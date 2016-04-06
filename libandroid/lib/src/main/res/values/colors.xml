@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From https://www.mapbox.com/base/styling/color/ -->
+    <color name="mapbox_fill_dark">#404040</color>
+    <color name="mapbox_fill_gray">#eee</color>
+    <color name="mapbox_fill_light">#f8f8f8</color>
+    <color name="mapbox_fill_white">#fff</color>
+    <color name="mapbox_fill_cyan">#3bb2d0</color>
+    <color name="mapbox_fill_blue">#3887be</color>
+    <color name="mapbox_fill_darkblue">#223b53</color>
+    <color name="mapbox_fill_denim">#50667f</color>
+    <color name="mapbox_fill_navy">#28353d</color>
+    <color name="mapbox_fill_navy_dark">#222b30</color>
+    <color name="mapbox_fill_purple">#8a8acb</color>
+    <color name="mapbox_fill_teal">#41afa5</color>
+    <color name="mapbox_fill_green">#56b881</color>
+    <color name="mapbox_fill_yellow">#f1f075</color>
+    <color name="mapbox_fill_mustard">#fbb03b</color>
+    <color name="mapbox_fill_orange">#f9886c</color>
+    <color name="mapbox_fill_red">#e55e5e</color>
+    <color name="mapbox_fill_pink">#ed6498</color>
+
+</resources>
