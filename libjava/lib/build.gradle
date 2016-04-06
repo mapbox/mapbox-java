@@ -1,0 +1,19 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    // Retrofit + Gson
+    compile 'com.squareup.retrofit2:retrofit:2.0.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
+
+    // Apache commons for StringUtils
+    compile 'org.apache.commons:commons-lang3:3.4'
+
+    // Testing
+    testCompile 'junit:junit:4.12'
+}
+
+apply from: 'gradle-mvn-push.gradle'
