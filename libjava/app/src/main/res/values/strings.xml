@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="app_name">Mapbox Java Services</string>
+    <string name="action_settings">Settings</string>
+    <string name="placeholder">Check the app module in the libandroid project for examples.</string>
+
+</resources>
