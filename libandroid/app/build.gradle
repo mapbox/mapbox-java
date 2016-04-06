@@ -1,0 +1,44 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.mapbox.services.android.testapp"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    // Android services
+    compile project (':lib')
+
+    // Support libraries
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
+    compile 'com.android.support:recyclerview-v7:23.2.1'
+
+    // Mapbox SDK
+    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.0.0@aar'){
+        transitive=true
+    }
+
+    // LOST
+    compile 'com.mapzen.android:lost:1.0.1'
+
+    // Picasso (Static Image)
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // Testing
+    testCompile 'junit:junit:4.12'
+}

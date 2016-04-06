@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mapbox.services.android.testapp">
+
+    <!-- Normal permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Dangerous permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".directions.DirectionsV4Activity"
+            android:label="Directions v4"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".directions.DirectionsV5Activity"
+            android:label="Directions v5"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".geocoding.GeocodingReverseActivity"
+            android:label="Reverse geocoding"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".geocoding.GeocodingServiceActivity"
+            android:label="Geocoding service"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".geocoding.GeocodingWidgetActivity"
+            android:label="Geocoding widget"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".staticimage.StaticImageActivity"
+            android:label="Static image"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
+
+        <!--
+        Service to asynchronously fetch a location address using a Geocoder. Setting the
+        android:exported attribute to "false" stops other apps from starting this
+        service, even when using an explicit intent.
+        -->
+        <service
+            android:name=".geocoding.service.FetchAddressIntentService"
+            android:exported="false" />
+
+        <!-- Telemetry -->
+        <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
+
+    </application>
+
+</manifest>
