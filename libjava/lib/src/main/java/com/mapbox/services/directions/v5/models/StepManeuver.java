@@ -1,6 +1,7 @@
 package com.mapbox.services.directions.v5.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.services.commons.models.Position;
 
 import java.util.Arrays;
 
@@ -10,10 +11,11 @@ import java.util.Arrays;
 public class StepManeuver {
 
     private double[] location;
-    @SerializedName("bearingBefore") private double bearingBefore;
-    @SerializedName("bearingAfter") private double bearingAfter;
+    @SerializedName("bearing_before") private double bearingBefore;
+    @SerializedName("bearing_after") private double bearingAfter;
     private String type;
     private String modifier;
+    private String instruction;
     private int exit;
 
     public double[] getLocation() {
@@ -36,8 +38,16 @@ public class StepManeuver {
         return modifier;
     }
 
+    public String getInstruction() {
+        return instruction;
+    }
+
     public int getExit() {
         return exit;
+    }
+
+    public Position asPosition() {
+        return Position.fromCoordinates(location[0], location[1]);
     }
 
     @Override
