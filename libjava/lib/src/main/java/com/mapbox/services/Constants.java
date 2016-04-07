@@ -9,7 +9,9 @@ public class Constants {
      */
 
     public final static int GOOGLE_PRECISION = 5;
-    public final static int OSRM_PRECISION = 6;
+
+    public final static int OSRM_PRECISION_V4 = 6;
+    public final static int OSRM_PRECISION_V5 = 5;
 
     /*
      * Mapbox default styles

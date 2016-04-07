@@ -63,12 +63,12 @@ public class PolylineUtilsTest {
     @Test
     public void testOsrmEncode() {
         LineString path = LineString.fromJson(LINESTRING);
-        assertEquals(path.toPolyline(Constants.OSRM_PRECISION), POLYLINE);
+        assertEquals(path.toPolyline(Constants.OSRM_PRECISION_V4), POLYLINE);
     }
 
     @Test
     public void testOsrmDecode() {
-        LineString path = LineString.fromPolyline(POLYLINE, Constants.OSRM_PRECISION);
+        LineString path = LineString.fromPolyline(POLYLINE, Constants.OSRM_PRECISION_V4);
 
         // Check a first, middle, last elements
         int middle = path.getCoordinates().size() / 2;
