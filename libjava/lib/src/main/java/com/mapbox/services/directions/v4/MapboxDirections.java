@@ -34,8 +34,15 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
     private Call<DirectionsResponse> call = null;
     private Observable<DirectionsResponse> observable = null;
 
+    // Allows testing
+    private String baseUrl = Constants.BASE_API_URL;
+
     public MapboxDirections(Builder builder) {
         this.builder = builder;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     public DirectionsService getService() {
@@ -44,7 +51,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(new OkHttpClient())
-                .baseUrl(Constants.BASE_API_URL)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();

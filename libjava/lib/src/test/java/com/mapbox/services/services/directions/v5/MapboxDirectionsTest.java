@@ -39,7 +39,6 @@ public class MapboxDirectionsTest {
 
     private final static double DELTA = 1E-10;
 
-
     private MockWebServer server;
     private HttpUrl mockUrl;
 

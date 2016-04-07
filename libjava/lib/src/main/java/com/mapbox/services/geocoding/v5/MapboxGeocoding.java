@@ -28,8 +28,15 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
     private Call<GeocodingResponse> call = null;
     private Observable<GeocodingResponse> observable = null;
 
+    // Allows testing
+    private String baseUrl = Constants.BASE_API_URL;
+
     public MapboxGeocoding(Builder builder) {
         this.builder = builder;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     public GeocodingService getService() {
@@ -38,7 +45,7 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .client(new OkHttpClient())
-                .baseUrl(Constants.BASE_API_URL)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
