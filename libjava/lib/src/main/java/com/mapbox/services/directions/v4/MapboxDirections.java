@@ -1,7 +1,9 @@
 package com.mapbox.services.directions.v4;
 
 import com.mapbox.services.Constants;
+import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.directions.v4.models.DirectionsResponse;
 import com.mapbox.services.directions.v4.models.Waypoint;
 
@@ -55,13 +57,13 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         if (call != null) return call;
 
         call = getService().getCall(
-                builder.profile,
-                builder.getWaypointsFormatted(),
-                builder.accessToken,
-                builder.alternatives,
-                builder.instructions,
-                builder.geometry,
-                builder.steps);
+                builder.getProfile(),
+                builder.getWaypoints(),
+                builder.getAccessToken(),
+                builder.isAlternatives(),
+                builder.getInstructions(),
+                builder.getGeometry(),
+                builder.isSteps());
 
         return call;
     }
@@ -93,7 +95,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
 
         observable = service.getObservable(
                 builder.profile,
-                builder.getWaypointsFormatted(),
+                builder.getWaypoints(),
                 builder.accessToken,
                 builder.alternatives,
                 builder.instructions,
@@ -107,18 +109,19 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
      * Builder
      */
 
-    public static class Builder {
+    public static class Builder extends MapboxBuilder {
 
         private String accessToken;
         private String profile;
         private List<Waypoint> waypoints;
         private Waypoint origin;
         private Waypoint destination;
-        private boolean alternatives;
+        private Boolean alternatives;
         private String instructions;
         private String geometry;
-        private boolean steps;
+        private Boolean steps;
 
+        @Override
         public Builder setAccessToken(String accessToken) {
             this.accessToken = accessToken;
             return this;
@@ -133,7 +136,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
          * We offer some convenience for the typical case where we only have an origin
          * and a destination. Instead of having to create a List of waypoints, we just
          * call setOrigin() and setDestination() which is more meaningful. That's taken
-         * into account in getWaypointsFormatted()
+         * into account in getWaypoints()
          */
 
         public Builder setWaypoints(List<Waypoint> waypoints) {
@@ -151,7 +154,36 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return this;
         }
 
-        public String getWaypointsFormatted() {
+        public Builder setAlternatives(Boolean alternatives) {
+            this.alternatives = alternatives;
+            return this;
+        }
+
+        public Builder setInstructions(String instructions) {
+            this.instructions = instructions;
+            return this;
+        }
+
+        public Builder setGeometry(String geometry) {
+            this.geometry = geometry;
+            return this;
+        }
+
+        public Builder setSteps(Boolean steps) {
+            this.steps = steps;
+            return this;
+        }
+
+        @Override
+        public String getAccessToken() {
+            return accessToken;
+        }
+
+        public String getProfile() {
+            return profile;
+        }
+
+        public String getWaypoints() {
             String waypointsFormatted = "";
 
             // Set origin and destination
@@ -175,34 +207,38 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return waypointsFormatted;
         }
 
-        public Builder setAlternatives(boolean alternatives) {
-            this.alternatives = alternatives;
-            return this;
+        public Waypoint getOrigin() {
+            return origin;
         }
 
-        public Builder setInstructions(String instructions) {
-            this.instructions = instructions;
-            return this;
+        public Waypoint getDestination() {
+            return destination;
         }
 
-        public Builder setSteps(boolean steps) {
-            this.steps = steps;
-            return this;
+        public Boolean isAlternatives() {
+            return alternatives;
         }
 
-        // Checks if the given token is valid
-        private void validateAccessToken(String accessToken) {
-            if (StringUtils.isEmpty(accessToken) || (!accessToken.startsWith("pk.") && !accessToken.startsWith("sk."))) {
-                throw new RuntimeException("Using the Mapbox Directions API requires setting a valid access token.");
-            }
+        public String getInstructions() {
+            return instructions;
         }
 
-        public MapboxDirections build() {
+        public String getGeometry() {
+            return geometry;
+        }
+
+        public Boolean isSteps() {
+            return steps;
+        }
+
+        @Override
+        public MapboxDirections build() throws ServicesException {
+            validateAccessToken(accessToken);
+
             // We force the geometry to be a polyline to make the request more efficient.
             // We have utils to transform polylines into a LineString easily.
             geometry = DirectionsCriteria.GEOMETRY_POLYLINE;
 
-            validateAccessToken(accessToken);
             return new MapboxDirections(this);
         }
 

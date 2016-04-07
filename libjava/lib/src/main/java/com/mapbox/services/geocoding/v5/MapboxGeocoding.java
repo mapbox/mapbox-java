@@ -1,7 +1,9 @@
 package com.mapbox.services.geocoding.v5;
 
 import com.mapbox.services.Constants;
+import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.models.Position;
 
@@ -50,11 +52,11 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         if (call != null) return call;
 
         call = getService().getCall(
-                builder.geocodingDataset,
-                builder.query,
-                builder.accessToken,
-                builder.proximity,
-                builder.geocodingType);
+                builder.getGeocodingDataset(),
+                builder.getQuery(),
+                builder.getAccessToken(),
+                builder.getProximity(),
+                builder.getGeocodingType());
 
         return call;
     }
@@ -85,11 +87,11 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         if (observable != null) return observable;
 
         observable = service.getObservable(
-                builder.geocodingDataset,
-                builder.query,
-                builder.accessToken,
-                builder.proximity,
-                builder.geocodingType);
+                builder.getGeocodingDataset(),
+                builder.getQuery(),
+                builder.getAccessToken(),
+                builder.getProximity(),
+                builder.getGeocodingType());
 
         return observable;
     }
@@ -98,7 +100,7 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
      * Builder
      */
 
-    public static class Builder {
+    public static class Builder extends MapboxBuilder {
 
         /*
          * Required
@@ -106,7 +108,6 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
 
         private String accessToken;
         private String query;
-
         private String geocodingDataset;
 
         /*
@@ -114,7 +115,6 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
          */
 
         private String proximity = null;
-
         private String geocodingType = null;
 
         public Builder() {
@@ -122,13 +122,9 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             geocodingDataset = com.mapbox.services.geocoding.v5.GeocodingCriteria.DATASET_PLACES;
         }
 
+        @Override
         public Builder setAccessToken(String accessToken) {
             this.accessToken = accessToken;
-            return this;
-        }
-
-        public Builder setDataset(String geocodingDataset) {
-            this.geocodingDataset = geocodingDataset;
             return this;
         }
 
@@ -143,6 +139,11 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return this;
         }
 
+        public Builder setDataset(String geocodingDataset) {
+            this.geocodingDataset = geocodingDataset;
+            return this;
+        }
+
         public Builder setProximity(Position position) {
             if (position == null) return this;
             proximity = String.format("%f,%f", position.getLongitude(), position.getLatitude());
@@ -154,7 +155,30 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return this;
         }
 
-        public MapboxGeocoding build() {
+        @Override
+        public String getAccessToken() {
+            return accessToken;
+        }
+
+        public String getQuery() {
+            return query;
+        }
+
+        public String getGeocodingDataset() {
+            return geocodingDataset;
+        }
+
+        public String getProximity() {
+            return proximity;
+        }
+
+        public String getGeocodingType() {
+            return geocodingType;
+        }
+
+        @Override
+        public MapboxGeocoding build() throws ServicesException {
+            validateAccessToken(accessToken);
             return new MapboxGeocoding(this);
         }
 

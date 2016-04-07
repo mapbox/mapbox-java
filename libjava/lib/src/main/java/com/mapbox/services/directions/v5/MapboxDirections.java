@@ -1,10 +1,11 @@
 package com.mapbox.services.directions.v5;
 
 import com.mapbox.services.Constants;
+import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.models.Bearing;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.directions.shared.DirectionsException;
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
 
 import org.apache.commons.lang3.StringUtils;
@@ -120,7 +121,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
      * Builder
      */
 
-    public static class Builder {
+    public static class Builder extends MapboxBuilder {
 
         // We use `Boolean` instead of `boolean` to allow unset (null) values.
         private String user = null;
@@ -168,6 +169,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return this;
         }
 
+        @Override
         public Builder setAccessToken(String accessToken) {
             this.accessToken = accessToken;
             return this;
@@ -211,7 +213,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return user;
         }
 
-        private String getProfile() {
+        public String getProfile() {
             return profile;
         }
 
@@ -225,7 +227,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
          * - Coordinates are separated by a ; from each other
          * - A query must at minimum have 2 coordinates and may at maximum have 25 coordinates
          */
-        private String getCoordinates() {
+        public String getCoordinates() {
             String[] coordinatesFormatted = new String[coordinates.length];
             for (int i = 0; i < coordinates.length; i++) {
                 coordinatesFormatted[i] = String.format("%f,%f",
@@ -236,11 +238,12 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return StringUtils.join(coordinatesFormatted, ";");
         }
 
-        private String getAccessToken() {
+        @Override
+        public String getAccessToken() {
             return accessToken;
         }
 
-        private Boolean isAlternative() {
+        public Boolean isAlternative() {
             return alternative;
         }
 
@@ -254,7 +257,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
          * - There must be as many bearings as there are coordinates
          * - It is possible to have empty bearings via ;;, which allow all directions
          */
-        private String getBearings() {
+        public String getBearings() {
             if (bearings == null || bearings.length == 0) return null;
 
             String[] bearingsFormatted = new String[bearings.length];
@@ -267,11 +270,11 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return StringUtils.join(bearingsFormatted, ";");
         }
 
-        private String getGeometries() {
+        public String getGeometries() {
             return geometries;
         }
 
-        private String getOverview() {
+        public String getOverview() {
             return overview;
         }
 
@@ -287,7 +290,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
          * - There must be as many radiuses as there are coordinates
          * - It is possible to not specify radiuses via ;;, which result in the same behaviour as setting unlimited
          */
-        private String getRadiuses() {
+        public String getRadiuses() {
             if (radiuses == null || radiuses.length == 0) return null;
 
             String[] radiusesFormatted = new String[radiuses.length];
@@ -298,11 +301,11 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return StringUtils.join(radiusesFormatted, ";");
         }
 
-        private Boolean isSteps() {
+        public Boolean isSteps() {
             return steps;
         }
 
-        private Boolean isUturns() {
+        public Boolean isUturns() {
             return uturns;
         }
 
@@ -310,19 +313,22 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
          * Build method
          */
 
-        public MapboxDirections build() throws DirectionsException {
+        @Override
+        public MapboxDirections build() throws ServicesException {
+            validateAccessToken(accessToken);
+
             if (coordinates == null || coordinates.length < 2) {
-                throw new DirectionsException(
+                throw new ServicesException(
                         "You should provide at least two coordinates (from/to).");
             }
 
             if (bearings != null && bearings.length != coordinates.length) {
-                throw new DirectionsException(
+                throw new ServicesException(
                         "There must be as many bearings as there are coordinates.");
             }
 
             if (radiuses != null && radiuses.length != coordinates.length) {
-                throw new DirectionsException(
+                throw new ServicesException(
                         "There must be as many radiuses as there are coordinates.");
             }
 
