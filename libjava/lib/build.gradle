@@ -14,6 +14,8 @@ dependencies {
 
     // Testing
     testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
+    testCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
 }
 
 apply from: 'gradle-mvn-push.gradle'
