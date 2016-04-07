@@ -1,6 +1,7 @@
 package com.mapbox.services.directions.v4;
 
 import com.mapbox.services.Constants;
+import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.directions.v4.models.DirectionsResponse;
 import com.mapbox.services.directions.v4.models.Waypoint;
 
@@ -18,56 +19,88 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
 
 /**
  * Directions v4 are now deprecated in favor of v5
  */
 @Deprecated
-public class MapboxDirections {
+public class MapboxDirections implements MapboxService<DirectionsResponse> {
 
-    private final Call<DirectionsResponse> _call;
+    private Builder builder = null;
+    private DirectionsService service = null;
+    private Call<DirectionsResponse> call = null;
+    private Observable<DirectionsResponse> observable = null;
 
     public MapboxDirections(Builder builder) {
-        com.mapbox.services.directions.v4.DirectionsService service = getService();
-        _call = service.get(
-                builder._profile,
-                builder.getWaypointsFormatted(),
-                builder._accessToken,
-                builder._alternatives,
-                builder._instructions,
-                builder._geometry,
-                builder._steps);
+        this.builder = builder;
     }
 
-    /*
-     * Retrofit API
-     */
+    public DirectionsService getService() {
+        // No need to recreate it
+        if (service != null) return service;
 
-    public Response<DirectionsResponse> execute() throws IOException {
-        return _call.execute();
-    }
-
-    public void enqueue(Callback<DirectionsResponse> callback) {
-        _call.enqueue(callback);
-    }
-
-    public void cancel() {
-        _call.cancel();
-    }
-
-    public Call<DirectionsResponse> clone() {
-        return _call.clone();
-    }
-
-    private com.mapbox.services.directions.v4.DirectionsService getService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .client(new OkHttpClient())
                 .baseUrl(Constants.BASE_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
-        com.mapbox.services.directions.v4.DirectionsService service = retrofit.create(com.mapbox.services.directions.v4.DirectionsService.class);
+        service = retrofit.create(DirectionsService.class);
         return service;
+    }
+
+    public Call<DirectionsResponse> getCall() {
+        // No need to recreate it
+        if (call != null) return call;
+
+        call = getService().getCall(
+                builder.profile,
+                builder.getWaypointsFormatted(),
+                builder.accessToken,
+                builder.alternatives,
+                builder.instructions,
+                builder.geometry,
+                builder.steps);
+
+        return call;
+    }
+
+    @Override
+    public Response<DirectionsResponse> executeCall() throws IOException {
+        return getCall().execute();
+    }
+
+    @Override
+    public void enqueueCall(Callback<DirectionsResponse> callback) {
+        getCall().enqueue(callback);
+    }
+
+    @Override
+    public void cancelCall() {
+        getCall().cancel();
+    }
+
+    @Override
+    public Call<DirectionsResponse> cloneCall() {
+        return getCall().clone();
+    }
+
+    @Override
+    public Observable<DirectionsResponse> getObservable() {
+        // No need to recreate it
+        if (observable != null) return observable;
+
+        observable = service.getObservable(
+                builder.profile,
+                builder.getWaypointsFormatted(),
+                builder.accessToken,
+                builder.alternatives,
+                builder.instructions,
+                builder.geometry,
+                builder.steps);
+
+        return observable;
     }
 
     /*
@@ -76,23 +109,23 @@ public class MapboxDirections {
 
     public static class Builder {
 
-        private String _accessToken;
-        private String _profile;
-        private List<Waypoint> _waypoints;
-        private Waypoint _origin;
-        private Waypoint _destination;
-        private boolean _alternatives;
-        private String _instructions;
-        private String _geometry;
-        private boolean _steps;
+        private String accessToken;
+        private String profile;
+        private List<Waypoint> waypoints;
+        private Waypoint origin;
+        private Waypoint destination;
+        private boolean alternatives;
+        private String instructions;
+        private String geometry;
+        private boolean steps;
 
         public Builder setAccessToken(String accessToken) {
-            _accessToken = accessToken;
+            this.accessToken = accessToken;
             return this;
         }
 
         public Builder setProfile(String profile) {
-            _profile = profile;
+            this.profile = profile;
             return this;
         }
 
@@ -104,17 +137,17 @@ public class MapboxDirections {
          */
 
         public Builder setWaypoints(List<Waypoint> waypoints) {
-            _waypoints = waypoints;
+            this.waypoints = waypoints;
             return this;
         }
 
         public Builder setOrigin(Waypoint origin) {
-            _origin = origin;
+            this.origin = origin;
             return this;
         }
 
         public Builder setDestination(Waypoint destination) {
-            _destination = destination;
+            this.destination = destination;
             return this;
         }
 
@@ -122,18 +155,18 @@ public class MapboxDirections {
             String waypointsFormatted = "";
 
             // Set origin and destination
-            if (_origin != null && _destination != null) {
-                _waypoints = new ArrayList<>(Arrays.asList(_origin, _destination));
+            if (origin != null && destination != null) {
+                waypoints = new ArrayList<>(Arrays.asList(origin, destination));
             }
 
             // Empty list
-            if (_waypoints == null || _waypoints.size() == 0) {
+            if (waypoints == null || waypoints.size() == 0) {
                 return waypointsFormatted;
             }
 
             // Convert to {lon},{lat} coordinate pairs
             List<String> pieces = new ArrayList<>();
-            for (Waypoint waypoint: _waypoints) {
+            for (Waypoint waypoint: waypoints) {
                 pieces.add(String.format("%f,%f", waypoint.getLongitude(), waypoint.getLatitude()));
             }
 
@@ -143,17 +176,17 @@ public class MapboxDirections {
         }
 
         public Builder setAlternatives(boolean alternatives) {
-            _alternatives = alternatives;
+            this.alternatives = alternatives;
             return this;
         }
 
         public Builder setInstructions(String instructions) {
-            _instructions = instructions;
+            this.instructions = instructions;
             return this;
         }
 
         public Builder setSteps(boolean steps) {
-            _steps = steps;
+            this.steps = steps;
             return this;
         }
 
@@ -167,9 +200,9 @@ public class MapboxDirections {
         public MapboxDirections build() {
             // We force the geometry to be a polyline to make the request more efficient.
             // We have utils to transform polylines into a LineString easily.
-            _geometry = com.mapbox.services.directions.v4.DirectionsCriteria.GEOMETRY_POLYLINE;
+            geometry = DirectionsCriteria.GEOMETRY_POLYLINE;
 
-            validateAccessToken(_accessToken);
+            validateAccessToken(accessToken);
             return new MapboxDirections(this);
         }
 

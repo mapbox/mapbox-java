@@ -1,10 +1,11 @@
 package com.mapbox.services.directions.v5;
 
 import com.mapbox.services.Constants;
-import com.mapbox.services.directions.shared.DirectionsException;
-import com.mapbox.services.directions.v5.models.DirectionsResponse;
+import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.models.Bearing;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.directions.shared.DirectionsException;
+import com.mapbox.services.directions.v5.models.DirectionsResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,35 +18,27 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
 
 /**
  * The Directions API allows the calculation of routes between coordinates. The fastest route
  * is returned with geometries, and turn-by-turn instructions. The Mapbox Directions API supports
  * routing for driving cars, riding bicycles and walking.
  */
-public class MapboxDirections {
+public class MapboxDirections implements MapboxService<DirectionsResponse> {
 
-    private Builder builder;
-    private Call<DirectionsResponse> call;
+    private Builder builder = null;
+    private DirectionsService service = null;
+    private Call<DirectionsResponse> call = null;
+    private Observable<DirectionsResponse> observable = null;
 
     private MapboxDirections(Builder builder) {
         this.builder = builder;
     }
 
-    public Response<DirectionsResponse> execute() throws IOException {
-        return getCall().execute();
-    }
-
-    public void cancel() {
-        getCall().cancel();
-    }
-
-    public void enqueue(Callback<DirectionsResponse> callback) {
-        getCall().enqueue(callback);
-    }
-
-    private Call<DirectionsResponse> getCall() {
-        if (call != null) return call;
+    private DirectionsService getService() {
+        // No need to recreate it
+        if (service != null) return service;
 
         // Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
@@ -56,10 +49,15 @@ public class MapboxDirections {
                 .build();
 
         // Directions service
-        DirectionsService service = retrofit.create(DirectionsService.class);
+        service = retrofit.create(DirectionsService.class);
+        return service;
+    }
 
-        // Call
-        call = service.get(
+    private Call<DirectionsResponse> getCall() {
+        // No need to recreate it
+        if (call != null) return call;
+
+        call = getService().getCall(
                 builder.getUser(),
                 builder.getProfile(),
                 builder.getCoordinates(),
@@ -74,6 +72,48 @@ public class MapboxDirections {
 
         // Done
         return call;
+    }
+
+    @Override
+    public Response<DirectionsResponse> executeCall() throws IOException {
+        return getCall().execute();
+    }
+
+    @Override
+    public void enqueueCall(Callback<DirectionsResponse> callback) {
+        getCall().enqueue(callback);
+    }
+
+    @Override
+    public void cancelCall() {
+        getCall().cancel();
+    }
+
+    @Override
+    public Call<DirectionsResponse> cloneCall() {
+        return getCall().clone();
+    }
+
+    @Override
+    public Observable<DirectionsResponse> getObservable() {
+        // No need to recreate it
+        if (observable != null) return observable;
+
+        observable = getService().getObservable(
+                builder.getUser(),
+                builder.getProfile(),
+                builder.getCoordinates(),
+                builder.getAccessToken(),
+                builder.isAlternative(),
+                builder.getBearings(),
+                builder.getGeometries(),
+                builder.getOverview(),
+                builder.getRadiuses(),
+                builder.isSteps(),
+                builder.isUturns());
+
+        // Done
+        return observable;
     }
 
     /*

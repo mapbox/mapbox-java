@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by antonio on 1/30/16.
@@ -14,7 +15,18 @@ import retrofit2.http.Query;
 public interface DirectionsService {
 
     @GET("v4/directions/{profile}/{waypoints}.json")
-    Call<DirectionsResponse> get(
+    Call<DirectionsResponse> getCall(
+            @Path("profile") String profile,
+            @Path("waypoints") String waypoints,
+            @Query("access_token") String accessToken,
+            @Query("alternatives") boolean alternatives,
+            @Query("instructions") String instructions,
+            @Query("geometry") String geometry,
+            @Query("steps") boolean steps
+    );
+
+    @GET("v4/directions/{profile}/{waypoints}.json")
+    Observable<DirectionsResponse> getObservable(
             @Path("profile") String profile,
             @Path("waypoints") String waypoints,
             @Query("access_token") String accessToken,
