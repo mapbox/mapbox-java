@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -107,10 +108,46 @@ public class DirectionsV5Activity extends AppCompatActivity {
         positions[0] = origin;
         positions[1] = destination;
 
-        MapboxDirections client = new MapboxDirections.Builder()
+        MapboxDirections.Builder builder = new MapboxDirections.Builder()
                 .setCoordinates(positions)
-                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-                .build();
+                .setProfile(DirectionsCriteria.PROFILE_DRIVING);
+
+        // Check for a custom user
+        int v5MapboxUser = getResources().getIdentifier("v5_mapbox_user", "string", getPackageName());
+        if (!TextUtils.isEmpty(getString(v5MapboxUser))) {
+            Log.d(LOG_TAG, "Custom user set.");
+            builder.setUser(getString(v5MapboxUser));
+        }
+
+        // Check for a custom access token
+        int v5MapboxAccessToken = getResources().getIdentifier("v5_mapbox_access_token", "string", getPackageName());
+        if (!TextUtils.isEmpty(getString(v5MapboxAccessToken))) {
+            Log.d(LOG_TAG, "Custom access token set.");
+            builder.setAccessToken(getString(v5MapboxAccessToken));
+        } else {
+            builder.setAccessToken(Utils.getMapboxAccessToken(this));
+        }
+
+        MapboxDirections client = builder.build();
+
+        /*
+         * Note that we also support RxJava + RxAndroid to consume our APIs. For example, the
+         * code below could be done like this with observables, in a way that creates a new thread
+         * but the result can be used to change the views without hitting the dreaded
+         * android.os.NetworkOnMainThreadException.
+         *
+         * client.getObservable()
+         *                 .subscribeOn(Schedulers.newThread())
+         *                 .observeOn(AndroidSchedulers.mainThread())
+         *                 .subscribe(new Action1<DirectionsResponse>() {
+         *                     @Override
+         *                     public void call(DirectionsResponse response) {
+         *                         DirectionsRoute currentRoute = response.getRoutes().get(0);
+         *                         Log.d(LOG_TAG, "Response code: " + response.getCode());
+         *                         Log.d(LOG_TAG, "Distance: " + currentRoute.getDistance());
+         *                     }
+         *         });
+         */
 
         client.enqueue(new Callback<DirectionsResponse>() {
             @Override
@@ -137,7 +174,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
 
     private void drawRoute(DirectionsRoute route) {
         // Convert LineString coordinates into LatLng[]
-        LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.OSRM_PRECISION);
+        LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.GOOGLE_PRECISION);
         List<Position> coordinates = lineString.getCoordinates();
         LatLng[] points = new LatLng[coordinates.size()];
         for (int i = 0; i < coordinates.size(); i++) {
