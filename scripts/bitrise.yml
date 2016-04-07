@@ -23,20 +23,36 @@ workflows:
                 envman add --key SKIPCI --value false
             fi
     - script:
-        title: Build Android SDK
+        title: Build Java Services
         inputs:
         - content: |-
             #!/bin/bash
-            cd libjava; ./gradlew assembleRelease
-            cd libandroid; ./gradlew assembleRelease
+            cd libjava
+            ./gradlew assembleRelease
         - is_debug: 'yes'
     - script:
-        title: Run Unit Tests
+        title: Build Android Services
         inputs:
         - content: |-
             #!/bin/bash
-            cd libjava; ./gradlew testReleaseUnitTest --continue
-            cd libandroid; ./gradlew testReleaseUnitTest --continue
+            cd libandroid
+            ./gradlew assembleRelease
+        - is_debug: 'yes'
+    - script:
+        title: Run Java Project Unit Tests
+        inputs:
+        - content: |-
+            #!/bin/bash
+            cd libjava
+            ./gradlew testReleaseUnitTest --continue
+        - is_debug: 'yes'
+    - script:
+        title: Run Android Project Unit Tests
+        inputs:
+        - content: |-
+            #!/bin/bash
+            cd libandroid
+            ./gradlew testReleaseUnitTest --continue
         - is_debug: 'yes'
     - slack:
         title: Post to Slack
@@ -74,7 +90,7 @@ workflows:
           opts:
             is_expand: true
     - script:
-        title: Inject Signing And Publishing Credentials
+        title: Inject Signing And Publishing Credentials To Java Services
         inputs:
         - content: |-
             #!/bin/bash
@@ -83,7 +99,13 @@ workflows:
             signing.keyId=$SIGNING_KEYID
             signing.password=$SIGNING_PASSWORD
             signing.secretKeyRingFile=../../secring.gpg" >> libjava/gradle.properties
-
+          opts:
+            is_expand: true
+    - script:
+        title: Inject Signing And Publishing Credentials To Android Services
+        inputs:
+        - content: |-
+            #!/bin/bash
             echo "NEXUS_USERNAME=$PUBLISH_NEXUS_USERNAME
             NEXUS_PASSWORD=$PUBLISH_NEXUS_PASSWORD
             signing.keyId=$SIGNING_KEYID
@@ -92,23 +114,44 @@ workflows:
           opts:
             is_expand: true
     - script:
-        title: Build Android SDK
+        title: Build Java Services
         inputs:
         - content: |-
             #!/bin/bash
-            cd libjava; ./gradlew assembleRelease
-            cd libandroid; ./gradlew assembleRelease
+            cd libjava
+            ./gradlew assembleRelease
     - script:
-        title: Run Unit Tests
+        title: Build Android Services
         inputs:
         - content: |-
             #!/bin/bash
-            cd libjava; ./gradlew testReleaseUnitTest --continue
-            cd libandroid; ./gradlew testReleaseUnitTest --continue
+            cd libandroid
+            ./gradlew assembleRelease
     - script:
-        title: Publish To Maven Central
+        title: Run Java Project Unit Tests
         inputs:
         - content: |-
             #!/bin/bash
-            cd libjava; ./gradlew uploadArchives
-            cd libandroid; ./gradlew uploadArchives
+            cd libjava
+            ./gradlew testReleaseUnitTest --continue
+    - script:
+        title: Run Android Project Unit Tests
+        inputs:
+        - content: |-
+            #!/bin/bash
+            cd libandroid
+            ./gradlew testReleaseUnitTest --continue
+    - script:
+        title: Publish Java Services To Maven Central
+        inputs:
+        - content: |-
+            #!/bin/bash
+            cd libjava;
+            ./gradlew uploadArchives
+    - script:
+        title: Publish Android Services To Maven Central
+        inputs:
+        - content: |-
+            #!/bin/bash
+            cd libandroid;
+            ./gradlew uploadArchives
