@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by antonio on 11/6/15.
+ * Gives detailed information about an individual route such as the duration, distance and geometry.
  */
 @Deprecated
 public class DirectionsRoute {
@@ -21,6 +21,11 @@ public class DirectionsRoute {
         steps = new ArrayList<>();
     }
 
+    /**
+     * The distance traveled from origin to destination.
+     *
+     * @return an integer number with unit meters.
+     */
     public int getDistance() {
         return distance;
     }
@@ -29,6 +34,11 @@ public class DirectionsRoute {
         this.distance = distance;
     }
 
+    /**
+     * The estimated travel time from origin to destination.
+     *
+     * @return an integer number with unit seconds.
+     */
     public int getDuration() {
         return duration;
     }
@@ -37,6 +47,11 @@ public class DirectionsRoute {
         this.duration = duration;
     }
 
+    /**
+     * A short, human-readable summary of the route (e.g., major roads traversed).
+     *
+     * @return a string briefly describing route.
+     */
     public String getSummary() {
         return summary;
     }
@@ -45,6 +60,11 @@ public class DirectionsRoute {
         this.summary = summary;
     }
 
+    /**
+     * Gives the geometry of the route. Commonly used to draw the route on the mapView.
+     *
+     * @return encoded polyline with precision 6.
+     */
     public String getGeometry() {
         return geometry;
     }
@@ -53,6 +73,11 @@ public class DirectionsRoute {
         this.geometry = geometry;
     }
 
+    /**
+     * Steps gives you the route instructions.
+     *
+     * @return List of {@link RouteStep} objects.
+     */
     public List<RouteStep> getSteps() {
         return steps;
     }
@@ -61,10 +86,13 @@ public class DirectionsRoute {
         this.steps = steps;
     }
 
-    /*
-     * Easy decoding
+    /**
+     * Use this gives you a GeoJSON LineString which can be used to get route coordinates for
+     * drawing on mapview.
+     *
+     * @param precision of encoded polyline.
+     * @return GeoJSON LineString.
      */
-
     public LineString asLineString(int precision) {
         return LineString.fromPolyline(getGeometry(), precision);
     }
