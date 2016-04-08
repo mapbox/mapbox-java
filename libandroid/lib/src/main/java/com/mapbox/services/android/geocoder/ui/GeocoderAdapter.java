@@ -9,6 +9,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
@@ -153,8 +154,11 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
                         .setLocation(constraint.toString())
                         .setProximity(geocoderAdapter.getProximity())
                         .setType(geocoderAdapter.getType())
-                        .build().execute();
+                        .build().executeCall();
             } catch (IOException e) {
+                e.printStackTrace();
+                return results;
+            } catch (ServicesException e) {
                 e.printStackTrace();
                 return results;
             }

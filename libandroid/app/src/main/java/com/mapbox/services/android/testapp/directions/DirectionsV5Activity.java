@@ -21,9 +21,9 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.directions.shared.DirectionsException;
 import com.mapbox.services.directions.v5.DirectionsCriteria;
 import com.mapbox.services.directions.v5.MapboxDirections;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
@@ -96,14 +96,14 @@ public class DirectionsV5Activity extends AppCompatActivity {
                 // Get route from API
                 try {
                     getRoute(origin, destination);
-                } catch (DirectionsException e) {
+                } catch (ServicesException e) {
                     e.printStackTrace();
                 }
             }
         });
     }
 
-    private void getRoute(Position origin, Position destination) throws DirectionsException {
+    private void getRoute(Position origin, Position destination) throws ServicesException {
         Position[] positions = new Position[2];
         positions[0] = origin;
         positions[1] = destination;
@@ -149,7 +149,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
          *         });
          */
 
-        client.enqueue(new Callback<DirectionsResponse>() {
+        client.enqueueCall(new Callback<DirectionsResponse>() {
             @Override
             public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
                 // You can get generic HTTP info about the response
@@ -174,7 +174,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
 
     private void drawRoute(DirectionsRoute route) {
         // Convert LineString coordinates into LatLng[]
-        LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.GOOGLE_PRECISION);
+        LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.OSRM_PRECISION_V5);
         List<Position> coordinates = lineString.getCoordinates();
         LatLng[] points = new LatLng[coordinates.size()];
         for (int i = 0; i < coordinates.size(); i++) {

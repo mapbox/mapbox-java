@@ -20,6 +20,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.directions.v4.DirectionsCriteria;
@@ -93,12 +94,16 @@ public class DirectionsV4Activity extends AppCompatActivity {
                         .snippet("The White House"));
 
                 // Get route from API
-                getRoute(origin, destination);
+                try {
+                    getRoute(origin, destination);
+                } catch (ServicesException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-    private void getRoute(Waypoint origin, Waypoint destination) {
+    private void getRoute(Waypoint origin, Waypoint destination) throws ServicesException {
         MapboxDirections client = new MapboxDirections.Builder()
                 .setAccessToken(Utils.getMapboxAccessToken(this))
                 .setOrigin(origin)
@@ -106,7 +111,7 @@ public class DirectionsV4Activity extends AppCompatActivity {
                 .setProfile(DirectionsCriteria.PROFILE_WALKING)
                 .build();
 
-        client.enqueue(new Callback<DirectionsResponse>() {
+        client.enqueueCall(new Callback<DirectionsResponse>() {
             @Override
             public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
                 // You can get generic HTTP info about the response
@@ -131,7 +136,7 @@ public class DirectionsV4Activity extends AppCompatActivity {
 
     private void drawRoute(DirectionsRoute route) {
         // Convert LineString coordinates into LatLng[]
-        LineString lineString = route.asLineString(Constants.OSRM_PRECISION);
+        LineString lineString = route.asLineString(Constants.OSRM_PRECISION_V4);
         List<Position> coordinates = lineString.getCoordinates();
         LatLng[] points = new LatLng[coordinates.size()];
         for (int i = 0; i < coordinates.size(); i++) {

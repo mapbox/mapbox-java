@@ -11,6 +11,7 @@ import android.util.Log;
 import com.mapbox.services.android.geocoder.AndroidGeocoder;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
+import com.mapbox.services.commons.ServicesException;
 
 import java.io.IOException;
 import java.util.List;
@@ -105,6 +106,10 @@ public class FetchAddressIntentService extends IntentService {
             Log.e(TAG, errorMessage + ". " +
                     "Latitude = " + location.getLatitude() +
                     ", Longitude = " + location.getLongitude(), illegalArgumentException);
+        } catch (ServicesException servicesException) {
+            // Catch Mapbox-specific exceptions
+            errorMessage = servicesException.getMessage();
+            Log.e(TAG, errorMessage, servicesException);
         }
 
         // Handle case where no address was found.

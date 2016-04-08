@@ -16,6 +16,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
@@ -77,7 +78,11 @@ public class GeocodingReverseActivity extends AppCompatActivity {
                         mapboxMap.addMarker(new MarkerOptions()
                                 .position(point)
                                 .title("Your finger is here"));
-                        geocode(point);
+                        try {
+                            geocode(point);
+                        } catch (ServicesException e) {
+                            setMessage("Geocoding failed: " + e.getMessage());
+                        }
                     }
                 });
             }
@@ -118,7 +123,7 @@ public class GeocodingReverseActivity extends AppCompatActivity {
      * Forward geocoding
      */
 
-    private void geocode(LatLng point) {
+    private void geocode(LatLng point) throws ServicesException {
         Position position = Position.fromCoordinates(point.getLongitude(), point.getLatitude());
         MapboxGeocoding client = new MapboxGeocoding.Builder()
                 .setAccessToken(Utils.getMapboxAccessToken(this))
@@ -126,7 +131,7 @@ public class GeocodingReverseActivity extends AppCompatActivity {
                 .setType(GeocodingCriteria.TYPE_POI)
                 .build();
 
-        client.enqueue(new Callback<GeocodingResponse>() {
+        client.enqueueCall(new Callback<GeocodingResponse>() {
             @Override
             public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
                 List<GeocodingFeature> results = response.body().getFeatures();

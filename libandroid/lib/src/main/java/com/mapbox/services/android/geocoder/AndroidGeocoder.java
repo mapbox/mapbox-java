@@ -3,6 +3,7 @@ package com.mapbox.services.android.geocoder;
 import android.content.Context;
 import android.location.Address;
 
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
@@ -87,7 +88,7 @@ public class AndroidGeocoder {
      * I/O problem occurs
      */
     public List<Address> getFromLocation(double latitude, double longitude, int maxResults)
-            throws IOException {
+            throws IOException, ServicesException {
         List<Address> addresses = new ArrayList<>();
 
         Position position = Position.fromCoordinates(longitude, latitude);
@@ -96,7 +97,7 @@ public class AndroidGeocoder {
                 .setCoordinates(position)
                 .build();
 
-        Response<GeocodingResponse> response = client.execute();
+        Response<GeocodingResponse> response = client.executeCall();
         if (!response.isSuccessful()) {
             return addresses;
         }
@@ -139,7 +140,7 @@ public class AndroidGeocoder {
      * @throws IOException if the network is unavailable or any other
      * I/O problem occurs
      */
-    public List<Address> getFromLocationName(String locationName, int maxResults) throws IOException {
+    public List<Address> getFromLocationName(String locationName, int maxResults) throws IOException, ServicesException {
         List<Address> addresses = new ArrayList<>();
 
         MapboxGeocoding client = new MapboxGeocoding.Builder()
@@ -147,7 +148,7 @@ public class AndroidGeocoder {
                 .setLocation(locationName)
                 .build();
 
-        Response<GeocodingResponse> response = client.execute();
+        Response<GeocodingResponse> response = client.executeCall();
         if (!response.isSuccessful()) {
             return addresses;
         }
@@ -204,7 +205,7 @@ public class AndroidGeocoder {
      */
     public List<Address> getFromLocationName(String locationName, int maxResults,
                                              double lowerLeftLatitude, double lowerLeftLongitude,
-                                             double upperRightLatitude, double upperRightLongitude) throws IOException {
+                                             double upperRightLatitude, double upperRightLongitude) throws IOException, ServicesException {
         List<Address> addresses = new ArrayList<>();
 
         // We use the bbox to infer a proximity location
@@ -218,7 +219,7 @@ public class AndroidGeocoder {
                 .setProximity(position)
                 .build();
 
-        Response<GeocodingResponse> response = client.execute();
+        Response<GeocodingResponse> response = client.executeCall();
         if (!response.isSuccessful()) {
             return addresses;
         }
