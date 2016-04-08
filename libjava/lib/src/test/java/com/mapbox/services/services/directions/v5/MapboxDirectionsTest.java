@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
@@ -42,7 +43,7 @@ public class MapboxDirectionsTest {
     private MockWebServer server;
     private HttpUrl mockUrl;
 
-    private Position[] positions;
+    private ArrayList<Position> positions;
 
     @Before
     public void setUp() throws IOException {
@@ -56,9 +57,9 @@ public class MapboxDirectionsTest {
 
         mockUrl = server.url("");
 
-        positions = new Position[2];
-        positions[0] = Position.fromCoordinates(-122.416667, 37.783333); // SF
-        positions[1] = Position.fromCoordinates(-121.9, 37.333333); // SJ
+        positions = new ArrayList<>();
+        positions.add(Position.fromCoordinates(-122.416667, 37.783333)); // SF
+        positions.add(Position.fromCoordinates(-121.9, 37.333333)); // SJ
     }
 
     @After
@@ -200,6 +201,57 @@ public class MapboxDirectionsTest {
         assertEquals(maneuver.getModifier(), "left");
         assertEquals(maneuver.getInstruction(), "Head left on 8th Ave towards Lincoln Way");
         assertEquals(maneuver.getExit(), 1);
+    }
+
+    @Test
+    public void testSetCoordinates() {
+        ArrayList test = new ArrayList<>();
+        test.add(Position.fromCoordinates(2.1, 2.2));
+        test.add(Position.fromCoordinates(3.1, 3.2));
+
+        String coordinates = new MapboxDirections.Builder()
+                .setCoordinates(test)
+                .getCoordinates();
+        assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
+    }
+
+    @Test
+    public void setOriginDestination() {
+        String coordinates = new MapboxDirections.Builder()
+                .setOrigin(Position.fromCoordinates(2.1, 2.2))
+                .setDestination(Position.fromCoordinates(3.1, 3.2))
+                .getCoordinates();
+        assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
+    }
+
+    @Test
+    public void testSetCoordinatesMixed() {
+        ArrayList test = new ArrayList<>();
+        test.add(Position.fromCoordinates(2.1, 2.2));
+        test.add(Position.fromCoordinates(3.1, 3.2));
+
+        // Respect previously entered coordinates
+        String coordinates = new MapboxDirections.Builder()
+                .setCoordinates(test)
+                .setOrigin(Position.fromCoordinates(1.1, 1.2))
+                .setDestination(Position.fromCoordinates(4.1, 4.2))
+                .getCoordinates();
+        assertEquals(coordinates, "1.100000,1.200000;2.100000,2.200000;3.100000,3.200000;4.100000,4.200000");
+    }
+
+    @Test
+    public void testSetCoordinatesMixedHidden() {
+        ArrayList test = new ArrayList<>();
+        test.add(Position.fromCoordinates(2.1, 2.2));
+        test.add(Position.fromCoordinates(3.1, 3.2));
+
+        // The order matters
+        String coordinates = new MapboxDirections.Builder()
+                .setOrigin(Position.fromCoordinates(1.1, 1.2))
+                .setDestination(Position.fromCoordinates(4.1, 4.2))
+                .setCoordinates(test)
+                .getCoordinates();
+        assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
     }
 
 }

@@ -3,14 +3,16 @@ package com.mapbox.services.directions.v5;
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.models.Bearing;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -133,7 +135,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         // We use `Boolean` instead of `boolean` to allow unset (null) values.
         private String user = null;
         private String profile = null;
-        private Position[] coordinates = null;
+        private ArrayList<Position> coordinates = null;
         private String accessToken = null;
         private Boolean alternative = null;
         private Bearing[] bearings = null;
@@ -171,8 +173,58 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return this;
         }
 
-        public Builder setCoordinates(Position[] coordinates) {
+        /**
+         * Set the list of coordinates for the directions service. If you've previously set an
+         * origin with setOrigin() or a destination with setDestination(), those will be
+         * overridden.
+         *
+         * @param coordinates
+         * @return
+         */
+        public Builder setCoordinates(ArrayList<Position> coordinates) {
             this.coordinates = coordinates;
+            return this;
+        }
+
+        /**
+         * Inserts the specified position at the beginning of the coordinates list. If you've
+         * set other coordinates previously with setCoordinates() those elements are kept
+         * and their index will be moved up by one (the coordinates are moved to the right).
+         *
+         * @param origin
+         * @return
+         */
+        public Builder setOrigin(Position origin) {
+            if (coordinates == null) {
+                coordinates = new ArrayList<>();
+            }
+
+            // The default behavior of ArrayList is to inserts the specified element at the
+            // specified position in this list (beginning) and to shift the element currently at
+            // that position (if any) and any subsequent elements to the right (adds one to
+            // their indices)
+            coordinates.add(0, origin);
+
+            return this;
+        }
+
+        /**
+         * Appends the specified destination to the end of the coordinates list. If you've
+         * set other coordinates previously with setCoordinates() those elements are kept
+         * and the destination is added at the end of the list.
+         *
+         * @param destination
+         * @return
+         */
+        public Builder setDestination(Position destination) {
+            if (coordinates == null) {
+                coordinates = new ArrayList<>();
+            }
+
+            // The default behavior for ArrayList is to appends the specified element
+            // to the end of this list.
+            coordinates.add(destination);
+
             return this;
         }
 
@@ -235,11 +287,11 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
          * - A query must at minimum have 2 coordinates and may at maximum have 25 coordinates
          */
         public String getCoordinates() {
-            String[] coordinatesFormatted = new String[coordinates.length];
-            for (int i = 0; i < coordinates.length; i++) {
-                coordinatesFormatted[i] = String.format("%f,%f",
-                        coordinates[i].getLongitude(),
-                        coordinates[i].getLatitude());
+            List<String> coordinatesFormatted = new ArrayList<>();
+            for (Position coordinate: coordinates) {
+                coordinatesFormatted.add(String.format("%f,%f",
+                        coordinate.getLongitude(),
+                        coordinate.getLatitude()));
             }
 
             return StringUtils.join(coordinatesFormatted, ";");
@@ -324,17 +376,17 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         public MapboxDirections build() throws ServicesException {
             validateAccessToken(accessToken);
 
-            if (coordinates == null || coordinates.length < 2) {
+            if (coordinates == null || coordinates.size() < 2) {
                 throw new ServicesException(
                         "You should provide at least two coordinates (from/to).");
             }
 
-            if (bearings != null && bearings.length != coordinates.length) {
+            if (bearings != null && bearings.length != coordinates.size()) {
                 throw new ServicesException(
                         "There must be as many bearings as there are coordinates.");
             }
 
-            if (radiuses != null && radiuses.length != coordinates.length) {
+            if (radiuses != null && radiuses.length != coordinates.size()) {
                 throw new ServicesException(
                         "There must be as many radiuses as there are coordinates.");
             }
