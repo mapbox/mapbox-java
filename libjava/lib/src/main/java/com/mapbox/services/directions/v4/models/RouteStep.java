@@ -11,8 +11,7 @@ public class RouteStep {
 
     private int distance;
     private int duration;
-    @SerializedName("wayName")
-    private String wayName;
+    @SerializedName("wayName") private String wayName;
     private String direction;
     private double heading;
     private StepManeuver maneuver;
