@@ -1,6 +1,6 @@
 package com.mapbox.services.commons;
 
-import org.apache.commons.lang3.StringUtils;
+import com.mapbox.services.commons.utils.MapboxUtils;
 
 /**
  * Created by antonio on 4/7/16.
@@ -11,8 +11,7 @@ public abstract class MapboxBuilder {
     public abstract String getAccessToken();
 
     protected void validateAccessToken(String accessToken) throws ServicesException {
-        if (StringUtils.isEmpty(accessToken) ||
-            (!accessToken.startsWith("pk.") && !accessToken.startsWith("sk."))) {
+        if (!MapboxUtils.isAccessTokenValid(accessToken)) {
             throw new ServicesException(
                     "Using Mapbox Services requires setting a valid access token.");
         }
