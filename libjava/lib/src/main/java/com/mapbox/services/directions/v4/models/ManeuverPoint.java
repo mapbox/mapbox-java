@@ -18,8 +18,7 @@ public class ManeuverPoint {
     }
 
     /**
-     * Gives GeoJSON geometry type which can be Point, LineString, Polygon, or Multipolygon. However,
-     * in our case it should always return "Point".
+     * Gives the GeoJSON geometry type.
      *
      * @return string naming type.
      */
@@ -32,10 +31,10 @@ public class ManeuverPoint {
     }
 
     /**
-     * Gives the coordinate of the Point. Longitude will always be first (index 0)in list and
+     * Gives the coordinate of the Point. Longitude will always be first (index 0) in list and
      * latitude will be second (index 1).
      *
-     * @return List of Double objects containing Point Longitude and Latitude.
+     * @return List of Double objects containing a point with longitude and latitude values.
      */
     public List<Double> getCoordinates() {
         return coordinates;

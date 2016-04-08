@@ -1,7 +1,7 @@
 package com.mapbox.services.directions.v4.models;
 
 /**
- * A point on earth represented by a Longitude Latitude pair.
+ * A point on earth represented by a longitude/latitude pair.
  */
 @Deprecated
 public class Waypoint {
@@ -18,7 +18,7 @@ public class Waypoint {
     }
 
     /**
-     * The Latitude of the location.
+     * The latitude of the location.
      *
      * @return double value ranging from -90.0 to 90.0.
      */
@@ -31,7 +31,7 @@ public class Waypoint {
     }
 
     /**
-     * The Longitude of the location.
+     * The longitude of the location.
      *
      * @return double value ranging from -180.0 to 180.0
      */

@@ -12,7 +12,7 @@ public class DirectionsFeature {
     private FeatureProperties properties;
 
     /**
-     * Commonly used identifier.
+     * The type of the GeoJSON object.
      *
      * @return string type.
      */
@@ -25,7 +25,7 @@ public class DirectionsFeature {
     }
 
     /**
-     * {@link FeatureGeometry} object contains type and the coordinate.
+     * {@link FeatureGeometry} object contains type and the coordinates.
      *
      * @return {@link FeatureGeometry} object.
      */

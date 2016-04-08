@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * The instructions for a route are broken down into steps with each step containing details like
- * heading, direction, way_name, and duration.
+ * heading, direction, way name, and duration.
  */
 @Deprecated
 public class RouteStep {

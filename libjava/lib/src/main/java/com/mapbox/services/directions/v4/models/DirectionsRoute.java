@@ -61,7 +61,7 @@ public class DirectionsRoute {
     }
 
     /**
-     * Gives the geometry of the route. Commonly used to draw the route on the mapView.
+     * Gives the geometry of the route. Commonly used to draw the route on the map view.
      *
      * @return encoded polyline with precision 6.
      */
@@ -87,8 +87,8 @@ public class DirectionsRoute {
     }
 
     /**
-     * Use this gives you a GeoJSON LineString which can be used to get route coordinates for
-     * drawing on mapview.
+     * Gets a GeoJSON LineString which can be used to get route coordinates useful for
+     * drawing on a map view.
      *
      * @param precision of encoded polyline.
      * @return GeoJSON LineString.

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The starting point once you get a successful response.
+ * The response to a directions request.
  */
 @Deprecated
 public class DirectionsResponse {
