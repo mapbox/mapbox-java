@@ -8,9 +8,6 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
-/**
- * Created by antonio on 1/30/16.
- */
 @Deprecated
 public interface DirectionsService {
 
