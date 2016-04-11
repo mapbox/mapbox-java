@@ -72,7 +72,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(@NonNull MapboxMap mapboxMapReady) {
+            public void onMapReady(MapboxMap mapboxMapReady) {
                 mapboxMap = mapboxMapReady;
 
                 mapboxMap.setStyleUrl(Style.MAPBOX_STREETS);
@@ -88,11 +88,11 @@ public class DirectionsV5Activity extends AppCompatActivity {
                 mapboxMap.addMarker(new MarkerOptions()
                         .position(new LatLng(origin.getLatitude(), origin.getLongitude()))
                         .title("Origin")
-                        .snippet("Dupont Circle"));
+                        .snippet("San Francisco"));
                 mapboxMap.addMarker(new MarkerOptions()
                         .position(new LatLng(destination.getLatitude(), destination.getLongitude()))
                         .title("Destination")
-                        .snippet("The White House"));
+                        .snippet("San Jose"));
 
                 // Get route from API
                 try {
