@@ -29,6 +29,7 @@ import com.mapbox.services.directions.v5.MapboxDirections;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.directions.v5.models.DirectionsRoute;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -104,9 +105,9 @@ public class DirectionsV5Activity extends AppCompatActivity {
     }
 
     private void getRoute(Position origin, Position destination) throws ServicesException {
-        Position[] positions = new Position[2];
-        positions[0] = origin;
-        positions[1] = destination;
+        ArrayList<Position> positions = new ArrayList<>();
+        positions.add(origin);
+        positions.add(destination);
 
         MapboxDirections.Builder builder = new MapboxDirections.Builder()
                 .setCoordinates(positions)
