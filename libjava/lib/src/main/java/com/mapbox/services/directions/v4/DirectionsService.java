@@ -19,10 +19,10 @@ public interface DirectionsService {
             @Path("profile") String profile,
             @Path("waypoints") String waypoints,
             @Query("access_token") String accessToken,
-            @Query("alternatives") boolean alternatives,
+            @Query("alternatives") Boolean alternatives,
             @Query("instructions") String instructions,
             @Query("geometry") String geometry,
-            @Query("steps") boolean steps
+            @Query("steps") Boolean steps
     );
 
     @GET("v4/directions/{profile}/{waypoints}.json")
@@ -30,10 +30,10 @@ public interface DirectionsService {
             @Path("profile") String profile,
             @Path("waypoints") String waypoints,
             @Query("access_token") String accessToken,
-            @Query("alternatives") boolean alternatives,
+            @Query("alternatives") Boolean alternatives,
             @Query("instructions") String instructions,
             @Query("geometry") String geometry,
-            @Query("steps") boolean steps
+            @Query("steps") Boolean steps
     );
 
 }
