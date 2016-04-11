@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by antonio on 11/6/15.
+ * If turn-by-turn directions were requested for route, each step gives the location in which it
+ * should occur.
  */
 @Deprecated
 public class ManeuverPoint {
@@ -16,6 +17,11 @@ public class ManeuverPoint {
         coordinates = new ArrayList<>();
     }
 
+    /**
+     * Gives the GeoJSON geometry type.
+     *
+     * @return string naming type.
+     */
     public String getType() {
         return type;
     }
@@ -24,6 +30,12 @@ public class ManeuverPoint {
         this.type = type;
     }
 
+    /**
+     * Gives the coordinate of the Point. Longitude will always be first (index 0) in list and
+     * latitude will be second (index 1).
+     *
+     * @return List of Double objects containing a point with longitude and latitude values.
+     */
     public List<Double> getCoordinates() {
         return coordinates;
     }

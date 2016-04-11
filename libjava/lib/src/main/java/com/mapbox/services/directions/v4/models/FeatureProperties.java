@@ -1,13 +1,18 @@
 package com.mapbox.services.directions.v4.models;
 
 /**
- * Created by antonio on 11/6/15.
+ * Properties describing a {@link DirectionsFeature}.
  */
 @Deprecated
 public class FeatureProperties {
 
     private String name;
 
+    /**
+     * Gives the name of the closest street to the {@link DirectionFeature} point.
+     *
+     * @return String name.
+     */
     public String getName() {
         return name;
     }

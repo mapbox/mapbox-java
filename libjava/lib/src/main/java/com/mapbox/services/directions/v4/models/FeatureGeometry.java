@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by antonio on 11/6/15.
+ * Describes the geometry of a {@link DirectionsFeature}.
  */
 @Deprecated
 public class FeatureGeometry {
@@ -16,6 +16,11 @@ public class FeatureGeometry {
         coordinates = new ArrayList<>();
     }
 
+    /**
+     * Gives GeoJSON geometry type.
+     *
+     * @return string naming GeoJSON geometry type.
+     */
     public String getType() {
         return type;
     }
@@ -24,6 +29,12 @@ public class FeatureGeometry {
         this.type = type;
     }
 
+    /**
+     * Gives the coordinate of the point. Longitude will always be first (index 0) in list and
+     * latitude will be second (index 1).
+     *
+     * @return List of Double objects containing a point with longitude and latitude values.
+     */
     public List<Double> getCoordinates() {
         return coordinates;
     }
