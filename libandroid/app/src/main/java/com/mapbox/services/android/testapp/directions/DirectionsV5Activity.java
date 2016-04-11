@@ -155,6 +155,10 @@ public class DirectionsV5Activity extends AppCompatActivity {
             public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
                 // You can get generic HTTP info about the response
                 Log.d(LOG_TAG, "Response code: " + response.code());
+                if (response.body() == null) {
+                    Log.e(LOG_TAG, "No routes found, make sure you set the right user and access token.");
+                    return;
+                }
 
                 // Print some info about the route
                 currentRoute = response.body().getRoutes().get(0);
