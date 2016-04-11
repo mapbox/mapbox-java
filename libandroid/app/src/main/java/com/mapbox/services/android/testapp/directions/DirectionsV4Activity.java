@@ -71,7 +71,7 @@ public class DirectionsV4Activity extends AppCompatActivity {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(@NonNull MapboxMap mapboxMapReady) {
+            public void onMapReady(MapboxMap mapboxMapReady) {
                 mapboxMap = mapboxMapReady;
 
                 mapboxMap.setStyleUrl(Style.MAPBOX_STREETS);
