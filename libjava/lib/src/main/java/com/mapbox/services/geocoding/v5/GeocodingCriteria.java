@@ -1,8 +1,5 @@
 package com.mapbox.services.geocoding.v5;
 
-/**
- * Created by antonio on 1/30/16.
- */
 public final class GeocodingCriteria {
 
     public static final String DATASET_PLACES = "mapbox.places";
