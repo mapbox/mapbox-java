@@ -1,43 +1,73 @@
 package com.mapbox.services.directions.v5;
 
 /**
- * Created by antonio on 3/4/16.
+ * Constants used to customize the directions request.
  */
 public class DirectionsCriteria {
 
-    /**
-     The profile parameter denotes the type of routing. Currently supported are:
-     - mapbox/driving for car routing
-     - mapbox/walking for pedestrian and hiking routing
-     - mapbox/cycling for bicycle routing
-     */
     public static final String PROFILE_DEFAULT_USER = "mapbox";
+
+    /**
+     * For car and motorcycle routing. This profile shows the fastest routes by preferring
+     * high-speed roads like highways.
+     */
     public static final String PROFILE_DRIVING = "driving";
+
+    /**
+     * For pedestrian and hiking routing. This profile shows the shortest path by using sidewalks
+     * and trails.
+     */
     public static final String PROFILE_WALKING = "walking";
+
+    /**
+     * For bicycle routing. This profile shows routes that are short and safe for cyclist, avoiding
+     * highways and preferring streets with bike lanes.
+     */
     public static final String PROFILE_CYCLING = "cycling";
 
     /**
-     * Format in which geometries are returned
+     * Format to return route geometry will be encoded polyline.
      */
     public final static String GEOMETRY_POLYLINE = "polyline";
-    private final static String GEOMETRY_GEOJSON = "geojson"; // Unsupported
 
     /**
-     * Add overview geometry either full, simplified to the highest zoom level it could be
-     * display on, or not at all
+     * Format to return route geometry will be geojson. Note that this isn't supported by the SDK.
+     */
+    private final static String GEOMETRY_GEOJSON = "geojson";
+
+    /**
+     * A simplified version of the {@link #OVERVIEW_FULL} geometry. If not specified simplified is the default.
      */
     public final static String OVERVIEW_SIMPLIFIED = "simplified";
+
+    /**
+     * The most detailed geometry available.
+     */
     public final static String OVERVIEW_FULL = "full";
+
+    /**
+     * No overview geometry.
+     */
     public final static String OVERVIEW_FALSE = "false";
 
     /**
-     * On error, the server responds with an HTTP status code denoting the error, as explained in
-     * the table below. The response body may include a JSON object with a message property,
-     * explaining the error.
+     * Server responds with no errors.
      */
     public final static String RESPONSE_OK = "Ok";
+
+    /**
+     * There was no route found for the given query.
+     */
     public final static String RESPONSE_NO_ROUTE = "NoRoute";
+
+    /**
+     * Use a valid profile as described above.
+     */
     public final static String RESPONSE_PROFILE_NOT_FOUND = "ProfileNotFound";
+
+    /**
+     * The given request was not valid.
+     */
     public final static String RESPONSE_INVALID_INPUT = "InvalidInput";
 
 }

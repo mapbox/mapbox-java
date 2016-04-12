@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
 /**
- * Directions v4 are now deprecated in favor of v5
+ * @deprecated Directions v4 are now deprecated in favor of v5.
  */
 @Deprecated
 public class MapboxDirections implements MapboxService<DirectionsResponse> {
@@ -128,68 +128,122 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         private String geometry;
         private Boolean steps;
 
+        /**
+         * Required to call when building {@link com.mapbox.services.directions.v4.MapboxDirections.Builder}.
+         *
+         * @param accessToken Mapbox access token, You must have a Mapbox account inorder to use
+         *                    this library.
+         */
         @Override
         public Builder setAccessToken(String accessToken) {
             this.accessToken = accessToken;
             return this;
         }
 
+        /**
+         * Specify what routing profile you'd like: driving, walking, or cycling.
+         *
+         * @param profile {@link DirectionsCriteria#PROFILE_DRIVING},
+         * {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
+         */
         public Builder setProfile(String profile) {
             this.profile = profile;
             return this;
         }
 
-        /*
-         * We offer some convenience for the typical case where we only have an origin
-         * and a destination. Instead of having to create a List of waypoints, we just
-         * call setOrigin() and setDestination() which is more meaningful. That's taken
-         * into account in getWaypoints()
+        /**
+         * If you have more then one destination, call this method passing in a list of all
+         * waypoints including origin and final destination.
+         *
+         * @param waypoints List including all {@link Waypoint} you'd line to include in route.
          */
-
         public Builder setWaypoints(List<Waypoint> waypoints) {
             this.waypoints = waypoints;
             return this;
         }
 
+        /**
+         * Origin of the destination.
+         *
+         * @param origin {@link Waypoint} of origin.
+         */
         public Builder setOrigin(Waypoint origin) {
             this.origin = origin;
             return this;
         }
 
+        /**
+         * Final destination of your route, call this only if you have one destination, otherwise,
+         * use {@link #setWaypoints(List)}
+         *
+         * @param destination {@link Waypoint} of destination.
+         */
         public Builder setDestination(Waypoint destination) {
             this.destination = destination;
             return this;
         }
 
+        /**
+         * Optionally, call if you'd like to receive alternative routes besides just one.
+         *
+         * @param alternatives true if you'd like alternative routes, else false.
+         */
         public Builder setAlternatives(Boolean alternatives) {
             this.alternatives = alternatives;
             return this;
         }
 
+        /**
+         * Optionally, call if you'd like to receive human-readable instructions.
+         *
+         * @param instructions {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or
+         * {@link DirectionsCriteria#INSTRUCTIONS_HTML}
+         */
         public Builder setInstructions(String instructions) {
             this.instructions = instructions;
             return this;
         }
 
+        /**
+         * Optionally, call with the format you'd like the route geometry to be in.
+         *
+         * @param geometry {@link DirectionsCriteria#GEOMETRY_GEOJSON},
+         * {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
+         */
         public Builder setGeometry(String geometry) {
             this.geometry = geometry;
             return this;
         }
 
+        /**
+         * Optionally, call if you'd like to include step information within route.
+         *
+         * @param steps true if you'd like step information.
+         */
         public Builder setSteps(Boolean steps) {
             this.steps = steps;
             return this;
         }
 
+        /**
+         * @return your Mapbox access token.
+         */
         @Override
         public String getAccessToken() {
             return accessToken;
         }
 
+        /**
+         * @return {@link DirectionsCriteria#PROFILE_DRIVING},
+         * {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
+         */
         public String getProfile() {
             return profile;
         }
 
+        /**
+         * @return List including all {@link Waypoint} within route.
+         */
         public String getWaypoints() {
             String waypointsFormatted = "";
 
@@ -214,26 +268,46 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return waypointsFormatted;
         }
 
+        /**
+         * @return routes origin {@link Waypoint}.
+         */
         public Waypoint getOrigin() {
             return origin;
         }
 
+        /**
+         * @return routes final destination {@link Waypoint}.
+         */
         public Waypoint getDestination() {
             return destination;
         }
 
+        /**
+         * @return true if you {@link #setAlternatives(Boolean)} to true.
+         */
         public Boolean isAlternatives() {
             return alternatives;
         }
 
+        /**
+         * @return {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or
+         * {@link DirectionsCriteria#INSTRUCTIONS_HTML}
+         */
         public String getInstructions() {
             return instructions;
         }
 
+        /**
+         * @return {@link DirectionsCriteria#GEOMETRY_GEOJSON},
+         * {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
+         */
         public String getGeometry() {
             return geometry;
         }
 
+        /**
+         * @return true if you requested step information in {@link #setSteps(Boolean)}.
+         */
         public Boolean isSteps() {
             return steps;
         }
