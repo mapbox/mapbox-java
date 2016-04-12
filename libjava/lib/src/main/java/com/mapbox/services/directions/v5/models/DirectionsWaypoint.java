@@ -25,7 +25,7 @@ public class DirectionsWaypoint {
     }
 
     /**
-     * converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
+     * Converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
      * use this format instead of {@link #getLocation()} as it's easier to work with.
      *
      * @return {@link Position}.

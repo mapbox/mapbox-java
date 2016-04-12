@@ -12,7 +12,8 @@ public class DirectionsResponse {
     private List<DirectionsWaypoint> waypoints;
 
     /**
-     * String indicating the state of the response. This is a separate code than the HTTP status code.
+     * String indicating the state of the response. This is a separate code than the HTTP
+     * status code.
      *
      * @return "Ok", "NoRoute", "ProfileNotFound", or "InvalidInput".
      */

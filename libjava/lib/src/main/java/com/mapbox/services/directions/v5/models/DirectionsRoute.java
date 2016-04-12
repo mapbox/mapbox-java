@@ -33,7 +33,7 @@ public class DirectionsRoute {
     /**
      * Gives the geometry of the route. Commonly used to draw the route on the map view.
      *
-     * @return either GeoJSON LineString or an encoded polyline string.
+     * @return An encoded polyline string.
      */
     public String getGeometry() {
         return geometry;

@@ -33,7 +33,7 @@ public class LegStep {
     /**
      * Gives the geometry of the leg step.
      *
-     * @return either GeoJSON LineString or an encoded polyline string.
+     * @return An encoded polyline string.
      */
     public String getGeometry() {
         return geometry;

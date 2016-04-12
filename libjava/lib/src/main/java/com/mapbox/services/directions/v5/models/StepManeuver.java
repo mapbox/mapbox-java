@@ -46,7 +46,7 @@ public class StepManeuver {
     }
 
     /**
-     * This indicating the type of maneuver. It can be any of these listed:
+     * This indicates the type of maneuver. It can be any of these listed:
      * <p/>
      * <ul>
      * <li>turn - a basic turn into direction of the modifier</li>
@@ -68,7 +68,7 @@ public class StepManeuver {
     }
 
     /**
-     * This indicating the mode of the maneuver.  If type is of turn, the modifier indicates the
+     * This indicates the mode of the maneuver.  If type is of turn, the modifier indicates the
      * change in direction accomplished through the turn. If the type is of depart/arrive, the
      * modifier indicates the position of waypoint from the current direction of travel.
      *
@@ -88,7 +88,7 @@ public class StepManeuver {
     }
 
     /**
-     * Roundabout's will have an additional parameter.
+     * Roundabouts will have an additional parameter.
      *
      * @return int value
      */
@@ -97,7 +97,7 @@ public class StepManeuver {
     }
 
     /**
-     * converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
+     * Converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
      * use this format instead of {@link #getLocation()} as it's easier to work with.
      *
      * @return {@link Position}.
