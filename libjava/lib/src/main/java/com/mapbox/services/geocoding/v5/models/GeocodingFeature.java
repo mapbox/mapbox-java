@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by antonio on 1/30/16.
+ * Query results, if any, will be in a GeocodingFeature format.
  */
 public class GeocodingFeature {
 
@@ -20,12 +20,6 @@ public class GeocodingFeature {
     private FeatureGeometry geometry;
     private List<com.mapbox.services.geocoding.v5.models.FeatureContext> context;
 
-    /*
-     * We leave properties as a generic object because at this moment Carmen makes no
-     * specifications nor guarantees about the properties of each feature object. Feature
-     * properties are passed directly from indexes and may vary by feature and datasource.
-     */
-
     public Object properties;
 
     public GeocodingFeature() {
@@ -34,6 +28,14 @@ public class GeocodingFeature {
         this.context = new ArrayList<>();
     }
 
+    /**
+     * Feature IDs are formatted like {type}.{id}. {type} is one of the following, "country",
+     * "region", "postcode", "place", "locality", "neighborhood", "address", or poi. Additional
+     * feature types may be added in the future, but the current types will stay the same. The
+     * numeric part of a feature ID may change between data updates.
+     *
+     * @return String with format {type}.{id}.
+     */
     public String getId() {
         return this.id;
     }
@@ -42,6 +44,11 @@ public class GeocodingFeature {
         this.id = id;
     }
 
+    /**
+     * Determines the type of the GeoJSON object.
+     *
+     * @return String with GeoJSON object type.
+     */
     public String getType() {
         return this.type;
     }
@@ -50,6 +57,11 @@ public class GeocodingFeature {
         this.type = type;
     }
 
+    /**
+     * Text representing the feature (e.g. "Austin").
+     *
+     * @return String with feature text.
+     */
     public String getText() {
         return this.text;
     }
@@ -58,6 +70,12 @@ public class GeocodingFeature {
         this.text = text;
     }
 
+    /**
+     * Human-readable text representing the full result hierarchy
+     * (e.g. "Austin, Texas, United States").
+     *
+     * @return String with human-readable text.
+     */
     public String getPlaceName() {
         return this.placeName;
     }
@@ -66,6 +84,13 @@ public class GeocodingFeature {
         this.placeName = placeName;
     }
 
+    /**
+     * Results are returned in order of relevance. The relevance property is based on how much of
+     * the query matched text in the result. You can use the relevance property to remove rough
+     * results if you require a response that matches your whole query.
+     *
+     * @return double value between 0 and 1.
+     */
     public double getRelevance() {
         return this.relevance;
     }
@@ -74,6 +99,12 @@ public class GeocodingFeature {
         this.relevance = relevance;
     }
 
+    /**
+     * List giving a bounding box in the order [minx,miny,maxx,maxy]. Use to fit the entire
+     * feature within the map view.
+     *
+     * @return bounding box List.
+     */
     public List<Double> getBbox() {
         return this.bbox;
     }
@@ -82,6 +113,11 @@ public class GeocodingFeature {
         this.bbox = bbox;
     }
 
+    /**
+     * Center location of the feature.
+     *
+     * @return Double List with the order longitude, latitude.
+     */
     public List<Double> getCenter() {
         return this.center;
     }
@@ -90,6 +126,11 @@ public class GeocodingFeature {
         this.center = center;
     }
 
+    /**
+     * Feature geometry can be a point, polygon, multipolygon, or linestring.
+     *
+     * @return {@link FeatureGeometry} object.
+     */
     public FeatureGeometry getGeometry() {
         return this.geometry;
     }
@@ -98,6 +139,12 @@ public class GeocodingFeature {
         this.geometry = geometry;
     }
 
+    /**
+     * List representing a hierarchy of feature parents. Each parent includes id, and text.
+     *
+     * @return List of {@link FeatureContext}.
+     * @see <a href=https://mapbox.com/api-documentation/#geocoding>Geocoder Documentation</a>
+     */
     public List<com.mapbox.services.geocoding.v5.models.FeatureContext> getContext() {
         return this.context;
     }
@@ -106,6 +153,13 @@ public class GeocodingFeature {
         this.context = context;
     }
 
+    /**
+     * We leave properties as a generic object because at this moment Carmen makes no
+     * specifications nor guarantees about the properties of each feature object. Feature
+     * properties are passed directly from indexes and may vary by feature and datasource.
+     *
+     * @return an Object with feature properties.
+     */
     public Object getProperties() {
         return this.properties;
     }
@@ -114,18 +168,30 @@ public class GeocodingFeature {
         this.properties = properties;
     }
 
-    /*
-     * Additional API
+    /**
+     * Get the feature center longitude.
+     *
+     * @return double value of feature center longitude.
      */
-
     public double getLongitude() {
         return getCenter().get(0);
     }
 
+    /**
+     * Get the feature center latitude.
+     *
+     * @return double value of feature center latitude.
+     */
     public double getLatitude() {
         return getCenter().get(1);
     }
 
+    /**
+     * Human-readable text representing the full result hierarchy
+     * (e.g. "Austin, Texas, United States").
+     *
+     * @return String with human-readable text.
+     */
     @Override
     public String toString() {
         return getPlaceName();

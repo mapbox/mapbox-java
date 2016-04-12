@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by antonio on 1/30/16.
+ * Describes the features geometry, useful for placing it on your map view.
  */
 public class FeatureGeometry {
 
@@ -15,6 +15,11 @@ public class FeatureGeometry {
         this.coordinates = new ArrayList<>();
     }
 
+    /**
+     * Gives the GeoJSON geometry type. Typically will be a "point".
+     *
+     * @return String with GeoJSON geometry type.
+     */
     public String getType() {
         return this.type;
     }
@@ -23,6 +28,11 @@ public class FeatureGeometry {
         this.type = type;
     }
 
+    /**
+     * List of feature coordinates that can be used to mark/draw the result on your map view.
+     *
+     * @return List containing longitude, latitude pair.
+     */
     public List<Double> getCoordinates() {
         return this.coordinates;
     }

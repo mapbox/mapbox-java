@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
 /**
- * Created by antonio on 1/30/16.
+ * The Mapbox geocoding client (v5).
  */
 public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
 
@@ -103,24 +103,17 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         return observable;
     }
 
-    /*
-     * Builder
+    /**
+     * Builds your geocoder query by adding parameters.
      */
-
     public static class Builder extends MapboxBuilder {
 
-        /*
-         * Required
-         */
-
+        // Required
         private String accessToken;
         private String query;
         private String geocodingDataset;
 
-        /*
-         * Optional (Retrofit will omit these from the request if they remain null)
-         */
-
+        // Optional (Retrofit will omit these from the request if they remain null)
         private String proximity = null;
         private String geocodingType = null;
 
@@ -129,6 +122,12 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             geocodingDataset = com.mapbox.services.geocoding.v5.GeocodingCriteria.DATASET_PLACES;
         }
 
+        /**
+         * Required to call when building {@link MapboxGeocoding.Builder}
+         *
+         * @param accessToken Mapbox access token, you must have a Mapbox account
+         *                    in order to use this library.
+         */
         @Override
         public Builder setAccessToken(String accessToken) {
             this.accessToken = accessToken;
@@ -151,22 +150,39 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return this;
         }
 
+        /**
+         * Location around which to bias results.
+         *
+         * @param position A {@link Position}.
+         */
         public Builder setProximity(Position position) {
             if (position == null) return this;
             proximity = String.format("%f,%f", position.getLongitude(), position.getLatitude());
             return this;
         }
 
+        /**
+         * Filter results by one or more type. Options are country, region, postcode, place,
+         * locality, neighborhood, address, poi. Multiple options can be comma-separated.
+         *
+         * @param geocodingType String filtering the geocoder result types.
+         */
         public Builder setType(String geocodingType) {
             this.geocodingType = geocodingType;
             return this;
         }
 
+        /**
+         * @return your Mapbox access token.
+         */
         @Override
         public String getAccessToken() {
             return accessToken;
         }
 
+        /**
+         * @return your geocoder query.
+         */
         public String getQuery() {
             return query;
         }
@@ -175,10 +191,21 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return geocodingDataset;
         }
 
+        /**
+         * Location around which you biased the results.
+         *
+         * @return String with the format longitude, latitude.
+         */
         public String getProximity() {
             return proximity;
         }
 
+        /**
+         * If you filtered your results by one or more types you can get what those filters are by
+         * using this method.
+         *
+         * @return String with list of filters you used.
+         */
         public String getGeocodingType() {
             return geocodingType;
         }
@@ -188,7 +215,5 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             validateAccessToken(accessToken);
             return new MapboxGeocoding(this);
         }
-
     }
-
 }
