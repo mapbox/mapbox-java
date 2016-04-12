@@ -18,7 +18,9 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
-
+/**
+ * The Mapbox geocoding client (v5).
+ */
 public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
 
     private Builder builder = null;
@@ -102,7 +104,7 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
     }
 
     /**
-     * Build your geocoder query by adding parameters.
+     * Builds your geocoder query by adding parameters.
      */
     public static class Builder extends MapboxBuilder {
 
@@ -123,8 +125,8 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         /**
          * Required to call when building {@link MapboxGeocoding.Builder}
          *
-         * @param accessToken accessToken Mapbox access token, You must have a Mapbox account
-         *                    inorder to use this library.
+         * @param accessToken Mapbox access token, you must have a Mapbox account
+         *                    in order to use this library.
          */
         @Override
         public Builder setAccessToken(String accessToken) {
