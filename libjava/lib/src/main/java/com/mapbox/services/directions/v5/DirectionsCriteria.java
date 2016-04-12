@@ -1,7 +1,7 @@
 package com.mapbox.services.directions.v5;
 
 /**
- * Constants used to customize the directions requested
+ * Constants used to customize the directions request.
  */
 public class DirectionsCriteria {
 

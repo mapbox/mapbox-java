@@ -8,9 +8,24 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
+/**
+ * Interface that defines the directions service (v4).
+ */
 @Deprecated
 public interface DirectionsService {
 
+    /**
+     * Call-based interface
+     *
+     * @param profile
+     * @param waypoints
+     * @param accessToken
+     * @param alternatives
+     * @param instructions
+     * @param geometry
+     * @param steps
+     * @return A retrofit Call object
+     */
     @GET("v4/directions/{profile}/{waypoints}.json")
     Call<DirectionsResponse> getCall(
             @Path("profile") String profile,
@@ -22,6 +37,18 @@ public interface DirectionsService {
             @Query("steps") boolean steps
     );
 
+    /**
+     * RxJava-based interface
+     *
+     * @param profile
+     * @param waypoints
+     * @param accessToken
+     * @param alternatives
+     * @param instructions
+     * @param geometry
+     * @param steps
+     * @return A RxJava Observable object
+     */
     @GET("v4/directions/{profile}/{waypoints}.json")
     Observable<DirectionsResponse> getObservable(
             @Path("profile") String profile,

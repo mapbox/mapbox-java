@@ -143,7 +143,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         /**
          * Specify what routing profile you'd like: driving, walking, or cycling.
          *
-         * @param profile {@link DirectionsCriteria#PROFILE_DRIVING}, {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
+         * @param profile {@link DirectionsCriteria#PROFILE_DRIVING},
+         * {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
          */
         public Builder setProfile(String profile) {
             this.profile = profile;
@@ -195,7 +196,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         /**
          * Optionally, call if you'd like to receive human-readable instructions.
          *
-         * @param instructions {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or {@link DirectionsCriteria#INSTRUCTIONS_HTML}
+         * @param instructions {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or
+         * {@link DirectionsCriteria#INSTRUCTIONS_HTML}
          */
         public Builder setInstructions(String instructions) {
             this.instructions = instructions;
@@ -205,7 +207,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         /**
          * Optionally, call with the format you'd like the route geometry to be in.
          *
-         * @param geometry {@link DirectionsCriteria#GEOMETRY_GEOJSON}, {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
+         * @param geometry {@link DirectionsCriteria#GEOMETRY_GEOJSON},
+         * {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
          */
         public Builder setGeometry(String geometry) {
             this.geometry = geometry;
@@ -231,7 +234,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         }
 
         /**
-         * @return {@link DirectionsCriteria#PROFILE_DRIVING}, {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
+         * @return {@link DirectionsCriteria#PROFILE_DRIVING},
+         * {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
          */
         public String getProfile() {
             return profile;
@@ -286,14 +290,16 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         }
 
         /**
-         * @return {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or {@link DirectionsCriteria#INSTRUCTIONS_HTML}
+         * @return {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or
+         * {@link DirectionsCriteria#INSTRUCTIONS_HTML}
          */
         public String getInstructions() {
             return instructions;
         }
 
         /**
-         * @return {@link DirectionsCriteria#GEOMETRY_GEOJSON}, {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
+         * @return {@link DirectionsCriteria#GEOMETRY_GEOJSON},
+         * {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
          */
         public String getGeometry() {
             return geometry;
