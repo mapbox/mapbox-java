@@ -71,7 +71,8 @@ public class GeocodingFeature {
     }
 
     /**
-     * Human-readable text representing the full result hierarchy (e.g. "Austin, Texas, United States").
+     * Human-readable text representing the full result hierarchy
+     * (e.g. "Austin, Texas, United States").
      *
      * @return String with human-readable text.
      */
@@ -99,7 +100,8 @@ public class GeocodingFeature {
     }
 
     /**
-     * List giving a bounding box in the order [minx,miny,maxx,maxy]. Use to fit the entire feature within the map view.
+     * List giving a bounding box in the order [minx,miny,maxx,maxy]. Use to fit the entire
+     * feature within the map view.
      *
      * @return bounding box List.
      */
@@ -185,7 +187,8 @@ public class GeocodingFeature {
     }
 
     /**
-     * Human-readable text representing the full result hierarchy (e.g. "Austin, Texas, United States").
+     * Human-readable text representing the full result hierarchy
+     * (e.g. "Austin, Texas, United States").
      *
      * @return String with human-readable text.
      */

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Describes the features geometry, useful for drawing it on your map view.
+ * Describes the features geometry, useful for placing it on your map view.
  */
 public class FeatureGeometry {
 

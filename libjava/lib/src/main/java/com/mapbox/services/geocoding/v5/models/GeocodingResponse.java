@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * When a geocoder query is executed in your app this is the response.
+ * The response object for a geocoder query.
  */
 public class GeocodingResponse {
 
@@ -19,7 +19,7 @@ public class GeocodingResponse {
     }
 
     /**
-     * describes the GeoJSON type. Typically always "FeatureCollection".
+     * Describes the GeoJSON type. Typically always "FeatureCollection".
      *
      * @return String with GeoJSON type.
      */
