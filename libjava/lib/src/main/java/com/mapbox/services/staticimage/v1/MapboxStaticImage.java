@@ -4,8 +4,8 @@ import okhttp3.HttpUrl;
 
 /**
  * Static maps are standalone images that can be displayed in your mobile app without the aid of a
- * mapping library like Mapbox Android SDK. They look like an embedded map without interactivity or
- * controls.
+ * mapping library like he Mapbox Android SDK. They look like an embedded map without interactivity
+ * or controls.
  *
  * @see <a href=https://www.mapbox.com/developers/api/styles/#Request.static.images.from.a.style>API Documentation</a>
  */
@@ -16,7 +16,7 @@ public class MapboxStaticImage {
     /**
      * Build the static image API URL using the builder.
      *
-     * @param builder pass in a static image build.
+     * @param builder The MapboxStaticImage builder.
      */
     public MapboxStaticImage(Builder builder) {
         HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
@@ -54,7 +54,8 @@ public class MapboxStaticImage {
     }
 
     /**
-     * Static image builder used to customize location, image width/height, camera position, etc.
+     * Static image builder used to customize the image, including location, image width/height,
+     * and camera position.
      */
     public static class Builder {
 
@@ -73,14 +74,10 @@ public class MapboxStaticImage {
         private boolean attribution = true;
         private boolean logo = true;
 
-        /*
-         * Setters
-         */
-
         /**
          * Required to call when building {@link com.mapbox.services.staticimage.v1.MapboxStaticImage.Builder}.
          *
-         * @param accessToken Mapbox access token, You must have a Mapbox account inorder to use
+         * @param accessToken Mapbox access token, you must have a Mapbox account in order to use
          *                    this library.
          */
         public Builder setAccessToken(String accessToken) {
@@ -273,10 +270,9 @@ public class MapboxStaticImage {
             return logo;
         }
 
-        /*
-         * Build
+        /**
+         * Build the client when all user parameters have been set.
          */
-        
         public MapboxStaticImage build() {
             return new MapboxStaticImage(this);
         }
