@@ -36,4 +36,16 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
+android.libraryVariants.all { variant ->
+    def name = variant.name
+    task "javadoc$name"(type: Javadoc) {
+        description = "Generates javadoc for build $name"
+        failOnError = false
+        destinationDir = new File(destinationDir, variant.baseName)
+        source = files(variant.javaCompile.source)
+        classpath = files(variant.javaCompile.classpath.files) + files(android.bootClasspath)
+        exclude '**/R.java', '**/BuildConfig.java'
+    }
+}
+
 apply from: 'gradle-mvn-push.gradle'
