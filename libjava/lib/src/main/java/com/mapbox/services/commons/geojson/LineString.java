@@ -27,7 +27,9 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
         this.coordinates = coordinates;
     }
 
-    // ******************************* Getters *******************************
+    /*
+     * Getters
+     */
 
     /**
      * Should always be "LineString".
@@ -49,14 +51,17 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
         return coordinates;
     }
 
-    // ****************************** Factories ******************************
-
+    /*
+     * Factories
+     */
 
     public static LineString fromCoordinates(List<Position> coordinates) {
         return new LineString(coordinates);
     }
 
-    // **************************** Gson Interface ***************************
+    /*
+     * Gson interface
+     */
 
     public static LineString fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -71,7 +76,9 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
         return gson.create().toJson(this);
     }
 
-    // **************************** Polyline Utils ***************************
+    /*
+     * Polyline utils
+     */
 
     public static LineString fromPolyline(String polyline, int precision) {
         return new LineString(PolylineUtils.decode(polyline, precision));

@@ -28,7 +28,9 @@ public class GeometryCollection implements com.mapbox.services.commons.geojson.G
         this.geometries = geometries;
     }
 
-    // ******************************* Getters *******************************
+    /*
+     * Getters
+     */
 
     /**
      * Should always be "GeometryCollection".
@@ -49,7 +51,9 @@ public class GeometryCollection implements com.mapbox.services.commons.geojson.G
         return geometries;
     }
 
-    // ****************************** Factories ******************************
+    /*
+     * Factories
+     */
 
     /**
      * Create a {@link GeometryCollection} from a List of geometries.
@@ -61,7 +65,9 @@ public class GeometryCollection implements com.mapbox.services.commons.geojson.G
         return new GeometryCollection(geometries);
     }
 
-    // **************************** Gson Interface ***************************
+    /*
+     * Gson interface
+     */
 
     /**
      * Create a GeoJSON geometry collection object from JSON.

@@ -32,7 +32,9 @@ public class Feature implements GeoJSON {
         this.id = id;
     }
 
-    // ******************************* Getters *******************************
+    /*
+     * Getters
+     */
 
     /**
      * Should always be "Feature".
@@ -71,7 +73,9 @@ public class Feature implements GeoJSON {
         return id;
     }
 
-    // ****************************** Factories ******************************
+    /*
+     * Factories
+     */
 
     /**
      * Create a feature from geometry.
@@ -103,7 +107,9 @@ public class Feature implements GeoJSON {
         return new Feature(geometry, properties, id);
     }
 
-    // **************************** Gson Interface ***************************
+    /*
+     * Gson interface
+     */
 
     /**
      * Create a GeoJSON feature object from JSON.

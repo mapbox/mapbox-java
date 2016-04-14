@@ -28,7 +28,9 @@ public class FeatureCollection implements GeoJSON {
         this.features = features;
     }
 
-    // ******************************* Getters *******************************
+    /*
+     * Getters
+     */
 
     /**
      * Should always be "FeatureCollection".
@@ -49,7 +51,9 @@ public class FeatureCollection implements GeoJSON {
         return features;
     }
 
-    // ****************************** Factories ******************************
+    /*
+     * Factories
+     */
 
     /**
      * Create a {@link FeatureCollection} from a List of features.
@@ -61,7 +65,9 @@ public class FeatureCollection implements GeoJSON {
         return new FeatureCollection(features);
     }
 
-    // **************************** Gson Interface ***************************
+    /*
+     * Gson interface
+     */
 
     /**
      * Create a GeoJSON feature collection object from JSON.
