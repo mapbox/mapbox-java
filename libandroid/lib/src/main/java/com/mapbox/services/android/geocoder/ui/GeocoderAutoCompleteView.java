@@ -2,6 +2,7 @@ package com.mapbox.services.android.geocoder.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,7 +53,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
         });
 
         // Add clear button to autocomplete
-        final Drawable imgClearButton = getResources().getDrawable(R.drawable.ic_clear_black_24dp);
+        final Drawable imgClearButton = ContextCompat.getDrawable(context, R.drawable.ic_clear_black_24dp);
         setCompoundDrawablesWithIntrinsicBounds(null, null, imgClearButton, null);
         setOnTouchListener(new View.OnTouchListener() {
             @Override
