@@ -1,6 +1,6 @@
 [![Build Status](https://www.bitrise.io/app/a7eea7d04be1e2e5.svg?token=OruuJNhnjyeRnlBv0wXsFQ&branch=master)](https://www.bitrise.io/app/a7eea7d04be1e2e5)
 
-# Mapbox Android Services
+# Mapbox Android Services (MAS)
 
 Java and Android libraries for Mapbox APIs.
 
