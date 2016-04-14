@@ -3,6 +3,7 @@ package com.mapbox.services.geocoding.v5;
 import com.google.gson.internal.LinkedTreeMap;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.geocoding.v5.models.FeatureContext;
+import com.mapbox.services.geocoding.v5.models.FeatureGeometry;
 import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
@@ -109,6 +110,22 @@ public class MapboxGeocodingTest {
         assertEquals(feature.asPosition().getLatitude(), 38.897702, DELTA);
         assertEquals(feature.getAddress(), "1600");
         assertEquals(feature.getContext().size(), 5);
+    }
+
+    @Test
+    public void testGeometry() throws ServicesException, IOException {
+        MapboxGeocoding client = new MapboxGeocoding.Builder()
+                .setAccessToken("pk.XXX")
+                .setLocation("1600 pennsylvania ave nw")
+                .build();
+        client.setBaseUrl(mockUrl.toString());
+        Response<GeocodingResponse> response = client.executeCall();
+
+        FeatureGeometry geometry = response.body().getFeatures().get(3).getGeometry();
+        assertEquals(geometry.getType(), "Point");
+        assertEquals(geometry.getCoordinates().get(0), -75.563366, DELTA);
+        assertEquals(geometry.getCoordinates().get(1), 39.75431, DELTA);
+        assertEquals(geometry.isInterpolated(), true);
     }
 
     @Test

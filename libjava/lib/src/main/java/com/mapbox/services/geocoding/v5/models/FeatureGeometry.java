@@ -10,6 +10,7 @@ public class FeatureGeometry {
 
     private String type;
     private List<Double> coordinates;
+    private boolean interpolated;
 
     public FeatureGeometry() {
         this.coordinates = new ArrayList<>();
@@ -41,4 +42,11 @@ public class FeatureGeometry {
         this.coordinates = coordinates;
     }
 
+    public boolean isInterpolated() {
+        return interpolated;
+    }
+
+    public void setInterpolated(boolean interpolated) {
+        this.interpolated = interpolated;
+    }
 }
