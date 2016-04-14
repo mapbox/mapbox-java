@@ -11,6 +11,9 @@ public class Waypoint {
 
     /**
      * Construct a location with a longitude latitude pair.
+     *
+     * @param longitude double value ranging from -180.0 to 180.0.
+     * @param latitude  double value ranging from -90.0 to 90.0.
      */
     public Waypoint(double longitude, double latitude) {
         this.longitude = longitude;
@@ -33,7 +36,7 @@ public class Waypoint {
     /**
      * The longitude of the location.
      *
-     * @return double value ranging from -180.0 to 180.0
+     * @return double value ranging from -180.0 to 180.0.
      */
     public double getLongitude() {
         return longitude;

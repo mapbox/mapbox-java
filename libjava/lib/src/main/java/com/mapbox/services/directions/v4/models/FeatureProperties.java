@@ -9,7 +9,7 @@ public class FeatureProperties {
     private String name;
 
     /**
-     * Gives the name of the closest street to the {@link DirectionFeature} point.
+     * Gives the name of the closest street to the {@link DirectionsFeature} point.
      *
      * @return String name.
      */

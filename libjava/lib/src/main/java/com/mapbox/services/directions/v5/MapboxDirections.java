@@ -178,8 +178,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
          * origin with setOrigin() or a destination with setDestination(), those will be
          * overridden.
          *
-         * @param coordinates
-         * @return
+         * @param coordinates List of {@link Position} giving origin and destination(s) coordinates.
          */
         public Builder setCoordinates(ArrayList<Position> coordinates) {
             this.coordinates = coordinates;
@@ -191,8 +190,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
          * set other coordinates previously with setCoordinates() those elements are kept
          * and their index will be moved up by one (the coordinates are moved to the right).
          *
-         * @param origin
-         * @return
+         * @param origin {@link Position} of route origin.
          */
         public Builder setOrigin(Position origin) {
             if (coordinates == null) {
@@ -213,8 +211,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
          * set other coordinates previously with setCoordinates() those elements are kept
          * and the destination is added at the end of the list.
          *
-         * @param destination
-         * @return
+         * @param destination {@link Position} of route destination.
          */
         public Builder setDestination(Position destination) {
             if (coordinates == null) {
