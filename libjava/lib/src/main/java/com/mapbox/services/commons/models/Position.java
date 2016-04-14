@@ -23,7 +23,9 @@ public class Position {
         this.altitude = altitude;
     }
 
-    // ******************************* Getters *******************************
+    /*
+     * Getters
+     */
 
     /**
      * get the positions longitude.
@@ -66,7 +68,9 @@ public class Position {
         }
     }
 
-    // ****************************** Factories ******************************
+    /*
+     * Factories
+     */
 
     /**
      * Build a {@link Position} from a double longitude, latitude and a altitude.

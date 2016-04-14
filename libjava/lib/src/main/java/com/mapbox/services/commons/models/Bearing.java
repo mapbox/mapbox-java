@@ -20,7 +20,9 @@ public class Bearing {
         this.range = range;
     }
 
-    // ************************* Getters and Setters *************************
+    /*
+     * Getters and setters
+     */
 
     /**
      * get the bearing direction integer value between 0 and 360 indicating the clockwise angle from
