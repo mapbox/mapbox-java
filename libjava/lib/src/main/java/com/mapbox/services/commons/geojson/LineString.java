@@ -55,6 +55,12 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
      * Factories
      */
 
+    /**
+     * creates a {@link LineString} from a list of coordinates.
+     *
+     * @param coordinates List of {@link Position} coordinates.
+     * @return {@link LineString}.
+     */
     public static LineString fromCoordinates(List<Position> coordinates) {
         return new LineString(coordinates);
     }
@@ -63,12 +69,23 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
      * Gson interface
      */
 
+    /**
+     * Create a GeoJSON LineString object from JSON.
+     *
+     * @param json String of JSON making up a LineString.
+     * @return {@link LineString} GeoJSON object.
+     */
     public static LineString fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
         gson.registerTypeAdapter(Position.class, new PositionDeserializer());
         return gson.create().fromJson(json, LineString.class);
     }
 
+    /**
+     * Convert feature into JSON.
+     *
+     * @return String containing LineString JSON.
+     */
     @Override
     public String toJson() {
         GsonBuilder gson = new GsonBuilder();
@@ -80,6 +97,13 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
      * Polyline utils
      */
 
+    /**
+     * Convert a polyline into a LineString.
+     *
+     * @param polyline String describing a polyline.
+     * @param precision 
+     * @return
+     */
     public static LineString fromPolyline(String polyline, int precision) {
         return new LineString(PolylineUtils.decode(polyline, precision));
     }
