@@ -1,7 +1,7 @@
 package com.mapbox.services.commons.geojson;
 
 /**
- * Created by antonio on 1/30/16.
+ * TODO
  */
 public interface GeoJSON {
 

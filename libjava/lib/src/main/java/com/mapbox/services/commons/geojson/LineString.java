@@ -9,46 +9,54 @@ import com.mapbox.services.commons.utils.PolylineUtils;
 import java.util.List;
 
 /**
- * Created by antonio on 1/30/16.
+ * A LineString is a type of {@link Geometry}.
+ *
+ * @see <a href=geojson.org/geojson-spec.html#linestring>Official GeoJSON LineString Specifications</a>
  */
 public class LineString implements com.mapbox.services.commons.geojson.Geometry<List<Position>> {
 
     private final String type = "LineString";
     private final List<Position> coordinates;
 
-    /*
-     * Private constructor
+    /**
+     * Private constructor.
+     *
+     * @param coordinates List of {@link Position} making up the LineString.
      */
-
     private LineString(List<Position> coordinates) {
         this.coordinates = coordinates;
     }
 
-    /*
-     * Getters
-     */
+    // ******************************* Getters *******************************
 
+    /**
+     * Should always be "LineString".
+     *
+     * @return String "LineString".
+     */
     @Override
     public String getType() {
         return type;
     }
 
+    /**
+     * Get the list of {@link Position} making up the LineString.
+     *
+     * @return List of {@link Position}.
+     */
     @Override
     public List<Position> getCoordinates() {
         return coordinates;
     }
 
-    /*
-     * Factories
-     */
+    // ****************************** Factories ******************************
+
 
     public static LineString fromCoordinates(List<Position> coordinates) {
         return new LineString(coordinates);
     }
 
-    /*
-     * Gson interface
-     */
+    // **************************** Gson Interface ***************************
 
     public static LineString fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -63,9 +71,7 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
         return gson.create().toJson(this);
     }
 
-    /*
-     * Polyline utils
-     */
+    // **************************** Polyline Utils ***************************
 
     public static LineString fromPolyline(String polyline, int precision) {
         return new LineString(PolylineUtils.decode(polyline, precision));
