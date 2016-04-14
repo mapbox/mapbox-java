@@ -49,7 +49,7 @@ public class MapboxDirectionsTest {
     public void setUp() throws IOException {
         server = new MockWebServer();
 
-        byte[] content = Files.readAllBytes(Paths.get("src/test/java/com/mapbox/services/services/directions/v5/sample_response.json"));
+        byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/directions_v5.json"));
         String body = new String(content, StandardCharsets.UTF_8);
         server.enqueue(new MockResponse().setBody(body));
 
