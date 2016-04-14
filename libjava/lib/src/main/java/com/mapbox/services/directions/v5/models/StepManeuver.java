@@ -47,7 +47,7 @@ public class StepManeuver {
 
     /**
      * This indicates the type of maneuver. It can be any of these listed:
-     * <p/>
+     * <br>
      * <ul>
      * <li>turn - a basic turn into direction of the modifier</li>
      * <li>new name - the road name changes (after a mandatory turn)</li>
