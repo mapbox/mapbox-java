@@ -1,6 +1,7 @@
 package com.mapbox.services.geocoding.v5.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.services.commons.models.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +16,15 @@ public class GeocodingFeature {
     private String text;
     @SerializedName("place_name") private String placeName;
     private double relevance;
-    private List<Double> bbox;
-    private List<Double> center;
-    private FeatureGeometry geometry;
-    private List<com.mapbox.services.geocoding.v5.models.FeatureContext> context;
-
     public Object properties;
+    private List<Double> bbox;
+    private double[] center;
+    private FeatureGeometry geometry;
+    private String address;
+    private List<FeatureContext> context;
 
     public GeocodingFeature() {
         this.bbox = new ArrayList<>();
-        this.center = new ArrayList<>();
         this.context = new ArrayList<>();
     }
 
@@ -116,13 +116,13 @@ public class GeocodingFeature {
     /**
      * Center location of the feature.
      *
-     * @return Double List with the order longitude, latitude.
+     * @return double[] List with the order longitude, latitude.
      */
-    public List<Double> getCenter() {
+    public double[] getCenter() {
         return this.center;
     }
 
-    public void setCenter(List<Double> center) {
+    public void setCenter(double[] center) {
         this.center = center;
     }
 
@@ -139,17 +139,25 @@ public class GeocodingFeature {
         this.geometry = geometry;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     /**
      * List representing a hierarchy of feature parents. Each parent includes id, and text.
      *
      * @return List of {@link FeatureContext}.
      * @see <a href=https://mapbox.com/api-documentation/#geocoding>Geocoder Documentation</a>
      */
-    public List<com.mapbox.services.geocoding.v5.models.FeatureContext> getContext() {
+    public List<FeatureContext> getContext() {
         return this.context;
     }
 
-    public void setContext(List<com.mapbox.services.geocoding.v5.models.FeatureContext> context) {
+    public void setContext(List<FeatureContext> context) {
         this.context = context;
     }
 
@@ -169,21 +177,11 @@ public class GeocodingFeature {
     }
 
     /**
-     * Get the feature center longitude.
-     *
-     * @return double value of feature center longitude.
+     * Get the center as a Position object
+     * @return Position representing the center of the feature
      */
-    public double getLongitude() {
-        return getCenter().get(0);
-    }
-
-    /**
-     * Get the feature center latitude.
-     *
-     * @return double value of feature center latitude.
-     */
-    public double getLatitude() {
-        return getCenter().get(1);
+    public Position asPosition() {
+        return Position.fromCoordinates(getCenter()[0], getCenter()[1]);
     }
 
     /**

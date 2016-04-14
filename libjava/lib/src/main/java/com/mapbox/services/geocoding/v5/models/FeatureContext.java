@@ -1,5 +1,7 @@
 package com.mapbox.services.geocoding.v5.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Feature context breaks down the places address and gives you more information about each part.
  * In the case of an address it can give you the type id for each part and its name.
@@ -10,6 +12,7 @@ public class FeatureContext {
 
     private String id;
     private String text;
+    @SerializedName("short_code") private String shortCode;
 
     /**
      * Feature IDs are formatted like {type}.{id}. {type} is one of the following, "country",
@@ -40,4 +43,11 @@ public class FeatureContext {
         this.text = text;
     }
 
+    public String getShortCode() {
+        return shortCode;
+    }
+
+    public void setShortCode(String shortCode) {
+        this.shortCode = shortCode;
+    }
 }

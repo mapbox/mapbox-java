@@ -1,9 +1,7 @@
-package com.mapbox.services.services.directions.v5;
+package com.mapbox.services.directions.v5;
 
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.directions.v5.DirectionsCriteria;
-import com.mapbox.services.directions.v5.MapboxDirections;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.directions.v5.models.DirectionsWaypoint;
