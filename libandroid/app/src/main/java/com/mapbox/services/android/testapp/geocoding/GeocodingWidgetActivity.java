@@ -50,7 +50,8 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
         autocomplete.setOnFeatureListener(new GeocoderAutoCompleteView.OnFeatureListener() {
             @Override
             public void OnFeatureClick(GeocodingFeature feature) {
-                updateMap(feature.getLatitude(), feature.getLongitude());
+                Position position = feature.asPosition();
+                updateMap(position.getLatitude(), position.getLongitude());
             }
         });
 

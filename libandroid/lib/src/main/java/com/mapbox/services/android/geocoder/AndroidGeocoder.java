@@ -229,13 +229,14 @@ public class AndroidGeocoder {
         // Find results not contained within the bbox
         List<GeocodingFeature> featuresToRemove = new ArrayList<>();
         for (GeocodingFeature feature: features) {
-            if (feature.getLatitude() < lowerLeftLatitude) {
+            Position featurePosition = feature.asPosition();
+            if (featurePosition.getLatitude() < lowerLeftLatitude) {
                 featuresToRemove.add(feature);
-            } else if (feature.getLatitude() > upperRightLatitude) {
+            } else if (featurePosition.getLatitude() > upperRightLatitude) {
                 featuresToRemove.add(feature);
-            } else if (feature.getLongitude() < lowerLeftLongitude) {
+            } else if (featurePosition.getLongitude() < lowerLeftLongitude) {
                 featuresToRemove.add(feature);
-            } else if (feature.getLongitude() > upperRightLongitude) {
+            } else if (featurePosition.getLongitude() > upperRightLongitude) {
                 featuresToRemove.add(feature);
             }
         }
