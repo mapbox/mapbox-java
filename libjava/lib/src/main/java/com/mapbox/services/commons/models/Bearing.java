@@ -13,7 +13,6 @@ public class Bearing {
      * Constructor
      *
      * @param direction integer value between 0 and 360 indicating the clockwise angle from true north
-     * @param range     TODO
      */
     public Bearing(int direction, int range) {
         this.direction = direction;
@@ -38,11 +37,6 @@ public class Bearing {
         this.direction = direction;
     }
 
-    /**
-     * TODO
-     *
-     * @return TODO
-     */
     public int getRange() {
         return range;
     }
