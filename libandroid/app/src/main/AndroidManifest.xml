@@ -26,14 +26,14 @@
         </activity>
         <activity
             android:name=".directions.DirectionsV4Activity"
-            android:label="Directions v4"
+            android:label="Directions"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"/>
-        <activity
-            android:name=".directions.DirectionsV5Activity"
-            android:label="Directions v5"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity"/>
+        <!--<activity-->
+            <!--android:name=".directions.DirectionsV5Activity"-->
+            <!--android:label="Directions v5"-->
+            <!--android:theme="@style/AppTheme.NoActionBar"-->
+            <!--android:parentActivityName=".MainActivity"/>-->
         <activity
             android:name=".geocoding.GeocodingReverseActivity"
             android:label="Reverse geocoding"

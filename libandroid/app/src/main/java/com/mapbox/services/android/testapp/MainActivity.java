@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
 
     private final static List<SampleItem> samples = new ArrayList<>(Arrays.asList(
-            new SampleItem("Directions v4", "", DirectionsV4Activity.class),
-            new SampleItem("Directions v5", "", DirectionsV5Activity.class),
+            new SampleItem("Directions", "", DirectionsV4Activity.class),
+            //new SampleItem("Directions v5", "", DirectionsV5Activity.class),
             new SampleItem("Reverse geocoding", "", GeocodingReverseActivity.class),
             new SampleItem("Geocoding widget", "", GeocodingWidgetActivity.class),
             new SampleItem("Geocoding service", "", GeocodingServiceActivity.class),
