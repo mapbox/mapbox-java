@@ -9,13 +9,12 @@ public class Position {
     private final double latitude;
     private final double altitude;
 
-
     /**
      * Private Constructor
      *
-     * @param longitude double value with positions longitude.
-     * @param latitude  double value with positions latitude.
-     * @param altitude  double value with positions altitude.
+     * @param longitude double value with position's longitude.
+     * @param latitude  double value with position's latitude.
+     * @param altitude  double value with position's altitude.
      */
     private Position(double longitude, double latitude, double altitude) {
         this.longitude = longitude;
@@ -23,12 +22,8 @@ public class Position {
         this.altitude = altitude;
     }
 
-    /*
-     * Getters
-     */
-
     /**
-     * get the positions longitude.
+     * Gets the position's longitude.
      *
      * @return double value with positions longitude.
      */
@@ -37,7 +32,7 @@ public class Position {
     }
 
     /**
-     * get the positions latitude.
+     * Gets the position's latitude.
      *
      * @return double value with positions latitude.
      */
@@ -46,7 +41,7 @@ public class Position {
     }
 
     /**
-     * get the positions altitude.
+     * Gets the position's altitude.
      *
      * @return double value with positions altitude.
      */
@@ -55,10 +50,10 @@ public class Position {
     }
 
     /**
-     * get the position coordinates in a double array. Altitude will be included within array if it
-     * isn't null.
+     * Gets the position coordinates in a double array. Altitude will be included in the array
+     * if a value is present.
      *
-     * @return double array with longitude, latitude, and altitude (if it isn't null).
+     * @return double[] array with longitude, latitude, and altitude (if present).
      */
     public double[] getCoordinates() {
         if (hasAltitude()) {
@@ -68,12 +63,8 @@ public class Position {
         }
     }
 
-    /*
-     * Factories
-     */
-
     /**
-     * Build a {@link Position} from a double longitude, latitude and a altitude.
+     * Builds a {@link Position} from a double longitude, latitude and an altitude.
      *
      * @param longitude double longitude value.
      * @param latitude  double latitude value.
@@ -84,7 +75,7 @@ public class Position {
     }
 
     /**
-     * Build a {@link Position} from a double longitude and latitude.
+     * Builds a {@link Position} from a double longitude and latitude.
      *
      * @param longitude double longitude value.
      * @param latitude  double latitude value.
@@ -94,7 +85,7 @@ public class Position {
     }
 
     /**
-     * Check if a position has altitude value.
+     * Checks if a position has an altitude value.
      *
      * @return true if position contains altitude data.
      */
