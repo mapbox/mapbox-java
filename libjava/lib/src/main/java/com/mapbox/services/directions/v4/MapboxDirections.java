@@ -24,9 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
 /**
- * @deprecated Directions v4 are now deprecated in favor of v5.
+ * Mapbox Directions v4 client.
  */
-@Deprecated
 public class MapboxDirections implements MapboxService<DirectionsResponse> {
 
     private Builder builder = null;

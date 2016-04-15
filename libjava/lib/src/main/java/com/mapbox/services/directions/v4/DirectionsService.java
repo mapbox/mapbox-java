@@ -11,7 +11,6 @@ import rx.Observable;
 /**
  * Interface that defines the directions service (v4).
  */
-@Deprecated
 public interface DirectionsService {
 
     /**
