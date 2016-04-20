@@ -12,7 +12,7 @@ import java.util.List;
  * A GeoJSON object with the type "FeatureCollection" is a feature object which represents a
  * collection of feature objects.
  *
- * @see <a href=geojson.org/geojson-spec.html#feature-collection-objects>Official GeoJSON FeatureCollection Specifications</a>
+ * @see <a href='geojson.org/geojson-spec.html#feature-collection-objects'>Official GeoJSON FeatureCollection Specifications</a>
  */
 public class FeatureCollection implements GeoJSON {
 

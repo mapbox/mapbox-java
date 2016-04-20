@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * A LineString is a type of {@link Geometry}.
  *
- * @see <a href=geojson.org/geojson-spec.html#linestring>Official GeoJSON LineString Specifications</a>
+ * @see <a href='geojson.org/geojson-spec.html#linestring'>Official GeoJSON LineString Specifications</a>
  */
 public class LineString implements com.mapbox.services.commons.geojson.Geometry<List<Position>> {
 

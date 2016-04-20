@@ -10,7 +10,7 @@ import com.mapbox.services.commons.models.Position;
 /**
  * A GeoJSON object with the type "Feature" is a feature object.
  *
- * @see <a href=geojson.org/geojson-spec.html#feature-objects>Official GeoJSON Feature Specifications</a>
+ * @see <a href='geojson.org/geojson-spec.html#feature-objects'>Official GeoJSON Feature Specifications</a>
  */
 public class Feature implements GeoJSON {
 

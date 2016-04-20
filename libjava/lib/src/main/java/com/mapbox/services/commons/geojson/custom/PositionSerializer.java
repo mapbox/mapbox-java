@@ -10,8 +10,8 @@ import com.mapbox.services.commons.models.Position;
 import java.lang.reflect.Type;
 
 /**
- * Required to handle the special case where the altitude might be a Double.NaN,
- * which isn't a valid double value as per JSON specification.
+ * Required to handle the special case where the altitude might be a Double.NaN, which isn't a valid
+ * double value as per JSON specification.
  */
 public class PositionSerializer implements JsonSerializer<Position> {
 

@@ -12,7 +12,7 @@ import java.util.List;
  * A GeoJSON object with the type "GeometryCollection" is a geometry object which represents a
  * collection of geometry objects.
  *
- * @see <a href=geojson.org/geojson-spec.html#geometry-collection>Official GeoJSON GeometryCollection Specifications</a>
+ * @see <a href='geojson.org/geojson-spec.html#geometry-collection'>Official GeoJSON GeometryCollection Specifications</a>
  */
 public class GeometryCollection implements com.mapbox.services.commons.geojson.GeoJSON {
 

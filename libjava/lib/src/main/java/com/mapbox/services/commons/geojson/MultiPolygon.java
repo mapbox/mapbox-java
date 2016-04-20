@@ -8,7 +8,9 @@ import com.mapbox.services.commons.models.Position;
 import java.util.List;
 
 /**
- * Created by antonio on 1/30/16.
+ * A MultiPolygon is a type of {@link Geometry}.
+ *
+ * @see <a href='http://geojson.org/geojson-spec.html#multipolygon'>Official GeoJSON MultiPolygon Specifications</a>
  */
 public class MultiPolygon implements com.mapbox.services.commons.geojson.Geometry<List<List<List<Position>>>> {
 
@@ -19,6 +21,11 @@ public class MultiPolygon implements com.mapbox.services.commons.geojson.Geometr
      * Private constructor
      */
 
+    /**
+     * Private constructor.
+     *
+     * @param coordinates List of {@link Position} making up the MultiPolygon.
+     */
     private MultiPolygon(List<List<List<Position>>> coordinates) {
         this.coordinates = coordinates;
     }
@@ -27,11 +34,21 @@ public class MultiPolygon implements com.mapbox.services.commons.geojson.Geometr
      * Getters
      */
 
+    /**
+     * Should always be "MultiPolygon".
+     *
+     * @return String "MultiPolygon".
+     */
     @Override
     public String getType() {
         return type;
     }
 
+    /**
+     * Get the list of {@link Position} making up the MultiPolygon.
+     *
+     * @return List of {@link Position}.
+     */
     @Override
     public List<List<List<Position>>> getCoordinates() {
         return coordinates;
@@ -41,6 +58,12 @@ public class MultiPolygon implements com.mapbox.services.commons.geojson.Geometr
      * Factories
      */
 
+    /**
+     * Creates a {@link MultiPolygon} from a list of coordinates.
+     *
+     * @param coordinates List of {@link Position} coordinates.
+     * @return {@link MultiPolygon}.
+     */
     public static MultiPolygon fromCoordinates(List<List<List<Position>>> coordinates) {
         return new MultiPolygon(coordinates);
     }
@@ -49,17 +72,27 @@ public class MultiPolygon implements com.mapbox.services.commons.geojson.Geometr
      * Gson interface
      */
 
+    /**
+     * Create a GeoJSON MultiPolygon object from JSON.
+     *
+     * @param json String of JSON making up a MultiPolygon.
+     * @return {@link MultiPolygon} GeoJSON object.
+     */
     public static MultiPolygon fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
         gson.registerTypeAdapter(Position.class, new PositionDeserializer());
         return gson.create().fromJson(json, MultiPolygon.class);
     }
 
+    /**
+     * Convert feature into JSON.
+     *
+     * @return String containing MultiPolygon JSON.
+     */
     @Override
     public String toJson() {
         GsonBuilder gson = new GsonBuilder();
         gson.registerTypeAdapter(Position.class, new PositionSerializer());
         return gson.create().toJson(this);
     }
-
 }
