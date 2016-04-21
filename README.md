@@ -9,5 +9,11 @@ An open source toolset for building applications that need directions, geocoding
 ### Installation
 To install and use MAS in an application, see the [Mapbox Android Services website](https://www.mapbox.com/android-sdk/#mapbox_android_services).
 
+### Javadoc
+Located within the `gh-pages` branch, you can build locally by running: `bundle exec jekyll serve`. If you prefer to directly view online there are two sections, one for each library:
+
+- [Mapbox Java Services](http://mapbox.github.io/mapbox-java/api/libjava)
+- [Mapbox Android Services](http://mapbox.github.io/mapbox-java/api/libandroid)
+
 ### Sample code
 Check the [Test App](https://github.com/mapbox/mapbox-java/tree/master/libandroid/app) for a complete Android demo app using this library. You can also visit the [Mapbox Android SDK examples page](https://www.mapbox.com/android-sdk/examples/) for additional code examples.
