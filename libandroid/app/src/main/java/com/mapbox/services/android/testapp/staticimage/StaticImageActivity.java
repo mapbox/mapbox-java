@@ -35,7 +35,6 @@ public class StaticImageActivity extends AppCompatActivity {
             {33.5275, -112.2625}, // University of Phoenix Stadium
             {34.161389, -118.1675}}; // Rose Bowl
 
-
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
