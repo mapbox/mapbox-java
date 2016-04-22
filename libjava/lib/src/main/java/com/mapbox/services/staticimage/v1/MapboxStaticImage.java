@@ -1,5 +1,9 @@
 package com.mapbox.services.staticimage.v1;
 
+import com.mapbox.services.Constants;
+import com.mapbox.services.commons.MapboxBuilder;
+import com.mapbox.services.commons.ServicesException;
+
 import okhttp3.HttpUrl;
 
 /**
@@ -29,7 +33,7 @@ public class MapboxStaticImage {
                 .addPathSegment("static")
                 .addPathSegment(builder.getLocationPathSegment())
                 .addPathSegment(builder.getSizePathSegment())
-                .addQueryParameter("access_token", builder.accessToken);
+                .addQueryParameter("access_token", builder.getAccessToken());
 
         if (!builder.isAttribution()) {
             // Default is true
@@ -57,19 +61,19 @@ public class MapboxStaticImage {
      * Static image builder used to customize the image, including location, image width/height,
      * and camera position.
      */
-    public static class Builder {
+    public static class Builder extends MapboxBuilder {
 
         // Set defaults for optional fields
         private String accessToken;
-        private String username;
+        private String username = Constants.MAPBOX_USER;
         private String styleId;
-        private double lon;
-        private double lat;
-        private double zoom;
+        private Double lon;
+        private Double lat;
+        private Double zoom;
         private double bearing = 0;
         private double pitch = 0;
-        private int width;
-        private int height;
+        private Integer width;
+        private Integer height;
         private boolean retina = false;
         private boolean attribution = true;
         private boolean logo = true;
@@ -80,11 +84,11 @@ public class MapboxStaticImage {
          * @param accessToken Mapbox access token, you must have a Mapbox account in order to use
          *                    this library.
          */
+        @Override
         public Builder setAccessToken(String accessToken) {
             this.accessToken = accessToken;
             return this;
         }
-
 
         /**
          * Set the map style username. Typically will either be your Mapbox username or if you are
@@ -209,9 +213,15 @@ public class MapboxStaticImage {
             return this;
         }
 
-        /*
-         * Getters
+        /**
+         * Get the access token
+         *
+         * @return String with the access token
          */
+        @Override
+        public String getAccessToken() {
+            return accessToken;
+        }
 
         /**
          * Get the username you set within the builder. Typically your own Mapbox username or if you
@@ -273,7 +283,26 @@ public class MapboxStaticImage {
         /**
          * Build the client when all user parameters have been set.
          */
-        public MapboxStaticImage build() {
+        @Override
+        public MapboxStaticImage build() throws ServicesException {
+            validateAccessToken(accessToken);
+
+            if (styleId == null || styleId.isEmpty()) {
+                throw new ServicesException("You need to set a map style.");
+            }
+
+            if (lon == null || lat == null) {
+                throw new ServicesException("You need to set the map lon/lat coordinates.");
+            }
+
+            if (zoom == null) {
+                throw new ServicesException("You need to set the map zoom level.");
+            }
+
+            if (width == null || height == null) {
+                throw new ServicesException("You need to set the map width/height dimensions.");
+            }
+
             return new MapboxStaticImage(this);
         }
 
