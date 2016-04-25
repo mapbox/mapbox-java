@@ -110,23 +110,16 @@ public class DirectionsV5Activity extends AppCompatActivity {
         positions.add(destination);
 
         MapboxDirections.Builder builder = new MapboxDirections.Builder()
+                .setAccessToken(Utils.getMapboxAccessToken(this))
                 .setCoordinates(positions)
-                .setProfile(DirectionsCriteria.PROFILE_DRIVING);
+                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+                .setSteps(true);
 
         // Check for a custom user
         int v5MapboxUser = getResources().getIdentifier("v5_mapbox_user", "string", getPackageName());
         if (!TextUtils.isEmpty(getString(v5MapboxUser))) {
             Log.d(LOG_TAG, "Custom user set.");
             builder.setUser(getString(v5MapboxUser));
-        }
-
-        // Check for a custom access token
-        int v5MapboxAccessToken = getResources().getIdentifier("v5_mapbox_access_token", "string", getPackageName());
-        if (!TextUtils.isEmpty(getString(v5MapboxAccessToken))) {
-            Log.d(LOG_TAG, "Custom access token set.");
-            builder.setAccessToken(getString(v5MapboxAccessToken));
-        } else {
-            builder.setAccessToken(Utils.getMapboxAccessToken(this));
         }
 
         MapboxDirections client = builder.build();
