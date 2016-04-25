@@ -24,7 +24,7 @@ public interface DirectionsService {
             @Query("overview") String overview,
             @Query("radiuses") String radiuses,
             @Query("steps") Boolean steps,
-            @Query("uturns") Boolean uturns
+            @Query("continue_straight") Boolean continueStraight
     );
 
     @GET("directions/v5/{user}/{profile}/{coordinates}")
@@ -38,7 +38,7 @@ public interface DirectionsService {
             @Query("overview") String overview,
             @Query("radiuses") String radiuses,
             @Query("steps") Boolean steps,
-            @Query("uturns") Boolean uturns
+            @Query("continue_straight") Boolean continueStraight
     );
 
 }

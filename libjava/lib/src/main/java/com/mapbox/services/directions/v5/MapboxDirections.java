@@ -76,7 +76,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
                 builder.getOverview(),
                 builder.getRadiuses(),
                 builder.isSteps(),
-                builder.isUturns());
+                builder.isContinueStraight());
 
         // Done
         return call;
@@ -117,7 +117,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
                 builder.getOverview(),
                 builder.getRadiuses(),
                 builder.isSteps(),
-                builder.isUturns());
+                builder.isContinueStraight());
 
         // Done
         return observable;
@@ -139,7 +139,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         private String overview = null;
         private double[] radiuses = null;
         private Boolean steps = null;
-        private Boolean uturns = null;
+        private Boolean continueStraight = null;
 
         /*
          * Constructor
@@ -247,8 +247,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return this;
         }
 
-        public Builder setUturns(Boolean uturns) {
-            this.uturns = uturns;
+        public Builder setContinueStraight(Boolean continueStraight) {
+            this.continueStraight = continueStraight;
             return this;
         }
 
@@ -329,8 +329,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return steps;
         }
 
-        public Boolean isUturns() {
-            return uturns;
+        public Boolean isContinueStraight() {
+            return continueStraight;
         }
 
         /*
