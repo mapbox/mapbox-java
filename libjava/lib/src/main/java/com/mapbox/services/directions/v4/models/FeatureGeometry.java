@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * Describes the geometry of a {@link DirectionsFeature}.
  */
+@Deprecated
 public class FeatureGeometry {
 
     private String type;

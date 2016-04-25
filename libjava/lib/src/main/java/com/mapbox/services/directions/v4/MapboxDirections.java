@@ -26,6 +26,7 @@ import rx.Observable;
 /**
  * Mapbox Directions v4 client.
  */
+@Deprecated
 public class MapboxDirections implements MapboxService<DirectionsResponse> {
 
     private Builder builder = null;

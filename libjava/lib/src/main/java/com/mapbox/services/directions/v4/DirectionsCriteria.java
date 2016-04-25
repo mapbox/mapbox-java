@@ -3,6 +3,7 @@ package com.mapbox.services.directions.v4;
 /**
  * Constants used to customize the directions request.
  */
+@Deprecated
 public final class DirectionsCriteria {
 
     /**

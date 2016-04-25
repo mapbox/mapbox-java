@@ -3,6 +3,7 @@ package com.mapbox.services.directions.v4.models;
 /**
  * A point on earth represented by a longitude/latitude pair.
  */
+@Deprecated
 public class Waypoint {
 
     private double latitude;

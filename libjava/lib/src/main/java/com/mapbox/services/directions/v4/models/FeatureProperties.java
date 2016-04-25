@@ -3,6 +3,7 @@ package com.mapbox.services.directions.v4.models;
 /**
  * Properties describing a {@link DirectionsFeature}.
  */
+@Deprecated
 public class FeatureProperties {
 
     private String name;

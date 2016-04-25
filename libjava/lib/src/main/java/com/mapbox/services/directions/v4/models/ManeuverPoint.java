@@ -7,6 +7,7 @@ import java.util.List;
  * If turn-by-turn directions were requested for route, each step gives the location in which it
  * should occur.
  */
+@Deprecated
 public class ManeuverPoint {
 
     private String type;

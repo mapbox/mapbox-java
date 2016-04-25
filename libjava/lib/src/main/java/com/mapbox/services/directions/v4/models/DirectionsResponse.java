@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * The response to a directions request.
  */
+@Deprecated
 public class DirectionsResponse {
 
     private DirectionsFeature origin;

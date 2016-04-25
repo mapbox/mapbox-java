@@ -4,6 +4,7 @@ package com.mapbox.services.directions.v4.models;
  * Defines a <a href="http://geojson.org/geojson-spec.html#feature-objects">GeoJSON Feature Object</a>
  * with a Point geometry type.
  */
+@Deprecated
 public class DirectionsFeature {
 
     private String type;

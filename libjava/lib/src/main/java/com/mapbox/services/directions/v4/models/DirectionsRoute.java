@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Gives detailed information about an individual route such as the duration, distance and geometry.
  */
+@Deprecated
 public class DirectionsRoute {
 
     private int distance;
