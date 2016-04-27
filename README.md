@@ -8,6 +8,17 @@ Java and Android libraries for Mapbox APIs.
 
 We recommend installing this library with Gradle. This will automatically install the necessary dependencies and pull the library binaries from the Mapbox Android repository on Maven Central.
 
+To install the current _release_ version add this to your `build.gradle`:
+
+```
+
+dependencies {
+    compile ('com.mapbox.mapboxsdk:mapbox-android-services:1.0.0-SNAPSHOT@aar'){
+        transitive=true
+    }
+}
+```
+
 To install the current _SNAPSHOT_ version add this to your `build.gradle`:
 
 ```
@@ -17,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    compile ('com.mapbox.mapboxsdk:mapbox-android-services:1.0.0-SNAPSHOT@aar'){
+    compile ('com.mapbox.mapboxsdk:mapbox-android-services:1.1.0-SNAPSHOT@aar'){
         transitive=true
     }
 }
