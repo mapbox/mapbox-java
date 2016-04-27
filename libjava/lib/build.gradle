@@ -9,9 +9,6 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.1'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
 
-    // Apache commons for StringUtils
-    compile 'org.apache.commons:commons-lang3:3.4'
-
     // Testing
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-junit:2.0.0.0'
