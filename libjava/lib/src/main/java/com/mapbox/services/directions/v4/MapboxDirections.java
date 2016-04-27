@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -259,7 +260,9 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             // Convert to {lon},{lat} coordinate pairs
             List<String> pieces = new ArrayList<>();
             for (Waypoint waypoint: waypoints) {
-                pieces.add(String.format("%f,%f", waypoint.getLongitude(), waypoint.getLatitude()));
+                pieces.add(String.format(Locale.US, "%f,%f",
+                        waypoint.getLongitude(),
+                        waypoint.getLatitude()));
             }
 
             // The waypoints parameter should be a semicolon-separated list of locations to visit

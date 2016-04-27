@@ -4,6 +4,8 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.ServicesException;
 
+import java.util.Locale;
+
 import okhttp3.HttpUrl;
 
 /**
@@ -249,7 +251,7 @@ public class MapboxStaticImage {
          * @return String value with static image location information.
          */
         public String getLocationPathSegment() {
-            return String.format("%f,%f,%f,%f,%f", lon, lat, zoom, bearing, pitch);
+            return String.format(Locale.US, "%f,%f,%f,%f,%f", lon, lat, zoom, bearing, pitch);
         }
 
         /**
@@ -259,7 +261,7 @@ public class MapboxStaticImage {
          */
         public String getSizePathSegment() {
             String retinaPath = retina ? "@2x" : "";
-            return String.format("%dx%d%s", width, height, retinaPath);
+            return String.format(Locale.US, "%dx%d%s", width, height, retinaPath);
         }
 
         /**
