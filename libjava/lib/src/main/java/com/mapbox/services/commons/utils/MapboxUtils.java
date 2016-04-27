@@ -1,7 +1,5 @@
 package com.mapbox.services.commons.utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Misc utils around Mapbox services.
  */
@@ -16,7 +14,7 @@ public class MapboxUtils {
      * @return true if the provided access token is valid, false otherwise.
      */
     public static boolean isAccessTokenValid(String accessToken) {
-        if (StringUtils.isEmpty(accessToken)) return false;
+        if (TextUtils.isEmpty(accessToken)) return false;
         if (!accessToken.startsWith("pk.") && !accessToken.startsWith("sk.")) return false;
         return true;
     }

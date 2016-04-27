@@ -4,10 +4,9 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.directions.v4.models.DirectionsResponse;
 import com.mapbox.services.directions.v4.models.Waypoint;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -266,7 +265,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             }
 
             // The waypoints parameter should be a semicolon-separated list of locations to visit
-            waypointsFormatted = StringUtils.join(pieces, ";");
+            waypointsFormatted = TextUtils.join(";", pieces.toArray());
             return waypointsFormatted;
         }
 
