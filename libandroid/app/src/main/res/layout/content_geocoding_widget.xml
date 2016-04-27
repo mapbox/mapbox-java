@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.mapbox.services.android.testapp.GeocoderWidgetActivity"
+    tools:context="com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity"
     tools:showIn="@layout/activity_geocoding_widget">
 
     <com.mapbox.services.android.geocoder.ui.GeocoderAutoCompleteView

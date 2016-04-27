@@ -3,6 +3,8 @@
     <string name="app_name">Mapbox Android Services</string>
     <string name="action_settings">Settings</string>
 
+    <string name="default_style">mapbox://styles/mapbox/streets-v8</string>
+
     <string name="category">category</string>
     <string name="category_directions">Directions</string>
     <string name="category_geocoding">Geocoding</string>
