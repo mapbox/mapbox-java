@@ -1,5 +1,7 @@
 package com.mapbox.services.geojson;
 
+import com.mapbox.services.commons.geojson.FeatureCollection;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,7 +13,7 @@ public class FeatureCollectionTest extends BaseGeoJSON {
 
     @Test
     public void fromJson() {
-        com.mapbox.services.commons.geojson.FeatureCollection geo = com.mapbox.services.commons.geojson.FeatureCollection.fromJson(BaseGeoJSON.SAMPLE_FEATURECOLLECTION);
+        FeatureCollection geo = FeatureCollection.fromJson(BaseGeoJSON.SAMPLE_FEATURECOLLECTION);
         assertEquals(geo.getType(), "FeatureCollection");
         assertEquals(geo.getFeatures().size(), 3);
         assertEquals(geo.getFeatures().get(0).getType(), "Feature");
@@ -24,7 +26,7 @@ public class FeatureCollectionTest extends BaseGeoJSON {
 
     @Test
     public void toJson() {
-        com.mapbox.services.commons.geojson.FeatureCollection geo = com.mapbox.services.commons.geojson.FeatureCollection.fromJson(BaseGeoJSON.SAMPLE_FEATURECOLLECTION);
+        FeatureCollection geo = FeatureCollection.fromJson(BaseGeoJSON.SAMPLE_FEATURECOLLECTION);
         compareJson(BaseGeoJSON.SAMPLE_FEATURECOLLECTION, geo.toJson());
     }
 

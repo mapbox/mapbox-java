@@ -66,7 +66,7 @@ workflows:
         - content: |-
             #!/bin/bash
             cd libjava
-            ./gradlew testReleaseUnitTest --continue
+            ./gradlew test
         - is_debug: 'yes'
     - script:
         title: Run Android Project Unit Tests
@@ -74,7 +74,7 @@ workflows:
         - content: |-
             #!/bin/bash
             cd libandroid
-            ./gradlew testReleaseUnitTest --continue
+            ./gradlew test
         - is_debug: 'yes'
     - slack:
         title: Post to Slack
@@ -155,14 +155,14 @@ workflows:
         - content: |-
             #!/bin/bash
             cd libjava
-            ./gradlew testReleaseUnitTest --continue
+            ./gradlew test
     - script:
         title: Run Android Project Unit Tests
         inputs:
         - content: |-
             #!/bin/bash
             cd libandroid
-            ./gradlew testReleaseUnitTest --continue
+            ./gradlew test
     - script:
         title: Publish Java Services To Maven Central
         inputs:
