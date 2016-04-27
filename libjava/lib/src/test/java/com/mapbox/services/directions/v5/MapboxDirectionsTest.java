@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
@@ -244,6 +245,22 @@ public class MapboxDirectionsTest {
         test.add(Position.fromCoordinates(3.1, 3.2));
 
         // The order matters
+        String coordinates = new MapboxDirections.Builder()
+                .setOrigin(Position.fromCoordinates(1.1, 1.2))
+                .setDestination(Position.fromCoordinates(4.1, 4.2))
+                .setCoordinates(test)
+                .getCoordinates();
+        assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
+    }
+
+    @Test
+    public void TestLocale() {
+        ArrayList test = new ArrayList<>();
+        test.add(Position.fromCoordinates(2.1, 2.2));
+        test.add(Position.fromCoordinates(3.1, 3.2));
+
+        // Locale shouldn't matter (#39)
+        Locale.setDefault(Locale.GERMANY);
         String coordinates = new MapboxDirections.Builder()
                 .setOrigin(Position.fromCoordinates(1.1, 1.2))
                 .setDestination(Position.fromCoordinates(4.1, 4.2))
