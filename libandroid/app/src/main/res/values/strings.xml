@@ -21,6 +21,6 @@
     <string name="no_location_data_provided">No location data provided</string>
     <string name="service_not_available">Sorry, the service is not available</string>
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
-    <string name="title_activity_deleteme">DeletemeActivity</string>
+    <string name="title_activity_maki_icons">MakiIconsActivity</string>
 
 </resources>
