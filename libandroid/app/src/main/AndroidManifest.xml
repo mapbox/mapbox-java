@@ -21,39 +21,50 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".directions.DirectionsV4Activity"
             android:label="Directions"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity"/>
-        <!--<activity-->
-            <!--android:name=".directions.DirectionsV5Activity"-->
-            <!--android:label="Directions v5"-->
-            <!--android:theme="@style/AppTheme.NoActionBar"-->
-            <!--android:parentActivityName=".MainActivity"/>-->
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <!-- <activity -->
+        <!-- android:name=".directions.DirectionsV5Activity" -->
+        <!-- android:label="Directions v5" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar" -->
+        <!-- android:parentActivityName=".MainActivity"/> -->
+        <activity
+            android:name=".icons.DirectionsIconsActivity"
+            android:label="Directions Icons"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".geocoding.GeocodingReverseActivity"
             android:label="Reverse geocoding"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".geocoding.GeocodingServiceActivity"
             android:label="Geocoding service"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".geocoding.GeocodingWidgetActivity"
             android:label="Geocoding widget"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".icons.MakiIconsActivity"
+            android:label="Maki Icons"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".staticimage.StaticImageActivity"
             android:label="Static image"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--
         Service to asynchronously fetch a location address using a Geocoder. Setting the

@@ -21,6 +21,8 @@ import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
+import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
+import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.utils.PermissionsUtils;
 
@@ -43,9 +45,11 @@ public class MainActivity extends AppCompatActivity {
     private final static List<SampleItem> samples = new ArrayList<>(Arrays.asList(
             new SampleItem("Directions", "", DirectionsV4Activity.class),
             //new SampleItem("Directions v5", "", DirectionsV5Activity.class),
+            new SampleItem("Directions Icons", "", DirectionsIconsActivity.class),
             new SampleItem("Reverse geocoding", "", GeocodingReverseActivity.class),
             new SampleItem("Geocoding widget", "", GeocodingWidgetActivity.class),
             new SampleItem("Geocoding service", "", GeocodingServiceActivity.class),
+            new SampleItem("Maki Icons", "", MakiIconsActivity.class),
             new SampleItem("Static image", "", StaticImageActivity.class)
     ));
 
