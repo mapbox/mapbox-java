@@ -57,7 +57,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".icons.MakiIconsActivity"
-            android:label="@string/title_activity_maki_icons"
+            android:label="Maki Icons"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
