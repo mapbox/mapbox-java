@@ -9,9 +9,28 @@
 
 # Add any project specific keep options here:
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Retrofit 2
+# See: http://square.github.io/retrofit/#download
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+# RxJava
+# See: https://github.com/ReactiveX/RxAndroid/pull/220
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+-dontwarn sun.misc.Unsafe
+
+# MAS Data Models
+-keep class com.mapbox.services.directions.v4.models.** { *; }
+-keep class com.mapbox.services.directions.v5.models.** { *; }
+-keep class com.mapbox.services.geocoding.v5.models.** { *; }

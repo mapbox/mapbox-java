@@ -4,15 +4,15 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.directions.v4.models.DirectionsResponse;
 import com.mapbox.services.directions.v4.models.Waypoint;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -259,11 +259,13 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             // Convert to {lon},{lat} coordinate pairs
             List<String> pieces = new ArrayList<>();
             for (Waypoint waypoint: waypoints) {
-                pieces.add(String.format("%f,%f", waypoint.getLongitude(), waypoint.getLatitude()));
+                pieces.add(String.format(Locale.US, "%f,%f",
+                        waypoint.getLongitude(),
+                        waypoint.getLatitude()));
             }
 
             // The waypoints parameter should be a semicolon-separated list of locations to visit
-            waypointsFormatted = StringUtils.join(pieces, ";");
+            waypointsFormatted = TextUtils.join(";", pieces.toArray());
             return waypointsFormatted;
         }
 

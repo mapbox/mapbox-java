@@ -5,13 +5,13 @@ import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -277,12 +277,12 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         public String getCoordinates() {
             List<String> coordinatesFormatted = new ArrayList<>();
             for (Position coordinate: coordinates) {
-                coordinatesFormatted.add(String.format("%f,%f",
+                coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
                         coordinate.getLongitude(),
                         coordinate.getLatitude()));
             }
 
-            return StringUtils.join(coordinatesFormatted, ";");
+            return TextUtils.join(";", coordinatesFormatted.toArray());
         }
 
         @Override
@@ -319,10 +319,10 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
 
             String[] radiusesFormatted = new String[radiuses.length];
             for (int i = 0; i < radiuses.length; i++) {
-                radiusesFormatted[i] = String.format("%f", radiuses[i]);
+                radiusesFormatted[i] = String.format(Locale.US, "%f", radiuses[i]);
             }
 
-            return StringUtils.join(radiusesFormatted, ";");
+            return TextUtils.join(";", radiusesFormatted);
         }
 
         public Boolean isSteps() {

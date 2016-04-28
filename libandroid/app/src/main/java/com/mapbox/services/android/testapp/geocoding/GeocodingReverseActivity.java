@@ -1,15 +1,12 @@
 package com.mapbox.services.android.testapp.geocoding;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -51,24 +48,12 @@ public class GeocodingReverseActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.message);
         setMessage("Tap the map to trigger the reverse geocoder.");
 
-        final LatLng dupontCircle = new LatLng(38.90962, -77.04341);
-
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setAccessToken(Utils.getMapboxAccessToken(this));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(MapboxMap mapboxMapReady) {
-                mapboxMap = mapboxMapReady;
-                mapboxMap.setStyleUrl(Style.MAPBOX_STREETS);
-
-                // Animate map
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(dupontCircle)
-                        .zoom(15)
-                        .build();
-                mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
+            public void onMapReady(final MapboxMap mapboxMap) {
                 // Click listener
                 mapboxMap.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
                     @Override

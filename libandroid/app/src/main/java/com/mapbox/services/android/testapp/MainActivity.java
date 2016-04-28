@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,11 +15,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mapbox.services.android.BuildConfig;
 import com.mapbox.services.android.testapp.directions.DirectionsV4Activity;
 import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
+import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
+import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.utils.PermissionsUtils;
 
@@ -32,16 +36,20 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private final static String LOG_TAG = "MainActivity";
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     private final static List<SampleItem> samples = new ArrayList<>(Arrays.asList(
-            new SampleItem("Directions v5", "", DirectionsV5Activity.class),
-            new SampleItem("Directions v4 (deprecated)", "", DirectionsV4Activity.class),
+            new SampleItem("Directions v4", "", DirectionsV4Activity.class),
+            new SampleItem("Directions v5 (experimental)", "", DirectionsV5Activity.class),
+            new SampleItem("Directions icons", "", DirectionsIconsActivity.class),
             new SampleItem("Reverse geocoding", "", GeocodingReverseActivity.class),
             new SampleItem("Geocoding widget", "", GeocodingWidgetActivity.class),
             new SampleItem("Geocoding service", "", GeocodingServiceActivity.class),
+            new SampleItem("Maki icons", "", MakiIconsActivity.class),
             new SampleItem("Static image", "", StaticImageActivity.class)
     ));
 
@@ -51,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Debug information
+        Log.d(LOG_TAG, "MAS version name: " + BuildConfig.VERSION_NAME);
+        Log.d(LOG_TAG, "MAS version code: " + BuildConfig.VERSION_CODE);
 
         // RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);

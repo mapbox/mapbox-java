@@ -8,6 +8,7 @@ import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.models.Position;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -141,7 +142,9 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
 
         public Builder setCoordinates(Position position) {
             if (position == null) return this;
-            query = String.format("%f,%f", position.getLongitude(), position.getLatitude());
+            query = String.format(Locale.US, "%f,%f",
+                    position.getLongitude(),
+                    position.getLatitude());
             return this;
         }
 
@@ -157,7 +160,9 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
          */
         public Builder setProximity(Position position) {
             if (position == null) return this;
-            proximity = String.format("%f,%f", position.getLongitude(), position.getLatitude());
+            proximity = String.format(Locale.US, "%f,%f",
+                    position.getLongitude(),
+                    position.getLatitude());
             return this;
         }
 
