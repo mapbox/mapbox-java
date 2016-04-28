@@ -27,17 +27,17 @@
         </activity>
         <activity
             android:name=".directions.DirectionsV4Activity"
-            android:label="Directions"
+            android:label="Directions v4"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <!-- <activity -->
-        <!-- android:name=".directions.DirectionsV5Activity" -->
-        <!-- android:label="Directions v5" -->
-        <!-- android:theme="@style/AppTheme.NoActionBar" -->
-        <!-- android:parentActivityName=".MainActivity"/> -->
+        <activity
+            android:name=".directions.DirectionsV5Activity"
+            android:label="Directions v5 (experimental)"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".icons.DirectionsIconsActivity"
-            android:label="Directions Icons"
+            android:label="Directions icons"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -57,7 +57,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".icons.MakiIconsActivity"
-            android:label="Maki Icons"
+            android:label="Maki icons"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
