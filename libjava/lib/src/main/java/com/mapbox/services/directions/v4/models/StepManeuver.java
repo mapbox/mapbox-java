@@ -3,7 +3,6 @@ package com.mapbox.services.directions.v4.models;
 /**
  * Used to describe a instruction step maneuver.
  */
-@Deprecated
 public class StepManeuver {
 
     private String type;
