@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mapbox.services.android.BuildConfig;
 import com.mapbox.services.android.testapp.directions.DirectionsV4Activity;
 import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
@@ -31,6 +33,8 @@ import java.util.List;
  * from the user. It loads all the sample activities using a RecyclerView.
  */
 public class MainActivity extends AppCompatActivity {
+
+    private final static String LOG_TAG = "MainActivity";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -51,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Debug information
+        Log.d(LOG_TAG, "MAS version name: " + BuildConfig.VERSION_NAME);
+        Log.d(LOG_TAG, "MAS version code: " + BuildConfig.VERSION_CODE);
 
         // RecyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
