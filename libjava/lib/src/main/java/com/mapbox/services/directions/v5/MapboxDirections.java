@@ -71,7 +71,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
                 builder.getProfile(),
                 builder.getCoordinates(),
                 builder.getAccessToken(),
-                builder.isAlternative(),
+                builder.isAlternatives(),
                 builder.getGeometries(),
                 builder.getOverview(),
                 builder.getRadiuses(),
@@ -112,7 +112,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
                 builder.getProfile(),
                 builder.getCoordinates(),
                 builder.getAccessToken(),
-                builder.isAlternative(),
+                builder.isAlternatives(),
                 builder.getGeometries(),
                 builder.getOverview(),
                 builder.getRadiuses(),
@@ -134,7 +134,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         private String profile = null;
         private ArrayList<Position> coordinates = null;
         private String accessToken = null;
-        private Boolean alternative = null;
+        private Boolean alternatives = null;
         private String geometries = null;
         private String overview = null;
         private double[] radiuses = null;
@@ -227,8 +227,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return this;
         }
 
-        public Builder setAlternative(Boolean alternative) {
-            this.alternative = alternative;
+        public Builder setAlternatives(Boolean alternatives) {
+            this.alternatives = alternatives;
             return this;
         }
 
@@ -290,8 +290,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return accessToken;
         }
 
-        public Boolean isAlternative() {
-            return alternative;
+        public Boolean isAlternatives() {
+            return alternatives;
         }
 
         public String getGeometries() {
