@@ -23,8 +23,12 @@ import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Response;
+import rx.Observable;
+import rx.Scheduler;
+import rx.functions.Action1;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -143,4 +147,14 @@ public class MapboxGeocodingTest {
         assertEquals(contexts.get(4).getShortCode(), "us");
     }
 
+    @Test
+    public void testObservable() throws ServicesException, IOException {
+        MapboxGeocoding client = new MapboxGeocoding.Builder()
+                .setAccessToken("pk.XXX")
+                .setLocation("1600 pennsylvania ave nw")
+                .build();
+        client.setBaseUrl(mockUrl.toString());
+        Observable<GeocodingResponse> geocodingResponseObservable = client.getObservable();
+        assertNotNull(geocodingResponseObservable);
+    }
 }
