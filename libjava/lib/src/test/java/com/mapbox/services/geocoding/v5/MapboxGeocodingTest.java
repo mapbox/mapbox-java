@@ -6,34 +6,26 @@ import com.mapbox.services.geocoding.v5.models.FeatureContext;
 import com.mapbox.services.geocoding.v5.models.FeatureGeometry;
 import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Response;
 import rx.Observable;
-import rx.Scheduler;
-import rx.functions.Action1;
-
+import rx.observers.TestSubscriber;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by antonio on 4/14/16.
- */
 public class MapboxGeocodingTest {
 
     private final static double DELTA = 1E-10;
@@ -156,5 +148,17 @@ public class MapboxGeocodingTest {
         client.setBaseUrl(mockUrl.toString());
         Observable<GeocodingResponse> geocodingResponseObservable = client.getObservable();
         assertNotNull(geocodingResponseObservable);
+
+        TestSubscriber<GeocodingResponse> testSubscriber = new TestSubscriber<>();
+        geocodingResponseObservable.subscribe(testSubscriber);
+
+        testSubscriber.assertNoErrors();
+        List<GeocodingResponse> responses = testSubscriber.getOnNextEvents();
+        assertNotNull(responses);
+        assertTrue("Geocoding Response Returned", responses.size() > 0);
+        List<FeatureContext> contexts = responses.get(0).getFeatures().get(0).getContext();
+        assertEquals(contexts.get(4).getId(), "country.12862386939497690");
+        assertEquals(contexts.get(4).getText(), "United States");
+        assertEquals(contexts.get(4).getShortCode(), "us");
     }
 }
