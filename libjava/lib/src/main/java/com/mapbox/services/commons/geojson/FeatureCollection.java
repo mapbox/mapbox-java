@@ -28,10 +28,6 @@ public class FeatureCollection implements GeoJSON {
         this.features = features;
     }
 
-    /*
-     * Getters
-     */
-
     /**
      * Should always be "FeatureCollection".
      *
@@ -51,10 +47,6 @@ public class FeatureCollection implements GeoJSON {
         return features;
     }
 
-    /*
-     * Factories
-     */
-
     /**
      * Create a {@link FeatureCollection} from a List of features.
      *
@@ -64,10 +56,6 @@ public class FeatureCollection implements GeoJSON {
     public static FeatureCollection fromFeatures(List<com.mapbox.services.commons.geojson.Feature> features) {
         return new FeatureCollection(features);
     }
-
-    /*
-     * Gson interface
-     */
 
     /**
      * Create a GeoJSON feature collection object from JSON.
@@ -93,5 +81,4 @@ public class FeatureCollection implements GeoJSON {
         gson.registerTypeAdapter(Position.class, new PositionSerializer());
         return gson.create().toJson(this);
     }
-
 }

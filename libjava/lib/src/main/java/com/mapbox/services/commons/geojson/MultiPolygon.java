@@ -12,14 +12,10 @@ import java.util.List;
  *
  * @see <a href='http://geojson.org/geojson-spec.html#multipolygon'>Official GeoJSON MultiPolygon Specifications</a>
  */
-public class MultiPolygon implements com.mapbox.services.commons.geojson.Geometry<List<List<List<Position>>>> {
+public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
 
     private final String type = "MultiPolygon";
     private final List<List<List<Position>>> coordinates;
-
-    /*
-     * Private constructor
-     */
 
     /**
      * Private constructor.
@@ -29,10 +25,6 @@ public class MultiPolygon implements com.mapbox.services.commons.geojson.Geometr
     private MultiPolygon(List<List<List<Position>>> coordinates) {
         this.coordinates = coordinates;
     }
-
-    /*
-     * Getters
-     */
 
     /**
      * Should always be "MultiPolygon".
@@ -54,10 +46,6 @@ public class MultiPolygon implements com.mapbox.services.commons.geojson.Geometr
         return coordinates;
     }
 
-    /*
-     * Factories
-     */
-
     /**
      * Creates a {@link MultiPolygon} from a list of coordinates.
      *
@@ -67,10 +55,6 @@ public class MultiPolygon implements com.mapbox.services.commons.geojson.Geometr
     public static MultiPolygon fromCoordinates(List<List<List<Position>>> coordinates) {
         return new MultiPolygon(coordinates);
     }
-
-    /*
-     * Gson interface
-     */
 
     /**
      * Create a GeoJSON MultiPolygon object from JSON.

@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @see <a href='geojson.org/geojson-spec.html#geometry-collection'>Official GeoJSON GeometryCollection Specifications</a>
  */
-public class GeometryCollection implements com.mapbox.services.commons.geojson.GeoJSON {
+public class GeometryCollection implements GeoJSON {
 
     private final String type = "GeometryCollection";
     private final List<com.mapbox.services.commons.geojson.Geometry> geometries;
@@ -27,10 +27,6 @@ public class GeometryCollection implements com.mapbox.services.commons.geojson.G
     public GeometryCollection(List<com.mapbox.services.commons.geojson.Geometry> geometries) {
         this.geometries = geometries;
     }
-
-    /*
-     * Getters
-     */
 
     /**
      * Should always be "GeometryCollection".
@@ -51,10 +47,6 @@ public class GeometryCollection implements com.mapbox.services.commons.geojson.G
         return geometries;
     }
 
-    /*
-     * Factories
-     */
-
     /**
      * Create a {@link GeometryCollection} from a List of geometries.
      *
@@ -64,10 +56,6 @@ public class GeometryCollection implements com.mapbox.services.commons.geojson.G
     public static GeometryCollection fromGeometries(List<com.mapbox.services.commons.geojson.Geometry> geometries) {
         return new GeometryCollection(geometries);
     }
-
-    /*
-     * Gson interface
-     */
 
     /**
      * Create a GeoJSON geometry collection object from JSON.
@@ -93,5 +81,4 @@ public class GeometryCollection implements com.mapbox.services.commons.geojson.G
         gson.registerTypeAdapter(Position.class, new PositionSerializer());
         return gson.create().toJson(this);
     }
-
 }

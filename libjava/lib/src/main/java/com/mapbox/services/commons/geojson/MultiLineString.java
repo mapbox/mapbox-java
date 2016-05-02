@@ -12,14 +12,10 @@ import java.util.List;
  *
  * @see <a href='http://geojson.org/geojson-spec.html#multilinestringn'>Official GeoJSON MultiLineString Specifications</a>
  */
-public class MultiLineString implements com.mapbox.services.commons.geojson.Geometry<List<List<Position>>> {
+public class MultiLineString implements Geometry<List<List<Position>>> {
 
     private final String type = "MultiLineString";
     private final List<List<Position>> coordinates;
-
-    /*
-     * Private constructor
-     */
 
     /**
      * Private constructor.
@@ -29,10 +25,6 @@ public class MultiLineString implements com.mapbox.services.commons.geojson.Geom
     private MultiLineString(List<List<Position>> coordinates) {
         this.coordinates = coordinates;
     }
-
-    /*
-     * Getters
-     */
 
     /**
      * Should always be "MultiLineString".
@@ -54,10 +46,6 @@ public class MultiLineString implements com.mapbox.services.commons.geojson.Geom
         return coordinates;
     }
 
-    /*
-     * Factories
-     */
-
     /**
      * Creates a {@link MultiLineString} from a list of coordinates.
      *
@@ -67,10 +55,6 @@ public class MultiLineString implements com.mapbox.services.commons.geojson.Geom
     public static MultiLineString fromCoordinates(List<List<Position>> coordinates) {
         return new MultiLineString(coordinates);
     }
-
-    /*
-     * Gson interface
-     */
 
     /**
      * Create a GeoJSON MultiLineString object from JSON.
@@ -95,5 +79,4 @@ public class MultiLineString implements com.mapbox.services.commons.geojson.Geom
         gson.registerTypeAdapter(Position.class, new PositionSerializer());
         return gson.create().toJson(this);
     }
-    
 }

@@ -12,14 +12,10 @@ import java.util.List;
  *
  * @see <a href='http://geojson.org/geojson-spec.html#polygon'>Official GeoJSON Polygon Specifications</a>
  */
-public class Polygon implements com.mapbox.services.commons.geojson.Geometry<List<List<Position>>> {
+public class Polygon implements Geometry<List<List<Position>>> {
 
     private final String type = "Polygon";
     private final List<List<Position>> coordinates;
-
-    /*
-     * Private constructor
-     */
 
     /**
      * Private constructor.
@@ -29,10 +25,6 @@ public class Polygon implements com.mapbox.services.commons.geojson.Geometry<Lis
     private Polygon(List<List<Position>> coordinates) {
         this.coordinates = coordinates;
     }
-
-    /*
-     * Getters
-     */
 
     /**
      * Should always be "Polygon".
@@ -54,10 +46,6 @@ public class Polygon implements com.mapbox.services.commons.geojson.Geometry<Lis
         return coordinates;
     }
 
-    /*
-     * Factories
-     */
-
     /**
      * Creates a {@link Polygon} from a list of coordinates.
      *
@@ -67,10 +55,6 @@ public class Polygon implements com.mapbox.services.commons.geojson.Geometry<Lis
     public static Polygon fromCoordinates(List<List<Position>> coordinates) {
         return new Polygon(coordinates);
     }
-
-    /*
-     * Gson interface
-     */
 
     /**
      * Create a GeoJSON Polygon object from JSON.

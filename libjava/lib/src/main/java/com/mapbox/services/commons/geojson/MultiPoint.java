@@ -12,14 +12,10 @@ import java.util.List;
  *
  * @see <a href='http://geojson.org/geojson-spec.html#multipoint'>Official GeoJSON MultiPoint Specifications</a>
  */
-public class MultiPoint implements com.mapbox.services.commons.geojson.Geometry<List<Position>> {
+public class MultiPoint implements Geometry<List<Position>> {
 
     private final String type = "MultiPoint";
     private final List<Position> coordinates;
-
-    /*
-     * Private constructor
-     */
 
     /**
      * Private constructor.
@@ -29,10 +25,6 @@ public class MultiPoint implements com.mapbox.services.commons.geojson.Geometry<
     private MultiPoint(List<Position> coordinates) {
         this.coordinates = coordinates;
     }
-
-    /*
-     * Getters
-     */
 
     /**
      * Should always be "MultiPoint".
@@ -54,10 +46,6 @@ public class MultiPoint implements com.mapbox.services.commons.geojson.Geometry<
         return coordinates;
     }
 
-    /*
-     * Factories
-     */
-
     /**
      * Creates a {@link MultiPoint} from a list of coordinates.
      *
@@ -67,10 +55,6 @@ public class MultiPoint implements com.mapbox.services.commons.geojson.Geometry<
     public static MultiPoint fromCoordinates(List<Position> coordinates) {
         return new MultiPoint(coordinates);
     }
-
-    /*
-     * Gson interface
-     */
 
     /**
      * Create a GeoJSON MultiPoint object from JSON.

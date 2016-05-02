@@ -10,14 +10,10 @@ import com.mapbox.services.commons.models.Position;
  *
  * @see <a href='http://geojson.org/geojson-spec.html#point'>Official GeoJSON Point Specifications</a>
  */
-public class Point implements com.mapbox.services.commons.geojson.Geometry<Position> {
+public class Point implements Geometry<Position> {
 
     private final String type = "Point";
     private final Position coordinates;
-
-    /*
-     * Private constructor
-     */
 
     /**
      * Private constructor.
@@ -27,10 +23,6 @@ public class Point implements com.mapbox.services.commons.geojson.Geometry<Posit
     private Point(Position coordinates) {
         this.coordinates = coordinates;
     }
-
-    /*
-     * Getters
-     */
 
     /**
      * Should always be "Point".
@@ -52,10 +44,6 @@ public class Point implements com.mapbox.services.commons.geojson.Geometry<Posit
         return coordinates;
     }
 
-    /*
-     * Factories
-     */
-
     /**
      * Creates a {@link Point} from a given coordinate.
      *
@@ -65,10 +53,6 @@ public class Point implements com.mapbox.services.commons.geojson.Geometry<Posit
     public static Point fromCoordinates(Position coordinates) {
         return new Point(coordinates);
     }
-
-    /*
-     * Gson interface
-     */
 
     /**
      * Create a GeoJSON Point object from JSON.

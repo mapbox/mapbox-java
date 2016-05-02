@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @see <a href='geojson.org/geojson-spec.html#linestring'>Official GeoJSON LineString Specifications</a>
  */
-public class LineString implements com.mapbox.services.commons.geojson.Geometry<List<Position>> {
+public class LineString implements Geometry<List<Position>> {
 
     private final String type = "LineString";
     private final List<Position> coordinates;
@@ -26,10 +26,6 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
     private LineString(List<Position> coordinates) {
         this.coordinates = coordinates;
     }
-
-    /*
-     * Getters
-     */
 
     /**
      * Should always be "LineString".
@@ -51,10 +47,6 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
         return coordinates;
     }
 
-    /*
-     * Factories
-     */
-
     /**
      * creates a {@link LineString} from a list of coordinates.
      *
@@ -64,10 +56,6 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
     public static LineString fromCoordinates(List<Position> coordinates) {
         return new LineString(coordinates);
     }
-
-    /*
-     * Gson interface
-     */
 
     /**
      * Create a GeoJSON LineString object from JSON.
@@ -93,15 +81,11 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
         return gson.create().toJson(this);
     }
 
-    /*
-     * Polyline utils
-     */
-
     /**
      * Convert a polyline into a LineString.
      *
      * @param polyline String describing a polyline.
-     * @param precision 
+     * @param precision The encoded precision, for example Constants.OSRM_PRECISION_V4.
      * @return
      */
     public static LineString fromPolyline(String polyline, int precision) {
@@ -111,5 +95,4 @@ public class LineString implements com.mapbox.services.commons.geojson.Geometry<
     public String toPolyline(int precision) {
         return PolylineUtils.encode(getCoordinates(), precision);
     }
-
 }
