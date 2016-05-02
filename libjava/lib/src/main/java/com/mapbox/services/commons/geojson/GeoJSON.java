@@ -1,7 +1,7 @@
 package com.mapbox.services.commons.geojson;
 
 /**
- * Created by antonio on 1/30/16.
+ * Interface implemented by all GeoJSON objects, contains common fields.
  */
 public interface GeoJSON {
 
