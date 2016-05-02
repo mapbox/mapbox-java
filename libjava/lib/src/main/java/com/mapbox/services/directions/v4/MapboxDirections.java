@@ -99,7 +99,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         // No need to recreate it
         if (observable != null) return observable;
 
-        observable = service.getObservable(
+        observable = getService().getObservable(
                 builder.profile,
                 builder.getWaypoints(),
                 builder.accessToken,
