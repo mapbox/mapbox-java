@@ -109,20 +109,12 @@ public class DirectionsV5Activity extends AppCompatActivity {
         positions.add(origin);
         positions.add(destination);
 
-        MapboxDirections.Builder builder = new MapboxDirections.Builder()
+        MapboxDirections client = new MapboxDirections.Builder()
                 .setAccessToken(Utils.getMapboxAccessToken(this))
                 .setCoordinates(positions)
                 .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-                .setSteps(true);
-
-        // Check for a custom user
-        int v5MapboxUser = getResources().getIdentifier("v5_mapbox_user", "string", getPackageName());
-        if (!TextUtils.isEmpty(getString(v5MapboxUser))) {
-            Log.d(LOG_TAG, "Custom user set.");
-            builder.setUser(getString(v5MapboxUser));
-        }
-
-        MapboxDirections client = builder.build();
+                .setSteps(true)
+                .build();
 
         /*
          * Note that we also support RxJava + RxAndroid to consume our APIs. For example, the
