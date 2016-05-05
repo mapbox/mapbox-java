@@ -123,9 +123,9 @@ public class MapboxDirectionsTest {
         Response<DirectionsResponse> response = client.executeCall();
 
         DirectionsRoute route = response.body().getRoutes().get(0);
-        assertEquals(route.getDistance(), 77282.6, DELTA);
-        assertEquals(route.getDuration(), 2993.1, DELTA);
-        assertTrue(route.getGeometry().startsWith("kqreFfodjVhh"));
+        assertEquals(route.getDistance(), 77274.0, DELTA);
+        assertEquals(route.getDuration(), 3441.2, DELTA);
+        assertTrue(route.getGeometry().startsWith("kqreFhodjVhh"));
         assertEquals(route.getLegs().size(), 1);
     }
 
@@ -140,9 +140,9 @@ public class MapboxDirectionsTest {
         Response<DirectionsResponse> response = client.executeCall();
 
         DirectionsWaypoint waypoint = response.body().getWaypoints().get(0);
-        assertEquals(waypoint.getName(), "Eddy St");
-        assertEquals(waypoint.asPosition().getLongitude(), -122.416684, DELTA);
-        assertEquals(waypoint.asPosition().getLatitude(), 37.783415, DELTA);
+        assertEquals(waypoint.getName(), "Eddy Street");
+        assertEquals(waypoint.asPosition().getLongitude(), -122.416685, DELTA);
+        assertEquals(waypoint.asPosition().getLatitude(), 37.783424, DELTA);
     }
 
     @Test
@@ -156,10 +156,10 @@ public class MapboxDirectionsTest {
         Response<DirectionsResponse> response = client.executeCall();
 
         RouteLeg leg = response.body().getRoutes().get(0).getLegs().get(0);
-        assertEquals(leg.getDistance(), 77282.6, DELTA);
-        assertEquals(leg.getDuration(), 2993.1, DELTA);
-        //assertEquals(leg.getSummary(), "Golden Gate Ave, Leavenworth St");
-        assertEquals(leg.getSteps().size(), 63);
+        assertEquals(leg.getDistance(), 77274.0, DELTA);
+        assertEquals(leg.getDuration(), 3441.2, DELTA);
+        assertEquals(leg.getSummary(), "James Lick Freeway (US 101), Bayshore Freeway (US 101)");
+        assertEquals(leg.getSteps().size(), 16);
     }
 
     @Test
@@ -173,10 +173,10 @@ public class MapboxDirectionsTest {
         Response<DirectionsResponse> response = client.executeCall();
 
         LegStep step = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0);
-        assertEquals(step.getDistance(), 221.7, DELTA);
-        assertEquals(step.getDuration(), 48.5, DELTA);
-        assertEquals(step.getGeometry(), "kqreFfodjVJtAJtAf@fI");
-        assertEquals(step.getName(), "Eddy St");
+        assertEquals(step.getDistance(), 223.1, DELTA);
+        assertEquals(step.getDuration(), 52.0, DELTA);
+        assertEquals(step.getGeometry(), "kqreFhodjVRjDh@fI");
+        assertEquals(step.getName(), "Eddy Street");
         assertEquals(step.getMode(), "driving");
         assertNotEquals(step.getManeuver(), null);
     }
@@ -192,13 +192,13 @@ public class MapboxDirectionsTest {
         Response<DirectionsResponse> response = client.executeCall();
 
         StepManeuver maneuver = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0).getManeuver();
-        assertEquals(maneuver.asPosition().getLongitude(), -122.416684, DELTA);
-        assertEquals(maneuver.asPosition().getLatitude(), 37.783415, DELTA);
+        assertEquals(maneuver.asPosition().getLongitude(), -122.416685, DELTA);
+        assertEquals(maneuver.asPosition().getLatitude(), 37.783424, DELTA);
         assertEquals(maneuver.getBearingBefore(), 0, DELTA);
-        assertEquals(maneuver.getBearingAfter(), 260, DELTA);
+        assertEquals(maneuver.getBearingAfter(), 261, DELTA);
         assertEquals(maneuver.getType(), "depart");
         assertEquals(maneuver.getModifier(), "left");
-        assertEquals(maneuver.getInstruction(), "Head left on Eddy St");
+        assertEquals(maneuver.getInstruction(), "Proceed to Eddy Street, then go left");
         assertEquals(maneuver.getExit(), 1);
     }
 
