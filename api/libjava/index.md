@@ -1,5 +1,5 @@
 ---
 layout: redirect
 permalink: /api/libjava/
-redirect: /api/libjava/1.0.0/
+redirect: /api/libjava/1.1.0/
 ---
