@@ -33,7 +33,7 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
 
     // Mapbox Java Services
-    compile ('com.mapbox.mapboxsdk:mapbox-java-services:1.0.0@jar') {
+    compile ('com.mapbox.mapboxsdk:mapbox-java-services:1.1.0@jar') {
         transitive=true
     }
 

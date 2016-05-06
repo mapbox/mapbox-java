@@ -10,12 +10,11 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.models.Position;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -141,7 +140,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
             FilterResults results = new FilterResults();
 
             // No constraint
-            if (StringUtils.isEmpty(constraint)) {
+            if (TextUtils.isEmpty(constraint)) {
                 return results;
             }
 
