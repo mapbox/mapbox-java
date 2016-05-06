@@ -32,7 +32,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".directions.DirectionsV5Activity"
-            android:label="Directions v5 (experimental)"
+            android:label="Directions v5"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
