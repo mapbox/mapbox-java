@@ -2,6 +2,13 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v1.1.0
+
+* Updated to `libjava` v1.1.0
+* Removed extra dependencies to reduce method count
+
+Full changelog: https://github.com/mapbox/mapbox-java/issues?q=milestone%3Av1.1.0+is%3Aclosed
+
 ### v1.0.0
 
 * Initial release
