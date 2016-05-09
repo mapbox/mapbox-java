@@ -17,6 +17,6 @@ public abstract class MapboxBuilder {
         }
     }
 
-    public abstract MapboxService build() throws ServicesException;
+    public abstract Object build() throws ServicesException;
 
 }

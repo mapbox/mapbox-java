@@ -4,13 +4,37 @@
 
 # Mapbox Android Services (MAS)
 
+<<<<<<< HEAD
 An open source toolset for building applications that need directions, geocoding, or static map imagery. Two libraries are at your disposal: a **Java library** compatible with any Java application and an **Android library** intended to be used specifically for Android applications.
+=======
+To install the current _release_ version add this to your `build.gradle`:
+
+```
+
+dependencies {
+    compile ('com.mapbox.mapboxsdk:mapbox-android-services:1.0.0-SNAPSHOT@aar'){
+        transitive=true
+    }
+}
+```
+
+To install the current _SNAPSHOT_ version add this to your `build.gradle`:
+>>>>>>> master
 
 ### Installation
 To install and use MAS in an application, see the [Mapbox Android Services website](https://www.mapbox.com/android-sdk/#mapbox_android_services).
 
+<<<<<<< HEAD
 ### Javadoc
 Located within the `gh-pages` branch, you can build locally by running: `bundle exec jekyll serve`. If you prefer to directly view online there are two sections, one for each library:
+=======
+dependencies {
+    compile ('com.mapbox.mapboxsdk:mapbox-android-services:1.1.0-SNAPSHOT@aar'){
+        transitive=true
+    }
+}
+```
+>>>>>>> master
 
 - [Mapbox Java Services](http://mapbox.github.io/mapbox-java/api/libjava)
 - [Mapbox Android Services](http://mapbox.github.io/mapbox-java/api/libandroid)

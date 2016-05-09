@@ -4,10 +4,11 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
-import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -93,7 +94,7 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         // No need to recreate it
         if (observable != null) return observable;
 
-        observable = service.getObservable(
+        observable = getService().getObservable(
                 builder.getGeocodingDataset(),
                 builder.getQuery(),
                 builder.getAccessToken(),
@@ -141,7 +142,9 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
 
         public Builder setCoordinates(Position position) {
             if (position == null) return this;
-            query = String.format("%f,%f", position.getLongitude(), position.getLatitude());
+            query = String.format(Locale.US, "%f,%f",
+                    position.getLongitude(),
+                    position.getLatitude());
             return this;
         }
 
@@ -157,7 +160,9 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
          */
         public Builder setProximity(Position position) {
             if (position == null) return this;
-            proximity = String.format("%f,%f", position.getLongitude(), position.getLatitude());
+            proximity = String.format(Locale.US, "%f,%f",
+                    position.getLongitude(),
+                    position.getLatitude());
             return this;
         }
 

@@ -19,13 +19,12 @@ public interface DirectionsService {
             @Path("profile") String profile,
             @Path("coordinates") String coordinates,
             @Query("access_token") String accessToken,
-            @Query("alternative") Boolean alternative,
-            @Query("bearings") String bearings,
+            @Query("alternatives") Boolean alternatives,
             @Query("geometries") String geometries,
             @Query("overview") String overview,
             @Query("radiuses") String radiuses,
             @Query("steps") Boolean steps,
-            @Query("uturns") Boolean uturns
+            @Query("continue_straight") Boolean continueStraight
     );
 
     @GET("directions/v5/{user}/{profile}/{coordinates}")
@@ -34,13 +33,12 @@ public interface DirectionsService {
             @Path("profile") String profile,
             @Path("coordinates") String coordinates,
             @Query("access_token") String accessToken,
-            @Query("alternative") Boolean alternative,
-            @Query("bearings") String bearings,
+            @Query("alternatives") Boolean alternatives,
             @Query("geometries") String geometries,
             @Query("overview") String overview,
             @Query("radiuses") String radiuses,
             @Query("steps") Boolean steps,
-            @Query("uturns") Boolean uturns
+            @Query("continue_straight") Boolean continueStraight
     );
 
 }

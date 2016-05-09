@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
+import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.staticimage.v1.MapboxStaticImage;
 
 public class StaticImageActivity extends AppCompatActivity {
@@ -34,7 +36,6 @@ public class StaticImageActivity extends AppCompatActivity {
             {29.684722, -95.410833}, // NRG Stadium
             {33.5275, -112.2625}, // University of Phoenix Stadium
             {34.161389, -118.1675}}; // Rose Bowl
-
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -77,25 +78,35 @@ public class StaticImageActivity extends AppCompatActivity {
         int i = 0;
         for (double[] place: PLACES) {
             for (String style: MAPBOX_STYLES) {
-                MapboxStaticImage staticImage = new MapboxStaticImage.Builder()
-                        .setAccessToken(Utils.getMapboxAccessToken(this))
-                        .setUsername(Constants.MAPBOX_USER)
-                        .setStyleId(style)
-                        .setLon(place[1])
-                        .setLat(place[0])
-                        .setZoom(16)
-                        .setBearing(45)
-                        .setPitch(60)
-                        .setWidth(500)
-                        .setHeight(500)
-                        .setRetina(isRetina)
-                        .build();
-                dataset[i] = staticImage.getUrl().toString();
-                i++;
+                String imageUrl = null;
+                try {
+                    imageUrl = getImageUrl(style, place, isRetina);
+                    dataset[i] = imageUrl;
+                    i++;
+                } catch (ServicesException e) {
+                    Log.e(LOG_TAG, "Error: " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
         }
 
         return dataset;
     }
 
+    private String getImageUrl(String style, double[] place, boolean isRetina) throws ServicesException {
+        MapboxStaticImage staticImage = new MapboxStaticImage.Builder()
+                .setAccessToken(Utils.getMapboxAccessToken(this))
+                .setUsername(Constants.MAPBOX_USER)
+                .setStyleId(style)
+                .setLon(place[1])
+                .setLat(place[0])
+                .setZoom(16)
+                .setBearing(45)
+                .setPitch(60)
+                .setWidth(500)
+                .setHeight(500)
+                .setRetina(isRetina)
+                .build();
+        return staticImage.getUrl().toString();
+    }
 }

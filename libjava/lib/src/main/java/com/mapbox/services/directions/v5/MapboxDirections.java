@@ -4,15 +4,14 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
-import com.mapbox.services.commons.models.Bearing;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
-
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -72,13 +71,12 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
                 builder.getProfile(),
                 builder.getCoordinates(),
                 builder.getAccessToken(),
-                builder.isAlternative(),
-                builder.getBearings(),
+                builder.isAlternatives(),
                 builder.getGeometries(),
                 builder.getOverview(),
                 builder.getRadiuses(),
                 builder.isSteps(),
-                builder.isUturns());
+                builder.isContinueStraight());
 
         // Done
         return call;
@@ -114,13 +112,12 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
                 builder.getProfile(),
                 builder.getCoordinates(),
                 builder.getAccessToken(),
-                builder.isAlternative(),
-                builder.getBearings(),
+                builder.isAlternatives(),
                 builder.getGeometries(),
                 builder.getOverview(),
                 builder.getRadiuses(),
                 builder.isSteps(),
-                builder.isUturns());
+                builder.isContinueStraight());
 
         // Done
         return observable;
@@ -137,13 +134,12 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         private String profile = null;
         private ArrayList<Position> coordinates = null;
         private String accessToken = null;
-        private Boolean alternative = null;
-        private Bearing[] bearings = null;
+        private Boolean alternatives = null;
         private String geometries = null;
         private String overview = null;
         private double[] radiuses = null;
         private Boolean steps = null;
-        private Boolean uturns = null;
+        private Boolean continueStraight = null;
 
         /*
          * Constructor
@@ -231,13 +227,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return this;
         }
 
-        public Builder setAlternative(Boolean alternative) {
-            this.alternative = alternative;
-            return this;
-        }
-
-        public Builder setBearings(Bearing[] bearings) {
-            this.bearings = bearings;
+        public Builder setAlternatives(Boolean alternatives) {
+            this.alternatives = alternatives;
             return this;
         }
 
@@ -256,8 +247,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return this;
         }
 
-        public Builder setUturns(Boolean uturns) {
-            this.uturns = uturns;
+        public Builder setContinueStraight(Boolean continueStraight) {
+            this.continueStraight = continueStraight;
             return this;
         }
 
@@ -286,12 +277,12 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         public String getCoordinates() {
             List<String> coordinatesFormatted = new ArrayList<>();
             for (Position coordinate: coordinates) {
-                coordinatesFormatted.add(String.format("%f,%f",
+                coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
                         coordinate.getLongitude(),
                         coordinate.getLatitude()));
             }
 
-            return StringUtils.join(coordinatesFormatted, ";");
+            return TextUtils.join(";", coordinatesFormatted.toArray());
         }
 
         @Override
@@ -299,31 +290,8 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             return accessToken;
         }
 
-        public Boolean isAlternative() {
-            return alternative;
-        }
-
-        /*
-         * Bearings indicate the allowed direction of travel through a coordinate. They are
-         * indicated as a query parameter:
-         *
-         *    ?bearings={direction},{range};{direction},{range}[;{direction},{range} ...]
-         *
-         * - Each bearing consists of direction and range, which are separated by a ,
-         * - There must be as many bearings as there are coordinates
-         * - It is possible to have empty bearings via ;;, which allow all directions
-         */
-        public String getBearings() {
-            if (bearings == null || bearings.length == 0) return null;
-
-            String[] bearingsFormatted = new String[bearings.length];
-            for (int i = 0; i < bearings.length; i++) {
-                bearingsFormatted[i] = String.format("%d,%d",
-                        bearings[i].getDirection(),
-                        bearings[i].getRange());
-            }
-
-            return StringUtils.join(bearingsFormatted, ";");
+        public Boolean isAlternatives() {
+            return alternatives;
         }
 
         public String getGeometries() {
@@ -351,18 +319,18 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
 
             String[] radiusesFormatted = new String[radiuses.length];
             for (int i = 0; i < radiuses.length; i++) {
-                radiusesFormatted[i] = String.format("%f", radiuses[i]);
+                radiusesFormatted[i] = String.format(Locale.US, "%f", radiuses[i]);
             }
 
-            return StringUtils.join(radiusesFormatted, ";");
+            return TextUtils.join(";", radiusesFormatted);
         }
 
         public Boolean isSteps() {
             return steps;
         }
 
-        public Boolean isUturns() {
-            return uturns;
+        public Boolean isContinueStraight() {
+            return continueStraight;
         }
 
         /*
@@ -376,11 +344,6 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
             if (coordinates == null || coordinates.size() < 2) {
                 throw new ServicesException(
                         "You should provide at least two coordinates (from/to).");
-            }
-
-            if (bearings != null && bearings.length != coordinates.size()) {
-                throw new ServicesException(
-                        "There must be as many bearings as there are coordinates.");
             }
 
             if (radiuses != null && radiuses.length != coordinates.size()) {

@@ -9,9 +9,8 @@ import com.mapbox.services.commons.geojson.Geometry;
 import java.lang.reflect.Type;
 
 /**
- * Required to handle the "Unable to invoke no-args constructor for interface
- * com.mapbox.services.commons.geojson.Geometry" error that Gson shows when trying to deserialize
- * a List<Geometry>. There must be a better way to handle this case.
+ * Required to handle the "Unable to invoke no-args constructor for interface {@link Geometry} error
+ * that Gson shows when trying to deserialize a list of {@link Geometry}.
  */
 public class GeometryDeserializer implements JsonDeserializer<Geometry> {
 
@@ -21,7 +20,7 @@ public class GeometryDeserializer implements JsonDeserializer<Geometry> {
         String geometryType = json.getAsJsonObject().get("type").getAsString();
         try {
             // Use the current context to deserialize it
-            Type classType = Class.forName("com.mapbox.services.geojson." + geometryType);
+            Type classType = Class.forName("com.mapbox.services.commons.geojson." + geometryType);
             return context.deserialize(json, classType);
         } catch (ClassNotFoundException e) {
             // Unknown geometry

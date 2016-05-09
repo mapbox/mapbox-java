@@ -10,8 +10,8 @@ import com.mapbox.services.commons.models.Position;
 import java.lang.reflect.Type;
 
 /**
- * Required to handle the "Expected BEGIN_OBJECT but was BEGIN_ARRAY" error
- * that Gson would show otherwise.
+ * Required to handle the "Expected BEGIN_OBJECT but was BEGIN_ARRAY" error that Gson would show
+ * otherwise.
  */
 public class PositionDeserializer implements JsonDeserializer<Position> {
 
