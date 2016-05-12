@@ -28,13 +28,22 @@ public class TurfMeasurementTest {
         Point pt1 = Point.fromCoordinates(Position.fromCoordinates(-75.343, 39.984));
         Point pt2 = Point.fromCoordinates(Position.fromCoordinates(-75.534, 39.123));
 
+        // Common cases
         assertEquals(TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_MILES), 60.37218405837491, DELTA);
+        assertEquals(TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_NAUTICAL_MILES), 52.461979624130436, DELTA);
         assertEquals(TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_KILOMETERS), 97.15957803131901, DELTA);
         assertEquals(TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_RADIANS), 0.015245501024842149, DELTA);
         assertEquals(TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_DEGREES), 0.8735028650863799, DELTA);
 
+        // This also works
+        assertEquals(TurfMeasurement.distance(pt1, pt2, "kilometres"), 97.15957803131901, DELTA);
+
+        // Default is kilometers
+        assertEquals(TurfMeasurement.distance(pt1, pt2), 97.15957803131901, DELTA);
+
+        // Bad unit
         thrown.expect(TurfException.class);
-        thrown.expectMessage(startsWith("Unknown option given to units."));
+        thrown.expectMessage(startsWith("Invalid unit."));
         TurfMeasurement.distance(pt1, pt2, "blah");
     }
 }

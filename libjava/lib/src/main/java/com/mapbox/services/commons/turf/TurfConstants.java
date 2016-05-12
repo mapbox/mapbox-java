@@ -6,8 +6,14 @@ package com.mapbox.services.commons.turf;
 public class TurfConstants {
 
     public final static String UNIT_MILES = "miles";
+    public final static String UNIT_NAUTICAL_MILES = "nauticalmiles";
     public final static String UNIT_KILOMETERS = "kilometers";
-    public final static String UNIT_DEGREES = "degrees";
     public final static String UNIT_RADIANS = "radians";
+    public final static String UNIT_DEGREES = "degrees";
+    public final static String UNIT_INCHES = "inches";
+    public final static String UNIT_YARDS = "yards";
+    public final static String UNIT_METERS = "meters";
+
+    public final static String UNIT_DEFAULT = UNIT_KILOMETERS;
 
 }
