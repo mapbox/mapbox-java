@@ -15,7 +15,7 @@ import java.util.List;
 public class Polygon implements Geometry<List<List<Position>>> {
 
     private final String type = "Polygon";
-    private final List<List<Position>> coordinates;
+    private List<List<Position>> coordinates;
 
     /**
      * Private constructor.
@@ -44,6 +44,11 @@ public class Polygon implements Geometry<List<List<Position>>> {
     @Override
     public List<List<Position>> getCoordinates() {
         return coordinates;
+    }
+
+    @Override
+    public void setCoordinates(List<List<Position>> coordinates) {
+        this.coordinates = coordinates;
     }
 
     /**
