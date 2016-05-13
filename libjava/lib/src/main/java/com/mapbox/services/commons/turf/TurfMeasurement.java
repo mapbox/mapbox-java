@@ -14,6 +14,52 @@ import java.util.List;
 public class TurfMeasurement {
 
     /**
+     * Takes two points and finds the geographic bearing between them.
+     */
+    public static double bearing(Point p1, Point p2) {
+        double degrees2radians = Math.PI / 180;
+        double radians2degrees = 180 / Math.PI;
+        Position coordinates1 = p1.getCoordinates();
+        Position coordinates2 = p2.getCoordinates();
+
+        double lon1 = degrees2radians * coordinates1.getLongitude();
+        double lon2 = degrees2radians * coordinates2.getLongitude();
+        double lat1 = degrees2radians * coordinates1.getLatitude();
+        double lat2 = degrees2radians * coordinates2.getLatitude();
+        double a = Math.sin(lon2 - lon1) * Math.cos(lat2);
+        double b = Math.cos(lat1) * Math.sin(lat2) -
+                Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+
+        double bearing = radians2degrees * Math.atan2(a, b);
+        return bearing;
+    }
+
+    /**
+     * Takes a Point and calculates the location of a destination point given a distance in
+     * degrees, radians, miles, or kilometers; and bearing in degrees. This uses the Haversine
+     * formula to account for global curvature.
+     */
+    public static Point destination(Point point1, double distance, double bearing, String units) throws TurfException {
+        double degrees2radians = Math.PI / 180;
+        double radians2degrees = 180 / Math.PI;
+        Position coordinates1 = point1.getCoordinates();
+        double longitude1 = degrees2radians * coordinates1.getLongitude();
+        double latitude1 = degrees2radians * coordinates1.getLatitude();
+        double bearing_rad = degrees2radians * bearing;
+
+        double radians = TurfHelpers.distanceToRadians(distance, units);
+
+        double latitude2 = Math.asin(Math.sin(latitude1) * Math.cos(radians) +
+                Math.cos(latitude1) * Math.sin(radians) * Math.cos(bearing_rad));
+        double longitude2 = longitude1 + Math.atan2(Math.sin(bearing_rad) *
+                        Math.sin(radians) * Math.cos(latitude1),
+                Math.cos(radians) - Math.sin(latitude1) * Math.sin(latitude2));
+
+        return Point.fromCoordinates(
+                Position.fromCoordinates(radians2degrees * longitude2, radians2degrees * latitude2));
+    }
+
+    /**
      * Calculates the distance between two points in kilometers.
      * This uses the Haversine formula to account for global curvature.
      */

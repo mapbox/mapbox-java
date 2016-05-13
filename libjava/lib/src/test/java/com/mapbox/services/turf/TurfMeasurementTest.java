@@ -19,6 +19,8 @@ import java.nio.file.Paths;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -35,6 +37,21 @@ public class TurfMeasurementTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void testBearing() {
+        Point pt1 = Point.fromCoordinates(Position.fromCoordinates(-75.4, 39.4));
+        Point pt2 = Point.fromCoordinates(Position.fromCoordinates(-75.534, 39.123));
+        assertNotEquals(TurfMeasurement.bearing(pt1, pt2), 0, DELTA);
+    }
+
+    @Test
+    public void testDestination() throws TurfException {
+        Point pt1 = Point.fromCoordinates(Position.fromCoordinates(-75.0, 39.0));
+        double dist = 100;
+        double bear = 180;
+        assertNotNull(TurfMeasurement.destination(pt1, dist, bear, TurfConstants.UNIT_KILOMETERS));
+    }
 
     @Test
     public void testDistance() throws TurfException {
