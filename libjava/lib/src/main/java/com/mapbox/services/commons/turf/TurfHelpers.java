@@ -39,6 +39,10 @@ public class TurfHelpers {
         return radians * factor;
     }
 
+    public static double distanceToRadians(double radians) throws TurfException {
+        return distanceToRadians(radians, TurfConstants.UNIT_DEFAULT);
+    }
+
     public static double distanceToRadians(double radians, String units) throws TurfException {
         Double factor = factors.get(units);
         if (factor == null) {
