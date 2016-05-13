@@ -15,7 +15,7 @@ import java.util.List;
 public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
 
     private final String type = "MultiPolygon";
-    private final List<List<List<Position>>> coordinates;
+    private List<List<List<Position>>> coordinates;
 
     /**
      * Private constructor.
@@ -44,6 +44,11 @@ public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
     @Override
     public List<List<List<Position>>> getCoordinates() {
         return coordinates;
+    }
+
+    @Override
+    public void setCoordinates(List<List<List<Position>>> coordinates) {
+        this.coordinates = coordinates;
     }
 
     /**

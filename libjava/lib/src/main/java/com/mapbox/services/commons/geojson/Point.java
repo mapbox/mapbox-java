@@ -13,7 +13,7 @@ import com.mapbox.services.commons.models.Position;
 public class Point implements Geometry<Position> {
 
     private final String type = "Point";
-    private final Position coordinates;
+    private Position coordinates;
 
     /**
      * Private constructor.
@@ -42,6 +42,11 @@ public class Point implements Geometry<Position> {
     @Override
     public Position getCoordinates() {
         return coordinates;
+    }
+
+    @Override
+    public void setCoordinates(Position coordinates) {
+        this.coordinates = coordinates;
     }
 
     /**

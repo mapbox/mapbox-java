@@ -16,7 +16,7 @@ import java.util.List;
 public class LineString implements Geometry<List<Position>> {
 
     private final String type = "LineString";
-    private final List<Position> coordinates;
+    private List<Position> coordinates;
 
     /**
      * Private constructor.
@@ -45,6 +45,11 @@ public class LineString implements Geometry<List<Position>> {
     @Override
     public List<Position> getCoordinates() {
         return coordinates;
+    }
+
+    @Override
+    public void setCoordinates(List<Position> coordinates) {
+        this.coordinates = coordinates;
     }
 
     /**

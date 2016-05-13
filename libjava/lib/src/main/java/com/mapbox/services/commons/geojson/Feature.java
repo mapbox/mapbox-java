@@ -1,6 +1,7 @@
 package com.mapbox.services.commons.geojson;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
@@ -16,7 +17,7 @@ public class Feature implements GeoJSON {
 
     private final String type = "Feature";
     private final Geometry geometry;
-    private final JsonObject properties;
+    private JsonObject properties;
     private final String id;
 
     /**
@@ -58,6 +59,10 @@ public class Feature implements GeoJSON {
      */
     public JsonObject getProperties() {
         return properties;
+    }
+
+    public void setProperties(JsonObject properties) {
+        this.properties = properties;
     }
 
     /**
@@ -122,5 +127,113 @@ public class Feature implements GeoJSON {
         GsonBuilder gson = new GsonBuilder();
         gson.registerTypeAdapter(Position.class, new PositionSerializer());
         return gson.create().toJson(this);
+    }
+
+    /**
+     * Convenience method to add a String member.
+     * @param key name of the member
+     * @param value the String value associated with the member
+     */
+    public void addStringProperty(String key, String value) {
+        this.properties.addProperty(key, value);
+    }
+
+    /**
+     * Convenience method to add a Number member.
+     * @param key name of the member
+     * @param value the Number value associated with the member
+     */
+    public void addNumberProperty(String key, Number value) {
+        this.properties.addProperty(key, value);
+    }
+
+    /**
+     * Convenience method to add a Boolean member.
+     * @param key name of the member
+     * @param value the Boolean value associated with the member
+     */
+    public void addBooleanProperty(String key, Boolean value) {
+        this.properties.addProperty(key, value);
+    }
+
+    /**
+     * Convenience method to add a Character member.
+     * @param key name of the member
+     * @param value the Character value associated with the member
+     */
+    public void addCharacterProperty(String key, Character value) {
+        this.properties.addProperty(key, value);
+    }
+
+    /**
+     * Convenience method to add a JsonElement member.
+     * @param key name of the member
+     * @param value the JsonElement value associated with the member
+     */
+    public void addProperty(String key, JsonElement value) {
+        this.properties.add(key, value);
+    }
+
+    /**
+     * Convenience method to get a String member.
+     * @param key name of the member
+     * @return the value of the member, null if it doesn't exist
+     */
+    public String getStringProperty(String key) {
+        return this.properties.get(key).getAsString();
+    }
+
+    /**
+     * Convenience method to get a Number member.
+     * @param key name of the member
+     * @return the value of the member, null if it doesn't exist
+     */
+    public Number getNumberProperty(String key) {
+        return this.properties.get(key).getAsNumber();
+    }
+
+    /**
+     * Convenience method to get a Boolean member.
+     * @param key name of the member
+     * @return the value of the member, null if it doesn't exist
+     */
+    public Boolean getBooleanProperty(String key) {
+        return this.properties.get(key).getAsBoolean();
+    }
+
+    /**
+     * Convenience method to get a Character member.
+     * @param key name of the member
+     * @return the value of the member, null if it doesn't exist
+     */
+    public Character getCharacterProperty(String key) {
+        return this.properties.get(key).getAsCharacter();
+    }
+
+    /**
+     * Convenience method to get a JsonElement member.
+     * @param key name of the member
+     * @return the value of the member, null if it doesn't exist
+     */
+    public JsonElement getProperty(String key) {
+        return this.properties.get(key);
+    }
+
+    /**
+     * Removes the property from the object properties
+     * @param key name of the member
+     * @return
+     */
+    public JsonElement removeProperty(String key) {
+        return this.properties.remove(key);
+    }
+
+    /**
+     * Convenience method to check if a member with the specified name is present in this object.
+     * @param key
+     * @return
+     */
+    public boolean hasProperty(String key) {
+        return this.properties.has(key);
     }
 }
