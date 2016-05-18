@@ -20,11 +20,11 @@ public class FeatureCollection implements GeoJSON {
     private final List<com.mapbox.services.commons.geojson.Feature> features;
 
     /**
-     * Private constructor.
+     * Protected constructor.
      *
      * @param features List of {@link Feature}.
      */
-    private FeatureCollection(List<com.mapbox.services.commons.geojson.Feature> features) {
+    protected FeatureCollection(List<com.mapbox.services.commons.geojson.Feature> features) {
         this.features = features;
     }
 

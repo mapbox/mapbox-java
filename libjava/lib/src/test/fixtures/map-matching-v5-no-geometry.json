@@ -1,0 +1,44 @@
+{
+  "code": "Ok",
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {},
+      "properties": {
+        "confidence": 0.9800783937291059,
+        "distance": 306,
+        "duration": 69.2,
+        "matchedPoints": [
+          [
+            5.119308,
+            52.084313
+          ],
+          [
+            5.119888,
+            52.083396
+          ],
+          [
+            5.11996,
+            52.083267
+          ],
+          [
+            5.119108,
+            52.083118
+          ],
+          [
+            5.118473,
+            52.084098
+          ]
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    }
+  ]
+}
