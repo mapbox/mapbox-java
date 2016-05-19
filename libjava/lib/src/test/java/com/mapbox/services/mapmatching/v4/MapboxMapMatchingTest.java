@@ -28,14 +28,11 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 /**
- * Test the MaboxMapMatching
- * <p/>
- * Created by ivo on 17/05/16.
+ * Test the Mapbox Map Matching API
  */
 public class MapboxMapMatchingTest {
-    public static final String POLYLINE_FIXTURE = "src/test/fixtures/map-matching-v5-polyline.json";
-    public static final String NO_GEOMETRY_FIXTURE = "src/test/fixtures/map-matching-v5-no-geometry.json";
-
+    public static final String POLYLINE_FIXTURE = "src/test/fixtures/mapmatching_v5_polyline.json";
+    public static final String NO_GEOMETRY_FIXTURE = "src/test/fixtures/mapmatching_v5_no_geometry.json";
 
     private static final String ACCESS_TOKEN = "pk.XXX";
 
