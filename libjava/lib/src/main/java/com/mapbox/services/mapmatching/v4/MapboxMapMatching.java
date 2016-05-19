@@ -9,6 +9,7 @@ import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.directions.v4.DirectionsCriteria;
 import com.mapbox.services.mapmatching.v4.gson.MapMatchingResponseGeometryDeserializer;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
@@ -22,8 +23,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
-
-import static com.mapbox.services.mapmatching.v4.models.MapMatchingCriteria.*;
 
 /**
  * The Mapbox map matching interface (v4)
@@ -128,8 +127,8 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
         private Integer gpsPrecison;
 
         public Builder() {
-            //Use polyline by default as the return format
-            this.geometry = GEOMETRY_POLYLINE;
+            // Use polyline by default as the return format
+            this.geometry = DirectionsCriteria.GEOMETRY_POLYLINE;
         }
 
         @Override
@@ -163,13 +162,12 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
             return profile;
         }
 
-
         public String getGeometry() {
             return geometry;
         }
 
         public Builder setNoGeometry() {
-            this.geometry = GEOMETRY_NONE;
+            this.geometry = DirectionsCriteria.GEOMETRY_FALSE;
             return this;
         }
 
@@ -186,7 +184,9 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
         }
 
         private void validateProfile() throws ServicesException {
-            if (profile == null || !(profile.equals(PROFILE_CYCLING) || profile.equals(PROFILE_DRIVING) || profile.equals(PROFILE_WALKING))) {
+            if (profile == null || !(profile.equals(DirectionsCriteria.PROFILE_CYCLING)
+                    || profile.equals(DirectionsCriteria.PROFILE_DRIVING)
+                    || profile.equals(DirectionsCriteria.PROFILE_WALKING))) {
                 throw new ServicesException(
                         "Using Mapbox Map Matching requires setting a valid profile.");
             }

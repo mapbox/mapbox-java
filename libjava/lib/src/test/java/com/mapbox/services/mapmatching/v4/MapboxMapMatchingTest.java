@@ -1,6 +1,7 @@
 package com.mapbox.services.mapmatching.v4;
 
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.directions.v4.DirectionsCriteria;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
 import org.junit.After;
@@ -23,7 +24,6 @@ import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 import rx.observers.TestSubscriber;
 
-import static com.mapbox.services.mapmatching.v4.models.MapMatchingCriteria.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -81,7 +81,7 @@ public class MapboxMapMatchingTest {
     public void testCallSanity() throws ServicesException, IOException {
         MapboxMapMatching client = new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
-                .setProfile(PROFILE_WALKING)
+                .setProfile(DirectionsCriteria.PROFILE_WALKING)
                 .build();
         client.setBaseUrl(mockUrl.toString());
         Response<MapMatchingResponse> response = client.executeCall();
@@ -100,7 +100,7 @@ public class MapboxMapMatchingTest {
     public void testSanityRX() throws ServicesException, IOException {
         MapboxMapMatching client = new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
-                .setProfile(PROFILE_WALKING)
+                .setProfile(DirectionsCriteria.PROFILE_WALKING)
                 .build();
         client.setBaseUrl(mockUrl.toString());
 
@@ -116,7 +116,7 @@ public class MapboxMapMatchingTest {
 
 
         MapMatchingResponse response = events.get(0);
-        assertEquals(response.getCode(), RESPONSE_OK);
+        assertEquals(response.getCode(), DirectionsCriteria.RESPONSE_OK);
     }
 
     /**
@@ -126,7 +126,7 @@ public class MapboxMapMatchingTest {
     public void testNoGeometryResponse() throws ServicesException, IOException {
         MapboxMapMatching client = new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
-                .setProfile(PROFILE_WALKING)
+                .setProfile(DirectionsCriteria.PROFILE_WALKING)
                 .setNoGeometry()
                 .build();
         client.setBaseUrl(mockUrl.toString());
@@ -152,7 +152,7 @@ public class MapboxMapMatchingTest {
         thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid gps precision"));
         new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
-                .setProfile(PROFILE_WALKING)
+                .setProfile(DirectionsCriteria.PROFILE_WALKING)
                 .setGpsPrecison(0)
                 .build();
     }
@@ -163,7 +163,7 @@ public class MapboxMapMatchingTest {
         thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid gps precision"));
         new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
-                .setProfile(PROFILE_WALKING)
+                .setProfile(DirectionsCriteria.PROFILE_WALKING)
                 .setGpsPrecison(11)
                 .build();
     }

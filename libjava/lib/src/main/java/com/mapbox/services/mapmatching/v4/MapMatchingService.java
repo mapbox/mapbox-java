@@ -21,13 +21,12 @@ public interface MapMatchingService {
      * @param gpsPrecision assumed precission in meters of the used tracking device
      * @return The MapMatchingResponse in a Call wrapper
      */
-    @GET("matching/v4/mapbox.{profile}.json")
+    @GET("matching/v4/{profile}.json")
     Call<MapMatchingResponse> getCall(
             @Path("profile") String profile,
             @Query("geometry") String geometry,
             @Query("gps_precision") Integer gpsPrecision
     );
-
 
     /**
      * RxJava-based interface
@@ -37,7 +36,7 @@ public interface MapMatchingService {
      * @param gpsPrecision assumed precision in meters of the used tracking device
      * @return The MapMatchingResponse in an RX Java Observable
      */
-    @GET("matching/v4/mapbox.{profile}.json")
+    @GET("matching/v4/{profile}.json")
     Observable<MapMatchingResponse> getObservable(
             @Path("profile") String profile,
             @Query("geometry") String geometry,
