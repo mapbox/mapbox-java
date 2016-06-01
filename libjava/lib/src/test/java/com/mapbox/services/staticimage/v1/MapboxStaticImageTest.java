@@ -2,19 +2,13 @@ package com.mapbox.services.staticimage.v1;
 
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.ServicesException;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 import okhttp3.HttpUrl;
-
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertFalse;
 
-/**
- * Created by antonio on 4/22/16.
- */
 public class MapboxStaticImageTest {
 
     @Rule

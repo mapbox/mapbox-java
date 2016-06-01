@@ -20,11 +20,13 @@ public class Constants {
 
     public final static String MAPBOX_USER = "mapbox";
 
-    public final static String MAPBOX_STYLE_STREETS = "streets-v8";
-    public final static String MAPBOX_STYLE_LIGHT = "light-v8";
-    public final static String MAPBOX_STYLE_DARK = "dark-v8";
+    public final static String MAPBOX_STYLE_STREETS = "streets-v9";
+    public final static String MAPBOX_STYLE_LIGHT = "light-v9";
+    public final static String MAPBOX_STYLE_DARK = "dark-v9";
+    @Deprecated
     public final static String MAPBOX_STYLE_EMERALD = "emerald-v8";
-    public final static String MAPBOX_STYLE_SATELLITE = "satellite-v8";
-    public final static String MAPBOX_STYLE_SATELLITE_HYBRID = "satellite-hybrid-v8";
+    public final static String MAPBOX_OUTDOORS = "outdoors-v9";
+    public final static String MAPBOX_STYLE_SATELLITE = "satellite-v9";
+    public final static String MAPBOX_STYLE_SATELLITE_HYBRID = "satellite-streets-v9";
 
 }
