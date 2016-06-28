@@ -65,6 +65,11 @@
             android:label="Static image"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".utils.SimplifyPolylineActivity"
+            android:label="Simplify polyline"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--
         Service to asynchronously fetch a location address using a Geocoder. Setting the
