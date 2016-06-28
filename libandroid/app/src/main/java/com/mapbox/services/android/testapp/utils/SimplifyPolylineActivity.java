@@ -45,6 +45,10 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
     private boolean quality = false;
     private double toleranceValue = 0.8;
 
+    private int totalRoutePoints;
+    private int simplifiedRoutePoints;
+    private TextView pointValueTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,7 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
         final SeekBar toleranceSeekBar = (SeekBar) findViewById(R.id.seekbar_tolerance);
         final TextView toleranceTextView = (TextView) findViewById(R.id.tolerance_value);
         final CheckBox qualityCheckBox = (CheckBox) findViewById(R.id.quality_toggle);
+        pointValueTextView = (TextView) findViewById(R.id.point_value);
         if (toleranceSeekBar != null)
             toleranceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -195,6 +200,7 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
     }
 
     private void drawBeforeSimplify(List<Position> points) {
+        totalRoutePoints = points.size();
 
         LatLng[] pointsArray = new LatLng[points.size()];
         for (int i = 0; i < points.size(); i++)
@@ -218,6 +224,8 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
 
         Position[] after = PolylineUtils.simplify(before, tolerance, quality);
 
+        simplifiedRoutePoints = after.length;
+
         LatLng[] result = new LatLng[after.length];
         for (int i = 0; i < after.length; i++)
             result[i] = new LatLng(after[i].getLatitude(), after[i].getLongitude());
@@ -226,5 +234,7 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
                 .add(result)
                 .color(Color.parseColor("#3bb2d0"))
                 .width(4));
+
+        pointValueTextView.setText(simplifiedRoutePoints + "/" + totalRoutePoints);
     }
 }

@@ -43,6 +43,11 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
         <CheckBox
             android:id="@+id/quality_toggle"
             android:layout_width="wrap_content"
@@ -53,6 +58,19 @@
             android:paddingBottom="8dp"
             android:text="Highest quality" />
 
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/point_value"
+            android:layout_marginStart="56dp"
+            android:layout_marginLeft="56dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" points"/>
+
+        </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
