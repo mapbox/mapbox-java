@@ -1,0 +1,1 @@
+{"code":"Ok","type":"FeatureCollection","features":[{"type":"Feature","geometry":{},"properties":{"confidence":0.8841963624805721,"distance":291.7,"duration":40.5,"matchedPoints":[[13.418991,52.500625],[13.419147,52.501095],[13.419618,52.501754],[13.42004,52.502333],[13.420492,52.502984]],"indices":[0,1,2,3,4]}}]}

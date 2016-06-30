@@ -17,14 +17,16 @@ import java.util.List;
 public class FeatureCollection implements GeoJSON {
 
     private final String type = "FeatureCollection";
-    private final List<com.mapbox.services.commons.geojson.Feature> features;
+    private final List<Feature> features;
 
     /**
-     * Private constructor.
+     * Protected constructor.
+     * Unlike other GeoJSON object in this package, this constructor is protected to enable
+     * the deserialization of the Map Matching service.
      *
      * @param features List of {@link Feature}.
      */
-    private FeatureCollection(List<com.mapbox.services.commons.geojson.Feature> features) {
+    protected FeatureCollection(List<Feature> features) {
         this.features = features;
     }
 
@@ -43,7 +45,7 @@ public class FeatureCollection implements GeoJSON {
      *
      * @return List of features within collection.
      */
-    public List<com.mapbox.services.commons.geojson.Feature> getFeatures() {
+    public List<Feature> getFeatures() {
         return features;
     }
 
@@ -53,7 +55,7 @@ public class FeatureCollection implements GeoJSON {
      * @param features List of {@link Feature}
      * @return new {@link FeatureCollection}
      */
-    public static FeatureCollection fromFeatures(List<com.mapbox.services.commons.geojson.Feature> features) {
+    public static FeatureCollection fromFeatures(List<Feature> features) {
         return new FeatureCollection(features);
     }
 
