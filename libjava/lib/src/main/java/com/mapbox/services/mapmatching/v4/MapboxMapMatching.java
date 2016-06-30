@@ -138,6 +138,9 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
         }
 
         /**
+         * Set a map matching profile. You should use one of the constants in Directions v4
+         * com.mapbox.services.directions.v4.DirectionsCriteria
+         *
          * @param profile on of DirectionsCriteria#PROFILE_*
          */
         public Builder setProfile(String profile) {
