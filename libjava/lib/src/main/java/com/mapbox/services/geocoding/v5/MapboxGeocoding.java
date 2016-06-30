@@ -5,6 +5,7 @@ import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
 import java.io.IOException;
@@ -62,9 +63,12 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         call = getService().getCall(
                 builder.getMode(),
                 builder.getQuery(),
+                builder.getCountry(),
                 builder.getAccessToken(),
                 builder.getProximity(),
-                builder.getGeocodingType());
+                builder.getGeocodingTypes(),
+                builder.getAutocomplete(),
+                builder.getBbox());
 
         return call;
     }
@@ -97,9 +101,12 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         observable = getService().getObservable(
                 builder.getMode(),
                 builder.getQuery(),
+                builder.getCountry(),
                 builder.getAccessToken(),
                 builder.getProximity(),
-                builder.getGeocodingType());
+                builder.getGeocodingTypes(),
+                builder.getAutocomplete(),
+                builder.getBbox());
 
         return observable;
     }
@@ -115,8 +122,11 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         private String mode;
 
         // Optional (Retrofit will omit these from the request if they remain null)
+        private String country = null;
         private String proximity = null;
-        private String geocodingType = null;
+        private String geocodingTypes = null;
+        private Boolean autocomplete = null;
+        private String bbox = null;
 
         public Builder() {
             // Defaults
@@ -153,6 +163,14 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return this;
         }
 
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public void setCountries(String[] countries) {
+            this.country = TextUtils.join(",", countries);
+        }
+
         /**
          * Location around which to bias results.
          *
@@ -172,9 +190,22 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
          *
          * @param geocodingType String filtering the geocoder result types.
          */
-        public Builder setType(String geocodingType) {
-            this.geocodingType = geocodingType;
+        public Builder setGeocodingType(String geocodingType) {
+            this.geocodingTypes = geocodingType;
             return this;
+        }
+
+        public Builder setGeocodingTypes(String[] geocodingType) {
+            this.geocodingTypes = TextUtils.join(",", geocodingType);
+            return this;
+        }
+
+        public void setAutocomplete(boolean autocomplete) {
+            this.autocomplete = autocomplete;
+        }
+
+        public void setBbox(double minX, double minY, double  maxX, double  maxY) {
+            this.bbox = String.format(Locale.US, "%f,%f,%f,%f", minX, minY, maxX, maxY);
         }
 
         /**
@@ -196,6 +227,10 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return mode;
         }
 
+        public String getCountry() {
+            return country;
+        }
+
         /**
          * Location around which you biased the results.
          *
@@ -211,8 +246,16 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
          *
          * @return String with list of filters you used.
          */
-        public String getGeocodingType() {
-            return geocodingType;
+        public String getGeocodingTypes() {
+            return geocodingTypes;
+        }
+
+        public Boolean getAutocomplete() {
+            return autocomplete;
+        }
+
+        public String getBbox() {
+            return bbox;
         }
 
         @Override

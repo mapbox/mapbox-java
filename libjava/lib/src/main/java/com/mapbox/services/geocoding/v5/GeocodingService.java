@@ -19,8 +19,11 @@ public interface GeocodingService {
      * @param mode
      * @param query
      * @param accessToken
+     * @param country
      * @param proximity
      * @param types
+     * @param autocomplete
+     * @param bbox
      * @return A retrofit Call object
      */
     @GET("/geocoding/v5/{mode}/{query}.json")
@@ -28,8 +31,11 @@ public interface GeocodingService {
             @Path("mode") String mode,
             @Path("query") String query,
             @Query("access_token") String accessToken,
+            @Query("country") String country,
             @Query("proximity") String proximity,
-            @Query("types") String types);
+            @Query("types") String types,
+            @Query("autocomplete") Boolean autocomplete,
+            @Query("bbox") String bbox);
 
     /**
      * RxJava-based interface
@@ -37,8 +43,11 @@ public interface GeocodingService {
      * @param mode
      * @param query
      * @param accessToken
+     * @param country
      * @param proximity
      * @param types
+     * @param autocomplete
+     * @param bbox
      * @return A RxJava Observable object
      */
     @GET("/geocoding/v5/{mode}/{query}.json")
@@ -46,7 +55,10 @@ public interface GeocodingService {
             @Path("mode") String mode,
             @Path("query") String query,
             @Query("access_token") String accessToken,
+            @Query("country") String country,
             @Query("proximity") String proximity,
-            @Query("types") String types);
+            @Query("types") String types,
+            @Query("autocomplete") Boolean autocomplete,
+            @Query("bbox") String bbox);
 
 }
