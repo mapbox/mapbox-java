@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
  *
  * @see com.mapbox.services.mapmatching.v4.MapboxMapMatching.Builder
  */
-public class GeometryDeserializer implements JsonDeserializer<Geometry> {
+public class MapMatchingGeometryDeserializer implements JsonDeserializer<Geometry> {
 
     @Override
     public Geometry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

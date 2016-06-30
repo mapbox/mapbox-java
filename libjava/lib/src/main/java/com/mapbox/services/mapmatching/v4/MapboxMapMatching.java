@@ -8,7 +8,7 @@ import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.directions.v4.DirectionsCriteria;
-import com.mapbox.services.mapmatching.v4.gson.GeometryDeserializer;
+import com.mapbox.services.mapmatching.v4.gson.MapMatchingGeometryDeserializer;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
 import java.io.IOException;
@@ -51,7 +51,7 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
 
         // Gson instance with type adapters
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
+                .registerTypeAdapter(Geometry.class, new MapMatchingGeometryDeserializer())
                 .create();
 
         // Retrofit instance

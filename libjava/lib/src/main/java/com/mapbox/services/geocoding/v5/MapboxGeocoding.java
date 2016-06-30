@@ -1,10 +1,15 @@
 package com.mapbox.services.geocoding.v5;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.utils.TextUtils;
+import com.mapbox.services.geocoding.v5.gson.CarmenGeometryDeserializer;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
 import java.io.IOException;
@@ -44,10 +49,15 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         // No need to recreate it
         if (service != null) return service;
 
+        // Gson instance with type adapters
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer())
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .client(new OkHttpClient())
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
@@ -60,11 +70,14 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         if (call != null) return call;
 
         call = getService().getCall(
-                builder.getGeocodingDataset(),
+                builder.getMode(),
                 builder.getQuery(),
+                builder.getCountry(),
                 builder.getAccessToken(),
                 builder.getProximity(),
-                builder.getGeocodingType());
+                builder.getGeocodingTypes(),
+                builder.getAutocomplete(),
+                builder.getBbox());
 
         return call;
     }
@@ -95,11 +108,14 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         if (observable != null) return observable;
 
         observable = getService().getObservable(
-                builder.getGeocodingDataset(),
+                builder.getMode(),
                 builder.getQuery(),
+                builder.getCountry(),
                 builder.getAccessToken(),
                 builder.getProximity(),
-                builder.getGeocodingType());
+                builder.getGeocodingTypes(),
+                builder.getAutocomplete(),
+                builder.getBbox());
 
         return observable;
     }
@@ -112,15 +128,18 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         // Required
         private String accessToken;
         private String query;
-        private String geocodingDataset;
+        private String mode;
 
         // Optional (Retrofit will omit these from the request if they remain null)
+        private String country = null;
         private String proximity = null;
-        private String geocodingType = null;
+        private String geocodingTypes = null;
+        private Boolean autocomplete = null;
+        private String bbox = null;
 
         public Builder() {
             // Defaults
-            geocodingDataset = com.mapbox.services.geocoding.v5.GeocodingCriteria.DATASET_PLACES;
+            mode = GeocodingCriteria.MODE_PLACES;
         }
 
         /**
@@ -148,9 +167,17 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return this;
         }
 
-        public Builder setDataset(String geocodingDataset) {
-            this.geocodingDataset = geocodingDataset;
+        public Builder setMode(String mode) {
+            this.mode = mode;
             return this;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public void setCountries(String[] countries) {
+            this.country = TextUtils.join(",", countries);
         }
 
         /**
@@ -172,9 +199,22 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
          *
          * @param geocodingType String filtering the geocoder result types.
          */
-        public Builder setType(String geocodingType) {
-            this.geocodingType = geocodingType;
+        public Builder setGeocodingType(String geocodingType) {
+            this.geocodingTypes = geocodingType;
             return this;
+        }
+
+        public Builder setGeocodingTypes(String[] geocodingType) {
+            this.geocodingTypes = TextUtils.join(",", geocodingType);
+            return this;
+        }
+
+        public void setAutocomplete(boolean autocomplete) {
+            this.autocomplete = autocomplete;
+        }
+
+        public void setBbox(double minX, double minY, double  maxX, double  maxY) {
+            this.bbox = String.format(Locale.US, "%f,%f,%f,%f", minX, minY, maxX, maxY);
         }
 
         /**
@@ -192,8 +232,12 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return query;
         }
 
-        public String getGeocodingDataset() {
-            return geocodingDataset;
+        public String getMode() {
+            return mode;
+        }
+
+        public String getCountry() {
+            return country;
         }
 
         /**
@@ -211,8 +255,16 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
          *
          * @return String with list of filters you used.
          */
-        public String getGeocodingType() {
-            return geocodingType;
+        public String getGeocodingTypes() {
+            return geocodingTypes;
+        }
+
+        public Boolean getAutocomplete() {
+            return autocomplete;
+        }
+
+        public String getBbox() {
+            return bbox;
         }
 
         @Override

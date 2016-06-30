@@ -1,5 +1,8 @@
 package com.mapbox.services.geojson;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -111,8 +114,7 @@ public class BaseGeoJSON {
      */
 
     void compareJson(String json1, String json2) {
-        assertEquals(
-                json1.replace(" ", "").replace("\n", ""),
-                json2.replace(" ", "").replace("\n", ""));
+        JsonParser parser = new JsonParser();
+        assertEquals(parser.parse(json1), parser.parse(json2));
     }
 }
