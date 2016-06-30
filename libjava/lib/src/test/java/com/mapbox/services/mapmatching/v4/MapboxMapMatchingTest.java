@@ -1,7 +1,11 @@
 package com.mapbox.services.mapmatching.v4;
 
+import com.google.gson.Gson;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.geojson.Feature;
+import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.directions.v4.DirectionsCriteria;
+import com.mapbox.services.geojson.BaseGeoJSON;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
 import org.junit.After;
@@ -187,4 +191,23 @@ public class MapboxMapMatchingTest {
                 .setProfile("my_own_profile")
                 .build();
     }
+
+//    @Test
+//    public void testPost() throws ServicesException, IOException {
+//        // From https://www.mapbox.com/api-documentation/#map-matching
+//        LineString trace = LineString.fromJson("{ \"type\": \"LineString\", \"coordinates\": [ [13.418946862220764, 52.50055852688439], [13.419011235237122, 52.50113000479732], [13.419756889343262, 52.50171780290061], [13.419885635375975, 52.50237416816131], [13.420631289482117, 52.50294888790448] ] }");
+//        MapboxMapMatching client = new MapboxMapMatching.Builder()
+//                .setAccessToken("")
+//                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+//                .setTrace(trace)
+//                .build();
+//
+//        // Enable debug
+//        client.setEnableDebug(true);
+//
+//        // All good
+//        Response<MapMatchingResponse> response = client.executeCall();
+//        assertEquals(response.code(), 200);
+//        assertEquals(response.body().getCode(), DirectionsCriteria.RESPONSE_OK);
+//    }
 }

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,7 +26,7 @@ import rx.Observable;
  * is returned with geometries, and turn-by-turn instructions. The Mapbox Directions API supports
  * routing for driving cars, riding bicycles and walking.
  */
-public class MapboxDirections implements MapboxService<DirectionsResponse> {
+public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
     private Builder builder = null;
     private DirectionsService service = null;
@@ -51,7 +50,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
 
         // Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .client(new OkHttpClient())
+                .client(getOkHttpClient())
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
