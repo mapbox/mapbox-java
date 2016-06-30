@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".utils.SimplifyPolylineActivity"
+    tools:showIn="@layout/activity_utils_simplify_polyline">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:center_latitude="37.692465"
+        app:center_longitude="-122.410413"
+        app:style_url="mapbox://styles/mapbox/light-v9"
+        app:zoom="10.5" />
+
+</RelativeLayout>

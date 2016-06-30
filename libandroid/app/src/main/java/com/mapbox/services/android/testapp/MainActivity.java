@@ -24,6 +24,7 @@ import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
 import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
+import com.mapbox.services.android.testapp.utils.SimplifyPolylineActivity;
 import com.mapbox.services.android.utils.PermissionsUtils;
 
 import java.util.ArrayList;
@@ -50,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
             new SampleItem("Geocoding widget", "", GeocodingWidgetActivity.class),
             new SampleItem("Geocoding service", "", GeocodingServiceActivity.class),
             new SampleItem("Maki icons", "", MakiIconsActivity.class),
-            new SampleItem("Static image", "", StaticImageActivity.class)
+            new SampleItem("Static image", "", StaticImageActivity.class),
+            new SampleItem("Simplify polyline", "", SimplifyPolylineActivity.class)
     ));
 
     @Override
