@@ -6,14 +6,17 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.Geometry;
+import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.directions.v4.DirectionsCriteria;
 import com.mapbox.services.mapmatching.v4.gson.MapMatchingGeometryDeserializer;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
 import java.io.IOException;
 
-import okhttp3.OkHttpClient;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,7 +28,7 @@ import rx.Observable;
 /**
  * The Mapbox map matching interface (v4)
  */
-public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
+public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
 
     private Builder builder = null;
     private MapMatchingService service = null;
@@ -56,7 +59,7 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
 
         // Retrofit instance
         Retrofit retrofit = new Retrofit.Builder()
-                .client(new OkHttpClient())
+                .client(getOkHttpClient())
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -73,8 +76,10 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
 
         call = getService().getCall(
                 builder.getProfile(),
+                builder.getAccessToken(),
                 builder.getGeometry(),
-                builder.getGpsPrecison()
+                builder.getGpsPrecison(),
+                builder.getTrace()
         );
 
         return call;
@@ -107,8 +112,10 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
 
         observable = getService().getObservable(
                 builder.getProfile(),
+                builder.getAccessToken(),
                 builder.getGeometry(),
-                builder.getGpsPrecison()
+                builder.getGpsPrecison(),
+                builder.getTrace()
         );
 
         return observable;
@@ -120,6 +127,8 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
         private String profile;
         private String geometry;
         private Integer gpsPrecison;
+
+        private LineString trace;
 
         public Builder() {
             // Use polyline by default as the return format
@@ -165,11 +174,22 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
             return gpsPrecison;
         }
 
+        public RequestBody getTrace() {
+            return RequestBody.create(
+                    MediaType.parse("application/json"),
+                    Feature.fromGeometry(trace).toJson());
+        }
+
         /**
          * @param gpsPrecison Assumed accuracy of the tracking device in meters (1-10 inclusive, default 4)
          */
         public Builder setGpsPrecison(Integer gpsPrecison) {
             this.gpsPrecison = gpsPrecison;
+            return this;
+        }
+
+        public Builder setTrace(LineString trace) {
+            this.trace = trace;
             return this;
         }
 

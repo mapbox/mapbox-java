@@ -1,9 +1,12 @@
 package com.mapbox.services.mapmatching.v4;
 
+import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.GET;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -21,12 +24,13 @@ public interface MapMatchingService {
      * @param gpsPrecision assumed precission in meters of the used tracking device
      * @return The MapMatchingResponse in a Call wrapper
      */
-    @GET("matching/v4/{profile}.json")
+    @POST("matching/v4/{profile}.json")
     Call<MapMatchingResponse> getCall(
             @Path("profile") String profile,
+            @Query("access_token") String accessToken,
             @Query("geometry") String geometry,
-            @Query("gps_precision") Integer gpsPrecision
-    );
+            @Query("gps_precision") Integer gpsPrecision,
+            @Body RequestBody trace);
 
     /**
      * RxJava-based interface
@@ -36,10 +40,11 @@ public interface MapMatchingService {
      * @param gpsPrecision assumed precision in meters of the used tracking device
      * @return The MapMatchingResponse in an RX Java Observable
      */
-    @GET("matching/v4/{profile}.json")
+    @POST("matching/v4/{profile}.json")
     Observable<MapMatchingResponse> getObservable(
             @Path("profile") String profile,
+            @Query("access_token") String accessToken,
             @Query("geometry") String geometry,
-            @Query("gps_precision") Integer gpsPrecision
-    );
+            @Query("gps_precision") Integer gpsPrecision,
+            @Body RequestBody trace);
 }

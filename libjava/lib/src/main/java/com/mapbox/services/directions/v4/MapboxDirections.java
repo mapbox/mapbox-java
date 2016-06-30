@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,7 +25,7 @@ import rx.Observable;
 /**
  * Mapbox Directions v4 client.
  */
-public class MapboxDirections implements MapboxService<DirectionsResponse> {
+public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
     private Builder builder = null;
     private DirectionsService service = null;
@@ -49,7 +48,7 @@ public class MapboxDirections implements MapboxService<DirectionsResponse> {
         if (service != null) return service;
 
         Retrofit retrofit = new Retrofit.Builder()
-                .client(new OkHttpClient())
+                .client(getOkHttpClient())
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

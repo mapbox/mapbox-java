@@ -15,7 +15,6 @@ import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,7 +26,7 @@ import rx.Observable;
 /**
  * The Mapbox geocoding client (v5).
  */
-public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
+public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
     private Builder builder = null;
     private GeocodingService service = null;
@@ -55,7 +54,7 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .client(new OkHttpClient())
+                .client(getOkHttpClient())
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
@@ -172,12 +171,14 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return this;
         }
 
-        public void setCountry(String country) {
+        public Builder setCountry(String country) {
             this.country = country;
+            return this;
         }
 
-        public void setCountries(String[] countries) {
+        public Builder setCountries(String[] countries) {
             this.country = TextUtils.join(",", countries);
+            return this;
         }
 
         /**
@@ -209,12 +210,14 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return this;
         }
 
-        public void setAutocomplete(boolean autocomplete) {
+        public Builder setAutocomplete(boolean autocomplete) {
             this.autocomplete = autocomplete;
+            return this;
         }
 
-        public void setBbox(double minX, double minY, double  maxX, double  maxY) {
+        public Builder setBbox(double minX, double minY, double  maxX, double  maxY) {
             this.bbox = String.format(Locale.US, "%f,%f,%f,%f", minX, minY, maxX, maxY);
+            return this;
         }
 
         /**
