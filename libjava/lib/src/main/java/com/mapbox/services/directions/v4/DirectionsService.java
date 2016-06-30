@@ -1,9 +1,11 @@
 package com.mapbox.services.directions.v4;
 
+import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.directions.v4.models.DirectionsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -25,6 +27,7 @@ public interface DirectionsService {
      * @param steps
      * @return A retrofit Call object
      */
+    @Headers(MapboxService.HEADER_USER_AGENT)
     @GET("v4/directions/{profile}/{waypoints}.json")
     Call<DirectionsResponse> getCall(
             @Path("profile") String profile,
@@ -48,6 +51,7 @@ public interface DirectionsService {
      * @param steps
      * @return A RxJava Observable object
      */
+    @Headers(MapboxService.HEADER_USER_AGENT)
     @GET("v4/directions/{profile}/{waypoints}.json")
     Observable<DirectionsResponse> getObservable(
             @Path("profile") String profile,

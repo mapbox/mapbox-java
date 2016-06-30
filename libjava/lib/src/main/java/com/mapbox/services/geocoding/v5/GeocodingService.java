@@ -1,9 +1,11 @@
 package com.mapbox.services.geocoding.v5;
 
+import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -26,6 +28,7 @@ public interface GeocodingService {
      * @param bbox
      * @return A retrofit Call object
      */
+    @Headers(MapboxService.HEADER_USER_AGENT)
     @GET("/geocoding/v5/{mode}/{query}.json")
     Call<GeocodingResponse> getCall(
             @Path("mode") String mode,
@@ -50,6 +53,7 @@ public interface GeocodingService {
      * @param bbox
      * @return A RxJava Observable object
      */
+    @Headers(MapboxService.HEADER_USER_AGENT)
     @GET("/geocoding/v5/{mode}/{query}.json")
     Observable<GeocodingResponse> getObservable(
             @Path("mode") String mode,
