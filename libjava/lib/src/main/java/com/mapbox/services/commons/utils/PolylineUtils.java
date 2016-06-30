@@ -203,9 +203,11 @@ public class PolylineUtils {
 
     /**
      * Both algorithms combined for awesome performance
+     * For coordinates, tolerance should have a value around 0.00001.
+     * See https://github.com/mapbox/mapbox-java/issues/86#issuecomment-229192340 for details.
      */
     public static Position[] simplify(Position[] points) {
-        return simplify(points, 1.0);
+        return simplify(points, 0.00001);
     }
 
     public static Position[] simplify(Position[] points, double tolerance) {
