@@ -123,8 +123,8 @@ public class MapboxGeocodingTest {
 
         FeatureGeometry geometry = response.body().getFeatures().get(3).getGeometry();
         assertEquals(geometry.getType(), "Point");
-        assertEquals(geometry.getCoordinates().get(0), -75.563366, DELTA);
-        assertEquals(geometry.getCoordinates().get(1), 39.75431, DELTA);
+        assertEquals(geometry.getCoordinates().get(0), -74.236513, DELTA);
+        assertEquals(geometry.getCoordinates().get(1), 40.644412, DELTA);
         assertEquals(geometry.isInterpolated(), true);
     }
 
