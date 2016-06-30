@@ -29,7 +29,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.3.0'
 
     // Mapbox SDK
-    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.1.0-beta.3@aar'){
+    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.1.0@aar'){
         transitive=true
     }
 
