@@ -164,4 +164,17 @@ public class MapboxGeocodingTest {
         assertEquals(contexts.get(4).getText(), "United States");
         assertEquals(contexts.get(4).getShortCode(), "us");
     }
+
+    @Test
+    public void testWikidata() throws ServicesException, IOException {
+        MapboxGeocoding client = new MapboxGeocoding.Builder()
+                .setAccessToken("pk.XXX")
+                .setLocation("1600 pennsylvania ave nw")
+                .build();
+        client.setBaseUrl(mockUrl.toString());
+        Response<GeocodingResponse> response = client.executeCall();
+
+        CarmenContext context = response.body().getFeatures().get(0).getContext().get(1);
+        assertEquals(context.getWikidata(), "Q61");
+    }
 }
