@@ -7,7 +7,6 @@ import com.google.gson.JsonParseException;
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
 
 import java.lang.reflect.Type;
 
@@ -19,7 +18,7 @@ import java.lang.reflect.Type;
  *
  * @see com.mapbox.services.mapmatching.v4.MapboxMapMatching.Builder
  */
-public class MapMatchingResponseGeometryDeserializer implements JsonDeserializer<Geometry> {
+public class GeometryDeserializer implements JsonDeserializer<Geometry> {
 
     @Override
     public Geometry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

@@ -2,6 +2,7 @@ package com.mapbox.services.directions.v4;
 
 /**
  * Constants used to customize the directions request.
+ * These constansts are shared by the MapboxMapMatching object.
  */
 public final class DirectionsCriteria {
 
@@ -47,5 +48,30 @@ public final class DirectionsCriteria {
      * Use false to omit geometry from response.
      */
     public static final String GEOMETRY_FALSE = "false";
+
+    /**
+     * Normal case
+     */
+    public final static String RESPONSE_OK = "Ok";
+
+    /**
+     * The input did not produce any matches. Features will be an empty array.
+     */
+    public final static String RESPONSE_NO_MATCH = "NoMatch";
+
+    /**
+     * There are more than 100 points in the request.
+     */
+    public final static String RESPONSE_TOO_MANY_COORDINATES = "TooManyCoordinates";
+
+    /**
+     * message will hold an explanation of the invalid input.
+     */
+    public final static String RESPONSE_INVALID_INPUT = "InvalidInput";
+
+    /**
+     * Profile should be  mapbox.driving, mapbox.walking, or mapbox.cycling.
+     */
+    public final static String RESPONSE_PROFILE_NOT_FOUND = "ProfileNotFound";
 
 }

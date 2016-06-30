@@ -31,6 +31,7 @@ import static org.junit.Assert.*;
  * Test the Mapbox Map Matching API
  */
 public class MapboxMapMatchingTest {
+
     public static final String POLYLINE_FIXTURE = "src/test/fixtures/mapmatching_v5_polyline.json";
     public static final String NO_GEOMETRY_FIXTURE = "src/test/fixtures/mapmatching_v5_no_geometry.json";
 
@@ -50,7 +51,7 @@ public class MapboxMapMatchingTest {
 
             @Override
             public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-                //Switch response on geometry parameter (only false supported, so nice and simple)
+                // Switch response on geometry parameter (only false supported, so nice and simple)
                 String resource = POLYLINE_FIXTURE;
                 if (request.getPath().contains("geometry=false")) {
                     resource = NO_GEOMETRY_FIXTURE;
@@ -87,7 +88,7 @@ public class MapboxMapMatchingTest {
         Response<MapMatchingResponse> response = client.executeCall();
         assertEquals(response.code(), 200);
 
-        //Check the response body
+        // Check the response body
         assertNotNull(response.body());
         assertEquals(1, response.body().getFeatures().size());
         assertNotNull(response.body().getFeatures().get(0).getGeometry());
@@ -114,7 +115,6 @@ public class MapboxMapMatchingTest {
         List<MapMatchingResponse> events = testSubscriber.getOnNextEvents();
         assertEquals(1, events.size());
 
-
         MapMatchingResponse response = events.get(0);
         assertEquals(response.getCode(), DirectionsCriteria.RESPONSE_OK);
     }
@@ -133,7 +133,7 @@ public class MapboxMapMatchingTest {
         Response<MapMatchingResponse> response = client.executeCall();
         assertEquals(response.code(), 200);
 
-        //Check the response body
+        // Check the response body
         assertNotNull(response.body());
         assertEquals(1, response.body().getFeatures().size());
         assertNull(response.body().getFeatures().get(0).getGeometry());
@@ -149,7 +149,7 @@ public class MapboxMapMatchingTest {
     @Test
     public void validGpsPrecisionLowerBounds() throws ServicesException {
         thrown.expect(ServicesException.class);
-        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid gps precision"));
+        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid GPS precision"));
         new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
                 .setProfile(DirectionsCriteria.PROFILE_WALKING)
@@ -160,7 +160,7 @@ public class MapboxMapMatchingTest {
     @Test
     public void validGpsPrecisionUpperBounds() throws ServicesException {
         thrown.expect(ServicesException.class);
-        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid gps precision"));
+        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid GPS precision"));
         new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
                 .setProfile(DirectionsCriteria.PROFILE_WALKING)

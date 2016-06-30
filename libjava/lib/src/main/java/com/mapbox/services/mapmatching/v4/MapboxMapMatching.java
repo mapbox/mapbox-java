@@ -7,10 +7,8 @@ import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.Geometry;
-import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.directions.v4.DirectionsCriteria;
-import com.mapbox.services.mapmatching.v4.gson.MapMatchingResponseGeometryDeserializer;
+import com.mapbox.services.mapmatching.v4.gson.GeometryDeserializer;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
 import java.io.IOException;
@@ -26,8 +24,6 @@ import rx.Observable;
 
 /**
  * The Mapbox map matching interface (v4)
- * <p/>
- * Created by ivo on 17/05/16.
  */
 public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
 
@@ -53,10 +49,9 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
             return service;
         }
 
-        //Gson instance with type adapters
+        // Gson instance with type adapters
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Geometry.class, new MapMatchingResponseGeometryDeserializer())
-                .registerTypeAdapter(Position.class, new PositionDeserializer())
+                .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
                 .create();
 
         // Retrofit instance
@@ -142,16 +137,8 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
             return this.accessToken;
         }
 
-        @Override
-        public MapboxMapMatching build() throws ServicesException {
-            validateAccessToken(accessToken);
-            validateProfile();
-            validateGpsPrecision();
-            return new MapboxMapMatching(this);
-        }
-
         /**
-         * @param profile on of MapMatchingCriteria#PROFILE_*
+         * @param profile on of DirectionsCriteria#PROFILE_*
          */
         public Builder setProfile(String profile) {
             this.profile = profile;
@@ -195,8 +182,17 @@ public class MapboxMapMatching implements MapboxService<MapMatchingResponse> {
         private void validateGpsPrecision() throws ServicesException {
             if (gpsPrecison != null && (gpsPrecison < 1 || gpsPrecison > 10)) {
                 throw new ServicesException(
-                        "Using Mapbox Map Matching requires setting a valid gps precision.");
+                        "Using Mapbox Map Matching requires setting a valid GPS precision.");
             }
         }
+
+        @Override
+        public MapboxMapMatching build() throws ServicesException {
+            validateAccessToken(accessToken);
+            validateProfile();
+            validateGpsPrecision();
+            return new MapboxMapMatching(this);
+        }
+
     }
 }
