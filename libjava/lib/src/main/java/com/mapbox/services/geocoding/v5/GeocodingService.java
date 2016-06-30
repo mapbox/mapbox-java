@@ -16,16 +16,16 @@ public interface GeocodingService {
     /**
      * Call-based interface
      *
-     * @param dataset
+     * @param mode
      * @param query
      * @param accessToken
      * @param proximity
      * @param types
      * @return A retrofit Call object
      */
-    @GET("/geocoding/v5/{dataset}/{query}.json")
+    @GET("/geocoding/v5/{mode}/{query}.json")
     Call<GeocodingResponse> getCall(
-            @Path("dataset") String dataset,
+            @Path("mode") String mode,
             @Path("query") String query,
             @Query("access_token") String accessToken,
             @Query("proximity") String proximity,
@@ -34,16 +34,16 @@ public interface GeocodingService {
     /**
      * RxJava-based interface
      *
-     * @param dataset
+     * @param mode
      * @param query
      * @param accessToken
      * @param proximity
      * @param types
      * @return A RxJava Observable object
      */
-    @GET("/geocoding/v5/{dataset}/{query}.json")
+    @GET("/geocoding/v5/{mode}/{query}.json")
     Observable<GeocodingResponse> getObservable(
-            @Path("dataset") String dataset,
+            @Path("mode") String mode,
             @Path("query") String query,
             @Query("access_token") String accessToken,
             @Query("proximity") String proximity,

@@ -60,7 +60,7 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         if (call != null) return call;
 
         call = getService().getCall(
-                builder.getGeocodingDataset(),
+                builder.getMode(),
                 builder.getQuery(),
                 builder.getAccessToken(),
                 builder.getProximity(),
@@ -95,7 +95,7 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         if (observable != null) return observable;
 
         observable = getService().getObservable(
-                builder.getGeocodingDataset(),
+                builder.getMode(),
                 builder.getQuery(),
                 builder.getAccessToken(),
                 builder.getProximity(),
@@ -112,7 +112,7 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         // Required
         private String accessToken;
         private String query;
-        private String geocodingDataset;
+        private String mode;
 
         // Optional (Retrofit will omit these from the request if they remain null)
         private String proximity = null;
@@ -120,7 +120,7 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
 
         public Builder() {
             // Defaults
-            geocodingDataset = com.mapbox.services.geocoding.v5.GeocodingCriteria.DATASET_PLACES;
+            mode = GeocodingCriteria.MODE_PLACES;
         }
 
         /**
@@ -148,8 +148,8 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return this;
         }
 
-        public Builder setDataset(String geocodingDataset) {
-            this.geocodingDataset = geocodingDataset;
+        public Builder setMode(String mode) {
+            this.mode = mode;
             return this;
         }
 
@@ -192,8 +192,8 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
             return query;
         }
 
-        public String getGeocodingDataset() {
-            return geocodingDataset;
+        public String getMode() {
+            return mode;
         }
 
         /**

@@ -5,12 +5,12 @@ public final class GeocodingCriteria {
     /**
      * Default geocoding mode
      */
-    public static final String DATASET_PLACES = "mapbox.places";
+    public static final String MODE_PLACES = "mapbox.places";
 
     /**
      * Geocoding mode for for enterprise/batch geocoding
      */
-    public static final String DATASET_PLACES_PERMANENT = "mapbox.places-permanent";
+    public static final String MODE_PLACES_PERMANENT = "mapbox.places-permanent";
 
     /**
      * Filter results by country
