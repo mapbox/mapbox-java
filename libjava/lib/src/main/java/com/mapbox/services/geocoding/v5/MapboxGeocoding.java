@@ -1,11 +1,15 @@
 package com.mapbox.services.geocoding.v5;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
+import com.mapbox.services.geocoding.v5.gson.CarmenGeometryDeserializer;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
 import java.io.IOException;
@@ -45,10 +49,15 @@ public class MapboxGeocoding implements MapboxService<GeocodingResponse> {
         // No need to recreate it
         if (service != null) return service;
 
+        // Gson instance with type adapters
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer())
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .client(new OkHttpClient())
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 

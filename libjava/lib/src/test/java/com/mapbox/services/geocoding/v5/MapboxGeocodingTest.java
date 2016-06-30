@@ -1,10 +1,10 @@
 package com.mapbox.services.geocoding.v5;
 
-import com.google.gson.internal.LinkedTreeMap;
+import com.google.gson.JsonObject;
 import com.mapbox.services.commons.ServicesException;
-import com.mapbox.services.geocoding.v5.models.FeatureContext;
-import com.mapbox.services.geocoding.v5.models.FeatureGeometry;
-import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
+import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.geocoding.v5.models.CarmenContext;
+import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
 import org.junit.After;
@@ -99,13 +99,13 @@ public class MapboxGeocodingTest {
         client.setBaseUrl(mockUrl.toString());
         Response<GeocodingResponse> response = client.executeCall();
 
-        GeocodingFeature feature = response.body().getFeatures().get(0);
+        CarmenFeature feature = response.body().getFeatures().get(0);
         assertEquals(feature.getId(), "address.7626097581139850");
         assertEquals(feature.getType(), "Feature");
         assertEquals(feature.getText(), "Pennsylvania Ave NW");
         assertEquals(feature.getPlaceName(), "1600 Pennsylvania Ave NW, Washington, District of Columbia 20006, United States");
         assertEquals(feature.getRelevance(), 0.99, DELTA);
-        assertEquals(feature.getProperties(), new LinkedTreeMap());
+        assertEquals(feature.getProperties(), new JsonObject());
         assertEquals(feature.asPosition().getLongitude(), -77.036543, DELTA);
         assertEquals(feature.asPosition().getLatitude(), 38.897702, DELTA);
         assertEquals(feature.getAddress(), "1600");
@@ -121,11 +121,10 @@ public class MapboxGeocodingTest {
         client.setBaseUrl(mockUrl.toString());
         Response<GeocodingResponse> response = client.executeCall();
 
-        FeatureGeometry geometry = response.body().getFeatures().get(3).getGeometry();
-        assertEquals(geometry.getType(), "Point");
-        assertEquals(geometry.getCoordinates().get(0), -74.236513, DELTA);
-        assertEquals(geometry.getCoordinates().get(1), 40.644412, DELTA);
-        assertEquals(geometry.isInterpolated(), true);
+        Point point = (Point) response.body().getFeatures().get(3).getGeometry();
+        assertEquals(point.getType(), "Point");
+        assertEquals(point.getCoordinates().getLongitude(), -74.236513, DELTA);
+        assertEquals(point.getCoordinates().getLatitude(), 40.644412, DELTA);
     }
 
     @Test
@@ -137,7 +136,7 @@ public class MapboxGeocodingTest {
         client.setBaseUrl(mockUrl.toString());
         Response<GeocodingResponse> response = client.executeCall();
 
-        List<FeatureContext> contexts = response.body().getFeatures().get(0).getContext();
+        List<CarmenContext> contexts = response.body().getFeatures().get(0).getContext();
         assertEquals(contexts.get(4).getId(), "country.12862386939497690");
         assertEquals(contexts.get(4).getText(), "United States");
         assertEquals(contexts.get(4).getShortCode(), "us");
@@ -160,7 +159,7 @@ public class MapboxGeocodingTest {
         List<GeocodingResponse> responses = testSubscriber.getOnNextEvents();
         assertNotNull(responses);
         assertTrue("Geocoding Response Returned", responses.size() > 0);
-        List<FeatureContext> contexts = responses.get(0).getFeatures().get(0).getContext();
+        List<CarmenContext> contexts = responses.get(0).getFeatures().get(0).getContext();
         assertEquals(contexts.get(4).getId(), "country.12862386939497690");
         assertEquals(contexts.get(4).getText(), "United States");
         assertEquals(contexts.get(4).getShortCode(), "us");

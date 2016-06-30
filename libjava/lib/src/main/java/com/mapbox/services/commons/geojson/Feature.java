@@ -27,7 +27,7 @@ public class Feature implements GeoJSON {
      * @param properties of this feature as JSON.
      * @param id         common identifier of this feature.
      */
-    private Feature(Geometry geometry, JsonObject properties, String id) {
+    protected Feature(Geometry geometry, JsonObject properties, String id) {
         this.geometry = geometry;
         this.properties = properties;
         this.id = id;
