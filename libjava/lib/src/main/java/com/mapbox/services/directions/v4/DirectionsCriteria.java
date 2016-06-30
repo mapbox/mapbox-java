@@ -48,9 +48,4 @@ public final class DirectionsCriteria {
      */
     public static final String GEOMETRY_FALSE = "false";
 
-    /**
-     * Server responds with no errors.
-     */
-    public final static String RESPONSE_OK = "Ok";
-
 }
