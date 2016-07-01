@@ -301,8 +301,14 @@ public class MapboxStaticImage {
                 throw new ServicesException("You need to set the map zoom level.");
             }
 
-            if (width == null || height == null) {
-                throw new ServicesException("You need to set the map width/height dimensions.");
+            if (width == null || width < 1 || width > 1280) {
+                throw new ServicesException(
+                        "You need to set a valid image width (between 1 and 1280).");
+            }
+
+            if (height == null || height < 1 || height > 1280) {
+                throw new ServicesException(
+                        "You need to set a valid image height (between 1 and 1280).");
             }
 
             return new MapboxStaticImage(this);
