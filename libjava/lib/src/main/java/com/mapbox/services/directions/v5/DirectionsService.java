@@ -4,6 +4,7 @@ import com.mapbox.services.directions.v5.models.DirectionsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -15,6 +16,7 @@ public interface DirectionsService {
 
     @GET("directions/v5/{user}/{profile}/{coordinates}")
     Call<DirectionsResponse> getCall(
+            @Header("User-Agent") String userAgent,
             @Path("user") String user,
             @Path("profile") String profile,
             @Path("coordinates") String coordinates,
@@ -29,6 +31,7 @@ public interface DirectionsService {
 
     @GET("directions/v5/{user}/{profile}/{coordinates}")
     Observable<DirectionsResponse> getObservable(
+            @Header("User-Agent") String userAgent,
             @Path("user") String user,
             @Path("profile") String profile,
             @Path("coordinates") String coordinates,

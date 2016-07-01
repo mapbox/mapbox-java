@@ -69,6 +69,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         if (call != null) return call;
 
         call = getService().getCall(
+                getHeaderUserAgent(),
                 builder.getMode(),
                 builder.getQuery(),
                 builder.getCountry(),
@@ -107,6 +108,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         if (observable != null) return observable;
 
         observable = getService().getObservable(
+                getHeaderUserAgent(),
                 builder.getMode(),
                 builder.getQuery(),
                 builder.getCountry(),
