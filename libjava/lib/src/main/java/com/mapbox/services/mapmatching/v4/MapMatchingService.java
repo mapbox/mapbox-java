@@ -1,7 +1,6 @@
 package com.mapbox.services.mapmatching.v4;
 
-import com.mapbox.services.commons.MapboxService;
-import com.mapbox.services.commons.geojson.Feature;
+import com.mapbox.services.Constants;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
 import okhttp3.RequestBody;
@@ -26,7 +25,7 @@ public interface MapMatchingService {
      * @param gpsPrecision assumed precission in meters of the used tracking device
      * @return The MapMatchingResponse in a Call wrapper
      */
-    @Headers(MapboxService.HEADER_USER_AGENT)
+    @Headers(Constants.HEADER_USER_AGENT)
     @POST("matching/v4/{profile}.json")
     Call<MapMatchingResponse> getCall(
             @Path("profile") String profile,
@@ -43,7 +42,7 @@ public interface MapMatchingService {
      * @param gpsPrecision assumed precision in meters of the used tracking device
      * @return The MapMatchingResponse in an RX Java Observable
      */
-    @Headers(MapboxService.HEADER_USER_AGENT)
+    @Headers(Constants.HEADER_USER_AGENT)
     @POST("matching/v4/{profile}.json")
     Observable<MapMatchingResponse> getObservable(
             @Path("profile") String profile,

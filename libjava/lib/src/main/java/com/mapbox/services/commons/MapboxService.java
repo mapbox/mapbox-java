@@ -14,8 +14,6 @@ import rx.Observable;
  */
 public abstract class MapboxService<T> {
 
-    public final static String HEADER_USER_AGENT = "User-Agent: MapboxAndroidServices/1.0";
-
     private boolean enableDebug = false;
 
     public abstract Response<T> executeCall() throws IOException;
