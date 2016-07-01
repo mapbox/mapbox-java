@@ -15,30 +15,31 @@ public class Constants {
     public final static String HEADER_USER_AGENT =
             String.format(Locale.US, "MapboxJava/%s", MAPBOX_JAVA_VERSION);
 
+    /**
+     * Base URL for all API calls, not hardcoded to enable testing
+     */
     public final static String BASE_API_URL = "https://api.mapbox.com";
 
-    /*
-     * For polyline encoding/decoding
+    /**
+     * Constants for polyline encoding/decoding
      */
-
     public final static int GOOGLE_PRECISION = 5;
-
     public final static int OSRM_PRECISION_V4 = 6;
     public final static int OSRM_PRECISION_V5 = 5;
 
-    /*
+    /**
+     * Default user for services
+     */
+    public final static String MAPBOX_USER = "mapbox";
+
+    /**
      * Mapbox default styles
      * https://www.mapbox.com/developers/api/styles/
      */
-
-    public final static String MAPBOX_USER = "mapbox";
-
     public final static String MAPBOX_STYLE_STREETS = "streets-v9";
     public final static String MAPBOX_STYLE_LIGHT = "light-v9";
     public final static String MAPBOX_STYLE_DARK = "dark-v9";
-    @Deprecated
-    public final static String MAPBOX_STYLE_EMERALD = "emerald-v8";
-    public final static String MAPBOX_OUTDOORS = "outdoors-v9";
+    public final static String MAPBOX_STYLE_OUTDOORS = "outdoors-v9";
     public final static String MAPBOX_STYLE_SATELLITE = "satellite-v9";
     public final static String MAPBOX_STYLE_SATELLITE_HYBRID = "satellite-streets-v9";
 
