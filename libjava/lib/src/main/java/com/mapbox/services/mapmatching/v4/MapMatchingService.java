@@ -1,11 +1,11 @@
 package com.mapbox.services.mapmatching.v4;
 
-import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -26,6 +26,7 @@ public interface MapMatchingService {
      */
     @POST("matching/v4/{profile}.json")
     Call<MapMatchingResponse> getCall(
+            @Header("User-Agent") String userAgent,
             @Path("profile") String profile,
             @Query("access_token") String accessToken,
             @Query("geometry") String geometry,
@@ -42,6 +43,7 @@ public interface MapMatchingService {
      */
     @POST("matching/v4/{profile}.json")
     Observable<MapMatchingResponse> getObservable(
+            @Header("User-Agent") String userAgent,
             @Path("profile") String profile,
             @Query("access_token") String accessToken,
             @Query("geometry") String geometry,

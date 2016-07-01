@@ -75,6 +75,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
         if (call != null) return call;
 
         call = getService().getCall(
+                getHeaderUserAgent(),
                 builder.getProfile(),
                 builder.getAccessToken(),
                 builder.getGeometry(),
@@ -111,6 +112,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
         if (observable != null) return observable;
 
         observable = getService().getObservable(
+                getHeaderUserAgent(),
                 builder.getProfile(),
                 builder.getAccessToken(),
                 builder.getGeometry(),

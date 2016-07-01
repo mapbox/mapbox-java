@@ -4,6 +4,7 @@ import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -28,6 +29,7 @@ public interface GeocodingService {
      */
     @GET("/geocoding/v5/{mode}/{query}.json")
     Call<GeocodingResponse> getCall(
+            @Header("User-Agent") String userAgent,
             @Path("mode") String mode,
             @Path("query") String query,
             @Query("access_token") String accessToken,
@@ -52,6 +54,7 @@ public interface GeocodingService {
      */
     @GET("/geocoding/v5/{mode}/{query}.json")
     Observable<GeocodingResponse> getObservable(
+            @Header("User-Agent") String userAgent,
             @Path("mode") String mode,
             @Path("query") String query,
             @Query("access_token") String accessToken,

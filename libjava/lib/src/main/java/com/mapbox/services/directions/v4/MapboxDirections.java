@@ -62,6 +62,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         if (call != null) return call;
 
         call = getService().getCall(
+                getHeaderUserAgent(),
                 builder.getProfile(),
                 builder.getWaypoints(),
                 builder.getAccessToken(),
@@ -99,13 +100,14 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         if (observable != null) return observable;
 
         observable = getService().getObservable(
-                builder.profile,
+                getHeaderUserAgent(),
+                builder.getProfile(),
                 builder.getWaypoints(),
-                builder.accessToken,
-                builder.alternatives,
-                builder.instructions,
-                builder.geometry,
-                builder.steps);
+                builder.getAccessToken(),
+                builder.isAlternatives(),
+                builder.getInstructions(),
+                builder.getGeometry(),
+                builder.isSteps());
 
         return observable;
     }

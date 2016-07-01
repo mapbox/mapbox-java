@@ -1,6 +1,10 @@
 package com.mapbox.services.commons;
 
+import com.mapbox.services.Constants;
+import com.mapbox.services.commons.utils.TextUtils;
+
 import java.io.IOException;
+import java.util.Locale;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -43,4 +47,27 @@ public abstract class MapboxService<T> {
         }
     }
 
+    /**
+     * Computes a full user agent header of the form: MapboxJava/1.2.0 Mac OS X/10.11.5 (x86_64)
+     */
+    public static String getHeaderUserAgent() {
+        String osName;
+        String osVersion;
+        String osArch;
+
+        try {
+            osName = System.getProperty("os.name");
+            osVersion = System.getProperty("os.version");
+            osArch = System.getProperty("os.arch");
+        } catch (Exception e) {
+            return Constants.HEADER_USER_AGENT;
+        }
+
+        if (TextUtils.isEmpty(osName) || TextUtils.isEmpty(osVersion) || TextUtils.isEmpty(osArch)) {
+            return Constants.HEADER_USER_AGENT;
+        } else {
+            String osInfo = String.format(Locale.US, "%s/%s (%s)", osName, osVersion, osArch);
+            return String.format(Locale.US, "%s %s", Constants.HEADER_USER_AGENT, osInfo);
+        }
+    }
 }

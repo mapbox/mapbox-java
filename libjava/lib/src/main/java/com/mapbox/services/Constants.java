@@ -1,6 +1,19 @@
 package com.mapbox.services;
 
+import java.util.Locale;
+
 public class Constants {
+
+    /**
+     * Package version
+     */
+    public final static String MAPBOX_JAVA_VERSION = "1.2.0-SNAPSHOT";
+
+    /**
+     * User agent for HTTP requests
+     */
+    public final static String HEADER_USER_AGENT =
+            String.format(Locale.US, "MapboxJava/%s", MAPBOX_JAVA_VERSION);
 
     public final static String BASE_API_URL = "https://api.mapbox.com";
 
