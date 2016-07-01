@@ -10,7 +10,7 @@ public class Constants {
     /**
      * User agent for HTTP requests
      */
-    public final static String HEADER_USER_AGENT = "User-Agent: MapboxAndroidServices/" + MAPBOX_JAVA_VERSION;
+    public final static String HEADER_USER_AGENT = "User-Agent: MapboxJava/" + MAPBOX_JAVA_VERSION;
 
     public final static String BASE_API_URL = "https://api.mapbox.com";
 
