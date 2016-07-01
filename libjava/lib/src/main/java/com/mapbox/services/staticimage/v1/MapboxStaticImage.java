@@ -3,6 +3,7 @@ package com.mapbox.services.staticimage.v1;
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.models.Position;
 
 import java.util.Locale;
 
@@ -131,6 +132,17 @@ public class MapboxStaticImage {
          */
         public Builder setLat(double lat) {
             this.lat = lat;
+            return this;
+        }
+
+        /**
+         * Location for the center point of the static map.
+         *
+         * @param position Position object with valid latitude and longitude values
+         */
+        public Builder setLocation(Position position) {
+            this.lat = position.getLatitude();
+            this.lon = position.getLongitude();
             return this;
         }
 
