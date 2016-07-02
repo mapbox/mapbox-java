@@ -2,11 +2,14 @@ package com.mapbox.services.staticimage.v1;
 
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.models.Position;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import okhttp3.HttpUrl;
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class MapboxStaticImageTest {
@@ -127,6 +130,22 @@ public class MapboxStaticImageTest {
                 .setWidth(100)
                 .setHeight(5000)
                 .build();
+    }
+
+    @Test
+    public void testPrecision() throws ServicesException {
+        MapboxStaticImage client = new MapboxStaticImage.Builder()
+                .setAccessToken("pk.")
+                .setStyleId(Constants.MAPBOX_STYLE_STREETS)
+                .setLocation(Position.fromCoordinates(1.23456789, -98.76))
+                .setZoom(10).setBearing(345.67890123456789).setPitch(0.000000005)
+                .setWidth(100).setHeight(200)
+                .setPrecision(5)
+                .build();
+        HttpUrl url = client.getUrl();
+        assertEquals(
+                url.toString(),
+                "https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/1.23456,-98.76000,10.00000,345.67890,0.00000/100x200?access_token=pk.");
     }
 
 }
