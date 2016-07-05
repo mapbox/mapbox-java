@@ -5,7 +5,7 @@ import android.location.Address;
 
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
-import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
+import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.models.Position;
 
@@ -102,7 +102,7 @@ public class AndroidGeocoder {
             return addresses;
         }
 
-        List<GeocodingFeature> features = response.body().getFeatures();
+        List<CarmenFeature> features = response.body().getFeatures();
 
         // Trim the list if needed
         if (features.size() > maxResults) {
@@ -110,7 +110,7 @@ public class AndroidGeocoder {
         }
 
         // Convert from FeatureModel to Address
-        for (GeocodingFeature feature: features) {
+        for (CarmenFeature feature: features) {
             addresses.add(GeocoderUtils.featureToAddress(feature, _locale));
         }
 
@@ -153,7 +153,7 @@ public class AndroidGeocoder {
             return addresses;
         }
 
-        List<GeocodingFeature> features = response.body().getFeatures();
+        List<CarmenFeature> features = response.body().getFeatures();
 
         // Trim the list if needed
         if (features.size() > maxResults) {
@@ -161,7 +161,7 @@ public class AndroidGeocoder {
         }
 
         // Convert from FeatureModel to Address
-        for (GeocodingFeature feature: features) {
+        for (CarmenFeature feature: features) {
             addresses.add(GeocoderUtils.featureToAddress(feature, _locale));
         }
 
@@ -224,11 +224,11 @@ public class AndroidGeocoder {
             return addresses;
         }
 
-        List<GeocodingFeature> features = response.body().getFeatures();
+        List<CarmenFeature> features = response.body().getFeatures();
 
         // Find results not contained within the bbox
-        List<GeocodingFeature> featuresToRemove = new ArrayList<>();
-        for (GeocodingFeature feature: features) {
+        List<CarmenFeature> featuresToRemove = new ArrayList<>();
+        for (CarmenFeature feature: features) {
             Position featurePosition = feature.asPosition();
             if (featurePosition.getLatitude() < lowerLeftLatitude) {
                 featuresToRemove.add(feature);
@@ -241,6 +241,7 @@ public class AndroidGeocoder {
             }
         }
 
+
         // Remove features outside the bbox
         if (featuresToRemove.size() > 0) {
             features.removeAll(featuresToRemove);
@@ -252,7 +253,7 @@ public class AndroidGeocoder {
         }
 
         // Convert from FeatureModel to Address
-        for (GeocodingFeature feature: features) {
+        for (CarmenFeature feature: features) {
             addresses.add(GeocoderUtils.featureToAddress(feature, _locale));
         }
 

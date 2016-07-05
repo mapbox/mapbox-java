@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 
 import com.mapbox.services.android.R;
-import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
+import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.commons.models.Position;
 
 /**
@@ -23,7 +23,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
     private GeocoderAdapter adapter;
 
     public interface OnFeatureListener {
-        void OnFeatureClick(GeocodingFeature feature);
+        void OnFeatureClick(CarmenFeature feature);
     }
 
     private OnFeatureListener onFeatureListener = null;
@@ -42,7 +42,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
         setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GeocodingFeature result = adapter.getItem(position);
+                CarmenFeature result = adapter.getItem(position);
                 setText(result.toString());
 
                 // Notify subscribers

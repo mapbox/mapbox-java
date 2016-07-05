@@ -17,7 +17,7 @@ import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
-import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
+import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
 import java.util.List;
@@ -113,13 +113,13 @@ public class GeocodingReverseActivity extends AppCompatActivity {
         MapboxGeocoding client = new MapboxGeocoding.Builder()
                 .setAccessToken(Utils.getMapboxAccessToken(this))
                 .setCoordinates(position)
-                .setType(GeocodingCriteria.TYPE_POI)
+                .setGeocodingType(GeocodingCriteria.TYPE_POI)
                 .build();
 
         client.enqueueCall(new Callback<GeocodingResponse>() {
             @Override
             public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
-                List<GeocodingFeature> results = response.body().getFeatures();
+                List<CarmenFeature> results = response.body().getFeatures();
                 if (results.size() > 0) {
                     String placeName = results.get(0).getPlaceName();
                     setSuccess(placeName);

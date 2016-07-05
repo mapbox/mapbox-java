@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
-import com.mapbox.services.geocoding.v5.models.GeocodingFeature;
+import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.models.Position;
 
@@ -33,7 +33,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     private GeocoderFilter geocoderFilter;
 
-    private List<GeocodingFeature> features;
+    private List<CarmenFeature> features;
 
     public GeocoderAdapter(Context context) {
         this.context = context;
@@ -77,7 +77,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public GeocodingFeature getItem(int position) {
+    public CarmenFeature getItem(int position) {
         return features.get(position);
     }
 
@@ -105,7 +105,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         TextView text = (TextView) view;
 
         // Set the place name
-        GeocodingFeature feature = getItem(position);
+        CarmenFeature feature = getItem(position);
         text.setText(feature.toString());
 
         return view;
@@ -152,7 +152,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
                 response = builder.setAccessToken(geocoderAdapter.getAccessToken())
                         .setLocation(constraint.toString())
                         .setProximity(geocoderAdapter.getProximity())
-                        .setType(geocoderAdapter.getType())
+                        .setGeocodingType(geocoderAdapter.getType())
                         .build().executeCall();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -176,7 +176,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             if (results != null && results.count > 0) {
-                features = (List<GeocodingFeature>) results.values;
+                features = (List<CarmenFeature>) results.values;
                 notifyDataSetChanged();
             } else {
                 notifyDataSetInvalidated();
