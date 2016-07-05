@@ -1,11 +1,8 @@
 package com.mapbox.services.mapmatching.v4;
 
-import com.google.gson.Gson;
 import com.mapbox.services.commons.ServicesException;
-import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.directions.v4.DirectionsCriteria;
-import com.mapbox.services.geojson.BaseGeoJSON;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
 import org.junit.After;
@@ -28,8 +25,10 @@ import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 import rx.observers.TestSubscriber;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Test the Mapbox Map Matching API
@@ -209,5 +208,6 @@ public class MapboxMapMatchingTest {
 //        Response<MapMatchingResponse> response = client.executeCall();
 //        assertEquals(response.code(), 200);
 //        assertEquals(response.body().getCode(), DirectionsCriteria.RESPONSE_OK);
+//        assertEquals(response.body().getMatchedPoints().length, 5);
 //    }
 }
