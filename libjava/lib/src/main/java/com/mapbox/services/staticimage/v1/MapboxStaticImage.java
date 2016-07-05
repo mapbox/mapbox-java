@@ -3,7 +3,10 @@ package com.mapbox.services.staticimage.v1;
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.models.Position;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 import okhttp3.HttpUrl;
@@ -80,6 +83,9 @@ public class MapboxStaticImage {
         private boolean attribution = true;
         private boolean logo = true;
 
+        // This field isn't part of the URL
+        private int precision = -1;
+
         /**
          * Required to call when building {@link com.mapbox.services.staticimage.v1.MapboxStaticImage.Builder}.
          *
@@ -135,6 +141,17 @@ public class MapboxStaticImage {
         }
 
         /**
+         * Location for the center point of the static map.
+         *
+         * @param position Position object with valid latitude and longitude values
+         */
+        public Builder setLocation(Position position) {
+            this.lat = position.getLatitude();
+            this.lon = position.getLongitude();
+            return this;
+        }
+
+        /**
          * static map zoom level. Fractional zoom levels will be rounded to two decimal places.
          *
          * @param zoom double number between 0 and 22.
@@ -168,7 +185,7 @@ public class MapboxStaticImage {
         /**
          * width of the image.
          *
-         * @param width double number between 1 and 1280.
+         * @param width int number between 1 and 1280.
          */
         public Builder setWidth(int width) {
             this.width = width;
@@ -178,7 +195,7 @@ public class MapboxStaticImage {
         /**
          * height of the image.
          *
-         * @param height double number between 1 and 1280.
+         * @param height int number between 1 and 1280.
          */
         public Builder setHeight(int height) {
             this.height = height;
@@ -212,6 +229,17 @@ public class MapboxStaticImage {
          */
         public Builder setLogo(boolean logo) {
             this.logo = logo;
+            return this;
+        }
+
+        /**
+         * In order to make the returned images better cacheable on the client, you can set the
+         * precision in decimals instead of manually rounding the parameters.
+         *
+         * @param precision int number representing the precision for the formater
+         */
+        public Builder setPrecision(int precision) {
+            this.precision = precision;
             return this;
         }
 
@@ -251,7 +279,17 @@ public class MapboxStaticImage {
          * @return String value with static image location information.
          */
         public String getLocationPathSegment() {
-            return String.format(Locale.US, "%f,%f,%f,%f,%f", lon, lat, zoom, bearing, pitch);
+            if (precision > 0) {
+                String pattern = "0." + new String(new char[precision]).replace("\0", "0");
+                DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
+                df.applyPattern(pattern);
+                df.setRoundingMode(RoundingMode.FLOOR);
+                return String.format(Locale.US, "%s,%s,%s,%s,%s",
+                        df.format(lon), df.format(lat), df.format(zoom),
+                        df.format(bearing), df.format(pitch));
+            } else {
+                return String.format(Locale.US, "%f,%f,%f,%f,%f", lon, lat, zoom, bearing, pitch);
+            }
         }
 
         /**
@@ -282,6 +320,10 @@ public class MapboxStaticImage {
             return logo;
         }
 
+        public int getPrecision() {
+            return precision;
+        }
+
         /**
          * Build the client when all user parameters have been set.
          */
@@ -301,8 +343,14 @@ public class MapboxStaticImage {
                 throw new ServicesException("You need to set the map zoom level.");
             }
 
-            if (width == null || height == null) {
-                throw new ServicesException("You need to set the map width/height dimensions.");
+            if (width == null || width < 1 || width > 1280) {
+                throw new ServicesException(
+                        "You need to set a valid image width (between 1 and 1280).");
+            }
+
+            if (height == null || height < 1 || height > 1280) {
+                throw new ServicesException(
+                        "You need to set a valid image height (between 1 and 1280).");
             }
 
             return new MapboxStaticImage(this);
