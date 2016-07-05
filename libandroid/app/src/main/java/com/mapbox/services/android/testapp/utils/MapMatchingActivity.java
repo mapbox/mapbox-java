@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
+import com.mapbox.mapboxsdk.annotations.Polyline;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -16,6 +19,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.directions.v4.DirectionsCriteria;
 import com.mapbox.services.mapmatching.v4.MapboxMapMatching;
@@ -41,16 +45,41 @@ public class MapMatchingActivity extends AppCompatActivity {
 
     private MapView mapView;
     private MapboxMap map;
+    private LineString lineString;
+    private Polyline mapMatchedRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_matching);
+        setContentView(R.layout.activity_utils_map_matching);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        final SeekBar precisionSeekBar = (SeekBar) findViewById(R.id.seekbar_precision);
+        final TextView precisionTextView = (TextView) findViewById(R.id.precision_value);
+        if(precisionSeekBar != null)
+        precisionSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(lineString != null){
+                    if(precisionTextView != null) precisionTextView.setText(String.valueOf(progress));
+                    drawMapMatched(lineString, progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.setAccessToken(Utils.getMapboxAccessToken(this));
@@ -146,34 +175,18 @@ public class MapMatchingActivity extends AppCompatActivity {
         protected void onPostExecute(List<Position> points) {
             super.onPostExecute(points);
 
-            drawBeforeSimplify(points);
-            try {
-            MapboxMapMatching client = new MapboxMapMatching.Builder()
-                    .setAccessToken(Utils.getMapboxAccessToken(MapMatchingActivity.this))
-                    .setProfile(DirectionsCriteria.PROFILE_WALKING)
-                    .build();
+            drawBeforeMapMatching(points);
 
-                client.enqueueCall(new Callback<MapMatchingResponse>() {
-                    @Override
-                    public void onResponse(Call<MapMatchingResponse> call, Response<MapMatchingResponse> response) {
-                        System.out.println(response.body().toString());
-                    }
+            // Convert the route to a linestring
+            lineString = LineString.fromCoordinates(points);
+            drawMapMatched(lineString, 8);
 
-                    @Override
-                    public void onFailure(Call<MapMatchingResponse> call, Throwable t) {
-
-                    }
-                });
-            } catch (ServicesException e) {
-                Log.e(TAG, "MapboxMapMatching error: " + e.getMessage());
-                e.printStackTrace();
-            }
 
 
         }
     }
 
-    private void drawBeforeSimplify(List<Position> points) {
+    private void drawBeforeMapMatching(List<Position> points) {
 
         LatLng[] pointsArray = new LatLng[points.size()];
         for (int i = 0; i < points.size(); i++)
@@ -183,5 +196,46 @@ public class MapMatchingActivity extends AppCompatActivity {
                 .add(pointsArray)
                 .color(Color.parseColor("#8a8acb"))
                 .width(4));
+    }
+
+    private void drawMapMatched(LineString lineString, int precision){
+        try {
+            MapboxMapMatching client = new MapboxMapMatching.Builder()
+                    .setAccessToken(Utils.getMapboxAccessToken(MapMatchingActivity.this))
+                    .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+                    .setGpsPrecison(precision)
+                    .setTrace(lineString)
+                    .build();
+
+            client.enqueueCall(new Callback<MapMatchingResponse>() {
+                @Override
+                public void onResponse(Call<MapMatchingResponse> call, Response<MapMatchingResponse> response) {
+
+                    List<LatLng> mapMatchedPoints = new ArrayList<>();
+
+                    for(int i = 0; i < response.body().getMatchedPoints().size(); i++){
+                        mapMatchedPoints.add(new LatLng(response.body().getMatchedPoints().get(i).getLatitude(), response.body().getMatchedPoints().get(i).getLongitude()));
+                    }
+
+                    if(mapMatchedRoute != null){
+                        map.removeAnnotation(mapMatchedRoute);
+                    }
+
+                    mapMatchedRoute = map.addPolyline(new PolylineOptions()
+                            .addAll(mapMatchedPoints)
+                            .color(Color.parseColor("#3bb2d0"))
+                            .width(4));
+
+                }
+
+                @Override
+                public void onFailure(Call<MapMatchingResponse> call, Throwable t) {
+
+                }
+            });
+        } catch (ServicesException e) {
+            Log.e(TAG, "MapboxMapMatching error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
