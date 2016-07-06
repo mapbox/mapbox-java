@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.annotations.Polyline;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
@@ -213,19 +214,22 @@ public class MapMatchingActivity extends AppCompatActivity {
 
                     List<LatLng> mapMatchedPoints = new ArrayList<>();
 
-                    for(int i = 0; i < response.body().getMatchedPoints().size(); i++){
-                        mapMatchedPoints.add(new LatLng(response.body().getMatchedPoints().get(i).getLatitude(), response.body().getMatchedPoints().get(i).getLongitude()));
+                    if(response.code() == 200) {
+                            for (int i = 0; i < response.body().getMatchedPoints().size(); i++) {
+                                mapMatchedPoints.add(new LatLng(response.body().getMatchedPoints().get(i).getLatitude(), response.body().getMatchedPoints().get(i).getLongitude()));
+                            }
+
+                            if (mapMatchedRoute != null) {
+                                map.removeAnnotation(mapMatchedRoute);
+                            }
+
+                            mapMatchedRoute = map.addPolyline(new PolylineOptions()
+                                    .addAll(mapMatchedPoints)
+                                    .color(Color.parseColor("#3bb2d0"))
+                                    .width(4));
+                    } else{
+                        Log.e(TAG, "Too many coordinates, Profile not found, invalid input, or no match");
                     }
-
-                    if(mapMatchedRoute != null){
-                        map.removeAnnotation(mapMatchedRoute);
-                    }
-
-                    mapMatchedRoute = map.addPolyline(new PolylineOptions()
-                            .addAll(mapMatchedPoints)
-                            .color(Color.parseColor("#3bb2d0"))
-                            .width(4));
-
                 }
 
                 @Override
