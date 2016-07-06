@@ -2,6 +2,7 @@ package com.mapbox.services.mapmatching.v4;
 
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.directions.v4.DirectionsCriteria;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.HttpUrl;
@@ -42,6 +44,8 @@ public class MapboxMapMatchingTest {
 
     private MockWebServer server;
     private HttpUrl mockUrl;
+
+    private LineString trace;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -71,6 +75,9 @@ public class MapboxMapMatchingTest {
 
         server.start();
         mockUrl = server.url("");
+
+        // From https://www.mapbox.com/api-documentation/#map-matching
+        trace = LineString.fromJson("{ \"type\": \"LineString\", \"coordinates\": [ [13.418946862220764, 52.50055852688439], [13.419011235237122, 52.50113000479732], [13.419756889343262, 52.50171780290061], [13.419885635375975, 52.50237416816131], [13.420631289482117, 52.50294888790448] ] }");
     }
 
     @After
@@ -86,6 +93,7 @@ public class MapboxMapMatchingTest {
         MapboxMapMatching client = new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
                 .setProfile(DirectionsCriteria.PROFILE_WALKING)
+                .setTrace(trace)
                 .build();
         client.setBaseUrl(mockUrl.toString());
         Response<MapMatchingResponse> response = client.executeCall();
@@ -105,6 +113,7 @@ public class MapboxMapMatchingTest {
         MapboxMapMatching client = new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
                 .setProfile(DirectionsCriteria.PROFILE_WALKING)
+                .setTrace(trace)
                 .build();
         client.setBaseUrl(mockUrl.toString());
 
@@ -130,6 +139,7 @@ public class MapboxMapMatchingTest {
         MapboxMapMatching client = new MapboxMapMatching.Builder()
                 .setAccessToken(ACCESS_TOKEN)
                 .setProfile(DirectionsCriteria.PROFILE_WALKING)
+                .setTrace(trace)
                 .setNoGeometry()
                 .build();
         client.setBaseUrl(mockUrl.toString());
@@ -191,10 +201,35 @@ public class MapboxMapMatchingTest {
                 .build();
     }
 
+    @Test
+    public void validCoordinates() throws ServicesException {
+        thrown.expect(ServicesException.class);
+        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires to set some coordinates"));
+        new MapboxMapMatching.Builder()
+                .setAccessToken(ACCESS_TOKEN)
+                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+                .build();
+    }
+
+    @Test
+    public void validCoordinatesTotal() throws ServicesException {
+        // Fake too many positions
+        ArrayList<Position> positions = new ArrayList<>();
+        for (int i = 0; i < 101; i++) {
+            positions.add(Position.fromCoordinates(0.0, 0.0));
+        }
+
+        thrown.expect(ServicesException.class);
+        thrown.expectMessage(startsWith("The Map Matching API is limited to processing traces with up to 100 coordinates"));
+        new MapboxMapMatching.Builder()
+                .setAccessToken(ACCESS_TOKEN)
+                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+                .setTrace(LineString.fromCoordinates(positions))
+                .build();
+    }
+
 //    @Test
 //    public void testPost() throws ServicesException, IOException {
-//        // From https://www.mapbox.com/api-documentation/#map-matching
-//        LineString trace = LineString.fromJson("{ \"type\": \"LineString\", \"coordinates\": [ [13.418946862220764, 52.50055852688439], [13.419011235237122, 52.50113000479732], [13.419756889343262, 52.50171780290061], [13.419885635375975, 52.50237416816131], [13.420631289482117, 52.50294888790448] ] }");
 //        MapboxMapMatching client = new MapboxMapMatching.Builder()
 //                .setAccessToken("")
 //                .setProfile(DirectionsCriteria.PROFILE_DRIVING)

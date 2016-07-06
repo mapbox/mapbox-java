@@ -211,11 +211,25 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
             }
         }
 
+        private void validateTrace() throws ServicesException {
+            if (trace == null || trace.getCoordinates() == null) {
+                throw new ServicesException("Using Mapbox Map Matching requires to set some " +
+                        "coordinates representing the trace.");
+            }
+
+            if (trace.getCoordinates().size() > 100) {
+                throw new ServicesException("The Map Matching API is limited to processing traces " +
+                        "with up to 100 coordinates. If you need to process longer traces, you can " +
+                        "split the trace and make multiple requests.");
+            }
+        }
+
         @Override
         public MapboxMapMatching build() throws ServicesException {
             validateAccessToken(accessToken);
             validateProfile();
             validateGpsPrecision();
+            validateTrace();
             return new MapboxMapMatching(this);
         }
 
