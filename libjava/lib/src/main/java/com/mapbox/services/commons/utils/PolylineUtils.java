@@ -10,6 +10,9 @@ import java.util.List;
  */
 public class PolylineUtils {
 
+    private static final double SIMPLIFY_DEFAULT_TOLERANCE = 0.00001;
+    private static final boolean SIMPLIFY_DEFAULT_HIGHEST_QUALITY = false;
+
     /*
      * Encoded Polyline Algorithm Format. Some parts from:
      * https://github.com/mapbox/polyline/blob/master/src/polyline.js
@@ -203,15 +206,20 @@ public class PolylineUtils {
 
     /**
      * Both algorithms combined for awesome performance
+     *
      * For coordinates, tolerance should have a value around 0.00001.
      * See https://github.com/mapbox/mapbox-java/issues/86#issuecomment-229192340 for details.
      */
     public static Position[] simplify(Position[] points) {
-        return simplify(points, 0.00001);
+        return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
     }
 
     public static Position[] simplify(Position[] points, double tolerance) {
-        return simplify(points, tolerance, false);
+        return simplify(points, tolerance, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
+    }
+
+    public static Position[] simplify(Position[] points, boolean highestQuality) {
+        return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, highestQuality);
     }
 
     public static Position[] simplify(Position[] points, double tolerance, boolean highestQuality) {
