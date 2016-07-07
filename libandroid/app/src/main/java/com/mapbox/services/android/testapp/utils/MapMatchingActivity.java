@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.annotations.Polyline;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
@@ -61,26 +60,27 @@ public class MapMatchingActivity extends AppCompatActivity {
 
         final SeekBar precisionSeekBar = (SeekBar) findViewById(R.id.seekbar_precision);
         final TextView precisionTextView = (TextView) findViewById(R.id.precision_value);
-        if(precisionSeekBar != null)
-        precisionSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(lineString != null){
-                    if(precisionTextView != null) precisionTextView.setText(String.valueOf(progress));
-                    drawMapMatched(lineString, progress);
+        if (precisionSeekBar != null)
+            precisionSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (lineString != null) {
+                        if (precisionTextView != null)
+                            precisionTextView.setText(String.valueOf(progress));
+                        drawMapMatched(lineString, progress);
+                    }
                 }
-            }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
 
-            }
+                }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
 
-            }
-        });
+                }
+            });
 
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.setAccessToken(Utils.getMapboxAccessToken(this));
@@ -182,8 +182,6 @@ public class MapMatchingActivity extends AppCompatActivity {
             lineString = LineString.fromCoordinates(points);
             drawMapMatched(lineString, 8);
 
-
-
         }
     }
 
@@ -196,11 +194,13 @@ public class MapMatchingActivity extends AppCompatActivity {
         map.addPolyline(new PolylineOptions()
                 .add(pointsArray)
                 .color(Color.parseColor("#8a8acb"))
+                .alpha(0.65f)
                 .width(4));
     }
 
-    private void drawMapMatched(LineString lineString, int precision){
+    private void drawMapMatched(LineString lineString, int precision) {
         try {
+            // Setup the request using a client.
             MapboxMapMatching client = new MapboxMapMatching.Builder()
                     .setAccessToken(Utils.getMapboxAccessToken(MapMatchingActivity.this))
                     .setProfile(DirectionsCriteria.PROFILE_DRIVING)
@@ -208,33 +208,39 @@ public class MapMatchingActivity extends AppCompatActivity {
                     .setTrace(lineString)
                     .build();
 
+            // Execute the API call and handle the response.
             client.enqueueCall(new Callback<MapMatchingResponse>() {
                 @Override
                 public void onResponse(Call<MapMatchingResponse> call, Response<MapMatchingResponse> response) {
 
+                    // Create a new list to store the map matched coordinates.
                     List<LatLng> mapMatchedPoints = new ArrayList<>();
 
-                    if(response.code() == 200) {
-                            for (int i = 0; i < response.body().getMatchedPoints().size(); i++) {
-                                mapMatchedPoints.add(new LatLng(response.body().getMatchedPoints().get(i).getLatitude(), response.body().getMatchedPoints().get(i).getLongitude()));
-                            }
+                    // Check that the map matching API response is "OK".
+                    if (response.code() == 200) {
+                        // Convert the map matched response list from position to latlng coordinates.
+                        for (int i = 0; i < response.body().getMatchedPoints().size(); i++) {
+                            mapMatchedPoints.add(new LatLng(response.body().getMatchedPoints().get(i).getLatitude(), response.body().getMatchedPoints().get(i).getLongitude()));
+                        }
 
-                            if (mapMatchedRoute != null) {
-                                map.removeAnnotation(mapMatchedRoute);
-                            }
+                        if (mapMatchedRoute != null) {
+                            map.removeAnnotation(mapMatchedRoute);
+                        }
 
-                            mapMatchedRoute = map.addPolyline(new PolylineOptions()
-                                    .addAll(mapMatchedPoints)
-                                    .color(Color.parseColor("#3bb2d0"))
-                                    .width(4));
-                    } else{
+                        // Add the map matched route to the Mapbox map.
+                        mapMatchedRoute = map.addPolyline(new PolylineOptions()
+                                .addAll(mapMatchedPoints)
+                                .color(Color.parseColor("#3bb2d0"))
+                                .width(4));
+                    } else {
+                        // If the response code does not response "OK" an error has occurred.
                         Log.e(TAG, "Too many coordinates, Profile not found, invalid input, or no match");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<MapMatchingResponse> call, Throwable t) {
-
+                    Log.e(TAG, "MapboxMapMatching error: " + t.getMessage());
                 }
             });
         } catch (ServicesException e) {
