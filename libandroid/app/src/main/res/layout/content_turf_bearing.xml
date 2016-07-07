@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".utils.MapMatchingActivity"
-    android:id="@+id/turf_calculation_map_container">
+    tools:context=".turf.TurfBearingActivity"
+    android:id="@+id/turf_bearing_map_container">
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"

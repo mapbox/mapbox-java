@@ -23,7 +23,8 @@ import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.testapp.utils.MapMatchingActivity;
 import com.mapbox.services.android.testapp.utils.SimplifyPolylineActivity;
-import com.mapbox.services.android.testapp.utils.TurfCalculationsActivity;
+import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
+import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
 import com.mapbox.services.android.utils.PermissionsUtils;
 
 import java.util.ArrayList;
@@ -53,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
             new SampleItem("Static image", "", StaticImageActivity.class),
             new SampleItem("Simplify polyline", "", SimplifyPolylineActivity.class),
             new SampleItem("Map matching", "", MapMatchingActivity.class),
-            new SampleItem("Turf Calculations", "", TurfCalculationsActivity.class)
+            new SampleItem("Turf bearing", "", TurfBearingActivity.class),
+            new SampleItem("Turf destination", "", TurfDestinationActivity.class)
     ));
 
     @Override

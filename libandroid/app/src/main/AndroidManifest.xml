@@ -76,8 +76,13 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".utils.TurfCalculationsActivity"
-            android:label="Map Matching"
+            android:name=".turf.TurfBearingActivity"
+            android:label="Turf Bearing"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".turf.TurfDestinationActivity"
+            android:label="Turf Destination"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
