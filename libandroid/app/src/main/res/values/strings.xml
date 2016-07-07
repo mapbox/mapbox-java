@@ -22,4 +22,13 @@
     <string name="service_not_available">Sorry, the service is not available</string>
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
 
+    <string-array name="turf_calculation_items">
+        <item>item 1</item>
+        <item>Bearing</item>
+        <item>Destination</item>
+        <item>Distance</item>
+        <item>Line distance</item>
+        <item>item 6</item>
+    </string-array>
+
 </resources>
