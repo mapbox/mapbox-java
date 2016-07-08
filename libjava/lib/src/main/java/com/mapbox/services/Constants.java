@@ -7,7 +7,7 @@ public class Constants {
     /**
      * Package version
      */
-    public final static String MAPBOX_JAVA_VERSION = "1.2.0-SNAPSHOT";
+    public final static String MAPBOX_JAVA_VERSION = "2.0.0-SNAPSHOT";
 
     /**
      * User agent for HTTP requests

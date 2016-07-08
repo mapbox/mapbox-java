@@ -222,7 +222,7 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
         Position[] before = new Position[points.size()];
         for (int i = 0; i < points.size(); i++) before[i] = points.get(i);
 
-        Position[] after = PolylineUtils.simplify(before, tolerance, quality);
+        Position[] after = PolylineUtils.simplify(before, 0.001 * tolerance, quality);
 
         simplifiedRoutePoints = after.length;
 

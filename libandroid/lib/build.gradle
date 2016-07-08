@@ -10,8 +10,8 @@ android {
 
         // This should be updated together with gradle.properties
         // Last number is 0 for a SNAPSHOT, 1 for a release
-        versionCode 1 * 1000 + 1 * 100 + 0 * 10 + 0
-        versionName "1.1.0-SNAPSHOT"
+        versionCode 2 * 1000 + 0 * 100 + 0 * 10 + 0
+        versionName "2.0.0-SNAPSHOT"
     }
 
     compileOptions {
@@ -33,7 +33,7 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
 
     // Mapbox Java Services
-    compile ('com.mapbox.mapboxsdk:mapbox-java-services:1.2.0-SNAPSHOT@jar') {
+    compile ('com.mapbox.mapboxsdk:mapbox-java-services:1.2.0@jar') {
         transitive=true
     }
 

@@ -2,6 +2,16 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v1.2.0
+
+* Support for the Map Matching API
+* Improved Geocoder API (including support for `wikidata` and `bbox`)
+* Better Static Image API
+* Some [Turf](http://turfjs.org/) methods ported to Java: `TurfMeasurement.bearing`, `TurfMeasurement.destination`, `TurfMeasurement.distance`, `TurfMeasurement.lineDistance`, `TurfHelpers.distanceToRadians`, `TurfHelpers.radiansToDistance`, `TurfMisc.lineSlice`
+* [`simplify-js`](https://github.com/mourner/simplify-js) ported to Java
+
+Full changelog: https://github.com/mapbox/mapbox-java/issues?q=milestone%3Av1.2.0+is%3Aclosed
+
 ### v1.1.0
 
 * Support for directions API v5

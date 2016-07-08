@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 
 /**
  * Custom deserializer that assumes a Polyline string.
- * <p/>
+ *
  * In case of a json object, null is returned to support the geometry=false option
  * (empty object is returned instead of null)
  *
