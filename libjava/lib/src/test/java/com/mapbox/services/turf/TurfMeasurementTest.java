@@ -26,14 +26,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by antonio on 5/12/16.
  */
-public class TurfMeasurementTest {
-
-    private final static double DELTA = 1E-10;
-
-    private String loadJsonFixture(String filename) throws IOException {
-        byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/turf-line-distance/" + filename));
-        return new String(content, StandardCharsets.UTF_8);
-    }
+public class TurfMeasurementTest extends BaseTurf {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -79,8 +72,8 @@ public class TurfMeasurementTest {
 
     @Test
     public void testLineDistanceLineString() throws IOException, TurfException {
-        Feature route1 = Feature.fromJson(loadJsonFixture("route1.geojson"));
-        Feature route2 = Feature.fromJson(loadJsonFixture("route2.geojson"));
+        Feature route1 = Feature.fromJson(loadJsonFixture("turf-line-distance", "route1.geojson"));
+        Feature route2 = Feature.fromJson(loadJsonFixture("turf-line-distance", "route2.geojson"));
         assertEquals(Math.round(TurfMeasurement.lineDistance(route1, "miles")), 202);
         assertTrue((TurfMeasurement.lineDistance(route2, "kilometers") - 742) < 1
                 && (TurfMeasurement.lineDistance(route2, "kilometers") - 742) > (-1) );
@@ -88,8 +81,8 @@ public class TurfMeasurementTest {
 
     @Test
     public void testLineDistanceWithGeometries() throws IOException, TurfException {
-        Feature route1 = Feature.fromJson(loadJsonFixture("route1.geojson"));
-        Feature route2 = Feature.fromJson(loadJsonFixture("route2.geojson"));
+        Feature route1 = Feature.fromJson(loadJsonFixture("turf-line-distance", "route1.geojson"));
+        Feature route2 = Feature.fromJson(loadJsonFixture("turf-line-distance", "route2.geojson"));
         assertEquals(Math.round(TurfMeasurement.lineDistance(route1.getGeometry(), "miles")), 202);
         assertTrue((TurfMeasurement.lineDistance(route2.getGeometry(), "kilometers") - 742) < 1
                 && (TurfMeasurement.lineDistance(route2.getGeometry(), "kilometers") - 742) > (-1) );
@@ -97,19 +90,19 @@ public class TurfMeasurementTest {
 
     @Test
     public void testLineDistancePolygon() throws IOException, TurfException {
-        Feature feat = Feature.fromJson(loadJsonFixture("polygon.geojson"));
+        Feature feat = Feature.fromJson(loadJsonFixture("turf-line-distance", "polygon.geojson"));
         assertEquals(Math.round(1000 * TurfMeasurement.lineDistance(feat, "kilometers")), 5599);
     }
 
     @Test
     public void testLineDistanceMultiLineString() throws IOException, TurfException {
-        Feature feat = Feature.fromJson(loadJsonFixture("multilinestring.geojson"));
+        Feature feat = Feature.fromJson(loadJsonFixture("turf-line-distance", "multilinestring.geojson"));
         assertEquals(Math.round(1000 * TurfMeasurement.lineDistance(feat, "kilometers")), 4705);
     }
 
     @Test
     public void testLineDistanceFeatureCollection() throws IOException, TurfException {
-        FeatureCollection feat = FeatureCollection.fromJson(loadJsonFixture("featurecollection.geojson"));
+        FeatureCollection feat = FeatureCollection.fromJson(loadJsonFixture("turf-line-distance", "featurecollection.geojson"));
         assertEquals(Math.round(1000 * TurfMeasurement.lineDistance(feat, "kilometers")), 10304);
     }
 

@@ -58,6 +58,7 @@ public class Feature implements GeoJSON {
      * @return the properties of this feature
      */
     public JsonObject getProperties() {
+        if (properties == null) properties = new JsonObject();
         return properties;
     }
 
@@ -135,7 +136,7 @@ public class Feature implements GeoJSON {
      * @param value the String value associated with the member
      */
     public void addStringProperty(String key, String value) {
-        this.properties.addProperty(key, value);
+        getProperties().addProperty(key, value);
     }
 
     /**
@@ -144,7 +145,7 @@ public class Feature implements GeoJSON {
      * @param value the Number value associated with the member
      */
     public void addNumberProperty(String key, Number value) {
-        this.properties.addProperty(key, value);
+        getProperties().addProperty(key, value);
     }
 
     /**
@@ -153,7 +154,7 @@ public class Feature implements GeoJSON {
      * @param value the Boolean value associated with the member
      */
     public void addBooleanProperty(String key, Boolean value) {
-        this.properties.addProperty(key, value);
+        getProperties().addProperty(key, value);
     }
 
     /**
@@ -162,7 +163,7 @@ public class Feature implements GeoJSON {
      * @param value the Character value associated with the member
      */
     public void addCharacterProperty(String key, Character value) {
-        this.properties.addProperty(key, value);
+        getProperties().addProperty(key, value);
     }
 
     /**
@@ -171,7 +172,7 @@ public class Feature implements GeoJSON {
      * @param value the JsonElement value associated with the member
      */
     public void addProperty(String key, JsonElement value) {
-        this.properties.add(key, value);
+        getProperties().add(key, value);
     }
 
     /**
@@ -180,7 +181,7 @@ public class Feature implements GeoJSON {
      * @return the value of the member, null if it doesn't exist
      */
     public String getStringProperty(String key) {
-        return this.properties.get(key).getAsString();
+        return getProperties().get(key).getAsString();
     }
 
     /**
@@ -189,7 +190,7 @@ public class Feature implements GeoJSON {
      * @return the value of the member, null if it doesn't exist
      */
     public Number getNumberProperty(String key) {
-        return this.properties.get(key).getAsNumber();
+        return getProperties().get(key).getAsNumber();
     }
 
     /**
@@ -198,7 +199,7 @@ public class Feature implements GeoJSON {
      * @return the value of the member, null if it doesn't exist
      */
     public Boolean getBooleanProperty(String key) {
-        return this.properties.get(key).getAsBoolean();
+        return getProperties().get(key).getAsBoolean();
     }
 
     /**
@@ -207,7 +208,7 @@ public class Feature implements GeoJSON {
      * @return the value of the member, null if it doesn't exist
      */
     public Character getCharacterProperty(String key) {
-        return this.properties.get(key).getAsCharacter();
+        return getProperties().get(key).getAsCharacter();
     }
 
     /**
@@ -216,7 +217,7 @@ public class Feature implements GeoJSON {
      * @return the value of the member, null if it doesn't exist
      */
     public JsonElement getProperty(String key) {
-        return this.properties.get(key);
+        return getProperties().get(key);
     }
 
     /**
@@ -225,7 +226,7 @@ public class Feature implements GeoJSON {
      * @return
      */
     public JsonElement removeProperty(String key) {
-        return this.properties.remove(key);
+        return getProperties().remove(key);
     }
 
     /**
@@ -234,6 +235,6 @@ public class Feature implements GeoJSON {
      * @return
      */
     public boolean hasProperty(String key) {
-        return this.properties.has(key);
+        return getProperties().has(key);
     }
 }
