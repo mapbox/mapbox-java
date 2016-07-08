@@ -219,8 +219,10 @@ public class MapMatchingActivity extends AppCompatActivity {
                     // Check that the map matching API response is "OK".
                     if (response.code() == 200) {
                         // Convert the map matched response list from position to latlng coordinates.
-                        for (int i = 0; i < response.body().getMatchedPoints().size(); i++) {
-                            mapMatchedPoints.add(new LatLng(response.body().getMatchedPoints().get(i).getLatitude(), response.body().getMatchedPoints().get(i).getLongitude()));
+                        for (int i = 0; i < response.body().getMatchedPoints().length; i++) {
+                            mapMatchedPoints.add(new LatLng(
+                                    response.body().getMatchedPoints()[i].getLatitude(),
+                                    response.body().getMatchedPoints()[i].getLongitude()));
                         }
 
                         if (mapMatchedRoute != null) {

@@ -21,7 +21,7 @@ public class StaticImageActivity extends AppCompatActivity {
     // All default Mapbox styles
     public final static String[] MAPBOX_STYLES = {
             Constants.MAPBOX_STYLE_STREETS, Constants.MAPBOX_STYLE_LIGHT,
-            Constants.MAPBOX_STYLE_DARK, Constants.MAPBOX_OUTDOORS,
+            Constants.MAPBOX_STYLE_DARK, Constants.MAPBOX_STYLE_OUTDOORS,
             Constants.MAPBOX_STYLE_SATELLITE, Constants.MAPBOX_STYLE_SATELLITE_HYBRID};
 
     // The ten venues for Copa America Centenario
