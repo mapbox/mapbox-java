@@ -22,4 +22,25 @@
     <string name="service_not_available">Sorry, the service is not available</string>
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
 
+    <string-array name="turf_calculation_items">
+        <item>Select calculation</item>
+        <item>Bearing</item>
+        <item>Destination</item>
+        <item>Distance</item>
+        <item>Line distance</item>
+        <item>item 6</item>
+    </string-array>
+
+    <string-array name="turf_calculation_units">
+        <item>kilometers</item>
+        <item>miles</item>
+        <item>nauticalmiles</item>
+        <item>radians</item>
+        <item>degrees</item>
+        <item>inches</item>
+        <item>yards</item>
+        <item>meters</item>
+
+    </string-array>
+
 </resources>

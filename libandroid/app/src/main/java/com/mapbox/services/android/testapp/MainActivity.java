@@ -8,12 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mapbox.services.android.BuildConfig;
 import com.mapbox.services.android.testapp.directions.DirectionsV4Activity;
@@ -24,8 +21,11 @@ import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
 import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
+import com.mapbox.services.android.testapp.turf.TurfDistanceActivity;
 import com.mapbox.services.android.testapp.utils.MapMatchingActivity;
 import com.mapbox.services.android.testapp.utils.SimplifyPolylineActivity;
+import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
+import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
 import com.mapbox.services.android.utils.PermissionsUtils;
 
 import java.util.ArrayList;
@@ -54,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
             new SampleItem("Maki icons", "", MakiIconsActivity.class),
             new SampleItem("Static image", "", StaticImageActivity.class),
             new SampleItem("Simplify polyline", "", SimplifyPolylineActivity.class),
-            new SampleItem("Map matching", "", MapMatchingActivity.class)
+            new SampleItem("Map matching", "", MapMatchingActivity.class),
+            new SampleItem("Turf bearing", "", TurfBearingActivity.class),
+            new SampleItem("Turf destination", "", TurfDestinationActivity.class),
+            new SampleItem("Turf distance", "", TurfDistanceActivity.class)
     ));
 
     @Override

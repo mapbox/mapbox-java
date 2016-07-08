@@ -72,7 +72,22 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".utils.MapMatchingActivity"
-            android:label="Map Matching"
+            android:label="Map matching"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".turf.TurfBearingActivity"
+            android:label="Turf bearing"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".turf.TurfDestinationActivity"
+            android:label="Turf destination"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".turf.TurfDistanceActivity"
+            android:label="Turf distance"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
