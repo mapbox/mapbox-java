@@ -82,4 +82,15 @@ public class CarmenFeature extends Feature {
     public Position asPosition() {
         return Position.fromCoordinates(center[0], center[1]);
     }
+
+    /**
+     * Human-readable text representing the full result hierarchy
+     * (e.g. "Austin, Texas, United States").
+     *
+     * @return String with human-readable text.
+     */
+    @Override
+    public String toString() {
+        return getPlaceName();
+    }
 }
