@@ -32,10 +32,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
 
-    // Mapbox Java Services
-    compile ('com.mapbox.mapboxsdk:mapbox-java-services:1.2.0@jar') {
-        transitive=true
-    }
+    // Mapbox Java Services (development)
+    compile project(':libjava')
+
+    // Mapbox Java Services (release)
+//    compile ('com.mapbox.mapboxsdk:mapbox-java-services:1.2.0@jar') {
+//        transitive=true
+//    }
 
     // Testing
     testCompile 'junit:junit:4.12'
