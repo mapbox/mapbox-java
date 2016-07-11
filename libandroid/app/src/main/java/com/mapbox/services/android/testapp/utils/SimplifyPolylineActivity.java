@@ -32,6 +32,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SimplifyPolylineActivity extends AppCompatActivity {
 
@@ -43,11 +44,13 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
     private List<Position> route;
     private Polyline simplifiedRoute;
     private boolean quality = false;
-    private double toleranceValue = 0.8;
+
+    // Progress bar goes from 0 to 100 (default is 50)
+    private int toleranceValue = 50;
+    private TextView toleranceTextView;
+    private TextView pointValueTextView;
 
     private int totalRoutePoints;
-    private int simplifiedRoutePoints;
-    private TextView pointValueTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,19 +62,21 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final SeekBar toleranceSeekBar = (SeekBar) findViewById(R.id.seekbar_tolerance);
-        final TextView toleranceTextView = (TextView) findViewById(R.id.tolerance_value);
-        final CheckBox qualityCheckBox = (CheckBox) findViewById(R.id.quality_toggle);
+        toleranceTextView = (TextView) findViewById(R.id.tolerance_value);
+        updateToleranceTextView(toleranceValue);
+
         pointValueTextView = (TextView) findViewById(R.id.point_value);
-        if (toleranceSeekBar != null)
+
+        SeekBar toleranceSeekBar = (SeekBar) findViewById(R.id.seekbar_tolerance);
+        if (toleranceSeekBar != null) {
             toleranceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    toleranceValue = (double) progress / 10;
-                    toleranceTextView.setText("±: " + String.format("%.2f", toleranceValue));
+                    toleranceValue = progress;
+                    updateToleranceTextView(toleranceValue);
 
                     if (route != null) {
-                        drawSimplify(route, toleranceValue, quality);
+                        drawSimplify(route, progress, quality);
                     }
 
                 }
@@ -86,8 +91,10 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
 
                 }
             });
+        }
 
-        if (qualityCheckBox != null)
+        CheckBox qualityCheckBox = (CheckBox) findViewById(R.id.quality_toggle);
+        if (qualityCheckBox != null) {
             qualityCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -97,6 +104,7 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setAccessToken(Utils.getMapboxAccessToken(this));
@@ -105,11 +113,23 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
                 map = mapboxMap;
-
                 new DrawGeoJSON().execute();
 
             }
         });
+    }
+
+    private void updateToleranceTextView(int progress) {
+        toleranceTextView.setText(String.format(Locale.US, "±: %d", progress));
+    }
+
+    /*
+     * Tolerance affects the amount of simplification, and it's specified in the same metric as the
+     * point coordinates. For coordinates, that means multiplying the 0..100 range progress from the
+     * SeekBar by 0.0001.
+     */
+    private static double getToleranceAdjusted(int progress) {
+        return 0.0001 * progress;
     }
 
     @Override
@@ -194,8 +214,7 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
             route = points;
 
             drawBeforeSimplify(points);
-            drawSimplify(points, 0.8, false);
-
+            drawSimplify(points, toleranceValue, false);
         }
     }
 
@@ -212,19 +231,19 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
                 .width(4));
     }
 
-    private void drawSimplify(List<Position> points, double tolerance, boolean quality) {
+    private void drawSimplify(List<Position> points, int progress, boolean quality) {
         if (simplifiedRoute != null) {
             map.removeAnnotation(simplifiedRoute);
         }
 
-        Log.v(TAG, "Tolerance value: " + tolerance + " Quality: " + quality);
-
         Position[] before = new Position[points.size()];
         for (int i = 0; i < points.size(); i++) before[i] = points.get(i);
 
-        Position[] after = PolylineUtils.simplify(before, 0.001 * tolerance, quality);
+        Log.v(TAG, String.format(Locale.US,
+                "Tolerance value: %.4f; quality: %b", getToleranceAdjusted(progress), quality));
+        Position[] after = PolylineUtils.simplify(before, getToleranceAdjusted(progress), quality);
 
-        simplifiedRoutePoints = after.length;
+        int simplifiedRoutePoints = after.length;
 
         LatLng[] result = new LatLng[after.length];
         for (int i = 0; i < after.length; i++)
@@ -235,6 +254,7 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
                 .color(Color.parseColor("#3bb2d0"))
                 .width(4));
 
-        pointValueTextView.setText(simplifiedRoutePoints + "/" + totalRoutePoints);
+        pointValueTextView.setText(
+                String.format(Locale.US, "%s/%s", simplifiedRoutePoints, totalRoutePoints));
     }
 }
