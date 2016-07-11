@@ -93,4 +93,9 @@ public class Position {
         return !Double.isNaN(altitude);
     }
 
+    @Override
+    public String toString() {
+        return "Position [longitude=" + longitude + ", latitude=" + latitude + ", altitude=" + altitude + "]";
+    }
+
 }
