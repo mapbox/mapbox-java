@@ -36,7 +36,7 @@ dependencies {
     compile project(':libjava')
 
     // Mapbox Java Services (release)
-//    compile ('com.mapbox.mapboxsdk:mapbox-java-services:1.2.0@jar') {
+//    compile ('com.mapbox.mapboxsdk:mapbox-java-services:1.2.1@jar') {
 //        transitive=true
 //    }
 
