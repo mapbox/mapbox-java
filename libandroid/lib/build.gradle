@@ -56,4 +56,5 @@ android.libraryVariants.all { variant ->
     }
 }
 
+apply from: 'gradle-checkstyle.gradle'
 apply from: 'gradle-mvn-push.gradle'
