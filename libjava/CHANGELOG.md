@@ -2,6 +2,12 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v1.2.1
+
+* Bring back `toString()` method in `CarmenFeature`
+
+Full changelog: https://github.com/mapbox/mapbox-java/issues?q=milestone%3Av1.2.1+is%3Aclosed
+
 ### v1.2.0
 
 * Support for the Map Matching API
