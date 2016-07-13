@@ -22,6 +22,7 @@ import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
 import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.testapp.turf.TurfDistanceActivity;
+import com.mapbox.services.android.testapp.turf.TurfLineSliceActivity;
 import com.mapbox.services.android.testapp.utils.MapMatchingActivity;
 import com.mapbox.services.android.testapp.utils.SimplifyPolylineActivity;
 import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
@@ -57,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
             new SampleItem("Map matching", "", MapMatchingActivity.class),
             new SampleItem("Turf bearing", "", TurfBearingActivity.class),
             new SampleItem("Turf destination", "", TurfDestinationActivity.class),
-            new SampleItem("Turf distance", "", TurfDistanceActivity.class)
+            new SampleItem("Turf distance", "", TurfDistanceActivity.class),
+            new SampleItem("Turf line slice", "", TurfLineSliceActivity.class)
     ));
 
     @Override

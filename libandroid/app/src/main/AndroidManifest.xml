@@ -90,6 +90,11 @@
             android:label="Turf distance"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".turf.TurfLineSliceActivity"
+            android:label="Turf line slice"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--
         Service to asynchronously fetch a location address using a Geocoder. Setting the
