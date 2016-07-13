@@ -2,10 +2,8 @@ package com.mapbox.services.android.testapp.directions;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -67,7 +65,6 @@ public class DirectionsV5Activity extends AppCompatActivity {
 
         // Set up a standard Mapbox map
         mapView = (MapView) findViewById(R.id.mapview);
-        mapView.setAccessToken(Utils.getMapboxAccessToken(this));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
