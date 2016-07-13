@@ -211,7 +211,7 @@
         <module name="SummaryJavadocCheck">
             <property name="forbiddenSummaryFragments" value="Created by *"/>
             <message key="summary.javaDoc"
-             value="Remove the Created by javadoc at the top of this class."/>
+             value="Remove the Created by javadoc at the top of classes."/>
         </module>
     </module>
 </module>
