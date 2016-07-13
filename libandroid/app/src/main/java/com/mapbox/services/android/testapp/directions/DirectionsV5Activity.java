@@ -42,6 +42,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
     private MapboxMap mapboxMap = null;
 
     private DirectionsRoute currentRoute = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
