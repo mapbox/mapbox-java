@@ -1,9 +1,8 @@
 package com.mapbox.services.android.testapp.directions;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
@@ -29,15 +28,15 @@ import com.mapbox.services.directions.v4.models.DirectionsResponse;
 import com.mapbox.services.directions.v4.models.DirectionsRoute;
 import com.mapbox.services.directions.v4.models.Waypoint;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.List;
+
 public class DirectionsV4Activity extends AppCompatActivity {
 
-    private final static String LOG_TAG = "DirectionsV4Activity";
+    private static final String LOG_TAG = "DirectionsV4Activity";
 
     private MapView mapView = null;
     private MapboxMap mapboxMap = null;
@@ -96,8 +95,8 @@ public class DirectionsV4Activity extends AppCompatActivity {
                 // Get route from API
                 try {
                     getRoute(origin, destination);
-                } catch (ServicesException e) {
-                    e.printStackTrace();
+                } catch (ServicesException exception) {
+                    exception.printStackTrace();
                 }
             }
         });
@@ -131,9 +130,9 @@ public class DirectionsV4Activity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<DirectionsResponse> call, Throwable t) {
-                Log.e(LOG_TAG, "Error: " + t.getMessage());
-                showMessage("Error: " + t.getMessage());
+            public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+                Log.e(LOG_TAG, "Error: " + throwable.getMessage());
+                showMessage("Error: " + throwable.getMessage());
             }
         });
     }
@@ -167,7 +166,7 @@ public class DirectionsV4Activity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause()  {
+    public void onPause() {
         super.onPause();
         mapView.onPause();
     }

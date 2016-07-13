@@ -7,9 +7,6 @@ import android.widget.ImageView;
 
 import com.mapbox.services.android.testapp.R;
 
-/**
- * Created by antonio on 4/28/16.
- */
 class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
     private int[] iconList;

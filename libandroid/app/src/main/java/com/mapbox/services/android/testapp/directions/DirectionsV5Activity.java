@@ -2,10 +2,8 @@ package com.mapbox.services.android.testapp.directions;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,16 +27,16 @@ import com.mapbox.services.directions.v5.MapboxDirections;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.directions.v5.models.DirectionsRoute;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DirectionsV5Activity extends AppCompatActivity {
 
-    private final static String LOG_TAG = "DirectionsV5Activity";
+    private static final String LOG_TAG = "DirectionsV5Activity";
 
     private MapView mapView = null;
     private MapboxMap mapboxMap = null;
@@ -96,8 +94,8 @@ public class DirectionsV5Activity extends AppCompatActivity {
                 // Get route from API
                 try {
                     getRoute(origin, destination);
-                } catch (ServicesException e) {
-                    e.printStackTrace();
+                } catch (ServicesException exception) {
+                    exception.printStackTrace();
                 }
             }
         });
@@ -155,9 +153,9 @@ public class DirectionsV5Activity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<DirectionsResponse> call, Throwable t) {
-                Log.e(LOG_TAG, "Error: " + t.getMessage());
-                showMessage("Error: " + t.getMessage());
+            public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+                Log.e(LOG_TAG, "Error: " + throwable.getMessage());
+                showMessage("Error: " + throwable.getMessage());
             }
         });
     }

@@ -21,12 +21,12 @@ import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
 import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
+import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
+import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
 import com.mapbox.services.android.testapp.turf.TurfDistanceActivity;
 import com.mapbox.services.android.testapp.turf.TurfLineSliceActivity;
 import com.mapbox.services.android.testapp.utils.MapMatchingActivity;
 import com.mapbox.services.android.testapp.utils.SimplifyPolylineActivity;
-import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
-import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
 import com.mapbox.services.android.utils.PermissionsUtils;
 
 import java.util.ArrayList;
@@ -39,13 +39,13 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private final static String LOG_TAG = "MainActivity";
+    private static final String LOG_TAG = "MainActivity";
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
 
-    private final static List<SampleItem> samples = new ArrayList<>(Arrays.asList(
+    private static final List<SampleItem> samples = new ArrayList<>(Arrays.asList(
             new SampleItem("Directions v5", "", DirectionsV5Activity.class),
             new SampleItem("Directions v4", "", DirectionsV4Activity.class),
             new SampleItem("Directions icons", "", DirectionsIconsActivity.class),
@@ -74,20 +74,20 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "MAS version code: " + BuildConfig.VERSION_CODE);
 
         // RecyclerView
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
 
         // Use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
         // Specify an adapter
-        mAdapter = new MainAdapter(samples);
-        mRecyclerView.setAdapter(mAdapter);
+        adapter = new MainAdapter(samples);
+        recyclerView.setAdapter(adapter);
 
         // Check for location permission
         if (!PermissionsUtils.isLocationGranted(this)) {
-            mRecyclerView.setEnabled(false);
+            recyclerView.setEnabled(false);
             PermissionsUtils.startPermissionFlow(this);
         }
     }
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (PermissionsUtils.isRequestSuccessful(requestCode, permissions, grantResults)) {
-            mRecyclerView.setEnabled(true);
+            recyclerView.setEnabled(true);
         } else {
             PermissionsUtils.explainFallback(this);
         }
@@ -114,10 +114,10 @@ public class MainActivity extends AppCompatActivity {
             private TextView nameView;
             private TextView descriptionView;
 
-            public ViewHolder(View v) {
-                super(v);
-                nameView = (TextView) v.findViewById(R.id.nameView);
-                descriptionView = (TextView) v.findViewById(R.id.descriptionView);
+            public ViewHolder(View view) {
+                super(view);
+                nameView = (TextView) view.findViewById(R.id.nameView);
+                descriptionView = (TextView) view.findViewById(R.id.descriptionView);
             }
         }
 
@@ -127,20 +127,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public MainAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater
+            View view = LayoutInflater
                     .from(parent.getContext())
                     .inflate(R.layout.item_main_feature, parent, false);
 
-            v.setOnClickListener(new View.OnClickListener() {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    int position = mRecyclerView.getChildLayoutPosition(v);
-                    Intent intent = new Intent(v.getContext(), samples.get(position).getActivity());
+                public void onClick(View clickedView) {
+                    int position = recyclerView.getChildLayoutPosition(clickedView);
+                    Intent intent = new Intent(clickedView.getContext(), samples.get(position).getActivity());
                     startActivity(intent);
                 }
             });
 
-            return new ViewHolder(v);
+            return new ViewHolder(view);
         }
 
         @Override

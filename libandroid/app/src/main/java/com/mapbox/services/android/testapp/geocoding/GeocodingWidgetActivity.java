@@ -1,8 +1,8 @@
 package com.mapbox.services.android.testapp.geocoding;
 
 import android.location.Location;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
@@ -26,7 +26,7 @@ import com.mapzen.android.lost.api.LocationServices;
 
 public class GeocodingWidgetActivity extends AppCompatActivity {
 
-    private final static String LOG_TAG = "GeocodingWidgetActivity";
+    private static final String LOG_TAG = "GeocodingWidgetActivity";
 
     private MapView mapView;
     private MapboxMap mapboxMap;
@@ -102,7 +102,7 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause()  {
+    public void onPause() {
         super.onPause();
         mapView.onPause();
     }

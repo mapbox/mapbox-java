@@ -95,13 +95,17 @@ public class TurfBearingActivity extends AppCompatActivity {
         map.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng point) {
-                if (bearingMarker != null) map.removeMarker(bearingMarker);
+                if (bearingMarker != null) {
+                    map.removeMarker(bearingMarker);
+                }
 
                 bearingMarker = map.addMarker(new MarkerViewOptions()
                         .position(point)
                         .title("point 2"));
 
-                double bearing = TurfMeasurement.bearing(Point.fromCoordinates(cadillacHotelPosition), Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(), point.getLatitude())));
+                double bearing = TurfMeasurement.bearing(
+                        Point.fromCoordinates(cadillacHotelPosition),
+                        Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(), point.getLatitude())));
                 Snackbar.make(container, "Bearing = " + bearing, Snackbar.LENGTH_INDEFINITE).show();
             }
         });

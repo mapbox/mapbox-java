@@ -103,7 +103,8 @@ public class TurfLineSliceActivity extends AppCompatActivity {
 
     private void drawSlicedRoute() {
         try {
-            LineString lineString = TurfMisc.lineSlice(Point.fromCoordinates(routePoints.get(5)), Point.fromCoordinates(routePoints.get(20)), LineString.fromCoordinates(routePoints));
+            LineString lineString = TurfMisc.lineSlice(Point.fromCoordinates(routePoints.get(5)),
+                    Point.fromCoordinates(routePoints.get(20)), LineString.fromCoordinates(routePoints));
 
             List<LatLng> routeSliceLatLngs = new ArrayList<>();
             for (Position routePoint : lineString.getCoordinates()) {
@@ -115,8 +116,8 @@ public class TurfLineSliceActivity extends AppCompatActivity {
                     .color(Color.parseColor("#f9886c"))
                     .width(5));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 }
