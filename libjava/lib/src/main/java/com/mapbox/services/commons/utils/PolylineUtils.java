@@ -10,7 +10,11 @@ import java.util.List;
  */
 public class PolylineUtils {
 
-    private static final double SIMPLIFY_DEFAULT_TOLERANCE = 0.00001;
+    // 1 by default (in the same metric as the point coordinates)
+    private static final double SIMPLIFY_DEFAULT_TOLERANCE = 1;
+
+    // False by default (excludes distance-based preprocessing step which leads to highest quality
+    // simplification but runs slower)
     private static final boolean SIMPLIFY_DEFAULT_HIGHEST_QUALITY = false;
 
     /*
@@ -205,23 +209,49 @@ public class PolylineUtils {
     }
 
     /**
-     * Both algorithms combined for awesome performance
+     * Reduces the number of points in a polyline while retaining its shape, giving a performance
+     * boost when processing it and also reducing visual noise
      *
-     * For coordinates, tolerance should have a value around 0.00001.
-     * See https://github.com/mapbox/mapbox-java/issues/86#issuecomment-229192340 for details.
+     * @param points an array of points
+     * @return an array of simplified points
      */
     public static Position[] simplify(Position[] points) {
         return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
     }
 
+    /**
+     * Reduces the number of points in a polyline while retaining its shape, giving a performance
+     * boost when processing it and also reducing visual noise.
+     *
+     * @param points an array of points
+     * @param tolerance affects the amount of simplification (in the same metric as the point coordinates)
+     * @return an array of simplified points
+     */
     public static Position[] simplify(Position[] points, double tolerance) {
         return simplify(points, tolerance, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
     }
 
+    /**
+     * Reduces the number of points in a polyline while retaining its shape, giving a performance
+     * boost when processing it and also reducing visual noise.
+     *
+     * @param points an array of points
+     * @param highestQuality excludes distance-based preprocessing step which leads to highest quality simplification
+     * @return an array of simplified points
+     */
     public static Position[] simplify(Position[] points, boolean highestQuality) {
         return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, highestQuality);
     }
 
+    /**
+     * Reduces the number of points in a polyline while retaining its shape, giving a performance
+     * boost when processing it and also reducing visual noise.
+     *
+     * @param points an array of points
+     * @param tolerance affects the amount of simplification (in the same metric as the point coordinates)
+     * @param highestQuality excludes distance-based preprocessing step which leads to highest quality simplification
+     * @return an array of simplified points
+     */
     public static Position[] simplify(Position[] points, double tolerance, boolean highestQuality) {
         if (points.length <= 2) return points;
 
