@@ -49,7 +49,6 @@ public class GeocodingReverseActivity extends AppCompatActivity {
         setMessage("Tap the map to trigger the reverse geocoder.");
 
         mapView = (MapView) findViewById(R.id.mapview);
-        mapView.setAccessToken(Utils.getMapboxAccessToken(this));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override

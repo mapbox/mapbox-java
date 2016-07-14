@@ -83,7 +83,6 @@ public class MapMatchingActivity extends AppCompatActivity {
             });
 
         mapView = (MapView) findViewById(R.id.mapView);
-        mapView.setAccessToken(Utils.getMapboxAccessToken(this));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override

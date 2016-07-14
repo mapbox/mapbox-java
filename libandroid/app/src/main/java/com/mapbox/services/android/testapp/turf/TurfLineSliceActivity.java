@@ -43,7 +43,6 @@ public class TurfLineSliceActivity extends AppCompatActivity {
         routePoints = PolylineUtils.decode("ovnnEzvcrUt@o@z@u@_DkHu@cBM]Wi@q@aB[u@_BwDkBiEcB_EQ_@g@iAk@sAc@cAkA{CqAuCkAqCk@mAWm@S]]y@qBwEYq@]{@Z{@Xw@LYTm@Tm@Rk@Vq@JUJWNc@L]N_@Pc@HQPc@DKBKFO`@gARg@Tg@L[J[Rg@Tm@Nc@Pe@Zw@N_@JUNc@Z{@DIL[Tm@FDFF", Constants.OSRM_PRECISION_V5);
 
         mapView = (MapView) findViewById(R.id.mapView);
-        mapView.setAccessToken(Utils.getMapboxAccessToken(this));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
