@@ -92,21 +92,20 @@ public class TurfInvariant {
      */
     public static void collectionOf(FeatureCollection featurecollection, String type, String name) throws TurfException {
         if (TextUtils.isEmpty(name)) {
-            throw new TurfException(".collectionOf() requires a name");
+            throw new TurfException("collectionOf() requires a name");
         }
 
-        if (featurecollection == null|| !featurecollection.getType().equals("FeatureCollection")) {
+        if (featurecollection == null || !featurecollection.getType().equals("FeatureCollection")
+                || featurecollection.getFeatures() == null) {
             throw new TurfException("Invalid input to " + name + ", FeatureCollection required");
         }
 
-        Feature feature;
-        for (int i = 0; i < featurecollection.getFeatures().size(); i++) {
-            feature = featurecollection.getFeatures().get(i);
-            if (feature == null|| !feature.getType().equals("Feature") || feature.getGeometry() == null) {
+        for (Feature feature : featurecollection.getFeatures()) {
+            if (feature == null || !feature.getType().equals("Feature") || feature.getGeometry() == null) {
                 throw new TurfException("Invalid input to " + name + ", Feature with geometry required");
             }
 
-            if (feature.getGeometry() == null|| feature.getGeometry().getType().equals(type)) {
+            if (feature.getGeometry() == null || !feature.getGeometry().getType().equals(type)) {
                 throw new TurfException("Invalid input to " + name + ": must be a " + type
                         + ", given " + feature.getGeometry().getType());
             }

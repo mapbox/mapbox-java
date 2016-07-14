@@ -89,7 +89,7 @@ public class TurfInvariantTest extends BaseTurf {
     public void testInvariantCollectionOf2() throws TurfException {
         String json = "{}";
         thrown.expect(TurfException.class);
-        thrown.expectMessage(startsWith(".collectionOf() requires a name"));
+        thrown.expectMessage(startsWith("collectionOf() requires a name"));
         TurfInvariant.collectionOf(FeatureCollection.fromJson(json), "Polygon", null);
     }
 
@@ -101,8 +101,6 @@ public class TurfInvariantTest extends BaseTurf {
         TurfInvariant.collectionOf(FeatureCollection.fromJson(json), "Polygon", "foo");
     }
 
-
-    // TODO changing ..."Point", "myfn"); to ..."Polygon", "myfn"); will pass
     @Test
     public void testInvariantCollectionOf4() throws TurfException {
         String json = "{type: 'FeatureCollection', features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: [0, 0]}, properties: {}}]}";
@@ -113,10 +111,10 @@ public class TurfInvariantTest extends BaseTurf {
     @Test
     public void testInvariantGetCoord() throws TurfException {
         String jsonPoint = "{type: 'Point', coordinates: [1, 2]}";
-        String jsonFeature = "{type: 'Feature', geometry: {type: 'Point',coordinates: [1, 2]}";
+        String jsonFeature = "{type: 'Feature', geometry: {type: 'Point', coordinates: [1, 2]}}";
 
         assertEquals(TurfInvariant.getCoord(Point.fromJson(jsonPoint)), Position.fromCoordinates(1, 2));
-        assertEquals(TurfInvariant.getCoord(Point.fromJson(jsonFeature)), Position.fromCoordinates(1, 2));
+        assertEquals(TurfInvariant.getCoord(Feature.fromJson(jsonFeature)), Position.fromCoordinates(1, 2));
     }
 
 
