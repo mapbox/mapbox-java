@@ -2,13 +2,14 @@ package com.mapbox.services.geojson;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.mapbox.services.BaseTest;
 
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by antonio on 1/30/16.
  */
-public class BaseGeoJSON {
+public class BaseGeoJSON extends BaseTest {
 
     /*
      * These all samples come from the official spec:
@@ -109,12 +110,4 @@ public class BaseGeoJSON {
             "       ]\n" +
             "     }";
 
-    /*
-     * Utils
-     */
-
-    void compareJson(String json1, String json2) {
-        JsonParser parser = new JsonParser();
-        assertEquals(parser.parse(json1), parser.parse(json2));
-    }
 }
