@@ -142,7 +142,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
     @Override
     public Filter getFilter() {
         if (geocoderFilter == null) {
-            geocoderFilter = new GeocoderFilter(this);
+            geocoderFilter = new GeocoderFilter();
         }
 
         return geocoderFilter;
@@ -150,12 +150,10 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     private class GeocoderFilter extends Filter {
 
-        private final GeocoderAdapter geocoderAdapter;
         private final MapboxGeocoding.Builder builder;
 
-        public GeocoderFilter(GeocoderAdapter geocoderAdapter) {
+        public GeocoderFilter() {
             super();
-            this.geocoderAdapter = geocoderAdapter;
             builder = new MapboxGeocoding.Builder();
         }
 
