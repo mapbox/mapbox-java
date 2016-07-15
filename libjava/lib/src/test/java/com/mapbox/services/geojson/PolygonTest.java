@@ -1,17 +1,15 @@
 package com.mapbox.services.geojson;
 
-import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.Polygon;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.Test;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by antonio on 1/30/16.
@@ -46,6 +44,29 @@ public class PolygonTest extends BaseGeoJSON {
     public void toJsonHoles() {
         Polygon geo = Polygon.fromJson(BaseGeoJSON.SAMPLE_POLYGON_HOLES);
         compareJson(BaseGeoJSON.SAMPLE_POLYGON_HOLES, geo.toJson());
+    }
+
+    @Test
+    public void testFromCoordinates() {
+        // fromCoordinates (list)
+        ArrayList<Position> pointList = new ArrayList<>();
+        pointList.add(Position.fromCoordinates(0, 0));
+        pointList.add(Position.fromCoordinates(0, 100));
+        pointList.add(Position.fromCoordinates(100, 100));
+        pointList.add(Position.fromCoordinates(100, 0));
+        pointList.add(Position.fromCoordinates(0, 0));
+        ArrayList<List<Position>> coordinates = new ArrayList<>();
+        coordinates.add(pointList);
+        Polygon polyList = Polygon.fromCoordinates(coordinates);
+
+        // fromCoordinates (array)
+        Polygon polyArray = Polygon.fromCoordinates(new double[][][]{{
+                {0, 0}, {0, 100}, {100, 100}, {100, 0}, {0, 0}
+        }});
+
+        // Test equality
+        assertEquals(polyList.getCoordinates(), polyArray.getCoordinates());
+        compareJson(polyList.toJson(), polyArray.toJson());
     }
 
 }
