@@ -25,6 +25,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     private final Context context;
     private String accessToken;
+    private String country;
     private String type;
     private double[] bbox;
     private Position position;
@@ -47,6 +48,14 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getType() {
@@ -169,9 +178,10 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
                     .setAutocomplete(true);
 
                 // Optional params
+                if (getCountry() != null) builder.setCountry(getCountry());
+                if (getProximity() != null) builder.setProximity(getProximity());
                 if (getType() != null) builder.setGeocodingType(getType());
                 if (getBbox() != null) builder.setBbox(bbox[0], bbox[1], bbox[2], bbox[3]);
-                if (getProximity() != null) builder.setProximity(getProximity());
 
                 // Do request
                 response = builder.build().executeCall();
