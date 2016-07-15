@@ -217,7 +217,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
             return this;
         }
 
-        public Builder setBbox(Position northeast, Position southwest){
+        public Builder setBbox(Position northeast, Position southwest) {
             return setBbox(southwest.getLongitude(), southwest.getLatitude(),
                     northeast.getLongitude(), northeast.getLatitude());
         }

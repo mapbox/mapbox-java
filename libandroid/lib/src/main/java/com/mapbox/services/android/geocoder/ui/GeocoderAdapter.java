@@ -10,16 +10,14 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
-import com.mapbox.services.commons.models.Position;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Response;
 
@@ -28,7 +26,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
     private final Context context;
     private String accessToken;
     private String type;
-    private double[] bbox = new double[4];
+    private double[] bbox;
     private Position position;
 
     private GeocoderFilter geocoderFilter;
@@ -59,7 +57,13 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         this.type = type;
     }
 
+    public void setBbox(Position northeast, Position southwest) {
+        setBbox(southwest.getLongitude(), southwest.getLatitude(),
+                northeast.getLongitude(), northeast.getLatitude());
+    }
+
     public void setBbox(double minX, double minY, double  maxX, double  maxY){
+        if (bbox == null) bbox = new double[4];
         bbox[0] = minX;
         bbox[1] = minY;
         bbox[2] = maxX;
