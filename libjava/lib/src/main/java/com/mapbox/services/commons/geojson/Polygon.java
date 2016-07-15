@@ -11,6 +11,7 @@ import java.util.List;
  * A Polygon is a type of {@link Geometry}.
  *
  * @see <a href='http://geojson.org/geojson-spec.html#polygon'>Official GeoJSON Polygon Specifications</a>
+ * @since 1.0.0
  */
 public class Polygon implements Geometry<List<List<Position>>> {
 
@@ -21,6 +22,7 @@ public class Polygon implements Geometry<List<List<Position>>> {
      * Private constructor.
      *
      * @param coordinates List of {@link Position} making up the Polygon.
+     * @since 1.0.0
      */
     private Polygon(List<List<Position>> coordinates) {
         this.coordinates = coordinates;
@@ -30,6 +32,7 @@ public class Polygon implements Geometry<List<List<Position>>> {
      * Should always be "Polygon".
      *
      * @return String "Polygon".
+     * @since 1.0.0
      */
     @Override
     public String getType() {
@@ -40,6 +43,7 @@ public class Polygon implements Geometry<List<List<Position>>> {
      * Get the list of {@link Position} making up the Polygon.
      *
      * @return List of {@link Position}.
+     * @since 1.0.0
      */
     @Override
     public List<List<Position>> getCoordinates() {
@@ -56,6 +60,7 @@ public class Polygon implements Geometry<List<List<Position>>> {
      *
      * @param coordinates List of {@link Position} coordinates.
      * @return {@link Polygon}.
+     * @since 1.0.0
      */
     public static Polygon fromCoordinates(List<List<Position>> coordinates) {
         return new Polygon(coordinates);
@@ -66,6 +71,7 @@ public class Polygon implements Geometry<List<List<Position>>> {
      *
      * @param json String of JSON making up a Polygon.
      * @return {@link Polygon} GeoJSON object.
+     * @since 1.0.0
      */
     public static Polygon fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -77,6 +83,7 @@ public class Polygon implements Geometry<List<List<Position>>> {
      * Convert feature into JSON.
      *
      * @return String containing Polygon JSON.
+     * @since 1.0.0
      */
     @Override
     public String toJson() {

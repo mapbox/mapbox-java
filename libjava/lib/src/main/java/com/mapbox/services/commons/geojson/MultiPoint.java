@@ -11,6 +11,7 @@ import java.util.List;
  * A MultiPoint is a type of {@link Geometry}.
  *
  * @see <a href='http://geojson.org/geojson-spec.html#multipoint'>Official GeoJSON MultiPoint Specifications</a>
+ * @since 1.0.0
  */
 public class MultiPoint implements Geometry<List<Position>> {
 
@@ -21,6 +22,7 @@ public class MultiPoint implements Geometry<List<Position>> {
      * Private constructor.
      *
      * @param coordinates List of {@link Position} making up the MultiPoint.
+     * @since 1.0.0
      */
     private MultiPoint(List<Position> coordinates) {
         this.coordinates = coordinates;
@@ -30,6 +32,7 @@ public class MultiPoint implements Geometry<List<Position>> {
      * Should always be "MultiPoint".
      *
      * @return String "MultiPoint".
+     * @since 1.0.0
      */
     @Override
     public String getType() {
@@ -40,6 +43,7 @@ public class MultiPoint implements Geometry<List<Position>> {
      * Get the list of {@link Position} making up the MultiPoint.
      *
      * @return List of {@link Position}.
+     * @since 1.0.0
      */
     @Override
     public List<Position> getCoordinates() {
@@ -56,6 +60,7 @@ public class MultiPoint implements Geometry<List<Position>> {
      *
      * @param coordinates List of {@link Position} coordinates.
      * @return {@link MultiPoint}.
+     * @since 1.0.0
      */
     public static MultiPoint fromCoordinates(List<Position> coordinates) {
         return new MultiPoint(coordinates);
@@ -66,6 +71,7 @@ public class MultiPoint implements Geometry<List<Position>> {
      *
      * @param json String of JSON making up a MultiPoint.
      * @return {@link MultiPoint} GeoJSON object.
+     * @since 1.0.0
      */
     public static MultiPoint fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -77,6 +83,7 @@ public class MultiPoint implements Geometry<List<Position>> {
      * Convert feature into JSON.
      *
      * @return String containing MultiPoint JSON.
+     * @since 1.0.0
      */
     @Override
     public String toJson() {

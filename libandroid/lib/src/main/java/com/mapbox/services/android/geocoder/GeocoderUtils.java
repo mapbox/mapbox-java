@@ -8,10 +8,20 @@ import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import java.util.Locale;
 
 /**
- * Created by antonio on 1/30/16.
+ * Android Geocoder utils class used for the {@link AndroidGeocoder}.
+ *
+ * @since 1.0.0
  */
 public class GeocoderUtils {
 
+    /**
+     * Used to convert from FeatureModel to an Address.
+     *
+     * @param geocodingFeature a {@link CarmenFeature}.
+     * @param locale           {@link Locale}.
+     * @return {@link Address}
+     * @since 1.0.0
+     */
     public static Address featureToAddress(CarmenFeature geocodingFeature, Locale locale) {
         Address address = new Address(locale);
         address.setAddressLine(0, geocodingFeature.getPlaceName());
@@ -23,5 +33,4 @@ public class GeocoderUtils {
 
         return address;
     }
-
 }
