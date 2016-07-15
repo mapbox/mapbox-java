@@ -22,7 +22,10 @@ import java.util.List;
 import retrofit2.Response;
 
 /**
- * Created by antonio on 2/1/16.
+ * Adapter for the {@link GeocoderAutoCompleteView}. In this class we make the Mapbox Geocoding API
+ * call.
+ *
+ * @since 1.0.0
  */
 public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
@@ -43,26 +46,69 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
      * Getters and setters
      */
 
+    /**
+     * Get the access token used with making the Mapbox geocoding API call.
+     *
+     * @return String containing your Mapbox access token.
+     * @see <a href="https://www.mapbox.com/help/define-access-token/">Mapbox access token</a>
+     * @since 1.0.0
+     */
     public String getAccessToken() {
         return accessToken;
     }
 
+    /**
+     * You'll need to have a Mapbox access token to use the geocoding API within MAS.
+     *
+     * @param accessToken Your Mapbox access token
+     * @see <a href="https://www.mapbox.com/help/define-access-token/">Mapbox access token</a>
+     * @since 1.0.0
+     */
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
 
+    /**
+     * Get the geocoder filter type.
+     *
+     * @return String containing "place", "poi", "neighborhood", etc.
+     * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
+     * @since 1.0.0
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Configure the geocoder type, pass in one of the constants found within
+     * {@link com.mapbox.services.geocoding.v5.GeocodingCriteria}.
+     *
+     * @param type String containing "place", "poi", "neighborhood", etc.
+     * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
+     * @since 1.0.0
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * Location around which to bias geocoder results.
+     *
+     * @return {@link Position} coordinate.
+     * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
+     * @since 1.0.0
+     */
     public Position getProximity() {
         return position;
     }
 
+    /**
+     * Location around which to bias geocoder results.
+     *
+     * @param position {@link Position} coordinate.
+     * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
+     * @since 1.0.0
+     */
     public void setProximity(Position position) {
         this.position = position;
     }
@@ -71,25 +117,55 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
      * Required by BaseAdapter
      */
 
+    /**
+     * Gives How many items are in the data set represented by this Adapter.
+     *
+     * @return int value.
+     * @see <a href="https://developer.android.com/reference/android/widget/Adapter.html">Android Adapter</a>
+     * @since 1.0.0
+     */
     @Override
     public int getCount() {
         return features.size();
     }
 
+    /**
+     * Get the data item associated with the specified position in the data set.
+     *
+     * @param position int position within the data.
+     * @return {@link CarmenFeature}.
+     * @see <a href="https://developer.android.com/reference/android/widget/Adapter.html">Android Adapter</a>
+     * @since 1.0.0
+     */
     @Override
     public CarmenFeature getItem(int position) {
         return features.get(position);
     }
 
+    /**
+     * Get the row id associated with the specified position in the list.
+     *
+     * @param position int position within the data.
+     * @return long value
+     * @see <a href="https://developer.android.com/reference/android/widget/Adapter.html">Android Adapter</a>
+     * @since 1.0.0
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    /*
+    /**
      * Get a View that displays the data at the specified position in the data set.
+     *
+     * @param position    The position of the item within the adapter's data set of the item whose
+     *                    view we want.
+     * @param convertView The old view to reuse, if possible.
+     * @param parent      The parent that this view will eventually be attached to.
+     * @return A View corresponding to the data at the specified position.
+     * @see <a href="https://developer.android.com/reference/android/widget/Adapter.html">Android Adapter</a>
+     * @since 1.0.0
      */
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get view
@@ -115,6 +191,13 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
      * Required by Filterable
      */
 
+    /**
+     * Returns a filter that can be used to constrain data with a filtering pattern.
+     *
+     * @return a filter used to constrain data
+     * @see <a href="https://developer.android.com/reference/android/widget/Filterable.html">Filterable Class</a>
+     * @since 1.0.0
+     */
     @Override
     public Filter getFilter() {
         if (geocoderFilter == null) {
