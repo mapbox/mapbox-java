@@ -145,4 +145,27 @@ public class TurfMeasurement {
         return travelled;
     }
 
+    /**
+     * Takes two {@link Position} and returns a position midway between them. The midpoint is
+     * calculated geodesically, meaning the curvature of the earth is taken into account.
+     *
+     * @return midpoint
+     */
+    public static Position midpoint(Position from, Position to) throws TurfException {
+        Point midpointResult = midpoint(Point.fromCoordinates(from), Point.fromCoordinates(to));
+        return Position.fromCoordinates(midpointResult.getCoordinates().getLongitude(),
+                midpointResult.getCoordinates().getLatitude());
+    }
+
+    /**
+     * Takes two {@link Point} and returns a point midway between them. The midpoint is calculated
+     * geodesically, meaning the curvature of the earth is taken into account.
+     *
+     * @return midpoint
+     */
+    public static Point midpoint(Point from, Point to) throws TurfException {
+        double dist = distance(from, to, TurfConstants.UNIT_MILES);
+        double heading = bearing(from, to);
+        return destination(from, dist / 2, heading, TurfConstants.UNIT_MILES);
+    }
 }
