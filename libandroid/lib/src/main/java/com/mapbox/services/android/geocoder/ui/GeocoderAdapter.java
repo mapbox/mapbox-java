@@ -164,14 +164,14 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
             try {
                 // Build client and execute
-                builder.setAccessToken(geocoderAdapter.getAccessToken())
+                builder.setAccessToken(getAccessToken())
                     .setLocation(constraint.toString())
-                    .setGeocodingType(geocoderAdapter.getType())
                     .setAutocomplete(true);
 
                 // Optional params
+                if (getType() != null) builder.setGeocodingType(getType());
                 if (getBbox() != null) builder.setBbox(bbox[0], bbox[1], bbox[2], bbox[3]);
-                if (getProximity() != null) builder.setProximity(geocoderAdapter.getProximity());
+                if (getProximity() != null) builder.setProximity(getProximity());
 
                 // Do request
                 response = builder.build().executeCall();
