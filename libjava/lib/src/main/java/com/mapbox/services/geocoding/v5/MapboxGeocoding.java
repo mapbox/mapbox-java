@@ -218,6 +218,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         }
 
         public Builder setBbox(double minX, double minY, double  maxX, double  maxY) {
+            if (minX == 0 && minY == 0 && maxX == 0 && maxY == 0) return this;
             this.bbox = String.format(Locale.US, "%f,%f,%f,%f", minX, minY, maxX, maxY);
             return this;
         }

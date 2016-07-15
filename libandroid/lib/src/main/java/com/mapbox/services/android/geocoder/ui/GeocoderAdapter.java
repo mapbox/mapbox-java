@@ -17,18 +17,18 @@ import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.models.Position;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Response;
 
-/**
- * Created by antonio on 2/1/16.
- */
 public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     private final Context context;
     private String accessToken;
     private String type;
+    private double[] bbox = new double[4];
     private Position position;
 
     private GeocoderFilter geocoderFilter;
@@ -57,6 +57,13 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setBbox(double minX, double minY, double  maxX, double  maxY){
+        bbox[0] = minX;
+        bbox[1] = minY;
+        bbox[2] = maxX;
+        bbox[3] = maxY;
     }
 
     public Position getProximity() {
@@ -152,6 +159,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
                 response = builder.setAccessToken(geocoderAdapter.getAccessToken())
                         .setLocation(constraint.toString())
                         .setProximity(geocoderAdapter.getProximity())
+                        .setBbox(bbox[0], bbox[1], bbox[2], bbox[3])
                         .setGeocodingType(geocoderAdapter.getType())
                         .build().executeCall();
             } catch (IOException e) {
