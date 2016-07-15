@@ -13,6 +13,7 @@ import java.util.List;
  * collection of geometry objects.
  *
  * @see <a href='geojson.org/geojson-spec.html#geometry-collection'>Official GeoJSON GeometryCollection Specifications</a>
+ * @since 1.0.0
  */
 public class GeometryCollection implements GeoJSON {
 
@@ -23,6 +24,7 @@ public class GeometryCollection implements GeoJSON {
      * Private constructor.
      *
      * @param geometries List of {@link Geometry}.
+     * @since 1.0.0
      */
     public GeometryCollection(List<com.mapbox.services.commons.geojson.Geometry> geometries) {
         this.geometries = geometries;
@@ -32,6 +34,7 @@ public class GeometryCollection implements GeoJSON {
      * Should always be "GeometryCollection".
      *
      * @return String "GeometryCollection".
+     * @since 1.0.0
      */
     @Override
     public String getType() {
@@ -42,6 +45,7 @@ public class GeometryCollection implements GeoJSON {
      * Get the List containing all the geometries within collection.
      *
      * @return List of geometries within collection.
+     * @since 1.0.0
      */
     public List<com.mapbox.services.commons.geojson.Geometry> getGeometries() {
         return geometries;
@@ -52,6 +56,7 @@ public class GeometryCollection implements GeoJSON {
      *
      * @param geometries List of {@link Geometry}
      * @return new {@link GeometryCollection}
+     * @since 1.0.0
      */
     public static GeometryCollection fromGeometries(List<com.mapbox.services.commons.geojson.Geometry> geometries) {
         return new GeometryCollection(geometries);
@@ -62,6 +67,7 @@ public class GeometryCollection implements GeoJSON {
      *
      * @param json String of JSON making up a geometry collection.
      * @return {@link GeometryCollection} GeoJSON object.
+     * @since 1.0.0
      */
     public static GeometryCollection fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -74,6 +80,7 @@ public class GeometryCollection implements GeoJSON {
      * Convert geometry collection into JSON.
      *
      * @return String containing geometry collection JSON.
+     * @since 1.0.0
      */
     @Override
     public String toJson() {

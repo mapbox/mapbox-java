@@ -11,6 +11,7 @@ import java.util.List;
  * A MultiLineString is a type of {@link Geometry}.
  *
  * @see <a href='http://geojson.org/geojson-spec.html#multilinestringn'>Official GeoJSON MultiLineString Specifications</a>
+ * @since 1.0.0
  */
 public class MultiLineString implements Geometry<List<List<Position>>> {
 
@@ -21,6 +22,7 @@ public class MultiLineString implements Geometry<List<List<Position>>> {
      * Private constructor.
      *
      * @param coordinates List of {@link Position} making up the MultiLineString.
+     * @since 1.0.0
      */
     private MultiLineString(List<List<Position>> coordinates) {
         this.coordinates = coordinates;
@@ -30,6 +32,7 @@ public class MultiLineString implements Geometry<List<List<Position>>> {
      * Should always be "MultiLineString".
      *
      * @return String "MultiLineString".
+     * @since 1.0.0
      */
     @Override
     public String getType() {
@@ -40,6 +43,7 @@ public class MultiLineString implements Geometry<List<List<Position>>> {
      * Get the list of {@link Position} making up the MultiLineString.
      *
      * @return List of {@link Position}.
+     * @since 1.0.0
      */
     @Override
     public List<List<Position>> getCoordinates() {
@@ -56,6 +60,7 @@ public class MultiLineString implements Geometry<List<List<Position>>> {
      *
      * @param coordinates List of {@link Position} coordinates.
      * @return {@link MultiLineString}.
+     * @since 1.0.0
      */
     public static MultiLineString fromCoordinates(List<List<Position>> coordinates) {
         return new MultiLineString(coordinates);
@@ -66,6 +71,7 @@ public class MultiLineString implements Geometry<List<List<Position>>> {
      *
      * @param json String of JSON making up a MultiLineString.
      * @return {@link MultiLineString} GeoJSON object.
+     * @since 1.0.0
      */
     public static MultiLineString fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -77,6 +83,7 @@ public class MultiLineString implements Geometry<List<List<Position>>> {
      * Convert feature into JSON.
      *
      * @return String containing MultiLineString JSON.
+     * @since 1.0.0
      */
     @Override
     public String toJson() {

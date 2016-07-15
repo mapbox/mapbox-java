@@ -7,6 +7,7 @@ import java.util.List;
  * collection of feature objects.
  *
  * @see <a href='geojson.org/geojson-spec.html#feature-collection-objects'>Official GeoJSON FeatureCollection Specifications</a>
+ * @since 1.0.0
  */
 public class FeatureCollection extends BaseFeatureCollection {
 
@@ -18,6 +19,7 @@ public class FeatureCollection extends BaseFeatureCollection {
      * the deserialization of the Map Matching service response.
      *
      * @param features List of {@link Feature}.
+     * @since 1.0.0
      */
     protected FeatureCollection(List<Feature> features) {
         this.features = features;
@@ -27,6 +29,7 @@ public class FeatureCollection extends BaseFeatureCollection {
      * Get the List containing all the features within collection.
      *
      * @return List of features within collection.
+     * @since 1.0.0
      */
     public List<Feature> getFeatures() {
         return features;
@@ -37,6 +40,7 @@ public class FeatureCollection extends BaseFeatureCollection {
      *
      * @param features List of {@link Feature}
      * @return new {@link FeatureCollection}
+     * @since 1.0.0
      */
     public static FeatureCollection fromFeatures(List<Feature> features) {
         return new FeatureCollection(features);

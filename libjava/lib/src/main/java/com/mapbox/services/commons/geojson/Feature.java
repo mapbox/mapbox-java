@@ -12,6 +12,7 @@ import com.mapbox.services.commons.models.Position;
  * A GeoJSON object with the type "Feature" is a feature object.
  *
  * @see <a href='geojson.org/geojson-spec.html#feature-objects'>Official GeoJSON Feature Specifications</a>
+ * @since 1.0.0
  */
 public class Feature implements GeoJSON {
 
@@ -26,6 +27,7 @@ public class Feature implements GeoJSON {
      * @param geometry   {@link Geometry} object.
      * @param properties of this feature as JSON.
      * @param id         common identifier of this feature.
+     * @since 1.0.0
      */
     protected Feature(Geometry geometry, JsonObject properties, String id) {
         this.geometry = geometry;
@@ -37,6 +39,7 @@ public class Feature implements GeoJSON {
      * Should always be "Feature".
      *
      * @return String "Feature".
+     * @since 1.0.0
      */
     @Override
     public String getType() {
@@ -47,6 +50,7 @@ public class Feature implements GeoJSON {
      * Get the features {@link Geometry}.
      *
      * @return {@link Geometry} of the feature or null if not set.
+     * @since 1.0.0
      */
     public Geometry getGeometry() {
         return geometry;
@@ -56,6 +60,7 @@ public class Feature implements GeoJSON {
      * Returns the optional properties of this feature as JSON.
      *
      * @return the properties of this feature
+     * @since 1.0.0
      */
     public JsonObject getProperties() {
         if (properties == null) properties = new JsonObject();
@@ -70,6 +75,7 @@ public class Feature implements GeoJSON {
      * The optional, common identifier of this feature.
      *
      * @return The common identifier of this feature, if set.
+     * @since 1.0.0
      */
     public String getId() {
         return id;
@@ -79,6 +85,7 @@ public class Feature implements GeoJSON {
      * Create a feature from geometry.
      *
      * @param geometry {@link Geometry} object.
+     * @since 1.0.0
      */
     public static Feature fromGeometry(Geometry geometry) {
         return new Feature(geometry, null, null);
@@ -89,6 +96,7 @@ public class Feature implements GeoJSON {
      *
      * @param geometry   {@link Geometry} object.
      * @param properties of this feature as JSON.
+     * @since 1.0.0
      */
     public static Feature fromGeometry(Geometry geometry, JsonObject properties) {
         return new Feature(geometry, properties, null);
@@ -100,6 +108,7 @@ public class Feature implements GeoJSON {
      * @param geometry   {@link Geometry} object.
      * @param properties of this feature as JSON.
      * @param id         common identifier of this feature.
+     * @since 1.0.0
      */
     public static Feature fromGeometry(Geometry geometry, JsonObject properties, String id) {
         return new Feature(geometry, properties, id);
@@ -110,6 +119,7 @@ public class Feature implements GeoJSON {
      *
      * @param json String of JSON making up a feature.
      * @return {@link Feature} GeoJSON object.
+     * @since 1.0.0
      */
     public static Feature fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -122,6 +132,7 @@ public class Feature implements GeoJSON {
      * Convert feature into JSON.
      *
      * @return String containing feature JSON.
+     * @since 1.0.0
      */
     @Override
     public String toJson() {
@@ -132,8 +143,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to add a String member.
-     * @param key name of the member
+     *
+     * @param key   name of the member
      * @param value the String value associated with the member
+     * @since 1.0.0
      */
     public void addStringProperty(String key, String value) {
         getProperties().addProperty(key, value);
@@ -141,8 +154,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to add a Number member.
-     * @param key name of the member
+     *
+     * @param key   name of the member
      * @param value the Number value associated with the member
+     * @since 1.0.0
      */
     public void addNumberProperty(String key, Number value) {
         getProperties().addProperty(key, value);
@@ -150,8 +165,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to add a Boolean member.
-     * @param key name of the member
+     *
+     * @param key   name of the member
      * @param value the Boolean value associated with the member
+     * @since 1.0.0
      */
     public void addBooleanProperty(String key, Boolean value) {
         getProperties().addProperty(key, value);
@@ -159,8 +176,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to add a Character member.
-     * @param key name of the member
+     *
+     * @param key   name of the member
      * @param value the Character value associated with the member
+     * @since 1.0.0
      */
     public void addCharacterProperty(String key, Character value) {
         getProperties().addProperty(key, value);
@@ -168,8 +187,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to add a JsonElement member.
-     * @param key name of the member
+     *
+     * @param key   name of the member
      * @param value the JsonElement value associated with the member
+     * @since 1.0.0
      */
     public void addProperty(String key, JsonElement value) {
         getProperties().add(key, value);
@@ -177,8 +198,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to get a String member.
+     *
      * @param key name of the member
      * @return the value of the member, null if it doesn't exist
+     * @since 1.0.0
      */
     public String getStringProperty(String key) {
         return getProperties().get(key).getAsString();
@@ -186,8 +209,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to get a Number member.
+     *
      * @param key name of the member
      * @return the value of the member, null if it doesn't exist
+     * @since 1.0.0
      */
     public Number getNumberProperty(String key) {
         return getProperties().get(key).getAsNumber();
@@ -195,8 +220,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to get a Boolean member.
+     *
      * @param key name of the member
      * @return the value of the member, null if it doesn't exist
+     * @since 1.0.0
      */
     public Boolean getBooleanProperty(String key) {
         return getProperties().get(key).getAsBoolean();
@@ -204,8 +231,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to get a Character member.
+     *
      * @param key name of the member
      * @return the value of the member, null if it doesn't exist
+     * @since 1.0.0
      */
     public Character getCharacterProperty(String key) {
         return getProperties().get(key).getAsCharacter();
@@ -213,8 +242,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to get a JsonElement member.
+     *
      * @param key name of the member
      * @return the value of the member, null if it doesn't exist
+     * @since 1.0.0
      */
     public JsonElement getProperty(String key) {
         return getProperties().get(key);
@@ -222,8 +253,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Removes the property from the object properties
+     *
      * @param key name of the member
-     * @return
+     * @return Removed {@code property} from the key string passed in through the parameter.
+     * @since 1.0.0
      */
     public JsonElement removeProperty(String key) {
         return getProperties().remove(key);
@@ -231,8 +264,10 @@ public class Feature implements GeoJSON {
 
     /**
      * Convenience method to check if a member with the specified name is present in this object.
-     * @param key
-     * @return
+     *
+     * @param key name of the member
+     * @return true if there is the member has the specified name, false otherwise.
+     * @since 1.0.0
      */
     public boolean hasProperty(String key) {
         return getProperties().has(key);

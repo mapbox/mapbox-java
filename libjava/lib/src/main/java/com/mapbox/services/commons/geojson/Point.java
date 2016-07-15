@@ -9,6 +9,7 @@ import com.mapbox.services.commons.models.Position;
  * A Point is a type of {@link Geometry}.
  *
  * @see <a href='http://geojson.org/geojson-spec.html#point'>Official GeoJSON Point Specifications</a>
+ * @since 1.0.0
  */
 public class Point implements Geometry<Position> {
 
@@ -19,6 +20,7 @@ public class Point implements Geometry<Position> {
      * Private constructor.
      *
      * @param coordinates {@link Position} making up the Point.
+     * @since 1.0.0
      */
     private Point(Position coordinates) {
         this.coordinates = coordinates;
@@ -28,6 +30,7 @@ public class Point implements Geometry<Position> {
      * Should always be "Point".
      *
      * @return String "Point".
+     * @since 1.0.0
      */
     @Override
     public String getType() {
@@ -38,6 +41,7 @@ public class Point implements Geometry<Position> {
      * Get the {@link Position} making up the Point.
      *
      * @return {@link Position} making up the Point.
+     * @since 1.0.0
      */
     @Override
     public Position getCoordinates() {
@@ -54,6 +58,7 @@ public class Point implements Geometry<Position> {
      *
      * @param coordinates {@link Position} where point should be located.
      * @return {@link Point}.
+     * @since 1.0.0
      */
     public static Point fromCoordinates(Position coordinates) {
         return new Point(coordinates);
@@ -64,6 +69,7 @@ public class Point implements Geometry<Position> {
      *
      * @param json String of JSON making up a Point.
      * @return {@link Point} GeoJSON object.
+     * @since 1.0.0
      */
     public static Point fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -75,6 +81,7 @@ public class Point implements Geometry<Position> {
      * Convert feature into JSON.
      *
      * @return String containing Point JSON.
+     * @since 1.0.0
      */
     @Override
     public String toJson() {
