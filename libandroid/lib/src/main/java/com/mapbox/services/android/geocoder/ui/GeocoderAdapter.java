@@ -10,11 +10,11 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
-import com.mapbox.services.commons.models.Position;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +31,9 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     private final Context context;
     private String accessToken;
+    private String country;
     private String type;
+    private double[] bbox;
     private Position position;
 
     private GeocoderFilter geocoderFilter;
@@ -68,6 +70,30 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         this.accessToken = accessToken;
     }
 
+
+    /**
+     * Get the country you are limiting your geocoding results if applicable.
+     *
+     * @return <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a>
+     * country code
+     * @since 2.0.0
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    /**
+     * Parameter limits results to a set of one or more countries, specified with
+     * <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a> country codes
+     * and separated by commas.
+     *
+     * @param country String matching country code.
+     * @since 2.0.0
+     */
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     /**
      * Get the geocoder filter type.
      *
@@ -89,6 +115,45 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    /**
+     * Bounding box within which to limit results
+     *
+     * @return double array containing minX, minY, maxX, maxY
+     * @since 2.0.0
+     */
+    public double[] getBbox() {
+        return bbox;
+    }
+
+    /**
+     * Bounding box within which to limit results.
+     *
+     * @param northeast The top right hand corner of your bounding box when the map is pointed north.
+     * @param southwest The bottom left hand corner of your bounding box when the map is pointed north.
+     * @since 2.0.0
+     */
+    public void setBbox(Position northeast, Position southwest) {
+        setBbox(southwest.getLongitude(), southwest.getLatitude(),
+                northeast.getLongitude(), northeast.getLatitude());
+    }
+
+    /**
+     * Bounding box within which to limit results.
+     *
+     * @param minX Bottom of bounding box when map is pointed north.
+     * @param minY Left of bounding box when map is pointed north.
+     * @param maxX Top of bounding box when map is pointed north.
+     * @param maxY Right of bounding box when map is pointed north.
+     * @since 2.0.0
+     */
+    public void setBbox(double minX, double minY, double maxX, double maxY) {
+        if (bbox == null) bbox = new double[4];
+        bbox[0] = minX;
+        bbox[1] = minY;
+        bbox[2] = maxX;
+        bbox[3] = maxY;
     }
 
     /**
@@ -201,7 +266,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
     @Override
     public Filter getFilter() {
         if (geocoderFilter == null) {
-            geocoderFilter = new GeocoderFilter(this);
+            geocoderFilter = new GeocoderFilter();
         }
 
         return geocoderFilter;
@@ -209,12 +274,10 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     private class GeocoderFilter extends Filter {
 
-        private final GeocoderAdapter geocoderAdapter;
         private final MapboxGeocoding.Builder builder;
 
-        public GeocoderFilter(GeocoderAdapter geocoderAdapter) {
+        public GeocoderFilter() {
             super();
-            this.geocoderAdapter = geocoderAdapter;
             builder = new MapboxGeocoding.Builder();
         }
 
@@ -232,11 +295,18 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
             try {
                 // Build client and execute
-                response = builder.setAccessToken(geocoderAdapter.getAccessToken())
+                builder.setAccessToken(getAccessToken())
                         .setLocation(constraint.toString())
-                        .setProximity(geocoderAdapter.getProximity())
-                        .setGeocodingType(geocoderAdapter.getType())
-                        .build().executeCall();
+                        .setAutocomplete(true);
+
+                // Optional params
+                if (getCountry() != null) builder.setCountry(getCountry());
+                if (getProximity() != null) builder.setProximity(getProximity());
+                if (getType() != null) builder.setGeocodingType(getType());
+                if (getBbox() != null) builder.setBbox(bbox[0], bbox[1], bbox[2], bbox[3]);
+
+                // Do request
+                response = builder.build().executeCall();
             } catch (IOException e) {
                 e.printStackTrace();
                 return results;

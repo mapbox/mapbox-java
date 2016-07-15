@@ -13,9 +13,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
@@ -23,9 +20,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by antonio on 5/12/16.
- */
 public class TurfMeasurementTest extends BaseTurf {
 
     @Rule
@@ -45,6 +39,10 @@ public class TurfMeasurementTest extends BaseTurf {
         double bear = 180;
         assertNotNull(TurfMeasurement.destination(pt1, dist, bear, TurfConstants.UNIT_KILOMETERS));
     }
+
+    /*
+     * Turf distance tests
+     */
 
     @Test
     public void testDistance() throws TurfException {
@@ -76,7 +74,7 @@ public class TurfMeasurementTest extends BaseTurf {
         Feature route2 = Feature.fromJson(loadJsonFixture("turf-line-distance", "route2.geojson"));
         assertEquals(Math.round(TurfMeasurement.lineDistance(route1, "miles")), 202);
         assertTrue((TurfMeasurement.lineDistance(route2, "kilometers") - 742) < 1
-                && (TurfMeasurement.lineDistance(route2, "kilometers") - 742) > (-1) );
+                && (TurfMeasurement.lineDistance(route2, "kilometers") - 742) > (-1));
     }
 
     @Test
@@ -85,7 +83,7 @@ public class TurfMeasurementTest extends BaseTurf {
         Feature route2 = Feature.fromJson(loadJsonFixture("turf-line-distance", "route2.geojson"));
         assertEquals(Math.round(TurfMeasurement.lineDistance(route1.getGeometry(), "miles")), 202);
         assertTrue((TurfMeasurement.lineDistance(route2.getGeometry(), "kilometers") - 742) < 1
-                && (TurfMeasurement.lineDistance(route2.getGeometry(), "kilometers") - 742) > (-1) );
+                && (TurfMeasurement.lineDistance(route2.getGeometry(), "kilometers") - 742) > (-1));
     }
 
     @Test
@@ -106,4 +104,80 @@ public class TurfMeasurementTest extends BaseTurf {
         assertEquals(Math.round(1000 * TurfMeasurement.lineDistance(feat, "kilometers")), 10304);
     }
 
+    /*
+     * Turf midpoint tests
+     */
+
+    @Test
+    public void testMidpointHorizontalEquator() throws TurfException {
+        Point pt1 = Point.fromCoordinates(Position.fromCoordinates(0, 0));
+        Point pt2 = Point.fromCoordinates(Position.fromCoordinates(10, 0));
+        Point mid = TurfMeasurement.midpoint(pt1, pt2);
+
+        assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+                TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
+    }
+
+    @Test
+    public void testMidpointVericalFromEquator() throws TurfException {
+        Point pt1 = Point.fromCoordinates(Position.fromCoordinates(0, 0));
+        Point pt2 = Point.fromCoordinates(Position.fromCoordinates(0, 10));
+        Point mid = TurfMeasurement.midpoint(pt1, pt2);
+
+        assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+                TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
+    }
+
+    @Test
+    public void testMidpointVericalToEquator() throws TurfException {
+        Point pt1 = Point.fromCoordinates(Position.fromCoordinates(0, 10));
+        Point pt2 = Point.fromCoordinates(Position.fromCoordinates(0, 0));
+        Point mid = TurfMeasurement.midpoint(pt1, pt2);
+
+        assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+                TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
+    }
+
+    @Test
+    public void testMidpointDiagonalBackOverEquator() throws TurfException {
+        Point pt1 = Point.fromCoordinates(Position.fromCoordinates(-1, 10));
+        Point pt2 = Point.fromCoordinates(Position.fromCoordinates(1, -1));
+        Point mid = TurfMeasurement.midpoint(pt1, pt2);
+
+        assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+                TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
+    }
+
+    @Test
+    public void testMidpointDiagonalForwardOverEquator() throws TurfException {
+        Point pt1 = Point.fromCoordinates(Position.fromCoordinates(-5, -1));
+        Point pt2 = Point.fromCoordinates(Position.fromCoordinates(5, 10));
+        Point mid = TurfMeasurement.midpoint(pt1, pt2);
+
+        assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+                TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
+    }
+
+    @Test
+    public void testMidpointLongDistance() throws TurfException {
+        Point pt1 = Point.fromCoordinates(Position.fromCoordinates(22.5, 21.94304553343818));
+        Point pt2 = Point.fromCoordinates(Position.fromCoordinates(92.10937499999999, 46.800059446787316));
+        Point mid = TurfMeasurement.midpoint(pt1, pt2);
+
+        assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+                TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
+    }
+
+    // Custom test to make sure conversion of Position to point works correctly
+    @Test
+    public void testMidpointPositionToPoint() throws TurfException {
+        Position pt1 = Position.fromCoordinates(0, 0);
+        Position pt2 = Position.fromCoordinates(10, 0);
+        Position mid = TurfMeasurement.midpoint(pt1, pt2);
+
+        assertEquals(TurfMeasurement.distance(Point.fromCoordinates(pt1),
+                Point.fromCoordinates(mid), TurfConstants.UNIT_MILES),
+                TurfMeasurement.distance(Point.fromCoordinates(pt2),
+                        Point.fromCoordinates(mid), TurfConstants.UNIT_MILES), DELTA);
+    }
 }
