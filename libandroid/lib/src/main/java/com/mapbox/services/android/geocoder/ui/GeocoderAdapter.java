@@ -10,25 +10,24 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
 import com.mapbox.services.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
-import com.mapbox.services.commons.models.Position;
 
 import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Response;
 
-/**
- * Created by antonio on 2/1/16.
- */
 public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     private final Context context;
     private String accessToken;
+    private String country;
     private String type;
+    private double[] bbox;
     private Position position;
 
     private GeocoderFilter geocoderFilter;
@@ -51,12 +50,37 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         this.accessToken = accessToken;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public double[] getBbox() {
+        return bbox;
+    }
+
+    public void setBbox(Position northeast, Position southwest) {
+        setBbox(southwest.getLongitude(), southwest.getLatitude(),
+                northeast.getLongitude(), northeast.getLatitude());
+    }
+
+    public void setBbox(double minX, double minY, double  maxX, double  maxY){
+        if (bbox == null) bbox = new double[4];
+        bbox[0] = minX;
+        bbox[1] = minY;
+        bbox[2] = maxX;
+        bbox[3] = maxY;
     }
 
     public Position getProximity() {
@@ -118,7 +142,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
     @Override
     public Filter getFilter() {
         if (geocoderFilter == null) {
-            geocoderFilter = new GeocoderFilter(this);
+            geocoderFilter = new GeocoderFilter();
         }
 
         return geocoderFilter;
@@ -126,12 +150,10 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
     private class GeocoderFilter extends Filter {
 
-        private final GeocoderAdapter geocoderAdapter;
         private final MapboxGeocoding.Builder builder;
 
-        public GeocoderFilter(GeocoderAdapter geocoderAdapter) {
+        public GeocoderFilter() {
             super();
-            this.geocoderAdapter = geocoderAdapter;
             builder = new MapboxGeocoding.Builder();
         }
 
@@ -149,11 +171,18 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
             try {
                 // Build client and execute
-                response = builder.setAccessToken(geocoderAdapter.getAccessToken())
-                        .setLocation(constraint.toString())
-                        .setProximity(geocoderAdapter.getProximity())
-                        .setGeocodingType(geocoderAdapter.getType())
-                        .build().executeCall();
+                builder.setAccessToken(getAccessToken())
+                    .setLocation(constraint.toString())
+                    .setAutocomplete(true);
+
+                // Optional params
+                if (getCountry() != null) builder.setCountry(getCountry());
+                if (getProximity() != null) builder.setProximity(getProximity());
+                if (getType() != null) builder.setGeocodingType(getType());
+                if (getBbox() != null) builder.setBbox(bbox[0], bbox[1], bbox[2], bbox[3]);
+
+                // Do request
+                response = builder.build().executeCall();
             } catch (IOException e) {
                 e.printStackTrace();
                 return results;
