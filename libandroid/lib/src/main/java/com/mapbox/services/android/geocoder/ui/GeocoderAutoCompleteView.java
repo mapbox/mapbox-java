@@ -83,6 +83,11 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
         adapter.setType(type);
     }
 
+    public void setBbox(Position northeast, Position southwest){
+        adapter.setBbox(southwest.getLongitude(), southwest.getLatitude(),
+                northeast.getLongitude(), northeast.getLatitude());
+    }
+
     public void setBbox(double minX, double minY, double  maxX, double  maxY){
         adapter.setBbox(minX, minY, maxX, maxY);
     }

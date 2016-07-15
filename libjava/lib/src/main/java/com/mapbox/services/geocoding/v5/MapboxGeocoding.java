@@ -217,6 +217,11 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
             return this;
         }
 
+        public Builder setBbox(Position northeast, Position southwest){
+            return setBbox(southwest.getLongitude(), southwest.getLatitude(),
+                    northeast.getLongitude(), northeast.getLatitude());
+        }
+
         public Builder setBbox(double minX, double minY, double  maxX, double  maxY) {
             if (minX == 0 && minY == 0 && maxX == 0 && maxY == 0) return this;
             this.bbox = String.format(Locale.US, "%f,%f,%f,%f", minX, minY, maxX, maxY);
