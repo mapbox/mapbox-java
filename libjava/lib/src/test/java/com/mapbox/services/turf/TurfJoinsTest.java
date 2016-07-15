@@ -1,5 +1,6 @@
 package com.mapbox.services.turf;
 
+import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.MultiPolygon;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.geojson.Polygon;
@@ -61,11 +62,11 @@ public class TurfJoinsTest extends BaseTurf {
         Point ptInHole = Point.fromCoordinates(Position.fromCoordinates(-86.69208526611328, 36.20373274711739));
         Point ptInPoly = Point.fromCoordinates(Position.fromCoordinates(-86.72229766845702, 36.20258997094334));
         Point ptOutsidePoly = Point.fromCoordinates(Position.fromCoordinates(-86.75079345703125, 36.18527313913089));
-        Polygon polyHole = Polygon.fromJson(loadJsonFixture("turf-inside", "poly-with-hole.geojson"));
+        Feature polyHole = Feature.fromJson(loadJsonFixture("turf-inside", "poly-with-hole.geojson"));
 
-        assertFalse(TurfJoins.inside(ptInHole, polyHole));
-        assertTrue(TurfJoins.inside(ptInPoly, polyHole));
-        assertFalse(TurfJoins.inside(ptOutsidePoly, polyHole));
+        assertFalse(TurfJoins.inside(ptInHole, (Polygon)polyHole.getGeometry()));
+        assertTrue(TurfJoins.inside(ptInPoly, (Polygon)polyHole.getGeometry()));
+        assertFalse(TurfJoins.inside(ptOutsidePoly, (Polygon)polyHole.getGeometry()));
     }
 
     @Test
@@ -75,10 +76,10 @@ public class TurfJoinsTest extends BaseTurf {
         Point ptInPoly2 = Point.fromCoordinates(Position.fromCoordinates(-86.75079345703125, 36.18527313913089));
         Point ptOutsidePoly = Point.fromCoordinates(Position.fromCoordinates(-86.75302505493164, 36.23015046460186));
 
-        MultiPolygon multiPolyHole = MultiPolygon.fromJson(loadJsonFixture("turf-inside", "multipoly-with-hole.geojson"));
-        assertFalse(TurfJoins.inside(ptInHole, multiPolyHole));
-        assertTrue(TurfJoins.inside(ptInPoly, multiPolyHole));
-        assertTrue(TurfJoins.inside(ptInPoly2, multiPolyHole));
-        assertFalse(TurfJoins.inside(ptOutsidePoly, multiPolyHole));
+        Feature multiPolyHole = Feature.fromJson(loadJsonFixture("turf-inside", "multipoly-with-hole.geojson"));
+        assertFalse(TurfJoins.inside(ptInHole, (MultiPolygon)multiPolyHole.getGeometry()));
+        assertTrue(TurfJoins.inside(ptInPoly, (MultiPolygon)multiPolyHole.getGeometry()));
+        assertTrue(TurfJoins.inside(ptInPoly2, (MultiPolygon)multiPolyHole.getGeometry()));
+        assertFalse(TurfJoins.inside(ptOutsidePoly, (MultiPolygon)multiPolyHole.getGeometry()));
     }
 }

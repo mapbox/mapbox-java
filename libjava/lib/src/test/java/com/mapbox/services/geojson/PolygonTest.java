@@ -1,5 +1,6 @@
 package com.mapbox.services.geojson;
 
+import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.Polygon;
 import com.mapbox.services.commons.models.Position;
 
@@ -45,13 +46,6 @@ public class PolygonTest extends BaseGeoJSON {
     public void toJsonHoles() {
         Polygon geo = Polygon.fromJson(BaseGeoJSON.SAMPLE_POLYGON_HOLES);
         compareJson(BaseGeoJSON.SAMPLE_POLYGON_HOLES, geo.toJson());
-    }
-
-    @Test
-    public void testTurfFixture() throws IOException {
-        Polygon polyHole = Polygon.fromJson(loadJsonFixture("turf-inside", "poly-with-hole.geojson"));
-        List<List<Position>> coordinates = polyHole.getCoordinates();
-        assertEquals(coordinates.size(), 1);
     }
 
 }
