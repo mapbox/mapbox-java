@@ -57,6 +57,10 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         this.type = type;
     }
 
+    public double[] getBbox() {
+        return bbox;
+    }
+
     public void setBbox(Position northeast, Position southwest) {
         setBbox(southwest.getLongitude(), southwest.getLatitude(),
                 northeast.getLongitude(), northeast.getLatitude());
