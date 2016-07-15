@@ -166,7 +166,8 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
                 // Build client and execute
                 builder.setAccessToken(geocoderAdapter.getAccessToken())
                     .setLocation(constraint.toString())
-                    .setGeocodingType(geocoderAdapter.getType());
+                    .setGeocodingType(geocoderAdapter.getType())
+                    .setAutocomplete(true);
 
                 // Optional params
                 if (getBbox() != null) builder.setBbox(bbox[0], bbox[1], bbox[2], bbox[3]);
