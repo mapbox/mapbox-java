@@ -8,6 +8,8 @@ import com.mapbox.services.commons.models.Position;
 
 /**
  * Shared by FeatureCollection and CarmenFeatureCollection
+ *
+ * @since 1.0.0
  */
 public class BaseFeatureCollection implements GeoJSON {
 
@@ -17,6 +19,7 @@ public class BaseFeatureCollection implements GeoJSON {
      * Should always be "FeatureCollection".
      *
      * @return String "FeatureCollection".
+     * @since 1.0.0
      */
     @Override
     public String getType() {
@@ -28,6 +31,7 @@ public class BaseFeatureCollection implements GeoJSON {
      *
      * @param json String of JSON making up a feature collection.
      * @return {@link FeatureCollection} GeoJSON object.
+     * @since 1.0.0
      */
     public static FeatureCollection fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -40,6 +44,7 @@ public class BaseFeatureCollection implements GeoJSON {
      * Convert feature collection into JSON.
      *
      * @return String containing feature collection JSON.
+     * @since 1.0.0
      */
     @Override
     public String toJson() {

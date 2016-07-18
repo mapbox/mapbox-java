@@ -120,4 +120,8 @@ public class Position {
 
         return true;
     }
+
+    public String toString() {
+        return "Position [longitude=" + longitude + ", latitude=" + latitude + ", altitude=" + altitude + "]";
+    }
 }

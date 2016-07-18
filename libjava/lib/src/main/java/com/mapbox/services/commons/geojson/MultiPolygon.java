@@ -11,6 +11,7 @@ import java.util.List;
  * A MultiPolygon is a type of {@link Geometry}.
  *
  * @see <a href='http://geojson.org/geojson-spec.html#multipolygon'>Official GeoJSON MultiPolygon Specifications</a>
+ * @since 1.0.0
  */
 public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
 
@@ -21,6 +22,7 @@ public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
      * Private constructor.
      *
      * @param coordinates List of {@link Position} making up the MultiPolygon.
+     * @since 1.0.0
      */
     private MultiPolygon(List<List<List<Position>>> coordinates) {
         this.coordinates = coordinates;
@@ -30,6 +32,7 @@ public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
      * Should always be "MultiPolygon".
      *
      * @return String "MultiPolygon".
+     * @since 1.0.0
      */
     @Override
     public String getType() {
@@ -40,6 +43,7 @@ public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
      * Get the list of {@link Position} making up the MultiPolygon.
      *
      * @return List of {@link Position}.
+     * @since 1.0.0
      */
     @Override
     public List<List<List<Position>>> getCoordinates() {
@@ -56,6 +60,7 @@ public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
      *
      * @param coordinates List of {@link Position} coordinates.
      * @return {@link MultiPolygon}.
+     * @since 1.0.0
      */
     public static MultiPolygon fromCoordinates(List<List<List<Position>>> coordinates) {
         return new MultiPolygon(coordinates);
@@ -66,6 +71,7 @@ public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
      *
      * @param json String of JSON making up a MultiPolygon.
      * @return {@link MultiPolygon} GeoJSON object.
+     * @since 1.0.0
      */
     public static MultiPolygon fromJson(String json) {
         GsonBuilder gson = new GsonBuilder();
@@ -77,6 +83,7 @@ public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
      * Convert feature into JSON.
      *
      * @return String containing MultiPolygon JSON.
+     * @since 1.0.0
      */
     @Override
     public String toJson() {

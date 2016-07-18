@@ -107,7 +107,6 @@ public class SimplifyPolylineActivity extends AppCompatActivity {
         }
 
         mapView = (MapView) findViewById(R.id.mapview);
-        mapView.setAccessToken(Utils.getMapboxAccessToken(this));
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
