@@ -94,8 +94,34 @@ public class Position {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Position)) {
+            return false;
+        }
+
+        if (obj == this) {
+            return true;
+        }
+
+        Position position = (Position) obj;
+        if (position.getLatitude() != latitude) {
+            // They need to have the same latitude
+            return false;
+        } else if (position.getLongitude() != longitude) {
+            // They need to have the same longitude
+            return false;
+        } else if (Double.isNaN(position.getAltitude()) != Double.isNaN(altitude)) {
+            // They need to have the same altitude NaN state
+            return false;
+        } else if (!Double.isNaN(altitude) && position.getAltitude() != altitude) {
+            // They need to have the same latitude (if different from NaN)
+            return false;
+        }
+
+        return true;
+    }
+
     public String toString() {
         return "Position [longitude=" + longitude + ", latitude=" + latitude + ", altitude=" + altitude + "]";
     }
-
 }

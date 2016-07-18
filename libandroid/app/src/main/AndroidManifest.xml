@@ -97,6 +97,12 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".turf.TurfInsideActivity"
+            android:label="Turf inside"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".turf.TurfMidpointActivity"
             android:label="Turf midpoint"
             android:parentActivityName=".MainActivity"

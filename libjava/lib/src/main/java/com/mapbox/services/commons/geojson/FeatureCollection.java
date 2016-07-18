@@ -1,5 +1,6 @@
 package com.mapbox.services.commons.geojson;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,6 +45,10 @@ public class FeatureCollection extends BaseFeatureCollection {
      */
     public static FeatureCollection fromFeatures(List<Feature> features) {
         return new FeatureCollection(features);
+    }
+
+    public static FeatureCollection fromFeatures(Feature[] features) {
+        return new FeatureCollection(Arrays.asList(features));
     }
 
 }
