@@ -2,6 +2,8 @@ package com.mapbox.services.directions.v4.models;
 
 /**
  * Used to describe a instruction step maneuver.
+ *
+ * @since 1.0.0
  */
 public class StepManeuver {
 
@@ -18,11 +20,16 @@ public class StepManeuver {
      * to ensure you don't miss any.
      *
      * @return string with possibly one of the maneuvers given above.
+     * @since 1.0.0
      */
     public String getType() {
         return type;
     }
 
+    /**
+     * @param type string with possibly one of the maneuvers given above.
+     * @since 1.0.0
+     */
     public void setType(String type) {
         this.type = type;
     }
@@ -31,11 +38,16 @@ public class StepManeuver {
      * {@link ManeuverPoint} object containing type and the coordinate.
      *
      * @return {@link ManeuverPoint} object.
+     * @since 1.0.0
      */
     public ManeuverPoint getLocation() {
         return location;
     }
 
+    /**
+     * @param location {@link ManeuverPoint} object.
+     * @since 1.0.0
+     */
     public void setLocation(ManeuverPoint location) {
         this.location = location;
     }
@@ -46,11 +58,16 @@ public class StepManeuver {
      * relieve the instructions in HTML format.
      *
      * @return string typically the length of a sentence giving next maneuver instruction.
+     * @since 1.0.0
      */
     public String getInstruction() {
         return instruction;
     }
 
+    /**
+     * @param instruction string typically the length of a sentence giving next maneuver instruction.
+     * @since 1.0.0
+     */
     public void setInstruction(String instruction) {
         this.instruction = instruction;
     }
@@ -62,11 +79,16 @@ public class StepManeuver {
      * <p>For cycling: cycling, walking, ferry, train, movable bridge, unaccessible.
      *
      * @return string with possibly one of the values given above.
+     * @since 1.0.0
      */
     public String getMode() {
         return mode;
     }
 
+    /**
+     * @param mode string with possibly one of the values given above.
+     * @since 1.0.0
+     */
     public void setMode(String mode) {
         this.mode = mode;
     }

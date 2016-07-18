@@ -11,20 +11,24 @@ import rx.Observable;
 
 /**
  * Interface that defines the directions service (v4).
+ *
+ * @since 1.0.0
  */
 public interface DirectionsService {
 
     /**
      * Call-based interface
      *
-     * @param profile
-     * @param waypoints
-     * @param accessToken
-     * @param alternatives
-     * @param instructions
-     * @param geometry
-     * @param steps
+     * @param userAgent    The user.
+     * @param profile      The profile directions should use.
+     * @param waypoints    The waypoints the route should follow.
+     * @param accessToken  Mapbox access token.
+     * @param alternatives Define whether you want to recieve more then one route.
+     * @param instructions Define if you'd like to recieve route instructions.
+     * @param geometry     Route geometry.
+     * @param steps        Define if you'd like the route steps.
      * @return A retrofit Call object
+     * @since 1.0.0
      */
     @GET("v4/directions/{profile}/{waypoints}.json")
     Call<DirectionsResponse> getCall(
@@ -41,14 +45,15 @@ public interface DirectionsService {
     /**
      * RxJava-based interface
      *
-     * @param profile
-     * @param waypoints
-     * @param accessToken
-     * @param alternatives
-     * @param instructions
-     * @param geometry
-     * @param steps
+     * @param profile      The profile directions should use.
+     * @param waypoints    The waypoints the route should follow.
+     * @param accessToken  Mapbox access token.
+     * @param alternatives Define whether you want to recieve more then one route.
+     * @param instructions Define if you'd like to recieve route instructions.
+     * @param geometry     Route geometry.
+     * @param steps        Define if you'd like the route steps.
      * @return A RxJava Observable object
+     * @since 1.0.0
      */
     @GET("v4/directions/{profile}/{waypoints}.json")
     Observable<DirectionsResponse> getObservable(
@@ -61,5 +66,4 @@ public interface DirectionsService {
             @Query("geometry") String geometry,
             @Query("steps") Boolean steps
     );
-
 }

@@ -3,13 +3,21 @@ package com.mapbox.services.commons;
 import com.mapbox.services.commons.utils.MapboxUtils;
 
 /**
- * Created by antonio on 4/7/16.
+ * Abstract class containing Mapbox specific methods.
  */
 public abstract class MapboxBuilder {
 
     public abstract MapboxBuilder setAccessToken(String accessToken);
+
     public abstract String getAccessToken();
 
+    /**
+     * Method to validate a Mapbox Access token.
+     *
+     * @param accessToken A string containing a Mapbox Access Token
+     * @throws ServicesException
+     * @since 1.0.0
+     */
     protected void validateAccessToken(String accessToken) throws ServicesException {
         if (!MapboxUtils.isAccessTokenValid(accessToken)) {
             throw new ServicesException(
@@ -17,6 +25,13 @@ public abstract class MapboxBuilder {
         }
     }
 
+    /**
+     * The builder.
+     *
+     * @return {@link MapboxBuilder}
+     * @throws ServicesException
+     * @since 1.0.0
+     */
     public abstract Object build() throws ServicesException;
 
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  * The response to a directions request.
+ *
+ * @since 1.0.0
  */
 public class DirectionsResponse {
 
@@ -22,11 +24,16 @@ public class DirectionsResponse {
      * Gives details about the origin of the route.
      *
      * @return {@link DirectionsFeature} object.
+     * @since 1.0.0
      */
     public DirectionsFeature getOrigin() {
         return origin;
     }
 
+    /**
+     * @param origin Details about the origin of the route.
+     * @since 1.0.0
+     */
     public void setOrigin(DirectionsFeature origin) {
         this.origin = origin;
     }
@@ -35,11 +42,16 @@ public class DirectionsResponse {
      * Gives details about the destination of the route.
      *
      * @return {@link DirectionsFeature} object.
+     * @since 1.0.0
      */
     public DirectionsFeature getDestination() {
         return destination;
     }
 
+    /**
+     * @param destination Details about the destination of the route.
+     * @since 1.0.0
+     */
     public void setDestination(DirectionsFeature destination) {
         this.destination = destination;
     }
@@ -50,11 +62,16 @@ public class DirectionsResponse {
      * addition information about those intermediate points will be given here in a List object.
      *
      * @return List of {@link DirectionsFeature} objects.
+     * @since 1.0.0
      */
     public List<DirectionsFeature> getWaypoints() {
         return waypoints;
     }
 
+    /**
+     * @param waypoints List of {@link DirectionsFeature} objects.
+     * @since 1.0.0
+     */
     public void setWaypoints(List<DirectionsFeature> waypoints) {
         this.waypoints = waypoints;
     }
@@ -66,11 +83,16 @@ public class DirectionsResponse {
      * size 1.
      *
      * @return List of {@link DirectionsRoute} objects.
+     * @since 1.0.0
      */
     public List<DirectionsRoute> getRoutes() {
         return routes;
     }
 
+    /**
+     * @param routes List of {@link DirectionsRoute} objects.
+     * @since 1.0.0
+     */
     public void setRoutes(List<DirectionsRoute> routes) {
         this.routes = routes;
     }
