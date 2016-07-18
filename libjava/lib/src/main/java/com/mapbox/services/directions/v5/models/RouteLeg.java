@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * A route between only two {@link DirectionsWaypoint}.
+ *
+ * @since 1.0.0
  */
 public class RouteLeg {
 
@@ -16,6 +18,7 @@ public class RouteLeg {
      * The distance traveled from one waypoint to another.
      *
      * @return a double number with unit meters.
+     * @since 1.0.0
      */
     public double getDistance() {
         return distance;
@@ -25,6 +28,7 @@ public class RouteLeg {
      * The estimated travel time from one waypoint to another.
      *
      * @return a double number with unit seconds.
+     * @since 1.0.0
      */
     public double getDuration() {
         return duration;
@@ -34,6 +38,7 @@ public class RouteLeg {
      * A short human-readable summary of major roads traversed. Useful to distinguish alternatives.
      *
      * @return String with summary.
+     * @since 1.0.0
      */
     public String getSummary() {
         return summary;
@@ -43,6 +48,7 @@ public class RouteLeg {
      * Gives a List including all the steps to get from one waypoint to another.
      *
      * @return List of {@link LegStep}.
+     * @since 1.0.0
      */
     public List<LegStep> getSteps() {
         return steps;

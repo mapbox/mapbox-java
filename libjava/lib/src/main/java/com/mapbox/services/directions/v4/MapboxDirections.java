@@ -24,6 +24,8 @@ import rx.Observable;
 
 /**
  * Mapbox Directions v4 client.
+ *
+ * @since 1.0.0
  */
 public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
@@ -35,14 +37,32 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     // Allows testing
     private String baseUrl = Constants.BASE_API_URL;
 
+    /**
+     * Mapbox builder
+     *
+     * @param builder {@link Builder}
+     * @since 1.0.0
+     */
     public MapboxDirections(Builder builder) {
         this.builder = builder;
     }
 
+    /**
+     * Used internally.
+     *
+     * @param baseUrl {@link String} baseUrl
+     * @since 1.0.0
+     */
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
+    /**
+     * Used internally.
+     *
+     * @return DirectionsService
+     * @since 1.0.0
+     */
     public DirectionsService getService() {
         // No need to recreate it
         if (service != null) return service;
@@ -57,6 +77,12 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         return service;
     }
 
+    /**
+     * Used internally.
+     *
+     * @return The directions response call.
+     * @since 1.0.0
+     */
     public Call<DirectionsResponse> getCall() {
         // No need to recreate it
         if (call != null) return call;
@@ -74,26 +100,56 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         return call;
     }
 
+    /**
+     * Execute the call
+     *
+     * @return The Directions v4 response
+     * @throws IOException
+     * @since 1.0.0
+     */
     @Override
     public Response<DirectionsResponse> executeCall() throws IOException {
         return getCall().execute();
     }
 
+    /**
+     * Execute the call
+     *
+     * @param callback A Retrofit callback.
+     * @since 1.0.0
+     */
     @Override
     public void enqueueCall(Callback<DirectionsResponse> callback) {
         getCall().enqueue(callback);
     }
 
+    /**
+     * Cancel the call
+     *
+     * @since 1.0.0
+     */
     @Override
     public void cancelCall() {
         getCall().cancel();
     }
 
+    /**
+     * clone the call
+     *
+     * @return cloned call
+     * @since 1.0.0
+     */
     @Override
     public Call<DirectionsResponse> cloneCall() {
         return getCall().clone();
     }
 
+    /**
+     * Get observable
+     *
+     * @return Observable
+     * @since 1.0.0
+     */
     @Override
     public Observable<DirectionsResponse> getObservable() {
         // No need to recreate it
@@ -112,10 +168,11 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         return observable;
     }
 
-    /*
-     * Builder
+    /**
+     * Directions v4 builder
+     *
+     * @since 1.0.0
      */
-
     public static class Builder extends MapboxBuilder {
 
         private String accessToken;
@@ -133,6 +190,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          *
          * @param accessToken Mapbox access token, You must have a Mapbox account inorder to use
          *                    this library.
+         * @since 1.0.0
          */
         @Override
         public Builder setAccessToken(String accessToken) {
@@ -144,7 +202,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Specify what routing profile you'd like: driving, walking, or cycling.
          *
          * @param profile {@link DirectionsCriteria#PROFILE_DRIVING},
-         * {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
+         *                {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
+         * @since 1.0.0
          */
         public Builder setProfile(String profile) {
             this.profile = profile;
@@ -156,6 +215,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * waypoints including origin and final destination.
          *
          * @param waypoints List including all {@link Waypoint} you'd line to include in route.
+         * @since 1.0.0
          */
         public Builder setWaypoints(List<Waypoint> waypoints) {
             this.waypoints = waypoints;
@@ -166,6 +226,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Origin of the destination.
          *
          * @param origin {@link Waypoint} of origin.
+         * @since 1.0.0
          */
         public Builder setOrigin(Waypoint origin) {
             this.origin = origin;
@@ -177,6 +238,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * use {@link #setWaypoints(List)}
          *
          * @param destination {@link Waypoint} of destination.
+         * @since 1.0.0
          */
         public Builder setDestination(Waypoint destination) {
             this.destination = destination;
@@ -187,6 +249,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Optionally, call if you'd like to receive alternative routes besides just one.
          *
          * @param alternatives true if you'd like alternative routes, else false.
+         * @since 1.0.0
          */
         public Builder setAlternatives(Boolean alternatives) {
             this.alternatives = alternatives;
@@ -197,7 +260,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Optionally, call if you'd like to receive human-readable instructions.
          *
          * @param instructions {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or
-         * {@link DirectionsCriteria#INSTRUCTIONS_HTML}
+         *                     {@link DirectionsCriteria#INSTRUCTIONS_HTML}
+         * @since 1.0.0
          */
         public Builder setInstructions(String instructions) {
             this.instructions = instructions;
@@ -208,7 +272,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Optionally, call with the format you'd like the route geometry to be in.
          *
          * @param geometry {@link DirectionsCriteria#GEOMETRY_GEOJSON},
-         * {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
+         *                 {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
+         * @since 1.0.0
          */
         public Builder setGeometry(String geometry) {
             this.geometry = geometry;
@@ -219,6 +284,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Optionally, call if you'd like to include step information within route.
          *
          * @param steps true if you'd like step information.
+         * @since 1.0.0
          */
         public Builder setSteps(Boolean steps) {
             this.steps = steps;
@@ -227,6 +293,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
         /**
          * @return your Mapbox access token.
+         * @since 1.0.0
          */
         @Override
         public String getAccessToken() {
@@ -236,6 +303,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         /**
          * @return {@link DirectionsCriteria#PROFILE_DRIVING},
          * {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
+         * @since 1.0.0
          */
         public String getProfile() {
             return profile;
@@ -243,6 +311,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
         /**
          * @return List including all {@link Waypoint} within route.
+         * @since 1.0.0
          */
         public String getWaypoints() {
             String waypointsFormatted = "";
@@ -259,7 +328,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
             // Convert to {lon},{lat} coordinate pairs
             List<String> pieces = new ArrayList<>();
-            for (Waypoint waypoint: waypoints) {
+            for (Waypoint waypoint : waypoints) {
                 pieces.add(String.format(Locale.US, "%f,%f",
                         waypoint.getLongitude(),
                         waypoint.getLatitude()));
@@ -272,6 +341,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
         /**
          * @return routes origin {@link Waypoint}.
+         * @since 1.0.0
          */
         public Waypoint getOrigin() {
             return origin;
@@ -279,6 +349,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
         /**
          * @return routes final destination {@link Waypoint}.
+         * @since 1.0.0
          */
         public Waypoint getDestination() {
             return destination;
@@ -286,6 +357,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
         /**
          * @return true if you {@link #setAlternatives(Boolean)} to true.
+         * @since 1.0.0
          */
         public Boolean isAlternatives() {
             return alternatives;
@@ -294,6 +366,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         /**
          * @return {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or
          * {@link DirectionsCriteria#INSTRUCTIONS_HTML}
+         * @since 1.0.0
          */
         public String getInstructions() {
             return instructions;
@@ -302,6 +375,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         /**
          * @return {@link DirectionsCriteria#GEOMETRY_GEOJSON},
          * {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
+         * @since 1.0.0
          */
         public String getGeometry() {
             return geometry;
@@ -309,11 +383,19 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
         /**
          * @return true if you requested step information in {@link #setSteps(Boolean)}.
+         * @since 1.0.0
          */
         public Boolean isSteps() {
             return steps;
         }
 
+        /**
+         * Build the MapboxDirections
+         *
+         * @return {@link MapboxDirections}
+         * @throws ServicesException
+         * @since 1.0.0
+         */
         @Override
         public MapboxDirections build() throws ServicesException {
             validateAccessToken(accessToken);

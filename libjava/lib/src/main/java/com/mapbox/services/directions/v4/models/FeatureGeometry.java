@@ -5,12 +5,19 @@ import java.util.List;
 
 /**
  * Describes the geometry of a {@link DirectionsFeature}.
+ *
+ * @since 1.0.0
  */
 public class FeatureGeometry {
 
     private String type;
     private List<Double> coordinates;
 
+    /**
+     * Builder
+     *
+     * @since 1.0.0
+     */
     public FeatureGeometry() {
         coordinates = new ArrayList<>();
     }
@@ -19,11 +26,16 @@ public class FeatureGeometry {
      * Gives GeoJSON geometry type.
      *
      * @return string naming GeoJSON geometry type.
+     * @since 1.0.0
      */
     public String getType() {
         return type;
     }
 
+    /**
+     * @param type The GeoJSON geometry type.
+     * @since 1.0.0
+     */
     public void setType(String type) {
         this.type = type;
     }
@@ -33,11 +45,17 @@ public class FeatureGeometry {
      * latitude will be second (index 1).
      *
      * @return List of Double objects containing a point with longitude and latitude values.
+     * @since 1.0.0
      */
     public List<Double> getCoordinates() {
         return coordinates;
     }
 
+    /**
+     * @param coordinates List of Double objects containing a point with longitude and latitude
+     *                    values.
+     * @since 1.0.0
+     */
     public void setCoordinates(List<Double> coordinates) {
         this.coordinates = coordinates;
     }

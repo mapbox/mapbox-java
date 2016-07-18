@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * The response to a directions request.
+ *
+ * @since 1.0.0
  */
 public class DirectionsResponse {
 
@@ -16,6 +18,7 @@ public class DirectionsResponse {
      * status code.
      *
      * @return "Ok", "NoRoute", "ProfileNotFound", or "InvalidInput".
+     * @since 1.0.0
      */
     public String getCode() {
         return code;
@@ -26,6 +29,7 @@ public class DirectionsResponse {
      * in the order of the input coordinates.
      *
      * @return List of {@link DirectionsWaypoint} objects.
+     * @since 1.0.0
      */
     public List<DirectionsWaypoint> getWaypoints() {
         return waypoints;
@@ -38,6 +42,7 @@ public class DirectionsResponse {
      * size 1.
      *
      * @return List of {@link DirectionsRoute} objects.
+     * @since 1.0.0
      */
     public List<DirectionsRoute> getRoutes() {
         return routes;

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Polyline utils
+ * Polyline utils class contains method that can decode/encode a polyline, simplify a line, and more.
+ *
+ * @since 1.0.0
  */
 public class PolylineUtils {
 
@@ -17,14 +19,15 @@ public class PolylineUtils {
     // simplification but runs slower)
     private static final boolean SIMPLIFY_DEFAULT_HIGHEST_QUALITY = false;
 
-    /*
-     * Encoded Polyline Algorithm Format. Some parts from:
-     * https://github.com/mapbox/polyline/blob/master/src/polyline.js
-     * https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/android/PolyUtil.java
-     */
-
     /**
      * Decodes an encoded path string into a sequence of Positions.
+     *
+     * @param encodedPath {@link String} representing a path string.
+     * @param precision   OSRMv4 uses 6, OSRMv5 and Google uses 5.
+     * @return List of {@link Position} making up the line.
+     * @see <a href="https://github.com/mapbox/polyline/blob/master/src/polyline.js">Part of algorithm came from this source</a>
+     * @see <a href="https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/android/PolyUtil.java">Part of algorithm came from this source.</a>
+     * @since 1.0.0
      */
     public static List<Position> decode(final String encodedPath, int precision) {
         int len = encodedPath.length();
@@ -67,6 +70,11 @@ public class PolylineUtils {
 
     /**
      * Encodes a sequence of Positions into an encoded path string.
+     *
+     * @param path      List of {@link Position} making up the line.
+     * @param precision OSRMv4 uses 6, OSRMv5 and Google uses 5.
+     * @return {@link String} representing a path string.
+     * @since 1.0.0
      */
     public static String encode(final List<Position> path, int precision) {
         long lastLat = 0;
@@ -214,6 +222,8 @@ public class PolylineUtils {
      *
      * @param points an array of points
      * @return an array of simplified points
+     * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
+     * @since 1.2.0
      */
     public static Position[] simplify(Position[] points) {
         return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
@@ -223,9 +233,11 @@ public class PolylineUtils {
      * Reduces the number of points in a polyline while retaining its shape, giving a performance
      * boost when processing it and also reducing visual noise.
      *
-     * @param points an array of points
+     * @param points    an array of points
      * @param tolerance affects the amount of simplification (in the same metric as the point coordinates)
      * @return an array of simplified points
+     * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
+     * @since 1.2.0
      */
     public static Position[] simplify(Position[] points, double tolerance) {
         return simplify(points, tolerance, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
@@ -235,9 +247,11 @@ public class PolylineUtils {
      * Reduces the number of points in a polyline while retaining its shape, giving a performance
      * boost when processing it and also reducing visual noise.
      *
-     * @param points an array of points
+     * @param points         an array of points
      * @param highestQuality excludes distance-based preprocessing step which leads to highest quality simplification
      * @return an array of simplified points
+     * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
+     * @since 1.2.0
      */
     public static Position[] simplify(Position[] points, boolean highestQuality) {
         return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, highestQuality);
@@ -247,10 +261,12 @@ public class PolylineUtils {
      * Reduces the number of points in a polyline while retaining its shape, giving a performance
      * boost when processing it and also reducing visual noise.
      *
-     * @param points an array of points
-     * @param tolerance affects the amount of simplification (in the same metric as the point coordinates)
+     * @param points         an array of points
+     * @param tolerance      affects the amount of simplification (in the same metric as the point coordinates)
      * @param highestQuality excludes distance-based preprocessing step which leads to highest quality simplification
      * @return an array of simplified points
+     * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
+     * @since 1.2.0
      */
     public static Position[] simplify(Position[] points, double tolerance, boolean highestQuality) {
         if (points.length <= 2) return points;

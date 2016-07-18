@@ -14,15 +14,21 @@ import retrofit2.Response;
 import rx.Observable;
 
 /**
- * Created by antonio on 4/7/16.
+ * Mapbox specific services used internally within the SDK.
+ *
+ * @param <T> Type parameter.
+ * @since 1.0.0
  */
 public abstract class MapboxService<T> {
 
     private boolean enableDebug = false;
 
     public abstract Response<T> executeCall() throws IOException;
+
     public abstract void enqueueCall(Callback<T> callback);
+
     public abstract void cancelCall();
+
     public abstract Call<T> cloneCall();
 
     public abstract Observable<T> getObservable();
@@ -35,6 +41,12 @@ public abstract class MapboxService<T> {
         this.enableDebug = enableDebug;
     }
 
+    /**
+     * Used Internally.
+     *
+     * @return OkHttpClient
+     * @since 1.0.0
+     */
     public OkHttpClient getOkHttpClient() {
         if (isEnableDebug()) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -49,6 +61,9 @@ public abstract class MapboxService<T> {
 
     /**
      * Computes a full user agent header of the form: MapboxJava/1.2.0 Mac OS X/10.11.5 (x86_64)
+     *
+     * @return {@link String}
+     * @since 1.0.0
      */
     public static String getHeaderUserAgent() {
         String osName;

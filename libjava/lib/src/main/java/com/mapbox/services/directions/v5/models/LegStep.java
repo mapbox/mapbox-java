@@ -2,6 +2,8 @@ package com.mapbox.services.directions.v5.models;
 
 /**
  * Includes one {@link StepManeuver} object and travel to the following {@link LegStep}.
+ *
+ * @since 1.0.0
  */
 public class LegStep {
 
@@ -16,6 +18,7 @@ public class LegStep {
      * The distance traveled from the maneuver to the next {@link LegStep}.
      *
      * @return a double number with unit meters.
+     * @since 1.0.0
      */
     public double getDistance() {
         return distance;
@@ -25,6 +28,7 @@ public class LegStep {
      * The estimated travel time from the maneuver to the next {@link LegStep}.
      *
      * @return a double number with unit seconds.
+     * @since 1.0.0
      */
     public double getDuration() {
         return duration;
@@ -34,6 +38,7 @@ public class LegStep {
      * Gives the geometry of the leg step.
      *
      * @return An encoded polyline string.
+     * @since 1.0.0
      */
     public String getGeometry() {
         return geometry;
@@ -41,6 +46,7 @@ public class LegStep {
 
     /**
      * @return String with the name of the way along which the travel proceeds.
+     * @since 1.0.0
      */
     public String getName() {
         return name;
@@ -48,6 +54,7 @@ public class LegStep {
 
     /**
      * @return String indicating the mode of transportation.
+     * @since 1.0.0
      */
     public String getMode() {
         return mode;
@@ -55,6 +62,7 @@ public class LegStep {
 
     /**
      * @return One {@link StepManeuver} object.
+     * @since 1.0.0
      */
     public StepManeuver getManeuver() {
         return maneuver;
