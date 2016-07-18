@@ -10,23 +10,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by antonio on 5/13/16.
+ * Class contains all the miscellaneous methods that Turf can perform.
+ *
+ * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
+ * @since 1.2.0
  */
 public class TurfMisc {
 
     /**
-     * Takes a line, a start Point, and a stop point and returns the line in between those points.
+     * Takes a line, a start {@link Point}, and a stop point and returns the line in between those
+     * points.
+     *
+     * @param startPt Starting point.
+     * @param stopPt  Stopping point.
+     * @param line    Line to slice.
+     * @return Sliced line.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
+     * @since 1.2.0
      */
     public static LineString lineSlice(Point startPt, Point stopPt, Feature line) throws TurfException {
         if (!line.getGeometry().getType().equals("LineString")) {
             throw new TurfException("input must be a LineString Feature or Geometry");
         }
 
-        return lineSlice(startPt, stopPt, (LineString)line.getGeometry());
+        return lineSlice(startPt, stopPt, (LineString) line.getGeometry());
     }
 
     /**
-     * Takes a line, a start Point, and a stop point and returns the line in between those points.
+     * Takes a line, a start {@link Point}, and a stop point and returns the line in between those
+     * points.
+     *
+     * @param startPt Starting point.
+     * @param stopPt  Stopping point.
+     * @param line    Line to slice.
+     * @return Sliced line.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
+     * @since 1.2.0
      */
     public static LineString lineSlice(Point startPt, Point stopPt, LineString line) throws TurfException {
         List<Position> coords = line.getCoordinates();
@@ -34,7 +55,7 @@ public class TurfMisc {
         Feature startVertex = pointOnLine(startPt, coords);
         Feature stopVertex = pointOnLine(stopPt, coords);
         List<Feature> ends = new ArrayList<>();
-        if ((int)startVertex.getNumberProperty("index") <= (int)stopVertex.getNumberProperty("index")) {
+        if ((int) startVertex.getNumberProperty("index") <= (int) stopVertex.getNumberProperty("index")) {
             ends.add(startVertex);
             ends.add(stopVertex);
         } else {
@@ -44,7 +65,7 @@ public class TurfMisc {
         List<Position> positions = new ArrayList<>();
         positions.add(((Point) ends.get(0).getGeometry()).getCoordinates());
         LineString clipLine = LineString.fromCoordinates(positions);
-        for (int i = (int)ends.get(0).getNumberProperty("index") + 1; i < (int)ends.get(1).getNumberProperty("index") + 1; i++) {
+        for (int i = (int) ends.get(0).getNumberProperty("index") + 1; i < (int) ends.get(1).getNumberProperty("index") + 1; i++) {
             List<Position> coordinates = clipLine.getCoordinates();
             coordinates.add(coords.get(i));
             clipLine.setCoordinates(coordinates);
@@ -67,52 +88,52 @@ public class TurfMisc {
             Feature start = Feature.fromGeometry(Point.fromCoordinates(coords.get(i)));
             Feature stop = Feature.fromGeometry(Point.fromCoordinates(coords.get(i + 1)));
             //start
-            start.addNumberProperty("dist", TurfMeasurement.distance(pt, (Point)start.getGeometry(), units));
+            start.addNumberProperty("dist", TurfMeasurement.distance(pt, (Point) start.getGeometry(), units));
             //stop
-            stop.addNumberProperty("dist", TurfMeasurement.distance(pt, (Point)stop.getGeometry(), units));
+            stop.addNumberProperty("dist", TurfMeasurement.distance(pt, (Point) stop.getGeometry(), units));
             //perpendicular
-            double direction = TurfMeasurement.bearing((Point)start.getGeometry(), (Point)stop.getGeometry());
+            double direction = TurfMeasurement.bearing((Point) start.getGeometry(), (Point) stop.getGeometry());
             Feature perpendicularPt = Feature.fromGeometry(TurfMeasurement.destination(pt, 1000, direction + 90, units)); // 1000 = gross
             LineIntersectsResult intersect = lineIntersects(
                     pt.getCoordinates().getLongitude(),
                     pt.getCoordinates().getLatitude(),
-                    ((Point)perpendicularPt.getGeometry()).getCoordinates().getLongitude(),
-                    ((Point)perpendicularPt.getGeometry()).getCoordinates().getLatitude(),
-                    ((Point)start.getGeometry()).getCoordinates().getLongitude(),
-                    ((Point)start.getGeometry()).getCoordinates().getLatitude(),
-                    ((Point)stop.getGeometry()).getCoordinates().getLongitude(),
-                    ((Point)stop.getGeometry()).getCoordinates().getLatitude()
+                    ((Point) perpendicularPt.getGeometry()).getCoordinates().getLongitude(),
+                    ((Point) perpendicularPt.getGeometry()).getCoordinates().getLatitude(),
+                    ((Point) start.getGeometry()).getCoordinates().getLongitude(),
+                    ((Point) start.getGeometry()).getCoordinates().getLatitude(),
+                    ((Point) stop.getGeometry()).getCoordinates().getLongitude(),
+                    ((Point) stop.getGeometry()).getCoordinates().getLatitude()
             );
             if (intersect == null) {
                 perpendicularPt = Feature.fromGeometry(TurfMeasurement.destination(pt, 1000, direction - 90, units)); // 1000 = gross
                 intersect = lineIntersects(
                         pt.getCoordinates().getLongitude(),
                         pt.getCoordinates().getLatitude(),
-                        ((Point)perpendicularPt.getGeometry()).getCoordinates().getLongitude(),
-                        ((Point)perpendicularPt.getGeometry()).getCoordinates().getLatitude(),
-                        ((Point)start.getGeometry()).getCoordinates().getLongitude(),
-                        ((Point)start.getGeometry()).getCoordinates().getLatitude(),
-                        ((Point)stop.getGeometry()).getCoordinates().getLongitude(),
-                        ((Point)stop.getGeometry()).getCoordinates().getLatitude()
+                        ((Point) perpendicularPt.getGeometry()).getCoordinates().getLongitude(),
+                        ((Point) perpendicularPt.getGeometry()).getCoordinates().getLatitude(),
+                        ((Point) start.getGeometry()).getCoordinates().getLongitude(),
+                        ((Point) start.getGeometry()).getCoordinates().getLatitude(),
+                        ((Point) stop.getGeometry()).getCoordinates().getLongitude(),
+                        ((Point) stop.getGeometry()).getCoordinates().getLatitude()
                 );
             }
             perpendicularPt.addNumberProperty("dist", Double.POSITIVE_INFINITY);
             Feature intersectPt = null;
             if (intersect != null) {
                 intersectPt = Feature.fromGeometry(Point.fromCoordinates(Position.fromCoordinates(intersect.getY(), intersect.getX())));
-                intersectPt.addNumberProperty("dist", TurfMeasurement.distance(pt, (Point)intersectPt.getGeometry(), units));
+                intersectPt.addNumberProperty("dist", TurfMeasurement.distance(pt, (Point) intersectPt.getGeometry(), units));
             }
 
-            if ((double)start.getNumberProperty("dist") < (double)closestPt.getNumberProperty("dist")) {
+            if ((double) start.getNumberProperty("dist") < (double) closestPt.getNumberProperty("dist")) {
                 closestPt = start;
                 closestPt.addNumberProperty("index", i);
             }
-            if ((double)stop.getNumberProperty("dist")< (double)closestPt.getNumberProperty("dist")) {
+            if ((double) stop.getNumberProperty("dist") < (double) closestPt.getNumberProperty("dist")) {
                 closestPt = stop;
                 closestPt.addNumberProperty("index", i);
             }
             if (intersectPt != null
-                    && (double)intersectPt.getNumberProperty("dist") < (double)closestPt.getNumberProperty("dist")) {
+                    && (double) intersectPt.getNumberProperty("dist") < (double) closestPt.getNumberProperty("dist")) {
                 closestPt = intersectPt;
                 closestPt.addNumberProperty("index", i);
             }

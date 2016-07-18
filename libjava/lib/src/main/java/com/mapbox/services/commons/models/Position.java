@@ -2,6 +2,8 @@ package com.mapbox.services.commons.models;
 
 /**
  * Represents a position defined by a longitude, latitude, and optionally, an altitude.
+ *
+ * @since 1.0.0
  */
 public class Position {
 
@@ -15,6 +17,7 @@ public class Position {
      * @param longitude double value with position's longitude.
      * @param latitude  double value with position's latitude.
      * @param altitude  double value with position's altitude.
+     * @since 1.0.0
      */
     private Position(double longitude, double latitude, double altitude) {
         this.longitude = longitude;
@@ -26,6 +29,7 @@ public class Position {
      * Gets the position's longitude.
      *
      * @return double value with positions longitude.
+     * @since 1.0.0
      */
     public double getLongitude() {
         return longitude;
@@ -35,6 +39,7 @@ public class Position {
      * Gets the position's latitude.
      *
      * @return double value with positions latitude.
+     * @since 1.0.0
      */
     public double getLatitude() {
         return latitude;
@@ -44,6 +49,7 @@ public class Position {
      * Gets the position's altitude.
      *
      * @return double value with positions altitude.
+     * @since 1.0.0
      */
     public double getAltitude() {
         return altitude;
@@ -54,6 +60,7 @@ public class Position {
      * if a value is present.
      *
      * @return double[] array with longitude, latitude, and altitude (if present).
+     * @since 1.0.0
      */
     public double[] getCoordinates() {
         if (hasAltitude()) {
@@ -69,6 +76,7 @@ public class Position {
      * @param longitude double longitude value.
      * @param latitude  double latitude value.
      * @param altitude  double altitude value.
+     * @since 1.0.0
      */
     public static Position fromCoordinates(double longitude, double latitude, double altitude) {
         return new Position(longitude, latitude, altitude);
@@ -79,6 +87,7 @@ public class Position {
      *
      * @param longitude double longitude value.
      * @param latitude  double latitude value.
+     * @since 1.0.0
      */
     public static Position fromCoordinates(double longitude, double latitude) {
         return new Position(longitude, latitude, Double.NaN);
@@ -88,11 +97,19 @@ public class Position {
      * Checks if a position has an altitude value.
      *
      * @return true if position contains altitude data.
+     * @since 1.0.0
      */
     public boolean hasAltitude() {
         return !Double.isNaN(altitude);
     }
 
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     *
+     * @param obj An object.
+     * @return true if the position matches the object, false otherwise.
+     * @since 2.0.0
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Position)) {
@@ -121,6 +138,13 @@ public class Position {
         return true;
     }
 
+    /**
+     * Use to print out the longitude, latitude and altitude values.
+     *
+     * @return String containing the longitude, latitude, and altitude.
+     * @since 2.0.0
+     */
+    @Override
     public String toString() {
         return "Position [longitude=" + longitude + ", latitude=" + latitude + ", altitude=" + altitude + "]";
     }

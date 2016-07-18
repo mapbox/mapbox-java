@@ -9,12 +9,22 @@ import com.mapbox.services.commons.models.Position;
 import java.util.List;
 
 /**
- * Created by antonio on 5/12/16.
+ * Class contains an assortment of methods used to calculate measurments such as bearing,
+ * destination, midpoint, etc.
+ *
+ * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
+ * @since 1.2.0
  */
 public class TurfMeasurement {
 
     /**
      * Takes two points and finds the geographic bearing between them.
+     *
+     * @param p1 Starting {@link Point}.
+     * @param p2 Ending {@link Point}.
+     * @return bearing in decimal degrees.
+     * @see <a href="http://turfjs.org/docs/#bearing">Turf Bearing documentation</a>
+     * @since 1.2.0
      */
     public static double bearing(Point p1, Point p2) {
         double degrees2radians = Math.PI / 180;
@@ -34,10 +44,20 @@ public class TurfMeasurement {
         return bearing;
     }
 
+
     /**
      * Takes a Point and calculates the location of a destination point given a distance in
      * degrees, radians, miles, or kilometers; and bearing in degrees. This uses the Haversine
      * formula to account for global curvature.
+     *
+     * @param point1   Starting point.
+     * @param distance Distance from the starting point.
+     * @param bearing  Ranging from -180 to 180.
+     * @param units    Miles, kilometers, degrees, or radians (defaults kilometers).
+     * @return destination {@link Point}
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#destination">Turf Destination documetation</a>
+     * @since 1.2.0
      */
     public static Point destination(Point point1, double distance, double bearing, String units) throws TurfException {
         double degrees2radians = Math.PI / 180;
@@ -60,16 +80,31 @@ public class TurfMeasurement {
     }
 
     /**
-     * Calculates the distance between two points in kilometers.
-     * This uses the Haversine formula to account for global curvature.
+     * Calculates the distance between two points in kilometers. This uses the Haversine formula to
+     * account for global curvature.
+     *
+     * @param point1 Origin point.
+     * @param point2 Destination point.
+     * @return Distance between the two points.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
+     * @since 1.2.0
      */
     public static double distance(Point point1, Point point2) throws TurfException {
         return distance(point1, point2, TurfConstants.UNIT_DEFAULT);
     }
 
     /**
-     * Calculates the distance between two points in degress, radians, miles, or kilometers.
-     * This uses the Haversine formula to account for global curvature.
+     * Calculates the distance between two points in degress, radians, miles, or kilometers. This
+     * uses the Haversine formula to account for global curvature.
+     *
+     * @param point1 Origin point.
+     * @param point2 Destination point.
+     * @param units  Can be degrees, radians, miles, or kilometers (defaults kilometers).
+     * @return Distance between the two points.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
+     * @since 1.2.0
      */
     public static double distance(Point point1, Point point2, String units) throws TurfException {
         double degrees2radians = Math.PI / 180;
@@ -88,6 +123,13 @@ public class TurfMeasurement {
 
     /**
      * Takes a line and measures its length in the specified units.
+     *
+     * @param line  Line to measure.
+     * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
+     * @return Length of the input line.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
+     * @since 1.2.0
      */
     public static double lineDistance(FeatureCollection line, String units) throws TurfException {
         double d = 0;
@@ -97,10 +139,30 @@ public class TurfMeasurement {
         return d;
     }
 
+    /**
+     * Takes a line and measures its length in the specified units.
+     *
+     * @param line  Line to measure.
+     * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
+     * @return Length of the input line.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
+     * @since 1.2.0
+     */
     public static double lineDistance(Feature line, String units) throws TurfException {
         return lineDistance(line.getGeometry(), units);
     }
 
+    /**
+     * Takes a line and measures its length in the specified units.
+     *
+     * @param line  Line to measure.
+     * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
+     * @return Length of the input line.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
+     * @since 1.2.0
+     */
     public static double lineDistance(Geometry line, String units) throws TurfException {
         double d;
 
@@ -149,7 +211,12 @@ public class TurfMeasurement {
      * Takes two {@link Position} and returns a position midway between them. The midpoint is
      * calculated geodesically, meaning the curvature of the earth is taken into account.
      *
-     * @return midpoint
+     * @param from First point.
+     * @param to   Second point.
+     * @return A {@link Position} midway between pt1 and pt2.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#midpoint">Turf Midpoint documentation</a>
+     * @since 2.0.0
      */
     public static Position midpoint(Position from, Position to) throws TurfException {
         Point midpointResult = midpoint(Point.fromCoordinates(from), Point.fromCoordinates(to));
@@ -161,7 +228,12 @@ public class TurfMeasurement {
      * Takes two {@link Point} and returns a point midway between them. The midpoint is calculated
      * geodesically, meaning the curvature of the earth is taken into account.
      *
-     * @return midpoint
+     * @param from First point.
+     * @param to   Second point.
+     * @return A {@link Point} midway between pt1 and pt2.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#midpoint">Turf Midpoint documentation</a>
+     * @since 2.0.0
      */
     public static Point midpoint(Point from, Point to) throws TurfException {
         double dist = distance(from, to, TurfConstants.UNIT_MILES);
