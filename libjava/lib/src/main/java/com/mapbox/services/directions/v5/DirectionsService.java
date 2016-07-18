@@ -10,10 +10,30 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 /**
- * Created by antonio on 3/4/16.
+ * Interface that defines the directions service (v5).
+ *
+ * @since 1.0.0
  */
 public interface DirectionsService {
 
+    /**
+     * Call-based interface
+     *
+     * @param userAgent        The user.
+     * @param user             The user.
+     * @param profile          The profile directions should use.
+     * @param coordinates      The coordinates the route should follow.
+     * @param accessToken      Mapbox access token.
+     * @param alternatives     Define whether you want to recieve more then one route.
+     * @param geometries       Route geometry.
+     * @param overview         Route full, simplified, etc.
+     * @param radiuses         start at the most efficient point within the radius.
+     * @param steps            Define if you'd like the route steps.
+     * @param continueStraight Define whether the route should continue straight even if the route
+     *                         will be slower.
+     * @return A retrofit Call object
+     * @since 1.0.0
+     */
     @GET("directions/v5/{user}/{profile}/{coordinates}")
     Call<DirectionsResponse> getCall(
             @Header("User-Agent") String userAgent,
@@ -29,6 +49,24 @@ public interface DirectionsService {
             @Query("continue_straight") Boolean continueStraight
     );
 
+    /**
+     * RxJava-based interface
+     *
+     * @param userAgent        The user.
+     * @param user             The user.
+     * @param profile          The profile directions should use.
+     * @param coordinates      The coordinates the route should follow.
+     * @param accessToken      Mapbox access token.
+     * @param alternatives     Define whether you want to recieve more then one route.
+     * @param geometries       Route geometry.
+     * @param overview         Route full, simplified, etc.
+     * @param radiuses         start at the most efficient point within the radius.
+     * @param steps            Define if you'd like the route steps.
+     * @param continueStraight Define whether the route should continue straight even if the route
+     *                         will be slower.
+     * @return A RxJava Observable object
+     * @since 1.0.0
+     */
     @GET("directions/v5/{user}/{profile}/{coordinates}")
     Observable<DirectionsResponse> getObservable(
             @Header("User-Agent") String userAgent,
@@ -43,5 +81,4 @@ public interface DirectionsService {
             @Query("steps") Boolean steps,
             @Query("continue_straight") Boolean continueStraight
     );
-
 }

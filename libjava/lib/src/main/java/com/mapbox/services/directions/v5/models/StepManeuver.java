@@ -7,12 +7,16 @@ import java.util.Arrays;
 
 /**
  * Gives maneuver information about one {@link LegStep}.
+ *
+ * @since 1.0.0
  */
 public class StepManeuver {
 
     private double[] location;
-    @SerializedName("bearing_before") private double bearingBefore;
-    @SerializedName("bearing_after") private double bearingAfter;
+    @SerializedName("bearing_before")
+    private double bearingBefore;
+    @SerializedName("bearing_after")
+    private double bearingAfter;
     private String type;
     private String modifier;
     private String instruction;
@@ -20,6 +24,7 @@ public class StepManeuver {
 
     /**
      * @return double array of [longitude, latitude] for the snapped coordinate.
+     * @since 1.0.0
      */
     public double[] getLocation() {
         return location;
@@ -30,6 +35,7 @@ public class StepManeuver {
      * travel right before the maneuver.
      *
      * @return double with value from 0 to 360.
+     * @since 1.0.0
      */
     public double getBearingBefore() {
         return bearingBefore;
@@ -40,6 +46,7 @@ public class StepManeuver {
      * travel right after the maneuver.
      *
      * @return double with value from 0 to 360.
+     * @since 1.0.0
      */
     public double getBearingAfter() {
         return bearingAfter;
@@ -62,6 +69,7 @@ public class StepManeuver {
      * </ul>
      *
      * @return String with type of maneuver.
+     * @since 1.0.0
      */
     public String getType() {
         return type;
@@ -73,6 +81,7 @@ public class StepManeuver {
      * modifier indicates the position of waypoint from the current direction of travel.
      *
      * @return String with modifier.
+     * @since 1.0.0
      */
     public String getModifier() {
         return modifier;
@@ -82,6 +91,7 @@ public class StepManeuver {
      * A human-readable instruction of how to execute the returned maneuver.
      *
      * @return String with instruction.
+     * @since 1.0.0
      */
     public String getInstruction() {
         return instruction;
@@ -91,6 +101,7 @@ public class StepManeuver {
      * Roundabouts will have an additional parameter.
      *
      * @return int value
+     * @since 1.0.0
      */
     public int getExit() {
         return exit;
@@ -101,6 +112,7 @@ public class StepManeuver {
      * use this format instead of {@link #getLocation()} as it's easier to work with.
      *
      * @return {@link Position}.
+     * @since 1.0.0
      */
     public Position asPosition() {
         return Position.fromCoordinates(location[0], location[1]);
@@ -108,6 +120,7 @@ public class StepManeuver {
 
     /**
      * @return String with all {@link StepManeuver} information within.
+     * @since 1.0.0
      */
     @Override
     public String toString() {
