@@ -10,6 +10,34 @@ import java.util.List;
 
 public class TurfJoins {
 
+    /**
+     * Takes a {@link Position} and a List of Positions making up a polygon and determines if the
+     * point resides inside the polygon. The polygon can be convex or concave. The function accounts
+     * for holes.
+     *
+     * @param point   input position.
+     * @param polygon input list of positions making up the polygon.
+     * @return True if the Point is inside the Polygon; false if the Point is not inside the Polygon.
+     * @throws TurfException
+     * @since 2.0.0
+     */
+    public static boolean inside(Position point, List<Position> polygon) throws TurfException {
+        List<List<Position>> polygons = new ArrayList<>();
+        polygons.add(polygon);
+
+        return inside(Point.fromCoordinates(point), Polygon.fromCoordinates(polygons));
+    }
+
+    /**
+     * Takes a {@link Point} and a {@link Polygon} and determines if the point resides inside the
+     * polygon. The polygon can be convex or concave. The function accounts for holes.
+     *
+     * @param point   input point.
+     * @param polygon input polygon.
+     * @return True if the Point is inside the Polygon; false if the Point is not inside the Polygon.
+     * @throws TurfException
+     * @since 2.0.0
+     */
     public static boolean inside(Point point, Polygon polygon) throws TurfException {
         // This API needs to get better
         List<List<Position>> coordinates = polygon.getCoordinates();
@@ -18,6 +46,16 @@ public class TurfJoins {
         return inside(point, MultiPolygon.fromCoordinates(multiCoordinates));
     }
 
+    /**
+     * Takes a {@link Point} and a {@link MultiPolygon} and determines if the point resides inside
+     * the polygon. The polygon can be convex or concave. The function accounts for holes.
+     *
+     * @param point   input point.
+     * @param polygon input multipolygon.
+     * @return True if the Point is inside the MultiPolygon; false if the Point is not inside the MultiPolygon.
+     * @throws TurfException
+     * @since 2.0.0
+     */
     public static boolean inside(Point point, MultiPolygon polygon) throws TurfException {
         Position pt = TurfInvariant.getCoord(point);
         List<List<List<Position>>> polys = polygon.getCoordinates();
@@ -40,10 +78,10 @@ public class TurfJoins {
         }
 
         return insidePoly;
-    };
+    }
 
     // pt is [x,y] and ring is [[x,y], [x,y],..]
-    public static boolean inRing(Position pt, List<Position> ring) {
+    private static boolean inRing(Position pt, List<Position> ring) {
         boolean isInside = false;
 
         for (int i = 0, j = ring.size() - 1; i < ring.size(); j = i++) {

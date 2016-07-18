@@ -7,11 +7,18 @@ import com.mapbox.services.commons.geojson.Polygon;
 
 import java.util.ArrayList;
 
-/**
- * Created by antonio on 7/15/16.
- */
 public class TurfGrids {
 
+    /**
+     * Takes a {@link FeatureCollection} of {@link Point} and a {@link FeatureCollection} of
+     * {@link Polygon} and returns the points that fall within the polygons.
+     *
+     * @param points   input points.
+     * @param polygons input polygons.
+     * @return points that land within at least one polygon.
+     * @throws TurfException
+     * @since 2.0.0
+     */
     public static FeatureCollection within(FeatureCollection points, FeatureCollection polygons) throws TurfException {
         ArrayList<Feature> features = new ArrayList<>();
         for (int i = 0; i < polygons.getFeatures().size(); i++) {
@@ -23,7 +30,6 @@ public class TurfGrids {
                 }
             }
         }
-
         return FeatureCollection.fromFeatures(features);
     }
 }

@@ -82,4 +82,23 @@ public class TurfJoinsTest extends BaseTurf {
         assertTrue(TurfJoins.inside(ptInPoly2, (MultiPolygon)multiPolyHole.getGeometry()));
         assertFalse(TurfJoins.inside(ptOutsidePoly, (MultiPolygon)multiPolyHole.getGeometry()));
     }
+
+    /*
+     * Custom test
+     */
+
+    @Test
+    public void testInputPositions() throws IOException, TurfException {
+        Position ptInPoly = Position.fromCoordinates(-86.72229766845702, 36.20258997094334);
+        Position ptOutsidePoly = Position.fromCoordinates(-86.75079345703125, 36.18527313913089);
+        Feature polyHole = Feature.fromJson(loadJsonFixture("turf-inside", "poly-with-hole.geojson"));
+
+        Polygon polygon = (Polygon) polyHole.getGeometry();
+        List<List<Position>> polygonPosition = polygon.getCoordinates();
+
+        assertTrue(TurfJoins.inside(ptInPoly, polygonPosition.get(0)));
+        assertFalse(TurfJoins.inside(ptOutsidePoly, polygonPosition.get(0)));
+
+
+    }
 }
