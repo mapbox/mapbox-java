@@ -7,6 +7,13 @@ import com.mapbox.services.commons.geojson.Polygon;
 
 import java.util.ArrayList;
 
+/**
+ * Methods found in this Turf class typically return a set of {@link Point}, {@link Polygon}, or
+ * other geometry in a grid.
+ *
+ * @see <a href="http://turfjs.org/docs/">Turfjs documentation</a>
+ * @since 2.0.0
+ */
 public class TurfGrids {
 
     /**

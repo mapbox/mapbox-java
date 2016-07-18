@@ -8,6 +8,12 @@ import com.mapbox.services.commons.models.Position;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class contains methods that can determine if points lie within a polygon or not.
+ *
+ * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
+ * @since 2.0.0
+ */
 public class TurfJoins {
 
     /**
@@ -19,6 +25,7 @@ public class TurfJoins {
      * @param polygon input list of positions making up the polygon.
      * @return True if the Point is inside the Polygon; false if the Point is not inside the Polygon.
      * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
      * @since 2.0.0
      */
     public static boolean inside(Position point, List<Position> polygon) throws TurfException {
@@ -36,6 +43,7 @@ public class TurfJoins {
      * @param polygon input polygon.
      * @return True if the Point is inside the Polygon; false if the Point is not inside the Polygon.
      * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
      * @since 2.0.0
      */
     public static boolean inside(Point point, Polygon polygon) throws TurfException {
@@ -54,6 +62,7 @@ public class TurfJoins {
      * @param polygon input multipolygon.
      * @return True if the Point is inside the MultiPolygon; false if the Point is not inside the MultiPolygon.
      * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
      * @since 2.0.0
      */
     public static boolean inside(Point point, MultiPolygon polygon) throws TurfException {

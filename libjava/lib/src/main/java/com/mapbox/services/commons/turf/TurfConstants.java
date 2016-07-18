@@ -1,7 +1,10 @@
 package com.mapbox.services.commons.turf;
 
 /**
- * Created by antonio on 5/12/16.
+ * Holds the Turf constants, the Turf units can be found here.
+ *
+ * @see <a href="http://turfjs.org/docs/">Turfjs documentation</a>
+ * @since 1.2.0
  */
 public class TurfConstants {
 

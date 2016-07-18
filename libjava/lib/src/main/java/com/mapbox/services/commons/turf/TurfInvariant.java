@@ -8,22 +8,28 @@ import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
 
 /**
- * Created by antonio on 7/14/16.
+ * Also called Assertions, these methods enforce expectations of a certain type or calculate various
+ * shapes from given points.
+ *
+ * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
+ * @since 1.2.0
  */
 public class TurfInvariant {
 
     /**
-     * Unwrap a coordinate from a Feature with a Point geometry, a Point
-     * geometry, or a single coordinate.
+     * Unwrap a coordinate from a Feature with a Point geometry, a Point geometry, or a single
+     * coordinate.
      *
-     * @param {*} obj any value
-     * @returns {Array<number>} a coordinate
+     * @param obj any value
+     * @return A coordinate
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#getcoord">Turf getCoord documentation</a>
+     * @since 1.2.0
      */
     public static Position getCoord(Feature obj) throws TurfException {
         if (obj.getGeometry().getClass().equals(Point.class)) {
             return getCoord((Point) obj.getGeometry());
         }
-
         throw new TurfException("A coordinate, feature, or point geometry is required");
     }
 
@@ -31,22 +37,22 @@ public class TurfInvariant {
         if (obj != null) {
             return obj.getCoordinates();
         }
-
         throw new TurfException("A coordinate, feature, or point geometry is required");
     }
 
     /**
      * Enforce expectations about types of GeoJSON objects for Turf.
      *
-     * @alias geojsonType
-     * @param {GeoJSON} value any GeoJSON object
-     * @param {string} type expected GeoJSON type
-     * @param {string} name name of calling function
-     * @throws {Error} if value is not the expected type.
+     * @param value Any GeoJSON object.
+     * @param type  Type expected GeoJSON type.
+     * @param name  Name of calling function.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#geojsontype">Turf geojsonType documentation</a>
+     * @since 1.2.0
      */
     public static void geojsonType(GeoJSON value, String type, String name) throws TurfException {
         if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)) {
-           throw new TurfException("Type and name required");
+            throw new TurfException("Type and name required");
         }
 
         if (value == null || !value.getType().equals(type)) {
@@ -56,14 +62,15 @@ public class TurfInvariant {
     }
 
     /**
-     * Enforce expectations about types of {@link Feature} inputs for Turf.
-     * Internally this uses {@link Feature#getType()} to judge geometry types.
+     * Enforce expectations about types of {@link Feature} inputs for Turf. Internally this uses
+     * {@link Feature#getType()} to judge geometry types.
      *
-     * @alias featureOf
-     * @param {Feature} feature a feature with an expected geometry type
-     * @param {string} type expected GeoJSON type
-     * @param {string} name name of calling function
-     * @throws {Error} error if value is not the expected type.
+     * @param feature A feature with an expected geometry type.
+     * @param type    Type expected GeoJSON type.
+     * @param name    Name of calling function.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#featureof">Turf featureOf documentation</a>
+     * @since 1.2.0
      */
     public static void featureOf(Feature feature, String type, String name) throws TurfException {
         if (TextUtils.isEmpty(name)) {
@@ -81,14 +88,15 @@ public class TurfInvariant {
     }
 
     /**
-     * Enforce expectations about types of {@link FeatureCollection} inputs for Turf.
-     * Internally this uses {@link Feature#getType()}} to judge geometry types.
+     * Enforce expectations about types of {@link FeatureCollection} inputs for Turf. Internally
+     * this uses {@link Feature#getType()}} to judge geometry types.
      *
-     * @alias collectionOf
-     * @param {FeatureCollection} featurecollection a featurecollection for which features will be judged
-     * @param {string} type expected GeoJSON type
-     * @param {string} name name of calling function
-     * @throws {Error} if value is not the expected type.
+     * @param featurecollection A {@link FeatureCollection} for which features will be judged
+     * @param type              Expected GeoJSON type.
+     * @param name              Name of calling function.
+     * @throws TurfException
+     * @see <a href="http://turfjs.org/docs/#collectionof">Turf collectionOf documentation</a>
+     * @since 1.2.0
      */
     public static void collectionOf(FeatureCollection featurecollection, String type, String name) throws TurfException {
         if (TextUtils.isEmpty(name)) {
@@ -111,5 +119,4 @@ public class TurfInvariant {
             }
         }
     }
-
 }

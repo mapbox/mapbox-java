@@ -4,13 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by antonio on 5/12/16.
+ * This {@code TurfHelpers} class is made up of methods that take in an object, convert it, and then
+ * return the object in the desired units or object.
+ *
+ * @see <a href="http://turfjs.org/docs/">Turfjs documentation</a>
+ * @since 1.2.0
  */
 public class TurfHelpers {
 
     private static final Map<String, Double> factors;
-    static
-    {
+
+    static {
         factors = new HashMap<>();
         factors.put(TurfConstants.UNIT_MILES, 3960d);
         factors.put(TurfConstants.UNIT_NAUTICAL_MILES, 3441.145d);
@@ -26,10 +30,27 @@ public class TurfHelpers {
         factors.put("kilometres", 6373d);
     }
 
+    /**
+     * Convert radians to distance. The units used here equals the default.
+     *
+     * @param radians Double representing a radian value.
+     * @return Converted radian to distance value.
+     * @throws TurfException
+     * @since 1.2.0
+     */
     public static double radiansToDistance(double radians) throws TurfException {
         return radiansToDistance(radians, TurfConstants.UNIT_DEFAULT);
     }
 
+    /**
+     * Convert radians to distance.
+     *
+     * @param radians Double representing a radian value.
+     * @param units   Pass in the units you'd like to use.
+     * @return Converted radian to distance value.
+     * @throws TurfException
+     * @since 1.2.0
+     */
     public static double radiansToDistance(double radians, String units) throws TurfException {
         Double factor = factors.get(units);
         if (factor == null) {
@@ -39,17 +60,32 @@ public class TurfHelpers {
         return radians * factor;
     }
 
-    public static double distanceToRadians(double radians) throws TurfException {
-        return distanceToRadians(radians, TurfConstants.UNIT_DEFAULT);
+    /**
+     * Convert distance to radians. The units used here equals the default.
+     *
+     * @param distance Double representing a distance value.
+     * @return Converted distance to radians value.
+     * @throws TurfException
+     * @since 1.2.0
+     */
+    public static double distanceToRadians(double distance) throws TurfException {
+        return distanceToRadians(distance, TurfConstants.UNIT_DEFAULT);
     }
 
-    public static double distanceToRadians(double radians, String units) throws TurfException {
+    /**
+     * Convert distance to radians.
+     *
+     * @param distance Double representing a distance value.
+     * @param units    Pass in the units you'd like to use.
+     * @return Converted distance to radians value.
+     * @throws TurfException
+     * @since 1.2.0
+     */
+    public static double distanceToRadians(double distance, String units) throws TurfException {
         Double factor = factors.get(units);
         if (factor == null) {
             throw new TurfException("Invalid unit.");
         }
-
-        return radians / factor;
+        return distance / factor;
     }
-
 }
