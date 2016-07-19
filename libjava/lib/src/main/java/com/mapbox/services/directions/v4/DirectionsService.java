@@ -45,13 +45,14 @@ public interface DirectionsService {
     /**
      * RxJava-based interface
      *
-     * @param profile      The profile directions should use.
-     * @param waypoints    The waypoints the route should follow.
-     * @param accessToken  Mapbox access token.
+     * @param userAgent The user.
+     * @param profile The profile directions should use.
+     * @param waypoints The waypoints the route should follow.
+     * @param accessToken Mapbox access token.
      * @param alternatives Define whether you want to recieve more then one route.
      * @param instructions Define if you'd like to recieve route instructions.
-     * @param geometry     Route geometry.
-     * @param steps        Define if you'd like the route steps.
+     * @param geometry Route geometry.
+     * @param steps Define if you'd like the route steps.
      * @return A RxJava Observable object
      * @since 1.0.0
      */

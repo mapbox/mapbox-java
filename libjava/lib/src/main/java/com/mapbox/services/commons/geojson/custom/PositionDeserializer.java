@@ -27,7 +27,8 @@ public class PositionDeserializer implements JsonDeserializer<Position> {
      *                invocation of its {@link JsonDeserializer#deserialize(JsonElement, Type,
      *                JsonDeserializationContext)} method.
      * @return Either {@link Position} with an altitude or one that doesn't.
-     * @throws JsonParseException
+     * @throws JsonParseException This exception is raised if there is a serious issue that occurs
+     *                            during parsing of a Json string.
      * @since 1.0.0
      */
     @Override

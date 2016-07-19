@@ -17,6 +17,7 @@ import okhttp3.HttpUrl;
  * or controls.
  *
  * @see <a href=https://www.mapbox.com/developers/api/styles/#Request.static.images.from.a.style>API Documentation</a>
+ * @since 1.0.0
  */
 public class MapboxStaticImage {
 
@@ -26,6 +27,7 @@ public class MapboxStaticImage {
      * Build the static image API URL using the builder.
      *
      * @param builder The MapboxStaticImage builder.
+     * @since 1.0.0
      */
     public MapboxStaticImage(Builder builder) {
         HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
@@ -57,6 +59,7 @@ public class MapboxStaticImage {
      * If you need the API URL you can request it with this method.
      *
      * @return the built API URL.
+     * @since 1.0.0
      */
     public HttpUrl getUrl() {
         return url;
@@ -65,6 +68,8 @@ public class MapboxStaticImage {
     /**
      * Static image builder used to customize the image, including location, image width/height,
      * and camera position.
+     *
+     * @since 1.0.0
      */
     public static class Builder extends MapboxBuilder {
 
@@ -91,6 +96,8 @@ public class MapboxStaticImage {
          *
          * @param accessToken Mapbox access token, you must have a Mapbox account in order to use
          *                    this library.
+         * @return Builder
+         * @since 1.0.0
          */
         @Override
         public Builder setAccessToken(String accessToken) {
@@ -104,6 +111,8 @@ public class MapboxStaticImage {
          * styles, the username will be "mapbox".
          *
          * @param username You will need to pass in your Mapbox username.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setUsername(String username) {
             this.username = username;
@@ -114,6 +123,8 @@ public class MapboxStaticImage {
          * You'll need to set what map style you'd like the static image to display.
          *
          * @param styleId can be one of the <a href=https://mapbox.com/api-documentation/#styles>defaults</a> or your own.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setStyleId(String styleId) {
             this.styleId = styleId;
@@ -124,6 +135,8 @@ public class MapboxStaticImage {
          * Longitude for the center point of the static map.
          *
          * @param lon double number between -180 and 180.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setLon(double lon) {
             this.lon = lon;
@@ -134,6 +147,8 @@ public class MapboxStaticImage {
          * Latitude for the center point of the static map.
          *
          * @param lat double number between -90 and 90.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setLat(double lat) {
             this.lat = lat;
@@ -144,6 +159,8 @@ public class MapboxStaticImage {
          * Location for the center point of the static map.
          *
          * @param position Position object with valid latitude and longitude values
+         * @return Builder
+         * @since 1.2.0
          */
         public Builder setLocation(Position position) {
             this.lat = position.getLatitude();
@@ -155,6 +172,8 @@ public class MapboxStaticImage {
          * static map zoom level. Fractional zoom levels will be rounded to two decimal places.
          *
          * @param zoom double number between 0 and 22.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setZoom(double zoom) {
             this.zoom = zoom;
@@ -166,6 +185,8 @@ public class MapboxStaticImage {
          * to the left. 180 flips the map. Defaults is 0.
          *
          * @param bearing double number between 0 and 360, interpreted as decimal degrees.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setBearing(double bearing) {
             this.bearing = bearing;
@@ -176,6 +197,8 @@ public class MapboxStaticImage {
          * Optionally, pitch tilts the map, producing a perspective effect. Defaults is 0.
          *
          * @param pitch double number between 0 and 60.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setPitch(double pitch) {
             this.pitch = pitch;
@@ -186,6 +209,8 @@ public class MapboxStaticImage {
          * width of the image.
          *
          * @param width int number between 1 and 1280.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setWidth(int width) {
             this.width = width;
@@ -193,9 +218,11 @@ public class MapboxStaticImage {
         }
 
         /**
-         * height of the image.
+         * Height of the image.
          *
          * @param height int number between 1 and 1280.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setHeight(int height) {
             this.height = height;
@@ -206,6 +233,8 @@ public class MapboxStaticImage {
          * Optionally, use to request a retina 2x image that will be returned.
          *
          * @param retina true if you'd like a retina image.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setRetina(boolean retina) {
             this.retina = retina;
@@ -216,6 +245,8 @@ public class MapboxStaticImage {
          * Optionally, control whether there is attribution on the image. Default is true.
          *
          * @param attribution true places attribution on image.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setAttribution(boolean attribution) {
             this.attribution = attribution;
@@ -226,6 +257,8 @@ public class MapboxStaticImage {
          * Optionally, control whether there is a Mapbox logo on the image. Default is true.
          *
          * @param logo true places Mapbox logo on image.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setLogo(boolean logo) {
             this.logo = logo;
@@ -236,7 +269,9 @@ public class MapboxStaticImage {
          * In order to make the returned images better cacheable on the client, you can set the
          * precision in decimals instead of manually rounding the parameters.
          *
-         * @param precision int number representing the precision for the formater
+         * @param precision int number representing the precision for the formatter
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setPrecision(int precision) {
             this.precision = precision;
@@ -247,6 +282,7 @@ public class MapboxStaticImage {
          * Get the access token
          *
          * @return String with the access token
+         * @since 1.0.0
          */
         @Override
         public String getAccessToken() {
@@ -258,6 +294,7 @@ public class MapboxStaticImage {
          * used a <a href=https://mapbox.com/api-documentation/#styles>defaults</a> Mapbox style, it will be "mapbox".
          *
          * @return String with the username.
+         * @since 1.0.0
          */
         public String getUsername() {
             return username;
@@ -267,6 +304,7 @@ public class MapboxStaticImage {
          * Get what map style your static image will display.
          *
          * @return String containing static map id.
+         * @since 1.0.0
          */
         public String getStyleId() {
             return styleId;
@@ -277,6 +315,7 @@ public class MapboxStaticImage {
          * bearing, and pitch.
          *
          * @return String value with static image location information.
+         * @since 1.0.0
          */
         public String getLocationPathSegment() {
             if (precision > 0) {
@@ -296,6 +335,7 @@ public class MapboxStaticImage {
          * Gives the height and width of the static image.
          *
          * @return String giving width, height and retina.
+         * @since 1.0.0
          */
         public String getSizePathSegment() {
             String retinaPath = retina ? "@2x" : "";
@@ -306,6 +346,7 @@ public class MapboxStaticImage {
          * Determine if the static image will contain attribution.
          *
          * @return true if attribution will be on static image.
+         * @since 1.0.0
          */
         public boolean isAttribution() {
             return attribution;
@@ -315,17 +356,25 @@ public class MapboxStaticImage {
          * Determine if the static image will contain Mapbox logo.
          *
          * @return true if Mapbox logo will be on static image.
+         * @since 1.0.0
          */
         public boolean isLogo() {
             return logo;
         }
 
+        /**
+         * @return int number representing the precision for the formatter
+         * @since 1.0.0
+         */
         public int getPrecision() {
             return precision;
         }
 
         /**
          * Build the client when all user parameters have been set.
+         *
+         * @return MapboxStaticImage
+         * @since 1.0.0
          */
         @Override
         public MapboxStaticImage build() throws ServicesException {

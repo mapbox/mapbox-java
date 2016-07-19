@@ -1,7 +1,8 @@
 package com.mapbox.services.commons;
 
 /**
- * Generic Exception for all things directions
+ * Generic Exception for all things Mapbox, this is used for geocoding, directions, and other APIs
+ * in this SDK.
  */
 public class ServicesException extends Exception {
 

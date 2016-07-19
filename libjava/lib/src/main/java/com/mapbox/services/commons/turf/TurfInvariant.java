@@ -22,7 +22,7 @@ public class TurfInvariant {
      *
      * @param obj any value
      * @return A coordinate
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#getcoord">Turf getCoord documentation</a>
      * @since 1.2.0
      */
@@ -46,7 +46,7 @@ public class TurfInvariant {
      * @param value Any GeoJSON object.
      * @param type  Type expected GeoJSON type.
      * @param name  Name of calling function.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#geojsontype">Turf geojsonType documentation</a>
      * @since 1.2.0
      */
@@ -68,7 +68,7 @@ public class TurfInvariant {
      * @param feature A feature with an expected geometry type.
      * @param type    Type expected GeoJSON type.
      * @param name    Name of calling function.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#featureof">Turf featureOf documentation</a>
      * @since 1.2.0
      */
@@ -94,7 +94,7 @@ public class TurfInvariant {
      * @param featurecollection A {@link FeatureCollection} for which features will be judged
      * @param type              Expected GeoJSON type.
      * @param name              Name of calling function.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#collectionof">Turf collectionOf documentation</a>
      * @since 1.2.0
      */

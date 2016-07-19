@@ -25,6 +25,8 @@ import rx.Observable;
 
 /**
  * The Mapbox geocoding client (v5).
+ *
+ * @since 1.0.0
  */
 public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
@@ -36,14 +38,32 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     // Allows testing
     private String baseUrl = Constants.BASE_API_URL;
 
+    /**
+     * Public constructor.
+     *
+     * @param builder {@link Builder} object.
+     * @since 1.0.0
+     */
     public MapboxGeocoding(Builder builder) {
         this.builder = builder;
     }
 
+    /**
+     * Used internally.
+     *
+     * @param baseUrl the baseURL.
+     * @since 1.0.0
+     */
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
+    /**
+     * Used internally.
+     *
+     * @return Geocoding service.
+     * @since 1.0.0
+     */
     public GeocodingService getService() {
         // No need to recreate it
         if (service != null) return service;
@@ -64,6 +84,12 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         return service;
     }
 
+    /**
+     * Used internally.
+     *
+     * @return call
+     * @since 1.0.0
+     */
     public Call<GeocodingResponse> getCall() {
         // No need to recreate it
         if (call != null) return call;
@@ -82,26 +108,56 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         return call;
     }
 
+    /**
+     * Execute the call
+     *
+     * @return The Geocoding v5 response
+     * @throws IOException Signals that an I/O exception of some sort has occurred.
+     * @since 1.0.0
+     */
     @Override
     public Response<GeocodingResponse> executeCall() throws IOException {
         return getCall().execute();
     }
 
+    /**
+     * Execute the call
+     *
+     * @param callback A Retrofit callback.
+     * @since 1.0.0
+     */
     @Override
     public void enqueueCall(Callback<GeocodingResponse> callback) {
         getCall().enqueue(callback);
     }
 
+    /**
+     * Cancel the call
+     *
+     * @since 1.0.0
+     */
     @Override
     public void cancelCall() {
         getCall().cancel();
     }
 
+    /**
+     * clone the call
+     *
+     * @return cloned call
+     * @since 1.0.0
+     */
     @Override
     public Call<GeocodingResponse> cloneCall() {
         return getCall().clone();
     }
 
+    /**
+     * Get observable
+     *
+     * @return Observable
+     * @since 1.0.0
+     */
     @Override
     public Observable<GeocodingResponse> getObservable() {
         // No need to recreate it
@@ -123,6 +179,8 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
     /**
      * Builds your geocoder query by adding parameters.
+     *
+     * @since 1.0.0
      */
     public static class Builder extends MapboxBuilder {
 
@@ -138,6 +196,11 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         private Boolean autocomplete = null;
         private String bbox = null;
 
+        /**
+         * Constructor
+         *
+         * @since 1.0.0
+         */
         public Builder() {
             // Defaults
             mode = GeocodingCriteria.MODE_PLACES;
@@ -146,8 +209,10 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         /**
          * Required to call when building {@link MapboxGeocoding.Builder}
          *
-         * @param accessToken Mapbox access token, you must have a Mapbox account
-         *                    in order to use this library.
+         * @param accessToken Mapbox access token, you must have a Mapbox account in order to use
+         *                    this library.
+         * @return Builder
+         * @since 1.0.0
          */
         @Override
         public Builder setAccessToken(String accessToken) {
@@ -155,11 +220,23 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
             return this;
         }
 
+        /**
+         * The location equals the query.
+         *
+         * @param location query
+         * @return Builder
+         * @since 1.0.0
+         */
         public Builder setLocation(String location) {
             query = location;
             return this;
         }
 
+        /**
+         * @param position {@link Position}
+         * @return Builder
+         * @since 1.0.0
+         */
         public Builder setCoordinates(Position position) {
             if (position == null) return this;
             query = String.format(Locale.US, "%f,%f",
@@ -168,16 +245,37 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
             return this;
         }
 
+        /**
+         * mapbox.places or mapbox.places-permanent for enterprise/batch geocoding.
+         *
+         * @param mode mapbox.places or mapbox.places-permanent for enterprise/batch geocoding.
+         * @return Builder
+         * @since 1.0.0
+         */
         public Builder setMode(String mode) {
             this.mode = mode;
             return this;
         }
 
+        /**
+         * Country which you want the results to show up in.
+         *
+         * @param country ISO 3166 alpha 2 country code
+         * @return Builder
+         * @since 1.0.0
+         */
         public Builder setCountry(String country) {
             this.country = country;
             return this;
         }
 
+        /**
+         * Countries which you want the results to show up in.
+         *
+         * @param countries ISO 3166 alpha 2 country codes, separated by commas.
+         * @return Builder
+         * @since 1.0.0
+         */
         public Builder setCountries(String[] countries) {
             this.country = TextUtils.join(",", countries);
             return this;
@@ -187,6 +285,8 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
          * Location around which to bias results.
          *
          * @param position A {@link Position}.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setProximity(Position position) {
             if (position == null) return this;
@@ -201,28 +301,65 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
          * locality, neighborhood, address, poi. Multiple options can be comma-separated.
          *
          * @param geocodingType String filtering the geocoder result types.
+         * @return Builder
+         * @since 1.0.0
          */
         public Builder setGeocodingType(String geocodingType) {
             this.geocodingTypes = geocodingType;
             return this;
         }
 
+        /**
+         * Filter results by one or more type. Options are country, region, postcode, place,
+         * locality, neighborhood, address, poi. Multiple options can be comma-separated.
+         *
+         * @param geocodingType String array filtering the geocoder result types.
+         * @return Builder
+         * @since 1.0.0
+         */
         public Builder setGeocodingTypes(String[] geocodingType) {
             this.geocodingTypes = TextUtils.join(",", geocodingType);
             return this;
         }
 
+        /**
+         * Whether or not to return autocomplete results.
+         *
+         * @param autocomplete true, if you want autocomplete results, else false. (Defaults true)
+         * @return Builder
+         * @since 1.0.0
+         */
         public Builder setAutocomplete(boolean autocomplete) {
             this.autocomplete = autocomplete;
             return this;
         }
 
+        /**
+         * Bounding box within which to limit results.
+         *
+         * @param northeast The northeast corner of the bounding box as {@link Position}.
+         * @param southwest The southwest corner of the bounding box as {@link Position}.
+         * @return Builder
+         * @throws ServicesException Generic Exception for all things geocoding.
+         * @since 1.0.0
+         */
         public Builder setBbox(Position northeast, Position southwest) throws ServicesException {
             return setBbox(southwest.getLongitude(), southwest.getLatitude(),
                     northeast.getLongitude(), northeast.getLatitude());
         }
 
-        public Builder setBbox(double minX, double minY, double  maxX, double  maxY) throws ServicesException {
+        /**
+         * Bounding box within which to limit results.
+         *
+         * @param minX The minX of bounding box when maps facing north.
+         * @param minY The minY of bounding box when maps facing north.
+         * @param maxX The maxX of bounding box when maps facing north.
+         * @param maxY The maxY of bounding box when maps facing north.
+         * @return Builder
+         * @throws ServicesException Generic Exception for all things geocoding.
+         * @since 1.0.0
+         */
+        public Builder setBbox(double minX, double minY, double maxX, double maxY) throws ServicesException {
             if (minX == 0 && minY == 0 && maxX == 0 && maxY == 0) {
                 throw new ServicesException("You provided an empty bounding box");
             }
@@ -233,6 +370,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
         /**
          * @return your Mapbox access token.
+         * @since 1.0.0
          */
         @Override
         public String getAccessToken() {
@@ -241,15 +379,24 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
         /**
          * @return your geocoder query.
+         * @since 1.0.0
          */
         public String getQuery() {
             return query;
         }
 
+        /**
+         * @return mapbox.places or  mapbox.places-permanent for enterprise/batch geocoding.
+         * @since 1.0.0
+         */
         public String getMode() {
             return mode;
         }
 
+        /**
+         * @return ISO 3166 alpha 2 country codes, separated by commas
+         * @since 1.0.0
+         */
         public String getCountry() {
             return country;
         }
@@ -258,6 +405,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
          * Location around which you biased the results.
          *
          * @return String with the format longitude, latitude.
+         * @since 1.0.0
          */
         public String getProximity() {
             return proximity;
@@ -268,19 +416,35 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
          * using this method.
          *
          * @return String with list of filters you used.
+         * @since 1.0.0
          */
         public String getGeocodingTypes() {
             return geocodingTypes;
         }
 
+        /**
+         * @return true if autocomplete results, else false.
+         * @since 1.0.0
+         */
         public Boolean getAutocomplete() {
             return autocomplete;
         }
 
+        /**
+         * @return Bounding box within which the results are limited
+         * @since 1.0.0
+         */
         public String getBbox() {
             return bbox;
         }
 
+        /**
+         * Build method
+         *
+         * @return MapboxGeocoding
+         * @throws ServicesException Generic Exception for all things geocoding.
+         * @since 1.0.0
+         */
         @Override
         public MapboxGeocoding build() throws ServicesException {
             validateAccessToken(accessToken);

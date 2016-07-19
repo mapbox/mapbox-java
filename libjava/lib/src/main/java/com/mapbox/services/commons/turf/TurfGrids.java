@@ -23,7 +23,7 @@ public class TurfGrids {
      * @param points   input points.
      * @param polygons input polygons.
      * @return points that land within at least one polygon.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @since 2.0.0
      */
     public static FeatureCollection within(FeatureCollection points, FeatureCollection polygons) throws TurfException {

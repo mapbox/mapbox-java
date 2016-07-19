@@ -24,7 +24,7 @@ public class TurfJoins {
      * @param point   input position.
      * @param polygon input list of positions making up the polygon.
      * @return True if the Point is inside the Polygon; false if the Point is not inside the Polygon.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
      * @since 2.0.0
      */
@@ -42,7 +42,7 @@ public class TurfJoins {
      * @param point   input point.
      * @param polygon input polygon.
      * @return True if the Point is inside the Polygon; false if the Point is not inside the Polygon.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
      * @since 2.0.0
      */
@@ -61,7 +61,7 @@ public class TurfJoins {
      * @param point   input point.
      * @param polygon input multipolygon.
      * @return True if the Point is inside the MultiPolygon; false if the Point is not inside the MultiPolygon.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
      * @since 2.0.0
      */

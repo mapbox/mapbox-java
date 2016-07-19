@@ -55,7 +55,7 @@ public class TurfMeasurement {
      * @param bearing  Ranging from -180 to 180.
      * @param units    Miles, kilometers, degrees, or radians (defaults kilometers).
      * @return destination {@link Point}
-     * @throws TurfException
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#destination">Turf Destination documetation</a>
      * @since 1.2.0
      */
@@ -86,7 +86,7 @@ public class TurfMeasurement {
      * @param point1 Origin point.
      * @param point2 Destination point.
      * @return Distance between the two points.
-     * @throws TurfException
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
      * @since 1.2.0
      */
@@ -102,7 +102,7 @@ public class TurfMeasurement {
      * @param point2 Destination point.
      * @param units  Can be degrees, radians, miles, or kilometers (defaults kilometers).
      * @return Distance between the two points.
-     * @throws TurfException
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
      * @since 1.2.0
      */
@@ -127,7 +127,7 @@ public class TurfMeasurement {
      * @param line  Line to measure.
      * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
      * @return Length of the input line.
-     * @throws TurfException
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
      * @since 1.2.0
      */
@@ -145,7 +145,7 @@ public class TurfMeasurement {
      * @param line  Line to measure.
      * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
      * @return Length of the input line.
-     * @throws TurfException
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
      * @since 1.2.0
      */
@@ -159,7 +159,7 @@ public class TurfMeasurement {
      * @param line  Line to measure.
      * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
      * @return Length of the input line.
-     * @throws TurfException
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
      * @since 1.2.0
      */
@@ -214,7 +214,7 @@ public class TurfMeasurement {
      * @param from First point.
      * @param to   Second point.
      * @return A {@link Position} midway between pt1 and pt2.
-     * @throws TurfException
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#midpoint">Turf Midpoint documentation</a>
      * @since 2.0.0
      */
@@ -231,7 +231,7 @@ public class TurfMeasurement {
      * @param from First point.
      * @param to   Second point.
      * @return A {@link Point} midway between pt1 and pt2.
-     * @throws TurfException
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#midpoint">Turf Midpoint documentation</a>
      * @since 2.0.0
      */

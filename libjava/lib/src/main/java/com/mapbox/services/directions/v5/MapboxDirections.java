@@ -94,7 +94,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * Execute the call
      *
      * @return The Directions v5 response
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception of some sort has occurred.
      * @since 1.0.0
      */
     @Override
@@ -375,23 +375,12 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
             return profile;
         }
 
-        /*
-         * The coordinates parameter denotes between which points routing happens. The coordinates
-         * must be in the format:
-         *
-         *    {longitude},{latitude};{longitude},{latitude}[;{longitude},{latitude} ...]
-         *
-         * - Each coordinate is a pair of a longitude float and latitude float, which are separated by a ,
-         * - Coordinates are separated by a ; from each other
-         * - A query must at minimum have 2 coordinates and may at maximum have 25 coordinates
-         */
-
         /**
          * The coordinates parameter denotes between which points routing happens. The coordinates
          * must be in the format:
-         * <p/>
+         * <p>
          * {longitude},{latitude};{longitude},{latitude}[;{longitude},{latitude} ...]
-         * <p/>
+         * <p>
          * - Each coordinate is a pair of a longitude float and latitude float, which are separated by a ,
          * - Coordinates are separated by a ; from each other
          * - A query must at minimum have 2 coordinates and may at maximum have 25 coordinates
@@ -447,12 +436,12 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         /**
          * Radiuses indicate how far from a coordinate a routeable way is searched. They
          * are indicated like this:
-         * <p/>
+         * <p>
          * ?radiuses={radius};{radius}}[;{radius} ...].
-         * <p/>
+         * <p>
          * If no routeble way can be found within the serach radius, a NoRoute error will be returned.
          * - Radiuses are separated by a ,
-         * - Each radius must be of a value float >= 0 in meters or unlimited (default)
+         * - Each radius must be of a value {@code float >= 0} in meters or unlimited (default)
          * - There must be as many radiuses as there are coordinates
          * - It is possible to not specify radiuses via ;;, which result in the same behaviour as setting unlimited
          *
@@ -492,7 +481,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Build method
          *
          * @return MapboxDirections
-         * @throws ServicesException
+         * @throws ServicesException Generic Exception for all things directions.
          * @since 1.0.0
          */
         @Override

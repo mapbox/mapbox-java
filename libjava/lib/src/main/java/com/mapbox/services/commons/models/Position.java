@@ -76,6 +76,7 @@ public class Position {
      * @param longitude double longitude value.
      * @param latitude  double latitude value.
      * @param altitude  double altitude value.
+     * @return {@link Position}.
      * @since 1.0.0
      */
     public static Position fromCoordinates(double longitude, double latitude, double altitude) {
@@ -87,6 +88,7 @@ public class Position {
      *
      * @param longitude double longitude value.
      * @param latitude  double latitude value.
+     * @return {@link Position}.
      * @since 1.0.0
      */
     public static Position fromCoordinates(double longitude, double latitude) {

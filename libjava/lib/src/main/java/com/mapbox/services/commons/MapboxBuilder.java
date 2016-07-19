@@ -15,7 +15,7 @@ public abstract class MapboxBuilder {
      * Method to validate a Mapbox Access token.
      *
      * @param accessToken A string containing a Mapbox Access Token
-     * @throws ServicesException
+     * @throws ServicesException Generic Exception for all things Mapbox.
      * @since 1.0.0
      */
     protected void validateAccessToken(String accessToken) throws ServicesException {
@@ -29,7 +29,7 @@ public abstract class MapboxBuilder {
      * The builder.
      *
      * @return {@link MapboxBuilder}
-     * @throws ServicesException
+     * @throws ServicesException Generic Exception for all things Mapbox.
      * @since 1.0.0
      */
     public abstract Object build() throws ServicesException;

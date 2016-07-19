@@ -26,7 +26,8 @@ public class GeometryDeserializer implements JsonDeserializer<Geometry> {
      *                invocation of its {@link JsonDeserializer#deserialize(JsonElement, Type,
      *                JsonDeserializationContext)} method.
      * @return either default deserialization on the specified object or JsonParseException.
-     * @throws JsonParseException
+     * @throws JsonParseException This exception is raised if there is a serious issue that occurs
+     *                            during parsing of a Json string.
      * @since 1.0.0
      */
     @Override
