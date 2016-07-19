@@ -16,5 +16,11 @@ dependencies {
     testCompile 'com.squareup.okhttp3:mockwebserver:3.3.1'
 }
 
+task JavadocGeneration(type: Javadoc) {
+    source = sourceSets.main.allJava
+    failOnError = false
+    classpath = configurations.compile
+}
+
 apply from: 'gradle-checkstyle.gradle'
 apply from: 'gradle-mvn-push.gradle'

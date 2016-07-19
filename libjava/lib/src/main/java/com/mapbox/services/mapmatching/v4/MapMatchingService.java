@@ -12,17 +12,23 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 /**
- * Created by ivo on 17/05/16.
+ * Interface that defines the map matching service.
+ *
+ * @since 1.2.0
  */
 public interface MapMatchingService {
 
     /**
      * Call based interface
      *
+     * @param userAgent    user
      * @param profile      directions profile id
+     * @param accessToken  Mapbox access token
      * @param geometry     format for the returned geometry (optional)
      * @param gpsPrecision assumed precission in meters of the used tracking device
+     * @param trace        The trace wanting to be matched
      * @return The MapMatchingResponse in a Call wrapper
+     * @since 1.2.0
      */
     @POST("matching/v4/{profile}.json")
     Call<MapMatchingResponse> getCall(
@@ -36,10 +42,14 @@ public interface MapMatchingService {
     /**
      * RxJava-based interface
      *
+     * @param userAgent    user
      * @param profile      directions profile id
+     * @param accessToken  Mapbox access token
      * @param geometry     format for the returned geometry (optional)
      * @param gpsPrecision assumed precision in meters of the used tracking device
+     * @param trace        The trace wanting to be matched
      * @return The MapMatchingResponse in an RX Java Observable
+     * @since 1.2.0
      */
     @POST("matching/v4/{profile}.json")
     Observable<MapMatchingResponse> getObservable(

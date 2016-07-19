@@ -104,7 +104,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * Execute the call
      *
      * @return The Directions v4 response
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception of some sort has occurred.
      * @since 1.0.0
      */
     @Override
@@ -203,6 +203,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          *
          * @param profile {@link DirectionsCriteria#PROFILE_DRIVING},
          *                {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
+         * @return Builder
          * @since 1.0.0
          */
         public Builder setProfile(String profile) {
@@ -215,6 +216,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * waypoints including origin and final destination.
          *
          * @param waypoints List including all {@link Waypoint} you'd line to include in route.
+         * @return Builder
          * @since 1.0.0
          */
         public Builder setWaypoints(List<Waypoint> waypoints) {
@@ -226,6 +228,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Origin of the destination.
          *
          * @param origin {@link Waypoint} of origin.
+         * @return Builder
          * @since 1.0.0
          */
         public Builder setOrigin(Waypoint origin) {
@@ -238,6 +241,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * use {@link #setWaypoints(List)}
          *
          * @param destination {@link Waypoint} of destination.
+         * @return Builder
          * @since 1.0.0
          */
         public Builder setDestination(Waypoint destination) {
@@ -249,6 +253,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Optionally, call if you'd like to receive alternative routes besides just one.
          *
          * @param alternatives true if you'd like alternative routes, else false.
+         * @return Builder
          * @since 1.0.0
          */
         public Builder setAlternatives(Boolean alternatives) {
@@ -261,6 +266,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          *
          * @param instructions {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or
          *                     {@link DirectionsCriteria#INSTRUCTIONS_HTML}
+         * @return Builder
          * @since 1.0.0
          */
         public Builder setInstructions(String instructions) {
@@ -273,6 +279,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          *
          * @param geometry {@link DirectionsCriteria#GEOMETRY_GEOJSON},
          *                 {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
+         * @return Builder
          * @since 1.0.0
          */
         public Builder setGeometry(String geometry) {
@@ -284,6 +291,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Optionally, call if you'd like to include step information within route.
          *
          * @param steps true if you'd like step information.
+         * @return Builder
          * @since 1.0.0
          */
         public Builder setSteps(Boolean steps) {
@@ -393,7 +401,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
          * Build the MapboxDirections
          *
          * @return {@link MapboxDirections}
-         * @throws ServicesException
+         * @throws ServicesException Generic Exception for all things directions.
          * @since 1.0.0
          */
         @Override

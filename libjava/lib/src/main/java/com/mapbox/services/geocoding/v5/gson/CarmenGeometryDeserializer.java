@@ -13,10 +13,23 @@ import com.mapbox.services.commons.models.Position;
 import java.lang.reflect.Type;
 
 /**
- * Created by antonio on 6/30/16.
+ * A custom deserializer for Gson, used for the Geocoder.
+ *
+ * @since 1.0.0
  */
 public class CarmenGeometryDeserializer implements JsonDeserializer<Geometry> {
 
+    /**
+     * A custom deserializer for Gson, used for the Geocoder.
+     *
+     * @param json    The Json data being deserialized.
+     * @param typeOfT The type of the Object to deserialize to.
+     * @param context Context for deserialization.
+     * @return Deserialized Geometry.
+     * @throws JsonParseException This exception is raised if there is a serious issue that occurs
+     *                            during parsing of a Json string.
+     * @since 1.0.0
+     */
     @Override
     public Geometry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = (JsonObject) json;

@@ -7,7 +7,9 @@ import com.mapbox.services.commons.geojson.FeatureCollection;
 import java.util.List;
 
 /**
- * Created by antonio on 6/30/16.
+ * The Geocoding API hierarchy starts with this class.
+ *
+ * @since 1.0.0
  */
 public class CarmenFeatureCollection extends BaseFeatureCollection {
 
@@ -21,6 +23,7 @@ public class CarmenFeatureCollection extends BaseFeatureCollection {
      * of the Geocoding service responses.
      *
      * @param features List of {@link Feature}.
+     * @since 1.0.0
      */
     protected CarmenFeatureCollection(List<CarmenFeature> features) {
         this.features = features;
@@ -31,11 +34,19 @@ public class CarmenFeatureCollection extends BaseFeatureCollection {
      * reverse geocoding.
      *
      * @return a List containing your search query.
+     * @since 1.0.0
      */
     public List<String> getQuery() {
         return this.query;
     }
 
+    /**
+     * A place name for forward geocoding or a coordinate pair (longitude, latitude location)
+     * for reverse geocoding.
+     *
+     * @param query The search terms used.
+     * @since 1.0.0
+     */
     public void setQuery(List<String> query) {
         this.query = query;
     }
@@ -44,11 +55,16 @@ public class CarmenFeatureCollection extends BaseFeatureCollection {
      * Mapbox attribution.
      *
      * @return String with Mapbox attribution.
+     * @since 1.0.0
      */
     public String getAttribution() {
         return this.attribution;
     }
 
+    /**
+     * @param attribution String with Mapbox attribution.
+     * @since 1.0.0
+     */
     public void setAttribution(String attribution) {
         this.attribution = attribution;
     }
@@ -57,6 +73,7 @@ public class CarmenFeatureCollection extends BaseFeatureCollection {
      * Get the List containing all the features within collection.
      *
      * @return List of features within collection.
+     * @since 1.0.0
      */
     public List<CarmenFeature> getFeatures() {
         return features;
@@ -67,6 +84,7 @@ public class CarmenFeatureCollection extends BaseFeatureCollection {
      *
      * @param features List of {@link Feature}
      * @return new {@link FeatureCollection}
+     * @since 1.0.0
      */
     public static CarmenFeatureCollection fromFeatures(List<CarmenFeature> features) {
         return new CarmenFeatureCollection(features);

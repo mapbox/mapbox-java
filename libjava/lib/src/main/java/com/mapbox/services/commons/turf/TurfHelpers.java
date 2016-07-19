@@ -35,7 +35,7 @@ public class TurfHelpers {
      *
      * @param radians Double representing a radian value.
      * @return Converted radian to distance value.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @since 1.2.0
      */
     public static double radiansToDistance(double radians) throws TurfException {
@@ -48,7 +48,7 @@ public class TurfHelpers {
      * @param radians Double representing a radian value.
      * @param units   Pass in the units you'd like to use.
      * @return Converted radian to distance value.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @since 1.2.0
      */
     public static double radiansToDistance(double radians, String units) throws TurfException {
@@ -65,7 +65,7 @@ public class TurfHelpers {
      *
      * @param distance Double representing a distance value.
      * @return Converted distance to radians value.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @since 1.2.0
      */
     public static double distanceToRadians(double distance) throws TurfException {
@@ -78,7 +78,7 @@ public class TurfHelpers {
      * @param distance Double representing a distance value.
      * @param units    Pass in the units you'd like to use.
      * @return Converted distance to radians value.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @since 1.2.0
      */
     public static double distanceToRadians(double distance, String units) throws TurfException {

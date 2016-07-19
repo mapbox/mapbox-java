@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * The response object for a geocoder query.
+ *
+ * @since 1.0.0
  */
 public class GeocodingResponse extends CarmenFeatureCollection {
 

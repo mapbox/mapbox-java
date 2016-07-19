@@ -85,6 +85,7 @@ public class Feature implements GeoJSON {
      * Create a feature from geometry.
      *
      * @param geometry {@link Geometry} object.
+     * @return {@link Feature}
      * @since 1.0.0
      */
     public static Feature fromGeometry(Geometry geometry) {
@@ -96,6 +97,7 @@ public class Feature implements GeoJSON {
      *
      * @param geometry   {@link Geometry} object.
      * @param properties of this feature as JSON.
+     * @return {@link Feature}
      * @since 1.0.0
      */
     public static Feature fromGeometry(Geometry geometry, JsonObject properties) {
@@ -108,6 +110,7 @@ public class Feature implements GeoJSON {
      * @param geometry   {@link Geometry} object.
      * @param properties of this feature as JSON.
      * @param id         common identifier of this feature.
+     * @return {@link Feature}
      * @since 1.0.0
      */
     public static Feature fromGeometry(Geometry geometry, JsonObject properties, String id) {

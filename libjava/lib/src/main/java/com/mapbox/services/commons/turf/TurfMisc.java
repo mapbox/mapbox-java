@@ -25,7 +25,7 @@ public class TurfMisc {
      * @param stopPt  Stopping point.
      * @param line    Line to slice.
      * @return Sliced line.
-     * @throws TurfException
+     * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
      * @since 1.2.0
      */
@@ -45,7 +45,7 @@ public class TurfMisc {
      * @param stopPt  Stopping point.
      * @param line    Line to slice.
      * @return Sliced line.
-     * @throws TurfException
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
      * @since 1.2.0
      */
