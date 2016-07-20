@@ -27,6 +27,7 @@ import rx.Observable;
  *
  * @since 1.0.0
  */
+@Deprecated
 public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
     private Builder builder = null;
