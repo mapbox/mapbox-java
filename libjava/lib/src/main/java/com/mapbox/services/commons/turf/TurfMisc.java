@@ -55,7 +55,7 @@ public class TurfMisc {
         return clipLine;
     }
 
-    private static Feature pointOnLine(Point pt, List<Position> coords) throws TurfException {
+    public static Feature pointOnLine(Point pt, List<Position> coords) throws TurfException {
         String units = TurfConstants.UNIT_MILES;
 
         Feature closestPt = Feature.fromGeometry(
