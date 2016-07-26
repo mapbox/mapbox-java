@@ -36,6 +36,10 @@ public class CarmenFeature extends Feature {
         super(geometry, properties, id);
     }
 
+    public CarmenFeature() {
+        super(null, null, null);
+    }
+
     /**
      * @return Text representing the feature (e.g. "Austin").
      * @since 1.0.0
@@ -93,6 +97,34 @@ public class CarmenFeature extends Feature {
      */
     public double getRelevance() {
         return relevance;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
+    public void setBbox(double[] bbox) {
+        this.bbox = bbox;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCenter(double[] center) {
+        this.center = center;
+    }
+
+    public void setContext(List<CarmenContext> context) {
+        this.context = context;
+    }
+
+    public void setRelevance(double relevance) {
+        this.relevance = relevance;
     }
 
     /**

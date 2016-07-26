@@ -17,9 +17,9 @@ import com.mapbox.services.commons.models.Position;
 public class Feature implements GeoJSON {
 
     private final String type = "Feature";
-    private final Geometry geometry;
+    private Geometry geometry;
     private JsonObject properties;
-    private final String id;
+    private String id;
 
     /**
      * Private constructor.
@@ -56,6 +56,10 @@ public class Feature implements GeoJSON {
         return geometry;
     }
 
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
+    }
+
     /**
      * Returns the optional properties of this feature as JSON.
      *
@@ -79,6 +83,10 @@ public class Feature implements GeoJSON {
      */
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
