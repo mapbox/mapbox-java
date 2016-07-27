@@ -18,9 +18,9 @@ public class StepManeuver {
     @SerializedName("bearing_after")
     private double bearingAfter;
     private String type;
+    private String pronunciation;
     private String modifier;
     private String instruction;
-    private int exit;
 
     /**
      * @return double array of [longitude, latitude] for the snapped coordinate.
@@ -65,7 +65,7 @@ public class StepManeuver {
      * <li>fork</li>
      * <li>end of road - road ends in a T intersection</li>
      * <li>continue - continue on a street after a turn</li>
-     * <li>roundabout - traverse roundabout, has additional field {@link #getExit()}</li>
+     * <li>roundabout - traverse roundabout</li>
      * </ul>
      *
      * @return String with type of maneuver.
@@ -73,6 +73,15 @@ public class StepManeuver {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * The pronunciation hint of the way name. Will be undefined if no pronunciation is hit.
+     * @since 2.0.0
+     * @return String with the pronunciation
+     */
+    public String getPronunciation() {
+        return pronunciation;
     }
 
     /**
@@ -98,16 +107,6 @@ public class StepManeuver {
     }
 
     /**
-     * Roundabouts will have an additional parameter.
-     *
-     * @return int value
-     * @since 1.0.0
-     */
-    public int getExit() {
-        return exit;
-    }
-
-    /**
      * Converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
      * use this format instead of {@link #getLocation()} as it's easier to work with.
      *
@@ -128,9 +127,10 @@ public class StepManeuver {
                 "location=" + Arrays.toString(location) +
                 ", bearingBefore=" + bearingBefore +
                 ", bearingAfter=" + bearingAfter +
+                ", instruction='" + instruction + '\'' +
                 ", type='" + type + '\'' +
+                ", pronunciation='" + pronunciation + '\'' +
                 ", modifier='" + modifier + '\'' +
-                ", exit=" + exit +
                 '}';
     }
 }
