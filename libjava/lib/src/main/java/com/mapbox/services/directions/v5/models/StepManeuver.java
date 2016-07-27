@@ -18,6 +18,7 @@ public class StepManeuver {
     @SerializedName("bearing_after")
     private double bearingAfter;
     private String type;
+    private String pronunciation;
     private String modifier;
     private String instruction;
 
@@ -75,6 +76,15 @@ public class StepManeuver {
     }
 
     /**
+     * The pronunciation hint of the way name. Will be undefined if no pronunciation is hit.
+     * @since 2.0.0
+     * @return String with the pronunciation
+     */
+    public String getPronunciation() {
+        return pronunciation;
+    }
+
+    /**
      * This indicates the mode of the maneuver.  If type is of turn, the modifier indicates the
      * change in direction accomplished through the turn. If the type is of depart/arrive, the
      * modifier indicates the position of waypoint from the current direction of travel.
@@ -117,8 +127,10 @@ public class StepManeuver {
                 "location=" + Arrays.toString(location) +
                 ", bearingBefore=" + bearingBefore +
                 ", bearingAfter=" + bearingAfter +
+                ", instruction='" + instruction + '\'' +
                 ", type='" + type + '\'' +
-                ", modifier='" + modifier +
+                ", pronunciation='" + pronunciation + '\'' +
+                ", modifier='" + modifier + '\'' +
                 '}';
     }
 }
