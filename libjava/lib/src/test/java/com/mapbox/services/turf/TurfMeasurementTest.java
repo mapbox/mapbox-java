@@ -2,6 +2,7 @@ package com.mapbox.services.turf;
 
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
+import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.turf.TurfConstants;
@@ -179,5 +180,44 @@ public class TurfMeasurementTest extends BaseTurf {
                 Point.fromCoordinates(mid), TurfConstants.UNIT_MILES),
                 TurfMeasurement.distance(Point.fromCoordinates(pt2),
                         Point.fromCoordinates(mid), TurfConstants.UNIT_MILES), DELTA);
+    }
+
+    @Test
+    public void testTurfAlong() throws IOException, TurfException {
+        Feature feature = Feature.fromJson(loadJsonFixture("turf-along", "dc-line.geojson"));
+        LineString line = (LineString) feature.getGeometry();
+
+        Point pt1 = TurfMeasurement.along(line, 1, "miles");
+        Point pt2 = TurfMeasurement.along(line, 1.2, "miles");
+        Point pt3 = TurfMeasurement.along(line, 1.4, "miles");
+        Point pt4 = TurfMeasurement.along(line, 1.6, "miles");
+        Point pt5 = TurfMeasurement.along(line, 1.8, "miles");
+        Point pt6 = TurfMeasurement.along(line, 2, "miles");
+        Point pt7 = TurfMeasurement.along(line, 100, "miles");
+        Point pt8 = TurfMeasurement.along(line, 0, "miles");
+        FeatureCollection fc = FeatureCollection.fromFeatures(new Feature[] {
+                Feature.fromGeometry(pt1),
+                Feature.fromGeometry(pt2),
+                Feature.fromGeometry(pt3),
+                Feature.fromGeometry(pt4),
+                Feature.fromGeometry(pt5),
+                Feature.fromGeometry(pt6),
+                Feature.fromGeometry(pt7),
+                Feature.fromGeometry(pt8)
+        });
+
+        for (Feature f: fc.getFeatures()) {
+            assertNotNull(f);
+            assertEquals(f.getType(), "Feature");
+            assertEquals(f.getGeometry().getType(), "Point");
+        }
+
+        assertEquals(fc.getFeatures().size(), 8);
+        assertEquals(
+                ((Point) fc.getFeatures().get(7).getGeometry()).getCoordinates().getLongitude(),
+                pt8.getCoordinates().getLongitude(), DELTA);
+        assertEquals(
+                ((Point) fc.getFeatures().get(7).getGeometry()).getCoordinates().getLatitude(),
+                pt8.getCoordinates().getLatitude(), DELTA);
     }
 }
