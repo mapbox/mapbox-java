@@ -20,7 +20,6 @@ public class StepManeuver {
     private String type;
     private String modifier;
     private String instruction;
-    private int exit;
 
     /**
      * @return double array of [longitude, latitude] for the snapped coordinate.
@@ -65,7 +64,7 @@ public class StepManeuver {
      * <li>fork</li>
      * <li>end of road - road ends in a T intersection</li>
      * <li>continue - continue on a street after a turn</li>
-     * <li>roundabout - traverse roundabout, has additional field {@link #getExit()}</li>
+     * <li>roundabout - traverse roundabout</li>
      * </ul>
      *
      * @return String with type of maneuver.
@@ -98,16 +97,6 @@ public class StepManeuver {
     }
 
     /**
-     * Roundabouts will have an additional parameter.
-     *
-     * @return int value
-     * @since 1.0.0
-     */
-    public int getExit() {
-        return exit;
-    }
-
-    /**
      * Converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
      * use this format instead of {@link #getLocation()} as it's easier to work with.
      *
@@ -129,8 +118,7 @@ public class StepManeuver {
                 ", bearingBefore=" + bearingBefore +
                 ", bearingAfter=" + bearingAfter +
                 ", type='" + type + '\'' +
-                ", modifier='" + modifier + '\'' +
-                ", exit=" + exit +
+                ", modifier='" + modifier +
                 '}';
     }
 }

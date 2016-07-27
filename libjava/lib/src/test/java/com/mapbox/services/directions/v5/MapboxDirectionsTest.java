@@ -199,7 +199,6 @@ public class MapboxDirectionsTest {
         assertEquals(maneuver.getType(), "depart");
         assertEquals(maneuver.getModifier(), "left");
         assertEquals(maneuver.getInstruction(), "Head west on Eddy Street");
-        assertEquals(maneuver.getExit(), 0);
     }
 
     @Test
