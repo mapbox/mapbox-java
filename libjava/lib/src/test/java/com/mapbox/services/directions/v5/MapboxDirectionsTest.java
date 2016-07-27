@@ -123,8 +123,8 @@ public class MapboxDirectionsTest {
         Response<DirectionsResponse> response = client.executeCall();
 
         DirectionsRoute route = response.body().getRoutes().get(0);
-        assertEquals(route.getDistance(), 77274.0, DELTA);
-        assertEquals(route.getDuration(), 3441.2, DELTA);
+        assertEquals(route.getDistance(), 77274.3, DELTA);
+        assertEquals(route.getDuration(), 3444.2, DELTA);
         assertTrue(route.getGeometry().startsWith("kqreFhodjVhh"));
         assertEquals(route.getLegs().size(), 1);
     }
@@ -156,10 +156,10 @@ public class MapboxDirectionsTest {
         Response<DirectionsResponse> response = client.executeCall();
 
         RouteLeg leg = response.body().getRoutes().get(0).getLegs().get(0);
-        assertEquals(leg.getDistance(), 77274.0, DELTA);
-        assertEquals(leg.getDuration(), 3441.2, DELTA);
+        assertEquals(leg.getDistance(), 77274.3, DELTA);
+        assertEquals(leg.getDuration(), 3444.2, DELTA);
         assertEquals(leg.getSummary(), "James Lick Freeway (US 101), Bayshore Freeway (US 101)");
-        assertEquals(leg.getSteps().size(), 16);
+        assertEquals(leg.getSteps().size(), 14);
     }
 
     @Test
@@ -198,8 +198,8 @@ public class MapboxDirectionsTest {
         assertEquals(maneuver.getBearingAfter(), 261, DELTA);
         assertEquals(maneuver.getType(), "depart");
         assertEquals(maneuver.getModifier(), "left");
-        assertEquals(maneuver.getInstruction(), "Proceed to Eddy Street, then go left");
-        assertEquals(maneuver.getExit(), 1);
+        assertEquals(maneuver.getInstruction(), "Head west on Eddy Street");
+        assertEquals(maneuver.getExit(), 0);
     }
 
     @Test
