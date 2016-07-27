@@ -33,28 +33,17 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
 
     // Mapbox Java Services (development)
-    compile project(':libjava')
+    //compile project(':libjava')
 
     // Mapbox Java Services (release)
-//    compile ('com.mapbox.mapboxsdk:mapbox-java-services:1.2.1@jar') {
-//        transitive=true
-//    }
+    compile ('com.mapbox.mapboxsdk:mapbox-java-services:2.0.0-SNAPSHOT@jar') {
+        transitive=true
+    }
 
     // Testing
     testCompile 'junit:junit:4.12'
 }
 
-android.libraryVariants.all { variant ->
-    def name = variant.name
-    task "javadoc$name"(type: Javadoc) {
-        description = "Generates javadoc for build $name"
-        failOnError = false
-        destinationDir = new File(destinationDir, variant.baseName)
-        source = files(variant.javaCompile.source)
-        classpath = files(variant.javaCompile.classpath.files) + files(android.bootClasspath)
-        exclude '**/R.java', '**/BuildConfig.java'
-    }
-}
-
+apply from: 'gradle-javadoc.gradle'
 apply from: 'gradle-checkstyle.gradle'
 apply from: 'gradle-mvn-push.gradle'
