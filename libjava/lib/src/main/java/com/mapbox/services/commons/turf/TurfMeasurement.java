@@ -3,6 +3,7 @@ package com.mapbox.services.commons.turf;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Geometry;
+import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
@@ -16,6 +17,19 @@ import java.util.List;
  * @since 1.2.0
  */
 public class TurfMeasurement {
+
+    /**
+     * Takes two positions and finds the geographic bearing between them.
+     *
+     * @param p1 Starting {@link Position}.
+     * @param p2 Ending {@link Position}.
+     * @return bearing in decimal degrees.
+     * @see <a href="http://turfjs.org/docs/#bearing">Turf Bearing documentation</a>
+     * @since 2.0.0
+     */
+    public static double bearing(Position p1, Position p2) {
+        return bearing(Point.fromCoordinates(p1), Point.fromCoordinates(p2));
+    }
 
     /**
      * Takes two points and finds the geographic bearing between them.
@@ -44,6 +58,23 @@ public class TurfMeasurement {
         return bearing;
     }
 
+    /**
+     * Takes a Position and calculates the location of a destination point given a distance in
+     * degrees, radians, miles, or kilometers; and bearing in degrees. This uses the Haversine
+     * formula to account for global curvature.
+     *
+     * @param p1   Starting point.
+     * @param distance Distance from the starting point.
+     * @param bearing  Ranging from -180 to 180.
+     * @param units    Miles, kilometers, degrees, or radians (defaults kilometers).
+     * @return destination {@link Point}
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+     * @see <a href="http://turfjs.org/docs/#destination">Turf Destination documetation</a>
+     * @since 2.0.0
+     */
+    public static Position destination(Position p1, double distance, double bearing, String units) throws TurfException {
+        return destination(Point.fromCoordinates(p1), distance, bearing, units).getCoordinates();
+    }
 
     /**
      * Takes a Point and calculates the location of a destination point given a distance in
@@ -77,6 +108,21 @@ public class TurfMeasurement {
 
         return Point.fromCoordinates(
                 Position.fromCoordinates(radians2degrees * longitude2, radians2degrees * latitude2));
+    }
+
+    /**
+     * Calculates the distance between two positions in degress, radians, miles, or kilometers. This
+     * uses the Haversine formula to account for global curvature.
+     *
+     * @param point1 Origin position.
+     * @param point2 Destination position.
+     * @return Distance between the two positions.
+     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+     * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
+     * @since 2.0.0
+     */
+    public static double distance(Position point1, Position point2, String units) throws TurfException {
+        return distance(Point.fromCoordinates(point1), Point.fromCoordinates(point2), units);
     }
 
     /**
@@ -239,5 +285,28 @@ public class TurfMeasurement {
         double dist = distance(from, to, TurfConstants.UNIT_MILES);
         double heading = bearing(from, to);
         return destination(from, dist / 2, heading, TurfConstants.UNIT_MILES);
+    }
+
+    public static Point along(LineString line, double distance, String units) throws TurfException {
+        List<Position> coords = line.getCoordinates();
+
+        double travelled = 0;
+        for (int i = 0; i < coords.size(); i++) {
+            if (distance >= travelled && i == coords.size() - 1) {
+                break;
+            } else if (travelled >= distance) {
+                double overshot = distance - travelled;
+                if (overshot == 0) {
+                    return Point.fromCoordinates(coords.get(i));
+                } else {
+                    double direction = bearing(coords.get(i), coords.get(i - 1)) - 180;
+                    return Point.fromCoordinates(destination(coords.get(i), overshot, direction, units));
+                }
+            } else {
+                travelled += distance(coords.get(i), coords.get(i + 1), units);
+            }
+        }
+
+        return Point.fromCoordinates(coords.get(coords.size() - 1));
     }
 }
