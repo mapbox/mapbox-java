@@ -7,6 +7,7 @@ import com.mapbox.services.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.directions.v5.models.DirectionsWaypoint;
 import com.mapbox.services.directions.v5.models.LegStep;
 import com.mapbox.services.directions.v5.models.RouteLeg;
+import com.mapbox.services.directions.v5.models.StepIntersection;
 import com.mapbox.services.directions.v5.models.StepManeuver;
 
 import org.junit.After;
@@ -28,6 +29,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Response;
 
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
@@ -179,6 +181,26 @@ public class MapboxDirectionsTest {
         assertEquals(step.getName(), "Eddy Street");
         assertEquals(step.getMode(), "driving");
         assertNotEquals(step.getManeuver(), null);
+        assertEquals(step.getIntersections().size(), 2);
+    }
+
+    @Test
+    public void testStepIntersection() throws ServicesException, IOException {
+        MapboxDirections client = new MapboxDirections.Builder()
+                .setAccessToken("pk.XXX")
+                .setCoordinates(positions)
+                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+                .build();
+        client.setBaseUrl(mockUrl.toString());
+        Response<DirectionsResponse> response = client.executeCall();
+
+        StepIntersection intersection = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0).getIntersections().get(1);
+        assertEquals(intersection.asPosition().getLongitude(), -122.417548, DELTA);
+        assertEquals(intersection.asPosition().getLatitude(), 37.783315, DELTA);
+        assertArrayEquals(intersection.getBearings(), new int[] {75, 165, 255, 345});
+        assertArrayEquals(intersection.getEntry(), new boolean[] {false, false, true, true});
+        assertEquals(intersection.getIn(), 0);
+        assertEquals(intersection.getOut(), 2);
     }
 
     @Test

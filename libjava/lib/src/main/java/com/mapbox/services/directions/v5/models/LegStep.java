@@ -1,5 +1,7 @@
 package com.mapbox.services.directions.v5.models;
 
+import java.util.List;
+
 /**
  * Includes one {@link StepManeuver} object and travel to the following {@link LegStep}.
  *
@@ -13,6 +15,7 @@ public class LegStep {
     private String name;
     private String mode;
     private StepManeuver maneuver;
+    private List<StepIntersection> intersections;
 
     /**
      * The distance traveled from the maneuver to the next {@link LegStep}.
@@ -66,5 +69,13 @@ public class LegStep {
      */
     public StepManeuver getManeuver() {
         return maneuver;
+    }
+
+    /**
+     * @return Array of objects representing all intersections along the step.
+     * @since 2.0.0
+     */
+    public List<StepIntersection> getIntersections() {
+        return intersections;
     }
 }
