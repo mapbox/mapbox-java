@@ -283,4 +283,15 @@ public class Feature implements GeoJSON {
     public boolean hasProperty(String key) {
         return getProperties().has(key);
     }
+
+    /**
+     * Convenience method to check for a member by name as well as non-null value.
+     *
+     * @param key name of the member
+     * @return true if member is present with non-null value, false otherwise.
+     * @since 2.0.0
+     */
+    public boolean hasNonNullValueForProperty(String key) {
+        return hasProperty(key) && getProperty(key) != null;
+    }
 }

@@ -21,6 +21,7 @@ public class CarmenFeatureTest {
         double[] center = new double[]{1.2, 3.4};
         double relevance = 1.2;
         JsonObject properties = new JsonObject();
+        properties.addProperty("foo1", "bar");
         CarmenFeature feature = new CarmenFeature();
 
         // Type specific
@@ -47,6 +48,9 @@ public class CarmenFeatureTest {
         assertEquals(feature.getRelevance(), relevance, DELTA);
         assertEquals(feature.getGeometry(), null);
         assertEquals(feature.getProperties(), properties);
+        assertEquals(feature.getStringProperty("foo1"), "bar");
+        assertEquals(feature.hasNonNullValueForProperty("foo1"), true);
+        assertEquals(feature.hasNonNullValueForProperty("foo2"), false);
         assertEquals(feature.getId(), "Text field 4");
     }
 }
