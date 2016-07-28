@@ -3,10 +3,13 @@ format_version: 1.0.0
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 trigger_map:
 - pattern: scheduled
+  is_pull_request_allowed: false
   workflow: scheduled
 - pattern: gh-pages
+  is_pull_request_allowed: false
   workflow: gh-pages
 - pattern: "*"
+  is_pull_request_allowed: true
   workflow: primary
 workflows:
   gh-pages:
