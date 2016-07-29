@@ -292,6 +292,6 @@ public class Feature implements GeoJSON {
      * @since 2.0.0
      */
     public boolean hasNonNullValueForProperty(String key) {
-        return hasProperty(key) && getProperty(key) != null && getProperty(key) != "null";
+        return hasProperty(key) && !getProperty(key).isJsonNull();
     }
 }
