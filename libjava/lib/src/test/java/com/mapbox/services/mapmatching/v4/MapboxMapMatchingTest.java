@@ -17,7 +17,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.Dispatcher;
@@ -25,7 +24,6 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
-import rx.observers.TestSubscriber;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
@@ -103,32 +101,6 @@ public class MapboxMapMatchingTest {
         assertNotNull(response.body());
         assertEquals(1, response.body().getFeatures().size());
         assertNotNull(response.body().getFeatures().get(0).getGeometry());
-    }
-
-    /**
-     * Test the most basic request but now with RX
-     */
-    @Test
-    public void testSanityRX() throws ServicesException, IOException {
-        MapboxMapMatching client = new MapboxMapMatching.Builder()
-                .setAccessToken(ACCESS_TOKEN)
-                .setProfile(DirectionsCriteria.PROFILE_WALKING)
-                .setTrace(trace)
-                .build();
-        client.setBaseUrl(mockUrl.toString());
-
-        TestSubscriber<MapMatchingResponse> testSubscriber = new TestSubscriber<>();
-        client.getObservable().subscribe(testSubscriber);
-
-        testSubscriber.assertCompleted();
-        testSubscriber.assertNoErrors();
-        testSubscriber.assertValueCount(1);
-
-        List<MapMatchingResponse> events = testSubscriber.getOnNextEvents();
-        assertEquals(1, events.size());
-
-        MapMatchingResponse response = events.get(0);
-        assertEquals(response.getCode(), DirectionsCriteria.RESPONSE_OK);
     }
 
     /**
