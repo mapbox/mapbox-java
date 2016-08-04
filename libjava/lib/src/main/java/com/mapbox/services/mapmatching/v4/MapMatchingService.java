@@ -38,25 +38,4 @@ public interface MapMatchingService {
             @Query("geometry") String geometry,
             @Query("gps_precision") Integer gpsPrecision,
             @Body RequestBody trace);
-
-    /**
-     * RxJava-based interface
-     *
-     * @param userAgent    user
-     * @param profile      directions profile id
-     * @param accessToken  Mapbox access token
-     * @param geometry     format for the returned geometry (optional)
-     * @param gpsPrecision assumed precision in meters of the used tracking device
-     * @param trace        The trace wanting to be matched
-     * @return The MapMatchingResponse in an RX Java Observable
-     * @since 1.2.0
-     */
-    @POST("matching/v4/{profile}.json")
-    Observable<MapMatchingResponse> getObservable(
-            @Header("User-Agent") String userAgent,
-            @Path("profile") String profile,
-            @Query("access_token") String accessToken,
-            @Query("geometry") String geometry,
-            @Query("gps_precision") Integer gpsPrecision,
-            @Body RequestBody trace);
 }

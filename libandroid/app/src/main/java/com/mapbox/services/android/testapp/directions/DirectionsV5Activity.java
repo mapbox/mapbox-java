@@ -113,25 +113,6 @@ public class DirectionsV5Activity extends AppCompatActivity {
                 .setOverview(DirectionsCriteria.OVERVIEW_FULL)
                 .build();
 
-        /*
-         * Note that we also support RxJava + RxAndroid to consume our APIs. For example, the
-         * code below could be done like this with observables, in a way that creates a new thread
-         * but the result can be used to change the views without hitting the dreaded
-         * android.os.NetworkOnMainThreadException.
-         *
-         * client.getObservable()
-         *                 .subscribeOn(Schedulers.newThread())
-         *                 .observeOn(AndroidSchedulers.mainThread())
-         *                 .subscribe(new Action1<DirectionsResponse>() {
-         *                     @Override
-         *                     public void call(DirectionsResponse response) {
-         *                         DirectionsRoute currentRoute = response.getRoutes().get(0);
-         *                         Log.d(LOG_TAG, "Response code: " + response.getCode());
-         *                         Log.d(LOG_TAG, "Distance: " + currentRoute.getDistance());
-         *                     }
-         *         });
-         */
-
         client.enqueueCall(new Callback<DirectionsResponse>() {
             @Override
             public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {

@@ -11,7 +11,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rx.Observable;
 
 /**
  * Mapbox specific services used internally within the SDK.
@@ -30,8 +29,6 @@ public abstract class MapboxService<T> {
     public abstract void cancelCall();
 
     public abstract Call<T> cloneCall();
-
-    public abstract Observable<T> getObservable();
 
     public boolean isEnableDebug() {
         return enableDebug;

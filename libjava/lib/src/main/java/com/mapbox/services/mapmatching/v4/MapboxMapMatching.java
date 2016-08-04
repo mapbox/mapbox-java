@@ -21,9 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 
 /**
  * The Mapbox map matching interface (v4)
@@ -40,7 +38,6 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     private Builder builder = null;
     private MapMatchingService service = null;
     private Call<MapMatchingResponse> call = null;
-    private Observable<MapMatchingResponse> observable = null;
 
     // Allows testing
     private String baseUrl = Constants.BASE_API_URL;
@@ -76,7 +73,6 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
                 .client(getOkHttpClient())
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
         // MapMatching service
@@ -148,29 +144,6 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     @Override
     public Call<MapMatchingResponse> cloneCall() {
         return getCall().clone();
-    }
-
-    /**
-     * Get observable
-     *
-     * @return Observable
-     * @since 1.2.0
-     */
-    @Override
-    public Observable<MapMatchingResponse> getObservable() {
-        // No need to recreate it
-        if (observable != null) return observable;
-
-        observable = getService().getObservable(
-                getHeaderUserAgent(),
-                builder.getProfile(),
-                builder.getAccessToken(),
-                builder.getGeometry(),
-                builder.getGpsPrecison(),
-                builder.getTrace()
-        );
-
-        return observable;
     }
 
     /**
