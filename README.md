@@ -8,7 +8,20 @@
 
 An open source toolset for building applications that need directions, geocoding, or static map imagery. Two libraries are at your disposal: a **Java library** compatible with any Java application and an **Android library** intended to be used specifically for Android applications.
 
+### Features
+
+**Java & Android:**
+
+* [x] Integrate with the [Geocoding API](https://www.mapbox.com/geocoding/)
+* [x] Integrate with the [Map Matching API](https://www.mapbox.com/blog/map-matching/)
+* [x] Integrate with the [Static Image API](https://www.mapbox.com/api-documentation/#static)
+
+**Android:**
+
+* [x] Ready-to-go geocoder input view with autocompletion
+
 ### Installation
+
 To install and use MAS in an application, see the [Mapbox Android Services website](https://www.mapbox.com/android-sdk/#mapbox_android_services).
 
 ### Sample code
