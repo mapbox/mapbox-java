@@ -23,11 +23,8 @@ import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import retrofit2.Response;
-import rx.Observable;
-import rx.observers.TestSubscriber;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class MapboxGeocodingTest {
@@ -137,29 +134,6 @@ public class MapboxGeocodingTest {
         Response<GeocodingResponse> response = client.executeCall();
 
         List<CarmenContext> contexts = response.body().getFeatures().get(0).getContext();
-        assertEquals(contexts.get(4).getId(), "country.12862386939497690");
-        assertEquals(contexts.get(4).getText(), "United States");
-        assertEquals(contexts.get(4).getShortCode(), "us");
-    }
-
-    @Test
-    public void testObservable() throws ServicesException, IOException {
-        MapboxGeocoding client = new MapboxGeocoding.Builder()
-                .setAccessToken("pk.XXX")
-                .setLocation("1600 pennsylvania ave nw")
-                .build();
-        client.setBaseUrl(mockUrl.toString());
-        Observable<GeocodingResponse> geocodingResponseObservable = client.getObservable();
-        assertNotNull(geocodingResponseObservable);
-
-        TestSubscriber<GeocodingResponse> testSubscriber = new TestSubscriber<>();
-        geocodingResponseObservable.subscribe(testSubscriber);
-
-        testSubscriber.assertNoErrors();
-        List<GeocodingResponse> responses = testSubscriber.getOnNextEvents();
-        assertNotNull(responses);
-        assertTrue("Geocoding Response Returned", responses.size() > 0);
-        List<CarmenContext> contexts = responses.get(0).getFeatures().get(0).getContext();
         assertEquals(contexts.get(4).getId(), "country.12862386939497690");
         assertEquals(contexts.get(4).getText(), "United States");
         assertEquals(contexts.get(4).getShortCode(), "us");

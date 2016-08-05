@@ -19,9 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 
 /**
  * The Mapbox geocoding client (v5).
@@ -33,7 +31,6 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     private Builder builder = null;
     private GeocodingService service = null;
     private Call<GeocodingResponse> call = null;
-    private Observable<GeocodingResponse> observable = null;
 
     // Allows testing
     private String baseUrl = Constants.BASE_API_URL;
@@ -77,7 +74,6 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
                 .client(getOkHttpClient())
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
         service = retrofit.create(GeocodingService.class);
@@ -150,31 +146,6 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     @Override
     public Call<GeocodingResponse> cloneCall() {
         return getCall().clone();
-    }
-
-    /**
-     * Get observable
-     *
-     * @return Observable
-     * @since 1.0.0
-     */
-    @Override
-    public Observable<GeocodingResponse> getObservable() {
-        // No need to recreate it
-        if (observable != null) return observable;
-
-        observable = getService().getObservable(
-                getHeaderUserAgent(),
-                builder.getMode(),
-                builder.getQuery(),
-                builder.getAccessToken(),
-                builder.getCountry(),
-                builder.getProximity(),
-                builder.getGeocodingTypes(),
-                builder.getAutocomplete(),
-                builder.getBbox());
-
-        return observable;
     }
 
     /**
