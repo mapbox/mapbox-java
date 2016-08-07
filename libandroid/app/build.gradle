@@ -58,3 +58,4 @@ dependencies {
 
 apply from: 'gradle-checkstyle.gradle'
 apply from: 'gradle-config.gradle'
+apply from: 'gradle-dexcount.gradle'
