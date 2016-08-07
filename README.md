@@ -16,7 +16,7 @@ An open source toolset for building applications that need directions, geocoding
 * [x] Integrate with the [Geocoding API](https://www.mapbox.com/geocoding/)
 * [x] Integrate with the [Map Matching API](https://www.mapbox.com/blog/map-matching/)
 * [x] Integrate with the [Static Image API](https://www.mapbox.com/api-documentation/#static)
-* [x] Integrate with the [Line simplification](https://www.mapbox.com/android-sdk/examples/polyline-simplification/)
+* [x] [Line simplification](https://www.mapbox.com/android-sdk/examples/polyline-simplification/)
 * [x] Geospatial analysis functionality, adapted from the [Turf](http://turfjs.org/) project
 
 **Android:**
