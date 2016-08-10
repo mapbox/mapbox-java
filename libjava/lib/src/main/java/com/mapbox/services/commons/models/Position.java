@@ -95,6 +95,14 @@ public class Position {
         return new Position(longitude, latitude, Double.NaN);
     }
 
+    public static Position fromCoordinates(double[] coordinates) {
+        if (coordinates.length == 3) {
+            return Position.fromCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+        } else {
+            return Position.fromCoordinates(coordinates[0], coordinates[1]);
+        }
+    }
+
     /**
      * Checks if a position has an altitude value.
      *

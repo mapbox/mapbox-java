@@ -68,18 +68,16 @@ public class Polygon implements Geometry<List<List<Position>>> {
     }
 
     public static Polygon fromCoordinates(double[][][] coordinates) {
-        List<List<Position>> coordinatesList = new ArrayList<>();
+        List<List<Position>> converted = new ArrayList<>(coordinates.length);
         for (int i = 0; i < coordinates.length; i++) {
-            List<Position> innerList = new ArrayList<>();
+            List<Position> innerList = new ArrayList<>(coordinates[i].length);
             for (int j = 0; j < coordinates[i].length; j++) {
-                innerList.add(Position.fromCoordinates(
-                        coordinates[i][j][0],
-                        coordinates[i][j][1]));
+                innerList.add(Position.fromCoordinates(coordinates[i][j]));
             }
-            coordinatesList.add(innerList);
+            converted.add(innerList);
         }
 
-        return fromCoordinates(coordinatesList);
+        return fromCoordinates(converted);
     }
 
     /**

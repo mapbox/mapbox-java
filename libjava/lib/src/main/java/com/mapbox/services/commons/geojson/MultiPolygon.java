@@ -5,6 +5,7 @@ import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionSerializer;
 import com.mapbox.services.commons.models.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,6 +65,23 @@ public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
      */
     public static MultiPolygon fromCoordinates(List<List<List<Position>>> coordinates) {
         return new MultiPolygon(coordinates);
+    }
+
+    public static MultiPolygon fromCoordinates(double[][][][] coordinates) {
+        List<List<List<Position>>> converted = new ArrayList<>(coordinates.length);
+        for (int i = 0; i < coordinates.length; i++) {
+            List<List<Position>> innerOneList = new ArrayList<>(coordinates[i].length);
+            for (int j = 0; j < coordinates[i].length; j++) {
+                List<Position> innerTwoList = new ArrayList<>(coordinates[i][j].length);
+                for (int k = 0; k < coordinates[i][j].length; k++) {
+                    innerTwoList.add(Position.fromCoordinates(coordinates[i][j][k]));
+                }
+                innerOneList.add(innerTwoList);
+            }
+            converted.add(innerOneList);
+        }
+
+        return fromCoordinates(converted);
     }
 
     /**
