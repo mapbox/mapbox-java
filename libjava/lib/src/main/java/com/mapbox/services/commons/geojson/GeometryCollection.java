@@ -18,7 +18,7 @@ import java.util.List;
 public class GeometryCollection implements GeoJSON {
 
     private final String type = "GeometryCollection";
-    private final List<com.mapbox.services.commons.geojson.Geometry> geometries;
+    private final List<Geometry> geometries;
 
     /**
      * Private constructor.
@@ -26,7 +26,7 @@ public class GeometryCollection implements GeoJSON {
      * @param geometries List of {@link Geometry}.
      * @since 1.0.0
      */
-    public GeometryCollection(List<com.mapbox.services.commons.geojson.Geometry> geometries) {
+    public GeometryCollection(List<Geometry> geometries) {
         this.geometries = geometries;
     }
 
@@ -47,7 +47,7 @@ public class GeometryCollection implements GeoJSON {
      * @return List of geometries within collection.
      * @since 1.0.0
      */
-    public List<com.mapbox.services.commons.geojson.Geometry> getGeometries() {
+    public List<Geometry> getGeometries() {
         return geometries;
     }
 
@@ -58,7 +58,7 @@ public class GeometryCollection implements GeoJSON {
      * @return new {@link GeometryCollection}
      * @since 1.0.0
      */
-    public static GeometryCollection fromGeometries(List<com.mapbox.services.commons.geojson.Geometry> geometries) {
+    public static GeometryCollection fromGeometries(List<Geometry> geometries) {
         return new GeometryCollection(geometries);
     }
 

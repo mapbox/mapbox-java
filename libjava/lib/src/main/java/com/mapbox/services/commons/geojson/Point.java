@@ -64,6 +64,10 @@ public class Point implements Geometry<Position> {
         return new Point(coordinates);
     }
 
+    public static Point fromCoordinates(double[] coordinates) {
+        return fromCoordinates(Position.fromCoordinates(coordinates));
+    }
+
     /**
      * Create a GeoJSON Point object from JSON.
      *

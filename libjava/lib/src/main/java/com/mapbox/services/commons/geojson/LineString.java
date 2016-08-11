@@ -6,6 +6,7 @@ import com.mapbox.services.commons.geojson.custom.PositionSerializer;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.PolylineUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,6 +66,15 @@ public class LineString implements Geometry<List<Position>> {
      */
     public static LineString fromCoordinates(List<Position> coordinates) {
         return new LineString(coordinates);
+    }
+
+    public static LineString fromCoordinates(double[][] coordinates) {
+        ArrayList<Position> converted = new ArrayList<>(coordinates.length);
+        for (int i = 0; i < coordinates.length; i++) {
+            converted.add(Position.fromCoordinates(coordinates[i]));
+        }
+
+        return fromCoordinates(converted);
     }
 
     /**

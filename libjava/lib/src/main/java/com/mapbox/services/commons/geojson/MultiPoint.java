@@ -5,6 +5,7 @@ import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionSerializer;
 import com.mapbox.services.commons.models.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,6 +65,15 @@ public class MultiPoint implements Geometry<List<Position>> {
      */
     public static MultiPoint fromCoordinates(List<Position> coordinates) {
         return new MultiPoint(coordinates);
+    }
+
+    public static MultiPoint fromCoordinates(double[][] coordinates) {
+        ArrayList<Position> converted = new ArrayList<>(coordinates.length);
+        for (int i = 0; i < coordinates.length; i++) {
+            converted.add(Position.fromCoordinates(coordinates[i]));
+        }
+
+        return MultiPoint.fromCoordinates(converted);
     }
 
     /**
