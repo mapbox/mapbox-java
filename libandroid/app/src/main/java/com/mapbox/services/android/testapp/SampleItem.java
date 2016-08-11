@@ -1,8 +1,5 @@
 package com.mapbox.services.android.testapp;
 
-/**
- * Created by antonio on 4/1/16.
- */
 public class SampleItem {
 
     private String name;

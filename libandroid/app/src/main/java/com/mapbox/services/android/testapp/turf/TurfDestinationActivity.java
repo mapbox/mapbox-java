@@ -24,7 +24,6 @@ import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.commons.turf.TurfConstants;
 import com.mapbox.services.commons.turf.TurfException;
 import com.mapbox.services.commons.turf.TurfMeasurement;
 
@@ -51,13 +50,16 @@ public class TurfDestinationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.turf_destination_fab);
-        if (fab != null)
+        if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    if (map != null) destination();
+                public void onClick(View view) {
+                    if (map != null) {
+                        destination();
+                    }
                 }
             });
+        }
 
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -114,10 +116,10 @@ public class TurfDestinationActivity extends AppCompatActivity {
         final EditText bearingInput = (EditText) dialog.findViewById(R.id.turf_destination_bearing_input);
         final Spinner distanceUnitsSpinner = (Spinner) dialog.findViewById(R.id.turf_destination_unit_spinner);
         Button calculateButton = (Button) dialog.findViewById(R.id.turf_destination_calculate_button);
-        if (calculateButton != null)
+        if (calculateButton != null) {
             calculateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
                     double distance;
                     double bearing;
 
@@ -125,7 +127,8 @@ public class TurfDestinationActivity extends AppCompatActivity {
                     if (distanceInput.getText().length() != 0) {
                         distance = Double.parseDouble(distanceInput.getText().toString());
                     } else {
-                        Toast.makeText(TurfDestinationActivity.this, "missing distance value", Toast.LENGTH_LONG).show();
+                        Toast.makeText(TurfDestinationActivity.this, "missing distance value", Toast.LENGTH_LONG)
+                                .show();
                         return;
                     }
 
@@ -136,28 +139,36 @@ public class TurfDestinationActivity extends AppCompatActivity {
                         return;
                     }
                     try {
-                        Point result = TurfMeasurement.destination(Point.fromCoordinates(cadillacHotelPosition), distance, bearing, distanceUnitsSpinner.getSelectedItem().toString());
+                        Point result = TurfMeasurement.destination(Point.fromCoordinates(cadillacHotelPosition),
+                                distance, bearing, distanceUnitsSpinner.getSelectedItem().toString());
                         Position resultPosition = result.getCoordinates();
-                        if (destinationMarker != null) map.removeMarker(destinationMarker);
+                        if (destinationMarker != null) {
+                            map.removeMarker(destinationMarker);
+                        }
                         destinationMarker = map.addMarker(new MarkerViewOptions()
-                                .position(new LatLng(result.getCoordinates().getLatitude(), result.getCoordinates().getLongitude()))
+                                .position(new LatLng(result.getCoordinates().getLatitude(),
+                                        result.getCoordinates().getLongitude()))
                                 .title("destination"));
                         LatLngBounds latLngBounds = new LatLngBounds.Builder()
-                                .include(new LatLng(cadillacHotelPosition.getLatitude(), cadillacHotelPosition.getLongitude()))
+                                .include(new LatLng(cadillacHotelPosition.getLatitude(),
+                                        cadillacHotelPosition.getLongitude()))
                                 .include(new LatLng(resultPosition.getLatitude(), resultPosition.getLongitude()))
                                 .build();
 
                         map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 80, 160, 80, 160), 1000);
 
-                        Snackbar.make(container, "Destination = " + resultPosition.getLatitude() + ", " + resultPosition.getLongitude(), Snackbar.LENGTH_INDEFINITE).show();
-                    } catch (TurfException e) {
-                        e.printStackTrace();
+                        Snackbar.make(container,
+                                "Destination = " + resultPosition.getLatitude() + ", " + resultPosition.getLongitude(),
+                                Snackbar.LENGTH_INDEFINITE).show();
+                    } catch (TurfException exception) {
+                        exception.printStackTrace();
                     }
 
                     dialog.dismiss();
 
                 }
             });
+        }
 
         dialog.show();
     }

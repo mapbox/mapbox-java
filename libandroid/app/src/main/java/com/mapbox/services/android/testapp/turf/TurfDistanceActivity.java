@@ -141,7 +141,9 @@ public class TurfDistanceActivity extends AppCompatActivity {
         map.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng point) {
-                if (distanceMarker != null) map.removeMarker(distanceMarker);
+                if (distanceMarker != null) {
+                    map.removeMarker(distanceMarker);
+                }
 
                 distanceMarker = map.addMarker(new MarkerViewOptions()
                         .position(point)
@@ -149,9 +151,11 @@ public class TurfDistanceActivity extends AppCompatActivity {
 
                 double distance = 0;
                 try {
-                    distance = TurfMeasurement.distance(Point.fromCoordinates(cadillacHotelPosition), Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(), point.getLatitude())), units);
-                } catch (TurfException e) {
-                    e.printStackTrace();
+                    distance = TurfMeasurement.distance(Point.fromCoordinates(cadillacHotelPosition),
+                            Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(),
+                                    point.getLatitude())), units);
+                } catch (TurfException exception) {
+                    exception.printStackTrace();
                 }
                 Snackbar.make(container, "Distance = " + distance + " " + units, Snackbar.LENGTH_INDEFINITE).show();
             }

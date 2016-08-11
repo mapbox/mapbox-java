@@ -7,9 +7,6 @@ import android.support.annotation.NonNull;
 
 import com.mapbox.mapboxsdk.constants.MapboxConstants;
 
-/**
- * Created by antonio on 3/24/16.
- */
 public class Utils {
 
     /**

@@ -26,7 +26,7 @@ import com.mapzen.android.lost.api.LocationServices;
 
 public class GeocodingWidgetActivity extends AppCompatActivity {
 
-    private final static String LOG_TAG = "GeocodingWidgetActivity";
+    private static final String LOG_TAG = "GeocodingWidgetActivity";
 
     private MapView mapView;
     private MapboxMap mapboxMap;
@@ -101,7 +101,7 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause()  {
+    public void onPause() {
         super.onPause();
         mapView.onPause();
     }

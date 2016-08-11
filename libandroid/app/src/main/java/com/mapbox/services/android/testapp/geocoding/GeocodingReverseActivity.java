@@ -20,11 +20,11 @@ import com.mapbox.services.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.List;
 
 public class GeocodingReverseActivity extends AppCompatActivity {
 
@@ -64,8 +64,8 @@ public class GeocodingReverseActivity extends AppCompatActivity {
                                 .title("Your finger is here"));
                         try {
                             geocode(point);
-                        } catch (ServicesException e) {
-                            setMessage("Geocoding failed: " + e.getMessage());
+                        } catch (ServicesException exception) {
+                            setMessage("Geocoding failed: " + exception.getMessage());
                         }
                     }
                 });
@@ -128,8 +128,8 @@ public class GeocodingReverseActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<GeocodingResponse> call, Throwable t) {
-                setError(t.getMessage());
+            public void onFailure(Call<GeocodingResponse> call, Throwable throwable) {
+                setError(throwable.getMessage());
             }
         });
     }
