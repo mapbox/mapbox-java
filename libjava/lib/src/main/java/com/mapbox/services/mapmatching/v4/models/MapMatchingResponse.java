@@ -19,7 +19,7 @@ public class MapMatchingResponse extends FeatureCollection {
 
     private String code;
 
-    protected MapMatchingResponse(List<Feature> features) {
+    public MapMatchingResponse(List<Feature> features) {
         super(features);
     }
 

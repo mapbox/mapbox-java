@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class GeocodingResponse extends CarmenFeatureCollection {
 
-    protected GeocodingResponse(List<CarmenFeature> features) {
+    public GeocodingResponse(List<CarmenFeature> features) {
         super(features);
     }
 

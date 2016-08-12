@@ -13,6 +13,11 @@ public class DirectionsResponse {
     private List<DirectionsRoute> routes;
     private List<DirectionsWaypoint> waypoints;
 
+    public DirectionsResponse(List<DirectionsRoute> routes, List<DirectionsWaypoint> waypoints) {
+        this.routes = routes;
+        this.waypoints = waypoints;
+    }
+
     /**
      * String indicating the state of the response. This is a separate code than the HTTP
      * status code.
@@ -22,6 +27,10 @@ public class DirectionsResponse {
      */
     public String getCode() {
         return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     /**
@@ -35,6 +44,10 @@ public class DirectionsResponse {
         return waypoints;
     }
 
+    public void setWaypoints(List<DirectionsWaypoint> waypoints) {
+        this.waypoints = waypoints;
+    }
+
     /**
      * List containing all the different route options. It's ordered by descending recommendation
      * rank. In other words, object 0 in the List is the highest recommended route. if you don't
@@ -46,5 +59,9 @@ public class DirectionsResponse {
      */
     public List<DirectionsRoute> getRoutes() {
         return routes;
+    }
+
+    public void setRoutes(List<DirectionsRoute> routes) {
+        this.routes = routes;
     }
 }
