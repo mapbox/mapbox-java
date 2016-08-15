@@ -21,7 +21,8 @@ An open source toolset for building applications that need directions, geocoding
 
 **Android:**
 
-* [x] Geocoder input view with autocompletion (drop-in replacement for stock Geocoder view)
+* [x] Ready-to-go geocoder input view with autocompletion.
+* [x] Drop-in replacement for stock Android Geocoder object.
 
 ### Installation
 
