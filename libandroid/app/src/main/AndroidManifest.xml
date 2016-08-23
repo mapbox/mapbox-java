@@ -36,6 +36,11 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".directions.RouteUtilsV5Activity"
+            android:label="Route Utils v5"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".icons.DirectionsIconsActivity"
             android:label="Directions icons"
             android:parentActivityName=".MainActivity"
@@ -100,7 +105,6 @@
             android:label="Turf inside"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".turf.TurfMidpointActivity"
             android:label="Turf midpoint"
