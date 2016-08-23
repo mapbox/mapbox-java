@@ -10,6 +10,7 @@ import com.mapbox.services.commons.turf.TurfConstants;
 import com.mapbox.services.commons.turf.TurfException;
 import com.mapbox.services.commons.turf.TurfMeasurement;
 import com.mapbox.services.commons.turf.TurfMisc;
+import com.mapbox.services.commons.utils.PolylineUtils;
 import com.mapbox.services.directions.v5.models.LegStep;
 import com.mapbox.services.directions.v5.models.RouteLeg;
 
@@ -51,7 +52,7 @@ public class RouteUtils {
         LegStep step = validateStep(route, stepIndex);
 
         // Decode the geometry
-        List<Position> coords = LineString.fromPolyline(step.getGeometry(), Constants.OSRM_PRECISION_V5).getCoordinates();
+        List<Position> coords = PolylineUtils.decode(step.getGeometry(), Constants.OSRM_PRECISION_V5);
 
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
@@ -74,8 +75,9 @@ public class RouteUtils {
         double minDistance = Double.MAX_VALUE;
         int closestIndex = 0;
 
+        double distance;
         for (int stepIndex = 0; stepIndex < route.getSteps().size(); stepIndex++) {
-            double distance = getDistanceToStep(position, route, stepIndex);
+            distance = getDistanceToStep(position, route, stepIndex);
             if (distance < minDistance) {
                 minDistance = distance;
                 closestIndex = stepIndex;
