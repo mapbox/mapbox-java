@@ -54,6 +54,11 @@ public class RouteUtils {
         // Decode the geometry
         List<Position> coords = PolylineUtils.decode(step.getGeometry(), Constants.OSRM_PRECISION_V5);
 
+        // No need to do the math if the step has one coordinate only
+        if (coords.size() == 1) {
+            return coords.get(0);
+        }
+
         // Uses Turf's pointOnLine, which takes a Point and a LineString to calculate the closest
         // Point on the LineString.
         Feature point = TurfMisc.pointOnLine(Point.fromCoordinates(position), coords);
