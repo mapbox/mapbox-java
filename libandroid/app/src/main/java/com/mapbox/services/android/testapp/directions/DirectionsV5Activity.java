@@ -29,6 +29,7 @@ import com.mapbox.services.directions.v5.models.DirectionsRoute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +43,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
     private MapboxMap mapboxMap = null;
 
     private DirectionsRoute currentRoute = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +128,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
                 // Print some info about the route
                 currentRoute = response.body().getRoutes().get(0);
                 Log.d(LOG_TAG, "Distance: " + currentRoute.getDistance());
-                showMessage(String.format("Route is %f meters long.", currentRoute.getDistance()));
+                showMessage(String.format(Locale.US, "Route is %.1f meters long.", currentRoute.getDistance()));
 
                 // Draw the route on the map
                 drawRoute(currentRoute);
