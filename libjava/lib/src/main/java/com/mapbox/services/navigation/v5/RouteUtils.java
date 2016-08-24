@@ -3,7 +3,6 @@ package com.mapbox.services.navigation.v5;
 import com.mapbox.services.Constants;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.turf.TurfConstants;
@@ -33,6 +32,10 @@ public class RouteUtils {
 
     public RouteUtils(double offRouteThresholdKm) {
         this.offRouteThresholdKm = offRouteThresholdKm;
+    }
+
+    public double getOffRouteThresholdKm() {
+        return offRouteThresholdKm;
     }
 
     public boolean isInStep(Position position, RouteLeg route, int stepIndex) throws ServicesException, TurfException {
