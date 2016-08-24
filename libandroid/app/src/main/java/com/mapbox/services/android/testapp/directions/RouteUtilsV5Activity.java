@@ -1,17 +1,24 @@
 package com.mapbox.services.android.testapp.directions;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.MarkerViewOptions;
+import com.mapbox.mapboxsdk.annotations.Polyline;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -21,16 +28,19 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
+import com.mapbox.services.android.testapp.MainActivity;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.turf.TurfException;
+import com.mapbox.services.commons.utils.PolylineUtils;
 import com.mapbox.services.directions.v5.DirectionsCriteria;
 import com.mapbox.services.directions.v5.MapboxDirections;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.directions.v5.models.DirectionsRoute;
+import com.mapbox.services.directions.v5.models.LegStep;
 import com.mapbox.services.directions.v5.models.RouteLeg;
 import com.mapbox.services.navigation.v5.RouteUtils;
 
@@ -53,6 +63,10 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
     private LatLng to = null;
     private DirectionsRoute currentRoute = null;
 
+    private Icon tapIcon;
+    private Marker userTap = null;
+    private List<Polyline> snapLines = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +76,11 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Create an Icon object for the marker to use
+        IconFactory iconFactory = IconFactory.getInstance(this);
+        Drawable iconDrawable = ContextCompat.getDrawable(this, R.drawable.ic_my_location_black_24dp);
+        tapIcon = iconFactory.fromDrawable(iconDrawable);
 
         // Set up a standard Mapbox map
         mapView = (MapView) findViewById(R.id.mapview);
@@ -129,18 +148,50 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
     }
 
     private void doUtils(LatLng point) throws ServicesException, TurfException {
+        // Remove previous
+        if (userTap != null) {
+            mapboxMap.removeMarker(userTap);
+        }
+
+        userTap = mapboxMap.addMarker(new MarkerOptions().position(point).setIcon(tapIcon));
+
         RouteUtils routeUtils = new RouteUtils();
         RouteLeg route = currentRoute.getLegs().get(0);
         Position position = Position.fromCoordinates(point.getLongitude(), point.getLatitude());
 
-        Log.d(LOG_TAG, String.format(Locale.US, "- isOffRoute = %b", routeUtils.isOffRoute(position, route)));
-        Log.d(LOG_TAG, String.format(Locale.US, "- getClosestStep = %d", routeUtils.getClosestStep(position, route)));
+        // General situational message
+        String message = String.format(Locale.US, "You're closest to step %d/%d (%s)",
+                routeUtils.getClosestStep(position, route) + 1,
+                route.getSteps().size(),
+                routeUtils.isOffRoute(position, route) ? "off-route" : "not off-route");
+        showMessage(message);
 
+        // Remove previous lines
+        if (snapLines != null && snapLines.size() > 0) {
+            for (Polyline snapLine: snapLines) {
+                mapboxMap.removePolyline(snapLine);
+            }
+        }
+
+        // Draw snap to route lines
+        snapLines = new ArrayList<>();
         for (int stepIndex = 0; stepIndex < route.getSteps().size(); stepIndex++) {
-            Log.d(LOG_TAG, String.format("- Step index: %d", stepIndex));
-            Log.d(LOG_TAG, String.format(Locale.US, "  - isInStep = %b", routeUtils.isInStep(position, route, stepIndex)));
-            Log.d(LOG_TAG, String.format(Locale.US, "  - getDistanceToStep = %f", routeUtils.getDistanceToStep(position, route, stepIndex)));
-            Log.d(LOG_TAG, String.format(Locale.US, "  - getSnapToRoute = %s", routeUtils.getSnapToRoute(position, route, stepIndex).toString()));
+            Position snapPoint = routeUtils.getSnapToRoute(position, route, stepIndex);
+            LatLng[] points = new LatLng[] {
+                    point,
+                    new LatLng(snapPoint.getLatitude(), snapPoint.getLongitude())};
+            snapLines.add(mapboxMap.addPolyline(new PolylineOptions()
+                    .add(points)
+                    .color(Color.parseColor("#f9886c"))
+                    .width(2)));
+        }
+
+        // Log some extra info
+        for (int stepIndex = 0; stepIndex < route.getSteps().size(); stepIndex++) {
+            Log.d(LOG_TAG, String.format("Step %d: in step = %b, distance = %.1fkm",
+                    stepIndex + 1,
+                    routeUtils.isInStep(position, route, stepIndex),
+                    routeUtils.getDistanceToStep(position, route, stepIndex)));
         }
     }
 
@@ -170,7 +221,9 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
                 // Print some info about the route
                 currentRoute = response.body().getRoutes().get(0);
                 Log.d(LOG_TAG, "Distance: " + currentRoute.getDistance());
-                showMessage(String.format(Locale.US, "Route is %f meters long.", currentRoute.getDistance()));
+                showMessage(String.format(Locale.US, "Route has %d steps and it's %.1f meters long.",
+                        currentRoute.getLegs().get(0).getSteps().size(),
+                        currentRoute.getDistance()));
 
                 // Draw the route on the map
                 drawRoute(currentRoute);
@@ -185,21 +238,28 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
     }
 
     private void drawRoute(DirectionsRoute route) {
-        // Convert LineString coordinates into LatLng[]
-        LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.OSRM_PRECISION_V5);
-        List<Position> coordinates = lineString.getCoordinates();
-        LatLng[] points = new LatLng[coordinates.size()];
-        for (int i = 0; i < coordinates.size(); i++) {
-            points[i] = new LatLng(
-                    coordinates.get(i).getLatitude(),
-                    coordinates.get(i).getLongitude());
-        }
+        // We're gonna draw each step in an alternating color
+        String[] colors = new String[] {"#3887be", "#56b881"}; // Blue, green
 
-        // Draw Points on MapView
-        mapboxMap.addPolyline(new PolylineOptions()
-                .add(points)
-                .color(Color.parseColor("#3887be"))
-                .width(5));
+        List<Position> coordinates;
+        LatLng[] points;
+        int colorIndex = 0;
+        for (int i = 0; i < route.getLegs().get(0).getSteps().size(); i++) {
+            LegStep step = route.getLegs().get(0).getSteps().get(i);
+            coordinates = PolylineUtils.decode(step.getGeometry(), Constants.OSRM_PRECISION_V5);
+            points = new LatLng[coordinates.size()];
+            for (int j = 0; j < coordinates.size(); j++) {
+                points[j] = new LatLng(
+                        coordinates.get(j).getLatitude(),
+                        coordinates.get(j).getLongitude());
+            }
+
+            colorIndex ^= 1;
+            mapboxMap.addPolyline(new PolylineOptions()
+                    .add(points)
+                    .color(Color.parseColor(colors[colorIndex]))
+                    .width(5));
+        }
     }
 
     private void showMessage(String message) {
