@@ -1,7 +1,7 @@
 [![](https://www.mapbox.com/android-sdk/images/service-splash.png)](https://www.mapbox.com/android-sdk/#mapbox_android_services)
 
 [![Build Status](https://www.bitrise.io/app/a7eea7d04be1e2e5.svg?token=OruuJNhnjyeRnlBv0wXsFQ&branch=master)](https://www.bitrise.io/app/a7eea7d04be1e2e5) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services)
-<a href="http://www.methodscount.com/?lib=com.mapbox.mapboxsdk%3Amapbox-android-services%3A1.2.1"><img src="https://img.shields.io/badge/Methods count-core: 113 | deps: 30620-e91e63.svg"/></a>
+<a href="http://www.methodscount.com/?lib=com.mapbox.mapboxsdk%3Amapbox-android-services%3A1.3.0"><img src="https://img.shields.io/badge/Methods count-core: 124 | deps: 25403-e91e63.svg"/></a>
 
 
 # Mapbox Android Services (MAS)
