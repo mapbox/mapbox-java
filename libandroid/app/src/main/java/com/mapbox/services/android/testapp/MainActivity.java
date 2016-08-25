@@ -21,6 +21,7 @@ import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
 import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
+import com.mapbox.services.android.testapp.nav.OffRouteDetectionActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.testapp.turf.TurfDistanceActivity;
 import com.mapbox.services.android.testapp.turf.TurfInsideActivity;
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
             new SampleItem("Turf distance", "", TurfDistanceActivity.class),
             new SampleItem("Turf line slice", "", TurfLineSliceActivity.class),
             new SampleItem("Turf inside", "", TurfInsideActivity.class),
-            new SampleItem("Turf midpoint", "", TurfMidpointActivity.class)
+            new SampleItem("Turf midpoint", "", TurfMidpointActivity.class),
+            new SampleItem("Off route detection", "", OffRouteDetectionActivity.class)
     ));
 
     @Override

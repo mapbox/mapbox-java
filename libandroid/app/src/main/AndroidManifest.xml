@@ -110,6 +110,11 @@
             android:label="Turf midpoint"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".nav.OffRouteDetectionActivity"
+            android:label="Off route detection"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--
         Service to asynchronously fetch a location address using a Geocoder. Setting the
