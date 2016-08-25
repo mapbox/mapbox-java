@@ -2,6 +2,13 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v1.3.0
+
+* `RouteUtils` class to simplify work with `RouteLeg` objects
+* `geojson-tidy` integrated with Map Matching client
+* Added Turf's `midpoint`, `along`, and `within` methods
+* Added an example to showcase Turf's `lineslice`
+
 ### v1.2.1
 
 * Bring back `toString()` method in `CarmenFeature`

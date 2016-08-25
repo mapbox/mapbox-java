@@ -2,6 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v1.3.0
+
+* Geocoding widget now supports the `bbox` parameter
+
 ### v1.2.1
 
 * Fixes regresion in `GeocoderAutoCompleteView`
