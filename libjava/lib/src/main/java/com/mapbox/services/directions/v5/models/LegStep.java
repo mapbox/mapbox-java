@@ -73,7 +73,7 @@ public class LegStep {
 
     /**
      * @return Array of objects representing all intersections along the step.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public List<StepIntersection> getIntersections() {
         return intersections;

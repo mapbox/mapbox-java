@@ -77,7 +77,7 @@ public class StepManeuver {
 
     /**
      * The pronunciation hint of the way name. Will be undefined if no pronunciation is hit.
-     * @since 2.0.0
+     * @since 1.3.0
      * @return String with the pronunciation
      */
     public String getPronunciation() {

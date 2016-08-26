@@ -76,7 +76,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
      *
      * @return <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a>
      * country code
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public String getCountry() {
         return country;
@@ -88,7 +88,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
      * and separated by commas.
      *
      * @param country String matching country code.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public void setCountry(String country) {
         this.country = country;
@@ -121,7 +121,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
      * Bounding box within which to limit results
      *
      * @return double array containing minX, minY, maxX, maxY
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public double[] getBbox() {
         return bbox;
@@ -132,7 +132,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
      *
      * @param northeast The top right hand corner of your bounding box when the map is pointed north.
      * @param southwest The bottom left hand corner of your bounding box when the map is pointed north.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public void setBbox(Position northeast, Position southwest) {
         setBbox(southwest.getLongitude(), southwest.getLatitude(),
@@ -146,7 +146,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
      * @param minY Left of bounding box when map is pointed north.
      * @param maxX Top of bounding box when map is pointed north.
      * @param maxY Right of bounding box when map is pointed north.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public void setBbox(double minX, double minY, double maxX, double maxY) {
         if (bbox == null) bbox = new double[4];

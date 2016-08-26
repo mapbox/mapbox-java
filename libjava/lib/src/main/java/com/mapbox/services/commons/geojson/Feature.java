@@ -289,7 +289,7 @@ public class Feature implements GeoJSON {
      *
      * @param key name of the member
      * @return true if member is present with non-null value, false otherwise.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public boolean hasNonNullValueForProperty(String key) {
         return hasProperty(key) && !getProperty(key).isJsonNull();
