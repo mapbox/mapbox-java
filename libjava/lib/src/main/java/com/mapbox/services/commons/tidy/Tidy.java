@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by antonio on 7/26/16.
+ * Create a tidy geojson by resampling points in the feature based on sampling time and distance.
+ * Handy when geometries that have been converted from a noisy GPS/GPX output.
+ *
+ * @since 1.3.0
  */
 public class Tidy {
 
@@ -35,6 +38,12 @@ public class Tidy {
     public final static String KEY_COORD_TIMES = "coordTimes";
     public final static String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
+    /**
+     * Constructor that uses a default 10 meter distance, 5 second minimum time and 100
+     * default points.
+     *
+     * @since 1.3.0
+     */
     public Tidy() {
         minimumDistance = DEFAULT_MINIMUM_DISTANCE;
         minimumTime = DEFAULT_MINIMUM_TIME;
@@ -42,6 +51,14 @@ public class Tidy {
         dateFormat = new SimpleDateFormat(Tidy.DATE_FORMAT, Locale.US);
     }
 
+    /**
+     * Constructor allowing you to pass in specific values for distance, time, and max points.
+     *
+     * @param minimumDistance in meters between successive coordinates.
+     * @param minimumTime     in milliseconds between successive coordinates.
+     * @param maximumPoints   for output.
+     * @since 1.3.0
+     */
     public Tidy(int minimumDistance, int minimumTime, int maximumPoints) {
         this.minimumDistance = minimumDistance;
         this.minimumTime = minimumTime;
@@ -49,38 +66,86 @@ public class Tidy {
         dateFormat = new SimpleDateFormat(Tidy.DATE_FORMAT, Locale.US);
     }
 
+    /**
+     * @return the minimum distance set; defaults 10 meters
+     * @since 1.3.0
+     */
     public int getMinimumDistance() {
         return minimumDistance;
     }
 
+    /**
+     * @param minimumDistance set/update the minimum distance in meters between successive
+     *                        coordinates.
+     * @since 1.3.0
+     */
     public void setMinimumDistance(int minimumDistance) {
         this.minimumDistance = minimumDistance;
     }
 
+    /**
+     * @return the minimum time set; defaults 5 seconds
+     * @since 1.3.0
+     */
     public int getMinimumTime() {
         return minimumTime;
     }
 
+    /**
+     * @param minimumTime set/update the minimum time in milliseconds between successive coordinates.
+     * @since 1.3.0
+     */
     public void setMinimumTime(int minimumTime) {
         this.minimumTime = minimumTime;
     }
 
+    /**
+     * @return the maximum points set; defaults 100.
+     * @since 1.3.0
+     */
     public int getMaximumPoints() {
         return maximumPoints;
     }
 
+    /**
+     * @param maximumPoints set/update the maximum points output; defaults 100.
+     * @since 1.3.0
+     */
     public void setMaximumPoints(int maximumPoints) {
         this.maximumPoints = maximumPoints;
     }
 
+    /**
+     * @return either the default date format or one that you have set using
+     * {@link #setDateFormat(SimpleDateFormat)}.
+     * @since 1.3.0
+     */
     public SimpleDateFormat getDateFormat() {
         return dateFormat;
     }
 
+    /**
+     * @param dateFormat set/update the date format used when {@link #execute(FeatureCollection)}
+     *                   is called.
+     * @since 1.3.0
+     */
     public void setDateFormat(SimpleDateFormat dateFormat) {
         this.dateFormat = dateFormat;
     }
 
+    /**
+     * Method that performs the tidying of geojson route passed in. It uses the parameters set when
+     * constructing the {@link Tidy} object or the values set using their respected setters. The
+     * result returned will be a GeoJSON FeatureCollection with similar coordinates removed.
+     *
+     * @param geojson {@link FeatureCollection} representing your route that you'd like to tidy up
+     *                and remove similar unnecessary coordinates from.
+     * @return {@link FeatureCollection} with similar unnecessary coordinates that met within the
+     * parameters you specified, removed.
+     * @throws TurfException     signals that a Turf exception of some sort has occurred.
+     * @throws ServicesException if error occurs Mapbox API related.
+     * @since 1.3.0
+     */
     public FeatureCollection execute(FeatureCollection geojson) throws TurfException, ServicesException {
         ArrayList<Feature> features = new ArrayList<>();
 

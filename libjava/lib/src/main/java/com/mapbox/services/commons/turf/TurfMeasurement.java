@@ -25,7 +25,7 @@ public class TurfMeasurement {
      * @param p2 Ending {@link Position}.
      * @return bearing in decimal degrees.
      * @see <a href="http://turfjs.org/docs/#bearing">Turf Bearing documentation</a>
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public static double bearing(Position p1, Position p2) {
         return bearing(Point.fromCoordinates(p1), Point.fromCoordinates(p2));
@@ -70,7 +70,7 @@ public class TurfMeasurement {
      * @return destination {@link Point}
      * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#destination">Turf Destination documetation</a>
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public static Position destination(Position p1, double distance, double bearing, String units) throws TurfException {
         return destination(Point.fromCoordinates(p1), distance, bearing, units).getCoordinates();
@@ -116,10 +116,11 @@ public class TurfMeasurement {
      *
      * @param point1 Origin position.
      * @param point2 Destination position.
+     * @param units  Miles, kilometers, degrees, or radians (defaults kilometers).
      * @return Distance between the two positions.
      * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public static double distance(Position point1, Position point2, String units) throws TurfException {
         return distance(Point.fromCoordinates(point1), Point.fromCoordinates(point2), units);
@@ -262,7 +263,7 @@ public class TurfMeasurement {
      * @return A {@link Position} midway between pt1 and pt2.
      * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#midpoint">Turf Midpoint documentation</a>
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public static Position midpoint(Position from, Position to) throws TurfException {
         Point midpointResult = midpoint(Point.fromCoordinates(from), Point.fromCoordinates(to));
@@ -279,7 +280,7 @@ public class TurfMeasurement {
      * @return A {@link Point} midway between pt1 and pt2.
      * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#midpoint">Turf Midpoint documentation</a>
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public static Point midpoint(Point from, Point to) throws TurfException {
         double dist = distance(from, to, TurfConstants.UNIT_MILES);

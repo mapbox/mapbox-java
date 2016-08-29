@@ -110,7 +110,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
      *
      * @param northeast The top right hand corner of your bounding box when the map is pointed north.
      * @param southwest The bottom left hand corner of your bounding box when the map is pointed north.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public void setBbox(Position northeast, Position southwest) {
         adapter.setBbox(southwest.getLongitude(), southwest.getLatitude(),
@@ -124,7 +124,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
      * @param minY Left of bounding box when map is pointed north.
      * @param maxX Top of bounding box when map is pointed north.
      * @param maxY Right of bounding box when map is pointed north.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public void setBbox(double minX, double minY, double maxX, double maxY) {
         adapter.setBbox(minX, minY, maxX, maxY);

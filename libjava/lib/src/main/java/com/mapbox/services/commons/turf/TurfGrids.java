@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * other geometry in a grid.
  *
  * @see <a href="http://turfjs.org/docs/">Turfjs documentation</a>
- * @since 2.0.0
+ * @since 1.3.0
  */
 public class TurfGrids {
 
@@ -24,7 +24,7 @@ public class TurfGrids {
      * @param polygons input polygons.
      * @return points that land within at least one polygon.
      * @throws TurfException Signals that a Turf exception of some sort has occurred.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public static FeatureCollection within(FeatureCollection points, FeatureCollection polygons) throws TurfException {
         ArrayList<Feature> features = new ArrayList<>();

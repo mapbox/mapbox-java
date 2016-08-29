@@ -15,7 +15,7 @@ public class StepIntersection {
 
     /**
      * @return A [longitude, latitude] pair describing the location of the turn.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public double[] getLocation() {
         return location;
@@ -24,7 +24,7 @@ public class StepIntersection {
     /**
      * @return A list of bearing values (for example [0,90,180,270]) that are available at the
      * intersection. The bearings describe all available roads at the intersection.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public int[] getBearings() {
         return bearings;
@@ -34,7 +34,7 @@ public class StepIntersection {
      * @return  A list of entry flags, corresponding in a 1:1 relationship to the bearings. A value
      * of true indicates that the respective road could be entered on a valid route. false
      * indicates that the turn onto the respective road would violate a restriction.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public boolean[] getEntry() {
         return entry;
@@ -46,7 +46,7 @@ public class StepIntersection {
      * maneuver/passing the intersection. To get the bearing in the direction of driving,
      * the bearing has to be rotated by a value of 180. The value is not supplied for departure
      * maneuvers.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public int getIn() {
         return in;
@@ -56,7 +56,7 @@ public class StepIntersection {
      * @return Index into the bearings/entry array. Used to extract the bearing after the turn.
      * Namely, The clockwise angle from true north to the direction of travel after the
      * maneuver/passing the intersection. The value is not supplied for arrive maneuvers.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public int getOut() {
         return out;
@@ -67,7 +67,7 @@ public class StepIntersection {
      * use this format instead of {@link #getLocation()} as it's easier to work with.
      *
      * @return {@link Position}.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public Position asPosition() {
         return Position.fromCoordinates(location[0], location[1]);

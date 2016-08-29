@@ -12,7 +12,7 @@ import java.util.List;
  * Class contains methods that can determine if points lie within a polygon or not.
  *
  * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
- * @since 2.0.0
+ * @since 1.3.0
  */
 public class TurfJoins {
 
@@ -26,7 +26,7 @@ public class TurfJoins {
      * @return True if the Point is inside the Polygon; false if the Point is not inside the Polygon.
      * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public static boolean inside(Position point, List<Position> polygon) throws TurfException {
         List<List<Position>> polygons = new ArrayList<>();
@@ -44,7 +44,7 @@ public class TurfJoins {
      * @return True if the Point is inside the Polygon; false if the Point is not inside the Polygon.
      * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public static boolean inside(Point point, Polygon polygon) throws TurfException {
         // This API needs to get better
@@ -63,7 +63,7 @@ public class TurfJoins {
      * @return True if the Point is inside the MultiPolygon; false if the Point is not inside the MultiPolygon.
      * @throws TurfException Signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
-     * @since 2.0.0
+     * @since 1.3.0
      */
     public static boolean inside(Point point, MultiPolygon polygon) throws TurfException {
         Position pt = TurfInvariant.getCoord(point);

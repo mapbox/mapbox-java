@@ -118,7 +118,7 @@ public class Position {
      *
      * @param obj An object.
      * @return true if the position matches the object, false otherwise.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     @Override
     public boolean equals(Object obj) {
@@ -152,7 +152,7 @@ public class Position {
      * Use to print out the longitude, latitude and altitude values.
      *
      * @return String containing the longitude, latitude, and altitude.
-     * @since 2.0.0
+     * @since 1.3.0
      */
     @Override
     public String toString() {

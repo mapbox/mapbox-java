@@ -25,7 +25,7 @@ public class TurfMisc {
      * @param stopPt  Stopping point.
      * @param line    Line to slice.
      * @return Sliced line.
-     * @throws TurfException Signals that a Turf exception of some sort has occurred.
+     * @throws TurfException signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
      * @since 1.2.0
      */
@@ -45,7 +45,7 @@ public class TurfMisc {
      * @param stopPt  Stopping point.
      * @param line    Line to slice.
      * @return Sliced line.
-     * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+     * @throws TurfException signals that a Turf exception of some sort has occurred.
      * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
      * @since 1.2.0
      */
@@ -76,6 +76,16 @@ public class TurfMisc {
         return clipLine;
     }
 
+    /**
+     * Takes a {@link Point} and a {@link LineString} and calculates the closest Point on the
+     * LineString.
+     *
+     * @param pt     point to snap from
+     * @param coords line to snap to
+     * @return closest point on the line to point
+     * @throws TurfException signals that a Turf exception of some sort has occurred.
+     * @since 1.3.0
+     */
     public static Feature pointOnLine(Point pt, List<Position> coords) throws TurfException {
         String units = TurfConstants.UNIT_MILES;
 
