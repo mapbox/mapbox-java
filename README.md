@@ -18,6 +18,8 @@ An open source toolset for building applications that need directions, geocoding
 * [x] Integrate with the [Static Image API](https://www.mapbox.com/api-documentation/#static)
 * [x] [Line simplification](https://www.mapbox.com/android-sdk/examples/polyline-simplification/)
 * [x] Geospatial analysis functionality, adapted from the [Turf](http://turfjs.org/) project
+* [x] RouteUtils for detecting when a user or marker location becomes off route
+* [x] Tidy which cleans noisy GPS traces removing repetitive coordinates from a GeoJSON Feature Collection
 
 **Android:**
 
