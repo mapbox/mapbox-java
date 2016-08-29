@@ -1,5 +1,5 @@
 ---
 layout: redirect
 permalink: /api/libandroid/
-redirect: /api/libandroid/1.2.1/
+redirect: /api/libandroid/1.3.0/
 ---
