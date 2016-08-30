@@ -21,5 +21,4 @@ task JavadocGeneration(type: Javadoc) {
     classpath = configurations.compile
 }
 
-apply from: 'gradle-checkstyle.gradle'
 apply from: 'gradle-mvn-push.gradle'
