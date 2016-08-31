@@ -19,133 +19,133 @@ import java.util.List;
  */
 public class CarmenFeature extends Feature {
 
-    private String text;
-    @SerializedName("place_name")
-    private String placeName;
-    private double[] bbox;
-    private String address;
-    private double[] center;
-    private List<CarmenContext> context;
+  private String text;
+  @SerializedName("place_name")
+  private String placeName;
+  private double[] bbox;
+  private String address;
+  private double[] center;
+  private List<CarmenContext> context;
 
-    private double relevance;
+  private double relevance;
 
-    /**
-     * Private constructor.
-     */
-    private CarmenFeature(Geometry geometry, JsonObject properties, String id) {
-        super(geometry, properties, id);
-    }
+  /**
+   * Private constructor.
+   */
+  private CarmenFeature(Geometry geometry, JsonObject properties, String id) {
+    super(geometry, properties, id);
+  }
 
-    public CarmenFeature() {
-        super(null, null, null);
-    }
+  public CarmenFeature() {
+    super(null, null, null);
+  }
 
-    /**
-     * @return Text representing the feature (e.g. "Austin").
-     * @since 1.0.0
-     */
-    public String getText() {
-        return text;
-    }
+  /**
+   * @return Text representing the feature (e.g. "Austin").
+   * @since 1.0.0
+   */
+  public String getText() {
+    return text;
+  }
 
-    /**
-     * @return Human-readable text representing the full result hierarchy (e.g. "Austin, Texas, United States").
-     * @since 1.0.0
-     */
-    public String getPlaceName() {
-        return placeName;
-    }
+  /**
+   * @return Human-readable text representing the full result hierarchy (e.g. "Austin, Texas, United States").
+   * @since 1.0.0
+   */
+  public String getPlaceName() {
+    return placeName;
+  }
 
-    /**
-     * @return Array bounding box of the form [minx, miny, maxx, maxy].
-     * @since 1.0.0
-     */
-    public double[] getBbox() {
-        return bbox;
-    }
+  /**
+   * @return Array bounding box of the form [minx, miny, maxx, maxy].
+   * @since 1.0.0
+   */
+  public double[] getBbox() {
+    return bbox;
+  }
 
-    /**
-     * @return Where applicable. Contains the housenumber for the returned feature
-     * @since 1.0.0
-     */
-    public String getAddress() {
-        return address;
-    }
+  /**
+   * @return Where applicable. Contains the housenumber for the returned feature
+   * @since 1.0.0
+   */
+  public String getAddress() {
+    return address;
+  }
 
-    /**
-     * @return Array of the form [lon, lat].
-     * @since 1.0.0
-     */
-    public double[] getCenter() {
-        return center;
-    }
+  /**
+   * @return Array of the form [lon, lat].
+   * @since 1.0.0
+   */
+  public double[] getCenter() {
+    return center;
+  }
 
-    /**
-     * @return Array representing a hierarchy of parents. Each parent includes id, text keys.
-     * @since 1.0.0
-     */
-    public List<CarmenContext> getContext() {
-        return context;
-    }
+  /**
+   * @return Array representing a hierarchy of parents. Each parent includes id, text keys.
+   * @since 1.0.0
+   */
+  public List<CarmenContext> getContext() {
+    return context;
+  }
 
-    /**
-     * You can use the relevance property to remove rough results if you require a response that
-     * matches your whole query.
-     *
-     * @return double value between 0 and 1.
-     * @since 1.0.0
-     */
-    public double getRelevance() {
-        return relevance;
-    }
+  /**
+   * You can use the relevance property to remove rough results if you require a response that
+   * matches your whole query.
+   *
+   * @return double value between 0 and 1.
+   * @since 1.0.0
+   */
+  public double getRelevance() {
+    return relevance;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public void setText(String text) {
+    this.text = text;
+  }
 
-    public void setPlaceName(String placeName) {
-        this.placeName = placeName;
-    }
+  public void setPlaceName(String placeName) {
+    this.placeName = placeName;
+  }
 
-    public void setBbox(double[] bbox) {
-        this.bbox = bbox;
-    }
+  public void setBbox(double[] bbox) {
+    this.bbox = bbox;
+  }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    public void setCenter(double[] center) {
-        this.center = center;
-    }
+  public void setCenter(double[] center) {
+    this.center = center;
+  }
 
-    public void setContext(List<CarmenContext> context) {
-        this.context = context;
-    }
+  public void setContext(List<CarmenContext> context) {
+    this.context = context;
+  }
 
-    public void setRelevance(double relevance) {
-        this.relevance = relevance;
-    }
+  public void setRelevance(double relevance) {
+    this.relevance = relevance;
+  }
 
-    /**
-     * Util to transform center into a Position object
-     *
-     * @return a {@link Position} representing the center.
-     * @since 1.0.0
-     */
-    public Position asPosition() {
-        return Position.fromCoordinates(center[0], center[1]);
-    }
+  /**
+   * Util to transform center into a Position object
+   *
+   * @return a {@link Position} representing the center.
+   * @since 1.0.0
+   */
+  public Position asPosition() {
+    return Position.fromCoordinates(center[0], center[1]);
+  }
 
-    /**
-     * Human-readable text representing the full result hierarchy
-     * (e.g. "Austin, Texas, United States").
-     *
-     * @return String with human-readable text.
-     * @since 1.0.0
-     */
-    @Override
-    public String toString() {
-        return getPlaceName();
-    }
+  /**
+   * Human-readable text representing the full result hierarchy
+   * (e.g. "Austin, Texas, United States").
+   *
+   * @return String with human-readable text.
+   * @since 1.0.0
+   */
+  @Override
+  public String toString() {
+    return getPlaceName();
+  }
 }

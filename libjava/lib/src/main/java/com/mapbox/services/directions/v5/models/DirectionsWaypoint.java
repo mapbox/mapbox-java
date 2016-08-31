@@ -9,33 +9,33 @@ import com.mapbox.services.commons.models.Position;
  */
 public class DirectionsWaypoint {
 
-    private String name;
-    private double[] location;
+  private String name;
+  private double[] location;
 
-    /**
-     * @return String with the name of the way the coordinate snapped to.
-     * @since 1.0.0
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * @return String with the name of the way the coordinate snapped to.
+   * @since 1.0.0
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * @return double array of [longitude, latitude] for the snapped coordinate.
-     * @since 1.0.0
-     */
-    public double[] getLocation() {
-        return location;
-    }
+  /**
+   * @return double array of [longitude, latitude] for the snapped coordinate.
+   * @since 1.0.0
+   */
+  public double[] getLocation() {
+    return location;
+  }
 
-    /**
-     * Converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
-     * use this format instead of {@link #getLocation()} as it's easier to work with.
-     *
-     * @return {@link Position}.
-     * @since 1.0.0
-     */
-    public Position asPosition() {
-        return Position.fromCoordinates(location[0], location[1]);
-    }
+  /**
+   * Converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
+   * use this format instead of {@link #getLocation()} as it's easier to work with.
+   *
+   * @return {@link Position}.
+   * @since 1.0.0
+   */
+  public Position asPosition() {
+    return Position.fromCoordinates(location[0], location[1]);
+  }
 }

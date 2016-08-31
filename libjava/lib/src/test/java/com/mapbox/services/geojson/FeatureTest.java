@@ -6,23 +6,20 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by antonio on 1/30/16.
- */
 public class FeatureTest extends BaseGeoJSON {
 
-    @Test
-    public void fromJson() {
-        Feature geo = Feature.fromJson(BaseGeoJSON.SAMPLE_FEATURE);
-        assertEquals(geo.getType(), "Feature");
-        assertEquals(geo.getGeometry().getType(), "Point");
-        assertEquals(geo.getProperties().get("name").getAsString(), "Dinagat Islands");
-    }
+  @Test
+  public void fromJson() {
+    Feature geo = Feature.fromJson(BaseGeoJSON.SAMPLE_FEATURE);
+    assertEquals(geo.getType(), "Feature");
+    assertEquals(geo.getGeometry().getType(), "Point");
+    assertEquals(geo.getProperties().get("name").getAsString(), "Dinagat Islands");
+  }
 
-    @Test
-    public void toJson() {
-        Feature geo = Feature.fromJson(BaseGeoJSON.SAMPLE_FEATURE);
-        compareJson(BaseGeoJSON.SAMPLE_FEATURE, geo.toJson());
-    }
+  @Test
+  public void toJson() {
+    Feature geo = Feature.fromJson(BaseGeoJSON.SAMPLE_FEATURE);
+    compareJson(BaseGeoJSON.SAMPLE_FEATURE, geo.toJson());
+  }
 
 }
