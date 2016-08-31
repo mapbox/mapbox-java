@@ -7,8 +7,8 @@ package com.mapbox.services.commons.geojson;
  */
 public interface GeoJSON {
 
-    String getType();
+  String getType();
 
-    String toJson();
+  String toJson();
 
 }
