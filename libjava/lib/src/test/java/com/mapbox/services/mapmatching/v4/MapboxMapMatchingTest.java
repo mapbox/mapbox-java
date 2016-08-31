@@ -35,170 +35,170 @@ import static org.junit.Assert.assertNull;
  */
 public class MapboxMapMatchingTest {
 
-    public static final String POLYLINE_FIXTURE = "src/test/fixtures/mapmatching_v5_polyline.json";
-    public static final String NO_GEOMETRY_FIXTURE = "src/test/fixtures/mapmatching_v5_no_geometry.json";
+  public static final String POLYLINE_FIXTURE = "src/test/fixtures/mapmatching_v5_polyline.json";
+  public static final String NO_GEOMETRY_FIXTURE = "src/test/fixtures/mapmatching_v5_no_geometry.json";
 
-    private static final String ACCESS_TOKEN = "pk.XXX";
+  private static final String ACCESS_TOKEN = "pk.XXX";
 
-    private MockWebServer server;
-    private HttpUrl mockUrl;
+  private MockWebServer server;
+  private HttpUrl mockUrl;
 
-    private LineString trace;
+  private LineString trace;
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
-    @Before
-    public void setUp() throws IOException {
-        server = new MockWebServer();
+  @Before
+  public void setUp() throws IOException {
+    server = new MockWebServer();
 
-        server.setDispatcher(new Dispatcher() {
+    server.setDispatcher(new Dispatcher() {
 
-            @Override
-            public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-                // Switch response on geometry parameter (only false supported, so nice and simple)
-                String resource = POLYLINE_FIXTURE;
-                if (request.getPath().contains("geometry=false")) {
-                    resource = NO_GEOMETRY_FIXTURE;
-                }
-
-                try {
-                    String body = new String(Files.readAllBytes(Paths.get(resource)), Charset.forName("utf-8"));
-                    return new MockResponse().setBody(body);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
-        server.start();
-        mockUrl = server.url("");
-
-        // From https://www.mapbox.com/api-documentation/#map-matching
-        trace = LineString.fromJson("{ \"type\": \"LineString\", \"coordinates\": [ [13.418946862220764, 52.50055852688439], [13.419011235237122, 52.50113000479732], [13.419756889343262, 52.50171780290061], [13.419885635375975, 52.50237416816131], [13.420631289482117, 52.50294888790448] ] }");
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        server.shutdown();
-    }
-
-    /**
-     * Test the most basic request (default response format)
-     */
-    @Test
-    public void testCallSanity() throws ServicesException, IOException {
-        MapboxMapMatching client = new MapboxMapMatching.Builder()
-                .setAccessToken(ACCESS_TOKEN)
-                .setProfile(DirectionsCriteria.PROFILE_WALKING)
-                .setTrace(trace)
-                .build();
-        client.setBaseUrl(mockUrl.toString());
-        Response<MapMatchingResponse> response = client.executeCall();
-        assertEquals(response.code(), 200);
-
-        // Check the response body
-        assertNotNull(response.body());
-        assertEquals(1, response.body().getFeatures().size());
-        assertNotNull(response.body().getFeatures().get(0).getGeometry());
-    }
-
-    /**
-     * Test a basic request with polyline response
-     */
-    @Test
-    public void testNoGeometryResponse() throws ServicesException, IOException {
-        MapboxMapMatching client = new MapboxMapMatching.Builder()
-                .setAccessToken(ACCESS_TOKEN)
-                .setProfile(DirectionsCriteria.PROFILE_WALKING)
-                .setTrace(trace)
-                .setNoGeometry()
-                .build();
-        client.setBaseUrl(mockUrl.toString());
-        Response<MapMatchingResponse> response = client.executeCall();
-        assertEquals(response.code(), 200);
-
-        // Check the response body
-        assertNotNull(response.body());
-        assertEquals(1, response.body().getFeatures().size());
-        assertNull(response.body().getFeatures().get(0).getGeometry());
-    }
-
-    @Test
-    public void requiredAccessToken() throws ServicesException {
-        thrown.expect(ServicesException.class);
-        thrown.expectMessage(startsWith("Using Mapbox Services requires setting a valid access token"));
-        new MapboxMapMatching.Builder().build();
-    }
-
-    @Test
-    public void validGpsPrecisionLowerBounds() throws ServicesException {
-        thrown.expect(ServicesException.class);
-        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid GPS precision"));
-        new MapboxMapMatching.Builder()
-                .setAccessToken(ACCESS_TOKEN)
-                .setProfile(DirectionsCriteria.PROFILE_WALKING)
-                .setGpsPrecison(0)
-                .build();
-    }
-
-    @Test
-    public void validGpsPrecisionUpperBounds() throws ServicesException {
-        thrown.expect(ServicesException.class);
-        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid GPS precision"));
-        new MapboxMapMatching.Builder()
-                .setAccessToken(ACCESS_TOKEN)
-                .setProfile(DirectionsCriteria.PROFILE_WALKING)
-                .setGpsPrecison(11)
-                .build();
-    }
-
-    @Test
-    public void validProfileNonNull() throws ServicesException {
-        thrown.expect(ServicesException.class);
-        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid profile"));
-        new MapboxMapMatching.Builder()
-                .setAccessToken(ACCESS_TOKEN)
-                .setProfile(null)
-                .build();
-    }
-
-    @Test
-    public void validProfileCorrectString() throws ServicesException {
-        thrown.expect(ServicesException.class);
-        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid profile"));
-        new MapboxMapMatching.Builder()
-                .setAccessToken(ACCESS_TOKEN)
-                .setProfile("my_own_profile")
-                .build();
-    }
-
-    @Test
-    public void validCoordinates() throws ServicesException {
-        thrown.expect(ServicesException.class);
-        thrown.expectMessage(startsWith("Using Mapbox Map Matching requires to set some coordinates"));
-        new MapboxMapMatching.Builder()
-                .setAccessToken(ACCESS_TOKEN)
-                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-                .build();
-    }
-
-    @Test
-    public void validCoordinatesTotal() throws ServicesException {
-        // Fake too many positions
-        ArrayList<Position> positions = new ArrayList<>();
-        for (int i = 0; i < 101; i++) {
-            positions.add(Position.fromCoordinates(0.0, 0.0));
+      @Override
+      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+        // Switch response on geometry parameter (only false supported, so nice and simple)
+        String resource = POLYLINE_FIXTURE;
+        if (request.getPath().contains("geometry=false")) {
+          resource = NO_GEOMETRY_FIXTURE;
         }
 
-        thrown.expect(ServicesException.class);
-        thrown.expectMessage(startsWith("The Map Matching API is limited to processing traces with up to 100 coordinates"));
-        new MapboxMapMatching.Builder()
-                .setAccessToken(ACCESS_TOKEN)
-                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-                .setTrace(LineString.fromCoordinates(positions))
-                .build();
+        try {
+          String body = new String(Files.readAllBytes(Paths.get(resource)), Charset.forName("utf-8"));
+          return new MockResponse().setBody(body);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    });
+
+    server.start();
+    mockUrl = server.url("");
+
+    // From https://www.mapbox.com/api-documentation/#map-matching
+    trace = LineString.fromJson("{ \"type\": \"LineString\", \"coordinates\": [ [13.418946862220764, 52.50055852688439], [13.419011235237122, 52.50113000479732], [13.419756889343262, 52.50171780290061], [13.419885635375975, 52.50237416816131], [13.420631289482117, 52.50294888790448] ] }");
+  }
+
+  @After
+  public void tearDown() throws IOException {
+    server.shutdown();
+  }
+
+  /**
+   * Test the most basic request (default response format)
+   */
+  @Test
+  public void testCallSanity() throws ServicesException, IOException {
+    MapboxMapMatching client = new MapboxMapMatching.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setProfile(DirectionsCriteria.PROFILE_WALKING)
+      .setTrace(trace)
+      .build();
+    client.setBaseUrl(mockUrl.toString());
+    Response<MapMatchingResponse> response = client.executeCall();
+    assertEquals(response.code(), 200);
+
+    // Check the response body
+    assertNotNull(response.body());
+    assertEquals(1, response.body().getFeatures().size());
+    assertNotNull(response.body().getFeatures().get(0).getGeometry());
+  }
+
+  /**
+   * Test a basic request with polyline response
+   */
+  @Test
+  public void testNoGeometryResponse() throws ServicesException, IOException {
+    MapboxMapMatching client = new MapboxMapMatching.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setProfile(DirectionsCriteria.PROFILE_WALKING)
+      .setTrace(trace)
+      .setNoGeometry()
+      .build();
+    client.setBaseUrl(mockUrl.toString());
+    Response<MapMatchingResponse> response = client.executeCall();
+    assertEquals(response.code(), 200);
+
+    // Check the response body
+    assertNotNull(response.body());
+    assertEquals(1, response.body().getFeatures().size());
+    assertNull(response.body().getFeatures().get(0).getGeometry());
+  }
+
+  @Test
+  public void requiredAccessToken() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Using Mapbox Services requires setting a valid access token"));
+    new MapboxMapMatching.Builder().build();
+  }
+
+  @Test
+  public void validGpsPrecisionLowerBounds() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid GPS precision"));
+    new MapboxMapMatching.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setProfile(DirectionsCriteria.PROFILE_WALKING)
+      .setGpsPrecison(0)
+      .build();
+  }
+
+  @Test
+  public void validGpsPrecisionUpperBounds() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid GPS precision"));
+    new MapboxMapMatching.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setProfile(DirectionsCriteria.PROFILE_WALKING)
+      .setGpsPrecison(11)
+      .build();
+  }
+
+  @Test
+  public void validProfileNonNull() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid profile"));
+    new MapboxMapMatching.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setProfile(null)
+      .build();
+  }
+
+  @Test
+  public void validProfileCorrectString() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid profile"));
+    new MapboxMapMatching.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setProfile("my_own_profile")
+      .build();
+  }
+
+  @Test
+  public void validCoordinates() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Using Mapbox Map Matching requires to set some coordinates"));
+    new MapboxMapMatching.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .build();
+  }
+
+  @Test
+  public void validCoordinatesTotal() throws ServicesException {
+    // Fake too many positions
+    ArrayList<Position> positions = new ArrayList<>();
+    for (int i = 0; i < 101; i++) {
+      positions.add(Position.fromCoordinates(0.0, 0.0));
     }
+
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("The Map Matching API is limited to processing traces with up to 100 coordinates"));
+    new MapboxMapMatching.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setTrace(LineString.fromCoordinates(positions))
+      .build();
+  }
 
 //    @Test
 //    public void testPost() throws ServicesException, IOException {

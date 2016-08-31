@@ -9,8 +9,8 @@ import java.util.List;
  */
 public class GeocodingResponse extends CarmenFeatureCollection {
 
-    public GeocodingResponse(List<CarmenFeature> features) {
-        super(features);
-    }
+  public GeocodingResponse(List<CarmenFeature> features) {
+    super(features);
+  }
 
 }
