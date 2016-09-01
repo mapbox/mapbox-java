@@ -14,23 +14,23 @@ import java.util.Locale;
  */
 public class GeocoderUtils {
 
-    /**
-     * Used to convert from FeatureModel to an Address.
-     *
-     * @param geocodingFeature a {@link CarmenFeature}.
-     * @param locale           {@link Locale}.
-     * @return {@link Address}
-     * @since 1.0.0
-     */
-    public static Address featureToAddress(CarmenFeature geocodingFeature, Locale locale) {
-        Address address = new Address(locale);
-        address.setAddressLine(0, geocodingFeature.getPlaceName());
-        address.setFeatureName(geocodingFeature.getText());
+  /**
+   * Used to convert from FeatureModel to an Address.
+   *
+   * @param geocodingFeature a {@link CarmenFeature}.
+   * @param locale           {@link Locale}.
+   * @return {@link Address}
+   * @since 1.0.0
+   */
+  public static Address featureToAddress(CarmenFeature geocodingFeature, Locale locale) {
+    Address address = new Address(locale);
+    address.setAddressLine(0, geocodingFeature.getPlaceName());
+    address.setFeatureName(geocodingFeature.getText());
 
-        Position position = geocodingFeature.asPosition();
-        address.setLongitude(position.getLongitude());
-        address.setLatitude(position.getLatitude());
+    Position position = geocodingFeature.asPosition();
+    address.setLongitude(position.getLongitude());
+    address.setLatitude(position.getLatitude());
 
-        return address;
-    }
+    return address;
+  }
 }

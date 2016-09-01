@@ -14,95 +14,98 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
-import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.turf.TurfMeasurement;
 
 public class TurfBearingActivity extends AppCompatActivity {
 
-    private MapView mapView;
-    private MapboxMap map;
-    private Marker bearingMarker;
+  private MapView mapView;
+  private MapboxMap map;
+  private Marker bearingMarker;
 
-    private Position cadillacHotelPosition = Position.fromCoordinates(-118.479852, 33.993898);
+  private Position cadillacHotelPosition = Position.fromCoordinates(-118.479852, 33.993898);
 
-    private View container;
+  private View container;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_turf_bearing);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_turf_bearing);
 
-        container = findViewById(R.id.turf_bearing_map_container);
+    container = findViewById(R.id.turf_bearing_map_container);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mapView = (MapView) findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap mapboxMap) {
-                map = mapboxMap;
+    mapView = (MapView) findViewById(R.id.mapView);
+    mapView.onCreate(savedInstanceState);
+    mapView.getMapAsync(new OnMapReadyCallback() {
+      @Override
+      public void onMapReady(MapboxMap mapboxMap) {
+        map = mapboxMap;
 
-                bearing();
-            }
-        });
-    }
+        bearing();
+      }
+    });
+  }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
+  @Override
+  public void onResume() {
+    super.onResume();
+    mapView.onResume();
+  }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-    }
+  @Override
+  public void onPause() {
+    super.onPause();
+    mapView.onPause();
+  }
 
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
+  @Override
+  public void onLowMemory() {
+    super.onLowMemory();
+    mapView.onLowMemory();
+  }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    mapView.onDestroy();
+  }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    mapView.onSaveInstanceState(outState);
+  }
 
-    private void bearing() {
+  private void bearing() {
 
-        map.addMarker(new MarkerViewOptions()
-                .position(new LatLng(cadillacHotelPosition.getLatitude(), cadillacHotelPosition.getLongitude()))
-                .title("point 1"));
+    map.addMarker(new MarkerViewOptions()
+      .position(new LatLng(cadillacHotelPosition.getLatitude(), cadillacHotelPosition.getLongitude()))
+      .title("point 1"));
 
-        Snackbar.make(container, "Click map anywhere to calculate bearing", Snackbar.LENGTH_INDEFINITE).show();
+    Snackbar.make(container, "Click map anywhere to calculate bearing", Snackbar.LENGTH_INDEFINITE).show();
 
-        map.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(@NonNull LatLng point) {
-                if (bearingMarker != null) map.removeMarker(bearingMarker);
+    map.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
+      @Override
+      public void onMapClick(@NonNull LatLng point) {
+        if (bearingMarker != null) {
+          map.removeMarker(bearingMarker);
+        }
 
-                bearingMarker = map.addMarker(new MarkerViewOptions()
-                        .position(point)
-                        .title("point 2"));
+        bearingMarker = map.addMarker(new MarkerViewOptions()
+          .position(point)
+          .title("point 2"));
 
-                double bearing = TurfMeasurement.bearing(Point.fromCoordinates(cadillacHotelPosition), Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(), point.getLatitude())));
-                Snackbar.make(container, "Bearing = " + bearing, Snackbar.LENGTH_INDEFINITE).show();
-            }
-        });
-    }
+        double bearing = TurfMeasurement.bearing(
+          Point.fromCoordinates(cadillacHotelPosition),
+          Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(), point.getLatitude())));
+        Snackbar.make(container, "Bearing = " + bearing, Snackbar.LENGTH_INDEFINITE).show();
+      }
+    });
+  }
 }
