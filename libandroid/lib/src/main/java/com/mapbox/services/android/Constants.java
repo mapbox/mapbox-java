@@ -5,6 +5,6 @@ package com.mapbox.services.android;
  */
 public class Constants {
 
-    private final static String PACKAGE_NAME = "com.mapbox.services.android";
+  private static final String PACKAGE_NAME = "com.mapbox.services.android";
 
 }

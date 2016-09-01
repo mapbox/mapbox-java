@@ -51,342 +51,344 @@ import retrofit2.Response;
 
 public class OffRouteDetectionActivity extends AppCompatActivity {
 
-    private static final String TAG = "OffRouteDetection";
+  private static final String TAG = "OffRouteDetection";
 
-    // Map variables
-    private MapView mapView;
-    private MapboxMap map;
-    private MarkerView car;
-    private Marker destinationMarker;
-    private Polyline routePolyline;
-    private Position destination;
+  // Map variables
+  private MapView mapView;
+  private MapboxMap map;
+  private MarkerView car;
+  private Marker destinationMarker;
+  private Polyline routePolyline;
+  private Position destination;
 
-    // Direction variables
-    private DirectionsRoute currentRoute;
-    private List<LatLng> routePoints;
-    private List<LatLng> newRoutePoints;
-    private int count = 0;
-    private long distance;
-    private Handler handler;
-    private Runnable runnable;
-    private boolean routeFinished = false;
-    private boolean reRoute = false;
-    private RouteUtils routeUtils;
+  // Direction variables
+  private DirectionsRoute currentRoute;
+  private List<LatLng> routePoints;
+  private List<LatLng> newRoutePoints;
+  private int count = 0;
+  private long distance;
+  private Handler handler;
+  private Runnable runnable;
+  private boolean routeFinished = false;
+  private boolean reRoute = false;
+  private RouteUtils routeUtils;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_off_route_detection);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_off_route_detection);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mapView = (MapView) findViewById(R.id.mapview);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap mapboxMap) {
-                map = mapboxMap;
+    mapView = (MapView) findViewById(R.id.mapview);
+    mapView.onCreate(savedInstanceState);
+    mapView.getMapAsync(new OnMapReadyCallback() {
+      @Override
+      public void onMapReady(MapboxMap mapboxMap) {
+        map = mapboxMap;
 
-                Toast.makeText(OffRouteDetectionActivity.this, "Press map to add destination", Toast.LENGTH_LONG).show();
+        Toast.makeText(OffRouteDetectionActivity.this, "Press map to add destination", Toast.LENGTH_LONG).show();
 
-                // origin used for starting point of car.
-                Position origin = Position.fromCoordinates(2.35166, 48.84659);
+        // origin used for starting point of car.
+        Position origin = Position.fromCoordinates(2.35166, 48.84659);
 
-                // Use the default 100 meter tolerance for off route.
-                routeUtils = new RouteUtils();
+        // Use the default 100 meter tolerance for off route.
+        routeUtils = new RouteUtils();
 
-                addCar(new LatLng(origin.getLatitude(), origin.getLongitude()));
+        addCar(new LatLng(origin.getLatitude(), origin.getLongitude()));
 
-                map.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(@NonNull LatLng point) {
+        map.setOnMapClickListener(new MapboxMap.OnMapClickListener() {
+          @Override
+          public void onMapClick(@NonNull LatLng point) {
 
-                        if (destinationMarker != null) {
-                            map.removeMarker(destinationMarker);
-                            reRoute = true;
-                        }
-                        destinationMarker = map.addMarker(new MarkerViewOptions().position(point));
+            if (destinationMarker != null) {
+              map.removeMarker(destinationMarker);
+              reRoute = true;
+            }
+            destinationMarker = map.addMarker(new MarkerViewOptions().position(point));
 
-                        destination = Position.fromCoordinates(point.getLongitude(), point.getLatitude());
+            destination = Position.fromCoordinates(point.getLongitude(), point.getLatitude());
 
-                        try {
-                            getRoute(
-                                    Position.fromCoordinates(car.getPosition().getLongitude(), car.getPosition().getLatitude()),
-                                    Position.fromCoordinates(point.getLongitude(), point.getLatitude())
-                            );
-                        } catch (ServicesException e) {
-                            e.printStackTrace();
-                            Log.e(TAG, "onMapReady: " + e.getMessage());
-                        }
+            try {
+              getRoute(
+                Position.fromCoordinates(car.getPosition().getLongitude(), car.getPosition().getLatitude()),
+                Position.fromCoordinates(point.getLongitude(), point.getLatitude())
+              );
+            } catch (ServicesException servicesException) {
+              servicesException.printStackTrace();
+              Log.e(TAG, "onMapReady: " + servicesException.getMessage());
+            }
 
-                    }
-                });
-
-            }// End onMapReady
+          }
         });
-    }// End onCreate
+
+      } // End onMapReady
+    });
+  } // End onCreate
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    mapView.onResume();
+    if (handler != null && runnable != null) {
+      handler.post(runnable);
+    }
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    mapView.onPause();
+    stopSimulation();
+  }
+
+  @Override
+  public void onLowMemory() {
+    super.onLowMemory();
+    mapView.onLowMemory();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    mapView.onDestroy();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    mapView.onSaveInstanceState(outState);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_off_route_detection, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.action_1:
+        routeUtils = new RouteUtils(0.05);
+        break;
+      case R.id.action_2:
+        routeUtils = new RouteUtils(0.5);
+        break;
+      case R.id.action_3:
+        routeUtils = new RouteUtils(1);
+        break;
+      default:
+        routeUtils = new RouteUtils(0.1);
+        break;
+    }
+
+
+    return super.onOptionsItemSelected(item);
+  }
+
+  private void addCar(LatLng position) {
+    // Using a custom car icon for marker.
+    IconFactory iconFactory = IconFactory.getInstance(OffRouteDetectionActivity.this);
+    Drawable iconDrawable = ContextCompat.getDrawable(OffRouteDetectionActivity.this, R.drawable.ic_car_top);
+    Icon icon = iconFactory.fromDrawable(iconDrawable);
+
+    // Add the car marker to the map.
+    car = map.addMarker(new MarkerViewOptions()
+      .position(position)
+      .anchor(0.5f, 0.5f)
+      .flat(true)
+      .icon(icon)
+    );
+  }
+
+  private void getRoute(Position origin, Position destination) throws ServicesException {
+    ArrayList<Position> positions = new ArrayList<>();
+    positions.add(origin);
+    positions.add(destination);
+
+    MapboxDirections client = new MapboxDirections.Builder()
+      .setAccessToken(Utils.getMapboxAccessToken(this))
+      .setCoordinates(positions)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setSteps(true)
+      .setOverview(DirectionsCriteria.OVERVIEW_FULL)
+      .build();
+
+    client.enqueueCall(new Callback<DirectionsResponse>() {
+      @Override
+      public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+        // You can get generic HTTP info about the response
+        Log.d(TAG, "Response code: " + response.code());
+        if (response.body() == null) {
+          Log.e(TAG, "No routes found, make sure you set the right user and access token.");
+          return;
+        }
+
+        // Print some info about the route
+        currentRoute = response.body().getRoutes().get(0);
+        Log.d(TAG, "Distance: " + currentRoute.getDistance());
+
+        // Draw the route on the map
+        drawRoute(currentRoute);
+      }
+
+      @Override
+      public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+        Log.e(TAG, "Error: " + throwable.getMessage());
+      }
+    });
+  }
+
+
+  private void drawRoute(DirectionsRoute route) {
+
+    // Convert the route to latlng values and add to list.
+    LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.OSRM_PRECISION_V5);
+    List<Position> coordinates = lineString.getCoordinates();
+    newRoutePoints = new ArrayList<>();
+    for (int j = 0; j < coordinates.size(); j++) {
+      newRoutePoints.add(new LatLng(
+        coordinates.get(j).getLatitude(),
+        coordinates.get(j).getLongitude()));
+    }
+
+    // Remove the route line if it exist on map.
+    if (routePolyline != null) {
+      map.removePolyline(routePolyline);
+    }
+
+    // Draw Points on map
+    routePolyline = map.addPolyline(new PolylineOptions()
+      .addAll(newRoutePoints)
+      .color(Color.parseColor("#56b881"))
+      .width(5));
+
+    // If car's already at the routes end, we need to start our runnable back up.
+    if (routeFinished) {
+      routeFinished = false;
+      routePoints = newRoutePoints;
+      count = 0;
+      handler.post(runnable);
+    }
+
+    if (!reRoute) {
+      routePoints = newRoutePoints;
+      startSimulation();
+    }
+  }
+
+  private void checkIfOffRoute() throws ServicesException, TurfException {
+
+    Position carCurrentPosition = Position.fromCoordinates(
+      car.getPosition().getLongitude(),
+      car.getPosition().getLatitude()
+    );
+
+    // TODO currently making the assumption that only 1 leg in route exist.
+    if (routeUtils.isOffRoute(carCurrentPosition, currentRoute.getLegs().get(0))) {
+
+      // Display message to user and stop simulation.
+      Toast.makeText(OffRouteDetectionActivity.this, "Off route", Toast.LENGTH_LONG).show();
+      stopSimulation();
+
+      // Reset our variables
+      reRoute = false;
+      count = 0;
+
+      // Get the route from car position to destination and begin simulating.
+      getRoute(carCurrentPosition, destination);
+
+    }
+  } // End checkIfOffRoute
+
+  private void startSimulation() {
+    // Typically you wouldn't need this method but since we want to simulate movement along a
+    // route, we use a handler to animate the car (similar behaviour to driving).
+    handler = new Handler();
+    runnable = new Runnable() {
+      @Override
+      public void run() {
+
+        // Check if we are at the end of the routePoints list, if so we want to stop using
+        // the handler.
+        if ((routePoints.size() - 1) > count) {
+
+          // Calculating the distance is done between the current point and next.
+          // This gives us the duration we will need to execute the ValueAnimator.
+          // Multiplying by ten is done to slow down the marker speed. Adjusting
+          // this value will result in the marker traversing faster or slower along
+          // the line
+          distance = (long) car.getPosition().distanceTo(routePoints.get(count)) * 10;
+
+          // animate the marker from it's current position to the next point in the
+          // points list.
+          ValueAnimator markerAnimator = ObjectAnimator.ofObject(car, "position",
+            new LatLngEvaluator(), car.getPosition(), routePoints.get(count));
+          markerAnimator.setDuration(distance);
+          markerAnimator.setInterpolator(new LinearInterpolator());
+          markerAnimator.start();
+
+          // This line will make sure the marker appears when it is being animated
+          // and starts outside the current user view. Without this, the user must
+          // intentionally execute a gesture before the view marker reappears on
+          // the map.
+          map.getMarkerViewManager().scheduleViewMarkerInvalidation();
+
+          // Rotate the car (marker) to the correct orientation.
+          car.setRotation((float) computeHeading(car.getPosition(), routePoints.get(count)));
+
+          // Check that the vehicles off route or not. If you aren't simulating the car,
+          // and want to use this example in the real world, the checkingIfOffRoute method
+          // should go in a locationListener.
+          try {
+            checkIfOffRoute();
+          } catch (ServicesException | TurfException exception) {
+            exception.printStackTrace();
+            Log.e(TAG, "check if off route error: " + exception.getMessage());
+          }
+
+          // Keeping the current point count we are on.
+          count++;
+
+          // Once we finish we need to repeat the entire process by executing the
+          // handler again once the ValueAnimator is finished.
+          handler.postDelayed(this, distance);
+        } else {
+          // Car's at the end of route so notify that we are finished.
+          routeFinished = true;
+        }
+      }
+    };
+    handler.post(runnable);
+  } // End startSimulation
+
+  private void stopSimulation() {
+    handler.removeCallbacks(runnable);
+  }
+
+  public static double computeHeading(LatLng from, LatLng to) {
+    // Compute bearing/heading using Turf and return the value.
+    return TurfMeasurement.bearing(
+      Position.fromCoordinates(from.getLongitude(), from.getLatitude()),
+      Position.fromCoordinates(to.getLongitude(), to.getLatitude())
+    );
+  }
+
+  private static class LatLngEvaluator implements TypeEvaluator<LatLng> {
+    // Method is used to interpolate the marker animation.
+    private LatLng latLng = new LatLng();
 
     @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-        if (handler != null && runnable != null) {
-            handler.post(runnable);
-        }
+    public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
+      latLng.setLatitude(startValue.getLatitude()
+        + ((endValue.getLatitude() - startValue.getLatitude()) * fraction));
+      latLng.setLongitude(startValue.getLongitude()
+        + ((endValue.getLongitude() - startValue.getLongitude()) * fraction));
+      return latLng;
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapView.onPause();
-        stopSimulation();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mapView.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_off_route_detection, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_default:
-                routeUtils = new RouteUtils(0.1);
-                break;
-            case R.id.action_1:
-                routeUtils = new RouteUtils(0.05);
-                break;
-            case R.id.action_2:
-                routeUtils = new RouteUtils(0.5);
-                break;
-            case R.id.action_3:
-                routeUtils = new RouteUtils(1);
-                break;
-        }
-
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void addCar(LatLng position) {
-        // Using a custom car icon for marker.
-        IconFactory iconFactory = IconFactory.getInstance(OffRouteDetectionActivity.this);
-        Drawable iconDrawable = ContextCompat.getDrawable(OffRouteDetectionActivity.this, R.drawable.ic_car_top);
-        Icon icon = iconFactory.fromDrawable(iconDrawable);
-
-        // Add the car marker to the map.
-        car = map.addMarker(new MarkerViewOptions()
-                .position(position)
-                .anchor(0.5f, 0.5f)
-                .flat(true)
-                .icon(icon)
-        );
-    }
-
-    private void getRoute(Position origin, Position destination) throws ServicesException {
-        ArrayList<Position> positions = new ArrayList<>();
-        positions.add(origin);
-        positions.add(destination);
-
-        MapboxDirections client = new MapboxDirections.Builder()
-                .setAccessToken(Utils.getMapboxAccessToken(this))
-                .setCoordinates(positions)
-                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-                .setSteps(true)
-                .setOverview(DirectionsCriteria.OVERVIEW_FULL)
-                .build();
-
-        client.enqueueCall(new Callback<DirectionsResponse>() {
-            @Override
-            public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-                // You can get generic HTTP info about the response
-                Log.d(TAG, "Response code: " + response.code());
-                if (response.body() == null) {
-                    Log.e(TAG, "No routes found, make sure you set the right user and access token.");
-                    return;
-                }
-
-                // Print some info about the route
-                currentRoute = response.body().getRoutes().get(0);
-                Log.d(TAG, "Distance: " + currentRoute.getDistance());
-
-                // Draw the route on the map
-                drawRoute(currentRoute);
-            }
-
-            @Override
-            public void onFailure(Call<DirectionsResponse> call, Throwable t) {
-                Log.e(TAG, "Error: " + t.getMessage());
-            }
-        });
-    }
-
-
-    private void drawRoute(DirectionsRoute route) {
-
-        // Convert the route to latlng values and add to list.
-        LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.OSRM_PRECISION_V5);
-        List<Position> coordinates = lineString.getCoordinates();
-        newRoutePoints = new ArrayList<>();
-        for (int j = 0; j < coordinates.size(); j++) {
-            newRoutePoints.add(new LatLng(
-                    coordinates.get(j).getLatitude(),
-                    coordinates.get(j).getLongitude()));
-        }
-
-        // Remove the route line if it exist on map.
-        if (routePolyline != null) {
-            map.removePolyline(routePolyline);
-        }
-
-        // Draw Points on map
-        routePolyline = map.addPolyline(new PolylineOptions()
-                .addAll(newRoutePoints)
-                .color(Color.parseColor("#56b881"))
-                .width(5));
-
-        // If car's already at the routes end, we need to start our runnable back up.
-        if (routeFinished) {
-            routeFinished = false;
-            routePoints = newRoutePoints;
-            count = 0;
-            handler.post(runnable);
-        }
-
-        if (!reRoute) {
-            routePoints = newRoutePoints;
-            startSimulation();
-        }
-    }
-
-    private void checkIfOffRoute() throws ServicesException, TurfException {
-
-        Position carCurrentPosition = Position.fromCoordinates(
-                car.getPosition().getLongitude(),
-                car.getPosition().getLatitude()
-        );
-
-        // TODO currently making the assumption that only 1 leg in route exist.
-        if (routeUtils.isOffRoute(carCurrentPosition, currentRoute.getLegs().get(0))) {
-
-            // Display message to user and stop simulation.
-            Toast.makeText(OffRouteDetectionActivity.this, "Off route", Toast.LENGTH_LONG).show();
-            stopSimulation();
-
-            // Reset our variables
-            reRoute = false;
-            count = 0;
-
-            // Get the route from car position to destination and begin simulating.
-            getRoute(carCurrentPosition, destination);
-
-        }
-    } // End checkIfOffRoute
-
-    private void startSimulation() {
-        // Typically you wouldn't need this method but since we want to simulate movement along a
-        // route, we use a handler to animate the car (similar behaviour to driving).
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-
-                // Check if we are at the end of the routePoints list, if so we want to stop using
-                // the handler.
-                if ((routePoints.size() - 1) > count) {
-
-                    // Calculating the distance is done between the current point and next.
-                    // This gives us the duration we will need to execute the ValueAnimator.
-                    // Multiplying by ten is done to slow down the marker speed. Adjusting
-                    // this value will result in the marker traversing faster or slower along
-                    // the line
-                    distance = (long) car.getPosition().distanceTo(routePoints.get(count)) * 10;
-
-                    // animate the marker from it's current position to the next point in the
-                    // points list.
-                    ValueAnimator markerAnimator = ObjectAnimator.ofObject(car, "position",
-                            new LatLngEvaluator(), car.getPosition(), routePoints.get(count));
-                    markerAnimator.setDuration(distance);
-                    markerAnimator.setInterpolator(new LinearInterpolator());
-                    markerAnimator.start();
-
-                    // This line will make sure the marker appears when it is being animated
-                    // and starts outside the current user view. Without this, the user must
-                    // intentionally execute a gesture before the view marker reappears on
-                    // the map.
-                    map.getMarkerViewManager().scheduleViewMarkerInvalidation();
-
-                    // Rotate the car (marker) to the correct orientation.
-                    car.setRotation((float) computeHeading(car.getPosition(), routePoints.get(count)));
-
-                    // Check that the vehicles off route or not. If you aren't simulating the car,
-                    // and want to use this example in the real world, the checkingIfOffRoute method
-                    // should go in a locationListener.
-                    try {
-                        checkIfOffRoute();
-                    } catch (ServicesException | TurfException e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "check if off route error: " + e.getMessage());
-                    }
-
-                    // Keeping the current point count we are on.
-                    count++;
-
-                    // Once we finish we need to repeat the entire process by executing the
-                    // handler again once the ValueAnimator is finished.
-                    handler.postDelayed(this, distance);
-                } else {
-                    // Car's at the end of route so notify that we are finished.
-                    routeFinished = true;
-                }
-            }
-        };
-        handler.post(runnable);
-    }// End startSimulation
-
-    private void stopSimulation() {
-        handler.removeCallbacks(runnable);
-    }
-
-    public static double computeHeading(LatLng from, LatLng to) {
-        // Compute bearing/heading using Turf and return the value.
-        return TurfMeasurement.bearing(
-                Position.fromCoordinates(from.getLongitude(), from.getLatitude()),
-                Position.fromCoordinates(to.getLongitude(), to.getLatitude())
-        );
-    }
-
-    private static class LatLngEvaluator implements TypeEvaluator<LatLng> {
-        // Method is used to interpolate the marker animation.
-        private LatLng latLng = new LatLng();
-
-        @Override
-        public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
-            latLng.setLatitude(startValue.getLatitude() + ((endValue.getLatitude() - startValue.getLatitude()) * fraction));
-            latLng.setLongitude(startValue.getLongitude() + ((endValue.getLongitude() - startValue.getLongitude()) * fraction));
-            return latLng;
-        }
-    }
+  }
 }
