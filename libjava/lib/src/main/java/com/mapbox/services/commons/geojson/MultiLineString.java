@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * A MultiLineString is a type of {@link Geometry}.
  *
- * @see <a href='http://geojson.org/geojson-spec.html#multilinestringn'>Official GeoJSON MultiLineString Specifications</a>
+ * @see <a href='http://geojson.org/geojson-spec.html#multilinestring'>Official GeoJSON MultiLineString Specifications</a>
  * @since 1.0.0
  */
 public class MultiLineString implements Geometry<List<List<Position>>> {
