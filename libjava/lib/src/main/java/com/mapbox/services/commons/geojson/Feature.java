@@ -99,7 +99,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public static Feature fromGeometry(Geometry geometry) {
-    return new Feature(geometry, null, null);
+    return new Feature(geometry, new JsonObject(), null);
   }
 
   /**
