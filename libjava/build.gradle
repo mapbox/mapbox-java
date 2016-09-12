@@ -16,10 +16,23 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion = "7.1.1"
+        configFile = "../../checkstyle.xml" as File
+    }
+
+    task checkstyle(type: Checkstyle) {
+        configFile file("../../checkstyle.xml")
+        source 'src'
+        include '**/*.java'
+        exclude '**/gen/**'
+        classpath = files()
+    }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-apply from: 'checkstyle.gradle'
