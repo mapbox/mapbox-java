@@ -64,9 +64,9 @@ public class Position {
    */
   public double[] getCoordinates() {
     if (hasAltitude()) {
-      return new double[] {getLongitude(), getLatitude(), getAltitude()};
+      return new double[]{getLongitude(), getLatitude(), getAltitude()};
     } else {
-      return new double[] {getLongitude(), getLatitude()};
+      return new double[]{getLongitude(), getLatitude()};
     }
   }
 
