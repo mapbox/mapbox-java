@@ -2,6 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v1.3.1
+
+(No changes, all changes happened in `libjava`.)
+
 ### v1.3.0
 
 * Geocoding widget now supports the `bbox` parameter
