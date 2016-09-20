@@ -2,6 +2,11 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v1.3.1
+
+* GeoJson: Feature properties are now properly serialized and raw array tests have been added
+* Introduce checkstyle to the project
+
 ### v1.3.0
 
 * `RouteUtils` class to simplify work with `RouteLeg` objects
