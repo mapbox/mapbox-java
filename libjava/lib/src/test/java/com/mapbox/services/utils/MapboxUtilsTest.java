@@ -18,6 +18,7 @@ public class MapboxUtilsTest {
   public void testRightPrefix() {
     assertTrue(MapboxUtils.isAccessTokenValid("pk.XXX"));
     assertTrue(MapboxUtils.isAccessTokenValid("sk.XXX"));
+    assertTrue(MapboxUtils.isAccessTokenValid("tk.XXX"));
   }
 
   @Test
