@@ -20,7 +20,7 @@ public class MapboxUtils {
     if (TextUtils.isEmpty(accessToken)) {
       return false;
     }
-    if (!accessToken.startsWith("pk.") && !accessToken.startsWith("sk.")) {
+    if (!accessToken.startsWith("pk.") && !accessToken.startsWith("sk.") && !accessToken.startsWith("tk.")) {
       return false;
     }
     return true;
