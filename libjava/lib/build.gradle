@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply from: 'build-config.gradle'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -15,10 +16,25 @@ dependencies {
     testCompile 'com.squareup.okhttp3:mockwebserver:3.3.1'
 }
 
+buildConfig {
+    packageName = 'com.mapbox.services'
+    constants = [
+        VERSION: project.VERSION_NAME,
+        GIT_REVISION: getGitRevision(),
+    ]
+}
+
 task JavadocGeneration(type: Javadoc) {
     source = sourceSets.main.allJava
     failOnError = false
     classpath = configurations.compile
+}
+
+def getGitRevision() {
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+    def ref = proc.text.trim()
+    return ref
 }
 
 apply from: 'gradle-mvn-push.gradle'
