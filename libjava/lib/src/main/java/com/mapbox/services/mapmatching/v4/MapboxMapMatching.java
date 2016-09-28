@@ -93,7 +93,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     }
 
     call = getService().getCall(
-      getHeaderUserAgent(),
+      getHeaderUserAgent(builder.getClientAppName()),
       builder.getProfile(),
       builder.getAccessToken(),
       builder.getGeometry(),
@@ -313,6 +313,11 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
           + "with up to 100 coordinates. If you need to process longer traces, you can "
           + "split the trace and make multiple requests.");
       }
+    }
+
+    public Builder setClientAppName(String appName) {
+      super.clientAppName = appName;
+      return this;
     }
 
     /**

@@ -95,7 +95,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     }
 
     call = getService().getCall(
-      getHeaderUserAgent(),
+      getHeaderUserAgent(builder.getClientAppName()),
       builder.getMode(),
       builder.getQuery(),
       builder.getAccessToken(),
@@ -415,6 +415,11 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      */
     public String getBbox() {
       return bbox;
+    }
+
+    public Builder setClientAppName(String appName) {
+      super.clientAppName = appName;
+      return this;
     }
 
     /**

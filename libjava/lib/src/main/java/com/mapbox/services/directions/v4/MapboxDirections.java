@@ -88,7 +88,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     call = getService().getCall(
-      getHeaderUserAgent(),
+      getHeaderUserAgent(builder.getClientAppName()),
       builder.getProfile(),
       builder.getWaypoints(),
       builder.getAccessToken(),
@@ -371,6 +371,11 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      */
     public Boolean isSteps() {
       return steps;
+    }
+
+    public Builder setClientAppName(String appName) {
+      super.clientAppName = appName;
+      return this;
     }
 
     /**

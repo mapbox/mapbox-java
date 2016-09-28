@@ -8,7 +8,7 @@ public class Constants {
    * User agent for HTTP requests
    */
   public static final String HEADER_USER_AGENT =
-    String.format(Locale.US, "MapboxJava/%s", BuildConfig.VERSION);
+    String.format(Locale.US, "MapboxJava/%s (%s)", BuildConfig.VERSION, BuildConfig.GIT_REVISION);
 
   /**
    * Base URL for all API calls, not hardcoded to enable testing

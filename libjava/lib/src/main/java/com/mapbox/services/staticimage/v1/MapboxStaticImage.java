@@ -370,6 +370,11 @@ public class MapboxStaticImage {
       return precision;
     }
 
+    public Builder setClientAppName(String appName) {
+      super.clientAppName = appName;
+      return this;
+    }
+
     /**
      * Build the client when all user parameters have been set.
      *
