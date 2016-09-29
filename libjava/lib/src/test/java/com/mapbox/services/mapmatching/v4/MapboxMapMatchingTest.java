@@ -29,6 +29,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test the Mapbox Map Matching API
@@ -198,6 +199,19 @@ public class MapboxMapMatchingTest {
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setTrace(LineString.fromCoordinates(positions))
       .build();
+  }
+
+
+  @Test
+  public void testUserAgent() throws ServicesException, IOException {
+    MapboxMapMatching service = new MapboxMapMatching.Builder()
+            .setClientAppName("APP")
+            .setAccessToken("pk.XXX")
+            .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+            .setTrace(LineString.fromCoordinates(new ArrayList<Position>()))
+            .build();
+    service.setBaseUrl(mockUrl.toString());
+    assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
 //    @Test

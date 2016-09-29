@@ -74,7 +74,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     call = getService().getCall(
-      getHeaderUserAgent(),
+      getHeaderUserAgent(builder.getClientAppName()),
       builder.getUser(),
       builder.getProfile(),
       builder.getCoordinates(),
@@ -451,6 +451,11 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      */
     public Boolean isContinueStraight() {
       return continueStraight;
+    }
+
+    public Builder setClientAppName(String appName) {
+      super.clientAppName = appName;
+      return this;
     }
 
     /**

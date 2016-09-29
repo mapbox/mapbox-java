@@ -12,6 +12,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.mapbox.services.commons.utils.TextUtils.isEmpty;
+
 /**
  * Mapbox specific services used internally within the SDK.
  *
@@ -59,27 +61,25 @@ public abstract class MapboxService<T> {
   /**
    * Computes a full user agent header of the form: MapboxJava/1.2.0 Mac OS X/10.11.5 (x86_64)
    *
+   * @param clientAppName Application Name
    * @return {@link String}
    * @since 1.0.0
    */
-  public static String getHeaderUserAgent() {
-    String osName;
-    String osVersion;
-    String osArch;
-
+  public static String getHeaderUserAgent(String clientAppName) {
     try {
-      osName = System.getProperty("os.name");
-      osVersion = System.getProperty("os.version");
-      osArch = System.getProperty("os.arch");
+      String osName = System.getProperty("os.name");
+      String osVersion = System.getProperty("os.version");
+      String osArch = System.getProperty("os.arch");
+
+      if (isEmpty(osName) || isEmpty(osVersion) || isEmpty(osArch)) {
+        return Constants.HEADER_USER_AGENT;
+      } else {
+        String baseUA = String.format(Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
+        return isEmpty(clientAppName) ? baseUA : String.format(Locale.US, "%s %s", clientAppName, baseUA);
+      }
+
     } catch (Exception exception) {
       return Constants.HEADER_USER_AGENT;
-    }
-
-    if (TextUtils.isEmpty(osName) || TextUtils.isEmpty(osVersion) || TextUtils.isEmpty(osArch)) {
-      return Constants.HEADER_USER_AGENT;
-    } else {
-      String osInfo = String.format(Locale.US, "%s/%s (%s)", osName, osVersion, osArch);
-      return String.format(Locale.US, "%s %s", Constants.HEADER_USER_AGENT, osInfo);
     }
   }
 }

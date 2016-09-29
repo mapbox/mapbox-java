@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -48,7 +49,7 @@ public class MapboxDirectionsTest {
     server = new MockWebServer();
 
     byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/directions_v5.json"));
-    String body = new String(content, StandardCharsets.UTF_8);
+    String body = new String(content, Charset.defaultCharset());
     server.enqueue(new MockResponse().setBody(body));
 
     server.start();
@@ -285,6 +286,18 @@ public class MapboxDirectionsTest {
       .setCoordinates(test)
       .getCoordinates();
     assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
+  }
+
+  @Test
+  public void testUserAgent() throws ServicesException, IOException {
+    MapboxDirections service = new MapboxDirections.Builder()
+            .setClientAppName("APP")
+            .setAccessToken("pk.XXX")
+            .setCoordinates(positions)
+            .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+            .build();
+    service.setBaseUrl(mockUrl.toString());
+    assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
 }

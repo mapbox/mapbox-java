@@ -5,15 +5,10 @@ import java.util.Locale;
 public class Constants {
 
   /**
-   * Package version
-   */
-  public static final String MAPBOX_JAVA_VERSION = "2.0.0-SNAPSHOT";
-
-  /**
    * User agent for HTTP requests
    */
   public static final String HEADER_USER_AGENT =
-    String.format(Locale.US, "MapboxJava/%s", MAPBOX_JAVA_VERSION);
+    String.format(Locale.US, "MapboxJava/%s (%s)", BuildConfig.VERSION, BuildConfig.GIT_REVISION);
 
   /**
    * Base URL for all API calls, not hardcoded to enable testing

@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -39,7 +40,7 @@ public class MapboxGeocodingTest {
     server = new MockWebServer();
 
     byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/geocoding.json"));
-    String body = new String(content, StandardCharsets.UTF_8);
+    String body = new String(content, Charset.defaultCharset());
     server.enqueue(new MockResponse().setBody(body));
 
     server.start();
@@ -151,4 +152,16 @@ public class MapboxGeocodingTest {
     CarmenContext context = response.body().getFeatures().get(0).getContext().get(1);
     assertEquals(context.getWikidata(), "Q61");
   }
+
+  @Test
+  public void testUserAgent() throws ServicesException, IOException {
+    MapboxGeocoding service = new MapboxGeocoding.Builder()
+            .setClientAppName("APP")
+            .setAccessToken("pk.XXX")
+            .setLocation("1600 pennsylvania ave nw")
+            .build();
+    service.setBaseUrl(mockUrl.toString());
+    assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
+  }
+
 }

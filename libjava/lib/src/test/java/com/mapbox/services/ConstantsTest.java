@@ -15,6 +15,7 @@ public class ConstantsTest {
 
   @Test
   public void testUserAgent() {
-    assertTrue(MapboxService.getHeaderUserAgent().startsWith(Constants.HEADER_USER_AGENT));
+    assertTrue(MapboxService.getHeaderUserAgent(null).startsWith(Constants.HEADER_USER_AGENT));
+    assertTrue(MapboxService.getHeaderUserAgent("AppName").startsWith("AppName"));
   }
 }
