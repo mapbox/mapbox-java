@@ -107,12 +107,11 @@ public class RouteUtilsTest extends BaseTest {
   public void getClosestStepTest() throws ServicesException, TurfException {
     RouteUtils routeUtils = new RouteUtils();
 
-    // For each step, the last coordinate is closest to its step (except the last step which
-    // is one point only)
-    for (int stepIndex = 0; stepIndex < route.getSteps().size() - 1; stepIndex++) {
+    // For each step, the first coordinate is closest to its step
+    for (int stepIndex = 0; stepIndex < route.getSteps().size(); stepIndex++) {
       LegStep step = route.getSteps().get(stepIndex);
       List<Position> coords = PolylineUtils.decode(step.getGeometry(), Constants.OSRM_PRECISION_V5);
-      assertEquals(stepIndex, routeUtils.getClosestStep(coords.get(coords.size() - 1), route));
+      assertEquals(stepIndex, routeUtils.getClosestStep(coords.get(0), route));
     }
   }
 }

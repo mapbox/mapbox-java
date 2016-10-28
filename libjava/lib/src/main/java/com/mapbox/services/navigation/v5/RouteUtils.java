@@ -148,7 +148,8 @@ public class RouteUtils {
   }
 
   /**
-   * Get the closest route step to the given position.
+   * Get the closest route step to the given position. Ties will go to the furthest step in the
+   * route leg.
    *
    * @param position that you want to get closest route step to.
    * @param route    a directions route.
@@ -164,7 +165,7 @@ public class RouteUtils {
     double distance;
     for (int stepIndex = 0; stepIndex < route.getSteps().size(); stepIndex++) {
       distance = getDistanceToStep(position, route, stepIndex);
-      if (distance < minDistance) {
+      if (distance <= minDistance) {
         minDistance = distance;
         closestIndex = stepIndex;
       }
