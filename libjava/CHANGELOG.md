@@ -2,6 +2,11 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v1.3.2
+
+* Geocoding: added poi.landmark type
+
+
 ### v1.3.1
 
 * GeoJson: Feature properties are now properly serialized and raw array tests have been added
