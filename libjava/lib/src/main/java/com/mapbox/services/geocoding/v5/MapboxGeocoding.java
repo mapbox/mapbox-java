@@ -277,7 +277,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
     /**
      * Filter results by one or more type. Options are country, region, postcode, place,
-     * locality, neighborhood, address, poi. Multiple options can be comma-separated.
+     * locality, neighborhood, address, poi, poi.landmark. Multiple options can be comma-separated.
      *
      * @param geocodingType String filtering the geocoder result types.
      * @return Builder
@@ -290,7 +290,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
     /**
      * Filter results by one or more type. Options are country, region, postcode, place,
-     * locality, neighborhood, address, poi. Multiple options can be comma-separated.
+     * locality, neighborhood, address, poi, poi.landmark. Multiple options can be comma-separated.
      *
      * @param geocodingType String array filtering the geocoder result types.
      * @return Builder

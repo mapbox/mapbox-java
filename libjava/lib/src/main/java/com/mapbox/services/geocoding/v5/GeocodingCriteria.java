@@ -70,4 +70,11 @@ public final class GeocodingCriteria {
    */
   public static final String TYPE_POI = "poi";
 
+
+  /**
+   * Filter results by POI landmark subtype.
+   *
+   * @since 1.3.2
+   */
+  public static final String TYPE_POI_LANDMARK = "poi.landmark";
 }
