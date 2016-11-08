@@ -12,6 +12,7 @@ public class StepIntersection {
   private boolean[] entry;
   private int in;
   private int out;
+  private IntersectionLanes[] lanes;
 
   /**
    * @return A [longitude, latitude] pair describing the location of the turn.
@@ -71,5 +72,15 @@ public class StepIntersection {
    */
   public Position asPosition() {
     return Position.fromCoordinates(location[0], location[1]);
+  }
+
+  /**
+   * @return Array of lane objects that represent the available turn lanes at the intersection. If
+   * no lane information is available for an intersection, the lanes property will not be present.
+   * Lanes are provided in their order on the street, from left to right.
+   * @since 2.0.0
+   */
+  public IntersectionLanes[] getLanes() {
+    return lanes;
   }
 }
