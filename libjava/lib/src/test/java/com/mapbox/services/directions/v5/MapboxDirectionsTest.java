@@ -126,7 +126,7 @@ public class MapboxDirectionsTest {
     DirectionsRoute route = response.body().getRoutes().get(0);
     assertEquals(route.getDistance(), 77274.3, DELTA);
     assertEquals(route.getDuration(), 3441.8, DELTA);
-    assertTrue(route.getGeometry().startsWith("kqreFhodjVRj"));
+    assertTrue(route.getGeometry().startsWith("kqreFhodjVhh"));
     assertEquals(route.getLegs().size(), 1);
   }
 
