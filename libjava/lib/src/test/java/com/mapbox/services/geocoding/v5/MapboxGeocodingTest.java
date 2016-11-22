@@ -15,7 +15,6 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -98,7 +97,7 @@ public class MapboxGeocodingTest {
     Response<GeocodingResponse> response = client.executeCall();
 
     CarmenFeature feature = response.body().getFeatures().get(0);
-    assertEquals(feature.getId(), "address.7626097581139850");
+    assertEquals(feature.getId(), "address.3982178573139850");
     assertEquals(feature.getType(), "Feature");
     assertEquals(feature.getText(), "Pennsylvania Ave NW");
     assertEquals(feature.getPlaceName(), "1600 Pennsylvania Ave NW, Washington, District of Columbia 20006, United States");
@@ -121,8 +120,8 @@ public class MapboxGeocodingTest {
 
     Point point = (Point) response.body().getFeatures().get(3).getGeometry();
     assertEquals(point.getType(), "Point");
-    assertEquals(point.getCoordinates().getLongitude(), -74.236513, DELTA);
-    assertEquals(point.getCoordinates().getLatitude(), 40.644412, DELTA);
+    assertEquals(point.getCoordinates().getLongitude(), -77.045, DELTA);
+    assertEquals(point.getCoordinates().getLatitude(), 38.8946, DELTA);
   }
 
   @Test
@@ -156,10 +155,10 @@ public class MapboxGeocodingTest {
   @Test
   public void testUserAgent() throws ServicesException, IOException {
     MapboxGeocoding service = new MapboxGeocoding.Builder()
-            .setClientAppName("APP")
-            .setAccessToken("pk.XXX")
-            .setLocation("1600 pennsylvania ave nw")
-            .build();
+      .setClientAppName("APP")
+      .setAccessToken("pk.XXX")
+      .setLocation("1600 pennsylvania ave nw")
+      .build();
     service.setBaseUrl(mockUrl.toString());
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
