@@ -5,6 +5,7 @@ import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.directions.v5.models.DirectionsWaypoint;
+import com.mapbox.services.directions.v5.models.IntersectionLanes;
 import com.mapbox.services.directions.v5.models.LegStep;
 import com.mapbox.services.directions.v5.models.RouteLeg;
 import com.mapbox.services.directions.v5.models.StepIntersection;
@@ -124,7 +125,7 @@ public class MapboxDirectionsTest {
 
     DirectionsRoute route = response.body().getRoutes().get(0);
     assertEquals(route.getDistance(), 77274.3, DELTA);
-    assertEquals(route.getDuration(), 3444.2, DELTA);
+    assertEquals(route.getDuration(), 3441.8, DELTA);
     assertTrue(route.getGeometry().startsWith("kqreFhodjVhh"));
     assertEquals(route.getLegs().size(), 1);
   }
@@ -157,9 +158,9 @@ public class MapboxDirectionsTest {
 
     RouteLeg leg = response.body().getRoutes().get(0).getLegs().get(0);
     assertEquals(leg.getDistance(), 77274.3, DELTA);
-    assertEquals(leg.getDuration(), 3444.2, DELTA);
-    assertEquals(leg.getSummary(), "James Lick Freeway (US 101), Bayshore Freeway (US 101)");
-    assertEquals(leg.getSteps().size(), 14);
+    assertEquals(leg.getDuration(), 3441.8, DELTA);
+    assertEquals(leg.getSummary(), "Bayshore Freeway, Bayshore Freeway");
+    assertEquals(leg.getSteps().size(), 13);
   }
 
   @Test
@@ -199,6 +200,22 @@ public class MapboxDirectionsTest {
     assertArrayEquals(intersection.getEntry(), new boolean[] {false, false, true, true});
     assertEquals(intersection.getIn(), 0);
     assertEquals(intersection.getOut(), 2);
+  }
+
+  @Test
+  public void testIntersectionLanes() throws ServicesException, IOException {
+    MapboxDirections client = new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positions)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .build();
+    client.setBaseUrl(mockUrl.toString());
+    Response<DirectionsResponse> response = client.executeCall();
+
+    IntersectionLanes intersectionLanes = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1).getIntersections().get(8).getLanes()[0];
+    assertEquals(intersectionLanes.getValid(), true);
+    assertEquals(intersectionLanes.getIndications()[0], "none");
+
   }
 
   @Test
