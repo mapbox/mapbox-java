@@ -35,6 +35,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   private String type;
   private double[] bbox;
   private Position position;
+  private int limit;
 
   private GeocoderFilter geocoderFilter;
 
@@ -180,6 +181,26 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
     this.position = position;
   }
 
+  /**
+   * Returns integer number representing the amount of results
+   *
+   * @return integer value
+   * @since 2.0.0
+   */
+  public int getLimit() {
+    return limit;
+  }
+
+  /**
+   * Limit the number of results returned. The default is 5.
+   *
+   * @param limit the integer value representing the amount of results desired.
+   * @since 2.0.0
+   */
+  public void setLimit(int limit) {
+    this.limit = limit;
+  }
+
   /*
    * Required by BaseAdapter
    */
@@ -313,6 +334,9 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         }
         if (getBbox() != null) {
           builder.setBbox(bbox[0], bbox[1], bbox[2], bbox[3]);
+        }
+        if (getLimit() != 0) {
+          builder.setLimit(limit);
         }
 
         // Do request
