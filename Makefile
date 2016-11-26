@@ -32,3 +32,9 @@ mapmatching-fixtures:
 	curl -X POST --header "Content-Type:application/json" -d @libjava/lib/src/test/fixtures/mapmatching_trace.json \
 		"https://api.mapbox.com/matching/v4/mapbox.driving.json?geometry=false&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o libjava/lib/src/test/fixtures/mapmatching_v5_no_geometry.json
+
+distance-fixtures:
+	# Retrieve a duration matrix
+	curl -X POST --header "Content-Type:application/json" -d @libjava/lib/src/test/fixtures/distance_coordinates.json \
+		"https://api.mapbox.com/distances/v1/mapbox/driving?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o libjava/lib/src/test/fixtures/distance_v1.json
