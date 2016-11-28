@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -40,7 +40,7 @@ public class MapboxGeocodingReverseTest {
     server = new MockWebServer();
 
     byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/geocoding_reverse.json"));
-    String body = new String(content, StandardCharsets.UTF_8);
+    String body = new String(content, Charset.forName("utf-8"));
     server.enqueue(new MockResponse().setBody(body));
 
     server.start();
