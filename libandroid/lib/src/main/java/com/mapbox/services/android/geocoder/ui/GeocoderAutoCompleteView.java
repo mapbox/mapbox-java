@@ -108,16 +108,27 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
   }
 
   /**
-   * parameter limits results to a set of one or more countries
-   * <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a> country codes,
-   * separated by commas.
+   * Parameter limits results to a country. Use one of the
+   * <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a> country codes. The country code is
+   * case sensitive and needs to be all lowercase.
    *
-   * @param country <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a>
-   *                country codes, separated by commas.
+   * @param country String matching country code. Needs to be lowercase.
    * @since 2.0.0
    */
   public void setCountry(String country) {
     adapter.setCountry(country);
+  }
+
+  /**
+   * Parameter limits results to a set of one or more countries. Use one or more of the
+   * <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a> country codes,
+   * separated by commas inside a String array. The country codes are case sensitive and needs to be all lowercase.
+   *
+   * @param countries String array containing the country codes you want to limit results to.
+   * @since 2.0.0
+   */
+  public void setCountries(String[] countries) {
+    adapter.setCountries(countries);
   }
 
   /**
