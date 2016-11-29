@@ -20,8 +20,10 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
 import static org.junit.Assert.assertEquals;
@@ -31,6 +33,10 @@ public class MapboxGeocodingTest {
 
   private final static double DELTA = 1E-10;
 
+  private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoding.json";
+  private static final String GEOCODING_COUNTRY_NOT_SUPPORTED = "src/test/fixtures/geocoding_country_not_supported.json";
+  private static final String ACCESS_TOKEN = "pk.XXX";
+
   private MockWebServer server;
   private HttpUrl mockUrl;
 
@@ -38,10 +44,24 @@ public class MapboxGeocodingTest {
   public void setUp() throws IOException {
     server = new MockWebServer();
 
-    byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/geocoding.json"));
-    String body = new String(content, Charset.defaultCharset());
-    server.enqueue(new MockResponse().setBody(body));
+    server.setDispatcher(new Dispatcher() {
 
+      @Override
+      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+        // Change the resource path if we are checking country not supported
+        String resource = GEOCODING_FIXTURE;
+        if (request.getPath().contains("country=aq")) {
+          resource = GEOCODING_COUNTRY_NOT_SUPPORTED;
+        }
+
+        try {
+          String body = new String(Files.readAllBytes(Paths.get(resource)), Charset.forName("utf-8"));
+          return new MockResponse().setBody(body);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    });
     server.start();
 
     mockUrl = server.url("");
@@ -58,7 +78,7 @@ public class MapboxGeocodingTest {
   @Test
   public void testSanity() throws ServicesException, IOException {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken("pk.XXX")
+      .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
       .build();
     client.setBaseUrl(mockUrl.toString());
@@ -69,7 +89,7 @@ public class MapboxGeocodingTest {
   @Test
   public void testBody() throws ServicesException, IOException {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken("pk.XXX")
+      .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
       .build();
     client.setBaseUrl(mockUrl.toString());
@@ -90,7 +110,7 @@ public class MapboxGeocodingTest {
   @Test
   public void testFeature() throws ServicesException, IOException {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken("pk.XXX")
+      .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
       .build();
     client.setBaseUrl(mockUrl.toString());
@@ -112,7 +132,7 @@ public class MapboxGeocodingTest {
   @Test
   public void testGeometry() throws ServicesException, IOException {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken("pk.XXX")
+      .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
       .build();
     client.setBaseUrl(mockUrl.toString());
@@ -127,7 +147,7 @@ public class MapboxGeocodingTest {
   @Test
   public void testContext() throws ServicesException, IOException {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken("pk.XXX")
+      .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
       .build();
     client.setBaseUrl(mockUrl.toString());
@@ -142,7 +162,7 @@ public class MapboxGeocodingTest {
   @Test
   public void testWikidata() throws ServicesException, IOException {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken("pk.XXX")
+      .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
       .build();
     client.setBaseUrl(mockUrl.toString());
@@ -156,11 +176,23 @@ public class MapboxGeocodingTest {
   public void testUserAgent() throws ServicesException, IOException {
     MapboxGeocoding service = new MapboxGeocoding.Builder()
       .setClientAppName("APP")
-      .setAccessToken("pk.XXX")
+      .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
       .build();
     service.setBaseUrl(mockUrl.toString());
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
+  @Test
+  public void testCountryNotSupported() throws ServicesException, IOException {
+    MapboxGeocoding client = new MapboxGeocoding.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setCountry("aq")
+      .setLocation("1600 pennsylvania ave nw")
+      .build();
+    client.setBaseUrl(mockUrl.toString());
+    Response<GeocodingResponse> response = client.executeCall();
+
+    assertEquals(0, response.body().getFeatures().size());
+  }
 }
