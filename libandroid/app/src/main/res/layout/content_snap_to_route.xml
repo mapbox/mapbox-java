@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".nav.SnapToRouteActivity"
+    tools:showIn="@layout/activity_snap_to_route">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:center_latitude="29.7850"
+        app:center_longitude="-95.7357"
+        app:zoom="13"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="end|bottom" >
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_back_a_step"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/ic_expand_more_24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/fab_forward_a_step"
+            android:layout_alignStart="@+id/fab_forward_a_step" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_forward_a_step"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/ic_expand_less_24dp"
+            android:layout_above="@+id/fab_back_a_step"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="16dp" />
+
+    </RelativeLayout>
+
+    <!--<RelativeLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="end|bottom"-->
+    <!--android:layout_margin="16dp">-->
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/back_a_step"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:src="@drawable/ic_expand_more_24dp"/>-->
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/forward_a_step"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="top|end"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:src="@drawable/ic_expand_less_24dp"-->
+        <!--app:layout_anchor="@id/back_a_step"-->
+        <!--app:layout_anchorGravity="top"/>-->
+
+    <!--</RelativeLayout>-->
+</android.support.design.widget.CoordinatorLayout>
