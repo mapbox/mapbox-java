@@ -116,6 +116,11 @@
             android:label="Off route detection"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".distance.DistanceActivity"
+            android:label="Distance"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!--
         Service to asynchronously fetch a location address using a Geocoder. Setting the

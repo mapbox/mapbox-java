@@ -17,6 +17,7 @@ import com.mapbox.services.android.BuildConfig;
 import com.mapbox.services.android.testapp.directions.DirectionsV4Activity;
 import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
 import com.mapbox.services.android.testapp.directions.RouteUtilsV5Activity;
+import com.mapbox.services.android.testapp.distance.DistanceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
   private RecyclerView.LayoutManager layoutManager;
 
   private static final List<SampleItem> samples = new ArrayList<>(Arrays.asList(
+    new SampleItem("Distance", "", DistanceActivity.class),
     new SampleItem("Directions v5", "", DirectionsV5Activity.class),
     new SampleItem("Route Utils v5", "", RouteUtilsV5Activity.class),
     new SampleItem("Directions v4", "", DirectionsV4Activity.class),
