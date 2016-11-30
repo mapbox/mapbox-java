@@ -247,22 +247,6 @@ public class TurfMiscTest extends BaseTurf {
       // pt did not shift far
       assertTrue(shift < 0.000001);
     }
-
-//    test('turf-point-on-line - points on top of line', function (t) {
-//      var line = linestring([[-0.10919809341430663,51.52204224896724],[-0.10923027992248535,51.521942114455435],[-0.10916590690612793,51.52186200668747],[-0.10904788970947266,51.52177522311313],[-0.10886549949645996,51.521601655468345],[-0.10874748229980469,51.52138135712038],[-0.10855436325073242,51.5206870765674],[-0.10843634605407713,51.52027984939518],[-0.10839343070983887,51.519952729849024],[-0.10817885398864746,51.51957887606202],[-0.10814666748046874,51.51928513164789],[-0.10789990425109863,51.518624199789016],[-0.10759949684143065,51.51778299991493]]);
-//
-//      var dist = lineDistance(line, 'miles');
-//      var increment = dist / 10;
-//
-//      for (var i = 0; i < 10; i++) {
-//        var pt = along(line, increment * i, 'miles');
-//        var snapped = pointOnLine(line, pt);
-//        var shift = distance(pt, snapped, 'miles');
-//        t.true(shift < 0.000001, 'pt did not shift far');
-//      }
-//
-//      t.end();
-//    });
   }
 
   @Test
@@ -277,19 +261,7 @@ public class TurfMiscTest extends BaseTurf {
     double shift = TurfMeasurement.distance(pt, snapped, TurfConstants.UNIT_MILES);
 
     // pt did not shift far
-    assertTrue(shift < 0.000001);
-
-//    test('turf-point-on-line - point along line', function (t) {
-//      var line = linestring([[-122.45717525482178,37.72003306385638],[-122.45717525482178,37.718242366859215]]);
-//
-//      var pt = along(line, 0.019, 'miles');
-//      var snapped = pointOnLine(line, pt);
-//      var shift = distance(pt, snapped, 'miles');
-//
-//      t.true(shift < 0.00001, 'pt did not shift far');
-//
-//      t.end();
-//    });
+    assertTrue(shift < 0.00001);
   }
 
   @Test
@@ -314,25 +286,5 @@ public class TurfMiscTest extends BaseTurf {
       // pt did not snap to last vertex
       assertNotEquals(snapped.getCoordinates(), last);
     }
-
-
-//    test('turf-point-on-line - points on sides of lines', function (t) {
-//      var line = linestring([[-122.45616137981413,37.72125936929241],[-122.45717525482178,37.718242366859215]]);
-//      var first = line.geometry.coordinates[0];
-//      var last = line.geometry.coordinates[line.geometry.coordinates.length - 1];
-//      var pts = [
-//      point([-122.45702505111694,37.71881098149625]),
-//      point([-122.45733618736267,37.719235317933844]),
-//      point([-122.45686411857605,37.72027068864082]),
-//      point([-122.45652079582213,37.72063561093274])
-//      ];
-//
-//      pts.forEach(function(pt){
-//        var snapped = pointOnLine(line, pt);
-//        t.notDeepEqual(snapped.geometry.coordinates, first, 'pt did not snap to first vertex');
-//        t.notDeepEqual(snapped.geometry.coordinates, last, 'pt did not snap to last vertex');
-//      });
-//
-//      t.end();
   }
 }
