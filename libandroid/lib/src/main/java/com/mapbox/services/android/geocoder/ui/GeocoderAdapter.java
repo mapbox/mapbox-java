@@ -32,9 +32,11 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   private final Context context;
   private String accessToken;
   private String country;
+  private String[] countries;
   private String type;
   private double[] bbox;
   private Position position;
+  private int limit;
 
   private GeocoderFilter geocoderFilter;
 
@@ -83,15 +85,38 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   }
 
   /**
-   * Parameter limits results to a set of one or more countries, specified with
-   * <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a> country codes
-   * and separated by commas.
+   * Parameter limits results to a country. Use one of the
+   * <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a> country codes. The country code is
+   * case sensitive and needs to be all lowercase.
    *
-   * @param country String matching country code.
+   * @param country String matching country code. Needs to be lowercase.
    * @since 1.3.0
    */
   public void setCountry(String country) {
     this.country = country;
+  }
+
+  /**
+   * Get the countries you are limiting your geocoding results if applicable.
+   *
+   * @return a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a>
+   * country code inside a String array.
+   * @since 2.0.0
+   */
+  public String[] getCountries() {
+    return countries;
+  }
+
+  /**
+   * Parameter limits results to a set of one or more countries. Use one or more of the
+   * <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a> country codes,
+   * separated by commas inside a String array. The country codes are case sensitive and needs to be all lowercase.
+   *
+   * @param countries String array containing the country codes you want to limit results to.
+   * @since 2.0.0
+   */
+  public void setCountries(String[] countries) {
+    this.countries = countries;
   }
 
   /**
@@ -178,6 +203,26 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    */
   public void setProximity(Position position) {
     this.position = position;
+  }
+
+  /**
+   * Returns integer number representing the amount of results
+   *
+   * @return integer value
+   * @since 2.0.0
+   */
+  public int getLimit() {
+    return limit;
+  }
+
+  /**
+   * Limit the number of results returned. The default is 5.
+   *
+   * @param limit the integer value representing the amount of results desired.
+   * @since 2.0.0
+   */
+  public void setLimit(int limit) {
+    this.limit = limit;
   }
 
   /*
@@ -305,6 +350,9 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         if (getCountry() != null) {
           builder.setCountry(getCountry());
         }
+        if (getCountries() != null) {
+          builder.setCountries(getCountries());
+        }
         if (getProximity() != null) {
           builder.setProximity(getProximity());
         }
@@ -313,6 +361,9 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         }
         if (getBbox() != null) {
           builder.setBbox(bbox[0], bbox[1], bbox[2], bbox[3]);
+        }
+        if (getLimit() != 0) {
+          builder.setLimit(limit);
         }
 
         // Do request

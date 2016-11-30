@@ -47,6 +47,7 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
     autocomplete = (GeocoderAutoCompleteView) findViewById(R.id.query);
     autocomplete.setAccessToken(Utils.getMapboxAccessToken(this));
     autocomplete.setType(GeocodingCriteria.TYPE_POI);
+    autocomplete.setLimit(10);
     autocomplete.setOnFeatureListener(new GeocoderAutoCompleteView.OnFeatureListener() {
       @Override
       public void OnFeatureClick(CarmenFeature feature) {

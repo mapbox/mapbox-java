@@ -103,7 +103,8 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       builder.getProximity(),
       builder.getGeocodingTypes(),
       builder.getAutocomplete(),
-      builder.getBbox());
+      builder.getBbox(),
+      builder.getLimit());
 
     return call;
   }
@@ -170,6 +171,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     private String geocodingTypes = null;
     private Boolean autocomplete = null;
     private String bbox = null;
+    private String limit = null;
 
     /**
      * Constructor
@@ -348,6 +350,22 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     }
 
     /**
+     * Limit the number of results returned. The default is 5 for forward geocoding and 1 for
+     * reverse geocoding.
+     *
+     * @param limit the integer value representing the amount of results desired.
+     * @return Builder
+     * @since 2.0.0
+     */
+    public Builder setLimit(int limit) {
+      if (limit == 0) {
+        return this;
+      }
+      this.limit = String.format(Locale.US, "%d", limit);
+      return this;
+    }
+
+    /**
      * @return your Mapbox access token.
      * @since 1.0.0
      */
@@ -415,6 +433,14 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      */
     public String getBbox() {
       return bbox;
+    }
+
+    /**
+     * @return the integer value representing the amount of results desired.
+     * @since 2.0.0
+     */
+    public String getLimit() {
+      return limit;
     }
 
     public Builder setClientAppName(String appName) {

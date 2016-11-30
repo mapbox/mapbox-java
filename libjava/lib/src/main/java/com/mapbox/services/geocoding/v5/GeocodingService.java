@@ -28,6 +28,7 @@ public interface GeocodingService {
    * @param types        Filter results by one or more type.
    * @param autocomplete True if you want auto complete.
    * @param bbox         Optionally pass in a bounding box to limit results in.
+   * @param limit        Optionally pass in a limit the amount of returning results.
    * @return A retrofit Call object
    * @since 1.0.0
    */
@@ -41,5 +42,6 @@ public interface GeocodingService {
     @Query("proximity") String proximity,
     @Query("types") String types,
     @Query("autocomplete") Boolean autocomplete,
-    @Query("bbox") String bbox);
+    @Query("bbox") String bbox,
+    @Query("limit") String limit);
 }
