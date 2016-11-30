@@ -48,6 +48,13 @@ workflows:
                 envman add --key SKIPCI --value false
             fi
     - script:
+        title: Run Checkstyle task for both libjava and libandroid
+        - content: |-
+            #!/bin/bash
+            cd libandroid
+            ./gradlew checkstyle
+        - is_debug: 'yes'
+    - script:
         title: Build Java Services
         inputs:
         - content: |-
