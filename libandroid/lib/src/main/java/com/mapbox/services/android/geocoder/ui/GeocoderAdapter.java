@@ -1,6 +1,7 @@
 package com.mapbox.services.android.geocoder.ui;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.mapbox.services.geocoding.v5.models.GeocodingResponse;
 import java.io.IOException;
 import java.util.List;
 
+import retrofit2.Call;
 import retrofit2.Response;
 
 /**
@@ -37,6 +39,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   private double[] bbox;
   private Position position;
   private int limit;
+  private Call call;
 
   private GeocoderFilter geocoderFilter;
 
@@ -225,6 +228,18 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
     this.limit = limit;
   }
 
+  /**
+   * Can be used to cancel any calls currently in progress. It's a good idea to include in onDestroy() to prevent
+   * memory leaks
+   *
+   * @since 2.0.0
+   */
+  public void cancelApiCall() {
+    if (call != null) {
+      call.cancel();
+    }
+  }
+
   /*
    * Required by BaseAdapter
    */
@@ -365,6 +380,8 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         if (getLimit() != 0) {
           builder.setLimit(limit);
         }
+
+        call = builder.build().getCall();
 
         // Do request
         response = builder.build().executeCall();

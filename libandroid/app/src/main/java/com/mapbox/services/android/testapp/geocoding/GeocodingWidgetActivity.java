@@ -116,6 +116,7 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
+    autocomplete.cancelApiCall();
     mapView.onDestroy();
   }
 

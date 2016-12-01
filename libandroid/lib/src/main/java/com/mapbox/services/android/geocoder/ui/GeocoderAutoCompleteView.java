@@ -80,6 +80,16 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
     });
   }
 
+  /**
+   * Can be used to cancel any calls currently in progress. It's a good idea to include in onDestroy() to prevent
+   * memory leaks
+   *
+   * @since 2.0.0
+   */
+  public void cancelApiCall() {
+    adapter.cancelApiCall();
+  }
+
   /*
    * Setters
    */
