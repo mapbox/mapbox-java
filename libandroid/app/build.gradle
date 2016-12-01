@@ -55,3 +55,6 @@ dependencies {
     // Testing
     testCompile 'junit:junit:4.12'
 }
+
+apply from: 'gradle-checkstyle.gradle'
+apply from: 'gradle-config.gradle'

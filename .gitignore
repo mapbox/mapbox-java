@@ -1,1 +1,22 @@
-secring.gpg
+# Gradle files
+.gradle/
+
+# IntelliJ files
+.idea/
+*.iml
+
+# Build files
+build/
+*.so
+*.apk
+BuildConfig.java
+.DS_Store
+
+# Local settings
+local.properties
+
+# Capture files
+captures/
+
+# Token file
+libandroid/app/src/main/res/values/developer-config.xml

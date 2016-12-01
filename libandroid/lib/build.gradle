@@ -47,6 +47,7 @@ dependencies {
 
 apply from: 'gradle-javadoc.gradle'
 apply from: 'gradle-mvn-push.gradle'
+apply from: 'gradle-checkstyle.gradle'
 
 // See: https://github.com/chrisbanes/gradle-mvn-push/issues/43#issuecomment-84140513
 afterEvaluate { project ->
@@ -56,3 +57,4 @@ afterEvaluate { project ->
         }
     }
 }
+
