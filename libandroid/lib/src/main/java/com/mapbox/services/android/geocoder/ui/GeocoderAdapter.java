@@ -31,8 +31,6 @@ import retrofit2.Response;
  */
 public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
-  private static final String TAG = "GeocoderAdapter";
-
   private final Context context;
   private String accessToken;
   private String country;
@@ -237,9 +235,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @since 2.0.0
    */
   public void cancelApiCall() {
-    if (call == null) {
-      Log.i(TAG, "cancelApiCall: call wasn't built yet");
-    } else {
+    if (call != null) {
       call.cancel();
     }
   }
