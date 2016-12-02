@@ -5,6 +5,7 @@ package com.mapbox.services.directions.v4.models;
  *
  * @since 1.0.0
  */
+@Deprecated
 public class StepManeuver {
 
   private String type;

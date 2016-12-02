@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @since 1.0.0
  */
+@Deprecated
 public class RouteStep {
 
   private int distance;

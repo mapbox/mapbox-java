@@ -13,6 +13,7 @@ import retrofit2.http.Query;
  *
  * @since 1.0.0
  */
+@Deprecated
 public interface DirectionsService {
 
   /**

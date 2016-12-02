@@ -10,6 +10,7 @@ import java.util.List;
  *
  * @since 1.0.0
  */
+@Deprecated
 public class DirectionsRoute {
 
   private int distance;
