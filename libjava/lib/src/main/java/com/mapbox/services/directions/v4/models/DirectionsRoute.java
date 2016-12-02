@@ -9,7 +9,9 @@ import java.util.List;
  * Gives detailed information about an individual route such as the duration, distance and geometry.
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public class DirectionsRoute {
 
   private int distance;
@@ -27,7 +29,9 @@ public class DirectionsRoute {
    *
    * @return An integer number with unit meters.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public int getDistance() {
     return distance;
   }
@@ -35,7 +39,9 @@ public class DirectionsRoute {
   /**
    * @param distance The distance traveled from origin to destination.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setDistance(int distance) {
     this.distance = distance;
   }
@@ -45,7 +51,9 @@ public class DirectionsRoute {
    *
    * @return an integer number with unit seconds.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public int getDuration() {
     return duration;
   }
@@ -53,7 +61,9 @@ public class DirectionsRoute {
   /**
    * @param duration The estimated travel time from origin to destination.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setDuration(int duration) {
     this.duration = duration;
   }
@@ -63,7 +73,9 @@ public class DirectionsRoute {
    *
    * @return a string briefly describing route.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getSummary() {
     return summary;
   }
@@ -71,7 +83,9 @@ public class DirectionsRoute {
   /**
    * @param summary A short, human-readable summary of the route (e.g., major roads traversed).
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setSummary(String summary) {
     this.summary = summary;
   }
@@ -81,7 +95,9 @@ public class DirectionsRoute {
    *
    * @return encoded polyline with precision 6.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getGeometry() {
     return geometry;
   }
@@ -89,7 +105,9 @@ public class DirectionsRoute {
   /**
    * @param geometry The geometry of the route.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setGeometry(String geometry) {
     this.geometry = geometry;
   }
@@ -99,7 +117,9 @@ public class DirectionsRoute {
    *
    * @return List of {@link RouteStep} objects.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public List<RouteStep> getSteps() {
     return steps;
   }
@@ -107,7 +127,9 @@ public class DirectionsRoute {
   /**
    * @param steps The route instructions.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setSteps(List<RouteStep> steps) {
     this.steps = steps;
   }
@@ -119,7 +141,9 @@ public class DirectionsRoute {
    * @param precision of encoded polyline.
    * @return GeoJSON LineString.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public LineString asLineString(int precision) {
     return LineString.fromPolyline(getGeometry(), precision);
   }

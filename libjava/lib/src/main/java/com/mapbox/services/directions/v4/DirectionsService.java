@@ -12,7 +12,9 @@ import retrofit2.http.Query;
  * Interface that defines the directions service (v4).
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public interface DirectionsService {
 
   /**

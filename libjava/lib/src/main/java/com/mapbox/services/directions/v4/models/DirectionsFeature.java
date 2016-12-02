@@ -5,7 +5,9 @@ package com.mapbox.services.directions.v4.models;
  * with a Point geometry type.
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public class DirectionsFeature {
 
   private String type;
@@ -17,7 +19,9 @@ public class DirectionsFeature {
    *
    * @return string type.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getType() {
     return type;
   }
@@ -25,7 +29,9 @@ public class DirectionsFeature {
   /**
    * @param type The type of the GeoJSON object.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setType(String type) {
     this.type = type;
   }
@@ -35,7 +41,9 @@ public class DirectionsFeature {
    *
    * @return {@link FeatureGeometry} object.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public FeatureGeometry getGeometry() {
     return geometry;
   }
@@ -43,7 +51,9 @@ public class DirectionsFeature {
   /**
    * @param geometry {@link FeatureGeometry} object contains type and the coordinates.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setGeometry(FeatureGeometry geometry) {
     this.geometry = geometry;
   }
@@ -53,7 +63,9 @@ public class DirectionsFeature {
    *
    * @return {@link FeatureProperties} object.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public FeatureProperties getProperties() {
     return properties;
   }
@@ -61,7 +73,9 @@ public class DirectionsFeature {
   /**
    * @param properties Properties describing the point. This includes, at a minimum, a name.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setProperties(FeatureProperties properties) {
     this.properties = properties;
   }

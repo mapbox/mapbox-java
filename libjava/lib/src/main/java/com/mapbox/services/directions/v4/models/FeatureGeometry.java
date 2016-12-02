@@ -7,7 +7,9 @@ import java.util.List;
  * Describes the geometry of a {@link DirectionsFeature}.
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public class FeatureGeometry {
 
   private String type;
@@ -17,7 +19,9 @@ public class FeatureGeometry {
    * Builder
    *
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public FeatureGeometry() {
     coordinates = new ArrayList<>();
   }
@@ -27,7 +31,9 @@ public class FeatureGeometry {
    *
    * @return string naming GeoJSON geometry type.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getType() {
     return type;
   }
@@ -35,7 +41,9 @@ public class FeatureGeometry {
   /**
    * @param type The GeoJSON geometry type.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setType(String type) {
     this.type = type;
   }
@@ -46,7 +54,9 @@ public class FeatureGeometry {
    *
    * @return List of Double objects containing a point with longitude and latitude values.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public List<Double> getCoordinates() {
     return coordinates;
   }
@@ -55,7 +65,9 @@ public class FeatureGeometry {
    * @param coordinates List of Double objects containing a point with longitude and latitude
    *                    values.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setCoordinates(List<Double> coordinates) {
     this.coordinates = coordinates;
   }
