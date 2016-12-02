@@ -118,6 +118,18 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
   }
 
   /**
+   * Configure the geocoder type, pass in one or more of the constants found within
+   * {@link com.mapbox.services.geocoding.v5.GeocodingCriteria}.
+   *
+   * @param types String array containing "place", "poi", "neighborhood", etc.
+   * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
+   * @since 2.0.0
+   */
+  public void setTypes(String[] types) {
+    adapter.setTypes(types);
+  }
+
+  /**
    * Parameter limits results to a country. Use one of the
    * <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a> country codes. The country code is
    * case sensitive and needs to be all lowercase.
