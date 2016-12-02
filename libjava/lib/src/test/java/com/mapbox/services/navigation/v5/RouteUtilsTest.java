@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -37,7 +38,7 @@ public class RouteUtilsTest extends BaseTest {
   public void setUp() throws IOException {
     Gson gson = new Gson();
     byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/directions_v5.json"));
-    String body = new String(content, StandardCharsets.UTF_8);
+    String body = new String(content, Charset.forName("utf-8"));
     response = gson.fromJson(body, DirectionsResponse.class);
     route = response.getRoutes().get(0).getLegs().get(0);
   }
@@ -68,6 +69,29 @@ public class RouteUtilsTest extends BaseTest {
       List<Position> coords = PolylineUtils.decode(step.getGeometry(), Constants.OSRM_PRECISION_V5);
       assertEquals(0.0, routeUtils.getDistanceToStep(coords.get(0), route, stepIndex), DELTA);
     }
+  }
+
+  @Test
+  public void getDistanceToNextStepTest() throws ServicesException, TurfException {
+    RouteUtils routeUtils = new RouteUtils();
+
+    for (int stepIndex = 0; stepIndex < route.getSteps().size(); stepIndex++) {
+      LegStep step = route.getSteps().get(stepIndex);
+      List<Position> coords = PolylineUtils.decode(step.getGeometry(), Constants.OSRM_PRECISION_V5);
+      double distance = routeUtils.getDistanceToNextStep(coords.get(0), route, stepIndex);
+      distance = distance * 1000; // Convert distance to meters
+      assertEquals(route.getSteps().get(stepIndex).getDistance(), distance, DELTA);
+    }
+  }
+
+  @Test
+  public void getDistanceToEndOfRouteTest() throws TurfException {
+    RouteUtils routeUtils = new RouteUtils();
+
+    List<Position> coords = PolylineUtils.decode(response.getRoutes().get(0).getGeometry(), Constants.OSRM_PRECISION_V5);
+    double distance = routeUtils.getDistanceToEndOfRoute(coords.get(0), response.getRoutes().get(0));
+    distance = distance * 1000; // Convert distance to meters
+    assertEquals(response.getRoutes().get(0).getDistance(), distance, DELTA);
   }
 
   @Test

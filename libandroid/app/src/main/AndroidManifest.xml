@@ -112,8 +112,13 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".nav.OffRouteDetectionActivity"
-            android:label="Off route detection"
+        android:name=".nav.OffRouteDetectionActivity"
+        android:label="Off route detection"
+        android:parentActivityName=".MainActivity"
+        android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".nav.SnapToRouteActivity"
+            android:label="Snap to route"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
