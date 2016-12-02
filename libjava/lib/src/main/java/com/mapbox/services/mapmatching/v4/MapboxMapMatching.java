@@ -9,7 +9,6 @@ import com.mapbox.services.commons.ServicesException;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.directions.v4.DirectionsCriteria;
 import com.mapbox.services.mapmatching.v4.gson.MapMatchingGeometryDeserializer;
 import com.mapbox.services.mapmatching.v4.models.MapMatchingResponse;
 
@@ -27,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * The Mapbox map matching interface (v4)
  * <p>
  * The Mapbox Map Matching API snaps fuzzy, inaccurate traces from a GPS unit or a phone to the
- * OpenStreetMap? road and path network using the Directions API. This produces clean paths that can
+ * OpenStreetMap road and path network using the Directions API. This produces clean paths that can
  * be displayed on a map or used for other analysis.
  *
  * @see <a href="https://www.mapbox.com/api-documentation/#map-matching">Map matching API documentation</a>
@@ -169,7 +168,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
      */
     public Builder() {
       // Use polyline by default as the return format
-      this.geometry = DirectionsCriteria.GEOMETRY_POLYLINE;
+      this.geometry = MapMatchingCriteria.GEOMETRY_POLYLINE;
     }
 
     /**
@@ -196,12 +195,11 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     }
 
     /**
-     * Set a map matching profile. You should use one of the constants in Directions v4
-     * com.mapbox.services.directions.v4.DirectionsCriteria
+     * Set a map matching profile. You should use one of the constants found in {@link MapMatchingCriteria}
      *
      * @param profile String containg A directions profile ID; either {@code mapbox.driving},
      *                {@code mapbox.walking}, or {@code mapbox.cycling}. Use one of the
-     *                {@link DirectionsCriteria} constants.
+     *                {@link MapMatchingCriteria} constants.
      * @return Builder
      * @since 1.2.0
      */
@@ -211,7 +209,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     }
 
     /**
-     * @return String containg A directions profile ID; either {@code mapbox.driving},
+     * @return String containing a map matching profile ID; either {@code mapbox.driving},
      * {@code mapbox.walking}, or {@code mapbox.cycling}.
      * @since 1.2.0
      */
@@ -238,7 +236,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
      * @since 1.2.0
      */
     public Builder setNoGeometry() {
-      this.geometry = DirectionsCriteria.GEOMETRY_FALSE;
+      this.geometry = MapMatchingCriteria.GEOMETRY_FALSE;
       return this;
     }
 
@@ -287,9 +285,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     }
 
     private void validateProfile() throws ServicesException {
-      if (profile == null || !(profile.equals(DirectionsCriteria.PROFILE_CYCLING)
-        || profile.equals(DirectionsCriteria.PROFILE_DRIVING)
-        || profile.equals(DirectionsCriteria.PROFILE_WALKING))) {
+      if (profile == null || !(profile.equals(MapMatchingCriteria.PROFILE_CYCLING)
+        || profile.equals(MapMatchingCriteria.PROFILE_DRIVING)
+        || profile.equals(MapMatchingCriteria.PROFILE_WALKING))) {
         throw new ServicesException(
           "Using Mapbox Map Matching requires setting a valid profile.");
       }

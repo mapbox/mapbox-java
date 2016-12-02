@@ -21,10 +21,10 @@ public interface MapMatchingService {
    * Call based interface
    *
    * @param userAgent    user
-   * @param profile      directions profile id
+   * @param profile      map matching profile id
    * @param accessToken  Mapbox access token
    * @param geometry     format for the returned geometry (optional)
-   * @param gpsPrecision assumed precission in meters of the used tracking device
+   * @param gpsPrecision assumed precision in meters of the used tracking device
    * @param trace        The trace wanting to be matched
    * @return The MapMatchingResponse in a Call wrapper
    * @since 1.2.0
