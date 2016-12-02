@@ -36,6 +36,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   private String country;
   private String[] countries;
   private String type;
+  private String[] types;
   private double[] bbox;
   private Position position;
   private int limit;
@@ -134,6 +135,17 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   }
 
   /**
+   * Get the geocder filter types in a String array.
+   *
+   * @return String containing "place", "poi", "neighborhood", etc.
+   * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
+   * @since 2.0.0
+   */
+  public String[] getTypes() {
+    return types;
+  }
+
+  /**
    * Configure the geocoder type, pass in one of the constants found within
    * {@link com.mapbox.services.geocoding.v5.GeocodingCriteria}.
    *
@@ -143,6 +155,18 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Configure the geocoder type, pass in one or more of the constants found within
+   * {@link com.mapbox.services.geocoding.v5.GeocodingCriteria}.
+   *
+   * @param types String array containing "place", "poi", "neighborhood", etc.
+   * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
+   * @since 2.0.0
+   */
+  public void setTypes(String[] types) {
+    this.types = types;
   }
 
   /**
@@ -373,6 +397,9 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         }
         if (getType() != null) {
           builder.setGeocodingType(getType());
+        }
+        if (getTypes() != null) {
+          builder.setGeocodingTypes(getTypes());
         }
         if (getBbox() != null) {
           builder.setBbox(bbox[0], bbox[1], bbox[2], bbox[3]);

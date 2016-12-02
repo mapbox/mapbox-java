@@ -1,6 +1,7 @@
 package com.mapbox.services.android.geocoder.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -28,6 +29,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
   private static final int DEFAULT_NUMBER_OF_LINES = 1;
 
   private GeocoderAdapter adapter;
+  private Drawable imgClearButton;
 
   public interface OnFeatureListener {
     void OnFeatureClick(CarmenFeature feature);
@@ -37,6 +39,10 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
 
   public GeocoderAutoCompleteView(Context context, AttributeSet attrs) {
     super(context, attrs);
+
+    // Get attributes from attrs.xml
+    TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.mas_geocoderWidget);
+    imgClearButton = attributes.getDrawable(R.styleable.mas_geocoderWidget_mas_clearButtonDrawable);
 
     // Set custom adapter
     adapter = new GeocoderAdapter(context);
@@ -60,7 +66,9 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
     });
 
     // Add clear button to autocomplete
-    final Drawable imgClearButton = ContextCompat.getDrawable(context, R.drawable.ic_clear_black_24dp);
+    if (imgClearButton == null) {
+      imgClearButton = ContextCompat.getDrawable(context, R.drawable.ic_clear_black_24dp);
+    }
     setCompoundDrawablesWithIntrinsicBounds(null, null, imgClearButton, null);
     setOnTouchListener(new View.OnTouchListener() {
       @Override
@@ -115,6 +123,18 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
    */
   public void setType(String type) {
     adapter.setType(type);
+  }
+
+  /**
+   * Configure the geocoder type, pass in one or more of the constants found within
+   * {@link com.mapbox.services.geocoding.v5.GeocodingCriteria}.
+   *
+   * @param types String array containing "place", "poi", "neighborhood", etc.
+   * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
+   * @since 2.0.0
+   */
+  public void setTypes(String[] types) {
+    adapter.setTypes(types);
   }
 
   /**
