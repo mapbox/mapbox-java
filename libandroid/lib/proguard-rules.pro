@@ -13,7 +13,8 @@
 # For using GSON @Expose annotation
 -keepattributes *Annotation*
 # Gson specific classes
--keep class sun.misc.Unsafe { *; }
+-dontwarn sun.misc.**
+
 # Prevent proguard from stripping interface information from TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
 -keep class * implements com.google.gson.TypeAdapterFactory
