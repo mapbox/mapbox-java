@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 25
 
         // This should be updated together with gradle.properties
         // Last number is 0 for a SNAPSHOT, 1 for a release
@@ -30,16 +30,16 @@ android {
 
 dependencies {
     // Support libraries
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
 
     // Mapbox Java Services (development)
-    compile project(':libjava')
+    //compile project(':libjava')
 
-//    // Mapbox Java Services (release)
-//    compile ('com.mapbox.mapboxsdk:mapbox-java-services:2.0.0-SNAPSHOT@jar') {
-//        transitive=true
-//    }
+    // Mapbox Java Services (release)
+    compile ('com.mapbox.mapboxsdk:mapbox-java-services:2.0.0-SNAPSHOT@jar') {
+        transitive=true
+    }
 
     // Testing
     testCompile 'junit:junit:4.12'

@@ -24,12 +24,6 @@ buildConfig {
     ]
 }
 
-task JavadocGeneration(type: Javadoc) {
-    source = sourceSets.main.allJava
-    failOnError = false
-    classpath = configurations.compile
-}
-
 def getGitRevision() {
     def cmd = "git rev-parse --short HEAD"
     def proc = cmd.execute()
@@ -39,3 +33,4 @@ def getGitRevision() {
 
 apply from: 'gradle-mvn-push.gradle'
 apply from: 'gradle-checkstyle.gradle'
+apply from: 'gradle-javadoc.gradle'

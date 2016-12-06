@@ -64,6 +64,8 @@ public class AndroidGeocoder {
    * empty lists.
    *
    * @since 1.0.0
+   * @return true if the Geocoder methods {@link AndroidGeocoder#getFromLocation(double, double, int)} and
+   * {@link AndroidGeocoder#getFromLocationName(String, int)} are implemented.
    */
   public static boolean isPresent() {
     return true;
@@ -91,6 +93,7 @@ public class AndroidGeocoder {
    *                                  less than -180 or greater than 180
    * @throws IOException              if the network is unavailable or any other
    *                                  I/O problem occurs
+   * @throws ServicesException        Generic Exception for all things Mapbox.
    * @since 1.0.0
    */
   public List<Address> getFromLocation(double latitude, double longitude, int maxResults)
@@ -143,6 +146,7 @@ public class AndroidGeocoder {
    * @throws IllegalArgumentException if locationName is null
    * @throws IOException              if the network is unavailable or any other
    *                                  I/O problem occurs
+   * @throws ServicesException        Generic Exception for all things Mapbox.
    * @since 1.0.0
    */
   public List<Address> getFromLocationName(String locationName, int maxResults) throws IOException, ServicesException {
@@ -199,6 +203,7 @@ public class AndroidGeocoder {
    *                                  greater than 90
    * @throws IOException              if the network is unavailable or any other
    *                                  I/O problem occurs
+   * @throws ServicesException        Generic Exception for all things Mapbox.
    * @since 1.0.0
    */
   public List<Address> getFromLocationName(String locationName, int maxResults,

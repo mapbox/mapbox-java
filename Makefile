@@ -1,9 +1,9 @@
 javadoc:
 	# Output is ./libjava/lib/build/docs/javadoc
-	cd libjava; ./gradlew clean javadoc
+	cd libjava; ./gradlew javadocGeneration
 
 	# Output is ./libandroid/lib/build/docs/javadoc/release
-	cd libandroid; ./gradlew clean javadocrelease
+	cd libandroid; ./gradlew javadocrelease
 
 geocoding-fixtures:
 	# Geocoding: 1600 Pennsylvania Ave NW

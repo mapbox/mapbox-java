@@ -8,7 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 /**
- * Utilities to handle the new permission system in 6.0. Weonly focus on ACCESS_FINE_LOCATION.
+ * Utilities to handle the new permission system in 6.0. We only focus on ACCESS_FINE_LOCATION.
  *
  * @see <a href="http://developer.android.com/training/permissions/index.html">Working with System Permissions</a>
  * @since 1.0.0
