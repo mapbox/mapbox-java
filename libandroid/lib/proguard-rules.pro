@@ -21,6 +21,8 @@
 -keep class * implements com.google.gson.JsonDeserializer
 
 # MAS Data Models
+-keep class com.mapbox.services.mapmatching.v4.models.** { *; }
+-keep class com.mapbox.services.distance.v1.models.** { *; }
 -keep class com.mapbox.services.directions.v4.models.** { *; }
 -keep class com.mapbox.services.directions.v5.models.** { *; }
 -keep class com.mapbox.services.geocoding.v5.models.** { *; }
