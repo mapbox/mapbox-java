@@ -16,6 +16,23 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion = "7.1.1"
+        configFile = "../../checkstyle.xml" as File
+    }
+
+    task checkstyle(type: Checkstyle) {
+        description 'Checks if the code adheres to coding standards'
+        group 'verification'
+        configFile file("../../checkstyle.xml")
+        source 'src'
+        include '**/*.java'
+        exclude '**/gen/**'
+        classpath = files()
+    }
 }
 
 task clean(type: Delete) {
