@@ -15,7 +15,8 @@ public final class DirectionsCriteria {
    * high-speed roads like highways.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String PROFILE_DRIVING = "mapbox.driving";
@@ -25,7 +26,8 @@ public final class DirectionsCriteria {
    * and trails.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String PROFILE_WALKING = "mapbox.walking";
@@ -35,7 +37,8 @@ public final class DirectionsCriteria {
    * highways and preferring streets with bike lanes.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String PROFILE_CYCLING = "mapbox.cycling";
@@ -44,7 +47,8 @@ public final class DirectionsCriteria {
    * Format to return route instructions will be text.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String INSTRUCTIONS_TEXT = "text";
@@ -53,7 +57,8 @@ public final class DirectionsCriteria {
    * Format to return route instructions will be html.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String INSTRUCTIONS_HTML = "html";
@@ -62,7 +67,8 @@ public final class DirectionsCriteria {
    * Format to return route geometry will be geojson.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String GEOMETRY_GEOJSON = "geojson";
@@ -71,7 +77,8 @@ public final class DirectionsCriteria {
    * Format to return route geometry will be encoded polyline.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String GEOMETRY_POLYLINE = "polyline";
@@ -80,7 +87,8 @@ public final class DirectionsCriteria {
    * Use false to omit geometry from response.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String GEOMETRY_FALSE = "false";
@@ -89,7 +97,8 @@ public final class DirectionsCriteria {
    * Normal case
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String RESPONSE_OK = "Ok";
@@ -98,7 +107,8 @@ public final class DirectionsCriteria {
    * The input did not produce any matches. Features will be an empty array.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String RESPONSE_NO_MATCH = "NoMatch";
@@ -107,7 +117,8 @@ public final class DirectionsCriteria {
    * There are more than 100 points in the request.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String RESPONSE_TOO_MANY_COORDINATES = "TooManyCoordinates";
@@ -116,7 +127,8 @@ public final class DirectionsCriteria {
    * message will hold an explanation of the invalid input.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String RESPONSE_INVALID_INPUT = "InvalidInput";
@@ -125,7 +137,8 @@ public final class DirectionsCriteria {
    * Profile should be  mapbox.driving, mapbox.walking, or mapbox.cycling.
    *
    * @since 1.0.0
-   * @deprecated Use Directions v5 instead or if MapMatching use {@link MapMatchingCriteria}
+   * @deprecated Use Directions v5 instead or if MapMatching use
+   * {@link com.mapbox.services.mapmatching.v4.MapMatchingCriteria}
    */
   @Deprecated
   public static final String RESPONSE_PROFILE_NOT_FOUND = "ProfileNotFound";
