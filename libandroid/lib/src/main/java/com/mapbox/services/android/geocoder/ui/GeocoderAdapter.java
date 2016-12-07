@@ -103,7 +103,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   /**
    * Get the countries you are limiting your geocoding results if applicable.
    *
-   * @return a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a>
+   * @return <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166 alpha 2</a>
    * country code inside a String array.
    * @since 2.0.0
    */
