@@ -7,7 +7,9 @@ import com.google.gson.annotations.SerializedName;
  * heading, direction, way name, and duration.
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public class RouteStep {
 
   private int distance;
@@ -23,7 +25,9 @@ public class RouteStep {
    *
    * @return integer distance given in meters.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public int getDistance() {
     return distance;
   }
@@ -31,7 +35,9 @@ public class RouteStep {
   /**
    * @param distance integer distance given in meters.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setDistance(int distance) {
     this.distance = distance;
   }
@@ -41,7 +47,9 @@ public class RouteStep {
    *
    * @return integer number given in seconds.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public int getDuration() {
     return duration;
   }
@@ -49,7 +57,9 @@ public class RouteStep {
   /**
    * @param duration integer number given in seconds.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setDuration(int duration) {
     this.duration = duration;
   }
@@ -59,7 +69,9 @@ public class RouteStep {
    *
    * @return string containing a name.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getWayName() {
     return wayName;
   }
@@ -67,7 +79,9 @@ public class RouteStep {
   /**
    * @param wayName string containing a name.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setWayName(String wayName) {
     this.wayName = wayName;
   }
@@ -78,7 +92,9 @@ public class RouteStep {
    *
    * @return string containing abbreviated cardinal direction.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getDirection() {
     return direction;
   }
@@ -86,7 +102,9 @@ public class RouteStep {
   /**
    * @param direction string containing abbreviated cardinal direction.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setDirection(String direction) {
     this.direction = direction;
   }
@@ -96,7 +114,9 @@ public class RouteStep {
    *
    * @return double value ranging from 0 to 359.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public double getHeading() {
     return heading;
   }
@@ -104,7 +124,9 @@ public class RouteStep {
   /**
    * @param heading Double value ranging from 0 to 359.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setHeading(double heading) {
     this.heading = heading;
   }
@@ -114,7 +136,9 @@ public class RouteStep {
    *
    * @return a {@link StepManeuver} object.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public StepManeuver getManeuver() {
     return maneuver;
   }
@@ -122,7 +146,9 @@ public class RouteStep {
   /**
    * @param maneuver A {@link StepManeuver} object.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setManeuver(StepManeuver maneuver) {
     this.maneuver = maneuver;
   }

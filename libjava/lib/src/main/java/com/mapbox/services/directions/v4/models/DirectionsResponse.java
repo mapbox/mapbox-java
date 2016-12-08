@@ -7,7 +7,9 @@ import java.util.List;
  * The response to a directions request.
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public class DirectionsResponse {
 
   private DirectionsFeature origin;
@@ -25,7 +27,9 @@ public class DirectionsResponse {
    *
    * @return {@link DirectionsFeature} object.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public DirectionsFeature getOrigin() {
     return origin;
   }
@@ -33,7 +37,9 @@ public class DirectionsResponse {
   /**
    * @param origin Details about the origin of the route.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setOrigin(DirectionsFeature origin) {
     this.origin = origin;
   }
@@ -43,7 +49,9 @@ public class DirectionsResponse {
    *
    * @return {@link DirectionsFeature} object.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public DirectionsFeature getDestination() {
     return destination;
   }
@@ -51,7 +59,9 @@ public class DirectionsResponse {
   /**
    * @param destination Details about the destination of the route.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setDestination(DirectionsFeature destination) {
     this.destination = destination;
   }
@@ -63,7 +73,9 @@ public class DirectionsResponse {
    *
    * @return List of {@link DirectionsFeature} objects.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public List<DirectionsFeature> getWaypoints() {
     return waypoints;
   }
@@ -71,7 +83,9 @@ public class DirectionsResponse {
   /**
    * @param waypoints List of {@link DirectionsFeature} objects.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setWaypoints(List<DirectionsFeature> waypoints) {
     this.waypoints = waypoints;
   }
@@ -84,7 +98,9 @@ public class DirectionsResponse {
    *
    * @return List of {@link DirectionsRoute} objects.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public List<DirectionsRoute> getRoutes() {
     return routes;
   }
@@ -92,7 +108,9 @@ public class DirectionsResponse {
   /**
    * @param routes List of {@link DirectionsRoute} objects.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setRoutes(List<DirectionsRoute> routes) {
     this.routes = routes;
   }

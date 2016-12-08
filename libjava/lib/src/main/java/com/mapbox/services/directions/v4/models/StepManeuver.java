@@ -4,7 +4,9 @@ package com.mapbox.services.directions.v4.models;
  * Used to describe a instruction step maneuver.
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public class StepManeuver {
 
   private String type;
@@ -21,7 +23,9 @@ public class StepManeuver {
    *
    * @return string with possibly one of the maneuvers given above.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getType() {
     return type;
   }
@@ -29,7 +33,9 @@ public class StepManeuver {
   /**
    * @param type string with possibly one of the maneuvers given above.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setType(String type) {
     this.type = type;
   }
@@ -39,7 +45,9 @@ public class StepManeuver {
    *
    * @return {@link ManeuverPoint} object.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public ManeuverPoint getLocation() {
     return location;
   }
@@ -47,7 +55,9 @@ public class StepManeuver {
   /**
    * @param location {@link ManeuverPoint} object.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setLocation(ManeuverPoint location) {
     this.location = location;
   }
@@ -59,7 +69,9 @@ public class StepManeuver {
    *
    * @return string typically the length of a sentence giving next maneuver instruction.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getInstruction() {
     return instruction;
   }
@@ -67,7 +79,9 @@ public class StepManeuver {
   /**
    * @param instruction string typically the length of a sentence giving next maneuver instruction.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setInstruction(String instruction) {
     this.instruction = instruction;
   }
@@ -80,7 +94,9 @@ public class StepManeuver {
    *
    * @return string with possibly one of the values given above.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getMode() {
     return mode;
   }
@@ -88,7 +104,9 @@ public class StepManeuver {
   /**
    * @param mode string with possibly one of the values given above.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setMode(String mode) {
     this.mode = mode;
   }

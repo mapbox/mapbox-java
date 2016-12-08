@@ -24,7 +24,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Mapbox Directions v4 client.
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
   private Builder builder = null;
@@ -39,7 +41,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    *
    * @param builder {@link Builder}
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public MapboxDirections(Builder builder) {
     this.builder = builder;
   }
@@ -49,7 +53,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    *
    * @param baseUrl {@link String} baseUrl
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
@@ -59,7 +65,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    *
    * @return DirectionsService
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public DirectionsService getService() {
     // No need to recreate it
     if (service != null) {
@@ -80,7 +88,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    *
    * @return The directions response call.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public Call<DirectionsResponse> getCall() {
     // No need to recreate it
     if (call != null) {
@@ -106,7 +116,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    * @return The Directions v4 response
    * @throws IOException Signals that an I/O exception of some sort has occurred.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
     return getCall().execute();
@@ -117,7 +129,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    *
    * @param callback A Retrofit callback.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   @Override
   public void enqueueCall(Callback<DirectionsResponse> callback) {
     getCall().enqueue(callback);
@@ -127,7 +141,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    * Cancel the call
    *
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   @Override
   public void cancelCall() {
     getCall().cancel();
@@ -138,7 +154,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    *
    * @return cloned call
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   @Override
   public Call<DirectionsResponse> cloneCall() {
     return getCall().clone();
@@ -148,7 +166,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    * Directions v4 builder
    *
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public static class Builder extends MapboxBuilder {
 
     private String accessToken;
@@ -167,7 +187,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @param accessToken Mapbox access token, You must have a Mapbox account inorder to use
      *                    this library.
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     @Override
     public Builder setAccessToken(String accessToken) {
       this.accessToken = accessToken;
@@ -181,7 +203,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      *                {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
      * @return Builder
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Builder setProfile(String profile) {
       this.profile = profile;
       return this;
@@ -194,7 +218,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @param waypoints List including all {@link Waypoint} you'd line to include in route.
      * @return Builder
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Builder setWaypoints(List<Waypoint> waypoints) {
       this.waypoints = waypoints;
       return this;
@@ -206,7 +232,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @param origin {@link Waypoint} of origin.
      * @return Builder
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Builder setOrigin(Waypoint origin) {
       this.origin = origin;
       return this;
@@ -219,7 +247,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @param destination {@link Waypoint} of destination.
      * @return Builder
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Builder setDestination(Waypoint destination) {
       this.destination = destination;
       return this;
@@ -231,7 +261,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @param alternatives true if you'd like alternative routes, else false.
      * @return Builder
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Builder setAlternatives(Boolean alternatives) {
       this.alternatives = alternatives;
       return this;
@@ -244,7 +276,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      *                     {@link DirectionsCriteria#INSTRUCTIONS_HTML}
      * @return Builder
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Builder setInstructions(String instructions) {
       this.instructions = instructions;
       return this;
@@ -257,7 +291,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      *                 {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
      * @return Builder
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Builder setGeometry(String geometry) {
       this.geometry = geometry;
       return this;
@@ -269,7 +305,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @param steps true if you'd like step information.
      * @return Builder
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Builder setSteps(Boolean steps) {
       this.steps = steps;
       return this;
@@ -278,7 +316,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     /**
      * @return your Mapbox access token.
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     @Override
     public String getAccessToken() {
       return accessToken;
@@ -288,7 +328,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return {@link DirectionsCriteria#PROFILE_DRIVING},
      * {@link DirectionsCriteria#PROFILE_CYCLING}, or {@link DirectionsCriteria#PROFILE_WALKING}
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public String getProfile() {
       return profile;
     }
@@ -296,7 +338,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     /**
      * @return List including all {@link Waypoint} within route.
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public String getWaypoints() {
       String waypointsFormatted = "";
 
@@ -326,7 +370,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     /**
      * @return routes origin {@link Waypoint}.
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Waypoint getOrigin() {
       return origin;
     }
@@ -334,7 +380,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     /**
      * @return routes final destination {@link Waypoint}.
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Waypoint getDestination() {
       return destination;
     }
@@ -342,7 +390,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     /**
      * @return true if you {@link #setAlternatives(Boolean)} to true.
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Boolean isAlternatives() {
       return alternatives;
     }
@@ -351,7 +401,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return {@link DirectionsCriteria#INSTRUCTIONS_TEXT} or
      * {@link DirectionsCriteria#INSTRUCTIONS_HTML}
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public String getInstructions() {
       return instructions;
     }
@@ -360,7 +412,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return {@link DirectionsCriteria#GEOMETRY_GEOJSON},
      * {@link DirectionsCriteria#GEOMETRY_POLYLINE}, or {@link DirectionsCriteria#GEOMETRY_FALSE}
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public String getGeometry() {
       return geometry;
     }
@@ -368,11 +422,17 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     /**
      * @return true if you requested step information in {@link #setSteps(Boolean)}.
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     public Boolean isSteps() {
       return steps;
     }
 
+    /**
+     * @deprecated Use Directions v5 instead
+     */
+    @Deprecated
     public Builder setClientAppName(String appName) {
       super.clientAppName = appName;
       return this;
@@ -384,7 +444,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return {@link MapboxDirections}
      * @throws ServicesException Generic Exception for all things directions.
      * @since 1.0.0
+     * @deprecated Use Directions v5 instead
      */
+    @Deprecated
     @Override
     public MapboxDirections build() throws ServicesException {
       validateAccessToken(accessToken);

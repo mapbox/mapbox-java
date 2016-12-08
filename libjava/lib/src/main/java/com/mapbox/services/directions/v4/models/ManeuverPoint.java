@@ -8,7 +8,9 @@ import java.util.List;
  * should occur.
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public class ManeuverPoint {
 
   private String type;
@@ -18,7 +20,9 @@ public class ManeuverPoint {
    * Builder
    *
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public ManeuverPoint() {
     coordinates = new ArrayList<>();
   }
@@ -28,7 +32,9 @@ public class ManeuverPoint {
    *
    * @return String naming type.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getType() {
     return type;
   }
@@ -36,7 +42,9 @@ public class ManeuverPoint {
   /**
    * @param type String naming type.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setType(String type) {
     this.type = type;
   }
@@ -47,7 +55,9 @@ public class ManeuverPoint {
    *
    * @return List of Double objects containing a point with longitude and latitude values.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public List<Double> getCoordinates() {
     return coordinates;
   }
@@ -56,7 +66,9 @@ public class ManeuverPoint {
    * @param coordinates List of Double objects containing a point with longitude and latitude
    *                    values.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setCoordinates(List<Double> coordinates) {
     this.coordinates = coordinates;
   }

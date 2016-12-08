@@ -4,7 +4,9 @@ package com.mapbox.services.directions.v4.models;
  * Properties describing a {@link DirectionsFeature}.
  *
  * @since 1.0.0
+ * @deprecated Use Directions v5 instead
  */
+@Deprecated
 public class FeatureProperties {
 
   private String name;
@@ -14,7 +16,9 @@ public class FeatureProperties {
    *
    * @return String name.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public String getName() {
     return name;
   }
@@ -22,7 +26,9 @@ public class FeatureProperties {
   /**
    * @param name String name.
    * @since 1.0.0
+   * @deprecated Use Directions v5 instead
    */
+  @Deprecated
   public void setName(String name) {
     this.name = name;
   }
