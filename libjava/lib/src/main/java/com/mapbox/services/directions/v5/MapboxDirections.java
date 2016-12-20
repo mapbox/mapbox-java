@@ -1,6 +1,5 @@
 package com.mapbox.services.directions.v5;
 
-import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
@@ -32,21 +31,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
   private DirectionsService service = null;
   private Call<DirectionsResponse> call = null;
 
-  // Allows testing
-  private String baseUrl = Constants.BASE_API_URL;
-
   private MapboxDirections(Builder builder) {
     this.builder = builder;
-  }
-
-  /**
-   * Used internally.
-   *
-   * @param baseUrl the baseURL
-   * @since 1.0.0
-   */
-  public void setBaseUrl(String baseUrl) {
-    this.baseUrl = baseUrl;
   }
 
   private DirectionsService getService() {
@@ -58,7 +44,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     // Retrofit instance
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
-      .baseUrl(baseUrl)
+      .baseUrl(builder.getBaseUrl())
       .addConverterFactory(GsonConverterFactory.create())
       .build();
 
@@ -455,6 +441,11 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
     public Builder setClientAppName(String appName) {
       super.clientAppName = appName;
+      return this;
+    }
+
+    public Builder setBaseUrl(String baseUrl) {
+      super.baseUrl = baseUrl;
       return this;
     }
 

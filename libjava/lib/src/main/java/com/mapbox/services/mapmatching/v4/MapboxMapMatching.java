@@ -2,7 +2,6 @@ package com.mapbox.services.mapmatching.v4;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
@@ -38,23 +37,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
   private MapMatchingService service = null;
   private Call<MapMatchingResponse> call = null;
 
-  // Allows testing
-  private String baseUrl = Constants.BASE_API_URL;
-
   private MapboxMapMatching(Builder builder) {
     this.builder = builder;
   }
-
-  /**
-   * Used internally.
-   *
-   * @param baseUrl the baseURL.
-   * @since 1.2.0
-   */
-  public void setBaseUrl(String baseUrl) {
-    this.baseUrl = baseUrl;
-  }
-
 
   private MapMatchingService getService() {
     // No need to recreate it
@@ -70,7 +55,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     // Retrofit instance
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
-      .baseUrl(baseUrl)
+      .baseUrl(builder.getBaseUrl())
       .addConverterFactory(GsonConverterFactory.create(gson))
       .build();
 
@@ -315,6 +300,19 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
 
     public Builder setClientAppName(String appName) {
       super.clientAppName = appName;
+      return this;
+    }
+
+    /**
+     * Set the base url of the API.
+     *
+     * @param baseUrl base url used as end point
+     * @return the current MapboxBuilder instance
+     * @since 2.0.0
+     */
+    @Override
+    public Builder setBaseUrl(String baseUrl) {
+      super.baseUrl = baseUrl;
       return this;
     }
 

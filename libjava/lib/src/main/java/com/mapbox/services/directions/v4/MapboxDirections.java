@@ -1,6 +1,5 @@
 package com.mapbox.services.directions.v4;
 
-import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
@@ -33,9 +32,6 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
   private DirectionsService service = null;
   private Call<DirectionsResponse> call = null;
 
-  // Allows testing
-  private String baseUrl = Constants.BASE_API_URL;
-
   /**
    * Mapbox builder
    *
@@ -46,18 +42,6 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
   @Deprecated
   public MapboxDirections(Builder builder) {
     this.builder = builder;
-  }
-
-  /**
-   * Used internally.
-   *
-   * @param baseUrl {@link String} baseUrl
-   * @since 1.0.0
-   * @deprecated Use Directions v5 instead
-   */
-  @Deprecated
-  public void setBaseUrl(String baseUrl) {
-    this.baseUrl = baseUrl;
   }
 
   /**
@@ -76,7 +60,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
-      .baseUrl(baseUrl)
+      .baseUrl(builder.getBaseUrl())
       .addConverterFactory(GsonConverterFactory.create())
       .build();
     service = retrofit.create(DirectionsService.class);
@@ -458,6 +442,20 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return new MapboxDirections(this);
     }
 
+    /**
+     * Set the base url of the API.
+     *
+     * @param baseUrl base url used as end point
+     * @return the current MapboxBuilder instance
+     * @since 2.0.0
+     * @deprecated Use Directions v5 instead
+     */
+    @Override
+    @Deprecated
+    public MapboxBuilder setBaseUrl(String baseUrl) {
+      super.baseUrl = baseUrl;
+      return this;
+    }
   }
 
 }

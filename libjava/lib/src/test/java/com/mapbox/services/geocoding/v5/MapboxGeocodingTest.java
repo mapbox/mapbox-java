@@ -80,8 +80,8 @@ public class MapboxGeocodingTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
     assertEquals(response.code(), 200);
   }
@@ -91,8 +91,8 @@ public class MapboxGeocodingTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     GeocodingResponse body = response.body();
@@ -112,8 +112,8 @@ public class MapboxGeocodingTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     CarmenFeature feature = response.body().getFeatures().get(0);
@@ -134,8 +134,8 @@ public class MapboxGeocodingTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     Point point = (Point) response.body().getFeatures().get(3).getGeometry();
@@ -149,8 +149,8 @@ public class MapboxGeocodingTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     List<CarmenContext> contexts = response.body().getFeatures().get(0).getContext();
@@ -164,8 +164,8 @@ public class MapboxGeocodingTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     CarmenContext context = response.body().getFeatures().get(0).getContext().get(1);
@@ -178,8 +178,8 @@ public class MapboxGeocodingTest {
       .setClientAppName("APP")
       .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    service.setBaseUrl(mockUrl.toString());
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
@@ -189,8 +189,8 @@ public class MapboxGeocodingTest {
       .setAccessToken(ACCESS_TOKEN)
       .setCountry("aq")
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     assertEquals(0, response.body().getFeatures().size());

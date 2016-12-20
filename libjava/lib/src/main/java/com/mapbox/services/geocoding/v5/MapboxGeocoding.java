@@ -2,7 +2,6 @@ package com.mapbox.services.geocoding.v5;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
@@ -32,9 +31,6 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   private GeocodingService service = null;
   private Call<GeocodingResponse> call = null;
 
-  // Allows testing
-  private String baseUrl = Constants.BASE_API_URL;
-
   /**
    * Public constructor.
    *
@@ -43,16 +39,6 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    */
   public MapboxGeocoding(Builder builder) {
     this.builder = builder;
-  }
-
-  /**
-   * Used internally.
-   *
-   * @param baseUrl the baseURL.
-   * @since 1.0.0
-   */
-  public void setBaseUrl(String baseUrl) {
-    this.baseUrl = baseUrl;
   }
 
   /**
@@ -74,7 +60,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
-      .baseUrl(baseUrl)
+      .baseUrl(builder.getBaseUrl())
       .addConverterFactory(GsonConverterFactory.create(gson))
       .build();
 
@@ -445,6 +431,19 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
     public Builder setClientAppName(String appName) {
       super.clientAppName = appName;
+      return this;
+    }
+
+    /**
+     * Set the base url of the API.
+     *
+     * @param baseUrl base url used as end point
+     * @return the current MapboxBuilder instance
+     * @since 2.0.0
+     */
+    @Override
+    public Builder setBaseUrl(String baseUrl) {
+      super.baseUrl = baseUrl;
       return this;
     }
 

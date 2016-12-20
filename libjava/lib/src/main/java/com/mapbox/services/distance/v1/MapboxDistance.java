@@ -2,7 +2,6 @@ package com.mapbox.services.distance.v1;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.services.Constants;
 import com.mapbox.services.commons.MapboxBuilder;
 import com.mapbox.services.commons.MapboxService;
 import com.mapbox.services.commons.ServicesException;
@@ -47,21 +46,8 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
   private DistanceService service = null;
   private Call<DistanceResponse> call = null;
 
-  // Allows testing
-  private String baseUrl = Constants.BASE_API_URL;
-
   private MapboxDistance(Builder builder) {
     this.builder = builder;
-  }
-
-  /**
-   * Used internally.
-   *
-   * @param baseUrl the baseURL.
-   * @since 2.0.0
-   */
-  public void setBaseUrl(String baseUrl) {
-    this.baseUrl = baseUrl;
   }
 
   private DistanceService getService() {
@@ -78,7 +64,7 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
     // Retrofit instance
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
-      .baseUrl(baseUrl)
+      .baseUrl(builder.getBaseUrl())
       .addConverterFactory(GsonConverterFactory.create(gson))
       .build();
 
@@ -274,6 +260,19 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
 
     public Builder setClientAppName(String appName) {
       super.clientAppName = appName;
+      return this;
+    }
+
+    /**
+     * Set the base url of the API.
+     *
+     * @param baseUrl base url used as end point
+     * @return Builder
+     * @since 2.0.0
+     */
+    @Override
+    public Builder setBaseUrl(String baseUrl) {
+      super.baseUrl = baseUrl;
       return this;
     }
 

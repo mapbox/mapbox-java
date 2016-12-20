@@ -30,9 +30,7 @@ public class MapboxStaticImage {
    * @since 1.0.0
    */
   public MapboxStaticImage(Builder builder) {
-    HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
-      .scheme("https")
-      .host("api.mapbox.com")
+    HttpUrl.Builder urlBuilder = HttpUrl.parse(builder.getBaseUrl()).newBuilder()
       .addPathSegment("styles")
       .addPathSegment("v1")
       .addPathSegment(builder.getUsername())
@@ -372,6 +370,19 @@ public class MapboxStaticImage {
 
     public Builder setClientAppName(String appName) {
       super.clientAppName = appName;
+      return this;
+    }
+
+    /**
+     * Set the base url of the API.
+     *
+     * @param baseUrl base url used as end point
+     * @return the current MapboxBuilder instance
+     * @since 2.0.0
+     */
+    @Override
+    public MapboxBuilder setBaseUrl(String baseUrl) {
+      super.baseUrl = baseUrl;
       return this;
     }
 

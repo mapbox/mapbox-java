@@ -93,8 +93,8 @@ public class MapboxMapMatchingTest {
       .setAccessToken(ACCESS_TOKEN)
       .setProfile(DirectionsCriteria.PROFILE_WALKING)
       .setTrace(trace)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<MapMatchingResponse> response = client.executeCall();
     assertEquals(response.code(), 200);
 
@@ -114,8 +114,8 @@ public class MapboxMapMatchingTest {
       .setProfile(DirectionsCriteria.PROFILE_WALKING)
       .setTrace(trace)
       .setNoGeometry()
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<MapMatchingResponse> response = client.executeCall();
     assertEquals(response.code(), 200);
 
@@ -205,12 +205,12 @@ public class MapboxMapMatchingTest {
   @Test
   public void testUserAgent() throws ServicesException, IOException {
     MapboxMapMatching service = new MapboxMapMatching.Builder()
-            .setClientAppName("APP")
-            .setAccessToken("pk.XXX")
-            .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-            .setTrace(LineString.fromCoordinates(new ArrayList<Position>()))
-            .build();
-    service.setBaseUrl(mockUrl.toString());
+      .setClientAppName("APP")
+      .setAccessToken("pk.XXX")
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setTrace(LineString.fromCoordinates(new ArrayList<Position>()))
+      .setBaseUrl(mockUrl.toString())
+      .build();
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
