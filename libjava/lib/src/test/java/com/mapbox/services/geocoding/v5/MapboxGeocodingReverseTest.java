@@ -61,8 +61,8 @@ public class MapboxGeocodingReverseTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken("pk.XXX")
       .setCoordinates(Position.fromCoordinates(-77.0366, 38.8971))
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
     assertEquals(response.code(), 200);
   }
@@ -72,8 +72,8 @@ public class MapboxGeocodingReverseTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken("pk.XXX")
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     GeocodingResponse body = response.body();
@@ -91,8 +91,8 @@ public class MapboxGeocodingReverseTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken("pk.XXX")
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     CarmenFeature feature = response.body().getFeatures().get(1);
@@ -116,8 +116,8 @@ public class MapboxGeocodingReverseTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken("pk.XXX")
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     Point point = (Point) response.body().getFeatures().get(1).getGeometry();
@@ -131,8 +131,8 @@ public class MapboxGeocodingReverseTest {
     MapboxGeocoding client = new MapboxGeocoding.Builder()
       .setAccessToken("pk.XXX")
       .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<GeocodingResponse> response = client.executeCall();
 
     List<CarmenContext> contexts = response.body().getFeatures().get(1).getContext();

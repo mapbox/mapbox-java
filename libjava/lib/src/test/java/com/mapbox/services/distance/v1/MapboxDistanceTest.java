@@ -85,8 +85,8 @@ public class MapboxDistanceTest {
       .setAccessToken(ACCESS_TOKEN)
       .setProfile(DirectionsCriteria.PROFILE_WALKING)
       .setCoordinates(coordinates)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DistanceResponse> response = client.executeCall();
     assertEquals(response.code(), 200);
 
@@ -157,8 +157,8 @@ public class MapboxDistanceTest {
       .setAccessToken("pk.XXX")
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setCoordinates(coordinates)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    service.setBaseUrl(mockUrl.toString());
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 }

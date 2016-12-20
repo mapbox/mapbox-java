@@ -1,5 +1,6 @@
 package com.mapbox.services.commons;
 
+import com.mapbox.services.Constants;
 import com.mapbox.services.commons.utils.MapboxUtils;
 
 /**
@@ -8,10 +9,31 @@ import com.mapbox.services.commons.utils.MapboxUtils;
 public abstract class MapboxBuilder {
 
   protected String clientAppName;
+  protected String baseUrl = Constants.BASE_API_URL;
 
   public abstract MapboxBuilder setAccessToken(String accessToken);
 
   public abstract String getAccessToken();
+
+  /**
+   * Set the base url of the API.
+   *
+   * @param baseUrl base url used as end point
+   * @param <T>     the concrete implementation of MapboxBuilder
+   * @return the current MapboxBuilder instance
+   * @since 2.0.0
+   */
+  public abstract <T extends MapboxBuilder> T setBaseUrl(String baseUrl);
+
+  /**
+   * Get the base url of the API.
+   *
+   * @return the base url used as endpoint.
+   * @since 2.0.0
+   */
+  public String getBaseUrl() {
+    return baseUrl;
+  }
 
   /**
    * Set the App Name to identify
@@ -36,7 +58,7 @@ public abstract class MapboxBuilder {
   protected void validateAccessToken(String accessToken) throws ServicesException {
     if (!MapboxUtils.isAccessTokenValid(accessToken)) {
       throw new ServicesException(
-              "Using Mapbox Services requires setting a valid access token.");
+        "Using Mapbox Services requires setting a valid access token.");
     }
   }
 

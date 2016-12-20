@@ -19,7 +19,6 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -90,8 +89,8 @@ public class MapboxDirectionsTest {
       .setAccessToken("pk.XXX")
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DirectionsResponse> response = client.executeCall();
     assertEquals(response.code(), 200);
     assertEquals(response.body().getCode(), DirectionsCriteria.RESPONSE_OK);
@@ -103,8 +102,8 @@ public class MapboxDirectionsTest {
       .setAccessToken("pk.XXX")
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DirectionsResponse> response = client.executeCall();
 
     DirectionsResponse body = response.body();
@@ -119,8 +118,8 @@ public class MapboxDirectionsTest {
       .setAccessToken("pk.XXX")
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DirectionsResponse> response = client.executeCall();
 
     DirectionsRoute route = response.body().getRoutes().get(0);
@@ -136,8 +135,8 @@ public class MapboxDirectionsTest {
       .setAccessToken("pk.XXX")
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DirectionsResponse> response = client.executeCall();
 
     DirectionsWaypoint waypoint = response.body().getWaypoints().get(0);
@@ -152,8 +151,8 @@ public class MapboxDirectionsTest {
       .setAccessToken("pk.XXX")
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DirectionsResponse> response = client.executeCall();
 
     RouteLeg leg = response.body().getRoutes().get(0).getLegs().get(0);
@@ -169,8 +168,8 @@ public class MapboxDirectionsTest {
       .setAccessToken("pk.XXX")
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DirectionsResponse> response = client.executeCall();
 
     LegStep step = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0);
@@ -189,8 +188,8 @@ public class MapboxDirectionsTest {
       .setAccessToken("pk.XXX")
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DirectionsResponse> response = client.executeCall();
 
     StepIntersection intersection = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0).getIntersections().get(1);
@@ -208,8 +207,8 @@ public class MapboxDirectionsTest {
       .setAccessToken("pk.XXX")
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DirectionsResponse> response = client.executeCall();
 
     IntersectionLanes intersectionLanes = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1).getIntersections().get(8).getLanes()[0];
@@ -224,8 +223,8 @@ public class MapboxDirectionsTest {
       .setAccessToken("pk.XXX")
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
       .build();
-    client.setBaseUrl(mockUrl.toString());
     Response<DirectionsResponse> response = client.executeCall();
 
     StepManeuver maneuver = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0).getManeuver();
@@ -308,12 +307,12 @@ public class MapboxDirectionsTest {
   @Test
   public void testUserAgent() throws ServicesException, IOException {
     MapboxDirections service = new MapboxDirections.Builder()
-            .setClientAppName("APP")
-            .setAccessToken("pk.XXX")
-            .setCoordinates(positions)
-            .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-            .build();
-    service.setBaseUrl(mockUrl.toString());
+      .setClientAppName("APP")
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positions)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .build();
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
