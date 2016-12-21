@@ -22,13 +22,13 @@ public class TurfHelpers {
     factors.put(TurfConstants.UNIT_RADIANS, 1d);
     factors.put(TurfConstants.UNIT_INCHES, 250905600d);
     factors.put(TurfConstants.UNIT_YARDS, 6969600d);
-    factors.put(TurfConstants.UNIT_METERS, 637300d);
+    factors.put(TurfConstants.UNIT_METERS, 6373000d);
     factors.put(TurfConstants.UNIT_KILOMETERS, 6373d);
 
     // Also supported
-    factors.put("metres", 637300d);
+    factors.put("metres", 6373000d);
     factors.put("kilometres", 6373d);
-  }
+  } 
 
   /**
    * Convert radians to distance. The units used here equals the default.
