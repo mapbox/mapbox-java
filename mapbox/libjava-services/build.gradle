@@ -3,6 +3,11 @@ apply plugin: 'java'
 dependencies {
     // Mapbox Java Services requires GeoJSON support
     compile project(':libjava-geojson')
+
+    // Retrofit
+    compile rootProject.ext.dep.retrofit2Main
+    compile rootProject.ext.dep.retrofit2Gson
+    compile rootProject.ext.dep.okHttpLogging
 }
 
 sourceCompatibility = "1.7"
