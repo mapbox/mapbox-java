@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".turf.TurfDestinationActivity"
+    android:id="@+id/turf_distance_map_container">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:center_latitude="33.991986"
+        app:center_longitude="-118.475743"
+        app:style_url="mapbox://styles/mapbox/streets-v9"
+        app:zoom="14.5" />
+
+</LinearLayout>

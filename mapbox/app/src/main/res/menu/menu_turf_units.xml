@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_miles"
+        android:title="Miles"
+        mapbox:showAsAction="never" />
+    <item
+        android:id="@+id/action_nauticalmiles"
+        android:title="Nautical miles"
+        mapbox:showAsAction="never" />
+    <item
+        android:id="@+id/action_kilometers"
+        android:title="Kilometers"
+        mapbox:showAsAction="never" />
+    <item
+        android:id="@+id/action_radians"
+        android:title="Radians"
+        mapbox:showAsAction="never" />
+    <item
+        android:id="@+id/action_degrees"
+        android:title="Degrees"
+        mapbox:showAsAction="never" />
+    <item
+        android:id="@+id/action_inches"
+        android:title="Inches"
+        mapbox:showAsAction="never" />
+    <item
+        android:id="@+id/action_yards"
+        android:title="Yards"
+        mapbox:showAsAction="never" />
+    <item
+        android:id="@+id/action_meters"
+        android:title="Meters"
+        mapbox:showAsAction="never" />
+</menu>

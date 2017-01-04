@@ -1,20 +1,77 @@
 package com.mapbox.services.android.testapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity
-  implements NavigationView.OnNavigationItemSelectedListener {
+import com.mapbox.services.android.BuildConfig;
+import com.mapbox.services.android.testapp.directions.DirectionsV4Activity;
+import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
+import com.mapbox.services.android.testapp.directions.RouteUtilsV5Activity;
+import com.mapbox.services.android.testapp.distance.DistanceActivity;
+import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
+import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
+import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
+import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
+import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
+import com.mapbox.services.android.testapp.nav.OffRouteDetectionActivity;
+import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
+import com.mapbox.services.android.testapp.turf.TurfDistanceActivity;
+import com.mapbox.services.android.testapp.turf.TurfInsideActivity;
+import com.mapbox.services.android.testapp.turf.TurfLineSliceActivity;
+import com.mapbox.services.android.testapp.turf.TurfMidpointActivity;
+import com.mapbox.services.android.testapp.utils.MapMatchingActivity;
+import com.mapbox.services.android.testapp.utils.SimplifyPolylineActivity;
+import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
+import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
+import com.mapbox.services.android.utils.PermissionsUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * This activity shows how to use PermissionsUtils to request location permissions
+ * from the user. It loads all the sample activities using a RecyclerView.
+ */
+public class MainActivity extends AppCompatActivity {
+
+  private static final String LOG_TAG = "MainActivity";
+
+  private RecyclerView recyclerView;
+  private RecyclerView.Adapter adapter;
+  private RecyclerView.LayoutManager layoutManager;
+
+  private static final List<SampleItem> samples = new ArrayList<>(Arrays.asList(
+    new SampleItem("Distance", "", DistanceActivity.class),
+    new SampleItem("Directions v5", "", DirectionsV5Activity.class),
+    new SampleItem("Route Utils v5", "", RouteUtilsV5Activity.class),
+    new SampleItem("Directions v4", "", DirectionsV4Activity.class),
+    new SampleItem("Directions icons", "", DirectionsIconsActivity.class),
+    new SampleItem("Reverse geocoding", "", GeocodingReverseActivity.class),
+    new SampleItem("Geocoding widget", "", GeocodingWidgetActivity.class),
+    new SampleItem("Geocoding service", "", GeocodingServiceActivity.class),
+    new SampleItem("Maki icons", "", MakiIconsActivity.class),
+    new SampleItem("Static image", "", StaticImageActivity.class),
+    new SampleItem("Simplify polyline", "", SimplifyPolylineActivity.class),
+    new SampleItem("Map matching", "", MapMatchingActivity.class),
+    new SampleItem("Turf bearing", "", TurfBearingActivity.class),
+    new SampleItem("Turf destination", "", TurfDestinationActivity.class),
+    new SampleItem("Turf distance", "", TurfDistanceActivity.class),
+    new SampleItem("Turf line slice", "", TurfLineSliceActivity.class),
+    new SampleItem("Turf inside", "", TurfInsideActivity.class),
+    new SampleItem("Turf midpoint", "", TurfMidpointActivity.class),
+    new SampleItem("Off route detection", "", OffRouteDetectionActivity.class)
+  ));
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -23,79 +80,89 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-          .setAction("Action", null).show();
-      }
-    });
+    // Debug information
+    Log.d(LOG_TAG, "MAS version name: " + BuildConfig.VERSION_NAME);
+    Log.d(LOG_TAG, "MAS version code: " + BuildConfig.VERSION_CODE);
 
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-      this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-    drawer.setDrawerListener(toggle);
-    toggle.syncState();
+    // RecyclerView
+    recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+    recyclerView.setHasFixedSize(true);
 
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-    navigationView.setNavigationItemSelectedListener(this);
+    // Use a linear layout manager
+    layoutManager = new LinearLayoutManager(this);
+    recyclerView.setLayoutManager(layoutManager);
+
+    // Specify an adapter
+    adapter = new MainAdapter(samples);
+    recyclerView.setAdapter(adapter);
+
+    // Check for location permission
+    if (!PermissionsUtils.isLocationGranted(this)) {
+      recyclerView.setEnabled(false);
+      PermissionsUtils.startPermissionFlow(this);
+    }
   }
 
   @Override
-  public void onBackPressed() {
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    if (drawer.isDrawerOpen(GravityCompat.START)) {
-      drawer.closeDrawer(GravityCompat.START);
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    if (PermissionsUtils.isRequestSuccessful(requestCode, permissions, grantResults)) {
+      recyclerView.setEnabled(true);
     } else {
-      super.onBackPressed();
+      PermissionsUtils.explainFallback(this);
     }
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.main, menu);
-    return true;
-  }
+  /*
+   * Recycler view
+   */
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
+  private class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
+    private List<SampleItem> samples;
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+      private TextView nameView;
+      private TextView descriptionView;
+
+      public ViewHolder(View view) {
+        super(view);
+        nameView = (TextView) view.findViewById(R.id.nameView);
+        descriptionView = (TextView) view.findViewById(R.id.descriptionView);
+      }
     }
 
-    return super.onOptionsItemSelected(item);
-  }
-
-  @SuppressWarnings("StatementWithEmptyBody")
-  @Override
-  public boolean onNavigationItemSelected(MenuItem item) {
-    // Handle navigation view item clicks here.
-    int id = item.getItemId();
-
-    if (id == R.id.nav_camera) {
-      // Handle the camera action
-    } else if (id == R.id.nav_gallery) {
-
-    } else if (id == R.id.nav_slideshow) {
-
-    } else if (id == R.id.nav_manage) {
-
-    } else if (id == R.id.nav_share) {
-
-    } else if (id == R.id.nav_send) {
-
+    public MainAdapter(List<SampleItem> samples) {
+      this.samples = samples;
     }
 
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    drawer.closeDrawer(GravityCompat.START);
-    return true;
+    @Override
+    public MainAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+      View view = LayoutInflater
+        .from(parent.getContext())
+        .inflate(R.layout.item_main_feature, parent, false);
+
+      view.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          int position = recyclerView.getChildLayoutPosition(view);
+          Intent intent = new Intent(view.getContext(), samples.get(position).getActivity());
+          startActivity(intent);
+        }
+      });
+
+      return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(MainAdapter.ViewHolder holder, int position) {
+      holder.nameView.setText(samples.get(position).getName());
+      holder.descriptionView.setText(samples.get(position).getDescription());
+    }
+
+    @Override
+    public int getItemCount() {
+      return samples.size();
+    }
   }
 }
