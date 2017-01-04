@@ -11,7 +11,7 @@ import android.util.Log;
 import com.mapbox.services.android.geocoder.AndroidGeocoder;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.api.ServicesException;
 
 import java.io.IOException;
 import java.util.List;

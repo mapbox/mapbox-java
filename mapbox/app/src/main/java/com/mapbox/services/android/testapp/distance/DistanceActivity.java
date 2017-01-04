@@ -16,20 +16,19 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.NoSuchLayerException;
 import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.style.sources.Source;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.directions.v5.DirectionsCriteria;
+import com.mapbox.services.api.distance.v1.MapboxDistance;
+import com.mapbox.services.api.distance.v1.models.DistanceResponse;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.directions.v5.DirectionsCriteria;
-import com.mapbox.services.distance.v1.MapboxDistance;
-import com.mapbox.services.distance.v1.models.DistanceResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,18 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.*;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleRadius;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textAnchor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textField;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textFont;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textHaloColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textHaloWidth;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textIgnorePlacement;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textMaxWidth;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textPadding;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textSize;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textTranslate;
 
 public class DistanceActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener {
 

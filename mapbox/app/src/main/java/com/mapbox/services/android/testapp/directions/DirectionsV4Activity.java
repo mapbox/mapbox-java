@@ -19,14 +19,14 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.commons.ServicesException;
+import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.directions.v4.DirectionsCriteria;
-import com.mapbox.services.directions.v4.MapboxDirections;
-import com.mapbox.services.directions.v4.models.DirectionsResponse;
-import com.mapbox.services.directions.v4.models.DirectionsRoute;
-import com.mapbox.services.directions.v4.models.Waypoint;
+import com.mapbox.services.api.directions.v4.DirectionsCriteria;
+import com.mapbox.services.api.directions.v4.MapboxDirections;
+import com.mapbox.services.api.directions.v4.models.DirectionsResponse;
+import com.mapbox.services.api.directions.v4.models.DirectionsRoute;
+import com.mapbox.services.api.directions.v4.models.Waypoint;
 
 import java.util.List;
 

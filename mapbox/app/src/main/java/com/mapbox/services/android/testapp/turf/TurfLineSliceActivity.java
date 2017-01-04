@@ -15,7 +15,7 @@ import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.commons.turf.TurfMisc;
+import com.mapbox.services.api.utils.turf.TurfMisc;
 import com.mapbox.services.commons.utils.PolylineUtils;
 
 import java.util.ArrayList;

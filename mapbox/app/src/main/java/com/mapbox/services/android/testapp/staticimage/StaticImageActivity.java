@@ -11,8 +11,8 @@ import android.util.Log;
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.commons.ServicesException;
-import com.mapbox.services.staticimage.v1.MapboxStaticImage;
+import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
 
 public class StaticImageActivity extends AppCompatActivity {
 
