@@ -7,7 +7,12 @@ dependencies {
     // Retrofit
     compile rootProject.ext.dep.retrofit2Main
     compile rootProject.ext.dep.retrofit2Gson
-    compile rootProject.ext.dep.okHttpLogging
+    compile rootProject.ext.dep.okhttp3Logging
+
+    // Testing
+    compile rootProject.ext.dep.okhttp3Mockwebserver
+    compile rootProject.ext.dep.junit
+    compile rootProject.ext.dep.hamcrestJunit
 }
 
 sourceCompatibility = "1.7"

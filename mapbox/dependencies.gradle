@@ -12,6 +12,9 @@ ext {
         gson: 'com.google.code.gson:gson:2.8.0',
         retrofit2Main: 'com.squareup.retrofit2:retrofit:2.1.0',
         retrofit2Gson: 'com.squareup.retrofit2:converter-gson:2.1.0',
-        okHttpLogging: 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+        okhttp3Logging: 'com.squareup.okhttp3:logging-interceptor:3.5.0',
+        okhttp3Mockwebserver: 'com.squareup.okhttp3:mockwebserver:3.5.0',
+        junit: 'junit:junit:4.12',
+        hamcrestJunit: 'org.hamcrest:hamcrest-junit:2.0.0.0'
     ]
 }
