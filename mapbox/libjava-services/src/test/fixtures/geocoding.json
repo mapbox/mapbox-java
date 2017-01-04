@@ -1,0 +1,251 @@
+{
+  "type": "FeatureCollection",
+  "query": [
+    "1600",
+    "pennsylvania",
+    "ave",
+    "nw"
+  ],
+  "features": [
+    {
+      "id": "address.3982178573139850",
+      "type": "Feature",
+      "text": "Pennsylvania Ave NW",
+      "place_name": "1600 Pennsylvania Ave NW, Washington, District of Columbia 20006, United States",
+      "relevance": 0.99,
+      "properties": {},
+      "center": [
+        -77.036543,
+        38.897702
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.036543,
+          38.897702
+        ]
+      },
+      "address": "1600",
+      "context": [
+        {
+          "text": "Franklin Mcpherson Square",
+          "id": "neighborhood.7130293780113160"
+        },
+        {
+          "text": "Washington",
+          "id": "place.12334081418246050",
+          "wikidata": "Q61"
+        },
+        {
+          "text": "20006",
+          "id": "postcode.3945292665816130"
+        },
+        {
+          "text": "District of Columbia",
+          "id": "region.6884744206035790",
+          "short_code": "US-DC",
+          "wikidata": "Q61"
+        },
+        {
+          "text": "United States",
+          "id": "country.12862386939497690",
+          "short_code": "us",
+          "wikidata": "Q30"
+        }
+      ]
+    },
+    {
+      "id": "neighborhood.8369462377973350",
+      "type": "Feature",
+      "text": "Northwest 39 Street Enclave",
+      "place_name": "Northwest 39 Street Enclave, Oklahoma City, 73112, Oklahoma, United States",
+      "relevance": 0.49,
+      "properties": {},
+      "bbox": [
+        -97.5933129882498,
+        35.4784866709552,
+        -97.5302718101196,
+        35.5329536952825
+      ],
+      "center": [
+        -97.5667,
+        35.507
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.5667,
+          35.507
+        ]
+      },
+      "context": [
+        {
+          "text": "Oklahoma City",
+          "id": "place.19794561018814370",
+          "wikidata": "Q34863"
+        },
+        {
+          "text": "73112",
+          "id": "postcode.6099851255966140"
+        },
+        {
+          "text": "Oklahoma",
+          "id": "region.3309618210069930",
+          "short_code": "US-OK",
+          "wikidata": "Q1649"
+        },
+        {
+          "text": "United States",
+          "id": "country.12862386939497690",
+          "short_code": "us",
+          "wikidata": "Q30"
+        }
+      ]
+    },
+    {
+      "id": "neighborhood.15062463487344880",
+      "type": "Feature",
+      "text": "Northwest",
+      "place_name": "Northwest, Wichita, 67205, Kansas, United States",
+      "relevance": 0.49,
+      "properties": {},
+      "bbox": [
+        -97.4113946977374,
+        37.6779166778675,
+        -97.3251342773249,
+        37.7698584813
+      ],
+      "center": [
+        -97.3808,
+        37.7611
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -97.3808,
+          37.7611
+        ]
+      },
+      "context": [
+        {
+          "text": "Wichita",
+          "id": "place.18735285001585410",
+          "wikidata": "Q49266"
+        },
+        {
+          "text": "67205",
+          "id": "postcode.15596524089337370"
+        },
+        {
+          "text": "Kansas",
+          "id": "region.14040296094955790",
+          "short_code": "US-KS",
+          "wikidata": "Q1558"
+        },
+        {
+          "text": "United States",
+          "id": "country.12862386939497690",
+          "short_code": "us",
+          "wikidata": "Q30"
+        }
+      ]
+    },
+    {
+      "id": "neighborhood.6968757879978520",
+      "type": "Feature",
+      "text": "Northwest Rectangle",
+      "place_name": "Northwest Rectangle, Washington, 20006, District of Columbia, United States",
+      "relevance": 0.49,
+      "properties": {},
+      "bbox": [
+        -77.0581054688,
+        38.8803431134252,
+        -77.0347595214999,
+        38.898868823627
+      ],
+      "center": [
+        -77.045,
+        38.8946
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.045,
+          38.8946
+        ]
+      },
+      "context": [
+        {
+          "text": "Washington",
+          "id": "place.12334081418246050",
+          "wikidata": "Q61"
+        },
+        {
+          "text": "20006",
+          "id": "postcode.3945292665816130"
+        },
+        {
+          "text": "District of Columbia",
+          "id": "region.6884744206035790",
+          "short_code": "US-DC",
+          "wikidata": "Q61"
+        },
+        {
+          "text": "United States",
+          "id": "country.12862386939497690",
+          "short_code": "us",
+          "wikidata": "Q30"
+        }
+      ]
+    },
+    {
+      "id": "neighborhood.7480948485344880",
+      "type": "Feature",
+      "text": "Northwest",
+      "place_name": "Northwest, Washington, 20008, District of Columbia, United States",
+      "relevance": 0.49,
+      "properties": {},
+      "bbox": [
+        -77.0745849608999,
+        38.9412582860561,
+        -77.0416259765809,
+        38.9594087925
+      ],
+      "center": [
+        -77.0579,
+        38.9475
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.0579,
+          38.9475
+        ]
+      },
+      "context": [
+        {
+          "text": "Washington",
+          "id": "place.12334081418246050",
+          "wikidata": "Q61"
+        },
+        {
+          "text": "20008",
+          "id": "postcode.11868982057998150"
+        },
+        {
+          "text": "District of Columbia",
+          "id": "region.6884744206035790",
+          "short_code": "US-DC",
+          "wikidata": "Q61"
+        },
+        {
+          "text": "United States",
+          "id": "country.12862386939497690",
+          "short_code": "us",
+          "wikidata": "Q30"
+        }
+      ]
+    }
+  ],
+  "attribution": "NOTICE: © 2016 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained."
+}
