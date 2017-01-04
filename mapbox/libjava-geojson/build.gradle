@@ -3,6 +3,9 @@ apply plugin: 'java'
 dependencies {
     // Mapbox GeoJSON requires access to core models
     compile project(':libjava-core')
+
+    // External dependencies
+    rootProject.ext.dep.gson
 }
 
 sourceCompatibility = "1.7"
