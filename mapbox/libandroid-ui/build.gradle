@@ -26,6 +26,7 @@ dependencies {
 
     // Android Support libraries
     compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
 
     // Testing
     testCompile 'junit:junit:4.12'
