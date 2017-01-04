@@ -1,4 +1,14 @@
 package com.mapbox.services.commons.geojson;
 
-public class GeoJSON {
+/**
+ * Interface implemented by all GeoJSON objects, contains common fields.
+ *
+ * @since 1.0.0
+ */
+public interface GeoJSON {
+
+  String getType();
+
+  String toJson();
+
 }

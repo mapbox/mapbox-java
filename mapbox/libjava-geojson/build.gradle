@@ -5,7 +5,7 @@ dependencies {
     compile project(':libjava-core')
 
     // External dependencies
-    rootProject.ext.dep.gson
+    compile rootProject.ext.dep.gson
 }
 
 sourceCompatibility = "1.7"

@@ -1,4 +1,7 @@
 ext {
+    MasVersionCode = 200
+    MasVersionName = "2.0.0"
+
     minSdkVersion = 15
     targetSdkVersion = 25
 
