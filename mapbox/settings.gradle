@@ -1,1 +1,1 @@
-include ':app', ':libjava-core', ':libjava-geojson', ':libandroid-telemetry', ':libandroid-ui', ':libjava-services', ':libjava-services-rx'
+include ':app', ':libjava-core', ':libjava-geojson', ':libandroid-telemetry', ':libandroid-ui', ':libjava-services', ':libjava-services-rx', ':libandroid-services'
