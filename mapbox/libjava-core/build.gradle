@@ -1,0 +1,28 @@
+apply plugin: 'java'
+apply from: '../build-config.gradle'
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+dependencies {
+    // No dependencies
+}
+
+buildConfig {
+    packageName = 'com.mapbox.services'
+    constants = [
+            VERSION: rootProject.ext.MasVersionName,
+            GIT_REVISION: getGitRevision(),
+    ]
+}
+
+def getGitRevision() {
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+    def ref = proc.text.trim()
+    return ref
+}
+
+apply from: 'gradle-javadoc.gradle'
+apply from: '../gradle-mvn-push-java.gradle'
+apply from: '../gradle-checkstyle.gradle'

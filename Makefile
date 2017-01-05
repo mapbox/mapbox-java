@@ -1,9 +1,56 @@
-javadoc:
-	# Output is ./libjava/lib/build/docs/javadoc
-	cd libjava; ./gradlew javadocGeneration
+checkstyle:
+	cd mapbox; ./gradlew checkstyle
 
-	# Output is ./libandroid/lib/build/docs/javadoc/release
-	cd libandroid; ./gradlew javadocrelease
+test-java:
+	cd mapbox; ./gradlew :libjava-core:test
+	cd mapbox; ./gradlew :libjava-geojson:test
+	cd mapbox; ./gradlew :libjava-services:test
+	cd mapbox; ./gradlew :libjava-services-rx:test
+
+test-android:
+	cd mapbox; ./gradlew :libandroid-telemetry:test
+	cd mapbox; ./gradlew :libandroid-services:test
+	cd mapbox; ./gradlew :libandroid-ui:test
+
+build-release-java:
+	cd mapbox; ./gradlew :libjava-core:assemble
+	cd mapbox; ./gradlew :libjava-geojson:assemble
+	cd mapbox; ./gradlew :libjava-services:assemble
+	cd mapbox; ./gradlew :libjava-services-rx:assemble
+
+build-release-android:
+	cd mapbox; ./gradlew :libandroid-telemetry:assembleRelease
+	cd mapbox; ./gradlew :libandroid-services:assembleRelease
+	cd mapbox; ./gradlew :libandroid-ui:assembleRelease
+
+javadoc:
+	# Java modules
+	# Output is in ./mapbox/*/build/docs/javadoc
+	cd mapbox; ./gradlew :libjava-core:javadocGeneration
+	cd mapbox; ./gradlew :libjava-geojson:javadocGeneration
+	cd mapbox; ./gradlew :libjava-services:javadocGeneration
+	cd mapbox; ./gradlew :libjava-services-rx:javadocGeneration
+
+	# Android modules
+	# Output is ./mapbox/*/build/docs/javadoc/release
+	cd mapbox; ./gradlew :libandroid-telemetry:javadocrelease
+	cd mapbox; ./gradlew :libandroid-services:javadocrelease
+	cd mapbox; ./gradlew :libandroid-ui:javadocrelease
+
+publish-java:
+	cd mapbox; ./gradlew :libjava-core:uploadArchives
+	cd mapbox; ./gradlew :libjava-geojson:uploadArchives
+	cd mapbox; ./gradlew :libjava-services:uploadArchives
+	cd mapbox; ./gradlew :libjava-services-rx:uploadArchives
+
+publish-android:
+	cd mapbox; ./gradlew :libandroid-telemetry:uploadArchives
+	cd mapbox; ./gradlew :libandroid-services:uploadArchives
+	cd mapbox; ./gradlew :libandroid-ui:uploadArchives
+
+dex-count:
+	cd mapbox; ./gradlew countDebugDexMethods
+	cd mapbox; ./gradlew countReleaseDexMethods
 
 geocoding-fixtures:
 	# Geocoding: 1600 Pennsylvania Ave NW

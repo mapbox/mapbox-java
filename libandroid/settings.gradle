@@ -1,5 +1,0 @@
-include ':app', ':lib'
-
-// Only used during development
-include ':libjava'
-project(':libjava').projectDir = new File(settingsDir, '../libjava/lib')

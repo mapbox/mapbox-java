@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.mapbox.services.android.testapp"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.MasVersionCode
+        versionName rootProject.ext.MasVersionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    // The Test App depends in Mapbox Android UI, which includes all modules
+    compile project(':libandroid-ui')
+
+    // Android Support libraries
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
+    compile "com.android.support:recyclerview-v7:25.1.0"
+
+    // Mapbox SDK
+    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.1@aar') {
+        transitive = true
+        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-java-services'
+    }
+
+    // Leak Canary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+    // LOST
+    compile ('com.mapzen.android:lost:1.1.1') {
+        exclude group: 'com.google.guava'
+    }
+
+    // Picasso (Static Image)
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // RxAndroid
+    compile 'io.reactivex:rxandroid:1.1.0'
+
+    // Testing
+    testCompile 'junit:junit:4.12'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+}
+
+apply from: 'gradle-dexcount.gradle'
+apply from: 'gradle-config.gradle'
+apply from: '../gradle-checkstyle.gradle'

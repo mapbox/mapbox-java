@@ -1,0 +1,12 @@
+rootProject.name = 'mapbox-root'
+
+include ':libjava-core'
+include ':libjava-geojson'
+include ':libjava-services'
+include ':libjava-services-rx'
+
+include ':libandroid-telemetry'
+include ':libandroid-services'
+include ':libandroid-ui'
+
+include ':app'
