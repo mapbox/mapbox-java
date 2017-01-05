@@ -61,8 +61,7 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libandroid
-                  ./gradlew checkstyle
+                  make checkstyle
             -
               is_debug: "yes"
           title: "Run Checkstyle"
@@ -72,8 +71,7 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libjava
-                  ./gradlew assembleRelease
+                  make build-release-java
             -
               is_debug: "yes"
           title: "Build Java Services"
@@ -83,8 +81,7 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libandroid
-                  ./gradlew assembleRelease
+                  make build-release-android
             -
               is_debug: "yes"
           title: "Build Android Services"
@@ -94,8 +91,7 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libjava
-                  ./gradlew test
+                  make test-java
             -
               is_debug: "yes"
           title: "Run Java Project Unit Tests"
@@ -105,8 +101,7 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libandroid
-                  ./gradlew test
+                  make test-android
             -
               is_debug: "yes"
           title: "Run Android Project Unit Tests"
@@ -162,32 +157,17 @@ workflows:
                   NEXUS_PASSWORD=$PUBLISH_NEXUS_PASSWORD
                   signing.keyId=$SIGNING_KEYID
                   signing.password=$SIGNING_PASSWORD
-                  signing.secretKeyRingFile=../../secring.gpg" >> libjava/gradle.properties
+                  signing.secretKeyRingFile=../../secring.gpg" >> mapbox/gradle.properties
               opts:
                 is_expand: true
-          title: "Inject Signing And Publishing Credentials To Java Services"
+          title: "Inject Signing And Publishing Credentials"
       -
         script:
           inputs:
             -
               content: |-
                   #!/bin/bash
-                  echo "NEXUS_USERNAME=$PUBLISH_NEXUS_USERNAME
-                  NEXUS_PASSWORD=$PUBLISH_NEXUS_PASSWORD
-                  signing.keyId=$SIGNING_KEYID
-                  signing.password=$SIGNING_PASSWORD
-                  signing.secretKeyRingFile=../../secring.gpg" >> libandroid/gradle.properties
-              opts:
-                is_expand: true
-          title: "Inject Signing And Publishing Credentials To Android Services"
-      -
-        script:
-          inputs:
-            -
-              content: |-
-                  #!/bin/bash
-                  cd libjava
-                  ./gradlew assembleRelease
+                  make build-release-java
           title: "Build Java Services"
       -
         script:
@@ -195,8 +175,7 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libandroid
-                  ./gradlew assembleRelease
+                  make build-release-android
           title: "Build Android Services"
       -
         script:
@@ -204,8 +183,7 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libjava
-                  ./gradlew test
+                  make test-java
           title: "Run Java Project Unit Tests"
       -
         script:
@@ -213,8 +191,7 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libandroid
-                  ./gradlew test
+                  make test-android
           title: "Run Android Project Unit Tests"
       -
         script:
@@ -222,8 +199,7 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libjava;
-                  ./gradlew uploadArchives
+                  make publish-java
           title: "Publish Java Services To Maven Central"
       -
         script:
@@ -231,6 +207,5 @@ workflows:
             -
               content: |-
                   #!/bin/bash
-                  cd libandroid;
-                  ./gradlew uploadArchives
+                  make publish-android
           title: "Publish Android Services To Maven Central"

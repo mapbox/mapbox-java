@@ -1,17 +1,24 @@
 checkstyle:
 	cd mapbox; ./gradlew checkstyle
 
-test:
-	cd mapbox; ./gradlew test
+test-java:
+	cd mapbox; ./gradlew :libjava-core:test
+	cd mapbox; ./gradlew :libjava-geojson:test
+	cd mapbox; ./gradlew :libjava-services:test
+	cd mapbox; ./gradlew :libjava-services-rx:test
 
-build-release:
-	# Java modules
+test-android:
+	cd mapbox; ./gradlew :libandroid-telemetry:test
+	cd mapbox; ./gradlew :libandroid-services:test
+	cd mapbox; ./gradlew :libandroid-ui:test
+
+build-release-java:
 	cd mapbox; ./gradlew :libjava-core:assemble
 	cd mapbox; ./gradlew :libjava-geojson:assemble
 	cd mapbox; ./gradlew :libjava-services:assemble
 	cd mapbox; ./gradlew :libjava-services-rx:assemble
 
-	# Android modules
+build-release-android:
 	cd mapbox; ./gradlew :libandroid-telemetry:assembleRelease
 	cd mapbox; ./gradlew :libandroid-services:assembleRelease
 	cd mapbox; ./gradlew :libandroid-ui:assembleRelease
@@ -32,26 +39,21 @@ javadoc:
 
 publish-local:
 	# Installs the artifacts into the local Maven repository
-	# Java modules
 	cd mapbox; ./gradlew :libjava-core:install
 	cd mapbox; ./gradlew :libjava-geojson:install
 	cd mapbox; ./gradlew :libjava-services:install
 	cd mapbox; ./gradlew :libjava-services-rx:install
-
-	# Android modules
 	cd mapbox; ./gradlew :libandroid-telemetry:install
 	cd mapbox; ./gradlew :libandroid-services:install
 	cd mapbox; ./gradlew :libandroid-ui:install
 
-publish:
-	# Installs the artifacts into the local Maven repository
-	# Java modules
+publish-java:
 	cd mapbox; ./gradlew :libjava-core:uploadArchives
 	cd mapbox; ./gradlew :libjava-geojson:uploadArchives
 	cd mapbox; ./gradlew :libjava-services:uploadArchives
 	cd mapbox; ./gradlew :libjava-services-rx:uploadArchives
 
-	# Android modules
+publish-android:
 	cd mapbox; ./gradlew :libandroid-telemetry:uploadArchives
 	cd mapbox; ./gradlew :libandroid-services:uploadArchives
 	cd mapbox; ./gradlew :libandroid-ui:uploadArchives
