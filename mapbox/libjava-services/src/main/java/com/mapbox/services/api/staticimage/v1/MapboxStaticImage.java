@@ -90,7 +90,7 @@ public class MapboxStaticImage {
     private int precision = -1;
 
     /**
-     * Required to call when building {@link com.mapbox.services.staticimage.v1.MapboxStaticImage.Builder}.
+     * Required to call when building {@link com.mapbox.services.api.v1.MapboxStaticImage.Builder}.
      *
      * @param accessToken Mapbox access token, you must have a Mapbox account in order to use
      *                    this library.

@@ -325,9 +325,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     /**
-     * @return {@link com.mapbox.services.directions.v4.DirectionsCriteria#PROFILE_DRIVING},
-     * {@link com.mapbox.services.directions.v4.DirectionsCriteria#PROFILE_CYCLING},
-     * or {@link com.mapbox.services.directions.v4.DirectionsCriteria#PROFILE_WALKING}
+     * @return {@link com.mapbox.services.api.directions.v4.DirectionsCriteria#PROFILE_DRIVING},
+     * {@link com.mapbox.services.api.directions.v4.DirectionsCriteria#PROFILE_CYCLING},
+     * or {@link com.mapbox.services.api.directions.v4.DirectionsCriteria#PROFILE_WALKING}
      * @since 1.0.0
      */
     public String getProfile() {
@@ -376,9 +376,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     /**
-     * @return {@link com.mapbox.services.directions.v4.DirectionsCriteria#GEOMETRY_GEOJSON},
-     * {@link com.mapbox.services.directions.v4.DirectionsCriteria#GEOMETRY_POLYLINE},
-     * or {@link com.mapbox.services.directions.v4.DirectionsCriteria#GEOMETRY_FALSE}
+     * @return {@link com.mapbox.services.api.directions.v4.DirectionsCriteria#GEOMETRY_GEOJSON},
+     * {@link com.mapbox.services.api.directions.v4.DirectionsCriteria#GEOMETRY_POLYLINE},
+     * or {@link com.mapbox.services.api.directions.v4.DirectionsCriteria#GEOMETRY_FALSE}
      * @since 1.0.0
      */
     public String getGeometries() {

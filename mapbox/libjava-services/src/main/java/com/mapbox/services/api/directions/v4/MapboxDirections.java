@@ -166,7 +166,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     private Boolean steps;
 
     /**
-     * Required to call when building {@link com.mapbox.services.directions.v4.MapboxDirections.Builder}.
+     * Required to call when building {@link com.mapbox.services.api.directions.v4.MapboxDirections.Builder}.
      *
      * @param accessToken Mapbox access token, You must have a Mapbox account inorder to use
      *                    this library.
