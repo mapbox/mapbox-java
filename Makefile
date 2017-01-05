@@ -43,6 +43,19 @@ publish-local:
 	cd mapbox; ./gradlew :libandroid-services:install
 	cd mapbox; ./gradlew :libandroid-ui:install
 
+publish:
+	# Installs the artifacts into the local Maven repository
+	# Java modules
+	cd mapbox; ./gradlew :libjava-core:uploadArchives
+	cd mapbox; ./gradlew :libjava-geojson:uploadArchives
+	cd mapbox; ./gradlew :libjava-services:uploadArchives
+	cd mapbox; ./gradlew :libjava-services-rx:uploadArchives
+
+	# Android modules
+	cd mapbox; ./gradlew :libandroid-telemetry:uploadArchives
+	cd mapbox; ./gradlew :libandroid-services:uploadArchives
+	cd mapbox; ./gradlew :libandroid-ui:uploadArchives
+
 dex-count:
 	cd mapbox; ./gradlew countDebugDexMethods
 	cd mapbox; ./gradlew countReleaseDexMethods
