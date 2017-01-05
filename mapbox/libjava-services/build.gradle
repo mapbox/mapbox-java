@@ -13,9 +13,9 @@ dependencies {
     compile rootProject.ext.dep.okhttp3Logging
 
     // Testing
-    compile rootProject.ext.dep.okhttp3Mockwebserver
-    compile rootProject.ext.dep.junit
-    compile rootProject.ext.dep.hamcrestJunit
+    testCompile rootProject.ext.dep.okhttp3Mockwebserver
+    testCompile rootProject.ext.dep.junit
+    testCompile rootProject.ext.dep.hamcrestJunit
 }
 
 apply from: 'gradle-javadoc.gradle'
