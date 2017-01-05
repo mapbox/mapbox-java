@@ -4,6 +4,18 @@ checkstyle:
 test:
 	cd mapbox; ./gradlew test
 
+build-release:
+	# Java modules
+	cd mapbox; ./gradlew :libjava-core:assemble
+	cd mapbox; ./gradlew :libjava-geojson:assemble
+	cd mapbox; ./gradlew :libjava-services:assemble
+	cd mapbox; ./gradlew :libjava-services-rx:assemble
+
+	# Android modules
+	cd mapbox; ./gradlew :libandroid-telemetry:assembleRelease
+	cd mapbox; ./gradlew :libandroid-services:assembleRelease
+	cd mapbox; ./gradlew :libandroid-ui:assembleRelease
+
 javadoc:
 	# Java modules
 	# Output is in ./mapbox/*/build/docs/javadoc
