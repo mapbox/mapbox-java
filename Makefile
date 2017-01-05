@@ -37,16 +37,6 @@ javadoc:
 	cd mapbox; ./gradlew :libandroid-services:javadocrelease
 	cd mapbox; ./gradlew :libandroid-ui:javadocrelease
 
-publish-local:
-	# Installs the artifacts into the local Maven repository
-	cd mapbox; ./gradlew :libjava-core:install
-	cd mapbox; ./gradlew :libjava-geojson:install
-	cd mapbox; ./gradlew :libjava-services:install
-	cd mapbox; ./gradlew :libjava-services-rx:install
-	cd mapbox; ./gradlew :libandroid-telemetry:install
-	cd mapbox; ./gradlew :libandroid-services:install
-	cd mapbox; ./gradlew :libandroid-ui:install
-
 publish-java:
 	cd mapbox; ./gradlew :libjava-core:uploadArchives
 	cd mapbox; ./gradlew :libjava-geojson:uploadArchives
