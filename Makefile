@@ -1,9 +1,16 @@
 javadoc:
-	# Output is ./libjava/lib/build/docs/javadoc
-	cd libjava; ./gradlew javadocGeneration
+	# Java modules
+	# Output is in ./mapbox/*/build/docs/javadoc
+	cd mapbox; ./gradlew :libjava-core:javadocGeneration
+	cd mapbox; ./gradlew :libjava-geojson:javadocGeneration
+	cd mapbox; ./gradlew :libjava-services:javadocGeneration
+	cd mapbox; ./gradlew :libjava-services-rx:javadocGeneration
 
-	# Output is ./libandroid/lib/build/docs/javadoc/release
-	cd libandroid; ./gradlew javadocrelease
+	# Android modules
+	# Output is ./mapbox/*/build/docs/javadoc/release
+	cd mapbox; ./gradlew :libandroid-telemetry:javadocrelease
+	cd mapbox; ./gradlew :libandroid-services:javadocrelease
+	cd mapbox; ./gradlew :libandroid-ui:javadocrelease
 
 geocoding-fixtures:
 	# Geocoding: 1600 Pennsylvania Ave NW
