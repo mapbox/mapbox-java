@@ -1,3 +1,6 @@
+checkstyle:
+	cd mapbox; ./gradlew checkstyle
+
 javadoc:
 	# Java modules
 	# Output is in ./mapbox/*/build/docs/javadoc
