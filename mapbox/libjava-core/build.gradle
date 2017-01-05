@@ -1,6 +1,9 @@
 apply plugin: 'java'
 apply from: '../build-config.gradle'
 
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
 dependencies {
     // No dependencies
 }
@@ -20,5 +23,6 @@ def getGitRevision() {
     return ref
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+apply from: 'gradle-javadoc.gradle'
+apply from: '../gradle-mvn-push-java.gradle'
+apply from: '../gradle-checkstyle.gradle'

@@ -112,3 +112,12 @@ afterEvaluate { project ->
         archives androidJavadocsJar
     }
 }
+
+// See: https://github.com/chrisbanes/gradle-mvn-push/issues/43#issuecomment-84140513
+afterEvaluate { project ->
+    android.libraryVariants.all { variant ->
+        tasks.androidJavadocs.doFirst {
+            classpath += files(variant.javaCompile.classpath.files)
+        }
+    }
+}

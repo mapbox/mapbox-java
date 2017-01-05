@@ -1,7 +1,7 @@
 ext {
     // Last number is 0 for a SNAPSHOT, 1 for a release
     MasVersionCode = 2 * 1000 + 0 * 100 + 0 * 10 + 0
-    MasVersionName = "2.0.0"
+    MasVersionName = "2.0.0-SNAPSHOT"
 
     minSdkVersion = 15
     targetSdkVersion = 25
