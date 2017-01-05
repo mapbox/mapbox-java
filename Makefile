@@ -30,6 +30,23 @@ javadoc:
 	cd mapbox; ./gradlew :libandroid-services:javadocrelease
 	cd mapbox; ./gradlew :libandroid-ui:javadocrelease
 
+publish-local:
+	# Installs the artifacts into the local Maven repository
+	# Java modules
+	cd mapbox; ./gradlew :libjava-core:install
+	cd mapbox; ./gradlew :libjava-geojson:install
+	cd mapbox; ./gradlew :libjava-services:install
+	cd mapbox; ./gradlew :libjava-services-rx:install
+
+	# Android modules
+	cd mapbox; ./gradlew :libandroid-telemetry:install
+	cd mapbox; ./gradlew :libandroid-services:install
+	cd mapbox; ./gradlew :libandroid-ui:install
+
+dex-count:
+	cd mapbox; ./gradlew countDebugDexMethods
+	cd mapbox; ./gradlew countReleaseDexMethods
+
 geocoding-fixtures:
 	# Geocoding: 1600 Pennsylvania Ave NW
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/1600+pennsylvania+ave+nw.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
