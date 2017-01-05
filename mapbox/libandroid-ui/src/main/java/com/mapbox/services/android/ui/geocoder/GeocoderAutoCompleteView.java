@@ -115,7 +115,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
 
   /**
    * Configure the geocoder type, pass in one of the constants found within
-   * {@link com.mapbox.services.api.v5.GeocodingCriteria}.
+   * {@link com.mapbox.services.api.geocoding.v5.GeocodingCriteria}.
    *
    * @param type String containing "place", "poi", "neighborhood", etc.
    * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
@@ -127,7 +127,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
 
   /**
    * Configure the geocoder type, pass in one or more of the constants found within
-   * {@link com.mapbox.services.api.v5.GeocodingCriteria}.
+   * {@link com.mapbox.services.api.geocoding.v5.GeocodingCriteria}.
    *
    * @param types String array containing "place", "poi", "neighborhood", etc.
    * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>

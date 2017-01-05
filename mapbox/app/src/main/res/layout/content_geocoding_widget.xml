@@ -9,7 +9,7 @@
     tools:context="com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity"
     tools:showIn="@layout/activity_geocoding_widget">
 
-    <com.mapbox.services.android.geocoder.ui.GeocoderAutoCompleteView
+    <com.mapbox.services.android.ui.geocoder.GeocoderAutoCompleteView
         android:id="@+id/query"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
