@@ -20,6 +20,9 @@ allprojects {
         jcenter()
         mavenCentral()
     }
+
+    group = GROUP
+    version = VERSION_NAME
 }
 
 task clean(type: Delete) {
