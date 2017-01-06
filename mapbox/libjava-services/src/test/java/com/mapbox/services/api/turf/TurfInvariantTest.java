@@ -79,7 +79,8 @@ public class TurfInvariantTest extends BaseTurf {
 
   @Test
   public void testInvariantCollectionOf1() throws TurfException {
-    String json = "{type: 'FeatureCollection', features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: [0, 0]}, properties: {}}]}";
+    String json = "{type: 'FeatureCollection', features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: "
+      + "[0, 0]}, properties: {}}]}";
     thrown.expect(TurfException.class);
     thrown.expectMessage(startsWith("Invalid input to myfn: must be a Polygon, given Point"));
     TurfInvariant.collectionOf(FeatureCollection.fromJson(json), "Polygon", "myfn");
@@ -103,7 +104,8 @@ public class TurfInvariantTest extends BaseTurf {
 
   @Test
   public void testInvariantCollectionOf4() throws TurfException {
-    String json = "{type: 'FeatureCollection', features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: [0, 0]}, properties: {}}]}";
+    String json = "{type: 'FeatureCollection', features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: "
+      + "[0, 0]}, properties: {}}]}";
     TurfInvariant.collectionOf(FeatureCollection.fromJson(json), "Point", "myfn");
   }
 

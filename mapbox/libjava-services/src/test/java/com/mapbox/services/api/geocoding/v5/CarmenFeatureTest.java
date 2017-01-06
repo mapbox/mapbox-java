@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 public class CarmenFeatureTest {
 
-  private final static double DELTA = 1E-10;
+  private static final double DELTA = 1E-10;
 
   @Test
   public void testAllowStandalone() {

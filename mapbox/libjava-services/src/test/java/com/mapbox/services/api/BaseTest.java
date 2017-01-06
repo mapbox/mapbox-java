@@ -3,7 +3,7 @@ package com.mapbox.services.api;
 import com.google.gson.JsonParser;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 public class BaseTest {
 
-  protected final static double DELTA = 1E-10;
+  protected static final double DELTA = 1E-10;
 
   public void compareJson(String json1, String json2) {
     JsonParser parser = new JsonParser();
@@ -20,7 +20,7 @@ public class BaseTest {
 
   protected String loadJsonFixture(String folder, String filename) throws IOException {
     byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/" + folder + "/" + filename));
-    return new String(content, StandardCharsets.UTF_8);
+    return new String(content, Charset.forName("utf-8"));
   }
 
 }

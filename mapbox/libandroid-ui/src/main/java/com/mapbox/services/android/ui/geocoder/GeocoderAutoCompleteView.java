@@ -20,7 +20,8 @@ import com.mapbox.services.commons.models.Position;
  * down menu from which the user can choose an item and you can listen to and
  * act upon which item they chose
  *
- * @see <a href="https://developer.android.com/reference/android/widget/AutoCompleteTextView.html">Android AutoCompleteTextView</a>
+ * @see <a href="https://developer.android.com/reference/android/widget/AutoCompleteTextView.html">
+ * Android AutoCompleteTextView</a>
  * @see <a href="https://www.mapbox.com/android-sdk/examples/geocoding/">Mapbox example</a>
  * @since 1.0.0
  */
@@ -32,7 +33,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
   private Drawable imgClearButton;
 
   public interface OnFeatureListener {
-    void OnFeatureClick(CarmenFeature feature);
+    void onFeatureClick(CarmenFeature feature);
   }
 
   private OnFeatureListener onFeatureListener = null;
@@ -60,7 +61,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
 
         // Notify subscribers
         if (onFeatureListener != null) {
-          onFeatureListener.OnFeatureClick(result);
+          onFeatureListener.onFeatureClick(result);
         }
       }
     });

@@ -1,11 +1,10 @@
 package com.mapbox.services.api;
 
 import com.mapbox.services.Constants;
-import com.mapbox.services.api.MapboxService;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class ConstantsTest {
 

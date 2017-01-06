@@ -1,11 +1,10 @@
 package com.mapbox.services.api.mapmatching.v4;
 
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.mapmatching.v4.MapboxMapMatching;
-import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.api.directions.v4.DirectionsCriteria;
 import com.mapbox.services.api.mapmatching.v4.models.MapMatchingResponse;
+import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.models.Position;
 
 import org.junit.After;
 import org.junit.Before;
@@ -67,8 +66,8 @@ public class MapboxMapMatchingTest {
         try {
           String body = new String(Files.readAllBytes(Paths.get(resource)), Charset.forName("utf-8"));
           return new MockResponse().setBody(body);
-        } catch (IOException e) {
-          throw new RuntimeException(e);
+        } catch (IOException ioException) {
+          throw new RuntimeException(ioException);
         }
       }
     });
@@ -77,7 +76,9 @@ public class MapboxMapMatchingTest {
     mockUrl = server.url("");
 
     // From https://www.mapbox.com/api-documentation/#map-matching
-    trace = LineString.fromJson("{ \"type\": \"LineString\", \"coordinates\": [ [13.418946862220764, 52.50055852688439], [13.419011235237122, 52.50113000479732], [13.419756889343262, 52.50171780290061], [13.419885635375975, 52.50237416816131], [13.420631289482117, 52.50294888790448] ] }");
+    trace = LineString.fromJson("{ \"type\": \"LineString\", \"coordinates\": [ [13.418946862220764, "
+      + "52.50055852688439], [13.419011235237122, 52.50113000479732], [13.419756889343262, 52.50171780290061],"
+      + " [13.419885635375975, 52.50237416816131], [13.420631289482117, 52.50294888790448] ] }");
   }
 
   @After
@@ -215,21 +216,21 @@ public class MapboxMapMatchingTest {
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
-//    @Test
-//    public void testPost() throws ServicesException, IOException {
-//        MapboxMapMatching client = new MapboxMapMatching.Builder()
-//                .setAccessToken("")
-//                .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-//                .setTrace(trace)
-//                .build();
-//
-//        // Enable debug
-//        client.setEnableDebug(true);
-//
-//        // All good
-//        Response<MapMatchingResponse> response = client.executeCall();
-//        assertEquals(response.code(), 200);
-//        assertEquals(response.body().getCode(), DirectionsCriteria.RESPONSE_OK);
-//        assertEquals(response.body().getMatchedPoints().length, 5);
-//    }
+  //  @Test
+  //  public void testPost() throws ServicesException, IOException {
+  //    MapboxMapMatching client = new MapboxMapMatching.Builder()
+  //      .setAccessToken("")
+  //      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+  //      .setTrace(trace)
+  //      .build();
+  //
+  //    // Enable debug
+  //    client.setEnableDebug(true);
+  //
+  //    // All good
+  //    Response<MapMatchingResponse> response = client.executeCall();
+  //    assertEquals(response.code(), 200);
+  //    assertEquals(response.body().getCode(), DirectionsCriteria.RESPONSE_OK);
+  //    assertEquals(response.body().getMatchedPoints().length, 5);
+  //  }
 }

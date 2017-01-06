@@ -2,7 +2,6 @@ package com.mapbox.services.api.staticimage.v1;
 
 import com.mapbox.services.Constants;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.Rule;
