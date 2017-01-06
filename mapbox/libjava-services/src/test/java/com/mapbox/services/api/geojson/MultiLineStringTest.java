@@ -17,7 +17,7 @@ import static org.junit.Assert.assertFalse;
 
 public class MultiLineStringTest extends BaseTest {
 
-  private static final String SAMPLE_MULTILINESTRING_FIXTURE = "src/test/fixtures/geojson/sample-point.json";
+  private static final String SAMPLE_MULTILINESTRING_FIXTURE = "src/test/fixtures/geojson/sample-multilinestring.json";
 
   @Test
   public void fromJson() throws IOException {
