@@ -1,0 +1,13 @@
+{
+  "type": "LineString",
+  "coordinates": [
+    [
+      100,
+      0
+    ],
+    [
+      101,
+      1
+    ]
+  ]
+}

@@ -1,11 +1,11 @@
 package com.mapbox.services.api.turf;
 
+import com.mapbox.services.api.utils.turf.TurfException;
+import com.mapbox.services.api.utils.turf.TurfInvariant;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.api.utils.turf.TurfException;
-import com.mapbox.services.api.utils.turf.TurfInvariant;
 
 import org.junit.Rule;
 import org.junit.Test;

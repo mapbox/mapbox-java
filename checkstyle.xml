@@ -6,8 +6,8 @@
 <module name = "Checker">
     <property name="charset" value="UTF-8"/>
 
-    <!-- <property name="severity" value="error"/> -->
-    <property name="severity" value="warning"/>
+    <property name="severity" value="error"/>
+    <!-- <property name="severity" value="warning"/> -->
 
     <property name="fileExtensions" value="java, properties, xml"/>
     <!-- Checks for whitespace                               -->
@@ -113,7 +113,7 @@
         </module>
         <module name="LocalVariableName">
             <property name="tokens" value="VARIABLE_DEF"/>
-            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+            <!--<property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>-->
             <property name="allowOneCharVarInForLoop" value="true"/>
             <message key="name.invalidPattern"
              value="Local variable name ''{0}'' must match pattern ''{1}''."/>
@@ -158,7 +158,7 @@
             <property name="allowedAbbreviationLength" value="1"/>
         </module>
         <module name="OverloadMethodsDeclarationOrder"/>
-        <module name="VariableDeclarationUsageDistance"/>
+        <!--<module name="VariableDeclarationUsageDistance"/>-->
         <module name="AvoidStarImport"/>
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>

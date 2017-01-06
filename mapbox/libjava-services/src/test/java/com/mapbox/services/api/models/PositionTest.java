@@ -1,6 +1,7 @@
 package com.mapbox.services.api.models;
 
 import com.mapbox.services.commons.models.Position;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,18 +22,18 @@ public class PositionTest {
 
   @Test
   public void checksEqualityFromCoordinatesLongitudeLatitude() {
-    Position aPosition = Position.fromCoordinates(new double[]{100.0, 0.0});
+    Position position = Position.fromCoordinates(new double[] {100.0, 0.0});
 
-    String positionCoordinates = aPosition.toString();
+    String positionCoordinates = position.toString();
 
     assertEquals("Position [longitude=100.0, latitude=0.0, altitude=NaN]", positionCoordinates);
   }
 
   @Test
   public void checksEqualityFromCoordinatesLongitudeLatitudeAltitude() {
-    Position aPosition = Position.fromCoordinates(new double[]{100.0, 0.0, 3.1});
+    Position position = Position.fromCoordinates(new double[] {100.0, 0.0, 3.1});
 
-    String positionCoordinates = aPosition.toString();
+    String positionCoordinates = position.toString();
 
     assertEquals("Position [longitude=100.0, latitude=0.0, altitude=3.1]", positionCoordinates);
   }

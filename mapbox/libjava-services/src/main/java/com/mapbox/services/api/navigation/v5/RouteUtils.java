@@ -108,7 +108,8 @@ public class RouteUtils {
    * @throws TurfException     signals that a Turf exception of some sort has occurred.
    * @since 1.3.0
    */
-  public Position getSnapToRoute(Position position, RouteLeg route, int stepIndex) throws ServicesException, TurfException {
+  public Position getSnapToRoute(Position position, RouteLeg route, int stepIndex)
+    throws ServicesException, TurfException {
     LegStep step = validateStep(route, stepIndex);
 
     // Decode the geometry

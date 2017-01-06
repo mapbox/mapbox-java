@@ -1,18 +1,17 @@
 package com.mapbox.services.api.navigation.v5;
 
 import com.google.gson.Gson;
-import com.mapbox.services.api.BaseTest;
 import com.mapbox.services.Constants;
+import com.mapbox.services.api.BaseTest;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.navigation.v5.RouteUtils;
-import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.api.utils.turf.TurfConstants;
-import com.mapbox.services.api.utils.turf.TurfException;
-import com.mapbox.services.api.utils.turf.TurfMeasurement;
-import com.mapbox.services.commons.utils.PolylineUtils;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.LegStep;
 import com.mapbox.services.api.directions.v5.models.RouteLeg;
+import com.mapbox.services.api.utils.turf.TurfConstants;
+import com.mapbox.services.api.utils.turf.TurfException;
+import com.mapbox.services.api.utils.turf.TurfMeasurement;
+import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.utils.PolylineUtils;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,7 +19,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -38,7 +37,7 @@ public class RouteUtilsTest extends BaseTest {
   public void setUp() throws IOException {
     Gson gson = new Gson();
     byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/directions_v5.json"));
-    String body = new String(content, StandardCharsets.UTF_8);
+    String body = new String(content, Charset.forName("utf-8"));
     response = gson.fromJson(body, DirectionsResponse.class);
     route = response.getRoutes().get(0).getLegs().get(0);
   }
@@ -100,7 +99,8 @@ public class RouteUtilsTest extends BaseTest {
     // be off-route
     LegStep lastStep = route.getSteps().get(route.getSteps().size() - 1);
     List<Position> lastCoords = PolylineUtils.decode(lastStep.getGeometry(), Constants.OSRM_PRECISION_V5);
-    Position offRoutePoint = TurfMeasurement.destination(lastCoords.get(0), routeUtils.getOffRouteThresholdKm(), 180, TurfConstants.UNIT_DEFAULT);
+    Position offRoutePoint = TurfMeasurement.destination(
+      lastCoords.get(0), routeUtils.getOffRouteThresholdKm(), 180, TurfConstants.UNIT_DEFAULT);
     assertTrue(routeUtils.isOffRoute(offRoutePoint, route));
   }
 
