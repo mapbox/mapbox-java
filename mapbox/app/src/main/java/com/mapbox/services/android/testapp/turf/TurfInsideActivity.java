@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,10 +19,9 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
-import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfJoins;
+import com.mapbox.services.commons.models.Position;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,13 +51,7 @@ public class TurfInsideActivity extends AppCompatActivity {
 
     container = findViewById(R.id.turf_inside_map_container);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     mapView = (MapView) findViewById(R.id.mapView);
-    mapView.setAccessToken(Utils.getMapboxAccessToken(this));
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(new OnMapReadyCallback() {
       @Override

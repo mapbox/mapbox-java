@@ -3,7 +3,6 @@ package com.mapbox.services.android.testapp.directions;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,12 +19,12 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.directions.v5.MapboxDirections;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.models.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +47,6 @@ public class DirectionsV5Activity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_directions_v5);
-
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     // San Francisco
     final Position origin = Position.fromCoordinates(-122.416667, 37.783333);

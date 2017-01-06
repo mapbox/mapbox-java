@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +24,14 @@ import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
 import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
 import com.mapbox.services.android.testapp.nav.OffRouteDetectionActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
+import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
+import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
 import com.mapbox.services.android.testapp.turf.TurfDistanceActivity;
 import com.mapbox.services.android.testapp.turf.TurfInsideActivity;
 import com.mapbox.services.android.testapp.turf.TurfLineSliceActivity;
 import com.mapbox.services.android.testapp.turf.TurfMidpointActivity;
 import com.mapbox.services.android.testapp.utils.MapMatchingActivity;
 import com.mapbox.services.android.testapp.utils.SimplifyPolylineActivity;
-import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
-import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
 import com.mapbox.services.android.utils.PermissionsUtils;
 
 import java.util.ArrayList;
@@ -48,37 +47,109 @@ public class MainActivity extends AppCompatActivity {
   private static final String LOG_TAG = "MainActivity";
 
   private RecyclerView recyclerView;
-  private RecyclerView.Adapter adapter;
-  private RecyclerView.LayoutManager layoutManager;
-
-  private static final List<SampleItem> samples = new ArrayList<>(Arrays.asList(
-    new SampleItem("Distance", "", DistanceActivity.class),
-    new SampleItem("Directions v5", "", DirectionsV5Activity.class),
-    new SampleItem("Route Utils v5", "", RouteUtilsV5Activity.class),
-    new SampleItem("Directions v4", "", DirectionsV4Activity.class),
-    new SampleItem("Directions icons", "", DirectionsIconsActivity.class),
-    new SampleItem("Reverse geocoding", "", GeocodingReverseActivity.class),
-    new SampleItem("Geocoding widget", "", GeocodingWidgetActivity.class),
-    new SampleItem("Geocoding service", "", GeocodingServiceActivity.class),
-    new SampleItem("Maki icons", "", MakiIconsActivity.class),
-    new SampleItem("Static image", "", StaticImageActivity.class),
-    new SampleItem("Simplify polyline", "", SimplifyPolylineActivity.class),
-    new SampleItem("Map matching", "", MapMatchingActivity.class),
-    new SampleItem("Turf bearing", "", TurfBearingActivity.class),
-    new SampleItem("Turf destination", "", TurfDestinationActivity.class),
-    new SampleItem("Turf distance", "", TurfDistanceActivity.class),
-    new SampleItem("Turf line slice", "", TurfLineSliceActivity.class),
-    new SampleItem("Turf inside", "", TurfInsideActivity.class),
-    new SampleItem("Turf midpoint", "", TurfMidpointActivity.class),
-    new SampleItem("Off route detection", "", OffRouteDetectionActivity.class)
-  ));
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
+
+    final List<SampleItem> samples = new ArrayList<>(Arrays.asList(
+      new SampleItem(
+        getString(R.string.title_distance),
+        getString(R.string.description_distance),
+        DistanceActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_directions_v5),
+        getString(R.string.description_directions_v5),
+        DirectionsV5Activity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_route_utils_v5),
+        getString(R.string.description_route_utils),
+        RouteUtilsV5Activity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_directions_v4),
+        getString(R.string.description_directions_v4),
+        DirectionsV4Activity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_directions_icons),
+        getString(R.string.description_directions_icons),
+        DirectionsIconsActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_reverse_geocoding),
+        getString(R.string.description_reverse_geocoding),
+        GeocodingReverseActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_geocoding_widget),
+        getString(R.string.description_geocoding_widget),
+        GeocodingWidgetActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_geocoding_service),
+        getString(R.string.description_geocoding_service),
+        GeocodingServiceActivity.class
+      ), // TODO fix activity memory leak
+      new SampleItem(
+        getString(R.string.title_maki_icons),
+        getString(R.string.description_maki_icons),
+        MakiIconsActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_static_image),
+        getString(R.string.description_static_image),
+        StaticImageActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_simplify_polyline),
+        getString(R.string.description_simplify_polyline),
+        SimplifyPolylineActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_map_matching),
+        getString(R.string.description_map_matching),
+        MapMatchingActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_turf_bearing),
+        getString(R.string.description_turf_bearing),
+        TurfBearingActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_turf_destination),
+        getString(R.string.description_turf_destination),
+        TurfDestinationActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_turf_distance),
+        getString(R.string.description_turf_distance),
+        TurfDistanceActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_turf_line_slice),
+        getString(R.string.description_turf_line_slice),
+        TurfLineSliceActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_turf_inside),
+        getString(R.string.description_turf_inside),
+        TurfInsideActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_turf_midpoint),
+        getString(R.string.description_turf_midpoint),
+        TurfMidpointActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_off_route_detection),
+        getString(R.string.description_off_route_detection),
+        OffRouteDetectionActivity.class
+      )
+    ));
 
     // Debug information
     Log.d(LOG_TAG, "MAS version name: " + BuildConfig.VERSION_NAME);
@@ -89,11 +160,11 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setHasFixedSize(true);
 
     // Use a linear layout manager
-    layoutManager = new LinearLayoutManager(this);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     recyclerView.setLayoutManager(layoutManager);
 
     // Specify an adapter
-    adapter = new MainAdapter(samples);
+    RecyclerView.Adapter adapter = new MainAdapter(samples);
     recyclerView.setAdapter(adapter);
 
     // Check for location permission
@@ -120,19 +191,19 @@ public class MainActivity extends AppCompatActivity {
 
     private List<SampleItem> samples;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
       private TextView nameView;
       private TextView descriptionView;
 
-      public ViewHolder(View view) {
+      ViewHolder(View view) {
         super(view);
         nameView = (TextView) view.findViewById(R.id.nameView);
         descriptionView = (TextView) view.findViewById(R.id.descriptionView);
       }
     }
 
-    public MainAdapter(List<SampleItem> samples) {
+    MainAdapter(List<SampleItem> samples) {
       this.samples = samples;
     }
 

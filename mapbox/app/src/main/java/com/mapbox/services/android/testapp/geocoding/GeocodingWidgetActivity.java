@@ -3,7 +3,6 @@ package com.mapbox.services.android.testapp.geocoding;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
@@ -14,12 +13,12 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.services.android.ui.geocoder.GeocoderAutoCompleteView;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.android.ui.geocoder.GeocoderAutoCompleteView;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.services.commons.models.Position;
 import com.mapzen.android.lost.api.LocationListener;
 import com.mapzen.android.lost.api.LocationRequest;
 import com.mapzen.android.lost.api.LocationServices;
@@ -37,11 +36,6 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_geocoding_widget);
-
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     // Set up autocomplete widget
     autocomplete = (GeocoderAutoCompleteView) findViewById(R.id.query);

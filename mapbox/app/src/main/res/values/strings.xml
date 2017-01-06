@@ -3,7 +3,7 @@
     <string name="app_name">Mapbox Android Services</string>
     <string name="action_settings">Settings</string>
 
-    <string name="default_style">mapbox://styles/mapbox/streets-v8</string>
+    <string name="default_style">mapbox://styles/mapbox/streets-v9</string>
 
     <string name="category">category</string>
     <string name="category_directions">Directions</string>
@@ -21,6 +21,48 @@
     <string name="no_location_data_provided">No location data provided</string>
     <string name="service_not_available">Sorry, the service is not available</string>
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
+
+    <!-- Titles -->
+    <string name="title_distance">Distance</string>
+    <string name="title_directions_v5">Directions v5</string>
+    <string name="title_route_utils_v5">Route Utils v5</string>
+    <string name="title_directions_v4">Directions v4</string>
+    <string name="title_directions_icons">Directions icons</string>
+    <string name="title_reverse_geocoding">Reverse geocoding</string>
+    <string name="title_geocoding_widget">Geocoding widget</string>
+    <string name="title_geocoding_service">Geocoding service</string>
+    <string name="title_maki_icons">Maki icons</string>
+    <string name="title_static_image">Static image</string>
+    <string name="title_simplify_polyline">Simplify polyline</string>
+    <string name="title_map_matching">Map matching</string>
+    <string name="title_turf_bearing">Turf bearing</string>
+    <string name="title_turf_destination">Turf destination</string>
+    <string name="title_turf_distance">Turf distance</string>
+    <string name="title_turf_line_slice">Turf line slice</string>
+    <string name="title_turf_inside">Turf inside</string>
+    <string name="title_turf_midpoint">Turf midpoint</string>
+    <string name="title_off_route_detection">Off route detection</string>
+
+    <!-- Descriptions -->
+    <string name="description_distance">Returns all travel times between many points.</string>
+    <string name="description_directions_v5">Show you how to get where you\'re going.</string>
+    <string name="description_directions_v4">Deprecated</string>
+    <string name="description_route_utils">Used for testing the RouteUtils class.</string>
+    <string name="description_directions_icons">Icons that can used for navigation.</string>
+    <string name="description_reverse_geocoding">Pick a point on the map and receive a geocoded result.</string>
+    <string name="description_geocoding_widget">An easy to incorporate geocoding search bar.</string>
+    <string name="description_geocoding_service">Gets your current location and returns information using geocoder.</string>
+    <string name="description_maki_icons">List of the Maki icons.</string>
+    <string name="description_static_image">Use the static map API and display in an image view.</string>
+    <string name="description_simplify_polyline">Take a polyline and simplify it\'s geometry.</string>
+    <string name="description_map_matching">Use the map matching API to match a route to a road.</string>
+    <string name="description_turf_bearing">Use Turf to get the bearing.</string>
+    <string name="description_turf_destination">Use Turf to get a destination point.</string>
+    <string name="description_turf_distance">Use Turf to calculate a distance.</string>
+    <string name="description_turf_line_slice">Use Turf to slice a line into a smaller section.</string>
+    <string name="description_turf_inside">Use Turf to determine if something is within a polygon.</string>
+    <string name="description_turf_midpoint">Use Turf to get a midpoint.</string>
+    <string name="description_off_route_detection">Uses the Route Utils class to determine if a users off route.</string>
 
     <string-array name="turf_calculation_items">
         <item>Select calculation</item>

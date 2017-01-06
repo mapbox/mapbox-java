@@ -3,7 +3,6 @@ package com.mapbox.services.android.testapp.directions;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,13 +19,13 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.api.directions.v4.DirectionsCriteria;
 import com.mapbox.services.api.directions.v4.MapboxDirections;
 import com.mapbox.services.api.directions.v4.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v4.models.DirectionsRoute;
 import com.mapbox.services.api.directions.v4.models.Waypoint;
+import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.models.Position;
 
 import java.util.List;
 
@@ -47,11 +46,6 @@ public class DirectionsV4Activity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_directions_v4);
-
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     // Dupont Circle (Washington, DC)
     final Waypoint origin = new Waypoint(-77.04341, 38.90962);
@@ -187,5 +181,4 @@ public class DirectionsV4Activity extends AppCompatActivity {
     super.onLowMemory();
     mapView.onLowMemory();
   }
-
 }

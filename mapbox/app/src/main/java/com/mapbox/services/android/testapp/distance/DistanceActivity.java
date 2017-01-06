@@ -5,7 +5,6 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -67,10 +66,6 @@ public class DistanceActivity extends AppCompatActivity implements OnMapReadyCal
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_distance);
-
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     addRestaurants();
 
@@ -135,6 +130,10 @@ public class DistanceActivity extends AppCompatActivity implements OnMapReadyCal
 
           // Check that the distance API response is "OK".
           if (response.code() == 200) {
+
+            if (restaurants.size() <= 0) {
+              return;
+            }
 
             int feature = 0;
             for (int i = 0; i < restaurants.size(); i++) {
@@ -227,7 +226,7 @@ public class DistanceActivity extends AppCompatActivity implements OnMapReadyCal
         textIgnorePlacement(true),
         textPadding(0f),
         textAnchor(Property.TEXT_ANCHOR_TOP_LEFT),
-        textField(restaurants.get(i).getStringProperty("duration") + " min"),
+        textField("{duration}" + " min"),
         textMaxWidth(8f)
       );
       mapboxMap.addLayer(marker);

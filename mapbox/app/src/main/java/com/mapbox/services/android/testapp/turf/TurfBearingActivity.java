@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -14,9 +13,9 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
+import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.api.utils.turf.TurfMeasurement;
 
 public class TurfBearingActivity extends AppCompatActivity {
 
@@ -34,11 +33,6 @@ public class TurfBearingActivity extends AppCompatActivity {
     setContentView(R.layout.activity_turf_bearing);
 
     container = findViewById(R.id.turf_bearing_map_container);
-
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     mapView = (MapView) findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);

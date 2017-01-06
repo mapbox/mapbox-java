@@ -48,11 +48,6 @@ public class StaticImageActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_static_image);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     // Build the dataset using the MapboxStaticImage API
     dataset = buildDataset();
 

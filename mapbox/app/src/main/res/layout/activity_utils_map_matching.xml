@@ -1,50 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:fitsSystemWindows="true"
-tools:context=".utils.MapMatchingActivity">
-
-<android.support.design.widget.AppBarLayout
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.AppBarOverlay">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".utils.MapMatchingActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    <LinearLayout
-        android:id="@+id/seekbar_container"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/precision_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="8" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-        <SeekBar
-            android:id="@+id/seekbar_precision"
+        <LinearLayout
+            android:id="@+id/seekbar_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="10"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:progress="8" />
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/precision_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="8"/>
 
-</android.support.design.widget.AppBarLayout>
+            <SeekBar
+                android:id="@+id/seekbar_precision"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="10"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:progress="8"/>
 
-<include layout="@layout/content_utils_map_matching" />
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        mapbox:center_latitude="34.01591350351023"
+        mapbox:center_longitude="-118.4945560781314"
+        mapbox:style_url="mapbox://styles/mapbox/streets-v9"
+        mapbox:zoom="14.5"/>
 
 </android.support.design.widget.CoordinatorLayout>

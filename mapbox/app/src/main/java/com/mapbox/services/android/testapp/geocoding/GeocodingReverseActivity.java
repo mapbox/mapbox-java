@@ -3,7 +3,6 @@ package com.mapbox.services.android.testapp.geocoding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -15,11 +14,11 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.services.commons.models.Position;
 
 import java.util.List;
 
@@ -32,7 +31,6 @@ public class GeocodingReverseActivity extends AppCompatActivity {
   private static final String LOG_TAG = "GeocodingReverse";
 
   private MapView mapView;
-  private MapboxMap mapboxMap;
 
   private TextView textView;
 
@@ -40,11 +38,6 @@ public class GeocodingReverseActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_geocoding_reverse);
-
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     textView = (TextView) findViewById(R.id.message);
     setMessage("Tap the map to trigger the reverse geocoder.");
@@ -59,7 +52,7 @@ public class GeocodingReverseActivity extends AppCompatActivity {
           @Override
           public void onMapClick(@NonNull LatLng point) {
             setMessage("Geocoding...");
-            mapboxMap.removeAnnotations();
+            mapboxMap.clear();
             mapboxMap.addMarker(new MarkerOptions()
               .position(point)
               .title("Your finger is here"));
