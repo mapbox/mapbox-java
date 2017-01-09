@@ -20,3 +20,6 @@ captures/
 
 # Token file
 libandroid/app/src/main/res/values/developer-config.xml
+
+# Do not track signing file
+secring.gpg
