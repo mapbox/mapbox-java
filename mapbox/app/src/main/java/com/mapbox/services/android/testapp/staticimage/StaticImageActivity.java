@@ -1,11 +1,10 @@
 package com.mapbox.services.android.testapp.staticimage;
 
 import android.content.res.Configuration;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.mapbox.services.Constants;
@@ -37,35 +36,24 @@ public class StaticImageActivity extends AppCompatActivity {
     {33.5275, -112.2625}, // University of Phoenix Stadium
     {34.161389, -118.1675}}; // Rose Bowl
 
-  private RecyclerView recyclerView;
-  private RecyclerView.Adapter adapter;
-  private RecyclerView.LayoutManager layoutManager;
-
-  private String[] dataset;
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_static_image);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     // Build the dataset using the MapboxStaticImage API
-    dataset = buildDataset();
+    String[] dataset = buildDataset();
 
     // Recycler view
-    recyclerView = (RecyclerView) findViewById(R.id.gallery_view);
+    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.gallery_view);
 
     // Use a GridLayoutManager with 2/3 columns
     int cols = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
-    layoutManager = new GridLayoutManager(this, cols);
+    RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, cols);
     recyclerView.setLayoutManager(layoutManager);
 
     // Specify an adapter
-    adapter = new GalleryAdapter(this, dataset);
+    RecyclerView.Adapter adapter = new GalleryAdapter(this, dataset);
     recyclerView.setAdapter(adapter);
   }
 

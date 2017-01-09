@@ -2,11 +2,10 @@ package com.mapbox.services.android.testapp.geocoding;
 
 import android.content.Intent;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -23,7 +22,7 @@ import com.mapzen.android.lost.api.LostApiClient;
 /**
  * This activity is inspired by the stock Android Geocoder sample code in
  * https://github.com/googlesamples/android-play-location/tree/master/LocationAddress
- *
+ * <p>
  * In this sample, we show how to use Mapbox' Geocoder simply replacing the
  * android.location.Geocoder object with com.mapbox.services.android.geocoder.AndroidGeocoder.
  * To simplify the code, we've replaced Google Play Services with LOST.
@@ -82,11 +81,6 @@ public class GeocodingServiceActivity extends AppCompatActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_geocoding_service);
-
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     resultReceiver = new AddressResultReceiver(new Handler());
 

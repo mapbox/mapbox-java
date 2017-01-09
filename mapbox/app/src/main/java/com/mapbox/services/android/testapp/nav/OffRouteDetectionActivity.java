@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,15 +31,15 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.api.utils.turf.TurfException;
-import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.directions.v5.MapboxDirections;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.navigation.v5.RouteUtils;
+import com.mapbox.services.api.utils.turf.TurfException;
+import com.mapbox.services.api.utils.turf.TurfMeasurement;
+import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.models.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +63,6 @@ public class OffRouteDetectionActivity extends AppCompatActivity {
   // Direction variables
   private DirectionsRoute currentRoute;
   private List<LatLng> routePoints;
-  private List<LatLng> newRoutePoints;
   private int count = 0;
   private long distance;
   private Handler handler;
@@ -77,11 +75,6 @@ public class OffRouteDetectionActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_off_route_detection);
-
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     mapView = (MapView) findViewById(R.id.mapview);
     mapView.onCreate(savedInstanceState);
@@ -249,7 +242,7 @@ public class OffRouteDetectionActivity extends AppCompatActivity {
     // Convert the route to latlng values and add to list.
     LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.OSRM_PRECISION_V5);
     List<Position> coordinates = lineString.getCoordinates();
-    newRoutePoints = new ArrayList<>();
+    List<LatLng> newRoutePoints = new ArrayList<>();
     for (int j = 0; j < coordinates.size(); j++) {
       newRoutePoints.add(new LatLng(
         coordinates.get(j).getLatitude(),

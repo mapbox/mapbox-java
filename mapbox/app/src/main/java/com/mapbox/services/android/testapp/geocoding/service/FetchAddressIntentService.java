@@ -40,7 +40,7 @@ public class FetchAddressIntentService extends IntentService {
    * result receiver. If unsuccessful, sends an error message instead.
    * Note: We define a {@link android.os.ResultReceiver} in * MainActivity to process content
    * sent from this service.
-   *
+   * <p>
    * This service calls this method from the default worker thread with the intent that started
    * the service. When this method returns, the service automatically stops.
    */

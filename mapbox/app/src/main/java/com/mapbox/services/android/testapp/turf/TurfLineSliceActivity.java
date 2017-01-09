@@ -3,7 +3,6 @@ package com.mapbox.services.android.testapp.turf;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -33,15 +32,10 @@ public class TurfLineSliceActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_turf_line_slice);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     // Full route
-    routePoints = PolylineUtils.decode("ovnnEzvcrUt@o@z@u@_DkHu@cBM]Wi@q@aB[u@_BwDkBiEcB_EQ_@g@iAk@sAc@cAkA{CqAuC"
-      + "kAqCk@mAWm@S]]y@qBwEYq@]{@Z{@Xw@LYTm@Tm@Rk@Vq@JUJWNc@L]N_@Pc@HQPc@DKBKFO`@gARg@Tg@L[J[Rg@Tm@Nc@Pe@Zw@N_@J"
-      + "UNc@Z{@DIL[Tm@FDFF", Constants.OSRM_PRECISION_V5);
+    routePoints = PolylineUtils.decode("ovnnEzvcrUt@o@z@u@_DkHu@cBM]Wi@q@aB[u@_BwDkBiEcB_EQ_@g@iAk@sAc@cAkA{CqAuCkAq"
+      + "Ck@mAWm@S]]y@qBwEYq@]{@Z{@Xw@LYTm@Tm@Rk@Vq@JUJWNc@L]N_@Pc@HQPc@DKBKFO`@gARg@Tg@L[J[Rg@Tm@Nc@Pe@Zw@N_@JUNc@Z"
+      + "{@DIL[Tm@FDFF", Constants.OSRM_PRECISION_V5);
 
     mapView = (MapView) findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
