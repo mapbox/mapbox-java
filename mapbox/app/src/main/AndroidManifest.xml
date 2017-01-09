@@ -28,20 +28,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".directions.DirectionsV4Activity"
-            android:label="@string/title_directions_v4">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
-        </activity>
-        <activity
-            android:name=".directions.DirectionsV5Activity"
-            android:label="@string/title_directions_v5">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
-        </activity>
-        <activity
             android:name=".directions.RouteUtilsV5Activity"
             android:label="@string/title_route_utils_v5">
             <meta-data
