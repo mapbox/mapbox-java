@@ -1,9 +1,5 @@
 package com.mapbox.services.commons.models;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-
 /**
  * Represents a position defined by a longitude, latitude, and optionally, an altitude.
  *
@@ -24,17 +20,8 @@ public class Position {
    * @since 1.0.0
    */
   private Position(double longitude, double latitude, double altitude) {
-
-    // Format the longitude value to comply with GeoJSON spec.
-    BigDecimal bigDecimalLongitude = new BigDecimal(longitude);
-    bigDecimalLongitude = bigDecimalLongitude.setScale(7, RoundingMode.HALF_UP);
-    this.longitude = bigDecimalLongitude.doubleValue();
-
-    // Format the latitude value to comply with GeoJSON spec.
-    BigDecimal bigDecimalLatitude = new BigDecimal(latitude);
-    bigDecimalLatitude = bigDecimalLatitude.setScale(7, RoundingMode.HALF_UP);
-    this.latitude = bigDecimalLatitude.doubleValue();
-
+    this.longitude = longitude;
+    this.latitude = latitude;
     this.altitude = altitude;
   }
 
