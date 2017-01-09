@@ -1,13 +1,13 @@
 package com.mapbox.services.api.turf;
 
+import com.mapbox.services.api.utils.turf.TurfConstants;
+import com.mapbox.services.api.utils.turf.TurfException;
+import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.api.utils.turf.TurfConstants;
-import com.mapbox.services.api.utils.turf.TurfException;
-import com.mapbox.services.api.utils.turf.TurfMeasurement;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,9 +41,9 @@ public class TurfMeasurementTest extends BaseTurf {
     assertNotNull(TurfMeasurement.destination(pt1, dist, bear, TurfConstants.UNIT_KILOMETERS));
   }
 
-    /*
-     * Turf distance tests
-     */
+  /*
+   * Turf distance tests
+   */
 
   @Test
   public void testDistance() throws TurfException {
@@ -101,13 +101,14 @@ public class TurfMeasurementTest extends BaseTurf {
 
   @Test
   public void testLineDistanceFeatureCollection() throws IOException, TurfException {
-    FeatureCollection feat = FeatureCollection.fromJson(loadJsonFixture("turf-line-distance", "featurecollection.geojson"));
+    FeatureCollection feat =
+      FeatureCollection.fromJson(loadJsonFixture("turf-line-distance", "featurecollection.geojson"));
     assertEquals(Math.round(1000 * TurfMeasurement.lineDistance(feat, "kilometers")), 10304);
   }
 
-    /*
-     * Turf midpoint tests
-     */
+  /*
+   * Turf midpoint tests
+   */
 
   @Test
   public void testMidpointHorizontalEquator() throws TurfException {

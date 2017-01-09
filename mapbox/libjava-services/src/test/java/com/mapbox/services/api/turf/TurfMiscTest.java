@@ -1,13 +1,13 @@
 package com.mapbox.services.api.turf;
 
-import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.api.utils.turf.TurfConstants;
 import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.api.utils.turf.TurfMisc;
+import com.mapbox.services.commons.geojson.Feature;
+import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.commons.models.Position;
 
 import org.junit.Test;
 
@@ -150,11 +150,11 @@ public class TurfMiscTest extends BaseTurf {
 
     List<Point> pts = new ArrayList<>();
     pts.add(Point.fromCoordinates(new double[] {-122.45696067810057, 37.7181405249708}));
-    pts.add(Point.fromCoordinates(new double[] {-122.4573630094528,37.71813203814049}));
-    pts.add(Point.fromCoordinates(new double[] {-122.45730936527252,37.71797927502795}));
-    pts.add(Point.fromCoordinates(new double[] {-122.45718061923981,37.71704571582896}));
+    pts.add(Point.fromCoordinates(new double[] {-122.4573630094528, 37.71813203814049}));
+    pts.add(Point.fromCoordinates(new double[] {-122.45730936527252, 37.71797927502795}));
+    pts.add(Point.fromCoordinates(new double[] {-122.45718061923981, 37.71704571582896}));
 
-    for(Point pt : pts) {
+    for (Point pt : pts) {
       Feature snappedFeature = TurfMisc.pointOnLine(pt, line);
       Point snapped = (Point) snappedFeature.getGeometry();
       // pt behind start moves to last vertex
@@ -165,35 +165,35 @@ public class TurfMiscTest extends BaseTurf {
   @Test
   public void testTurfPointOnLinePointsOnJoints() throws TurfException {
     List<Point> line1 = new ArrayList<>();
-    line1.add(Point.fromCoordinates(new double[]{-122.45616137981413,37.72125936929241}));
-    line1.add(Point.fromCoordinates(new double[]{-122.45717525482178,37.72003306385638}));
-    line1.add(Point.fromCoordinates(new double[]{-122.45717525482178,37.718242366859215}));
+    line1.add(Point.fromCoordinates(new double[] {-122.45616137981413, 37.72125936929241}));
+    line1.add(Point.fromCoordinates(new double[] {-122.45717525482178, 37.72003306385638}));
+    line1.add(Point.fromCoordinates(new double[] {-122.45717525482178, 37.718242366859215}));
 
     List<Point> line2 = new ArrayList<>();
-    line2.add(Point.fromCoordinates(new double[]{26.279296875,31.728167146023935}));
-    line2.add(Point.fromCoordinates(new double[]{21.796875,32.69486597787505}));
-    line2.add(Point.fromCoordinates(new double[]{18.80859375,29.99300228455108}));
-    line2.add(Point.fromCoordinates(new double[]{12.919921874999998,33.137551192346145}));
-    line2.add(Point.fromCoordinates(new double[]{10.1953125,35.60371874069731}));
-    line2.add(Point.fromCoordinates(new double[]{4.921875,36.527294814546245}));
-    line2.add(Point.fromCoordinates(new double[]{-1.669921875,36.527294814546245}));
-    line2.add(Point.fromCoordinates(new double[]{-5.44921875,34.74161249883172}));
-    line2.add(Point.fromCoordinates(new double[]{-8.7890625,32.99023555965106}));
+    line2.add(Point.fromCoordinates(new double[] {26.279296875, 31.728167146023935}));
+    line2.add(Point.fromCoordinates(new double[] {21.796875, 32.69486597787505}));
+    line2.add(Point.fromCoordinates(new double[] {18.80859375, 29.99300228455108}));
+    line2.add(Point.fromCoordinates(new double[] {12.919921874999998, 33.137551192346145}));
+    line2.add(Point.fromCoordinates(new double[] {10.1953125, 35.60371874069731}));
+    line2.add(Point.fromCoordinates(new double[] {4.921875, 36.527294814546245}));
+    line2.add(Point.fromCoordinates(new double[] {-1.669921875, 36.527294814546245}));
+    line2.add(Point.fromCoordinates(new double[] {-5.44921875, 34.74161249883172}));
+    line2.add(Point.fromCoordinates(new double[] {-8.7890625, 32.99023555965106}));
 
     List<Point> line3 = new ArrayList<>();
-    line3.add(Point.fromCoordinates(new double[]{-0.10919809341430663,51.52204224896724}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10923027992248535,51.521942114455435}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10916590690612793,51.52186200668747}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10904788970947266,51.52177522311313}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10886549949645996,51.521601655468345}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10874748229980469,51.52138135712038}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10855436325073242,51.5206870765674}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10843634605407713,51.52027984939518}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10839343070983887,51.519952729849024}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10817885398864746,51.51957887606202}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10814666748046874,51.51928513164789}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10789990425109863,51.518624199789016}));
-    line3.add(Point.fromCoordinates(new double[]{-0.10759949684143065,51.51778299991493}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10919809341430663, 51.52204224896724}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10923027992248535, 51.521942114455435}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10916590690612793, 51.52186200668747}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10904788970947266, 51.52177522311313}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10886549949645996, 51.521601655468345}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10874748229980469, 51.52138135712038}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10855436325073242, 51.5206870765674}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10843634605407713, 51.52027984939518}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10839343070983887, 51.519952729849024}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10817885398864746, 51.51957887606202}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10814666748046874, 51.51928513164789}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10789990425109863, 51.518624199789016}));
+    line3.add(Point.fromCoordinates(new double[] {-0.10759949684143065, 51.51778299991493}));
 
     List<List<Point>> lines = new ArrayList<>();
     lines.add(line1);
@@ -202,10 +202,11 @@ public class TurfMiscTest extends BaseTurf {
 
     for (List<Point> line : lines) {
       List<Position> linePosition = new ArrayList<>();
-      for(Point pt : line) {
-        linePosition.add(Position.fromCoordinates(pt.getCoordinates().getLongitude(), pt.getCoordinates().getLatitude()));
+      for (Point pt : line) {
+        linePosition.add(
+          Position.fromCoordinates(pt.getCoordinates().getLongitude(), pt.getCoordinates().getLatitude()));
       }
-      for(Point pt : line) {
+      for (Point pt : line) {
         Feature snappedFeature = TurfMisc.pointOnLine(pt, linePosition);
         Point snapped = (Point) snappedFeature.getGeometry();
         // pt on joint stayed in place
@@ -217,19 +218,19 @@ public class TurfMiscTest extends BaseTurf {
   @Test
   public void testTurfPointOnLinePointsOnTopOfLine() throws TurfException {
     List<Position> line = new ArrayList<>();
-    line.add(Position.fromCoordinates(-0.10919809341430663,51.52204224896724));
-    line.add(Position.fromCoordinates(-0.10923027992248535,51.521942114455435));
-    line.add(Position.fromCoordinates(-0.10916590690612793,51.52186200668747));
-    line.add(Position.fromCoordinates(-0.10904788970947266,51.52177522311313));
-    line.add(Position.fromCoordinates(-0.10886549949645996,51.521601655468345));
-    line.add(Position.fromCoordinates(-0.10874748229980469,51.52138135712038));
-    line.add(Position.fromCoordinates(-0.10855436325073242,51.5206870765674));
-    line.add(Position.fromCoordinates(-0.10843634605407713,51.52027984939518));
-    line.add(Position.fromCoordinates(-0.10839343070983887,51.519952729849024));
-    line.add(Position.fromCoordinates(-0.10817885398864746,51.51957887606202));
-    line.add(Position.fromCoordinates(-0.10814666748046874,51.51928513164789));
-    line.add(Position.fromCoordinates(-0.10789990425109863,51.518624199789016));
-    line.add(Position.fromCoordinates(-0.10759949684143065,51.51778299991493));
+    line.add(Position.fromCoordinates(-0.10919809341430663, 51.52204224896724));
+    line.add(Position.fromCoordinates(-0.10923027992248535, 51.521942114455435));
+    line.add(Position.fromCoordinates(-0.10916590690612793, 51.52186200668747));
+    line.add(Position.fromCoordinates(-0.10904788970947266, 51.52177522311313));
+    line.add(Position.fromCoordinates(-0.10886549949645996, 51.521601655468345));
+    line.add(Position.fromCoordinates(-0.10874748229980469, 51.52138135712038));
+    line.add(Position.fromCoordinates(-0.10855436325073242, 51.5206870765674));
+    line.add(Position.fromCoordinates(-0.10843634605407713, 51.52027984939518));
+    line.add(Position.fromCoordinates(-0.10839343070983887, 51.519952729849024));
+    line.add(Position.fromCoordinates(-0.10817885398864746, 51.51957887606202));
+    line.add(Position.fromCoordinates(-0.10814666748046874, 51.51928513164789));
+    line.add(Position.fromCoordinates(-0.10789990425109863, 51.518624199789016));
+    line.add(Position.fromCoordinates(-0.10759949684143065, 51.51778299991493));
 
     double dist = TurfMeasurement.lineDistance(LineString.fromCoordinates(line), TurfConstants.UNIT_MILES);
     double increment = dist / 10;
@@ -270,10 +271,10 @@ public class TurfMiscTest extends BaseTurf {
     Position last = line.get(1);
 
     List<Point> pts = new ArrayList<>();
-    pts.add(Point.fromCoordinates(new double[]{-122.45702505111694,37.71881098149625}));
-    pts.add(Point.fromCoordinates(new double[]{-122.45733618736267,37.719235317933844}));
-    pts.add(Point.fromCoordinates(new double[]{-122.45686411857605,37.72027068864082}));
-    pts.add(Point.fromCoordinates(new double[]{-122.45652079582213,37.72063561093274}));
+    pts.add(Point.fromCoordinates(new double[] {-122.45702505111694, 37.71881098149625}));
+    pts.add(Point.fromCoordinates(new double[] {-122.45733618736267, 37.719235317933844}));
+    pts.add(Point.fromCoordinates(new double[] {-122.45686411857605, 37.72027068864082}));
+    pts.add(Point.fromCoordinates(new double[] {-122.45652079582213, 37.72063561093274}));
 
     for (Point pt : pts) {
       Feature snappedFeature = TurfMisc.pointOnLine(pt, line);

@@ -1,32 +1,41 @@
 package com.mapbox.services.api.geojson;
 
 import com.google.gson.JsonObject;
+import com.mapbox.services.api.BaseTest;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.Test;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class FeatureTest extends BaseGeoJSON {
+public class FeatureTest extends BaseTest {
+
+  private static final String SAMPLE_FEATURE_FIXTURE = "src/test/fixtures/geojson/sample-feature.json";
 
   @Test
-  public void fromJson() {
-    Feature geo = Feature.fromJson(BaseGeoJSON.SAMPLE_FEATURE);
+  public void fromJson() throws IOException {
+    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_FEATURE_FIXTURE)), Charset.forName("utf-8"));
+    Feature geo = Feature.fromJson(geojson);
     assertEquals(geo.getType(), "Feature");
     assertEquals(geo.getGeometry().getType(), "Point");
     assertEquals(geo.getProperties().get("name").getAsString(), "Dinagat Islands");
   }
 
   @Test
-  public void toJson() {
-    Feature geo = Feature.fromJson(BaseGeoJSON.SAMPLE_FEATURE);
-    compareJson(BaseGeoJSON.SAMPLE_FEATURE, geo.toJson());
+  public void toJson() throws IOException {
+    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_FEATURE_FIXTURE)), Charset.forName("utf-8"));
+    Feature geo = Feature.fromJson(geojson);
+    compareJson(geojson, geo.toJson());
   }
 
   @Test

@@ -16,12 +16,16 @@ public class MasApplication extends Application {
     super.onCreate();
 
     // Leak canary
-    if (LeakCanary.isInAnalyzerProcess(this)) return;
+    if (LeakCanary.isInAnalyzerProcess(this)) {
+      return;
+    }
     LeakCanary.install(this);
 
     // Access token
     String mapboxAccessToken = Utils.getMapboxAccessToken(getApplicationContext());
-    if (TextUtils.isEmpty(mapboxAccessToken)) Log.w(LOG_TAG, "Warning: access token isn't set.");
+    if (TextUtils.isEmpty(mapboxAccessToken)) {
+      Log.w(LOG_TAG, "Warning: access token isn't set.");
+    }
     MapboxAccountManager.start(getApplicationContext(), mapboxAccessToken);
   }
 }

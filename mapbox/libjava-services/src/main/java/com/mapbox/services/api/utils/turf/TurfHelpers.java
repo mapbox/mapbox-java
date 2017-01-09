@@ -28,7 +28,7 @@ public class TurfHelpers {
     // Also supported
     factors.put("metres", 6373000d);
     factors.put("kilometres", 6373d);
-  } 
+  }
 
   /**
    * Convert radians to distance. The units used here equals the default.

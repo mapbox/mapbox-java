@@ -6,8 +6,8 @@
 <module name = "Checker">
     <property name="charset" value="UTF-8"/>
 
-    <!-- <property name="severity" value="error"/> -->
-    <property name="severity" value="warning"/>
+    <property name="severity" value="error"/>
+    <!-- <property name="severity" value="warning"/> -->
 
     <property name="fileExtensions" value="java, properties, xml"/>
     <!-- Checks for whitespace                               -->
@@ -96,16 +96,16 @@
             <message key="name.invalidPattern"
              value="Type name ''{0}'' must match pattern ''{1}''."/>
         </module>
-        <module name="MemberName">
+        <!-- <module name="MemberName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
             <message key="name.invalidPattern"
              value="Member name ''{0}'' must match pattern ''{1}''."/>
-        </module>
-        <module name="ParameterName">
+        </module> -->
+        <!-- <module name="ParameterName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
             <message key="name.invalidPattern"
              value="Parameter name ''{0}'' must match pattern ''{1}''."/>
-        </module>
+        </module> -->
         <module name="CatchParameterName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
             <message key="name.invalidPattern"
@@ -113,7 +113,7 @@
         </module>
         <module name="LocalVariableName">
             <property name="tokens" value="VARIABLE_DEF"/>
-            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+            <!--<property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>-->
             <property name="allowOneCharVarInForLoop" value="true"/>
             <message key="name.invalidPattern"
              value="Local variable name ''{0}'' must match pattern ''{1}''."/>
@@ -153,12 +153,12 @@
             <property name="arrayInitIndent" value="2"/>
             <!-- <property name="forceStrictCondition" value="true"/> -->
         </module>
-        <module name="AbbreviationAsWordInName">
+        <!-- <module name="AbbreviationAsWordInName">
             <property name="ignoreFinal" value="false"/>
             <property name="allowedAbbreviationLength" value="1"/>
-        </module>
+        </module> -->
         <module name="OverloadMethodsDeclarationOrder"/>
-        <module name="VariableDeclarationUsageDistance"/>
+        <!--<module name="VariableDeclarationUsageDistance"/>-->
         <module name="AvoidStarImport"/>
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>

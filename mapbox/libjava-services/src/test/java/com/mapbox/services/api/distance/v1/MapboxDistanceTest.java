@@ -1,11 +1,10 @@
 package com.mapbox.services.api.distance.v1;
 
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.distance.v1.MapboxDistance;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.directions.v5.MapboxDirections;
 import com.mapbox.services.api.distance.v1.models.DistanceResponse;
+import com.mapbox.services.commons.models.Position;
 
 import org.junit.After;
 import org.junit.Before;
@@ -57,8 +56,8 @@ public class MapboxDistanceTest {
         try {
           String body = new String(Files.readAllBytes(Paths.get(DISTANCE_FIXTURE)), Charset.forName("utf-8"));
           return new MockResponse().setBody(body);
-        } catch (IOException e) {
-          throw new RuntimeException(e);
+        } catch (IOException ioException) {
+          throw new RuntimeException(ioException);
         }
       }
     });

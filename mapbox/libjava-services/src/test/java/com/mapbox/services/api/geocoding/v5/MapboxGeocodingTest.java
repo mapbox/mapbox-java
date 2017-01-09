@@ -2,11 +2,10 @@ package com.mapbox.services.api.geocoding.v5;
 
 import com.google.gson.JsonObject;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.api.geocoding.v5.models.CarmenContext;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.services.commons.geojson.Point;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,10 +31,11 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxGeocodingTest {
 
-  private final static double DELTA = 1E-10;
+  private static final double DELTA = 1E-10;
 
   private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoding.json";
-  private static final String GEOCODING_COUNTRY_NOT_SUPPORTED = "src/test/fixtures/geocoding_country_not_supported.json";
+  private static final String GEOCODING_COUNTRY_NOT_SUPPORTED =
+    "src/test/fixtures/geocoding_country_not_supported.json";
   private static final String ACCESS_TOKEN = "pk.XXX";
 
   private MockWebServer server;
@@ -58,8 +58,8 @@ public class MapboxGeocodingTest {
         try {
           String body = new String(Files.readAllBytes(Paths.get(resource)), Charset.forName("utf-8"));
           return new MockResponse().setBody(body);
-        } catch (IOException e) {
-          throw new RuntimeException(e);
+        } catch (IOException ioException) {
+          throw new RuntimeException(ioException);
         }
       }
     });
@@ -121,7 +121,8 @@ public class MapboxGeocodingTest {
     assertEquals(feature.getId(), "address.3982178573139850");
     assertEquals(feature.getType(), "Feature");
     assertEquals(feature.getText(), "Pennsylvania Ave NW");
-    assertEquals(feature.getPlaceName(), "1600 Pennsylvania Ave NW, Washington, District of Columbia 20006, United States");
+    assertEquals(feature.getPlaceName(), "1600 Pennsylvania Ave NW, Washington, District of Columbia 20006, "
+      + "United States");
     assertEquals(feature.getRelevance(), 0.99, DELTA);
     assertEquals(feature.getProperties(), new JsonObject());
     assertEquals(feature.asPosition().getLongitude(), -77.036543, DELTA);

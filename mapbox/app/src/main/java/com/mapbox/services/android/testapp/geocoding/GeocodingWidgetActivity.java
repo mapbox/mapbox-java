@@ -50,7 +50,7 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
     autocomplete.setLimit(10);
     autocomplete.setOnFeatureListener(new GeocoderAutoCompleteView.OnFeatureListener() {
       @Override
-      public void OnFeatureClick(CarmenFeature feature) {
+      public void onFeatureClick(CarmenFeature feature) {
         Position position = feature.asPosition();
         updateMap(position.getLatitude(), position.getLongitude());
       }

@@ -1,12 +1,12 @@
 package com.mapbox.services.api.turf;
 
+import com.mapbox.services.api.utils.turf.TurfException;
+import com.mapbox.services.api.utils.turf.TurfJoins;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.MultiPolygon;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.geojson.Polygon;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.api.utils.turf.TurfException;
-import com.mapbox.services.api.utils.turf.TurfJoins;
 
 import org.junit.Test;
 
@@ -83,9 +83,9 @@ public class TurfJoinsTest extends BaseTurf {
     assertFalse(TurfJoins.inside(ptOutsidePoly, (MultiPolygon) multiPolyHole.getGeometry()));
   }
 
-    /*
-     * Custom test
-     */
+  /*
+   * Custom test
+   */
 
   @Test
   public void testInputPositions() throws IOException, TurfException {

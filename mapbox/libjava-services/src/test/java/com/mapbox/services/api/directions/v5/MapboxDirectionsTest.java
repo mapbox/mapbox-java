@@ -1,9 +1,6 @@
 package com.mapbox.services.api.directions.v5;
 
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.directions.v5.DirectionsCriteria;
-import com.mapbox.services.api.directions.v5.MapboxDirections;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.directions.v5.models.DirectionsWaypoint;
@@ -12,6 +9,7 @@ import com.mapbox.services.api.directions.v5.models.LegStep;
 import com.mapbox.services.api.directions.v5.models.RouteLeg;
 import com.mapbox.services.api.directions.v5.models.StepIntersection;
 import com.mapbox.services.api.directions.v5.models.StepManeuver;
+import com.mapbox.services.commons.models.Position;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,7 +37,7 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest {
 
-  private final static double DELTA = 1E-10;
+  private static final double DELTA = 1E-10;
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -194,7 +192,8 @@ public class MapboxDirectionsTest {
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
-    StepIntersection intersection = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(0).getIntersections().get(1);
+    StepIntersection intersection = response.body().getRoutes().get(0).getLegs()
+      .get(0).getSteps().get(0).getIntersections().get(1);
     assertEquals(intersection.asPosition().getLongitude(), -122.417548, DELTA);
     assertEquals(intersection.asPosition().getLatitude(), 37.783315, DELTA);
     assertArrayEquals(intersection.getBearings(), new int[] {75, 165, 255, 345});
@@ -213,7 +212,8 @@ public class MapboxDirectionsTest {
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
-    IntersectionLanes intersectionLanes = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1).getIntersections().get(8).getLanes()[0];
+    IntersectionLanes intersectionLanes = response.body().getRoutes().get(0).getLegs()
+      .get(0).getSteps().get(1).getIntersections().get(8).getLanes()[0];
     assertEquals(intersectionLanes.getValid(), true);
     assertEquals(intersectionLanes.getIndications()[0], "none");
 
@@ -291,7 +291,7 @@ public class MapboxDirectionsTest {
   }
 
   @Test
-  public void TestLocale() {
+  public void testLocale() {
     ArrayList test = new ArrayList<>();
     test.add(Position.fromCoordinates(2.1, 2.2));
     test.add(Position.fromCoordinates(3.1, 3.2));

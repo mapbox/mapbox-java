@@ -1,10 +1,10 @@
 package com.mapbox.services.api.utils.turf;
 
+import com.mapbox.services.api.utils.turf.models.LineIntersectsResult;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
-import com.mapbox.services.api.utils.turf.models.LineIntersectsResult;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.mapbox.services.api;
 
 import com.mapbox.services.Constants;
-import com.mapbox.services.commons.utils.TextUtils;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -74,8 +73,9 @@ public abstract class MapboxService<T> {
       if (isEmpty(osName) || isEmpty(osVersion) || isEmpty(osArch)) {
         return Constants.HEADER_USER_AGENT;
       } else {
-        String baseUA = String.format(Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
-        return isEmpty(clientAppName) ? baseUA : String.format(Locale.US, "%s %s", clientAppName, baseUA);
+        String baseUa = String.format(
+          Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
+        return isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s", clientAppName, baseUa);
       }
 
     } catch (Exception exception) {

@@ -2,12 +2,11 @@ package com.mapbox.services.api.geocoding.v5;
 
 import com.google.gson.JsonObject;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.api.geocoding.v5.models.CarmenContext;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.commons.models.Position;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxGeocodingReverseTest {
 
-  private final static double DELTA = 1E-10;
+  private static final double DELTA = 1E-10;
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -100,7 +99,8 @@ public class MapboxGeocodingReverseTest {
     assertEquals(feature.getId(), "neighborhood.7130293780113160");
     assertEquals(feature.getType(), "Feature");
     assertEquals(feature.getText(), "Franklin Mcpherson Square");
-    assertEquals(feature.getPlaceName(), "Franklin Mcpherson Square, Washington, 20006, District of Columbia, United States");
+    assertEquals(feature.getPlaceName(), "Franklin Mcpherson Square, Washington, 20006, District of Columbia, "
+      + "United States");
     assertEquals(feature.getRelevance(), 1, DELTA);
     assertEquals(feature.getProperties(), new JsonObject());
     assertEquals(feature.getBbox()[0], -77.0375061034999, DELTA);
