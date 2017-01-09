@@ -65,7 +65,8 @@ public class CarmenFeature extends Feature {
   }
 
   /**
-   * @return Where applicable. Contains the housenumber for the returned feature
+   * @return Where applicable. While the string content isn't guaranteed, in many cases, this will be the house number.
+   * If the response doesn't contain an address this will be null.
    * @since 1.0.0
    */
   public String getAddress() {
