@@ -12,6 +12,7 @@ task checkstyle(type: Checkstyle) {
   source 'src'
   include '**/*.java'
   exclude '**/gen/**'
+  exclude '**/BuildConfig.java'
   classpath = files()
   ignoreFailures = false
 }
