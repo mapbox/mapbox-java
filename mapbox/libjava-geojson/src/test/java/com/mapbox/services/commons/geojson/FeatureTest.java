@@ -1,9 +1,6 @@
-package com.mapbox.services.api.geojson;
+package com.mapbox.services.commons.geojson;
 
 import com.google.gson.JsonObject;
-import com.mapbox.services.api.BaseTest;
-import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.Test;
@@ -20,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 public class FeatureTest extends BaseTest {
 
-  private static final String SAMPLE_FEATURE_FIXTURE = "src/test/fixtures/geojson/sample-feature.json";
+  private static final String SAMPLE_FEATURE_FIXTURE = "src/test/fixtures/sample-feature.json";
 
   @Test
   public void fromJson() throws IOException {

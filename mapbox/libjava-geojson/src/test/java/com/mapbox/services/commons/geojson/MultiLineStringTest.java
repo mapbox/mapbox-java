@@ -1,7 +1,5 @@
-package com.mapbox.services.api.geojson;
+package com.mapbox.services.commons.geojson;
 
-import com.mapbox.services.api.BaseTest;
-import com.mapbox.services.commons.geojson.MultiLineString;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.Test;
@@ -17,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 
 public class MultiLineStringTest extends BaseTest {
 
-  private static final String SAMPLE_MULTILINESTRING_FIXTURE = "src/test/fixtures/geojson/sample-multilinestring.json";
+  private static final String SAMPLE_MULTILINESTRING_FIXTURE = "src/test/fixtures/sample-multilinestring.json";
 
   @Test
   public void fromJson() throws IOException {

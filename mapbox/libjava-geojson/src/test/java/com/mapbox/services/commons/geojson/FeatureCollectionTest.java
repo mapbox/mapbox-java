@@ -1,7 +1,4 @@
-package com.mapbox.services.api.geojson;
-
-import com.mapbox.services.api.BaseTest;
-import com.mapbox.services.commons.geojson.FeatureCollection;
+package com.mapbox.services.commons.geojson;
 
 import org.junit.Test;
 
@@ -15,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class FeatureCollectionTest extends BaseTest {
 
   private static final String SAMPLE_FEATURECOLLECTION_FIXTURE =
-    "src/test/fixtures/geojson/sample-featurecollection.json";
+    "src/test/fixtures/sample-featurecollection.json";
 
   @Test
   public void fromJson() throws IOException {

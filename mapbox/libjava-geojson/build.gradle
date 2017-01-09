@@ -9,6 +9,11 @@ dependencies {
 
     // External dependencies
     compile rootProject.ext.dep.gson
+
+    // Testing
+    testCompile rootProject.ext.dep.okhttp3Mockwebserver
+    testCompile rootProject.ext.dep.junit
+    testCompile rootProject.ext.dep.hamcrestJunit
 }
 
 apply from: 'gradle-javadoc.gradle'

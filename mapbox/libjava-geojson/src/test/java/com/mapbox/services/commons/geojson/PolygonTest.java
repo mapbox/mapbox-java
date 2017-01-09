@@ -1,7 +1,5 @@
-package com.mapbox.services.api.geojson;
+package com.mapbox.services.commons.geojson;
 
-import com.mapbox.services.api.BaseTest;
-import com.mapbox.services.commons.geojson.Polygon;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.Test;
@@ -17,16 +15,16 @@ import static org.junit.Assert.assertFalse;
 
 public class PolygonTest extends BaseTest {
 
-  private static final String SAMPLE_POLYGON_FIXTURE = "src/test/fixtures/geojson/sample-polygon.json";
-  private static final String SAMPLE_POLYGON_HOLES_FIXTURE = "src/test/fixtures/geojson/sample-polygon-holes.json";
+  private static final String SAMPLE_POLYGON_FIXTURE = "src/test/fixtures/sample-polygon.json";
+  private static final String SAMPLE_POLYGON_HOLES_FIXTURE = "src/test/fixtures/sample-polygon-holes.json";
 
   @Test
   public void fromJson() throws IOException {
     String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_POLYGON_FIXTURE)), Charset.forName("utf-8"));
     Polygon geo = Polygon.fromJson(geojson);
     assertEquals(geo.getType(), "Polygon");
-    assertEquals(geo.getCoordinates().get(0).get(0).getLongitude(), 100.0, DELTA);
-    assertEquals(geo.getCoordinates().get(0).get(0).getLatitude(), 0.0, DELTA);
+    assertEquals(geo.getCoordinates().get(0).get(0).getLongitude(), 100.0, BaseTest.DELTA);
+    assertEquals(geo.getCoordinates().get(0).get(0).getLatitude(), 0.0, BaseTest.DELTA);
     assertFalse(geo.getCoordinates().get(0).get(0).hasAltitude());
   }
 
@@ -35,8 +33,8 @@ public class PolygonTest extends BaseTest {
     String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_POLYGON_FIXTURE)), Charset.forName("utf-8"));
     Polygon geo = Polygon.fromJson(geojson);
     assertEquals(geo.getType(), "Polygon");
-    assertEquals(geo.getCoordinates().get(0).get(0).getLongitude(), 100.0, DELTA);
-    assertEquals(geo.getCoordinates().get(0).get(0).getLatitude(), 0.0, DELTA);
+    assertEquals(geo.getCoordinates().get(0).get(0).getLongitude(), 100.0, BaseTest.DELTA);
+    assertEquals(geo.getCoordinates().get(0).get(0).getLatitude(), 0.0, BaseTest.DELTA);
     assertFalse(geo.getCoordinates().get(0).get(0).hasAltitude());
   }
 

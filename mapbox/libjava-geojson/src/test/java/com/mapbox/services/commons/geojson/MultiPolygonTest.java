@@ -1,7 +1,5 @@
-package com.mapbox.services.api.geojson;
+package com.mapbox.services.commons.geojson;
 
-import com.mapbox.services.api.BaseTest;
-import com.mapbox.services.commons.geojson.MultiPolygon;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.Test;
@@ -17,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 
 public class MultiPolygonTest extends BaseTest {
 
-  private static final String SAMPLE_MULTIPOLYGON_FIXTURE = "src/test/fixtures/geojson/sample-multipolygon.json";
+  private static final String SAMPLE_MULTIPOLYGON_FIXTURE = "src/test/fixtures/sample-multipolygon.json";
 
   @Test
   public void fromJson() throws IOException {
