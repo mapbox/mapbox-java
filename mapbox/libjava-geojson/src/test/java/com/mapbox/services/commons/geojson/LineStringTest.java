@@ -1,7 +1,5 @@
-package com.mapbox.services.api.geojson;
+package com.mapbox.services.commons.geojson;
 
-import com.mapbox.services.api.BaseTest;
-import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.Test;
@@ -17,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 
 public class LineStringTest extends BaseTest {
 
-  private static final String SAMPLE_LINESTRING_FIXTURE = "src/test/fixtures/geojson/sample-linestring.json";
+  private static final String SAMPLE_LINESTRING_FIXTURE = "src/test/fixtures/sample-linestring.json";
 
   @Test
   public void fromJson() throws IOException {

@@ -8,6 +8,8 @@ import com.google.gson.JsonSerializer;
 import com.mapbox.services.commons.models.Position;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Required to handle the special case where the altitude might be a Double.NaN, which isn't a valid
@@ -33,8 +35,15 @@ public class PositionSerializer implements JsonSerializer<Position> {
   @Override
   public JsonElement serialize(Position src, Type typeOfSrc, JsonSerializationContext context) {
     JsonArray rawCoordinates = new JsonArray();
-    rawCoordinates.add(new JsonPrimitive(src.getLongitude()));
-    rawCoordinates.add(new JsonPrimitive(src.getLatitude()));
+
+    BigDecimal lat = new BigDecimal(src.getLatitude());
+    lat = lat.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros();
+
+    BigDecimal lon = new BigDecimal(src.getLongitude());
+    lon = lon.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros();
+
+    rawCoordinates.add(new JsonPrimitive(lon));
+    rawCoordinates.add(new JsonPrimitive(lat));
 
     // Includes altitude
     if (src.hasAltitude()) {
