@@ -1,7 +1,6 @@
 package com.mapbox.services.api.mapmatching.v4;
 
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.directions.v4.DirectionsCriteria;
 import com.mapbox.services.api.mapmatching.v4.models.MapMatchingResponse;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
@@ -93,7 +92,7 @@ public class MapboxMapMatchingTest {
   public void testCallSanity() throws ServicesException, IOException {
     MapboxMapMatching client = new MapboxMapMatching.Builder()
       .setAccessToken(ACCESS_TOKEN)
-      .setProfile(DirectionsCriteria.PROFILE_WALKING)
+      .setProfile(MapMatchingCriteria.PROFILE_WALKING)
       .setTrace(trace)
       .setBaseUrl(mockUrl.toString())
       .build();
@@ -113,7 +112,7 @@ public class MapboxMapMatchingTest {
   public void testNoGeometryResponse() throws ServicesException, IOException {
     MapboxMapMatching client = new MapboxMapMatching.Builder()
       .setAccessToken(ACCESS_TOKEN)
-      .setProfile(DirectionsCriteria.PROFILE_WALKING)
+      .setProfile(MapMatchingCriteria.PROFILE_WALKING)
       .setTrace(trace)
       .setNoGeometry()
       .setBaseUrl(mockUrl.toString())
@@ -140,7 +139,7 @@ public class MapboxMapMatchingTest {
     thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid GPS precision"));
     new MapboxMapMatching.Builder()
       .setAccessToken(ACCESS_TOKEN)
-      .setProfile(DirectionsCriteria.PROFILE_WALKING)
+      .setProfile(MapMatchingCriteria.PROFILE_WALKING)
       .setGpsPrecison(0)
       .build();
   }
@@ -151,7 +150,7 @@ public class MapboxMapMatchingTest {
     thrown.expectMessage(startsWith("Using Mapbox Map Matching requires setting a valid GPS precision"));
     new MapboxMapMatching.Builder()
       .setAccessToken(ACCESS_TOKEN)
-      .setProfile(DirectionsCriteria.PROFILE_WALKING)
+      .setProfile(MapMatchingCriteria.PROFILE_WALKING)
       .setGpsPrecison(11)
       .build();
   }
@@ -182,7 +181,7 @@ public class MapboxMapMatchingTest {
     thrown.expectMessage(startsWith("Using Mapbox Map Matching requires to set some coordinates"));
     new MapboxMapMatching.Builder()
       .setAccessToken(ACCESS_TOKEN)
-      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
       .build();
   }
 
@@ -198,7 +197,7 @@ public class MapboxMapMatchingTest {
     thrown.expectMessage(startsWith("The Map Matching API is limited to processing traces with up to 100 coordinates"));
     new MapboxMapMatching.Builder()
       .setAccessToken(ACCESS_TOKEN)
-      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
       .setTrace(LineString.fromCoordinates(positions))
       .build();
   }
@@ -209,7 +208,7 @@ public class MapboxMapMatchingTest {
     MapboxMapMatching service = new MapboxMapMatching.Builder()
       .setClientAppName("APP")
       .setAccessToken("pk.XXX")
-      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
       .setTrace(LineString.fromCoordinates(new ArrayList<Position>()))
       .setBaseUrl(mockUrl.toString())
       .build();
@@ -220,7 +219,7 @@ public class MapboxMapMatchingTest {
   //  public void testPost() throws ServicesException, IOException {
   //    MapboxMapMatching client = new MapboxMapMatching.Builder()
   //      .setAccessToken("")
-  //      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+  //      .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
   //      .setTrace(trace)
   //      .build();
   //
@@ -230,7 +229,7 @@ public class MapboxMapMatchingTest {
   //    // All good
   //    Response<MapMatchingResponse> response = client.executeCall();
   //    assertEquals(response.code(), 200);
-  //    assertEquals(response.body().getCode(), DirectionsCriteria.RESPONSE_OK);
+  //    assertEquals(response.body().getCode(), MapMatchingCriteria.RESPONSE_OK);
   //    assertEquals(response.body().getMatchedPoints().length, 5);
   //  }
 }
