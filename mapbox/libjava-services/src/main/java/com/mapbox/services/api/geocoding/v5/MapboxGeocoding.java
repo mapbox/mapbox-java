@@ -12,6 +12,7 @@ import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -30,6 +31,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   private Builder builder = null;
   private GeocodingService service = null;
   private Call<GeocodingResponse> call = null;
+  private Call<List<GeocodingResponse>> batchCall = null;
 
   /**
    * Public constructor.
@@ -80,6 +82,10 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       return call;
     }
 
+    if (builder.getQuery().contains(";")) {
+      throw new IllegalArgumentException("Use getBatchCall() for batch calls.");
+    }
+
     call = getService().getCall(
       getHeaderUserAgent(builder.getClientAppName()),
       builder.getMode(),
@@ -96,6 +102,37 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   }
 
   /**
+   * Used internally.
+   *
+   * @return batch call
+   * @since 1.0.0
+   */
+  public Call<List<GeocodingResponse>> getBatchCall() {
+    // No need to recreate it
+    if (batchCall != null) {
+      return batchCall;
+    }
+
+    if (!builder.getQuery().contains(";")) {
+      throw new IllegalArgumentException("Use getCall() for non-batch calls.");
+    }
+
+    batchCall = getService().getBatchCall(
+      getHeaderUserAgent(builder.getClientAppName()),
+      builder.getMode(),
+      builder.getQuery(),
+      builder.getAccessToken(),
+      builder.getCountry(),
+      builder.getProximity(),
+      builder.getGeocodingTypes(),
+      builder.getAutocomplete(),
+      builder.getBbox(),
+      builder.getLimit());
+
+    return batchCall;
+  }
+
+  /**
    * Execute the call
    *
    * @return The Geocoding v5 response
@@ -105,6 +142,17 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   @Override
   public Response<GeocodingResponse> executeCall() throws IOException {
     return getCall().execute();
+  }
+
+  /**
+   * Execute the batch call
+   *
+   * @return The Geocoding v5 response
+   * @throws IOException Signals that an I/O exception of some sort has occurred.
+   * @since 1.0.0
+   */
+  public Response<List<GeocodingResponse>> executeBatchCall() throws IOException {
+    return getBatchCall().execute();
   }
 
   /**
@@ -119,6 +167,16 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   }
 
   /**
+   * Execute the batch call
+   *
+   * @param callback A Retrofit callback.
+   * @since 1.0.0
+   */
+  public void enqueueBatchCall(Callback<List<GeocodingResponse>> callback) {
+    getBatchCall().enqueue(callback);
+  }
+
+  /**
    * Cancel the call
    *
    * @since 1.0.0
@@ -126,6 +184,15 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   @Override
   public void cancelCall() {
     getCall().cancel();
+  }
+
+  /**
+   * Cancel the batch call
+   *
+   * @since 1.0.0
+   */
+  public void cancelBatchCall() {
+    getBatchCall().cancel();
   }
 
   /**
@@ -137,6 +204,16 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   @Override
   public Call<GeocodingResponse> cloneCall() {
     return getCall().clone();
+  }
+
+  /**
+   * clone the batch call
+   *
+   * @return cloned call
+   * @since 1.0.0
+   */
+  public Call<List<GeocodingResponse>> cloneBatchCall() {
+    return getBatchCall().clone();
   }
 
   /**
