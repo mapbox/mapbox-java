@@ -28,6 +28,8 @@ public class GeojsonTest extends BaseTest {
     Position matchRound = Position.fromCoordinates(1.1234567, 1.1234567);
     Position roundLat = Position.fromCoordinates(1.1234567, 1.12345678910);
     Position roundLon = Position.fromCoordinates(1.12345678910, 1.1234567);
+    Position largeRound = Position.fromCoordinates(105.12345678910, 89.1234567);
+    Position negRound = Position.fromCoordinates(-105.12345678910, -89.1234567);
 
     List<Feature> features = new ArrayList<>();
     features.add(Feature.fromGeometry(Point.fromCoordinates(roundDown)));
@@ -35,6 +37,8 @@ public class GeojsonTest extends BaseTest {
     features.add(Feature.fromGeometry(Point.fromCoordinates(matchRound)));
     features.add(Feature.fromGeometry(Point.fromCoordinates(roundLat)));
     features.add(Feature.fromGeometry(Point.fromCoordinates(roundLon)));
+    features.add(Feature.fromGeometry(Point.fromCoordinates(largeRound)));
+    features.add(Feature.fromGeometry(Point.fromCoordinates(negRound)));
     FeatureCollection featureCollection = FeatureCollection.fromFeatures(features);
 
     String geojson = new String(Files.readAllBytes(

@@ -10,6 +10,7 @@ import com.mapbox.services.commons.models.Position;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
 /**
  * Required to handle the special case where the altitude might be a Double.NaN, which isn't a valid
@@ -37,9 +38,10 @@ public class PositionSerializer implements JsonSerializer<Position> {
     JsonArray rawCoordinates = new JsonArray();
 
     BigDecimal lat = new BigDecimal(src.getLatitude());
-    lat = lat.round(new MathContext(7));
+    lat = lat.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros();
+
     BigDecimal lon = new BigDecimal(src.getLongitude());
-    lon = lon.round(new MathContext(7));
+    lon = lon.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros();
 
     rawCoordinates.add(new JsonPrimitive(lon));
     rawCoordinates.add(new JsonPrimitive(lat));
