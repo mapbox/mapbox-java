@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mapbox.services.android.BuildConfig;
-import com.mapbox.services.android.testapp.directions.DirectionsV4Activity;
 import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
 import com.mapbox.services.android.testapp.directions.RouteUtilsV5Activity;
 import com.mapbox.services.android.testapp.distance.DistanceActivity;
@@ -68,11 +67,6 @@ public class MainActivity extends AppCompatActivity {
         getString(R.string.title_route_utils_v5),
         getString(R.string.description_route_utils),
         RouteUtilsV5Activity.class
-      ),
-      new SampleItem(
-        getString(R.string.title_directions_v4),
-        getString(R.string.description_directions_v4),
-        DirectionsV4Activity.class
       ),
       new SampleItem(
         getString(R.string.title_directions_icons),
