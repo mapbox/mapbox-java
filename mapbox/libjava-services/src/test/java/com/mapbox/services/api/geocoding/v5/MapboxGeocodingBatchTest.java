@@ -25,7 +25,7 @@ import retrofit2.Response;
 import static org.junit.Assert.assertEquals;
 
 public class MapboxGeocodingBatchTest {
-  
+
   private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoding_batch.json";
   private static final String ACCESS_TOKEN = "pk.XXX";
 
