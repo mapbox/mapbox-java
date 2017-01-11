@@ -40,7 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This activity shows how to use PermissionsUtils to request location permissions
+ * This activity shows how to use PermissionsManager to request location permissions
  * from the user. It loads all the sample activities using a RecyclerView.
  */
 public class MainActivity extends AppCompatActivity implements PermissionsListener {
