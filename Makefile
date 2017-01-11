@@ -55,33 +55,37 @@ dex-count:
 geocoding-fixtures:
 	# Geocoding: 1600 Pennsylvania Ave NW
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/1600+pennsylvania+ave+nw.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o libjava/lib/src/test/fixtures/geocoding.json
+		-o mapbox/libjava-services/src/test/fixtures/geocoding.json
 
 	# Reverse geocoding: -77.0366, 38.8971
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/-77.0366,38.8971.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o libjava/lib/src/test/fixtures/geocoding_reverse.json
+		-o mapbox/libjava-services/src/test/fixtures/geocoding_reverse.json
 
-	#
+	# Not supported country
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/1600+pennsylvania+ave+nw.json?country=aq&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-	  -o libjava/lib/src/test/fixtures/geocoding_country_not_supported.json
+		-o mapbox/libjava-services/src/test/fixtures/geocoding_country_not_supported.json
+
+geocoding-batch-fixtures:
+	curl "https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/20001;20009;22209.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o mapbox/libjava-services/src/test/fixtures/geocoding_batch.json
 
 directions-fixtures:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.416667,37.783333;-121.900000,37.333333?geometries=polyline&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o libjava/lib/src/test/fixtures/directions_v5.json
+		-o mapbox/libjava-services/src/test/fixtures/directions_v5.json
 
 mapmatching-fixtures:
 	# Geometry polyline
-	curl -X POST --header "Content-Type:application/json" -d @libjava/lib/src/test/fixtures/mapmatching_trace.json \
+	curl -X POST --header "Content-Type:application/json" -d @mapbox/libjava-services/src/test/fixtures/mapmatching_trace.json \
 		"https://api.mapbox.com/matching/v4/mapbox.driving.json?geometry=polyline&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o libjava/lib/src/test/fixtures/mapmatching_v5_polyline.json
+		-o mapbox/libjava-services/src/test/fixtures/mapmatching_v5_polyline.json
 
 	# No geometry
-	curl -X POST --header "Content-Type:application/json" -d @libjava/lib/src/test/fixtures/mapmatching_trace.json \
+	curl -X POST --header "Content-Type:application/json" -d @mapbox/libjava-services/src/test/fixtures/mapmatching_trace.json \
 		"https://api.mapbox.com/matching/v4/mapbox.driving.json?geometry=false&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o libjava/lib/src/test/fixtures/mapmatching_v5_no_geometry.json
+		-o mapbox/libjava-services/src/test/fixtures/mapmatching_v5_no_geometry.json
 
 distance-fixtures:
 	# Retrieve a duration matrix
-	curl -X POST --header "Content-Type:application/json" -d @libjava/lib/src/test/fixtures/distance_coordinates.json \
+	curl -X POST --header "Content-Type:application/json" -d @mapbox/libjava-services/src/test/fixtures/distance_coordinates.json \
 		"https://api.mapbox.com/distances/v1/mapbox/driving?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o libjava/lib/src/test/fixtures/distance_v1.json
+		-o mapbox/libjava-services/src/test/fixtures/distance_v1.json
