@@ -2,10 +2,12 @@ package com.mapbox.services.api.mapmatching.v4.models;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.models.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +20,9 @@ public class MapMatchingResponse extends FeatureCollection {
   private static final String KEY_MATCHED_POINTS = "matchedPoints";
 
   private String code;
+
+  /** A placeholder for the best matched points for optimizing multiple calls */
+  private Position[] bestMatchedPoints;
 
   public MapMatchingResponse(List<Feature> features) {
     super(features);
@@ -56,7 +61,7 @@ public class MapMatchingResponse extends FeatureCollection {
    * @since 1.2.0
    */
   public Position[] getMatchedPoints() {
-    return getMatchedPoints(0);
+    return bestMatchedPoints != null ? bestMatchedPoints : (bestMatchedPoints = getMatchedPoints(0));
   }
 
   /**
@@ -64,6 +69,27 @@ public class MapMatchingResponse extends FeatureCollection {
    * algorithm cannot decide the correct match between two points, it will omit that line and
    * create several sub-matches, each as a feature. The higher the number of features, the more
    * likely that the input traces are poorly aligned to the road network.
+   *
+   * <p>
+   * Implementation Note:<br>
+   * A caller should consider using returned array as an instance rather than as a reference to the array
+   *
+   * <pre>
+   *   for (int index = 0; index < MapMatchingResponse.getMatchedPoints(bestIndex).length; index++) {
+   *     .. do some work
+   *     double latitude = MapMatchingResponse.getMatchedPoints(bestIndex).getLatitude();
+   *     .. do more work
+   *   }
+   * </pre>
+   * <p>This can be optimized in performance by doing below</p>
+   * <pre>
+   *   Position[] points = MapMatchingResponse.getMatchedPoints(bestIndex);
+   *   for (int index = 0; index < points.length; index++) {
+   *     .. do some work
+   *     double latitude = points[index].getLatitude();
+   *     .. do more work
+   *   }
+   * </pre>
    *
    * @param submatch Which sub-match you want to get the position for.
    * @return Array of {@link Position} that have been map matched.
@@ -79,7 +105,77 @@ public class MapMatchingResponse extends FeatureCollection {
         points.get(i).getAsJsonArray().get(0).getAsDouble(),
         points.get(i).getAsJsonArray().get(1).getAsDouble());
     }
+
     return positions;
   }
 
+  /**
+   * Convenience method to get a confidence value from Map Matching Response
+   * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
+   *
+   * @param submatch A MapMatching sub-match value
+   * @return a confidence value, null when property doesn't exist
+   */
+  public Number getConfidence(int submatch) throws JsonParseException {
+    final String CONFIDENCE = "confidence";
+    if (!getFeatures().get(submatch).hasProperty(CONFIDENCE)) {
+      return null;
+    }
+
+    return getFeatures().get(submatch).getNumberProperty(CONFIDENCE);
+  }
+
+  /**
+   * Convenience method to get distance property on Map Matching Response
+   * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
+   *
+   * @param submatch A MapMatching sub-match value
+   * @return total distance in meters, null when property doesn't exist
+   */
+  public Number getDistance(int submatch) throws JsonParseException {
+    final String DISTANCE = "distance";
+    if (!getFeatures().get(submatch).hasProperty(DISTANCE)) {
+      return null;
+    }
+
+    return getFeatures().get(submatch).getNumberProperty(DISTANCE);
+  }
+
+  /**
+   * Convenience method to get duration property on Map Matching Response
+   * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
+   *
+   * @param submatch A MapMatching sub-match value
+   * @return travel time in seconds, null when property doesn't exist
+   */
+  public Number getDuration(int submatch) throws JsonParseException {
+    final String DURATION = "duration";
+    if (!getFeatures().get(submatch).hasProperty(DURATION)) {
+      return null;
+    }
+
+    return getFeatures().get(submatch).getNumberProperty(DURATION);
+  }
+
+  /**
+   * Convenience method to get coordinate times property on Feature
+   * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
+   *
+   * @param submatch A MapMatching sub-match value
+   * @return Array of indices
+   */
+  public List<Integer> getIndcies(int submatch) throws JsonParseException {
+    final String INDICES = "indices";
+    if (!getFeatures().get(submatch).hasProperty(INDICES)) {
+      return null;
+    }
+
+    JsonArray rawIndices = getFeatures().get(submatch).getProperty(INDICES).getAsJsonArray();
+    List<Integer> indices = new ArrayList<>();
+    for (int i = 0; i < rawIndices.size(); i ++) {
+      indices.add(rawIndices.get(i).getAsInt());
+    }
+
+    return indices;
+  }
 }
