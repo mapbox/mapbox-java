@@ -163,7 +163,7 @@ public class MapMatchingResponse extends FeatureCollection {
    * @param submatch A MapMatching sub-match value
    * @return Array of indices
    */
-  public List<Integer> getIndcies(int submatch) {
+  public List<Integer> getIndices(int submatch) {
     final String INDICES = "indices";
     if (!getFeatures().get(submatch).hasProperty(INDICES)) {
       return null;

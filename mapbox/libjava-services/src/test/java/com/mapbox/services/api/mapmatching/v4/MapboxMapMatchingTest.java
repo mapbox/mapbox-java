@@ -239,7 +239,7 @@ public class MapboxMapMatchingTest {
             response.body().getDuration(0).doubleValue(), 0);
 
     int[] mockIndices = new int[] {0, 1, 2, 3, 4};
-    List<Integer> indicies = response.body().getIndcies(0);
+    List<Integer> indicies = response.body().getIndices(0);
     // count test
     assertEquals("property indices count", 5, indicies.size());
     // sampling indices at 2
