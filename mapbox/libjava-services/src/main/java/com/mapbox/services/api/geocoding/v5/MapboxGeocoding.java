@@ -105,7 +105,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    * Used internally.
    *
    * @return batch call
-   * @since 1.0.0
+   * @since 2.0.0
    */
   public Call<List<GeocodingResponse>> getBatchCall() {
     // No need to recreate it
@@ -149,7 +149,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    *
    * @return The Geocoding v5 response
    * @throws IOException Signals that an I/O exception of some sort has occurred.
-   * @since 1.0.0
+   * @since 2.0.0
    */
   public Response<List<GeocodingResponse>> executeBatchCall() throws IOException {
     return getBatchCall().execute();
@@ -170,7 +170,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    * Execute the batch call
    *
    * @param callback A Retrofit callback.
-   * @since 1.0.0
+   * @since 2.0.0
    */
   public void enqueueBatchCall(Callback<List<GeocodingResponse>> callback) {
     getBatchCall().enqueue(callback);
@@ -189,7 +189,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   /**
    * Cancel the batch call
    *
-   * @since 1.0.0
+   * @since 2.0.0
    */
   public void cancelBatchCall() {
     getBatchCall().cancel();
@@ -210,7 +210,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    * clone the batch call
    *
    * @return cloned call
-   * @since 1.0.0
+   * @since 2.0.0
    */
   public Call<List<GeocodingResponse>> cloneBatchCall() {
     return getBatchCall().clone();
