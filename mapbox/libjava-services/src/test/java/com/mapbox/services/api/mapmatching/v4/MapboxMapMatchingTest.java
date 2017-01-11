@@ -15,8 +15,13 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.Dispatcher;
@@ -26,6 +31,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -217,7 +223,8 @@ public class MapboxMapMatchingTest {
   }
 
   @Test
-  public void validConvenientMethodsFetchingMapMatchingProperties() throws ServicesException, IOException {
+  public void validConvenientMethodsFetchingMapMatchingProperties()
+          throws ServicesException, IOException, ParseException {
     MapboxMapMatching client = new MapboxMapMatching.Builder()
             .setAccessToken(ACCESS_TOKEN)
             .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
@@ -232,7 +239,7 @@ public class MapboxMapMatchingTest {
     assertEquals(1, response.body().getFeatures().size());
 
     assertEquals("property confidence", 0.8820996720716853,
-            response.body().getConfidence(0).doubleValue(), 0.001);
+            response.body().getConfidence(0).doubleValue(), 0);
     assertEquals("property distance", 291.6,
             response.body().getDistance(0).doubleValue(), 0);
     assertEquals("property duration", 40.5,
@@ -245,6 +252,17 @@ public class MapboxMapMatchingTest {
     assertEquals("property indices count", 5, indices.size());
     // sampling indices at 2
     assertEquals("property indices count", mockIndices[2], indices.get(2).doubleValue(), 0);
+
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'", Locale.getDefault());
+    List<Date> mockCoordTimes = Arrays.asList(
+              formatter.parse("2015-04-21T06:00:00Z"),
+              formatter.parse("2015-04-21T06:00:05Z"),
+              formatter.parse("2015-04-21T06:00:10Z"),
+              formatter.parse("2015-04-21T06:00:15Z"),
+              formatter.parse("2015-04-21T06:00:20Z")
+      );
+
+    assertArrayEquals(mockCoordTimes.toArray(), response.body().getCoordTimes(0).toArray());
   }
 
   //  @Test

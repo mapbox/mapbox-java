@@ -1,16 +1,12 @@
 package com.mapbox.services.commons.geojson;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionSerializer;
 import com.mapbox.services.commons.models.Position;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A GeoJSON object with the type "Feature" is a feature object.
@@ -299,26 +295,5 @@ public class Feature implements GeoJSON {
    */
   public boolean hasNonNullValueForProperty(String key) {
     return hasProperty(key) && !getProperty(key).isJsonNull();
-  }
-
-  /**
-   * Convenience method to get coordinate times property on Feature
-   * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
-   *
-   * @return Array of coordinate times when property doesn't exist
-   */
-  public List<String> getCoordTimes() {
-    final String COORDTIMES = "coordTimes";
-    if (!hasProperty(COORDTIMES)) {
-      return null;
-    }
-
-    JsonArray rawCoordTimes = properties.get(COORDTIMES).getAsJsonArray();
-    List<String> coordTimes = new ArrayList<>();
-    for (int i = 0; i < rawCoordTimes.size(); i ++) {
-      coordTimes.add(rawCoordTimes.get(i).getAsString());
-    }
-
-    return coordTimes;
   }
 }

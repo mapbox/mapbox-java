@@ -6,11 +6,16 @@ import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.models.Position;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
- * Mapbox map matching API response
+ * Mapbox map matching API response and convenience getter methods for optional properties
+ * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
  *
  * @since 1.2.0
  */
@@ -80,9 +85,13 @@ public class MapMatchingResponse extends FeatureCollection {
    *     .. do more work
    *   }
    * </pre>
-   * <p>This can be optimized in performance by doing below</p>
+   * <p>This can be optimized in performance as below</p>
    * <pre>
    *   Position[] points = MapMatchingResponse.getMatchedPoints(bestIndex);
+   *   if (points == null) {
+   *     return;
+   *   }
+   *
    *   for (int index = 0; index < points.length; index++) {
    *     .. do some work
    *     double latitude = points[index].getLatitude();
@@ -110,62 +119,58 @@ public class MapMatchingResponse extends FeatureCollection {
 
   /**
    * Convenience method to get a confidence value from Map Matching Response
-   * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
    *
    * @param submatch A MapMatching sub-match value
-   * @return a confidence value, null when property doesn't exist
+   * @return a confidence value when a property exists and contains non-null value, otherwise null
    */
   public Number getConfidence(int submatch) {
     final String CONFIDENCE = "confidence";
-    if (!getFeatures().get(submatch).hasProperty(CONFIDENCE)) {
+    if (!getFeatures().get(submatch).hasNonNullValueForProperty(CONFIDENCE)) {
       return null;
     }
 
-    return getFeatures().get(submatch).getNumberProperty(CONFIDENCE);
+    return getFeatures().get(submatch).getProperties().get(CONFIDENCE).getAsNumber();
   }
 
   /**
    * Convenience method to get distance property on Map Matching Response
-   * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
    *
    * @param submatch A MapMatching sub-match value
-   * @return total distance in meters, null when property doesn't exist
+   * @return total distance in meters when a property exists and contains non-null value, otherwise null
    */
   public Number getDistance(int submatch) {
     final String DISTANCE = "distance";
-    if (!getFeatures().get(submatch).hasProperty(DISTANCE)) {
+    if (!getFeatures().get(submatch).hasNonNullValueForProperty(DISTANCE)) {
       return null;
     }
 
-    return getFeatures().get(submatch).getNumberProperty(DISTANCE);
+    return getFeatures().get(submatch).getProperties().get(DISTANCE).getAsNumber();
   }
 
   /**
    * Convenience method to get duration property on Map Matching Response
-   * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
    *
    * @param submatch A MapMatching sub-match value
-   * @return travel time in seconds, null when property doesn't exist
+   * @return travel time in seconds when a property exists and contains non-null value, otherwise null
    */
   public Number getDuration(int submatch) {
     final String DURATION = "duration";
-    if (!getFeatures().get(submatch).hasProperty(DURATION)) {
+    if (!getFeatures().get(submatch).hasNonNullValueForProperty(DURATION)) {
       return null;
     }
 
-    return getFeatures().get(submatch).getNumberProperty(DURATION);
+    return getFeatures().get(submatch).getProperties().get(DURATION).getAsNumber();
   }
 
   /**
    * Convenience method to get coordinate times property on Feature
-   * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
    *
    * @param submatch A MapMatching sub-match value
-   * @return Array of indices
+   * @return Array of indices when a property exists and contains non-null value, otherwise null
    */
   public List<Integer> getIndices(int submatch) {
     final String INDICES = "indices";
-    if (!getFeatures().get(submatch).hasProperty(INDICES)) {
+    if (!getFeatures().get(submatch).hasNonNullValueForProperty(INDICES)) {
       return null;
     }
 
@@ -176,5 +181,35 @@ public class MapMatchingResponse extends FeatureCollection {
     }
 
     return indices;
+  }
+
+  /**
+   * Convenience method to get coordinate times property on Map Matching property
+   *
+   * @param submatch A MapMatching sub-match value
+   * @return Array of coordinate times when a property exists and contains non-null value, otherwise null
+   */
+  public List<Date> getCoordTimes(int submatch) {
+    final String COORDTIMES = "coordTimes";
+    if (!getFeatures().get(submatch).hasNonNullValueForProperty(COORDTIMES)) {
+      return null;
+    }
+
+    JsonArray rawCoordTimes = getFeatures().get(submatch).getProperty(COORDTIMES).getAsJsonArray();
+    List<Date> coordTimes = new ArrayList<>();
+    for (int i = 0; i < rawCoordTimes.size(); i ++) {
+      Date date;
+      try {
+        date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+                .parse(rawCoordTimes.get(i).getAsString());
+      } catch (ParseException e) {
+        e.printStackTrace();
+        date = new Date(0);
+      }
+
+      coordTimes.add(date);
+    }
+
+    return coordTimes;
   }
 }

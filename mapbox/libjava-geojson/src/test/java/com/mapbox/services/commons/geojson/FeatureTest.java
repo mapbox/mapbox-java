@@ -9,18 +9,15 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class FeatureTest extends BaseTest {
 
   private static final String SAMPLE_FEATURE_FIXTURE = "src/test/fixtures/sample-feature.json";
-  private static final String SAMPLE_FEATURE_WITH_OPTION_FIXTURE = "src/test/fixtures/sample-feature-with-option.json";
 
   @Test
   public void fromJson() throws IOException {
@@ -54,22 +51,5 @@ public class FeatureTest extends BaseTest {
     properties.addProperty("key", "value");
     Feature feature = Feature.fromGeometry(line, properties);
     assertTrue(feature.toJson().contains("\"properties\":{\"key\":\"value\"}"));
-  }
-
-  @Test
-  public void testCoordsProperties() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_FEATURE_WITH_OPTION_FIXTURE)), Charset.forName("utf-8"));
-    Feature geo = Feature.fromJson(geojson);
-    assertEquals(geo.getType(), "Feature");
-
-    List<String> mockCoordTimes = Arrays.asList(
-            "2015-04-21T06:00:00Z",
-            "2015-04-21T06:00:05Z",
-            "2015-04-21T06:00:10Z",
-            "2015-04-21T06:00:15Z",
-            "2015-04-21T06:00:20Z"
-    );
-
-    assertArrayEquals(mockCoordTimes.toArray(), geo.getCoordTimes().toArray());
   }
 }
