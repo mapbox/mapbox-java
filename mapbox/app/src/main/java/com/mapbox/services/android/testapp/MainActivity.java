@@ -11,8 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mapbox.services.android.BuildConfig;
+import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
+import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
 import com.mapbox.services.android.testapp.directions.RouteUtilsV5Activity;
 import com.mapbox.services.android.testapp.distance.DistanceActivity;
@@ -31,7 +34,6 @@ import com.mapbox.services.android.testapp.turf.TurfLineSliceActivity;
 import com.mapbox.services.android.testapp.turf.TurfMidpointActivity;
 import com.mapbox.services.android.testapp.utils.MapMatchingActivity;
 import com.mapbox.services.android.testapp.utils.SimplifyPolylineActivity;
-import com.mapbox.services.android.utils.PermissionsUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,11 +43,12 @@ import java.util.List;
  * This activity shows how to use PermissionsUtils to request location permissions
  * from the user. It loads all the sample activities using a RecyclerView.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PermissionsListener {
 
   private static final String LOG_TAG = "MainActivity";
 
   private RecyclerView recyclerView;
+  private PermissionsManager permissionsManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -162,18 +165,31 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setAdapter(adapter);
 
     // Check for location permission
-    if (!PermissionsUtils.isLocationGranted(this)) {
+    permissionsManager = new PermissionsManager(this, this);
+    if (!permissionsManager.areLocationPermissionsGranted()) {
       recyclerView.setEnabled(false);
-      PermissionsUtils.startPermissionFlow(this);
+      permissionsManager.requestLocationPermissions();
     }
   }
 
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-    if (PermissionsUtils.isRequestSuccessful(requestCode, permissions, grantResults)) {
+    permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+  }
+
+  @Override
+  public void onExplanationNeeded(List<String> permissionsToExplain) {
+    Toast.makeText(this, "This app needs location permissions in order to show its functionality.",
+      Toast.LENGTH_LONG).show();
+  }
+
+  @Override
+  public void onPermissionResult(boolean granted) {
+    if (granted) {
       recyclerView.setEnabled(true);
     } else {
-      PermissionsUtils.explainFallback(this);
+      Toast.makeText(this, "You didn't grant location permissions.",
+        Toast.LENGTH_LONG).show();
     }
   }
 
