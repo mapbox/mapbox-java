@@ -252,17 +252,6 @@ public class MapboxMapMatchingTest {
     assertEquals("property indices count", 5, indices.size());
     // sampling indices at 2
     assertEquals("property indices count", mockIndices[2], indices.get(2).doubleValue(), 0);
-
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'", Locale.getDefault());
-    List<Date> mockCoordTimes = Arrays.asList(
-              formatter.parse("2015-04-21T06:00:00Z"),
-              formatter.parse("2015-04-21T06:00:05Z"),
-              formatter.parse("2015-04-21T06:00:10Z"),
-              formatter.parse("2015-04-21T06:00:15Z"),
-              formatter.parse("2015-04-21T06:00:20Z")
-      );
-
-    assertArrayEquals(mockCoordTimes.toArray(), response.body().getCoordTimes(0).toArray());
   }
 
   //  @Test

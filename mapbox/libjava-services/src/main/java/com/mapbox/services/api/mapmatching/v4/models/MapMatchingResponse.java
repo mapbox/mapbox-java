@@ -182,34 +182,4 @@ public class MapMatchingResponse extends FeatureCollection {
 
     return indices;
   }
-
-  /**
-   * Convenience method to get coordinate times property on Map Matching property
-   *
-   * @param submatch A MapMatching sub-match value
-   * @return Array of coordinate times when a property exists and contains non-null value, otherwise null
-   */
-  public List<Date> getCoordTimes(int submatch) {
-    final String COORDTIMES = "coordTimes";
-    if (!getFeatures().get(submatch).hasNonNullValueForProperty(COORDTIMES)) {
-      return null;
-    }
-
-    JsonArray rawCoordTimes = getFeatures().get(submatch).getProperty(COORDTIMES).getAsJsonArray();
-    List<Date> coordTimes = new ArrayList<>();
-    for (int i = 0; i < rawCoordTimes.size(); i ++) {
-      Date date;
-      try {
-        date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                .parse(rawCoordTimes.get(i).getAsString());
-      } catch (ParseException e) {
-        e.printStackTrace();
-        date = new Date(0);
-      }
-
-      coordTimes.add(date);
-    }
-
-    return coordTimes;
-  }
 }
