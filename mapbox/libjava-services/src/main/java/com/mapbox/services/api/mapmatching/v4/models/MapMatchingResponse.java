@@ -2,7 +2,6 @@ package com.mapbox.services.api.mapmatching.v4.models;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.models.Position;
@@ -116,7 +115,7 @@ public class MapMatchingResponse extends FeatureCollection {
    * @param submatch A MapMatching sub-match value
    * @return a confidence value, null when property doesn't exist
    */
-  public Number getConfidence(int submatch) throws JsonParseException {
+  public Number getConfidence(int submatch) {
     final String CONFIDENCE = "confidence";
     if (!getFeatures().get(submatch).hasProperty(CONFIDENCE)) {
       return null;
@@ -132,7 +131,7 @@ public class MapMatchingResponse extends FeatureCollection {
    * @param submatch A MapMatching sub-match value
    * @return total distance in meters, null when property doesn't exist
    */
-  public Number getDistance(int submatch) throws JsonParseException {
+  public Number getDistance(int submatch) {
     final String DISTANCE = "distance";
     if (!getFeatures().get(submatch).hasProperty(DISTANCE)) {
       return null;
@@ -148,7 +147,7 @@ public class MapMatchingResponse extends FeatureCollection {
    * @param submatch A MapMatching sub-match value
    * @return travel time in seconds, null when property doesn't exist
    */
-  public Number getDuration(int submatch) throws JsonParseException {
+  public Number getDuration(int submatch) {
     final String DURATION = "duration";
     if (!getFeatures().get(submatch).hasProperty(DURATION)) {
       return null;
@@ -164,7 +163,7 @@ public class MapMatchingResponse extends FeatureCollection {
    * @param submatch A MapMatching sub-match value
    * @return Array of indices
    */
-  public List<Integer> getIndcies(int submatch) throws JsonParseException {
+  public List<Integer> getIndcies(int submatch) {
     final String INDICES = "indices";
     if (!getFeatures().get(submatch).hasProperty(INDICES)) {
       return null;

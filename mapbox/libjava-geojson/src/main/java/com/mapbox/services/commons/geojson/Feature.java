@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionSerializer;
@@ -308,7 +307,7 @@ public class Feature implements GeoJSON {
    *
    * @return Array of coordinate times when property doesn't exist
    */
-  public List<String> getCoordTimes() throws JsonParseException {
+  public List<String> getCoordTimes() {
     final String COORDTIMES = "coordTimes";
     if (!hasProperty(COORDTIMES)) {
       return null;
