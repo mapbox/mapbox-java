@@ -24,14 +24,8 @@ import retrofit2.Response;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by antonio on 1/10/17.
- */
-
 public class MapboxGeocodingBatchTest {
-
-  private static final double DELTA = 1E-10;
-
+  
   private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoding_batch.json";
   private static final String ACCESS_TOKEN = "pk.XXX";
 
