@@ -241,7 +241,7 @@ public class MapboxMapMatchingTest {
     int[] mockIndices = new int[] {0, 1, 2, 3, 4};
     List<Integer> indices = response.body().getIndices(0);
 
-    // count test
+    // test indices counts
     assertEquals("property indices count", 5, indices.size());
     // sampling indices at 2
     assertEquals("property indices count", mockIndices[2], indices.get(2).doubleValue(), 0);
