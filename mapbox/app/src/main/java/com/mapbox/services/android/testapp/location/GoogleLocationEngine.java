@@ -45,7 +45,7 @@ public class GoogleLocationEngine implements LocationEngine,
       .build();
   }
 
-  public static LocationEngine getLocationEngine(Context context) {
+  public static synchronized LocationEngine getLocationEngine(Context context) {
     if (instance == null) {
       instance = new GoogleLocationEngine(context.getApplicationContext());
     }

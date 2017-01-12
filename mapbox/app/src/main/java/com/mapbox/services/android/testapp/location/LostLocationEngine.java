@@ -39,7 +39,7 @@ public class LostLocationEngine implements
       .build();
   }
 
-  public static LocationEngine getLocationEngine(Context context) {
+  public static synchronized LocationEngine getLocationEngine(Context context) {
     if (instance == null) {
       instance = new LostLocationEngine(context.getApplicationContext());
     }
