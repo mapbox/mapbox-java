@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.Dispatcher;
@@ -213,6 +215,38 @@ public class MapboxMapMatchingTest {
       .setBaseUrl(mockUrl.toString())
       .build();
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
+  }
+
+  @Test
+  public void validConvenientMethodsFetchingMapMatchingProperties()
+          throws ServicesException, IOException, ParseException {
+    MapboxMapMatching client = new MapboxMapMatching.Builder()
+            .setAccessToken(ACCESS_TOKEN)
+            .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
+            .setTrace(trace)
+            .setBaseUrl(mockUrl.toString())
+            .build();
+    Response<MapMatchingResponse> response = client.executeCall();
+    assertEquals(response.code(), 200);
+
+    // Check the response body
+    assertNotNull(response.body());
+    assertEquals(1, response.body().getFeatures().size());
+
+    assertEquals("property confidence", 0.8820996720716853,
+            response.body().getConfidence(0).doubleValue(), 0);
+    assertEquals("property distance", 291.6,
+            response.body().getDistance(0).doubleValue(), 0);
+    assertEquals("property duration", 40.5,
+            response.body().getDuration(0).doubleValue(), 0);
+
+    int[] mockIndices = new int[] {0, 1, 2, 3, 4};
+    List<Integer> indices = response.body().getIndices(0);
+
+    // test indices counts
+    assertEquals("property indices count", 5, indices.size());
+    // sampling indices at 2
+    assertEquals("property indices count", mockIndices[2], indices.get(2).doubleValue(), 0);
   }
 
   //  @Test

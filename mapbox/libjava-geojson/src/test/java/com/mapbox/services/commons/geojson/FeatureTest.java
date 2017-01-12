@@ -52,5 +52,4 @@ public class FeatureTest extends BaseTest {
     Feature feature = Feature.fromGeometry(line, properties);
     assertTrue(feature.toJson().contains("\"properties\":{\"key\":\"value\"}"));
   }
-
 }
