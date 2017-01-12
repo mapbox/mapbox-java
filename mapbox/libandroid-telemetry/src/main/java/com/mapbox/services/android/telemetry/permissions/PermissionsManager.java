@@ -2,6 +2,7 @@ package com.mapbox.services.android.telemetry.permissions;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -14,8 +15,8 @@ import java.util.ArrayList;
 
 public class PermissionsManager {
 
-  private final static String COARSE_LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION;
-  private final static String FINE_LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
+  public static final String COARSE_LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION;
+  public static final String FINE_LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
 
   private final int REQUEST_PERMISSIONS_CODE = 0;
 
@@ -39,17 +40,17 @@ public class PermissionsManager {
     this.listener = listener;
   }
 
-  public boolean isPermissionGranted(String permission) {
-    return ContextCompat.checkSelfPermission(activity, permission) ==
-      PackageManager.PERMISSION_GRANTED;
+  public static boolean isPermissionGranted(Context context, String permission) {
+    return ContextCompat.checkSelfPermission(context, permission)
+      == PackageManager.PERMISSION_GRANTED;
   }
 
   public boolean isCoarseLocationPermissionGranted() {
-    return isPermissionGranted(COARSE_LOCATION_PERMISSION);
+    return isPermissionGranted(activity, COARSE_LOCATION_PERMISSION);
   }
 
   public boolean isFineLocationPermissionGranted() {
-    return isPermissionGranted(FINE_LOCATION_PERMISSION);
+    return isPermissionGranted(activity, FINE_LOCATION_PERMISSION);
   }
 
   public boolean areLocationPermissionsGranted() {
@@ -62,9 +63,9 @@ public class PermissionsManager {
   }
 
   public void requestLocationPermissions(boolean requestFineLocation) {
-    String[] permissions = requestFineLocation ?
-      new String[] {FINE_LOCATION_PERMISSION} :
-      new String[] {COARSE_LOCATION_PERMISSION};
+    String[] permissions = requestFineLocation
+      ? new String[] {FINE_LOCATION_PERMISSION}
+      : new String[] {COARSE_LOCATION_PERMISSION};
     requestPermissions(permissions);
   }
 
@@ -88,17 +89,21 @@ public class PermissionsManager {
   /**
    * You should call this method from your activity onRequestPermissionsResult.
    *
-   * @param requestCode
-   * @param permissions
-   * @param grantResults
+   * @param requestCode  The request code passed in requestPermissions(android.app.Activity, String[], int)
+   * @param permissions  The requested permissions. Never null.
+   * @param grantResults The grant results for the corresponding permissions which is either
+   *                     PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
    */
-  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
     switch (requestCode) {
       case REQUEST_PERMISSIONS_CODE:
         if (listener != null) {
           boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
           listener.onPermissionResult(granted);
         }
+        break;
+      default:
+        // Ignored
     }
   }
 
