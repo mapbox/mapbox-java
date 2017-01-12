@@ -24,6 +24,7 @@ import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
 import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
+import com.mapbox.services.android.testapp.location.LocationEngineActivity;
 import com.mapbox.services.android.testapp.nav.OffRouteDetectionActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
@@ -56,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     setContentView(R.layout.activity_main);
 
     final List<SampleItem> samples = new ArrayList<>(Arrays.asList(
+      new SampleItem(
+        getString(R.string.title_location),
+        getString(R.string.description_location),
+        LocationEngineActivity.class),
       new SampleItem(
         getString(R.string.title_distance),
         getString(R.string.description_distance),
