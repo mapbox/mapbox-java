@@ -151,7 +151,8 @@ public class GeocodingServiceActivity extends AppCompatActivity {
   private void getLastLocation() {
     // Gets the best and most recent location currently available, which may be null
     // in rare cases when a location is not available.
-    lastLocation = LocationServices.FusedLocationApi.getLastLocation();
+    //noinspection MissingPermission
+    lastLocation = LocationServices.FusedLocationApi.getLastLocation(lostApiClient);
     if (lastLocation != null) {
       // Determine whether a Geocoder is available.
       if (!AndroidGeocoder.isPresent()) {

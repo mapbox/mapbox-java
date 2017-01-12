@@ -23,10 +23,10 @@
     <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
 
     <!-- Titles -->
+    <string name="title_location">Location Engine</string>
     <string name="title_distance">Distance</string>
     <string name="title_directions_v5">Directions v5</string>
     <string name="title_route_utils_v5">Route Utils v5</string>
-    <string name="title_directions_v4">Directions v4</string>
     <string name="title_directions_icons">Directions icons</string>
     <string name="title_reverse_geocoding">Reverse geocoding</string>
     <string name="title_geocoding_widget">Geocoding widget</string>
@@ -44,9 +44,9 @@
     <string name="title_off_route_detection">Off route detection</string>
 
     <!-- Descriptions -->
+    <string name="description_location">Shows how to obtain location from different engines.</string>
     <string name="description_distance">Returns all travel times between many points.</string>
     <string name="description_directions_v5">Show you how to get where you\'re going.</string>
-    <string name="description_directions_v4">Deprecated</string>
     <string name="description_route_utils">Used for testing the RouteUtils class.</string>
     <string name="description_directions_icons">Icons that can used for navigation.</string>
     <string name="description_reverse_geocoding">Pick a point on the map and receive a geocoded result.</string>
@@ -82,6 +82,13 @@
         <item>inches</item>
         <item>yards</item>
         <item>meters</item>
+    </string-array>
+
+    <string-array name="location_engines">
+        <item>None</item>
+        <item>Mock</item>
+        <item>Lost</item>
+        <item>Google Play Services</item>
     </string-array>
 
 </resources>

@@ -22,6 +22,7 @@ import com.mapbox.services.commons.models.Position;
 import com.mapzen.android.lost.api.LocationListener;
 import com.mapzen.android.lost.api.LocationRequest;
 import com.mapzen.android.lost.api.LocationServices;
+import com.mapzen.android.lost.api.LostApiClient;
 
 public class GeocodingWidgetActivity extends AppCompatActivity {
 
@@ -65,12 +66,26 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
     LocationRequest request = LocationRequest.create()
       .setInterval(5000)
       .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    LocationServices.FusedLocationApi.requestLocationUpdates(request, new LocationListener() {
+    LostApiClient lostApiClient = new LostApiClient.Builder(this).build();
+
+    //noinspection MissingPermission
+    LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, new LocationListener() {
+
       @Override
       public void onLocationChanged(Location location) {
         Log.d(LOG_TAG, "New LOST location: " + location.toString());
         autocomplete.setProximity(Position.fromCoordinates(
           location.getLongitude(), location.getLatitude()));
+      }
+
+      @Override
+      public void onProviderDisabled(String provider) {
+        Log.d(LOG_TAG, "onProviderDisabled: " + provider);
+      }
+
+      @Override
+      public void onProviderEnabled(String provider) {
+        Log.d(LOG_TAG, "onProviderEnabled: " + provider);
       }
     });
   }

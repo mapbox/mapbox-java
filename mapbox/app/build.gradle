@@ -52,9 +52,10 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     // LOST
-    compile ('com.mapzen.android:lost:1.1.1') {
-        exclude group: 'com.google.guava'
-    }
+    compile 'com.mapzen.android:lost:2.1.2'
+
+    // Google Play Services
+    compile 'com.google.android.gms:play-services-location:10.0.1'
 
     // Picasso (Static Image)
     compile 'com.squareup.picasso:picasso:2.5.2'
