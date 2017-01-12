@@ -130,13 +130,13 @@ public class GoogleLocationEngine implements LocationEngine,
       .setSmallestDisplacement(3.0f);
 
     // Priority matching is straightforward
-    if (priority == LocationEnginePriority.PRIORITY_NO_POWER) {
+    if (priority == LocationEnginePriority.NO_POWER) {
       request.setPriority(LocationRequest.PRIORITY_NO_POWER);
-    } else if (priority == LocationEnginePriority.PRIORITY_LOW_POWER) {
+    } else if (priority == LocationEnginePriority.LOW_POWER) {
       request.setPriority(LocationRequest.PRIORITY_LOW_POWER);
-    } else if (priority == LocationEnginePriority.PRIORITY_BALANCED_POWER_ACCURACY) {
+    } else if (priority == LocationEnginePriority.BALANCED_POWER_ACCURACY) {
       request.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-    } else if (priority == LocationEnginePriority.PRIORITY_HIGH_ACCURACY) {
+    } else if (priority == LocationEnginePriority.HIGH_ACCURACY) {
       request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 

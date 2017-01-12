@@ -78,7 +78,7 @@ public class LocationEngineActivity extends AppCompatActivity
 
     if (!engineName.equals(locationEngines[0]) && locationEngine != null) {
       // Not None
-      locationEngine.setPriority(LocationEnginePriority.PRIORITY_HIGH_ACCURACY);
+      locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
       locationEngine.addLocationEngineListener(this);
       locationEngine.activate();
     }
