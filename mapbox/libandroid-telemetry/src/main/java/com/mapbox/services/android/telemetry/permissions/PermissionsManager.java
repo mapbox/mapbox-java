@@ -49,7 +49,7 @@ public class PermissionsManager {
 
   public static boolean areLocationPermissionsGranted(Context context) {
     return isCoarseLocationPermissionGranted(context)
-      && isFineLocationPermissionGranted(context);
+      || isFineLocationPermissionGranted(context);
   }
 
   public void requestLocationPermissions(Activity activity) {
