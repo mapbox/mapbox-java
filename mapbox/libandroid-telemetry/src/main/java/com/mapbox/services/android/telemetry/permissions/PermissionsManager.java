@@ -20,15 +20,9 @@ public class PermissionsManager {
 
   private final int REQUEST_PERMISSIONS_CODE = 0;
 
-  private Activity activity;
   private PermissionsListener listener;
 
-  public PermissionsManager(Activity activity) {
-    this.activity = activity;
-  }
-
-  public PermissionsManager(Activity activity, PermissionsListener listener) {
-    this.activity = activity;
+  public PermissionsManager(PermissionsListener listener) {
     this.listener = listener;
   }
 
@@ -45,31 +39,32 @@ public class PermissionsManager {
       == PackageManager.PERMISSION_GRANTED;
   }
 
-  public boolean isCoarseLocationPermissionGranted() {
-    return isPermissionGranted(activity, COARSE_LOCATION_PERMISSION);
+  public static boolean isCoarseLocationPermissionGranted(Context context) {
+    return isPermissionGranted(context, COARSE_LOCATION_PERMISSION);
   }
 
-  public boolean isFineLocationPermissionGranted() {
-    return isPermissionGranted(activity, FINE_LOCATION_PERMISSION);
+  public static boolean isFineLocationPermissionGranted(Context context) {
+    return isPermissionGranted(context, FINE_LOCATION_PERMISSION);
   }
 
-  public boolean areLocationPermissionsGranted() {
-    return isCoarseLocationPermissionGranted() && isFineLocationPermissionGranted();
+  public static boolean areLocationPermissionsGranted(Context context) {
+    return isCoarseLocationPermissionGranted(context)
+      && isFineLocationPermissionGranted(context);
   }
 
-  public void requestLocationPermissions() {
+  public void requestLocationPermissions(Activity activity) {
     // Request fine location permissions by default
-    requestLocationPermissions(true);
+    requestLocationPermissions(activity, true);
   }
 
-  public void requestLocationPermissions(boolean requestFineLocation) {
+  public void requestLocationPermissions(Activity activity, boolean requestFineLocation) {
     String[] permissions = requestFineLocation
       ? new String[] {FINE_LOCATION_PERMISSION}
       : new String[] {COARSE_LOCATION_PERMISSION};
-    requestPermissions(permissions);
+    requestPermissions(activity, permissions);
   }
 
-  public void requestPermissions(String[] permissions) {
+  public void requestPermissions(Activity activity, String[] permissions) {
     ArrayList<String> permissionsToExplain = new ArrayList<>();
     for (String permission : permissions) {
       if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {

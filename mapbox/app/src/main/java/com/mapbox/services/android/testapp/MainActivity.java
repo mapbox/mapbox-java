@@ -170,10 +170,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     recyclerView.setAdapter(adapter);
 
     // Check for location permission
-    permissionsManager = new PermissionsManager(this, this);
-    if (!permissionsManager.areLocationPermissionsGranted()) {
+    permissionsManager = new PermissionsManager(this);
+    if (!permissionsManager.areLocationPermissionsGranted(this)) {
       recyclerView.setEnabled(false);
-      permissionsManager.requestLocationPermissions();
+      permissionsManager.requestLocationPermissions(this);
     }
   }
 
