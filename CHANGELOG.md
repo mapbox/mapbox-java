@@ -2,6 +2,12 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.0.0
+
+* `libjava` and `libandroid` now live under the same (Android Studio) project. These projects are now split up into: `libjava-core`, `libjava-geojson`, `libjava-services`, `libjava-services-rx`, `libandroid-telemetry`, `libandroid-services`, `libandroid-ui`, independently published to Maven to reduce method count on Android apps.
+* New `LocationEngine` that can be implemented by different location providers (open source or proprietary), decoupled from other components so that it can be used for telemetry, user tracking (map), navigation, or mocking use-cases. Sample implementations for Lost (`LostLocationEngine`), Google Play Services (`GoogleLocationEngine`) and Mock provider (`MockLocationEngine`).
+* New `PermissionsManager` and `PermissionsListener` that replaces the old `PermissionsUtils` to be more flexible checking for any kind of permission, not just location, at runtime.
+
 ### v1.3.2
 
 * Geocoding: added poi.landmark type
