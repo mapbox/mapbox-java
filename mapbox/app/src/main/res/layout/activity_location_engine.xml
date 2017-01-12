@@ -14,7 +14,7 @@
 
     <TextView
         android:text="Choose a location provider"
-        android:textStyle="bold"z
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
