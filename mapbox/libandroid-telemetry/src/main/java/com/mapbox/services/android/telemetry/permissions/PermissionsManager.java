@@ -10,9 +10,8 @@ import android.support.v4.content.ContextCompat;
 import java.util.ArrayList;
 
 /**
- * Helps request permissions at runtime
+ * Helps request permissions at runtime.
  */
-
 public class PermissionsManager {
 
   public static final String COARSE_LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION;
