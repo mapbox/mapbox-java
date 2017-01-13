@@ -12,7 +12,7 @@ import com.mapbox.services.android.telemetry.connectivity.ConnectivityReceiver;
 import com.mapbox.services.android.testapp.R;
 
 public class ConnectivityActivity extends AppCompatActivity
-  implements ConnectivityListener{
+  implements ConnectivityListener {
 
   private static final String LOG_TAG = ConnectivityActivity.class.getSimpleName();
   private ConnectivityReceiver connectivityReceiver;
