@@ -42,6 +42,7 @@
     <string name="title_turf_inside">Turf inside</string>
     <string name="title_turf_midpoint">Turf midpoint</string>
     <string name="title_off_route_detection">Off route detection</string>
+    <string name="title_connectivity">Connectivity state</string>
 
     <!-- Descriptions -->
     <string name="description_location">Shows how to obtain location from different engines.</string>
@@ -63,6 +64,7 @@
     <string name="description_turf_inside">Use Turf to determine if something is within a polygon.</string>
     <string name="description_turf_midpoint">Use Turf to get a midpoint.</string>
     <string name="description_off_route_detection">Uses the Route Utils class to determine if a users off route.</string>
+    <string name="description_connectivity">Keep track of the connectivity status.</string>
 
     <string-array name="turf_calculation_items">
         <item>Select calculation</item>

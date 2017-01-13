@@ -162,6 +162,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
+        <activity
+            android:name=".connectivity.ConnectivityActivity"
+            android:label="@string/title_connectivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
 
         <!--
         Service to asynchronously fetch a location address using a Geocoder. Setting the

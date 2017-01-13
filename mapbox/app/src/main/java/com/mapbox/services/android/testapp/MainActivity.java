@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.mapbox.services.android.BuildConfig;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
+import com.mapbox.services.android.testapp.connectivity.ConnectivityActivity;
 import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
 import com.mapbox.services.android.testapp.directions.RouteUtilsV5Activity;
 import com.mapbox.services.android.testapp.distance.DistanceActivity;
@@ -150,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         getString(R.string.title_off_route_detection),
         getString(R.string.description_off_route_detection),
         OffRouteDetectionActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_connectivity),
+        getString(R.string.description_connectivity),
+        ConnectivityActivity.class
       )
     ));
 
