@@ -1,9 +1,13 @@
 package com.mapbox.services.api.geocoding.v5.models;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.Geometry;
+import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
+import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
 import com.mapbox.services.commons.models.Position;
 
 import java.util.List;
@@ -100,6 +104,7 @@ public class CarmenFeature extends Feature {
     return relevance;
   }
 
+
   public void setText(String text) {
     this.text = text;
   }
@@ -126,6 +131,21 @@ public class CarmenFeature extends Feature {
 
   public void setRelevance(double relevance) {
     this.relevance = relevance;
+  }
+
+  /**
+   * Create a CarmenFeature object from JSON.
+   *
+   * @param json String of JSON making up a carmen feature.
+   * @return Carmen Feature
+   * @since 2.0.0
+   */
+  public static CarmenFeature fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Position.class, new PositionDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer());
+    return gson.create().fromJson(json, CarmenFeature.class);
   }
 
   /**
