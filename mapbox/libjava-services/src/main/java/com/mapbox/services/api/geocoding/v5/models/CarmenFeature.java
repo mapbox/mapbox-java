@@ -142,6 +142,9 @@ public class CarmenFeature extends Feature {
    */
   public static CarmenFeature fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Position.class, new PositionDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer());
     return gson.create().fromJson(json, CarmenFeature.class);
   }
 
