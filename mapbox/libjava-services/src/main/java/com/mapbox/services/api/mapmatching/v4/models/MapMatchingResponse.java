@@ -75,7 +75,7 @@ public class MapMatchingResponse extends FeatureCollection {
    * A caller should consider using returned array as an instance rather than as a reference to the array
    *
    * <pre>
-   *   for (int index = 0; index < MapMatchingResponse.getMatchedPoints(bestIndex).length; index++) {
+   *   for (int index = 0; index &lt; MapMatchingResponse.getMatchedPoints(bestIndex).length; index++) {
    *     .. do some work
    *     double latitude = MapMatchingResponse.getMatchedPoints(bestIndex).getLatitude();
    *     .. do more work
@@ -88,7 +88,7 @@ public class MapMatchingResponse extends FeatureCollection {
    *     return;
    *   }
    *
-   *   for (int index = 0; index < points.length; index++) {
+   *   for (int index = 0; index &lt; points.length; index++) {
    *     .. do some work
    *     double latitude = points[index].getLatitude();
    *     .. do more work
