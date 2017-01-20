@@ -89,6 +89,7 @@
     <string-array name="location_engines">
         <item>None</item>
         <item>Mock</item>
+        <item>Android</item>
         <item>Lost</item>
         <item>Google Play Services</item>
     </string-array>

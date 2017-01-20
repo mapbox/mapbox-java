@@ -13,27 +13,22 @@ import com.mapzen.android.lost.api.LocationRequest;
 import com.mapzen.android.lost.api.LocationServices;
 import com.mapzen.android.lost.api.LostApiClient;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
  * Sample LocationEngine using the Open Source Lost library
  */
-public class LostLocationEngine implements
-  LocationEngine, LostApiClient.ConnectionCallbacks, LocationListener {
+public class LostLocationEngine extends LocationEngine implements
+  LostApiClient.ConnectionCallbacks, LocationListener {
 
   private static final String LOG_TAG = LostLocationEngine.class.getSimpleName();
 
   private static LocationEngine instance;
 
   private Context context;
-  private CopyOnWriteArrayList<LocationEngineListener> locationListeners;
   private LostApiClient lostApiClient;
 
-  private int priority;
-
   public LostLocationEngine(Context context) {
+    super();
     this.context = context;
-    locationListeners = new CopyOnWriteArrayList<>();
     lostApiClient = new LostApiClient.Builder(context)
       .addConnectionCallbacks(this)
       .build();
@@ -68,7 +63,7 @@ public class LostLocationEngine implements
 
   @Override
   public void onConnected() {
-    for (LocationEngineListener listener : this.locationListeners) {
+    for (LocationEngineListener listener : locationListeners) {
       listener.onConnected();
     }
   }
@@ -79,36 +74,13 @@ public class LostLocationEngine implements
   }
 
   @Override
-  public int getPriority() {
-    return priority;
-  }
-
-  @Override
-  public void setPriority(int priority) {
-    this.priority = priority;
-  }
-
-  @Override
   public Location getLastLocation() {
-    if (lostApiClient.isConnected()
-      && PermissionsManager.isPermissionGranted(context, PermissionsManager.FINE_LOCATION_PERMISSION)) {
+    if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context)) {
       //noinspection MissingPermission
       return LocationServices.FusedLocationApi.getLastLocation(lostApiClient);
     }
 
     return null;
-  }
-
-  @Override
-  public void addLocationEngineListener(LocationEngineListener listener) {
-    if (!this.locationListeners.contains(listener)) {
-      this.locationListeners.add(listener);
-    }
-  }
-
-  @Override
-  public boolean removeLocationEngineListener(LocationEngineListener listener) {
-    return this.locationListeners.remove(listener);
   }
 
   @Override
@@ -129,8 +101,10 @@ public class LostLocationEngine implements
       request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    //noinspection MissingPermission
-    LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, this);
+    if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context)) {
+      //noinspection MissingPermission
+      LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, this);
+    }
   }
 
   @Override
@@ -140,7 +114,7 @@ public class LostLocationEngine implements
 
   @Override
   public void onLocationChanged(Location location) {
-    for (LocationEngineListener listener : this.locationListeners) {
+    for (LocationEngineListener listener : locationListeners) {
       listener.onLocationChanged(location);
     }
   }
