@@ -6,18 +6,17 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
-import com.mapbox.services.android.telemetry.location.TelemetryLocationReceiver;
+import com.mapbox.services.android.telemetry.TelemetryLocationReceiver;
+
+import timber.log.Timber;
 
 /**
  * Android telemetry Service
  */
 public class TelemetryService extends Service {
 
-  private static final String LOG_TAG = TelemetryService.class.getSimpleName();
-
-  private TelemetryLocationReceiver telemetryLocationReceiver = null;
+  private TelemetryLocationReceiver receiver = null;
 
   /**
    * Return the communication channel to the service.
@@ -26,6 +25,7 @@ public class TelemetryService extends Service {
   @Override
   public IBinder onBind(Intent intent) {
     // A service may return null if clients can not bind to the service.
+    Timber.w("The service doesn't support a binder interface.");
     return null;
   }
 
@@ -35,11 +35,10 @@ public class TelemetryService extends Service {
   @Override
   public void onCreate() {
     // Enable location listening for lifecycle of app
-    telemetryLocationReceiver = new TelemetryLocationReceiver();
-    LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(
-      telemetryLocationReceiver,
-      new IntentFilter(TelemetryLocationReceiver.INTENT_STRING)
-    );
+    Timber.v("Create event.");
+    receiver = new TelemetryLocationReceiver();
+    LocalBroadcastManager.getInstance(getApplicationContext())
+      .registerReceiver(receiver, new IntentFilter(TelemetryLocationReceiver.INTENT_STRING));
   }
 
   /**
@@ -48,15 +47,17 @@ public class TelemetryService extends Service {
    */
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
+    Timber.v("Start command event.");
     return START_NOT_STICKY;
   }
 
   /**
    * This is called if the service is currently running and the user has removed a task that comes from the
-   * service's application.
+   * service's application (swiping left/right the tasks list).
    */
   @Override
   public void onTaskRemoved(Intent rootIntent) {
+    Timber.v("Task removed event.");
     shutdownTelemetryService();
   }
 
@@ -67,14 +68,17 @@ public class TelemetryService extends Service {
    */
   @Override
   public void onDestroy() {
+    Timber.v("Destroy event.");
     shutdownTelemetryService();
   }
 
   private void shutdownTelemetryService() {
     try {
-      unregisterReceiver(telemetryLocationReceiver);
+      Timber.v("Unregistering location receiver.");
+      LocalBroadcastManager.getInstance(getApplicationContext())
+        .unregisterReceiver(receiver);
     } catch (Exception exception) {
-      Log.e(LOG_TAG, "unregisterReceiver failed: " + exception.getMessage());
+      Timber.e("Unregistering receiver failed: %s.", exception.getMessage());
     }
   }
 

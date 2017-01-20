@@ -9,19 +9,23 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.mapbox.services.android.telemetry.backoff.ExponentialBackoff;
 import com.mapbox.services.android.telemetry.connectivity.ConnectivityReceiver;
+import com.mapbox.services.android.telemetry.constants.TelemetryConstants;
 import com.mapbox.services.android.telemetry.http.TelemetryClient;
 import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.telemetry.service.TelemetryService;
 import com.mapbox.services.android.telemetry.utils.TelemetryUtils;
@@ -39,13 +43,12 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import okhttp3.internal.Util;
+import timber.log.Timber;
 
 /**
  * This is the entry point to manage Mapbox telemetry
  */
-public class MapboxTelemetry implements Callback {
-
-  private static final String LOG_TAG = MapboxTelemetry.class.getSimpleName();
+public class MapboxTelemetry implements Callback, LocationEngineListener {
 
   private static MapboxTelemetry instance;
 
@@ -56,12 +59,12 @@ public class MapboxTelemetry implements Callback {
   private String mapboxSessionId = null;
   private long mapboxSessionIdLastSet = 0;
   private String mapboxVendorId = null;
-  private boolean telemetryEnabled = true;
   private DisplayMetrics displayMetrics = null;
   private Intent batteryStatus = null;
   private TelemetryClient client = null;
   private Vector<Hashtable<String, Object>> events = new Vector<>();
   private Timer timer = null;
+  private LocationEngine locationEngine = null;
   private boolean withShutDown = false;
 
   /**
@@ -84,18 +87,30 @@ public class MapboxTelemetry implements Callback {
   }
 
   /**
-   * Internal setup of MapboxTelemetry. It needs to be called once before @link
-   * MapboxTelemetry#getInstance(). This allows for a cleaner getInstance() that doesn't
-   * require context and accessToken.
+   * Initialize MapboxTelemetry.
    *
-   * @param context     The context associated with MapView
-   * @param accessToken The accessToken to load MapView
+   * @param context        The context associated with the application
+   * @param accessToken    The accessToken associated with the application
+   * @param locationEngine Initialize telemetry with a custom location engine
+   */
+  public void initialize(@NonNull Context context, @NonNull String accessToken,
+                         @NonNull LocationEngine locationEngine) {
+    this.locationEngine = locationEngine;
+    initialize(context, accessToken);
+  }
+
+  /**
+   * Initialize MapboxTelemetry.
+   *
+   * @param context     The context associated with the application
+   * @param accessToken The accessToken associated with the application
    */
   public void initialize(@NonNull Context context, @NonNull String accessToken) {
     if (initialized) {
       return;
     }
 
+    Timber.v("Initializing telemetry.");
     this.context = context.getApplicationContext();
     this.accessToken = accessToken;
     if (this.context == null || TextUtils.isEmpty(this.accessToken)) {
@@ -109,9 +124,9 @@ public class MapboxTelemetry implements Callback {
     rotateSessionId();
     loadUserPreferences();
     readDisplayMetrics();
+    setupHttpClient();
     checkStagingServerInformation();
     registerBatteryUpdates();
-    setupHttpClient();
 
     initialized = true;
   }
@@ -132,7 +147,7 @@ public class MapboxTelemetry implements Callback {
         }
       }
     } catch (Exception exception) {
-      Log.w(LOG_TAG, "Failed to look for the telemetry service: " + exception.getMessage());
+      Timber.w("Failed to look for the telemetry service: %s.", exception.getMessage());
     }
 
     throw new TelemetryException(
@@ -145,7 +160,7 @@ public class MapboxTelemetry implements Callback {
     try {
       messageDigest = MessageDigest.getInstance("SHA-1");
     } catch (NoSuchAlgorithmException exception) {
-      Log.w(LOG_TAG, "Error getting encryption algorithm: ", exception);
+      Timber.w("Error getting the encryption algorithm: %s.", exception);
     }
   }
 
@@ -164,8 +179,8 @@ public class MapboxTelemetry implements Callback {
   private void loadUserPreferences() {
     SharedPreferences prefs = TelemetryUtils.getSharedPreferences(context);
 
-    // Determine if telemetry should be enabled
-    setTelemetryEnabled(prefs.getBoolean(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_ENABLED, true));
+    // Determine telemetry opt-in/opt-out status
+    setTelemetryEnabled(isTelemetryEnabled());
 
     // Load vendor ID
     if (prefs.contains(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_VENDOR_ID)) {
@@ -191,14 +206,14 @@ public class MapboxTelemetry implements Callback {
   /**
    * SHA-1 encoding for strings
    *
-   * @param string String to encode
+   * @param text String to encode
    * @return String encoded if no error, original string if error
    */
-  private String encodeString(String string) {
+  private String encodeString(String text) {
     try {
       if (messageDigest != null) {
         messageDigest.reset();
-        messageDigest.update(string.getBytes("UTF-8"));
+        messageDigest.update(text.getBytes("UTF-8"));
         byte[] bytes = messageDigest.digest();
 
         // Get the hex version of the digest
@@ -210,27 +225,36 @@ public class MapboxTelemetry implements Callback {
         return sb.toString();
       }
     } catch (Exception exception) {
-      Log.w(LOG_TAG, "Error encoding string, will return in original form: " + exception.getMessage());
+      Timber.w("Error encoding string (%s): '%s'.", text, exception.getMessage());
     }
 
-    return string;
+    return text;
   }
 
   private void checkStagingServerInformation() {
     try {
-      SharedPreferences prefs = TelemetryUtils.getSharedPreferences(context);
+      String stagingURL = null;
+      String stagingAccessToken = null;
+
+      // Try app metadata first
       ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(),
         PackageManager.GET_META_DATA);
-      String stagingURL = appInfo.metaData.getString(TelemetryConstants.KEY_META_DATA_STAGING_SERVER);
-      String stagingAccessToken = appInfo.metaData.getString(TelemetryConstants.KEY_META_DATA_STAGING_ACCESS_TOKEN);
+      if (appInfo != null && appInfo.metaData != null) {
+        stagingURL = appInfo.metaData.getString(TelemetryConstants.KEY_META_DATA_STAGING_SERVER);
+        stagingAccessToken = appInfo.metaData.getString(TelemetryConstants.KEY_META_DATA_STAGING_ACCESS_TOKEN);
+      }
 
+      // Try shared preferences next
       if (TextUtils.isEmpty(stagingURL) || TextUtils.isEmpty(stagingAccessToken)) {
+        SharedPreferences prefs = TelemetryUtils.getSharedPreferences(context);
         stagingURL = prefs.getString(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_STAGING_URL, null);
         stagingAccessToken = prefs.getString(
           TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_STAGING_ACCESS_TOKEN, null);
       }
 
+      // Set new client information (if needed)
       if (!TextUtils.isEmpty(stagingURL) && !TextUtils.isEmpty(stagingAccessToken)) {
+        Timber.w("Using staging server '%s' with access token '%s'.", stagingURL, stagingAccessToken);
         client.setEventsEndpoint(stagingURL);
         client.setAccessToken(stagingAccessToken);
         client.setStagingEnvironment(true);
@@ -241,11 +265,14 @@ public class MapboxTelemetry implements Callback {
       String userAgent = client.getUserAgent();
       if (TextUtils.equals(userAgent, BuildConfig.MAPBOX_EVENTS_USER_AGENT_BASE)
         && !TextUtils.isEmpty(appIdentifier)) {
-        client.setUserAgent(Util.toHumanReadableAscii(
-          String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent)));
+        String updatedUserAgent = Util.toHumanReadableAscii(
+          String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
+        Timber.v("Updating user agent value: '%s", updatedUserAgent);
+        client.setUserAgent(updatedUserAgent);
       }
     } catch (Exception exception) {
-      Log.e(LOG_TAG, "Failed to check staging credentials: " + exception.getMessage());
+      Timber.e("Failed to check staging credentials: %s", exception.getMessage());
+      exception.printStackTrace();
     }
   }
 
@@ -258,6 +285,27 @@ public class MapboxTelemetry implements Callback {
     int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
     int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
     return Math.round((level / (float) scale) * 100);
+  }
+
+  private void registerLocationUpdates() {
+    if (locationEngine == null) {
+      locationEngine = new AndroidLocationEngine(context);
+    }
+
+    locationEngine.addLocationEngineListener(this);
+    locationEngine.activate();
+  }
+
+  @Override
+  public void onConnected() {
+    locationEngine.requestLocationUpdates();
+  }
+
+  @Override
+  public void onLocationChanged(Location location) {
+    Intent locIntent = new Intent(TelemetryLocationReceiver.INTENT_STRING);
+    locIntent.putExtra(LocationManager.KEY_LOCATION_CHANGED, location);
+    LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(locIntent);
   }
 
   /**
@@ -280,25 +328,23 @@ public class MapboxTelemetry implements Callback {
   }
 
   public boolean isTelemetryEnabled() {
-    return telemetryEnabled;
+    return TelemetryUtils.getSharedPreferences(context)
+      .getBoolean(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_ENABLED, true);
   }
 
   /**
-   * Enables / Disables Telemetry
+   * Enables / disables telemetry
    *
    * @param telemetryEnabled True to start telemetry, false to stop it
    */
   public void setTelemetryEnabled(boolean telemetryEnabled) {
-    if (this.telemetryEnabled == telemetryEnabled) {
-      return;
-    }
-
     if (telemetryEnabled) {
+      Timber.v("Enabling telemetry.");
       context.startService(new Intent(context, TelemetryService.class));
 
       // Check for location permissions, periodically if necessary
-      if (!PermissionsManager.areLocationPermissionsGranted(context)) {
-        AndroidLocationEngine.getLocationEngine(context).activate();
+      if (PermissionsManager.areLocationPermissionsGranted(context)) {
+        registerLocationUpdates();
       } else {
         startPermissionsTimer();
       }
@@ -312,13 +358,12 @@ public class MapboxTelemetry implements Callback {
         }
       }, TelemetryConstants.FLUSH_DELAY_MS, TelemetryConstants.FLUSH_PERIOD_MS);
     } else {
-      // Shut it down
+      Timber.v("Disabling telemetry.");
       withShutDown = true;
       flushEventsQueueImmediately();
     }
 
     // Persist
-    this.telemetryEnabled = telemetryEnabled;
     SharedPreferences prefs = TelemetryUtils.getSharedPreferences(context);
     SharedPreferences.Editor editor = prefs.edit();
     editor.putBoolean(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_ENABLED, telemetryEnabled);
@@ -330,24 +375,25 @@ public class MapboxTelemetry implements Callback {
    * Start timer that checks for permissions
    */
   private void startPermissionsTimer() {
-    final Handler permsHandler = new Handler();
+    final Handler handler = new Handler();
+    final ExponentialBackoff counter = new ExponentialBackoff();
     Runnable runnable = new Runnable() {
-
-      private ExponentialBackoff exponentialBackoffCounter = new ExponentialBackoff();
-
       @Override
       public void run() {
         if (PermissionsManager.areLocationPermissionsGranted(context)) {
-          AndroidLocationEngine.getLocationEngine(context).activate();
+          registerLocationUpdates();
         } else {
-          // Restart Handler
-          long nextWaitTime = exponentialBackoffCounter.nextBackOffMillis();
-          permsHandler.postDelayed(this, nextWaitTime);
+          // Restart handler
+          long nextWaitTime = counter.nextBackOffMillis();
+          Timber.v("Location permissions not granted, checking again in %d seconds.", nextWaitTime / 1000);
+          handler.postDelayed(this, nextWaitTime);
         }
       }
     };
 
-    permsHandler.postDelayed(runnable, TelemetryConstants.FLUSH_DELAY_MS);
+    long nextWaitTime = counter.nextBackOffMillis();
+    Timber.v("Location permissions not granted, checking again in %d seconds.", nextWaitTime / 1000);
+    handler.postDelayed(runnable, nextWaitTime);
   }
 
   /**
@@ -367,7 +413,7 @@ public class MapboxTelemetry implements Callback {
    *
    * @param location Location event
    */
-  public void addLocationEvent(Location location) {
+  protected void addLocationEvent(Location location) {
     // NaN and Infinite checks to prevent JSON errors at send to server time
     if (Double.isNaN(location.getLatitude()) || Double.isNaN(location.getLongitude())
       || Double.isNaN(location.getAltitude()) || Float.isNaN(location.getAccuracy())) {
@@ -402,7 +448,7 @@ public class MapboxTelemetry implements Callback {
   }
 
   /**
-   * Push Interactive Events to the system for processing
+   * Push interactive events to the system for processing
    *
    * @param eventWithAttributes Event with attributes
    */
@@ -427,7 +473,7 @@ public class MapboxTelemetry implements Callback {
       eventWithAttributes.put(MapboxEvent.ATTRIBUTE_ORIENTATION, TelemetryUtils.getOrientation(context));
       eventWithAttributes.put(MapboxEvent.ATTRIBUTE_BATTERY_LEVEL, getBatteryLevel());
       eventWithAttributes.put(MapboxEvent.ATTRIBUTE_PLUGGED_IN, isPluggedIn());
-      eventWithAttributes.put(MapboxEvent.ATTRIBUTE_CARRIER,TelemetryUtils.getCellularCarrier(context));
+      eventWithAttributes.put(MapboxEvent.ATTRIBUTE_CARRIER, TelemetryUtils.getCellularCarrier(context));
       eventWithAttributes.put(MapboxEvent.ATTRIBUTE_CELLULAR_NETWORK_TYPE,
         TelemetryUtils.getCellularNetworkType(context));
       eventWithAttributes.put(MapboxEvent.ATTRIBUTE_WIFI, TelemetryUtils.getConnectedToWifi(context));
@@ -454,16 +500,14 @@ public class MapboxTelemetry implements Callback {
       eventWithAttributes.put(MapboxEvent.ATTRIBUTE_WIFI, TelemetryUtils.getConnectedToWifi(context));
       putEventOnQueue(eventWithAttributes);
     } else {
-      Log.w(LOG_TAG, "Unknown event type provided: " + eventType);
+      Timber.w("Unknown event type provided: %s.", eventType);
     }
   }
 
   /**
    * Immediately attempt to send all events data in the queue to the server.
-   * <p>
-   * <p>NOTE: Permission set to package private to enable only telemetry code to use this.
    */
-  public void flushEventsQueueImmediately() {
+  private void flushEventsQueueImmediately() {
     if (events.size() > 0 && ConnectivityReceiver.isConnected(context)) {
       client.sendEvents(events, this);
     } else if (withShutDown) {
@@ -479,7 +523,7 @@ public class MapboxTelemetry implements Callback {
     event.put(MapboxEvent.ATTRIBUTE_EVENT, MapboxEvent.TYPE_TURNSTILE);
     event.put(MapboxEvent.ATTRIBUTE_CREATED, TelemetryUtils.generateCreateDate());
     event.put(MapboxEvent.ATTRIBUTE_USERID, mapboxVendorId);
-    event.put(MapboxEvent.ATTRIBUTE_ENABLED_TELEMETRY, telemetryEnabled);
+    event.put(MapboxEvent.ATTRIBUTE_ENABLED_TELEMETRY, isTelemetryEnabled());
     events.add(event);
     flushEventsQueueImmediately();
   }
@@ -528,6 +572,8 @@ public class MapboxTelemetry implements Callback {
     withShutDown = false;
     events.removeAllElements();
     context.stopService(new Intent(context, TelemetryService.class));
+    locationEngine.removeLocationEngineListener(this);
+    locationEngine.removeLocationUpdates();
     if (timer != null) {
       timer.cancel();
       timer = null;

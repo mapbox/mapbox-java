@@ -11,7 +11,7 @@ import android.net.wifi.WifiManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.mapbox.services.android.telemetry.TelemetryConstants;
+import com.mapbox.services.android.telemetry.constants.TelemetryConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

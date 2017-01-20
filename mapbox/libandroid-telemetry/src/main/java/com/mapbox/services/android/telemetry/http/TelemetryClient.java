@@ -1,11 +1,10 @@
 package com.mapbox.services.android.telemetry.http;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.mapbox.services.android.telemetry.BuildConfig;
 import com.mapbox.services.android.telemetry.MapboxEvent;
-import com.mapbox.services.android.telemetry.TelemetryConstants;
+import com.mapbox.services.android.telemetry.constants.GeoConstants;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
 
 import org.json.JSONArray;
@@ -21,13 +20,12 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import timber.log.Timber;
 
 /**
  * HTTP client to Mapbox telemetry
  */
 public class TelemetryClient {
-
-  private static final String LOG_TAG = TelemetryClient.class.getSimpleName();
 
   private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -128,8 +126,8 @@ public class TelemetryClient {
         // Make sure longitude is wrapped
         if (evt.containsKey(MapboxEvent.KEY_LONGITUDE)) {
           double lon = (double) evt.get(MapboxEvent.KEY_LONGITUDE);
-          if ((lon < TelemetryConstants.MIN_LONGITUDE) || (lon > TelemetryConstants.MAX_LONGITUDE)) {
-            lon = MathUtils.wrap(lon, TelemetryConstants.MIN_LONGITUDE, TelemetryConstants.MAX_LONGITUDE);
+          if ((lon < GeoConstants.MIN_LONGITUDE) || (lon > GeoConstants.MAX_LONGITUDE)) {
+            lon = MathUtils.wrap(lon, GeoConstants.MIN_LONGITUDE, GeoConstants.MAX_LONGITUDE);
           }
           jsonObject.put(MapboxEvent.KEY_LONGITUDE, lon);
         }
@@ -170,7 +168,7 @@ public class TelemetryClient {
           }
         }
 
-        // Special Cases where null has to be passed if no value exists
+        // Special cases where null has to be passed if no value exists
         // Requires using put() instead of putOpt()
         String eventType = (String) evt.get(MapboxEvent.ATTRIBUTE_EVENT);
         if (!TextUtils.isEmpty(eventType) && eventType.equalsIgnoreCase(MapboxEvent.TYPE_MAP_CLICK)) {
@@ -201,7 +199,8 @@ public class TelemetryClient {
         .build();
       client.newCall(request).enqueue(callback);
     } catch (JSONException exception) {
-      Log.e(LOG_TAG, "JSON encoding failed: " + exception.getMessage());
+      Timber.e("JSON encoding failed: %s.", exception.getMessage());
+      exception.printStackTrace();
     }
   }
 

@@ -1,4 +1,4 @@
-package com.mapbox.services.android.telemetry;
+package com.mapbox.services.android.telemetry.constants;
 
 import android.os.Build;
 
@@ -22,7 +22,7 @@ public class TelemetryConstants {
 
   public static final int SESSION_ID_ROTATION_HOURS = 24;
 
-  public static final double LOCATION_EVENT_ACCURACY = 10_000_000;
+  public static final int LOCATION_EVENT_ACCURACY = 10_000_000;
 
   /**
    * Key used to store staging data server url in AndroidManifest.xml
@@ -40,8 +40,5 @@ public class TelemetryConstants {
   public static final String MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_STAGING_URL = "mapboxTelemetryStagingUrl";
   public static final String MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_STAGING_ACCESS_TOKEN =
     "mapboxTelemetryStagingAccessToken";
-
-  public static final double MIN_LONGITUDE = 0.0;
-  public static final double MAX_LONGITUDE = 0.0;
 
 }

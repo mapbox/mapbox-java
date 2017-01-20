@@ -6,18 +6,16 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.mapbox.services.android.telemetry.TelemetryConstants;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
+
+import timber.log.Timber;
 
 /**
  * A location engine that uses core android.location and has no external dependencies
  * https://developer.android.com/guide/topics/location/strategies.html
  */
 public class AndroidLocationEngine extends LocationEngine implements LocationListener {
-
-  private static final String LOG_TAG = "AndroidLocationEngine";
 
   private static final String DEFAULT_PROVIDER = LocationManager.PASSIVE_PROVIDER;
   private static final long DEFAULT_MIN_TIME = 0;
@@ -31,6 +29,8 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
 
   public AndroidLocationEngine(Context context) {
     super();
+
+    Timber.v("Initializing.");
     this.context = context;
     locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     currentProvider = DEFAULT_PROVIDER;
@@ -48,6 +48,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
   @Override
   public void activate() {
     // "Connection" is immediate
+    Timber.v("Activating.");
     for (LocationEngineListener listener : locationListeners) {
       listener.onConnected();
     }
@@ -56,6 +57,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
   @Override
   public void deactivate() {
     // No op
+    Timber.v("Deactivating.");
   }
 
   @Override
@@ -101,8 +103,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
       currentProvider = LocationManager.GPS_PROVIDER;
     }
 
-    Log.d(LOG_TAG, String.format(TelemetryConstants.DEFAULT_LOCALE,
-      "Priority set to %d (current provider is %s).", priority, currentProvider));
+    Timber.d("Priority set to %d (current provider is %s).", priority, currentProvider);
   }
 
   @Override
@@ -118,6 +119,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
    */
   @Override
   public void onLocationChanged(Location location) {
+    Timber.v("New location received.");
     for (LocationEngineListener listener : locationListeners) {
       listener.onLocationChanged(location);
     }
@@ -128,9 +130,8 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
    */
   @Override
   public void onStatusChanged(String provider, int status, Bundle extras) {
-    Log.d(LOG_TAG, String.format(TelemetryConstants.DEFAULT_LOCALE,
-      "Provider %s status changed to %d (current provider is %s).",
-      status, provider, currentProvider));
+    Timber.v("Provider %s status changed to %d (current provider is %s).",
+      status, provider, currentProvider);
   }
 
   /**
@@ -138,8 +139,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
    */
   @Override
   public void onProviderEnabled(String provider) {
-    Log.d(LOG_TAG, String.format(TelemetryConstants.DEFAULT_LOCALE,
-      "Provider %s was enabled (current provider is %s).", provider, currentProvider));
+    Timber.v("Provider %s was enabled (current provider is %s).", provider, currentProvider);
   }
 
   /**
@@ -147,7 +147,6 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
    */
   @Override
   public void onProviderDisabled(String provider) {
-    Log.d(LOG_TAG, String.format(TelemetryConstants.DEFAULT_LOCALE,
-      "Provider %s was disabled (current provider is %s).", provider, currentProvider));
+    Timber.v("Provider %s was disabled (current provider is %s).", provider, currentProvider);
   }
 }

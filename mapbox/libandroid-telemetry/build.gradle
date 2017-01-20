@@ -33,7 +33,10 @@ dependencies {
     // Android Support libraries
     compile 'com.android.support:appcompat-v7:25.1.0'
 
-    // OkHttp
+    // Timber for logging
+    compile 'com.jakewharton.timber:timber:4.5.0'
+
+    // OkHttp for network requests
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
 
     // Testing

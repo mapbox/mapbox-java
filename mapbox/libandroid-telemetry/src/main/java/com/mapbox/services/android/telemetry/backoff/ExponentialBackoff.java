@@ -9,8 +9,8 @@ package com.mapbox.services.android.telemetry.backoff;
  */
 public class ExponentialBackoff {
 
-  /** The default initial interval value in milliseconds (1 second). */
-  public static final int DEFAULT_INITIAL_INTERVAL_MILLIS = 1_000;
+  /** The default initial interval value in milliseconds (10 seconds). */
+  public static final int DEFAULT_INITIAL_INTERVAL_MILLIS = 10_000;
 
   /** The default multiplier value (2.0 which is 100% increase per back off). */
   public static final double DEFAULT_MULTIPLIER = 2.0;

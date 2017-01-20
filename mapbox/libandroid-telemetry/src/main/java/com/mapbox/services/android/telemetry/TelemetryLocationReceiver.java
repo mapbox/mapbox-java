@@ -1,4 +1,4 @@
-package com.mapbox.services.android.telemetry.location;
+package com.mapbox.services.android.telemetry;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 
-import com.mapbox.services.android.telemetry.MapboxTelemetry;
+import timber.log.Timber;
 
 /**
  * The TelemetryService will register for updates sent to this TelemetryLocationReceiver.
@@ -20,6 +20,8 @@ public class TelemetryLocationReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
+    Timber.v("Receive event.");
+
     // See https://github.com/mapbox/mapbox-gl-native/issues/6934
     if (intent == null || intent.getExtras() == null) {
       return;
