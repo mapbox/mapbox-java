@@ -10,6 +10,10 @@ android {
         versionCode rootProject.ext.MasVersionCode
         versionName rootProject.ext.MasVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Telemetry
+        buildConfigField "String", "MAPBOX_EVENTS_USER_AGENT_BASE", String.format("\"MapboxEventsAndroid/%s\"", project.VERSION_NAME)
+        buildConfigField "String", "MAPBOX_VERSION_STRING", String.format("\"Mapbox/%s\"", project.VERSION_NAME)
     }
 
     compileOptions {
@@ -28,6 +32,9 @@ android {
 dependencies {
     // Android Support libraries
     compile 'com.android.support:appcompat-v7:25.1.0'
+
+    // OkHttp
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
 
     // Testing
     testCompile 'junit:junit:4.12'
