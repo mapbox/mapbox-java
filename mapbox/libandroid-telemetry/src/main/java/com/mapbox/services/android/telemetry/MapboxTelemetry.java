@@ -121,13 +121,13 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     }
 
     validateTelemetryServiceConfigured();
-    setupMessageDigest();
-    rotateSessionId();
-    loadUserPreferences();
-    readDisplayMetrics();
     setupHttpClient();
     checkStagingServerInformation();
+    rotateSessionId();
+    setupMessageDigest();
+    readDisplayMetrics();
     registerBatteryUpdates();
+    loadUserPreferences();
 
     initialized = true;
   }
@@ -157,79 +157,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
         + "For more information, please visit https://www.mapbox.com/android-sdk.");
   }
 
-  private void setupMessageDigest() {
-    try {
-      messageDigest = MessageDigest.getInstance("SHA-1");
-    } catch (NoSuchAlgorithmException exception) {
-      Timber.w("Error getting the encryption algorithm: %s.", exception);
-    }
-  }
-
-  /**
-   * Changes session ID based on time boundary
-   */
-  private void rotateSessionId() {
-    long timeSinceLastSet = System.currentTimeMillis() - mapboxSessionIdLastSet;
-    if ((TextUtils.isEmpty(mapboxSessionId))
-      || (timeSinceLastSet > (TelemetryConstants.SESSION_ID_ROTATION_MS))) {
-      mapboxSessionId = UUID.randomUUID().toString();
-      mapboxSessionIdLastSet = System.currentTimeMillis();
-    }
-  }
-
-  private void loadUserPreferences() {
-    SharedPreferences prefs = TelemetryUtils.getSharedPreferences(context);
-
-    // Determine telemetry opt-in/opt-out status
-    setTelemetryEnabled(isTelemetryEnabled());
-
-    // Load vendor ID
-    if (prefs.contains(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_VENDOR_ID)) {
-      mapboxVendorId = prefs.getString(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_VENDOR_ID, "");
-    }
-
-    // Create vendor ID
-    if (TextUtils.isEmpty(mapboxVendorId)) {
-      String vendorId = UUID.randomUUID().toString();
-      mapboxVendorId = encodeString(vendorId);
-      SharedPreferences.Editor editor = prefs.edit();
-      editor.putString(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_VENDOR_ID, mapboxVendorId);
-      editor.apply();
-      editor.commit();
-    }
-  }
-
-  private void readDisplayMetrics() {
-    displayMetrics = new DisplayMetrics();
-    ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
-  }
-
-  /**
-   * SHA-1 encoding for strings
-   *
-   * @param text String to encode
-   * @return String encoded if no error, original string if error
-   */
-  private String encodeString(String text) {
-    try {
-      if (messageDigest != null) {
-        messageDigest.reset();
-        messageDigest.update(text.getBytes("UTF-8"));
-        byte[] bytes = messageDigest.digest();
-
-        // Get the hex version of the digest
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-          sb.append(String.format("%02X", b));
-        }
-
-        return sb.toString();
-      }
-    } catch (Exception exception) {
-      Timber.w("Error encoding string (%s): '%s'.", text, exception.getMessage());
-    }
-
-    return text;
+  private void setupHttpClient() {
+    client = new TelemetryClient(accessToken);
   }
 
   private void checkStagingServerInformation() {
@@ -277,6 +206,59 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     }
   }
 
+  /**
+   * Changes session ID based on time boundary
+   */
+  private void rotateSessionId() {
+    long timeSinceLastSet = System.currentTimeMillis() - mapboxSessionIdLastSet;
+    if ((TextUtils.isEmpty(mapboxSessionId))
+      || (timeSinceLastSet > (TelemetryConstants.SESSION_ID_ROTATION_MS))) {
+      mapboxSessionId = UUID.randomUUID().toString();
+      mapboxSessionIdLastSet = System.currentTimeMillis();
+    }
+  }
+
+  private void setupMessageDigest() {
+    try {
+      messageDigest = MessageDigest.getInstance("SHA-1");
+    } catch (NoSuchAlgorithmException exception) {
+      Timber.w("Error getting the encryption algorithm: %s.", exception);
+    }
+  }
+
+  /**
+   * SHA-1 encoding for strings
+   *
+   * @param text String to encode
+   * @return String encoded if no error, original string if error
+   */
+  private String encodeString(String text) {
+    try {
+      if (messageDigest != null) {
+        messageDigest.reset();
+        messageDigest.update(text.getBytes("UTF-8"));
+        byte[] bytes = messageDigest.digest();
+
+        // Get the hex version of the digest
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+          sb.append(String.format("%02X", b));
+        }
+
+        return sb.toString();
+      }
+    } catch (Exception exception) {
+      Timber.w("Error encoding string (%s): '%s'.", text, exception.getMessage());
+    }
+
+    return text;
+  }
+
+  private void readDisplayMetrics() {
+    displayMetrics = new DisplayMetrics();
+    ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
+  }
+
   private void registerBatteryUpdates() {
     IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
     batteryStatus = context.registerReceiver(null, iFilter);
@@ -286,27 +268,6 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
     int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
     return Math.round((level / (float) scale) * 100);
-  }
-
-  private void registerLocationUpdates() {
-    if (locationEngine == null) {
-      locationEngine = new AndroidLocationEngine(context);
-    }
-
-    locationEngine.addLocationEngineListener(this);
-    locationEngine.activate();
-  }
-
-  @Override
-  public void onConnected() {
-    locationEngine.requestLocationUpdates();
-  }
-
-  @Override
-  public void onLocationChanged(Location location) {
-    Intent locIntent = new Intent(TelemetryLocationReceiver.INTENT_STRING);
-    locIntent.putExtra(LocationManager.KEY_LOCATION_CHANGED, location);
-    LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(locIntent);
   }
 
   /**
@@ -324,8 +285,26 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     return false;
   }
 
-  private void setupHttpClient() {
-    client = new TelemetryClient(accessToken);
+  private void loadUserPreferences() {
+    SharedPreferences prefs = TelemetryUtils.getSharedPreferences(context);
+
+    // Load vendor ID
+    if (prefs.contains(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_VENDOR_ID)) {
+      mapboxVendorId = prefs.getString(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_VENDOR_ID, "");
+    }
+
+    // Create vendor ID
+    if (TextUtils.isEmpty(mapboxVendorId)) {
+      String vendorId = UUID.randomUUID().toString();
+      mapboxVendorId = encodeString(vendorId);
+      SharedPreferences.Editor editor = prefs.edit();
+      editor.putString(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_VENDOR_ID, mapboxVendorId);
+      editor.apply();
+      editor.commit();
+    }
+
+    // Determine telemetry opt-in/opt-out status
+    setTelemetryEnabled(isTelemetryEnabled());
   }
 
   public boolean isTelemetryEnabled() {
@@ -355,13 +334,15 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       timer.schedule(new TimerTask() {
         @Override
         public void run() {
-          flushEventsQueueImmediately();
+          flushEventsQueueImmediately(false);
         }
       }, TelemetryConstants.FLUSH_DELAY_MS, TelemetryConstants.FLUSH_PERIOD_MS);
     } else {
       Timber.v("Disabling telemetry.");
       withShutDown = true;
-      flushEventsQueueImmediately();
+
+      // This event is always recorded
+      pushTurnstileEvent();
     }
 
     // Persist
@@ -397,6 +378,27 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     handler.postDelayed(runnable, nextWaitTime);
   }
 
+  private void registerLocationUpdates() {
+    if (locationEngine == null) {
+      locationEngine = new AndroidLocationEngine(context);
+    }
+
+    locationEngine.addLocationEngineListener(this);
+    locationEngine.activate();
+  }
+
+  @Override
+  public void onConnected() {
+    locationEngine.requestLocationUpdates();
+  }
+
+  @Override
+  public void onLocationChanged(Location location) {
+    Intent locIntent = new Intent(TelemetryLocationReceiver.INTENT_STRING);
+    locIntent.putExtra(LocationManager.KEY_LOCATION_CHANGED, location);
+    LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(locIntent);
+  }
+
   /**
    * Centralized method for adding populated event to the queue allowing for cap size checking
    *
@@ -405,7 +407,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private void putEventOnQueue(@NonNull Hashtable<String, Object> event) {
     events.add(event);
     if (events.size() == TelemetryConstants.FLUSH_EVENTS_CAP) {
-      flushEventsQueueImmediately();
+      flushEventsQueueImmediately(false);
     }
   }
 
@@ -504,8 +506,9 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   /**
    * Immediately attempt to send all events data in the queue to the server.
    */
-  private void flushEventsQueueImmediately() {
-    if (events.size() > 0 && ConnectivityReceiver.isConnected(context)) {
+  private void flushEventsQueueImmediately(boolean hasTurnstileEvent) {
+    boolean doRequest = hasTurnstileEvent || isTelemetryEnabled();
+    if (events.size() > 0 && ConnectivityReceiver.isConnected(context) && doRequest) {
       client.sendEvents(events, this);
     } else if (withShutDown) {
       shutdownTelemetry();
@@ -513,7 +516,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   }
 
   /**
-   * Pushes turnstile event for internal billing purposes
+   * Pushes turnstile event for internal billing purposes.
    */
   private void pushTurnstileEvent() {
     Hashtable<String, Object> event = new Hashtable<>();
@@ -522,7 +525,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     event.put(MapboxEvent.KEY_USER_ID, mapboxVendorId);
     event.put(MapboxEvent.KEY_ENABLED_TELEMETRY, isTelemetryEnabled());
     events.add(event);
-    flushEventsQueueImmediately();
+    flushEventsQueueImmediately(true);
   }
 
   /**
