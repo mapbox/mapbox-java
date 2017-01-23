@@ -18,11 +18,7 @@ public class TelemetryConstants {
   public static final long FLUSH_PERIOD_MS = 3 * 60 * 1_000; // 3 minutes
   public static final int FLUSH_EVENTS_CAP = 1_000;
 
-  public static final long HOUR_IN_MS = 60 * 60 * 1_000;
-
-  public static final int SESSION_ID_ROTATION_HOURS = 24;
-
-  public static final int LOCATION_EVENT_ACCURACY = 10_000_000;
+  public static final int SESSION_ID_ROTATION_MS = 24 * 60 * 60 * 1_000; // 24 hours
 
   /**
    * Key used to store staging data server url in AndroidManifest.xml

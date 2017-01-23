@@ -170,7 +170,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private void rotateSessionId() {
     long timeSinceLastSet = System.currentTimeMillis() - mapboxSessionIdLastSet;
     if ((TextUtils.isEmpty(mapboxSessionId))
-      || (timeSinceLastSet > (TelemetryConstants.SESSION_ID_ROTATION_HOURS * TelemetryConstants.HOUR_IN_MS))) {
+      || (timeSinceLastSet > (TelemetryConstants.SESSION_ID_ROTATION_MS))) {
       mapboxSessionId = UUID.randomUUID().toString();
       mapboxSessionIdLastSet = System.currentTimeMillis();
     }
@@ -431,12 +431,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate());
     event.put(MapboxEvent.KEY_SOURCE, MapboxEvent.SOURCE_MAPBOX);
     event.put(MapboxEvent.KEY_SESSION_ID, encodeString(mapboxSessionId));
-    event.put(MapboxEvent.KEY_LATITUDE, Math.floor(
-      location.getLatitude() * TelemetryConstants.LOCATION_EVENT_ACCURACY)
-      / TelemetryConstants.LOCATION_EVENT_ACCURACY);
-    event.put(MapboxEvent.KEY_LONGITUDE, Math.floor(
-      location.getLongitude() * TelemetryConstants.LOCATION_EVENT_ACCURACY)
-      / TelemetryConstants.LOCATION_EVENT_ACCURACY);
+    event.put(MapboxEvent.KEY_LATITUDE, location.getLatitude());
+    event.put(MapboxEvent.KEY_LONGITUDE, location.getLongitude());
     event.put(MapboxEvent.KEY_ALTITUDE, location.getAltitude());
     event.put(MapboxEvent.KEY_HORIZONTAL_ACCURACY, Math.round(location.getAccuracy()));
     event.put(MapboxEvent.KEY_OPERATING_SYSTEM, TelemetryConstants.OPERATING_SYSTEM);
