@@ -63,7 +63,7 @@ public class MapboxEvent implements Serializable {
    * @param location  Location coordinates at start of gesture
    * @param zoom      Zoom level to be registered
    */
-  public static Hashtable<String, Object> buildGestureEvent(
+  public static Hashtable<String, Object> buildMapClickEvent(
     @NonNull Location location, @NonNull String gestureId, double zoom) {
     // NaN and Infinite checks to prevent JSON errors at send to server time
     if (Double.isNaN(location.getLatitude()) || Double.isNaN(location.getLongitude())) {
@@ -91,7 +91,7 @@ public class MapboxEvent implements Serializable {
    * @param location Original location coordinate at end of drag
    * @param zoom     Zoom level to be registered
    */
-  public static Hashtable<String, Object> buildGestureDragEndEvent(
+  public static Hashtable<String, Object> buildMapDragEndEvent(
     @NonNull Location location, double zoom) {
     // NaN and Infinite checks to prevent JSON errors at send to server time
     if (Double.isNaN(location.getLatitude()) || Double.isNaN(location.getLongitude())) {
