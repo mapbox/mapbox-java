@@ -115,12 +115,12 @@ public class TelemetryClient {
         JSONObject jsonObject = new JSONObject();
 
         // Build the JSON but only if there's a value for it in the evt
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_EVENT, evt.get(MapboxEvent.ATTRIBUTE_EVENT));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_CREATED, evt.get(MapboxEvent.ATTRIBUTE_CREATED));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_USERID, evt.get(MapboxEvent.ATTRIBUTE_USERID));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_ENABLED_TELEMETRY, evt.get(MapboxEvent.ATTRIBUTE_ENABLED_TELEMETRY));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_SOURCE, evt.get(MapboxEvent.ATTRIBUTE_SOURCE));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_SESSION_ID, evt.get(MapboxEvent.ATTRIBUTE_SESSION_ID));
+        jsonObject.putOpt(MapboxEvent.KEY_EVENT, evt.get(MapboxEvent.KEY_EVENT));
+        jsonObject.putOpt(MapboxEvent.KEY_CREATED, evt.get(MapboxEvent.KEY_CREATED));
+        jsonObject.putOpt(MapboxEvent.KEY_USER_ID, evt.get(MapboxEvent.KEY_USER_ID));
+        jsonObject.putOpt(MapboxEvent.KEY_ENABLED_TELEMETRY, evt.get(MapboxEvent.KEY_ENABLED_TELEMETRY));
+        jsonObject.putOpt(MapboxEvent.KEY_SOURCE, evt.get(MapboxEvent.KEY_SOURCE));
+        jsonObject.putOpt(MapboxEvent.KEY_SESSION_ID, evt.get(MapboxEvent.KEY_SESSION_ID));
         jsonObject.putOpt(MapboxEvent.KEY_LATITUDE, evt.get(MapboxEvent.KEY_LATITUDE));
 
         // Make sure longitude is wrapped
@@ -134,54 +134,54 @@ public class TelemetryClient {
 
         jsonObject.putOpt(MapboxEvent.KEY_ALTITUDE, evt.get(MapboxEvent.KEY_ALTITUDE));
         jsonObject.putOpt(MapboxEvent.KEY_ZOOM, evt.get(MapboxEvent.KEY_ZOOM));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_OPERATING_SYSTEM, evt.get(MapboxEvent.ATTRIBUTE_OPERATING_SYSTEM));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_USERID, evt.get(MapboxEvent.ATTRIBUTE_USERID));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_MODEL, evt.get(MapboxEvent.ATTRIBUTE_MODEL));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_RESOLUTION, evt.get(MapboxEvent.ATTRIBUTE_RESOLUTION));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_ACCESSIBILITY_FONT_SCALE,
-          evt.get(MapboxEvent.ATTRIBUTE_ACCESSIBILITY_FONT_SCALE));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_BATTERY_LEVEL, evt.get(MapboxEvent.ATTRIBUTE_BATTERY_LEVEL));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_PLUGGED_IN, evt.get(MapboxEvent.ATTRIBUTE_PLUGGED_IN));
-        jsonObject.putOpt(MapboxEvent.ATTRIBUTE_WIFI, evt.get(MapboxEvent.ATTRIBUTE_WIFI));
+        jsonObject.putOpt(MapboxEvent.KEY_OPERATING_SYSTEM, evt.get(MapboxEvent.KEY_OPERATING_SYSTEM));
+        jsonObject.putOpt(MapboxEvent.KEY_USER_ID, evt.get(MapboxEvent.KEY_USER_ID));
+        jsonObject.putOpt(MapboxEvent.KEY_MODEL, evt.get(MapboxEvent.KEY_MODEL));
+        jsonObject.putOpt(MapboxEvent.KEY_RESOLUTION, evt.get(MapboxEvent.KEY_RESOLUTION));
+        jsonObject.putOpt(MapboxEvent.KEY_ACCESSIBILITY_FONT_SCALE,
+          evt.get(MapboxEvent.KEY_ACCESSIBILITY_FONT_SCALE));
+        jsonObject.putOpt(MapboxEvent.KEY_BATTERY_LEVEL, evt.get(MapboxEvent.KEY_BATTERY_LEVEL));
+        jsonObject.putOpt(MapboxEvent.KEY_PLUGGED_IN, evt.get(MapboxEvent.KEY_PLUGGED_IN));
+        jsonObject.putOpt(MapboxEvent.KEY_WIFI, evt.get(MapboxEvent.KEY_WIFI));
 
         // Special cases where an empty string is denoting null and therefore should not be sent at all
         // This arises as thread safe hashtables do not accept null values (nor keys)
-        if (evt.containsKey(MapboxEvent.ATTRIBUTE_ORIENTATION)) {
-          String orientation = (String) evt.get(MapboxEvent.ATTRIBUTE_ORIENTATION);
+        if (evt.containsKey(MapboxEvent.KEY_ORIENTATION)) {
+          String orientation = (String) evt.get(MapboxEvent.KEY_ORIENTATION);
           if (!TextUtils.isEmpty(orientation)) {
-            jsonObject.putOpt(MapboxEvent.ATTRIBUTE_ORIENTATION, orientation);
+            jsonObject.putOpt(MapboxEvent.KEY_ORIENTATION, orientation);
           }
         }
 
-        if (evt.containsKey(MapboxEvent.ATTRIBUTE_CARRIER)) {
-          String carrier = (String) evt.get(MapboxEvent.ATTRIBUTE_CARRIER);
+        if (evt.containsKey(MapboxEvent.KEY_CARRIER)) {
+          String carrier = (String) evt.get(MapboxEvent.KEY_CARRIER);
           if (!TextUtils.isEmpty(carrier)) {
-            jsonObject.putOpt(MapboxEvent.ATTRIBUTE_CARRIER, carrier);
+            jsonObject.putOpt(MapboxEvent.KEY_CARRIER, carrier);
           }
         }
 
-        if (evt.containsKey(MapboxEvent.ATTRIBUTE_APPLICATION_STATE)) {
-          String appState = (String) evt.get(MapboxEvent.ATTRIBUTE_APPLICATION_STATE);
+        if (evt.containsKey(MapboxEvent.KEY_APPLICATION_STATE)) {
+          String appState = (String) evt.get(MapboxEvent.KEY_APPLICATION_STATE);
           if (!TextUtils.isEmpty(appState)) {
-            jsonObject.putOpt(MapboxEvent.ATTRIBUTE_APPLICATION_STATE,
-              evt.get(MapboxEvent.ATTRIBUTE_APPLICATION_STATE));
+            jsonObject.putOpt(MapboxEvent.KEY_APPLICATION_STATE,
+              evt.get(MapboxEvent.KEY_APPLICATION_STATE));
           }
         }
 
         // Special cases where null has to be passed if no value exists
         // Requires using put() instead of putOpt()
-        String eventType = (String) evt.get(MapboxEvent.ATTRIBUTE_EVENT);
+        String eventType = (String) evt.get(MapboxEvent.KEY_EVENT);
         if (!TextUtils.isEmpty(eventType) && eventType.equalsIgnoreCase(MapboxEvent.TYPE_MAP_CLICK)) {
           jsonObject.put(MapboxEvent.KEY_GESTURE_ID, evt.get(MapboxEvent.KEY_GESTURE_ID));
         }
 
-        if (evt.containsKey(MapboxEvent.ATTRIBUTE_CELLULAR_NETWORK_TYPE)) {
-          String cellularNetworkType = (String) evt.get(MapboxEvent.ATTRIBUTE_CELLULAR_NETWORK_TYPE);
+        if (evt.containsKey(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE)) {
+          String cellularNetworkType = (String) evt.get(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE);
           if (TextUtils.isEmpty(cellularNetworkType)) {
-            jsonObject.put(MapboxEvent.ATTRIBUTE_CELLULAR_NETWORK_TYPE, null);
+            jsonObject.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE, null);
           } else {
-            jsonObject.put(MapboxEvent.ATTRIBUTE_CELLULAR_NETWORK_TYPE,
-              evt.get(MapboxEvent.ATTRIBUTE_CELLULAR_NETWORK_TYPE));
+            jsonObject.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE,
+              evt.get(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE));
           }
         }
 
