@@ -31,6 +31,7 @@ import com.mapbox.services.android.telemetry.service.TelemetryService;
 import com.mapbox.services.android.telemetry.utils.TelemetryUtils;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Hashtable;
@@ -425,15 +426,19 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       return;
     }
 
+    // Scale values
+    double latitudeScaled = new BigDecimal(location.getLatitude()).setScale(7, BigDecimal.ROUND_DOWN).doubleValue();
+    double longitudeScaled = new BigDecimal(location.getLongitude()).setScale(7, BigDecimal.ROUND_DOWN).doubleValue();
+
     // Add Location even to queue
     Hashtable<String, Object> event = new Hashtable<>();
     event.put(MapboxEvent.KEY_EVENT, MapboxEvent.TYPE_LOCATION);
     event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate());
     event.put(MapboxEvent.KEY_SOURCE, MapboxEvent.SOURCE_MAPBOX);
     event.put(MapboxEvent.KEY_SESSION_ID, encodeString(mapboxSessionId));
-    event.put(MapboxEvent.KEY_LATITUDE, location.getLatitude());
-    event.put(MapboxEvent.KEY_LONGITUDE, location.getLongitude());
-    event.put(MapboxEvent.KEY_ALTITUDE, location.getAltitude());
+    event.put(MapboxEvent.KEY_LATITUDE, latitudeScaled);
+    event.put(MapboxEvent.KEY_LONGITUDE, longitudeScaled);
+    event.put(MapboxEvent.KEY_ALTITUDE, Math.round(location.getAltitude()));
     event.put(MapboxEvent.KEY_HORIZONTAL_ACCURACY, Math.round(location.getAccuracy()));
     event.put(MapboxEvent.KEY_OPERATING_SYSTEM, TelemetryConstants.OPERATING_SYSTEM);
     event.put(MapboxEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
@@ -464,14 +469,12 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       eventWithAttributes.put(MapboxEvent.KEY_MODEL, Build.MODEL);
       eventWithAttributes.put(MapboxEvent.KEY_OPERATING_SYSTEM, TelemetryConstants.OPERATING_SYSTEM);
       eventWithAttributes.put(MapboxEvent.KEY_RESOLUTION, displayMetrics.density);
-      eventWithAttributes.put(MapboxEvent.KEY_ACCESSIBILITY_FONT_SCALE,
-        TelemetryUtils.getAccesibilityFontScaleSize(context));
+      eventWithAttributes.put(MapboxEvent.KEY_ACCESSIBILITY_FONT_SCALE, TelemetryUtils.getAccesibilityFontScaleSize(context));
       eventWithAttributes.put(MapboxEvent.KEY_ORIENTATION, TelemetryUtils.getOrientation(context));
       eventWithAttributes.put(MapboxEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
       eventWithAttributes.put(MapboxEvent.KEY_PLUGGED_IN, isPluggedIn());
       eventWithAttributes.put(MapboxEvent.KEY_CARRIER, TelemetryUtils.getCellularCarrier(context));
-      eventWithAttributes.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE,
-        TelemetryUtils.getCellularNetworkType(context));
+      eventWithAttributes.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE, TelemetryUtils.getCellularNetworkType(context));
       eventWithAttributes.put(MapboxEvent.KEY_WIFI, TelemetryUtils.getConnectedToWifi(context));
       putEventOnQueue(eventWithAttributes);
       pushTurnstileEvent();
@@ -481,8 +484,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       eventWithAttributes.put(MapboxEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
       eventWithAttributes.put(MapboxEvent.KEY_PLUGGED_IN, isPluggedIn());
       eventWithAttributes.put(MapboxEvent.KEY_CARRIER, TelemetryUtils.getCellularCarrier(context));
-      eventWithAttributes.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE,
-        TelemetryUtils.getCellularNetworkType(context));
+      eventWithAttributes.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE, TelemetryUtils.getCellularNetworkType(context));
       eventWithAttributes.put(MapboxEvent.KEY_WIFI, TelemetryUtils.getConnectedToWifi(context));
       putEventOnQueue(eventWithAttributes);
     } else if (eventType.equalsIgnoreCase(MapboxEvent.TYPE_MAP_DRAG_END)) {
@@ -491,8 +493,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       eventWithAttributes.put(MapboxEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
       eventWithAttributes.put(MapboxEvent.KEY_PLUGGED_IN, isPluggedIn());
       eventWithAttributes.put(MapboxEvent.KEY_CARRIER, TelemetryUtils.getCellularCarrier(context));
-      eventWithAttributes.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE,
-        TelemetryUtils.getCellularNetworkType(context));
+      eventWithAttributes.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE, TelemetryUtils.getCellularNetworkType(context));
       eventWithAttributes.put(MapboxEvent.KEY_WIFI, TelemetryUtils.getConnectedToWifi(context));
       putEventOnQueue(eventWithAttributes);
     } else {
