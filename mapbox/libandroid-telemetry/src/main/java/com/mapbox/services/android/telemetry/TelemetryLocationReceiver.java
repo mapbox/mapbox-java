@@ -12,7 +12,6 @@ import timber.log.Timber;
  * The TelemetryService will register for updates sent to this TelemetryLocationReceiver.
  * Messages are sent locally using a LocalBroadcastManager.
  */
-
 public class TelemetryLocationReceiver extends BroadcastReceiver {
 
   public static final String INTENT_STRING =
