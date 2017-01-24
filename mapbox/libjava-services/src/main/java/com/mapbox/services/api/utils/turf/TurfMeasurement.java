@@ -2,11 +2,13 @@ package com.mapbox.services.api.utils.turf;
 
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
+import com.mapbox.services.commons.geojson.GeoJSON;
 import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -101,7 +103,7 @@ public class TurfMeasurement {
     double latitude2 = Math.asin(Math.sin(latitude1) * Math.cos(radians)
       + Math.cos(latitude1) * Math.sin(radians) * Math.cos(bearingRad));
     double longitude2 = longitude1 + Math.atan2(Math.sin(bearingRad)
-      * Math.sin(radians) * Math.cos(latitude1),
+        * Math.sin(radians) * Math.cos(latitude1),
       Math.cos(radians) - Math.sin(latitude1) * Math.sin(latitude2));
 
     return Point.fromCoordinates(
@@ -306,5 +308,40 @@ public class TurfMeasurement {
     }
 
     return Point.fromCoordinates(coords.get(coords.size() - 1));
+  }
+
+  /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param geojson A Feature or FeatureCollection.
+   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @throws TurfException Thrown when the GeoJSON provided isn't valid.
+   * @since 2.0.0
+   */
+  public static double[] bbox(GeoJSON geojson) throws TurfException {
+    double[] bbox = new double[4];
+
+    bbox[0] = Double.POSITIVE_INFINITY;
+    bbox[1] = Double.POSITIVE_INFINITY;
+    bbox[2] = Double.NEGATIVE_INFINITY;
+    bbox[3] = Double.NEGATIVE_INFINITY;
+
+    List<Position> resultCoords = TurfMeta.coordEach(geojson, false);
+
+    for (Position position : resultCoords) {
+      if (bbox[0] > position.getLongitude()) {
+        bbox[0] = position.getLongitude();
+      }
+      if (bbox[1] > position.getLatitude()) {
+        bbox[1] = position.getLatitude();
+      }
+      if (bbox[2] < position.getLongitude()) {
+        bbox[2] = position.getLongitude();
+      }
+      if (bbox[3] < position.getLatitude()) {
+        bbox[3] = position.getLatitude();
+      }
+    }
+    return bbox;
   }
 }

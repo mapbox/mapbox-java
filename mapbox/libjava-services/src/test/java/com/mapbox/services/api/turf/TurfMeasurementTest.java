@@ -6,6 +6,8 @@ import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.geojson.MultiLineString;
+import com.mapbox.services.commons.geojson.MultiPolygon;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
@@ -220,5 +222,83 @@ public class TurfMeasurementTest extends BaseTurf {
     assertEquals(
       ((Point) fc.getFeatures().get(7).getGeometry()).getCoordinates().getLatitude(),
       pt8.getCoordinates().getLatitude(), DELTA);
+  }
+
+  /*
+   * Turf bbox Test
+   */
+
+  @Test
+  public void bboxFromFeatureCollection() throws IOException, TurfException {
+    FeatureCollection featureCollection =
+      FeatureCollection.fromJson(loadJsonFixture("turf-bbox", "feature_collection.geojson"));
+    double[] bbox = TurfMeasurement.bbox(featureCollection);
+
+    assertEquals(bbox.length, 4);
+    assertEquals(bbox[0], 20, DELTA);
+    assertEquals(bbox[1], -10, DELTA);
+    assertEquals(bbox[2], 130, DELTA);
+    assertEquals(bbox[3], 4, DELTA);
+  }
+
+  @Test
+  public void bboxFromPoint() throws IOException, TurfException {
+    Feature feature = Feature.fromJson(loadJsonFixture("turf-bbox", "point.geojson"));
+    double[] bbox = TurfMeasurement.bbox(feature);
+
+    assertEquals(bbox.length, 4);
+    assertEquals(bbox[0], 102, DELTA);
+    assertEquals(bbox[1], 0.5, DELTA);
+    assertEquals(bbox[2], 102, DELTA);
+    assertEquals(bbox[3], 0.5, DELTA);
+  }
+
+  @Test
+  public void bboxFromLine() throws TurfException, IOException {
+    LineString lineString = LineString.fromJson(loadJsonFixture("turf-bbox", "line_string.geojson"));
+    double[] bbox = TurfMeasurement.bbox(lineString);
+
+    assertEquals(bbox.length, 4);
+    assertEquals(bbox[0], 102, DELTA);
+    assertEquals(bbox[1], -10, DELTA);
+    assertEquals(bbox[2], 130, DELTA);
+    assertEquals(bbox[3], 4, DELTA);
+  }
+
+  @Test
+  public void bboxFromPolygon() throws TurfException, IOException {
+    Feature feature = Feature.fromJson(loadJsonFixture("turf-bbox", "polygon.geojson"));
+    double[] bbox = TurfMeasurement.bbox(feature);
+
+    assertEquals(bbox.length, 4);
+    assertEquals(bbox[0], 100, DELTA);
+    assertEquals(bbox[1], 0, DELTA);
+    assertEquals(bbox[2], 101, DELTA);
+    assertEquals(bbox[3], 1, DELTA);
+  }
+
+  @Test
+  public void bboxFromMultiLineString() throws IOException, TurfException {
+    MultiLineString multiLineString =
+      MultiLineString.fromJson(loadJsonFixture("turf-bbox", "multiline_string.geojson"));
+    double[] bbox = TurfMeasurement.bbox(multiLineString);
+
+    assertEquals(bbox.length, 4);
+    assertEquals(bbox[0], 100, DELTA);
+    assertEquals(bbox[1], 0, DELTA);
+    assertEquals(bbox[2], 103, DELTA);
+    assertEquals(bbox[3], 3, DELTA);
+  }
+
+  @Test
+  public void bboxFromMultiPolygon() throws IOException, TurfException {
+    MultiPolygon multiPolygon = MultiPolygon.fromJson(loadJsonFixture("turf-bbox", "multipolygon.geojson"));
+    double[] bbox = TurfMeasurement.bbox(multiPolygon);
+
+    assertEquals(bbox.length, 4);
+    assertEquals(bbox[0], 100, DELTA);
+    assertEquals(bbox[1], 0, DELTA);
+    assertEquals(bbox[2], 103, DELTA);
+    assertEquals(bbox[3], 3, DELTA);
   }
 }
