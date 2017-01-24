@@ -77,7 +77,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    *
    * @return MapboxTelemetry
    */
-  public static MapboxTelemetry getInstance() {
+  public static synchronized MapboxTelemetry getInstance() {
     if (instance == null) {
       instance = new MapboxTelemetry();
     }
