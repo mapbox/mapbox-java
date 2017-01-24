@@ -139,7 +139,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
         context.getPackageName(), PackageManager.GET_SERVICES);
       if (packageInfo.services != null) {
         for (ServiceInfo service : packageInfo.services) {
-          if (TextUtils.equals("com.mapbox.services.android.telemetry.service.TelemetryService", service.name)) {
+          if (TextUtils.equals(TelemetryConstants.TELEMETRY_SERVICE_NAME, service.name)) {
             return;
           }
         }

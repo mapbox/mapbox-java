@@ -14,6 +14,8 @@ public class TelemetryConstants {
 
   public static final Locale DEFAULT_LOCALE = Locale.US;
 
+  public static final String TELEMETRY_SERVICE_NAME = "com.mapbox.services.android.telemetry.service.TelemetryService";
+
   public static final long FLUSH_DELAY_MS = 10 * 1_000; // 10 seconds
   public static final long FLUSH_PERIOD_MS = 3 * 60 * 1_000; // 3 minutes
   public static final int FLUSH_EVENTS_CAP = 180; // 180 seconds or 180 events
