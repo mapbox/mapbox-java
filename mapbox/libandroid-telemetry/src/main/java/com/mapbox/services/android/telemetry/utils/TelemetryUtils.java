@@ -1,5 +1,6 @@
 package com.mapbox.services.android.telemetry.utils;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.mapbox.services.android.telemetry.constants.TelemetryConstants;
+import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -135,23 +137,30 @@ public class TelemetryUtils {
     }
   }
 
+  /**
+   * Check whether we're connected to wifi. This requires android.permission.ACCESS_WIFI_STATE,
+   * we'll fail silently if we don't have access to it.
+   */
   public static Boolean getConnectedToWifi(Context context) {
-    Boolean status = false;
+    Boolean isConnectedToWifi = false;
 
-    WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-    if (wifiMgr.isWifiEnabled()) {
-      try {
+    try {
+      WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+      if (PermissionsManager.isPermissionGranted(context, Manifest.permission.ACCESS_WIFI_STATE)
+        && wifiMgr.isWifiEnabled()) {
+
         //noinspection MissingPermission
         WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
         if (wifiInfo.getNetworkId() != -1) {
-          status = true;
+          isConnectedToWifi = true;
         }
-      } catch (Exception exception) {
-        status = false;
       }
+    } catch (Exception exception) {
+      // Assume false if we don't have access to state
+      isConnectedToWifi = false;
     }
 
-    return status;
+    return isConnectedToWifi;
   }
 
 }
