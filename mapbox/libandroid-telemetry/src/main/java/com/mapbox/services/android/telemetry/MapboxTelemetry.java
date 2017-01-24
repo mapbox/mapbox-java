@@ -145,7 +145,10 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
         }
       }
     } catch (Exception exception) {
-      Timber.w("Failed to inspect for the telemetry service: %s.", exception.getMessage());
+      throw new TelemetryException(String.format(TelemetryConstants.DEFAULT_LOCALE,
+        "Failed to find the Telemetry service in your `AndroidManifest.xml` file (%s). "
+          + "For more information, please visit https://www.mapbox.com/android-sdk.",
+        exception.getMessage()));
     }
 
     throw new TelemetryException(
