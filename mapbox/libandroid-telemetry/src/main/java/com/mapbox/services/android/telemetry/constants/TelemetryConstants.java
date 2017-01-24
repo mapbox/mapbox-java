@@ -16,7 +16,7 @@ public class TelemetryConstants {
 
   public static final long FLUSH_DELAY_MS = 10 * 1_000; // 10 seconds
   public static final long FLUSH_PERIOD_MS = 3 * 60 * 1_000; // 3 minutes
-  public static final int FLUSH_EVENTS_CAP = 1_000;
+  public static final int FLUSH_EVENTS_CAP = 180; // 180 seconds or 180 events
 
   public static final int SESSION_ID_ROTATION_MS = 24 * 60 * 60 * 1_000; // 24 hours
 
