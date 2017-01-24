@@ -8,7 +8,6 @@ import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
