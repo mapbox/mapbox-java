@@ -263,7 +263,6 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       SharedPreferences.Editor editor = prefs.edit();
       editor.putString(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_VENDOR_ID, mapboxVendorId);
       editor.apply();
-      editor.commit();
     }
 
     // Set telemetry opt-in/opt-out status
@@ -324,7 +323,6 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     SharedPreferences.Editor editor = prefs.edit();
     editor.putBoolean(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_ENABLED, telemetryEnabled);
     editor.apply();
-    editor.commit();
   }
 
   /**
