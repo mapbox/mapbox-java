@@ -76,7 +76,6 @@ public class PermissionsManager {
       listener.onExplanationNeeded(permissionsToExplain);
     }
 
-
     ActivityCompat.requestPermissions(activity, permissions, REQUEST_PERMISSIONS_CODE);
   }
 

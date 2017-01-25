@@ -6,12 +6,10 @@ import android.os.Handler;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
  * Sample LocationEngine that provides mocked locations simulating GPS updates
  */
-public class MockLocationEngine implements LocationEngine {
+public class MockLocationEngine extends LocationEngine {
 
   // Mocked data
   private static final int UPDATE_INTERVAL_MS = 1000;
@@ -22,13 +20,11 @@ public class MockLocationEngine implements LocationEngine {
     new double[] {38.909623, -77.043413},
     new double[] {38.909624, -77.043414}};
 
-  private CopyOnWriteArrayList<LocationEngineListener> locationListeners;
-
   private Handler handler;
   int currentIndex;
 
   public MockLocationEngine() {
-    locationListeners = new CopyOnWriteArrayList<>();
+    super();
   }
 
   @Override
@@ -36,7 +32,7 @@ public class MockLocationEngine implements LocationEngine {
     currentIndex = 0;
 
     // "Connection" is immediate here
-    for (LocationEngineListener listener : this.locationListeners) {
+    for (LocationEngineListener listener : locationListeners) {
       listener.onConnected();
     }
   }
@@ -52,30 +48,8 @@ public class MockLocationEngine implements LocationEngine {
   }
 
   @Override
-  public int getPriority() {
-    return 0; // No effect
-  }
-
-  @Override
-  public void setPriority(int priority) {
-    // No effect
-  }
-
-  @Override
   public Location getLastLocation() {
     return getNextLocation();
-  }
-
-  @Override
-  public void addLocationEngineListener(LocationEngineListener listener) {
-    if (!this.locationListeners.contains(listener)) {
-      this.locationListeners.add(listener);
-    }
-  }
-
-  @Override
-  public boolean removeLocationEngineListener(LocationEngineListener listener) {
-    return this.locationListeners.remove(listener);
   }
 
   @Override

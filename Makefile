@@ -48,6 +48,16 @@ publish-android:
 	cd mapbox; ./gradlew :libandroid-services:uploadArchives
 	cd mapbox; ./gradlew :libandroid-ui:uploadArchives
 
+publish-local:
+	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
+	cd mapbox; ./gradlew :libjava-core:install
+	cd mapbox; ./gradlew :libjava-geojson:install
+	cd mapbox; ./gradlew :libjava-services:install
+	cd mapbox; ./gradlew :libjava-services-rx:install
+	# cd mapbox; ./gradlew :libandroid-telemetry:install
+	# cd mapbox; ./gradlew :libandroid-services:install
+	# cd mapbox; ./gradlew :libandroid-ui:install
+
 dex-count:
 	cd mapbox; ./gradlew countDebugDexMethods
 	cd mapbox; ./gradlew countReleaseDexMethods

@@ -17,12 +17,10 @@ import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
 /**
  * Sample LocationEngine using Google Play Services
  */
-public class GoogleLocationEngine implements LocationEngine,
+public class GoogleLocationEngine extends LocationEngine implements
   GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
   private static final String LOG_TAG = GoogleLocationEngine.class.getSimpleName();
@@ -30,14 +28,11 @@ public class GoogleLocationEngine implements LocationEngine,
   private static LocationEngine instance;
 
   private Context context;
-  private CopyOnWriteArrayList<LocationEngineListener> locationListeners;
   private GoogleApiClient googleApiClient;
 
-  private int priority;
-
   public GoogleLocationEngine(Context context) {
+    super();
     this.context = context;
-    locationListeners = new CopyOnWriteArrayList<>();
     googleApiClient = new GoogleApiClient.Builder(context)
       .addConnectionCallbacks(this)
       .addOnConnectionFailedListener(this)
@@ -74,7 +69,7 @@ public class GoogleLocationEngine implements LocationEngine,
 
   @Override
   public void onConnected(@Nullable Bundle bundle) {
-    for (LocationEngineListener listener : this.locationListeners) {
+    for (LocationEngineListener listener : locationListeners) {
       listener.onConnected();
     }
   }
@@ -90,36 +85,13 @@ public class GoogleLocationEngine implements LocationEngine,
   }
 
   @Override
-  public int getPriority() {
-    return priority;
-  }
-
-  @Override
-  public void setPriority(int priority) {
-    this.priority = priority;
-  }
-
-  @Override
   public Location getLastLocation() {
-    if (googleApiClient.isConnected()
-      && PermissionsManager.isPermissionGranted(context, PermissionsManager.FINE_LOCATION_PERMISSION)) {
+    if (googleApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context)) {
       //noinspection MissingPermission
       return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     }
 
     return null;
-  }
-
-  @Override
-  public void addLocationEngineListener(LocationEngineListener listener) {
-    if (!this.locationListeners.contains(listener)) {
-      this.locationListeners.add(listener);
-    }
-  }
-
-  @Override
-  public boolean removeLocationEngineListener(LocationEngineListener listener) {
-    return this.locationListeners.remove(listener);
   }
 
   @Override
@@ -140,8 +112,10 @@ public class GoogleLocationEngine implements LocationEngine,
       request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    //noinspection MissingPermission
-    LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, this);
+    if (googleApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context)) {
+      //noinspection MissingPermission
+      LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, this);
+    }
   }
 
   @Override
@@ -151,7 +125,7 @@ public class GoogleLocationEngine implements LocationEngine,
 
   @Override
   public void onLocationChanged(Location location) {
-    for (LocationEngineListener listener : this.locationListeners) {
+    for (LocationEngineListener listener : locationListeners) {
       listener.onLocationChanged(location);
     }
   }
