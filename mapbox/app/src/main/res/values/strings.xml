@@ -43,6 +43,7 @@
     <string name="title_turf_midpoint">Turf midpoint</string>
     <string name="title_off_route_detection">Off route detection</string>
     <string name="title_connectivity">Connectivity state</string>
+    <string name="title_snap_to_route">Snap to route</string>
 
     <!-- Descriptions -->
     <string name="description_location">Shows how to obtain location from different engines.</string>
@@ -65,6 +66,7 @@
     <string name="description_turf_midpoint">Use Turf to get a midpoint.</string>
     <string name="description_off_route_detection">Uses the Route Utils class to determine if a users off route.</string>
     <string name="description_connectivity">Keep track of the connectivity status.</string>
+    <string name="description_snap_to_route">Move forward or backwards between route steps and snap a point to the line.</string>
 
     <string-array name="turf_calculation_items">
         <item>Select calculation</item>
