@@ -1,5 +1,7 @@
 package com.mapbox.services.commons.models;
 
+import java.util.logging.Logger;
+
 /**
  * Represents a position defined by a longitude, latitude, and optionally, an altitude.
  *
@@ -7,6 +9,7 @@ package com.mapbox.services.commons.models;
  */
 public class Position {
 
+  private static final Logger logger = Logger.getLogger(Position.class.getSimpleName());
   private final double longitude;
   private final double latitude;
   private final double altitude;
@@ -23,6 +26,16 @@ public class Position {
     this.longitude = longitude;
     this.latitude = latitude;
     this.altitude = altitude;
+
+    if (java.lang.Double.compare(longitude, 180.0) > 0 ||
+      java.lang.Double.compare(longitude, -180.0) < 0) {
+      logger.warning("Invalid longitude: " + longitude);
+    }
+
+    if (java.lang.Double.compare(latitude, 90.0) > 0 ||
+      java.lang.Double.compare(latitude, -90.0) < 0) {
+      logger.warning("Invalid latitude: " + latitude);
+    }
   }
 
   /**
