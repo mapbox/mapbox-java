@@ -460,13 +460,17 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     public MapboxDirections build() throws ServicesException {
       validateAccessToken(accessToken);
 
+      if (profile == null) {
+        throw new ServicesException(
+          "You should provide a profile");
+      }
+
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException(
           "You should provide at least two coordinates (from/to).");
       }
 
-
-      if (profile != null && profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      if (profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
         && coordinates.size() > 3) {
           throw new ServicesException(
             "You should provide at most 3 coordinates with the driving-traffic profile.");
