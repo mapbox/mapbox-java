@@ -49,6 +49,16 @@ public class MapboxEvent implements Serializable {
   public static final String KEY_APPLICATION_STATE = "applicationState";
   public static final String KEY_HORIZONTAL_ACCURACY = "horizontalAccuracy";
 
+  // Gestures
+  public static final String GESTURE_SINGLETAP = "SingleTap";
+  public static final String GESTURE_DOUBLETAP = "DoubleTap";
+  public static final String GESTURE_TWO_FINGER_SINGLETAP = "TwoFingerTap";
+  public static final String GESTURE_PAN_START = "Pan";
+  public static final String GESTURE_PINCH_START = "Pinch";
+  public static final String GESTURE_ROTATION_START = "Rotation";
+  public static final String GESTURE_PITCH_START = "Pitch";
+  public static final String GESTURE_QUICK_ZOOM = "QuickZoom";
+
   /**
    * Helper method for tracking gesture events
    *
