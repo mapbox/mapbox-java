@@ -325,8 +325,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     /**
-     * @return {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING_TRAFFIC},
-     * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING},
+     * @return {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING},
      * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_CYCLING},
      * or {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_WALKING}
      * @since 1.0.0
@@ -463,18 +462,6 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException(
           "You should provide at least two coordinates (from/to).");
-      }
-
-
-      if (profile != null && profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
-        && coordinates.size() > 3) {
-          throw new ServicesException(
-            "You should provide at most 3 coordinates with the driving-traffic profile.");
-      }
-
-      if (coordinates.size() > 25) {
-        throw new ServicesException(
-          "You should provide at most 25 coordinates.");
       }
 
       if (radiuses != null && radiuses.length != coordinates.size()) {
