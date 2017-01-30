@@ -27,13 +27,13 @@ public class Position {
     this.latitude = latitude;
     this.altitude = altitude;
 
-    if (java.lang.Double.compare(longitude, 180.0) > 0 ||
-      java.lang.Double.compare(longitude, -180.0) < 0) {
+    if (Double.compare(longitude, 180.0) > 0
+      || Double.compare(longitude, -180.0) < 0) {
       logger.warning("Invalid longitude: " + longitude);
     }
 
-    if (java.lang.Double.compare(latitude, 90.0) > 0 ||
-      java.lang.Double.compare(latitude, -90.0) < 0) {
+    if (Double.compare(latitude, 90.0) > 0
+      || Double.compare(latitude, -90.0) < 0) {
       logger.warning("Invalid latitude: " + latitude);
     }
   }
