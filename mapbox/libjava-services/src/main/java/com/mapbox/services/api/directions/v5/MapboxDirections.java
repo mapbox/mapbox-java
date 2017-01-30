@@ -462,7 +462,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
       if (profile == null) {
         throw new ServicesException(
-          "You should provide a profile");
+          "A profile is required for the Directions API. Use one of the profiles found in the"
+            + "DirectionsCriteria.java file.");
       }
 
       if (coordinates == null || coordinates.size() < 2) {
@@ -472,13 +473,13 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
       if (profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
         && coordinates.size() > 3) {
-          throw new ServicesException(
-            "You should provide at most 3 coordinates with the driving-traffic profile.");
+        throw new ServicesException(
+          "Using the driving-traffic profile allows for maximum of 3 coordinates.");
       }
 
       if (coordinates.size() > 25) {
         throw new ServicesException(
-          "You should provide at most 25 coordinates.");
+          "All profiles (except driving-traffic) allows for maximum of 25 coordinates.");
       }
 
       if (radiuses != null && radiuses.length != coordinates.size()) {

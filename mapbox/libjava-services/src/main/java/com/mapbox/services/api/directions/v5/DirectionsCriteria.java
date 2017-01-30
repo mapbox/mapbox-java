@@ -13,7 +13,7 @@ public class DirectionsCriteria {
    * For car and motorcycle routing. This profile factors in current and historic traffic
    * conditions to avoid slowdowns.
    *
-   * @since 1.0.0
+   * @since 2.0.0
    */
   public static final String PROFILE_DRIVING_TRAFFIC = "driving-traffic";
 
