@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.Polyline;
@@ -230,7 +230,7 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
       .setOverview(DirectionsCriteria.OVERVIEW_FULL)
       .setSteps(true)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-      .setAccessToken(MapboxAccountManager.getInstance().getAccessToken())
+      .setAccessToken(Mapbox.getAccessToken())
       .build();
 
     Log.i(TAG, "Request: " + client.cloneCall().request());

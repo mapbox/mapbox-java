@@ -1,11 +1,9 @@
 package com.mapbox.services.android.testapp;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
-import com.mapbox.mapboxsdk.constants.MapboxConstants;
+import com.mapbox.mapboxsdk.Mapbox;
 
 public class Utils {
 
@@ -13,21 +11,17 @@ public class Utils {
    * <p>
    * Returns the Mapbox access token set in the app resources.
    * </p>
-   * It will first search the application manifest for a {@link MapboxConstants#KEY_META_DATA_MANIFEST}
-   * meta-data value. If not found it will then attempt to load the access token from the
+   * It will first search for a token in the Mapbox object. If not found it
+   * will then attempt to load the access token from the
    * {@code res/values/dev.xml} development file.
    *
    * @param context The {@link Context} of the {@link android.app.Activity} or {@link android.app.Fragment}.
    * @return The Mapbox access token or null if not found.
-   * @see MapboxConstants#KEY_META_DATA_MANIFEST
    */
   public static String getMapboxAccessToken(@NonNull Context context) {
     try {
       // Read out AndroidManifest
-      PackageManager packageManager = context.getPackageManager();
-      ApplicationInfo appInfo = packageManager
-        .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-      String token = appInfo.metaData.getString(MapboxConstants.KEY_META_DATA_MANIFEST);
+      String token = Mapbox.getAccessToken();
       if (token == null || token.isEmpty()) {
         throw new IllegalArgumentException();
       }

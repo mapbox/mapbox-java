@@ -329,7 +329,7 @@ public class OffRouteDetectionActivity extends AppCompatActivity {
           // and starts outside the current user view. Without this, the user must
           // intentionally execute a gesture before the view marker reappears on
           // the map.
-          map.getMarkerViewManager().scheduleViewMarkerInvalidation();
+          map.getMarkerViewManager().update();
 
           // Rotate the car (marker) to the correct orientation.
           car.setRotation((float) computeHeading(car.getPosition(), routePoints.get(count)));

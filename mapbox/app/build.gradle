@@ -41,9 +41,9 @@ dependencies {
     compile "com.android.support:recyclerview-v7:25.1.0"
 
     // Mapbox SDK
-    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.1@aar') {
-        transitive = true
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-java-services'
+    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:5.0.0-SNAPSHOT@aar') {
+        transitive=true
+        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-java-geojson'
     }
 
     // Leak Canary

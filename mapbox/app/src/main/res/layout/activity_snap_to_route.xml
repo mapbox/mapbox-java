@@ -12,9 +12,9 @@
         android:id="@+id/mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:center_latitude="29.7850"
-        app:center_longitude="-95.7357"
-        app:zoom="13"/>
+        app:mapbox_cameraTargetLat="29.7850"
+        app:mapbox_cameraTargetLng="-95.7357"
+        app:mapbox_cameraZoom="13"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
