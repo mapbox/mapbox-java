@@ -10,6 +10,14 @@ public class DirectionsCriteria {
   public static final String PROFILE_DEFAULT_USER = "mapbox";
 
   /**
+   * For car and motorcycle routing. This profile factors in current and historic traffic
+   * conditions to avoid slowdowns.
+   *
+   * @since 2.0.0
+   */
+  public static final String PROFILE_DRIVING_TRAFFIC = "driving-traffic";
+
+  /**
    * For car and motorcycle routing. This profile shows the fastest routes by preferring
    * high-speed roads like highways.
    *

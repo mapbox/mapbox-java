@@ -27,6 +27,7 @@ import java.util.Locale;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
 import static org.hamcrest.Matchers.startsWith;
@@ -39,6 +40,9 @@ public class MapboxDirectionsTest {
 
   private static final double DELTA = 1E-10;
 
+  public static final String DIRECTIONS_FIXTURE = "src/test/fixtures/directions_v5.json";
+  public static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
+
   private MockWebServer server;
   private HttpUrl mockUrl;
 
@@ -48,9 +52,25 @@ public class MapboxDirectionsTest {
   public void setUp() throws IOException {
     server = new MockWebServer();
 
-    byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/directions_v5.json"));
-    String body = new String(content, Charset.defaultCharset());
-    server.enqueue(new MockResponse().setBody(body));
+    server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
+      @Override
+      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+
+        // Switch response to traffic profile if test is using it.
+        String resource = DIRECTIONS_FIXTURE;
+        if (request.getPath().contains("driving-traffic")) {
+          resource = DIRECTIONS_TRAFFIC_FIXTURE;
+        }
+
+        try {
+          String body = new String(Files.readAllBytes(Paths.get(resource)), Charset.forName("utf-8"));
+          return new MockResponse().setBody(body);
+        } catch (IOException ioException) {
+          throw new RuntimeException(ioException);
+        }
+
+      }
+    });
 
     server.start();
 
@@ -77,10 +97,55 @@ public class MapboxDirectionsTest {
   }
 
   @Test
+  public void coordinatesOverLimit() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("All profiles (except driving-traffic) allows for maximum of 25 coordinates."));
+
+    ArrayList<Position> coord = new ArrayList<>();
+    for (int i = 0; i < 26; i++) {
+      coord.add(Position.fromCoordinates(i, i));
+    }
+
+    new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setCoordinates(coord).build();
+  }
+
+  @Test
+  public void coordinatesTrafficOverLimit() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Using the driving-traffic profile allows for maximum of 3 coordinates."));
+
+    ArrayList<Position> coord = new ArrayList<>();
+    for (int i = 0; i < 4; i++) {
+      coord.add(Position.fromCoordinates(i, i));
+    }
+
+    new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .setCoordinates(coord).build();
+  }
+
+  @Test
+  public void noProfileProvided() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("A profile is required for the Directions API. Use one of the profiles found in"));
+
+    ArrayList<Position> coord = new ArrayList<>();
+    for (int i = 0; i < 4; i++) {
+      coord.add(Position.fromCoordinates(i, i));
+    }
+
+    new MapboxDirections.Builder().setAccessToken("pk.XXX").setCoordinates(coord).build();
+  }
+
+  @Test
   public void requiredCoordinates() throws ServicesException {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(startsWith("You should provide at least two coordinates (from/to)"));
-    new MapboxDirections.Builder().setAccessToken("pk.XXX").build();
+    new MapboxDirections.Builder().setAccessToken("pk.XXX").setProfile(DirectionsCriteria.PROFILE_DRIVING).build();
   }
 
   @Test
@@ -127,6 +192,23 @@ public class MapboxDirectionsTest {
     assertEquals(route.getDuration(), 3441.8, DELTA);
     assertTrue(route.getGeometry().startsWith("kqreFhodjVhh"));
     assertEquals(route.getLegs().size(), 1);
+  }
+
+  @Test
+  public void testDirectionsTrafficProfile() throws ServicesException, IOException {
+    MapboxDirections client = new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positions)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .setBaseUrl(mockUrl.toString())
+      .build();
+    Response<DirectionsResponse> response = client.executeCall();
+    DirectionsRoute route = response.body().getRoutes().get(0);
+    assertEquals(route.getDistance(), 88549, DELTA);
+    assertEquals(route.getDuration(), 3520.8, DELTA);
+    assertTrue(route.getGeometry().startsWith("kqreFhodjV"));
+    assertEquals(route.getLegs().size(), 1);
+
   }
 
   @Test
@@ -317,5 +399,4 @@ public class MapboxDirectionsTest {
       .build();
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
-
 }
