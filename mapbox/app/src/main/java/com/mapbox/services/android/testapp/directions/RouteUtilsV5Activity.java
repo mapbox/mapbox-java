@@ -256,6 +256,12 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
   }
 
   @Override
+  protected void onStart() {
+    super.onStart();
+    mapView.onStart();
+  }
+
+  @Override
   public void onResume() {
     super.onResume();
     mapView.onResume();
@@ -271,6 +277,12 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    mapView.onStop();
   }
 
   @Override

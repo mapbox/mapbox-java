@@ -159,6 +159,12 @@ public class DirectionsV5Activity extends AppCompatActivity {
   }
 
   @Override
+  protected void onStart() {
+    super.onStart();
+    mapView.onStart();
+  }
+
+  @Override
   public void onResume() {
     super.onResume();
     mapView.onResume();
@@ -174,6 +180,12 @@ public class DirectionsV5Activity extends AppCompatActivity {
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     mapView.onSaveInstanceState(outState);
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    mapView.onStop();
   }
 
   @Override
