@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.Polyline;
@@ -230,7 +230,7 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
       .setOverview(DirectionsCriteria.OVERVIEW_FULL)
       .setSteps(true)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-      .setAccessToken(MapboxAccountManager.getInstance().getAccessToken())
+      .setAccessToken(Mapbox.getAccessToken())
       .build();
 
     Log.i(TAG, "Request: " + client.cloneCall().request());
@@ -312,6 +312,12 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
   }
 
   @Override
+  protected void onStart() {
+    super.onStart();
+    mapView.onStart();
+  }
+
+  @Override
   public void onResume() {
     super.onResume();
     mapView.onResume();
@@ -328,6 +334,13 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
     super.onLowMemory();
     mapView.onLowMemory();
   }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    mapView.onStop();
+  }
+
 
   @Override
   protected void onDestroy() {

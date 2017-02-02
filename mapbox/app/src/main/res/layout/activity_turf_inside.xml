@@ -13,9 +13,9 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:center_latitude="33.9425"
-        app:center_longitude="-118.4050"
-        app:style_url="mapbox://styles/mapbox/streets-v9"
-        app:zoom="12"/>
+        app:mapbox_cameraTargetLat="33.9425"
+        app:mapbox_cameraTargetLng="-118.4050"
+        app:mapbox_styleUrl="mapbox://styles/mapbox/streets-v9"
+        app:mapbox_cameraZoom="12"/>
 
 </android.support.design.widget.CoordinatorLayout>

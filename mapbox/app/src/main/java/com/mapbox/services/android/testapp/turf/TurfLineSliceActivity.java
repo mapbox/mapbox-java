@@ -52,6 +52,12 @@ public class TurfLineSliceActivity extends AppCompatActivity {
   }
 
   @Override
+  protected void onStart() {
+    super.onStart();
+    mapView.onStart();
+  }
+
+  @Override
   public void onResume() {
     super.onResume();
     mapView.onResume();
@@ -67,6 +73,12 @@ public class TurfLineSliceActivity extends AppCompatActivity {
   public void onLowMemory() {
     super.onLowMemory();
     mapView.onLowMemory();
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    mapView.onStop();
   }
 
   @Override

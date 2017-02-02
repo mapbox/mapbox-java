@@ -4,7 +4,7 @@ import android.app.Application;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.mapbox.mapboxsdk.Mapbox;
 import com.squareup.leakcanary.LeakCanary;
 
 public class MasApplication extends Application {
@@ -26,6 +26,6 @@ public class MasApplication extends Application {
     if (TextUtils.isEmpty(mapboxAccessToken)) {
       Log.w(LOG_TAG, "Warning: access token isn't set.");
     }
-    MapboxAccountManager.start(getApplicationContext(), mapboxAccessToken);
+    Mapbox.getInstance(getApplicationContext(), mapboxAccessToken);
   }
 }
