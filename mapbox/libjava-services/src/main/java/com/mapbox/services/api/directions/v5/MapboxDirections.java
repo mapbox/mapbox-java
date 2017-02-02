@@ -130,7 +130,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     // We use `Boolean` instead of `boolean` to allow unset (null) values.
     private String user = null;
     private String profile = null;
-    private ArrayList<Position> coordinates = null;
+    private List<Position> coordinates = null;
     private String accessToken = null;
     private Boolean alternatives = null;
     private String geometries = null;
@@ -187,7 +187,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setCoordinates(ArrayList<Position> coordinates) {
+    public Builder setCoordinates(List<Position> coordinates) {
       this.coordinates = coordinates;
       return this;
     }
