@@ -177,7 +177,7 @@ public class DistanceActivity extends AppCompatActivity implements OnMapReadyCal
   private void addMarkers() {
     for (int i = 0; i < restaurants.size(); i++) {
       CircleLayer circleLayer = new CircleLayer(
-        "circle-layer",
+              restaurants.get(i).getStringProperty("name") + "-circle-layer",
         restaurants.get(i).getStringProperty("name") + "-source"
       ).withProperties(
         circleColor(Color.parseColor("#e55e5e")),
