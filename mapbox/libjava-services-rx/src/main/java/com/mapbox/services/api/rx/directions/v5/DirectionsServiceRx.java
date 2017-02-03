@@ -1,19 +1,19 @@
-package com.mapbox.services.api.directions.v5;
+package com.mapbox.services.api.rx.directions.v5;
 
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Interface that defines the directions service (v5).
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
-public interface DirectionsService {
+public interface DirectionsServiceRx {
 
   /**
    * Call-based interface
@@ -31,11 +31,10 @@ public interface DirectionsService {
    * @param continueStraight Define whether the route should continue straight even if the route
    *                         will be slower.
    * @return A retrofit Call object
-   * @since 1.0.0
+   * @since 2.0.0
    */
   @GET("directions/v5/{user}/{profile}/{coordinates}")
-  Call<DirectionsResponse> getCall(
-    // NOTE: DirectionsServiceRx should be updated as well
+  Observable<DirectionsResponse> getObservable(
     @Header("User-Agent") String userAgent,
     @Path("user") String user,
     @Path("profile") String profile,

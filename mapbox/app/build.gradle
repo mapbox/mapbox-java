@@ -35,6 +35,9 @@ dependencies {
     // The Test App depends in Mapbox Android UI, which includes all modules
     compile project(':libandroid-ui')
 
+    // Rx extensions
+    compile project(':libjava-services-rx')
+
     // Android Support libraries
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'

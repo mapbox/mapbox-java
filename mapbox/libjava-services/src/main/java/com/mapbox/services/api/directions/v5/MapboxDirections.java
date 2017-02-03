@@ -27,11 +27,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
-  private Builder builder = null;
+  protected Builder builder = null;
   private DirectionsService service = null;
   private Call<DirectionsResponse> call = null;
 
-  private MapboxDirections(Builder builder) {
+  protected MapboxDirections(Builder builder) {
     this.builder = builder;
   }
 
