@@ -6,6 +6,9 @@ targetCompatibility = "1.7"
 dependencies {
     // Rx support depends on non-Rx services
     compile project(':libjava-services')
+
+    // Rx extensions
+    compile rootProject.ext.dep.retrofit2Rx
 }
 
 apply from: 'gradle-javadoc.gradle'
