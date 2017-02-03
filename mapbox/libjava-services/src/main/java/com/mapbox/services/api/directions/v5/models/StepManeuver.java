@@ -21,6 +21,7 @@ public class StepManeuver {
   private String pronunciation;
   private String modifier;
   private String instruction;
+  private Integer exit;
 
   /**
    * @return double array of [longitude, latitude] for the snapped coordinate.
@@ -73,6 +74,22 @@ public class StepManeuver {
    */
   public String getType() {
     return type;
+  }
+
+  /**
+   * An optional integer indicating number of the exit to take.
+   * If exit is undefined the destination is on the roundabout.
+   * The property exists for the following type properties:
+   *
+   * else - indicates the number of intersections passed until the turn.
+   * roundabout - traverse roundabout
+   * rotary - a traffic circle
+   *
+   * @return String of an integer indicating number of the exit to take.
+   * @since 2.0.0
+   */
+  public Integer getExit() {
+    return exit;
   }
 
   /**
@@ -132,6 +149,7 @@ public class StepManeuver {
       + ", type='" + type + '\''
       + ", pronunciation='" + pronunciation + '\''
       + ", modifier='" + modifier + '\''
+      + ", exit=" + exit
       + '}';
   }
 }
