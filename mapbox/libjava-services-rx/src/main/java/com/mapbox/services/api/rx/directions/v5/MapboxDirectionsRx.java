@@ -1,5 +1,6 @@
 package com.mapbox.services.api.rx.directions.v5;
 
+import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.MapboxDirections;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 
@@ -64,5 +65,13 @@ public class MapboxDirectionsRx extends MapboxDirections {
 
     // Done
     return observable;
+  }
+
+  public static class Builder extends MapboxDirections.Builder<Builder> {
+    @Override
+    public MapboxDirectionsRx build() throws ServicesException {
+      super.build();
+      return new MapboxDirectionsRx(this);
+    }
   }
 }

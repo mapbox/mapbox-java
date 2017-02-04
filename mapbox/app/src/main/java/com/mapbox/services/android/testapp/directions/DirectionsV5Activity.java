@@ -113,13 +113,13 @@ public class DirectionsV5Activity extends AppCompatActivity {
       .setOverview(DirectionsCriteria.OVERVIEW_FULL)
       .build();
 
-    MapboxDirectionsRx.Builder builder = new MapboxDirectionsRx.Builder()
+    MapboxDirectionsRx clientRx = new MapboxDirectionsRx.Builder()
       .setAccessToken(Utils.getMapboxAccessToken(this))
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setSteps(true)
-      .setOverview(DirectionsCriteria.OVERVIEW_FULL);
-    MapboxDirectionsRx clientRx = new MapboxDirectionsRx(builder);
+      .setOverview(DirectionsCriteria.OVERVIEW_FULL)
+      .build();
     clientRx.getObservable()
       .subscribeOn(Schedulers.newThread())
       .observeOn(AndroidSchedulers.mainThread())
