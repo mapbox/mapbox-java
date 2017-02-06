@@ -17,6 +17,8 @@ import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Sample LocationEngine using Google Play Services
  */
@@ -27,13 +29,13 @@ public class GoogleLocationEngine extends LocationEngine implements
 
   private static LocationEngine instance;
 
-  private Context context;
+  private WeakReference<Context> context;
   private GoogleApiClient googleApiClient;
 
   public GoogleLocationEngine(Context context) {
     super();
-    this.context = context;
-    googleApiClient = new GoogleApiClient.Builder(context)
+    this.context = new WeakReference<>(context);
+    googleApiClient = new GoogleApiClient.Builder(this.context.get())
       .addConnectionCallbacks(this)
       .addOnConnectionFailedListener(this)
       .addApi(LocationServices.API)
@@ -86,7 +88,7 @@ public class GoogleLocationEngine extends LocationEngine implements
 
   @Override
   public Location getLastLocation() {
-    if (googleApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context)) {
+    if (googleApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
       return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     }
@@ -112,7 +114,7 @@ public class GoogleLocationEngine extends LocationEngine implements
       request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    if (googleApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context)) {
+    if (googleApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
       LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, this);
     }

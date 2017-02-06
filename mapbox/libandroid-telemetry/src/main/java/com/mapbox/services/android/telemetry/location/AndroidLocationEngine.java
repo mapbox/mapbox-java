@@ -9,6 +9,8 @@ import android.text.TextUtils;
 
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
+import java.lang.ref.WeakReference;
+
 import timber.log.Timber;
 
 /**
@@ -23,7 +25,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
 
   private static AndroidLocationEngine instance;
 
-  private Context context;
+  private WeakReference<Context> context;
   private LocationManager locationManager;
   private String currentProvider = null;
 
@@ -31,8 +33,8 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
     super();
 
     Timber.v("Initializing.");
-    this.context = context;
-    locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    this.context = new WeakReference<>(context);
+    locationManager = (LocationManager) this.context.get().getSystemService(Context.LOCATION_SERVICE);
     currentProvider = DEFAULT_PROVIDER;
 
   }
@@ -68,7 +70,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
   @Override
   public Location getLastLocation() {
     if (!TextUtils.isEmpty(currentProvider)
-      && PermissionsManager.areLocationPermissionsGranted(context)) {
+      && PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
       return locationManager.getLastKnownLocation(currentProvider);
     }
@@ -79,7 +81,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
   @Override
   public void requestLocationUpdates() {
     if (!TextUtils.isEmpty(currentProvider)
-      && PermissionsManager.areLocationPermissionsGranted(context)) {
+      && PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
       locationManager.requestLocationUpdates(currentProvider, DEFAULT_MIN_TIME, DEFAULT_MIN_DISTANCE, this);
     }
@@ -108,7 +110,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
 
   @Override
   public void removeLocationUpdates() {
-    if (PermissionsManager.areLocationPermissionsGranted(context)) {
+    if (PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
       locationManager.removeUpdates(this);
     }
