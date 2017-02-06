@@ -27,11 +27,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
-  private Builder builder = null;
+  protected Builder builder = null;
   private DirectionsService service = null;
   private Call<DirectionsResponse> call = null;
 
-  private MapboxDirections(Builder builder) {
+  protected MapboxDirections(Builder builder) {
     this.builder = builder;
   }
 
@@ -125,7 +125,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    *
    * @since 1.0.0
    */
-  public static class Builder extends MapboxBuilder {
+  public static class Builder<T extends Builder> extends MapboxBuilder {
 
     // We use `Boolean` instead of `boolean` to allow unset (null) values.
     private String user = null;
@@ -163,9 +163,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setUser(String user) {
+    public T setUser(String user) {
       this.user = user;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -173,9 +173,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setProfile(String profile) {
+    public T setProfile(String profile) {
       this.profile = profile;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -187,9 +187,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setCoordinates(List<Position> coordinates) {
+    public T setCoordinates(List<Position> coordinates) {
       this.coordinates = coordinates;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -201,7 +201,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setOrigin(Position origin) {
+    public T setOrigin(Position origin) {
       if (coordinates == null) {
         coordinates = new ArrayList<>();
       }
@@ -212,7 +212,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       // their indices)
       coordinates.add(0, origin);
 
-      return this;
+      return (T) this;
     }
 
     /**
@@ -224,7 +224,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setDestination(Position destination) {
+    public T setDestination(Position destination) {
       if (coordinates == null) {
         coordinates = new ArrayList<>();
       }
@@ -233,7 +233,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       // to the end of this list.
       coordinates.add(destination);
 
-      return this;
+      return (T) this;
     }
 
     /**
@@ -245,9 +245,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @since 1.0.0
      */
     @Override
-    public Builder setAccessToken(String accessToken) {
+    public T setAccessToken(String accessToken) {
       this.accessToken = accessToken;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -257,9 +257,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setAlternatives(Boolean alternatives) {
+    public T setAlternatives(Boolean alternatives) {
       this.alternatives = alternatives;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -270,9 +270,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setOverview(String overview) {
+    public T setOverview(String overview) {
       this.overview = overview;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -282,9 +282,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @param radiuses double array containing the radiuses
      * @return Builder
      */
-    public Builder setRadiuses(double[] radiuses) {
+    public T setRadiuses(double[] radiuses) {
       this.radiuses = radiuses;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -294,9 +294,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setSteps(Boolean steps) {
+    public T setSteps(Boolean steps) {
       this.steps = steps;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -307,9 +307,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setContinueStraight(Boolean continueStraight) {
+    public T setContinueStraight(Boolean continueStraight) {
       this.continueStraight = continueStraight;
-      return this;
+      return (T) this;
     }
 
     /*
@@ -439,14 +439,14 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return continueStraight;
     }
 
-    public Builder setClientAppName(String appName) {
+    public T setClientAppName(String appName) {
       super.clientAppName = appName;
-      return this;
+      return (T) this;
     }
 
-    public Builder setBaseUrl(String baseUrl) {
+    public T setBaseUrl(String baseUrl) {
       super.baseUrl = baseUrl;
-      return this;
+      return (T) this;
     }
 
     /**

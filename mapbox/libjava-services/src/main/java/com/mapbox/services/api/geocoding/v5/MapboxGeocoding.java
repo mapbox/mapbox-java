@@ -28,10 +28,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
-  private Builder builder = null;
+  protected Builder builder = null;
   private GeocodingService service = null;
   private Call<GeocodingResponse> call = null;
   private Call<List<GeocodingResponse>> batchCall = null;
+  private Gson gson;
 
   /**
    * Public constructor.
@@ -39,8 +40,19 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    * @param builder {@link Builder} object.
    * @since 1.0.0
    */
-  public MapboxGeocoding(Builder builder) {
+  protected MapboxGeocoding(Builder builder) {
     this.builder = builder;
+  }
+
+  protected Gson getGson() {
+    // Gson instance with type adapters
+    if (gson == null) {
+      gson = new GsonBuilder()
+        .registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer())
+        .create();
+    }
+
+    return gson;
   }
 
   /**
@@ -55,15 +67,10 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       return service;
     }
 
-    // Gson instance with type adapters
-    Gson gson = new GsonBuilder()
-      .registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer())
-      .create();
-
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
-      .addConverterFactory(GsonConverterFactory.create(gson))
+      .addConverterFactory(GsonConverterFactory.create(getGson()))
       .build();
 
     service = retrofit.create(GeocodingService.class);
@@ -221,7 +228,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    *
    * @since 1.0.0
    */
-  public static class Builder extends MapboxBuilder {
+  public static class Builder<T extends Builder> extends MapboxBuilder {
 
     // Required
     private String accessToken;
@@ -255,9 +262,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @since 1.0.0
      */
     @Override
-    public Builder setAccessToken(String accessToken) {
+    public T setAccessToken(String accessToken) {
       this.accessToken = accessToken;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -267,9 +274,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setLocation(String location) {
+    public T setLocation(String location) {
       query = location;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -277,14 +284,14 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setCoordinates(Position position) {
+    public T setCoordinates(Position position) {
       if (position == null) {
-        return this;
+        return (T) this;
       }
       query = String.format(Locale.US, "%f,%f",
         position.getLongitude(),
         position.getLatitude());
-      return this;
+      return (T) this;
     }
 
     /**
@@ -294,9 +301,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setMode(String mode) {
+    public T setMode(String mode) {
       this.mode = mode;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -306,9 +313,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setCountry(String country) {
+    public T setCountry(String country) {
       this.country = country;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -318,9 +325,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setCountries(String[] countries) {
+    public T setCountries(String[] countries) {
       this.country = TextUtils.join(",", countries);
-      return this;
+      return (T) this;
     }
 
     /**
@@ -330,14 +337,14 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setProximity(Position position) {
+    public T setProximity(Position position) {
       if (position == null) {
-        return this;
+        return (T) this;
       }
       proximity = String.format(Locale.US, "%f,%f",
         position.getLongitude(),
         position.getLatitude());
-      return this;
+      return (T) this;
     }
 
     /**
@@ -348,9 +355,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setGeocodingType(String geocodingType) {
+    public T setGeocodingType(String geocodingType) {
       this.geocodingTypes = geocodingType;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -361,9 +368,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setGeocodingTypes(String[] geocodingType) {
+    public T setGeocodingTypes(String[] geocodingType) {
       this.geocodingTypes = TextUtils.join(",", geocodingType);
-      return this;
+      return (T) this;
     }
 
     /**
@@ -373,9 +380,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 1.0.0
      */
-    public Builder setAutocomplete(boolean autocomplete) {
+    public T setAutocomplete(boolean autocomplete) {
       this.autocomplete = autocomplete;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -387,7 +394,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @throws ServicesException Generic Exception for all things geocoding.
      * @since 1.0.0
      */
-    public Builder setBbox(Position northeast, Position southwest) throws ServicesException {
+    public T setBbox(Position northeast, Position southwest) throws ServicesException {
       return setBbox(southwest.getLongitude(), southwest.getLatitude(),
         northeast.getLongitude(), northeast.getLatitude());
     }
@@ -403,13 +410,13 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @throws ServicesException Generic Exception for all things geocoding.
      * @since 1.0.0
      */
-    public Builder setBbox(double minX, double minY, double maxX, double maxY) throws ServicesException {
+    public T setBbox(double minX, double minY, double maxX, double maxY) throws ServicesException {
       if (minX == 0 && minY == 0 && maxX == 0 && maxY == 0) {
         throw new ServicesException("You provided an empty bounding box");
       }
 
       this.bbox = String.format(Locale.US, "%f,%f,%f,%f", minX, minY, maxX, maxY);
-      return this;
+      return (T) this;
     }
 
     /**
@@ -420,12 +427,12 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return Builder
      * @since 2.0.0
      */
-    public Builder setLimit(int limit) {
+    public T setLimit(int limit) {
       if (limit == 0) {
-        return this;
+        return (T) this;
       }
       this.limit = String.format(Locale.US, "%d", limit);
-      return this;
+      return (T) this;
     }
 
     /**
@@ -506,9 +513,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       return limit;
     }
 
-    public Builder setClientAppName(String appName) {
+    public T setClientAppName(String appName) {
       super.clientAppName = appName;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -519,9 +526,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @since 2.0.0
      */
     @Override
-    public Builder setBaseUrl(String baseUrl) {
+    public T setBaseUrl(String baseUrl) {
       super.baseUrl = baseUrl;
-      return this;
+      return (T) this;
     }
 
     /**

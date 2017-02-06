@@ -23,6 +23,7 @@ import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.directions.v5.MapboxDirections;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.services.api.rx.directions.v5.MapboxDirectionsRx;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
 
@@ -33,6 +34,9 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class DirectionsV5Activity extends AppCompatActivity {
 
@@ -108,6 +112,25 @@ public class DirectionsV5Activity extends AppCompatActivity {
       .setSteps(true)
       .setOverview(DirectionsCriteria.OVERVIEW_FULL)
       .build();
+
+    MapboxDirectionsRx clientRx = new MapboxDirectionsRx.Builder()
+      .setAccessToken(Utils.getMapboxAccessToken(this))
+      .setCoordinates(positions)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setSteps(true)
+      .setOverview(DirectionsCriteria.OVERVIEW_FULL)
+      .build();
+    clientRx.getObservable()
+      .subscribeOn(Schedulers.newThread())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe(new Action1<DirectionsResponse>() {
+        @Override
+        public void call(DirectionsResponse response) {
+          DirectionsRoute currentRoute = response.getRoutes().get(0);
+          Log.d(LOG_TAG, "Response code: " + response.getCode());
+          Log.d(LOG_TAG, "Distance: " + currentRoute.getDistance());
+        }
+      });
 
     client.enqueueCall(new Callback<DirectionsResponse>() {
       @Override

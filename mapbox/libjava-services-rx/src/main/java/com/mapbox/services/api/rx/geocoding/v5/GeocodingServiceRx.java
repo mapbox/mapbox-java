@@ -1,24 +1,24 @@
-package com.mapbox.services.api.geocoding.v5;
+package com.mapbox.services.api.rx.geocoding.v5;
 
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 
 import java.util.List;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Interface that defines the geocoding service.
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
-public interface GeocodingService {
+public interface GeocodingServiceRx {
 
   /**
-   * Call-based interface
+   * Observable-based interface
    *
    * @param userAgent    The user
    * @param mode         mapbox.places or mapbox.places-permanent for enterprise geocoding.
@@ -31,12 +31,11 @@ public interface GeocodingService {
    * @param autocomplete True if you want auto complete.
    * @param bbox         Optionally pass in a bounding box to limit results in.
    * @param limit        Optionally pass in a limit the amount of returning results.
-   * @return A retrofit Call object
+   * @return A retrofit Observable object
    * @since 1.0.0
    */
   @GET("/geocoding/v5/{mode}/{query}.json")
-  Call<GeocodingResponse> getCall(
-    // NOTE: GeocodingServiceRx should be updated as well
+  Observable<GeocodingResponse> getObservable(
     @Header("User-Agent") String userAgent,
     @Path("mode") String mode,
     @Path("query") String query,
@@ -49,7 +48,7 @@ public interface GeocodingService {
     @Query("limit") String limit);
 
   /**
-   * Call-based interface
+   * Observable-based interface
    *
    * @param userAgent    The user
    * @param mode         mapbox.places-permanent for batch geocoding.
@@ -62,12 +61,11 @@ public interface GeocodingService {
    * @param autocomplete True if you want auto complete.
    * @param bbox         Optionally pass in a bounding box to limit results in.
    * @param limit        Optionally pass in a limit the amount of returning results.
-   * @return A retrofit Call object
+   * @return A retrofit Observable object
    * @since 1.0.0
    */
   @GET("/geocoding/v5/{mode}/{query}.json")
-  Call<List<GeocodingResponse>> getBatchCall(
-    // NOTE: GeocodingServiceRx should be updated as well
+  Observable<List<GeocodingResponse>> getBatchObservable(
     @Header("User-Agent") String userAgent,
     @Path("mode") String mode,
     @Path("query") String query,
