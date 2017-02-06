@@ -31,6 +31,7 @@ public interface DistanceService {
    */
   @POST("distances/v1/{user}/{profile}")
   Call<DistanceResponse> getCall(
+    // NOTE: DistanceServiceRx should be updated as well
     @Header("User-Agent") String userAgent,
     @Path("user") String user,
     @Path("profile") String profile,

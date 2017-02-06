@@ -36,6 +36,7 @@ public interface GeocodingService {
    */
   @GET("/geocoding/v5/{mode}/{query}.json")
   Call<GeocodingResponse> getCall(
+    // NOTE: GeocodingServiceRx should be updated as well
     @Header("User-Agent") String userAgent,
     @Path("mode") String mode,
     @Path("query") String query,
@@ -66,6 +67,7 @@ public interface GeocodingService {
    */
   @GET("/geocoding/v5/{mode}/{query}.json")
   Call<List<GeocodingResponse>> getBatchCall(
+    // NOTE: GeocodingServiceRx should be updated as well
     @Header("User-Agent") String userAgent,
     @Path("mode") String mode,
     @Path("query") String query,

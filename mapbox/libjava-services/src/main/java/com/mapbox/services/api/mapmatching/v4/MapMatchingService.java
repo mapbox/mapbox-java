@@ -31,6 +31,7 @@ public interface MapMatchingService {
    */
   @POST("matching/v4/{profile}.json")
   Call<MapMatchingResponse> getCall(
+    // NOTE: MapMatchingServiceRx should be updated as well
     @Header("User-Agent") String userAgent,
     @Path("profile") String profile,
     @Query("access_token") String accessToken,

@@ -40,7 +40,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    * @param builder {@link Builder} object.
    * @since 1.0.0
    */
-  public MapboxGeocoding(Builder builder) {
+  protected MapboxGeocoding(Builder builder) {
     this.builder = builder;
   }
 

@@ -11,9 +11,10 @@ import retrofit2.http.Query;
 import rx.Observable;
 
 /**
- * Created by antonio on 2/6/17.
+ * Interface that defines the geocoding service.
+ *
+ * @since 2.0.0
  */
-
 public interface GeocodingServiceRx {
 
   /**
