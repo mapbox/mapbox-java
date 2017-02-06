@@ -5,11 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.mapmatching.v4.gson.MapMatchingGeometryDeserializer;
+import com.mapbox.services.api.mapmatching.v4.models.MapMatchingResponse;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.api.mapmatching.v4.gson.MapMatchingGeometryDeserializer;
-import com.mapbox.services.api.mapmatching.v4.models.MapMatchingResponse;
 
 import java.io.IOException;
 
@@ -33,12 +33,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
 
-  private Builder builder = null;
+  protected Builder builder = null;
   private MapMatchingService service = null;
   private Call<MapMatchingResponse> call = null;
+  private Gson gson;
 
-  private MapboxMapMatching(Builder builder) {
+  protected MapboxMapMatching(Builder builder) {
     this.builder = builder;
+  }
+
+  protected Gson getGson() {
+    // Gson instance with type adapters
+    if (gson == null) {
+      gson = new GsonBuilder()
+        .registerTypeAdapter(Geometry.class, new MapMatchingGeometryDeserializer())
+        .create();
+    }
+
+    return gson;
   }
 
   private MapMatchingService getService() {
@@ -47,16 +59,11 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
       return service;
     }
 
-    // Gson instance with type adapters
-    Gson gson = new GsonBuilder()
-      .registerTypeAdapter(Geometry.class, new MapMatchingGeometryDeserializer())
-      .create();
-
     // Retrofit instance
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
-      .addConverterFactory(GsonConverterFactory.create(gson))
+      .addConverterFactory(GsonConverterFactory.create(getGson()))
       .build();
 
     // MapMatching service
@@ -137,7 +144,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
    *
    * @since 1.2.0
    */
-  public static class Builder extends MapboxBuilder {
+  public static class Builder<T extends Builder> extends MapboxBuilder {
 
     private String accessToken;
     private String profile;
@@ -165,9 +172,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
      * @since 1.2.0
      */
     @Override
-    public Builder setAccessToken(String accessToken) {
+    public T setAccessToken(String accessToken) {
       this.accessToken = accessToken;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -188,9 +195,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
      * @return Builder
      * @since 1.2.0
      */
-    public Builder setProfile(String profile) {
+    public T setProfile(String profile) {
       this.profile = profile;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -220,9 +227,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
      * @return Builder
      * @since 1.2.0
      */
-    public Builder setNoGeometry() {
+    public T setNoGeometry() {
       this.geometry = MapMatchingCriteria.GEOMETRY_FALSE;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -254,9 +261,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
      * @return Builder
      * @since 1.2.0
      */
-    public Builder setGpsPrecison(Integer gpsPrecison) {
+    public T setGpsPrecison(Integer gpsPrecison) {
       this.gpsPrecison = gpsPrecison;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -264,9 +271,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
      * @return Builder
      * @since 1.2.0
      */
-    public Builder setTrace(LineString trace) {
+    public T setTrace(LineString trace) {
       this.trace = trace;
-      return this;
+      return (T) this;
     }
 
     private void validateProfile() throws ServicesException {
@@ -298,9 +305,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
       }
     }
 
-    public Builder setClientAppName(String appName) {
+    public T setClientAppName(String appName) {
       super.clientAppName = appName;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -311,9 +318,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
      * @since 2.0.0
      */
     @Override
-    public Builder setBaseUrl(String baseUrl) {
+    public T setBaseUrl(String baseUrl) {
       super.baseUrl = baseUrl;
-      return this;
+      return (T) this;
     }
 
     /**

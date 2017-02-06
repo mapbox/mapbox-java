@@ -6,6 +6,7 @@ import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
 /**
@@ -37,6 +38,7 @@ public class MapboxDirectionsRx extends MapboxDirections {
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
       .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+      .addConverterFactory(GsonConverterFactory.create())
       .build();
 
     // Directions service

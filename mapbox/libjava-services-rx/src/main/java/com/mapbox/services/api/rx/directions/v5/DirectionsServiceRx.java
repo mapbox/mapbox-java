@@ -16,7 +16,7 @@ import rx.Observable;
 public interface DirectionsServiceRx {
 
   /**
-   * Call-based interface
+   * Observable-based interface
    *
    * @param userAgent        The user.
    * @param user             The user.
@@ -30,7 +30,7 @@ public interface DirectionsServiceRx {
    * @param steps            Define if you'd like the route steps.
    * @param continueStraight Define whether the route should continue straight even if the route
    *                         will be slower.
-   * @return A retrofit Call object
+   * @return A retrofit Observable object
    * @since 2.0.0
    */
   @GET("directions/v5/{user}/{profile}/{coordinates}")

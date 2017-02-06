@@ -42,12 +42,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class MapboxDistance extends MapboxService<DistanceResponse> {
 
-  private Builder builder = null;
+  protected Builder builder = null;
   private DistanceService service = null;
   private Call<DistanceResponse> call = null;
+  private Gson gson;
 
-  private MapboxDistance(Builder builder) {
+  protected MapboxDistance(Builder builder) {
     this.builder = builder;
+  }
+
+  protected Gson getGson() {
+    // Gson instance with type adapters
+    if (gson == null) {
+      gson = new GsonBuilder()
+        .registerTypeAdapter(Geometry.class, new DistanceGeometryDeserializer())
+        .create();
+    }
+
+    return gson;
   }
 
   private DistanceService getService() {
@@ -56,16 +68,11 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
       return service;
     }
 
-    // Gson instance with type adapters
-    Gson gson = new GsonBuilder()
-      .registerTypeAdapter(Geometry.class, new DistanceGeometryDeserializer())
-      .create();
-
     // Retrofit instance
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
-      .addConverterFactory(GsonConverterFactory.create(gson))
+      .addConverterFactory(GsonConverterFactory.create(getGson()))
       .build();
 
     // Distance service
@@ -145,7 +152,7 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
    *
    * @since 2.0.0
    */
-  public static class Builder extends MapboxBuilder {
+  public static class Builder<T extends Builder> extends MapboxBuilder {
 
     private String accessToken;
     private String user = DirectionsCriteria.PROFILE_DEFAULT_USER;
@@ -167,9 +174,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      * @return Builder
      * @since 2.0.0
      */
-    public Builder setUser(String user) {
+    public T setUser(String user) {
       this.user = user;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -190,9 +197,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      * @return Builder
      * @since 2.0.0
      */
-    public Builder setProfile(String profile) {
+    public T setProfile(String profile) {
       this.profile = profile;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -210,9 +217,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
         MultiPoint.fromCoordinates(coordinates).toJson());
     }
 
-    public Builder setCoordinates(List<Position> coordinates) {
+    public T setCoordinates(List<Position> coordinates) {
       this.coordinates = coordinates;
-      return this;
+      return (T) this;
     }
 
     private void validateProfile() throws ServicesException {
@@ -244,9 +251,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      * @since 2.0.0
      */
     @Override
-    public Builder setAccessToken(String accessToken) {
+    public T setAccessToken(String accessToken) {
       this.accessToken = accessToken;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -258,9 +265,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
       return this.accessToken;
     }
 
-    public Builder setClientAppName(String appName) {
+    public T setClientAppName(String appName) {
       super.clientAppName = appName;
-      return this;
+      return (T) this;
     }
 
     /**
@@ -271,9 +278,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      * @since 2.0.0
      */
     @Override
-    public Builder setBaseUrl(String baseUrl) {
+    public T setBaseUrl(String baseUrl) {
       super.baseUrl = baseUrl;
-      return this;
+      return (T) this;
     }
 
     /**
