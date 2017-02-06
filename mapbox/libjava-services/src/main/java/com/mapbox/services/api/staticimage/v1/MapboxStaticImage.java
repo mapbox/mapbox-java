@@ -179,7 +179,7 @@ public class MapboxStaticImage {
     }
 
     /**
-     * Optionally, bearing rotates the map around its center. A value of 90 rotates the map 90°
+     * Optionally, bearing rotates the map around its center. A value of 90 rotates the map 90
      * to the left. 180 flips the map. Defaults is 0.
      *
      * @param bearing double number between 0 and 360, interpreted as decimal degrees.
