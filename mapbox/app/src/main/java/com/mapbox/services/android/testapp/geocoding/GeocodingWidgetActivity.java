@@ -13,18 +13,17 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
+import com.mapbox.services.android.testapp.location.LostLocationEngine;
 import com.mapbox.services.android.ui.geocoder.GeocoderAutoCompleteView;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.commons.models.Position;
-import com.mapzen.android.lost.api.LocationListener;
-import com.mapzen.android.lost.api.LocationRequest;
-import com.mapzen.android.lost.api.LocationServices;
-import com.mapzen.android.lost.api.LostApiClient;
 
-public class GeocodingWidgetActivity extends AppCompatActivity {
+public class GeocodingWidgetActivity extends AppCompatActivity implements LocationEngineListener {
 
   private static final String LOG_TAG = "GeocodingWidgetActivity";
 
@@ -32,6 +31,7 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
   private MapboxMap mapboxMap;
 
   private GeocoderAutoCompleteView autocomplete;
+  private LocationEngine locationEngine;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,31 +63,24 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
     });
 
     // Set up location services to improve accuracy
-    LocationRequest request = LocationRequest.create()
-      .setInterval(5000)
-      .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    LostApiClient lostApiClient = new LostApiClient.Builder(this).build();
+    locationEngine = LostLocationEngine.getLocationEngine(this);
+    locationEngine.addLocationEngineListener(this);
+    locationEngine.activate();
+  }
 
-    //noinspection MissingPermission
-    LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, new LocationListener() {
+  @Override
+  public void onConnected() {
+    Log.d(LOG_TAG, "Connected to engine, we can now request updates.");
+    locationEngine.requestLocationUpdates();
+  }
 
-      @Override
-      public void onLocationChanged(Location location) {
-        Log.d(LOG_TAG, "New LOST location: " + location.toString());
-        autocomplete.setProximity(Position.fromCoordinates(
-          location.getLongitude(), location.getLatitude()));
-      }
-
-      @Override
-      public void onProviderDisabled(String provider) {
-        Log.d(LOG_TAG, "onProviderDisabled: " + provider);
-      }
-
-      @Override
-      public void onProviderEnabled(String provider) {
-        Log.d(LOG_TAG, "onProviderEnabled: " + provider);
-      }
-    });
+  @Override
+  public void onLocationChanged(Location location) {
+    if (location != null) {
+      Log.d(LOG_TAG, "New LOST location: " + location.toString());
+      autocomplete.setProximity(Position.fromCoordinates(
+        location.getLongitude(), location.getLatitude()));
+    }
   }
 
   private void updateMap(double latitude, double longitude) {
@@ -114,12 +107,21 @@ public class GeocodingWidgetActivity extends AppCompatActivity {
   public void onResume() {
     super.onResume();
     mapView.onResume();
+    if (locationEngine != null && locationEngine.isConnected()) {
+      locationEngine.requestLocationUpdates();
+    }
   }
 
   @Override
   public void onPause() {
     super.onPause();
     mapView.onPause();
+    if (locationEngine != null) {
+      locationEngine.removeLocationUpdates();
+      locationEngine.removeLocationEngineListener(this);
+      locationEngine.deactivate();
+    }
+
   }
 
   @Override
