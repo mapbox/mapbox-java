@@ -95,6 +95,20 @@ public class Position {
     return new Position(longitude, latitude, Double.NaN);
   }
 
+  /**
+   * Builds a {@link Position} from a double longitude and latitude. Identical to
+   * {@link #fromCoordinates(double, double)} but more explicit about the right order
+   * for the longitude and latitude parameters.
+   *
+   * @param longitude double longitude value.
+   * @param latitude  double latitude value.
+   * @return {@link Position}.
+   * @since 2.0.0
+   */
+  public static Position fromLngLat(double longitude, double latitude) {
+    return Position.fromCoordinates(longitude, latitude);
+  }
+
   public static Position fromCoordinates(double[] coordinates) {
     if (coordinates.length == 3) {
       return Position.fromCoordinates(coordinates[0], coordinates[1], coordinates[2]);
