@@ -5,6 +5,11 @@ import java.util.Locale;
 public class Constants {
 
   /**
+   * Default locale
+   */
+  public static final Locale DEFAULT_LOCALE = Locale.US;
+
+  /**
    * User agent for HTTP requests
    */
   public static final String HEADER_USER_AGENT =

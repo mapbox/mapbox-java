@@ -1,5 +1,9 @@
 package com.mapbox.services.commons.models;
 
+import com.mapbox.services.Constants;
+
+import java.util.logging.Logger;
+
 /**
  * Represents a position defined by a longitude, latitude, and optionally, an altitude.
  *
@@ -7,12 +11,15 @@ package com.mapbox.services.commons.models;
  */
 public class Position {
 
+  private static final Logger logger = Logger.getLogger(Position.class.getSimpleName());
+
   private final double longitude;
   private final double latitude;
   private final double altitude;
 
   /**
-   * Private Constructor
+   * Private constructor. It'll emit a warning if either latitude or longitude seem
+   * to be out of range.
    *
    * @param longitude double value with position's longitude.
    * @param latitude  double value with position's latitude.
@@ -23,6 +30,22 @@ public class Position {
     this.longitude = longitude;
     this.latitude = latitude;
     this.altitude = altitude;
+
+    if (latitude < -90 || latitude > 90) {
+      // Checks the latitude value is within range or provide a warning otherwise
+      logger.warning(String.format(Constants.DEFAULT_LOCALE,
+        "Latitude value seems to be out of range (found: %f, expected: [-90, 90]). "
+          + "Did you accidentally reverse the longitude/latitude order?",
+        latitude));
+    }
+
+    if (longitude < -180 || longitude > 180) {
+      // Checks the longitude value is within range or provide a warning otherwise
+      logger.warning(String.format(Constants.DEFAULT_LOCALE,
+        "Longitude value seems to be out of range (found: %f, expected: [-180, 180]). "
+        + "Did you accidentally reverse the longitude/latitude order?",
+        longitude));
+    }
   }
 
   /**
@@ -95,6 +118,14 @@ public class Position {
     return new Position(longitude, latitude, Double.NaN);
   }
 
+  public static Position fromCoordinates(double[] coordinates) {
+    if (coordinates.length == 3) {
+      return Position.fromCoordinates(coordinates[0], coordinates[1], coordinates[2]);
+    } else {
+      return Position.fromCoordinates(coordinates[0], coordinates[1]);
+    }
+  }
+
   /**
    * Builds a {@link Position} from a double longitude and latitude. Identical to
    * {@link #fromCoordinates(double, double)} but more explicit about the right order
@@ -107,14 +138,6 @@ public class Position {
    */
   public static Position fromLngLat(double longitude, double latitude) {
     return Position.fromCoordinates(longitude, latitude);
-  }
-
-  public static Position fromCoordinates(double[] coordinates) {
-    if (coordinates.length == 3) {
-      return Position.fromCoordinates(coordinates[0], coordinates[1], coordinates[2]);
-    } else {
-      return Position.fromCoordinates(coordinates[0], coordinates[1]);
-    }
   }
 
   /**
