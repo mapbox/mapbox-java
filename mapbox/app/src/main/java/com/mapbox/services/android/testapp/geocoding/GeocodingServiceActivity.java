@@ -186,6 +186,7 @@ public class GeocodingServiceActivity extends AppCompatActivity implements Locat
 
   @Override
   public void onLocationChanged(Location location) {
+    // Unused on purpose
   }
 
   @Override
