@@ -1,3 +1,6 @@
+# Used for Map Matching
+MAP_MATCHING_COORDINATES = 13.418946862220764,52.50055852688439;13.419011235237122,52.50113000479732;13.419756889343262,52.50171780290061;13.419885635375975,52.50237416816131;13.420631289482117,52.50294888790448
+
 checkstyle:
 	cd mapbox; ./gradlew checkstyle
 
@@ -88,15 +91,8 @@ directions-traffic-fixtures:
 		-o mapbox/libjava-services/src/test/fixtures/directions_v5_traffic.json
 
 mapmatching-fixtures:
-	# Geometry polyline
-	curl -X POST --header "Content-Type:application/json" -d @mapbox/libjava-services/src/test/fixtures/mapmatching_trace.json \
-		"https://api.mapbox.com/matching/v4/mapbox.driving.json?geometry=polyline&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/mapmatching_v5_polyline.json
-
-	# No geometry
-	curl -X POST --header "Content-Type:application/json" -d @mapbox/libjava-services/src/test/fixtures/mapmatching_trace.json \
-		"https://api.mapbox.com/matching/v4/mapbox.driving.json?geometry=false&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/mapmatching_v5_no_geometry.json
 
 distance-fixtures:
 	# Retrieve a duration matrix
