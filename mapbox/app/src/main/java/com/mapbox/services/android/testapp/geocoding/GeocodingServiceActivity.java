@@ -1,5 +1,6 @@
 package com.mapbox.services.android.testapp.geocoding;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -13,49 +14,52 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbox.services.android.geocoder.AndroidGeocoder;
+import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.geocoding.service.Constants;
 import com.mapbox.services.android.testapp.geocoding.service.FetchAddressIntentService;
-import com.mapzen.android.lost.api.LocationServices;
-import com.mapzen.android.lost.api.LostApiClient;
+
+import java.lang.ref.WeakReference;
 
 /**
  * This activity is inspired by the stock Android Geocoder sample code in
  * https://github.com/googlesamples/android-play-location/tree/master/LocationAddress
  * <p>
- * In this sample, we show how to use Mapbox' Geocoder simply replacing the
+ * In this sample, we show how to use Mapbox's Geocoder simply replacing the
  * android.location.Geocoder object with com.mapbox.services.android.geocoder.AndroidGeocoder.
- * To simplify the code, we've replaced Google Play Services with LOST.
+ * To simplify the code, we've replaced Google Play Services with Android.
  */
-public class GeocodingServiceActivity extends AppCompatActivity {
+public class GeocodingServiceActivity extends AppCompatActivity implements LocationEngineListener {
 
-  protected static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
-  protected static final String LOCATION_ADDRESS_KEY = "location-address";
+  private static final String ADDRESS_REQUESTED_KEY = "address-request-pending";
+  private static final String LOCATION_ADDRESS_KEY = "location-address";
 
   /**
-   * Provides the entry point to LOST services.
+   * Provides the entry point to location services.
    */
-  protected LostApiClient lostApiClient;
+  private LocationEngine locationEngine;
 
   /**
    * Represents a geographical location.
    */
-  protected Location lastLocation;
+  private Location lastLocation;
 
   /**
    * Tracks whether the user has requested an address. Becomes true when the user requests an
    * address and false when the address (or an error message) is delivered.
    * The user requests an address by pressing the Fetch Address button. This may happen
-   * before LostApiClient connects. This activity uses this boolean to keep track of the
+   * before location engine connects. This activity uses this boolean to keep track of the
    * user's intent. If the value is true, the activity tries to fetch the address as soon as
-   * LostApiClient connects.
+   * location engine connects.
    */
-  protected boolean addressRequested;
+  private static boolean addressRequested;
 
   /**
    * The formatted location address.
    */
-  protected String addressOutput;
+  private static String addressOutput;
 
   /**
    * Receiver registered with this activity to get the response from FetchAddressIntentService.
@@ -65,36 +69,37 @@ public class GeocodingServiceActivity extends AppCompatActivity {
   /**
    * Displays the location address.
    */
-  protected TextView locationAddressTextView;
+  private TextView locationAddressTextView;
 
   /**
    * Visible while the address is being fetched.
    */
-  ProgressBar progressBar;
+  private ProgressBar progressBar;
 
   /**
    * Kicks off the request to fetch an address when pressed.
    */
-  Button fetchAddressButton;
+  private Button fetchAddressButton;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_geocoding_service);
 
-    resultReceiver = new AddressResultReceiver(new Handler());
-
     locationAddressTextView = (TextView) findViewById(R.id.location_address_view);
     progressBar = (ProgressBar) findViewById(R.id.progress_bar);
     fetchAddressButton = (Button) findViewById(R.id.fetch_address_button);
+
+    resultReceiver = new AddressResultReceiver(new Handler(), this, locationAddressTextView, progressBar,
+      fetchAddressButton);
 
     // Set defaults, then update using values stored in the Bundle.
     addressRequested = false;
     addressOutput = "";
     updateValuesFromBundle(savedInstanceState);
 
-    updateUiWidgets();
-    buildLostApiClient();
+    updateUiWidgets(addressRequested, progressBar, fetchAddressButton);
+    buildAndroidLocationEngine();
   }
 
   /**
@@ -111,48 +116,51 @@ public class GeocodingServiceActivity extends AppCompatActivity {
       // and stored in the Bundle. If it was found, display the address string in the UI.
       if (savedInstanceState.keySet().contains(LOCATION_ADDRESS_KEY)) {
         addressOutput = savedInstanceState.getString(LOCATION_ADDRESS_KEY);
-        displayAddressOutput();
+        displayAddressOutput(locationAddressTextView);
       }
     }
   }
 
   /**
-   * Builds a LostApiClient.
+   * Builds Android location engine
    */
-  protected synchronized void buildLostApiClient() {
-    lostApiClient = new LostApiClient.Builder(this).build();
+  private synchronized void buildAndroidLocationEngine() {
+    locationEngine = AndroidLocationEngine.getLocationEngine(this);
+    locationEngine.addLocationEngineListener(this);
+    locationEngine.activate();
   }
 
   /**
    * Runs when user clicks the Fetch Address button. Starts the service to fetch the address if
-   * LostApiClient is connected.
+   * location engine is connected.
    */
   public void fetchAddressButtonHandler(View view) {
-    // We only start the service to fetch the address if LostApiClient is connected.
-    if (lostApiClient.isConnected() && lastLocation != null) {
+    // We only start the service to fetch the address if location engine is connected.
+    if (locationEngine.isConnected() && lastLocation != null) {
       startIntentService();
     }
 
-    // If LostApiClient isn't connected, we process the user's request by setting
-    // addressRequested to true. Later, when LostApiClient connects, we launch the service to
+    // If location engine isn't connected, we process the user's request by setting
+    // addressRequested to true. Later, when location engine connects, we launch the service to
     // fetch the address. As far as the user is concerned, pressing the Fetch Address button
     // immediately kicks off the process of getting the address.
     addressRequested = true;
-    updateUiWidgets();
+    updateUiWidgets(addressRequested, progressBar, fetchAddressButton);
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    lostApiClient.connect();
-    getLastLocation();
+  protected void onResume() {
+    super.onResume();
+    if (locationEngine != null && locationEngine.isConnected()) {
+      obtainLastAddress();
+    }
   }
 
-  private void getLastLocation() {
+  private void obtainLastAddress() {
     // Gets the best and most recent location currently available, which may be null
     // in rare cases when a location is not available.
-    //noinspection MissingPermission
-    lastLocation = LocationServices.FusedLocationApi.getLastLocation(lostApiClient);
+
+    lastLocation = locationEngine.getLastLocation();
     if (lastLocation != null) {
       // Determine whether a Geocoder is available.
       if (!AndroidGeocoder.isPresent()) {
@@ -161,10 +169,10 @@ public class GeocodingServiceActivity extends AppCompatActivity {
       }
 
       // It is possible that the user presses the button to get the address before the
-      // LostApiClient object successfully connects. In such a case, addressRequested
+      // location engine object successfully connects. In such a case, addressRequested
       // is set to true, but no attempt is made to fetch the address (see
       // fetchAddressButtonHandler()) . Instead, we start the intent service here if the
-      // user has requested an address, since we now have a connection to LostApiClient.
+      // user has requested an address, since we now have a connection to location engine.
       if (addressRequested) {
         startIntentService();
       }
@@ -172,10 +180,21 @@ public class GeocodingServiceActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onStop() {
-    super.onStop();
-    if (lostApiClient.isConnected()) {
-      lostApiClient.disconnect();
+  public void onConnected() {
+    obtainLastAddress();
+  }
+
+  @Override
+  public void onLocationChanged(Location location) {
+    // Unused on purpose
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    if (locationEngine != null) {
+      locationEngine.removeLocationEngineListener(this);
+      locationEngine.deactivate();
     }
   }
 
@@ -183,7 +202,7 @@ public class GeocodingServiceActivity extends AppCompatActivity {
    * Creates an intent, adds location data to it as an extra, and starts the intent service for
    * fetching an address.
    */
-  protected void startIntentService() {
+  private void startIntentService() {
     // Create an intent for passing to the intent service responsible for fetching the address.
     Intent intent = new Intent(this, FetchAddressIntentService.class);
 
@@ -202,28 +221,28 @@ public class GeocodingServiceActivity extends AppCompatActivity {
   /**
    * Updates the address in the UI.
    */
-  protected void displayAddressOutput() {
-    locationAddressTextView.setText(addressOutput);
+  private static void displayAddressOutput(TextView view) {
+    view.setText(addressOutput);
   }
 
   /**
    * Toggles the visibility of the progress bar. Enables or disables the Fetch Address button.
    */
-  private void updateUiWidgets() {
+  private static void updateUiWidgets(boolean addressRequested, ProgressBar progressBar, Button button) {
     if (addressRequested) {
       progressBar.setVisibility(ProgressBar.VISIBLE);
-      fetchAddressButton.setEnabled(false);
+      button.setEnabled(false);
     } else {
       progressBar.setVisibility(ProgressBar.GONE);
-      fetchAddressButton.setEnabled(true);
+      button.setEnabled(true);
     }
   }
 
   /**
-   * Shows a toast with the given text.
+   * Shows a toast with the given message.
    */
-  protected void showToast(String text) {
-    Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+  private static void showToast(Context context, String message) {
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
   }
 
   @Override
@@ -239,9 +258,19 @@ public class GeocodingServiceActivity extends AppCompatActivity {
   /**
    * Receiver for data sent from FetchAddressIntentService.
    */
-  class AddressResultReceiver extends ResultReceiver {
-    public AddressResultReceiver(Handler handler) {
+  private static class AddressResultReceiver extends ResultReceiver {
+    private final WeakReference<Context> contextReference;
+    private final WeakReference<TextView> textViewReference;
+    private final WeakReference<ProgressBar> progressBarReference;
+    private final WeakReference<Button> fetchAddressButtonReference;
+
+    public AddressResultReceiver(Handler handler, Context context, TextView resultTextView, ProgressBar progressBar,
+                                 Button fetchAddressButton) {
       super(handler);
+      this.contextReference = new WeakReference<>(context);
+      this.textViewReference = new WeakReference<>(resultTextView);
+      this.progressBarReference = new WeakReference<>(progressBar);
+      this.fetchAddressButtonReference = new WeakReference<>(fetchAddressButton);
     }
 
     /**
@@ -251,16 +280,28 @@ public class GeocodingServiceActivity extends AppCompatActivity {
     protected void onReceiveResult(int resultCode, Bundle resultData) {
       // Display the address string or an error message sent from the intent service.
       addressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-      displayAddressOutput();
+      TextView view = textViewReference.get();
+      if (view != null) {
+        displayAddressOutput(view);
+      }
 
       // Show a toast message if an address was found.
       if (resultCode == Constants.SUCCESS_RESULT) {
-        showToast(getString(R.string.address_found));
+        Context context = contextReference.get();
+        if (context != null) {
+          String message = context.getString(R.string.address_found);
+          showToast(context, message);
+        }
       }
 
       // Reset. Enable the Fetch Address button and stop showing the progress bar.
       addressRequested = false;
-      updateUiWidgets();
+
+      ProgressBar progressBar = progressBarReference.get();
+      Button fetchAddressButton = fetchAddressButtonReference.get();
+      if (progressBar != null && fetchAddressButton != null) {
+        updateUiWidgets(addressRequested, progressBar, fetchAddressButton);
+      }
     }
   }
 

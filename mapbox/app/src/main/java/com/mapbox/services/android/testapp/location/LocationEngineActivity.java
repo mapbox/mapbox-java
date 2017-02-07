@@ -44,6 +44,8 @@ public class LocationEngineActivity extends AppCompatActivity
     super.onPause();
     if (locationEngine != null) {
       locationEngine.removeLocationUpdates();
+      locationEngine.removeLocationEngineListener(this);
+      locationEngine.deactivate();
     }
   }
 

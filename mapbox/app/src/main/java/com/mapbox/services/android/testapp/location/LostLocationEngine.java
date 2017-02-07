@@ -13,6 +13,8 @@ import com.mapzen.android.lost.api.LocationRequest;
 import com.mapzen.android.lost.api.LocationServices;
 import com.mapzen.android.lost.api.LostApiClient;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Sample LocationEngine using the Open Source Lost library
  */
@@ -23,13 +25,13 @@ public class LostLocationEngine extends LocationEngine implements
 
   private static LocationEngine instance;
 
-  private Context context;
+  private WeakReference<Context> context;
   private LostApiClient lostApiClient;
 
   public LostLocationEngine(Context context) {
     super();
-    this.context = context;
-    lostApiClient = new LostApiClient.Builder(context)
+    this.context = new WeakReference<>(context);
+    lostApiClient = new LostApiClient.Builder(this.context.get())
       .addConnectionCallbacks(this)
       .build();
   }
@@ -75,7 +77,7 @@ public class LostLocationEngine extends LocationEngine implements
 
   @Override
   public Location getLastLocation() {
-    if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context)) {
+    if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
       return LocationServices.FusedLocationApi.getLastLocation(lostApiClient);
     }
@@ -101,7 +103,7 @@ public class LostLocationEngine extends LocationEngine implements
       request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context)) {
+    if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
       LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, this);
     }
