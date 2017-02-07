@@ -152,11 +152,11 @@ public class GeocodingServiceActivity extends AppCompatActivity implements Locat
   protected void onResume() {
     super.onResume();
     if (locationEngine != null && locationEngine.isConnected()) {
-      getLastLocation();
+      obtainLastAddress();
     }
   }
 
-  private void getLastLocation() {
+  private void obtainLastAddress() {
     // Gets the best and most recent location currently available, which may be null
     // in rare cases when a location is not available.
 
@@ -181,14 +181,11 @@ public class GeocodingServiceActivity extends AppCompatActivity implements Locat
 
   @Override
   public void onConnected() {
-    getLastLocation();
+    obtainLastAddress();
   }
 
   @Override
   public void onLocationChanged(Location location) {
-    if (location != null) {
-      getLastLocation();
-    }
   }
 
   @Override
