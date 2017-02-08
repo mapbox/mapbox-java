@@ -1,9 +1,9 @@
-package com.mapbox.services.api.rx.mapmatching.v4;
+package com.mapbox.services.api.rx.mapmatching.v5;
 
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.mapmatching.v4.MapMatchingCriteria;
-import com.mapbox.services.api.mapmatching.v4.models.MapMatchingResponse;
-import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.api.mapmatching.v5.MapMatchingCriteria;
+import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
+import com.mapbox.services.commons.models.Position;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,7 +40,7 @@ public class MapboxMapMatchingRxTest {
   private MockWebServer server;
   private HttpUrl mockUrl;
 
-  private LineString trace;
+  private Position[] coordinates;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -65,10 +65,13 @@ public class MapboxMapMatchingRxTest {
     server.start();
     mockUrl = server.url("");
 
-    // From https://www.mapbox.com/api-documentation/#map-matching
-    trace = LineString.fromJson("{ \"type\": \"LineString\", \"coordinates\": [ [13.418946862220764, "
-      + "52.50055852688439], [13.419011235237122, 52.50113000479732], [13.419756889343262, 52.50171780290061],"
-      + " [13.419885635375975, 52.50237416816131], [13.420631289482117, 52.50294888790448] ] }");
+    coordinates = new Position[] {
+      Position.fromCoordinates(13.418946862220764, 52.50055852688439),
+      Position.fromCoordinates(13.419011235237122, 52.50113000479732),
+      Position.fromCoordinates(13.419756889343262, 52.50171780290061),
+      Position.fromCoordinates(13.419885635375975, 52.50237416816131),
+      Position.fromCoordinates(13.420631289482117, 52.50294888790448)
+    };
   }
 
   @After
@@ -82,7 +85,7 @@ public class MapboxMapMatchingRxTest {
       .setBaseUrl(mockUrl.toString())
       .setAccessToken(ACCESS_TOKEN)
       .setProfile(MapMatchingCriteria.PROFILE_WALKING)
-      .setTrace(trace)
+      .setCoordinates(coordinates)
       .build();
 
     TestSubscriber<MapMatchingResponse> testSubscriber = new TestSubscriber<>();

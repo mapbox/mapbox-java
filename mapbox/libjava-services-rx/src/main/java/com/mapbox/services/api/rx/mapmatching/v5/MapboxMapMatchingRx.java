@@ -1,8 +1,8 @@
-package com.mapbox.services.api.rx.mapmatching.v4;
+package com.mapbox.services.api.rx.mapmatching.v5;
 
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.mapmatching.v4.MapboxMapMatching;
-import com.mapbox.services.api.mapmatching.v4.models.MapMatchingResponse;
+import com.mapbox.services.api.mapmatching.v5.MapboxMapMatching;
+import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -41,7 +41,7 @@ public class MapboxMapMatchingRx extends MapboxMapMatching {
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
       .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-      .addConverterFactory(GsonConverterFactory.create(getGson()))
+      .addConverterFactory(GsonConverterFactory.create())
       .build();
 
     // MapMatching service
@@ -57,11 +57,16 @@ public class MapboxMapMatchingRx extends MapboxMapMatching {
 
     observable = getServiceRx().getObservable(
       getHeaderUserAgent(builder.getClientAppName()),
+      builder.getUser(),
       builder.getProfile(),
+      builder.getCoordinates(),
       builder.getAccessToken(),
-      builder.getGeometry(),
-      builder.getGpsPrecison(),
-      builder.getTrace()
+      builder.getGeometries(),
+      builder.getRadiuses(),
+      builder.getSteps(),
+      builder.getOverview(),
+      builder.getTimestamps(),
+      builder.getAnnotations()
     );
 
     // Done
