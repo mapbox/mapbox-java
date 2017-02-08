@@ -18,6 +18,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.Dispatcher;
@@ -196,5 +197,27 @@ public class MapboxGeocodingTest {
     Response<GeocodingResponse> response = client.executeCall();
 
     assertEquals(0, response.body().getFeatures().size());
+  }
+
+  @Test
+  public void testLanguage() throws IOException, ServicesException {
+    MapboxGeocoding clientNoLanguage = new MapboxGeocoding.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setLocation("1600 pennsylvania ave nw")
+      .setBaseUrl(mockUrl.toString())
+      .build();
+
+    // By default no language is included
+    assertTrue(!clientNoLanguage.getCall().request().url().toString().contains("language=en_GB"));
+
+    MapboxGeocoding clientLanguage = new MapboxGeocoding.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setLocation("1600 pennsylvania ave nw")
+      .setLanguage(Locale.UK.toString())
+      .setBaseUrl(mockUrl.toString())
+      .build();
+
+    // setLanguage() will include the language query parameter
+    assertTrue(clientLanguage.getCall().request().url().toString().contains("language=en_GB"));
   }
 }
