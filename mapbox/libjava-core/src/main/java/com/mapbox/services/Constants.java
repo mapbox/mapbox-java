@@ -28,7 +28,6 @@ public class Constants {
   public static final int GOOGLE_PRECISION = 5;
   public static final int OSRM_PRECISION_V4 = 6;
   public static final int OSRM_PRECISION_V5 = 5;
-  public static final int OSRM_PRECISION_6_V5 = 6;
 
   // Use these if you want to be explicit about the precision
   public static final int PRECISION_5 = 5;

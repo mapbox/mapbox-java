@@ -148,8 +148,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       // Set defaults
       this.user = DirectionsCriteria.PROFILE_DEFAULT_USER;
 
-      // by defauly the geometry is polyline with precision 5.
-      this.geometries = DirectionsCriteria.GEOMETRY_POLYLINE;
+      // by defauly the geometry is polyline with precision 6.
+      this.geometries = DirectionsCriteria.GEOMETRY_POLYLINE6;
     }
 
     /**
