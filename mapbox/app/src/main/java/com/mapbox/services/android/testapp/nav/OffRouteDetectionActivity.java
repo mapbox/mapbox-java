@@ -372,7 +372,9 @@ public class OffRouteDetectionActivity extends AppCompatActivity {
   } // End startSimulation
 
   private void stopSimulation() {
-    handler.removeCallbacks(runnable);
+    if (handler != null && runnable != null) {
+      handler.removeCallbacks(runnable);
+    }
   }
 
   public static double computeHeading(LatLng from, LatLng to) {
