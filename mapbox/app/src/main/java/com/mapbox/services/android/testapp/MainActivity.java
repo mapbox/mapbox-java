@@ -37,6 +37,7 @@ import com.mapbox.services.android.testapp.turf.TurfLineSliceActivity;
 import com.mapbox.services.android.testapp.turf.TurfMidpointActivity;
 import com.mapbox.services.android.testapp.utils.MapMatchingActivity;
 import com.mapbox.services.android.testapp.utils.SimplifyPolylineActivity;
+import com.mapbox.services.commons.models.Position;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -168,6 +169,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     // Debug information
     Log.d(LOG_TAG, "MAS version name: " + BuildConfig.VERSION_NAME);
     Log.d(LOG_TAG, "MAS version code: " + BuildConfig.VERSION_CODE);
+
+    // Check Position warnings are working
+    Log.d(LOG_TAG, "The following Position warnings are intentional:");
+    Position.fromLngLat(185, 95);
 
     // RecyclerView
     recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
