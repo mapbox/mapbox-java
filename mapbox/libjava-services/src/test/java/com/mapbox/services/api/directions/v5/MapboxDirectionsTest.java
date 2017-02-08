@@ -187,6 +187,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
@@ -222,6 +223,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
     DirectionsRoute route = response.body().getRoutes().get(0);
@@ -255,6 +257,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
@@ -272,6 +275,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
@@ -292,6 +296,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
@@ -312,6 +317,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
@@ -329,6 +335,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
