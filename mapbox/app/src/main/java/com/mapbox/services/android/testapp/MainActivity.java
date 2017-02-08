@@ -23,8 +23,6 @@ import com.mapbox.services.android.testapp.distance.DistanceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
-import com.mapbox.services.android.testapp.icons.DirectionsIconsActivity;
-import com.mapbox.services.android.testapp.icons.MakiIconsActivity;
 import com.mapbox.services.android.testapp.location.LocationEngineActivity;
 import com.mapbox.services.android.testapp.nav.OffRouteDetectionActivity;
 import com.mapbox.services.android.testapp.nav.SnapToRouteActivity;
@@ -80,11 +78,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         RouteUtilsV5Activity.class
       ),
       new SampleItem(
-        getString(R.string.title_directions_icons),
-        getString(R.string.description_directions_icons),
-        DirectionsIconsActivity.class
-      ),
-      new SampleItem(
         getString(R.string.title_reverse_geocoding),
         getString(R.string.description_reverse_geocoding),
         GeocodingReverseActivity.class
@@ -99,11 +92,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         getString(R.string.description_geocoding_service),
         GeocodingServiceActivity.class
       ), // TODO fix activity memory leak
-      new SampleItem(
-        getString(R.string.title_maki_icons),
-        getString(R.string.description_maki_icons),
-        MakiIconsActivity.class
-      ),
       new SampleItem(
         getString(R.string.title_static_image),
         getString(R.string.description_static_image),
