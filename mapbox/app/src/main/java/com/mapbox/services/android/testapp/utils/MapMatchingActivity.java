@@ -176,8 +176,10 @@ public class MapMatchingActivity extends AppCompatActivity {
           // Check that the map matching API response is "OK".
           if (response.code() == 200) {
             // Convert the map matched response list from position to latlng coordinates.
+            // By default, the SDK uses MapMatchingCriteria.GEOMETRY_POLYLINE_6, therefore
+            // you need Constants.PRECISION_6 for the decode to be right
             String geometry = response.body().getMatchings().get(0).getGeometry();
-            List<Position> positions = PolylineUtils.decode(geometry, Constants.OSRM_PRECISION_V4);
+            List<Position> positions = PolylineUtils.decode(geometry, Constants.PRECISION_6);
             if (positions == null) {
               return;
             }
