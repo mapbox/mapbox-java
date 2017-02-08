@@ -23,9 +23,15 @@ public class Constants {
   /**
    * Constants for polyline encoding/decoding
    */
+
+  // Use these if you want to be explicit about the vendor
   public static final int GOOGLE_PRECISION = 5;
   public static final int OSRM_PRECISION_V4 = 6;
   public static final int OSRM_PRECISION_V5 = 5;
+
+  // Use these if you want to be explicit about the precision
+  public static final int PRECISION_5 = 5;
+  public static final int PRECISION_6 = 6;
 
   /**
    * Default user for services
