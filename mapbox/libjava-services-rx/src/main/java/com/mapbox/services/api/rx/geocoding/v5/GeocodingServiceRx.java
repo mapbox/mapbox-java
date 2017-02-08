@@ -31,6 +31,7 @@ public interface GeocodingServiceRx {
    * @param autocomplete True if you want auto complete.
    * @param bbox         Optionally pass in a bounding box to limit results in.
    * @param limit        Optionally pass in a limit the amount of returning results.
+   * @param language     The locale in which results should be returned.
    * @return A retrofit Observable object
    * @since 1.0.0
    */
@@ -45,7 +46,8 @@ public interface GeocodingServiceRx {
     @Query("types") String types,
     @Query("autocomplete") Boolean autocomplete,
     @Query("bbox") String bbox,
-    @Query("limit") String limit);
+    @Query("limit") String limit,
+    @Query("language") String language);
 
   /**
    * Observable-based interface
@@ -61,6 +63,7 @@ public interface GeocodingServiceRx {
    * @param autocomplete True if you want auto complete.
    * @param bbox         Optionally pass in a bounding box to limit results in.
    * @param limit        Optionally pass in a limit the amount of returning results.
+   * @param language     The locale in which results should be returned.
    * @return A retrofit Observable object
    * @since 1.0.0
    */
@@ -75,5 +78,6 @@ public interface GeocodingServiceRx {
     @Query("types") String types,
     @Query("autocomplete") Boolean autocomplete,
     @Query("bbox") String bbox,
-    @Query("limit") String limit);
+    @Query("limit") String limit,
+    @Query("language") String language);
 }
