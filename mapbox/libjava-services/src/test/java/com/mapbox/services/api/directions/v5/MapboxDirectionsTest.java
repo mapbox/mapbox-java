@@ -43,7 +43,7 @@ public class MapboxDirectionsTest {
   public static final String DIRECTIONS_V5_FIXTURE = "src/test/fixtures/directions_v5.json";
   public static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "src/test/fixtures/directions_v5_precision_6.json";
   public static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
-
+  public static final String DIRECTIONS_EXIT_FIXTURE = "src/test/fixtures/directions_v5_exit_property.json";
   private static final double DELTA = 1E-10;
 
   private MockWebServer server;
