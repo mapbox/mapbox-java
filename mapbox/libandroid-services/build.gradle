@@ -34,6 +34,9 @@ dependencies {
     // Android Support libraries
     compile 'com.android.support:appcompat-v7:25.1.0'
 
+    // LOST
+    compile 'com.mapzen.android:lost:2.1.2'
+
     // Testing
     testCompile 'junit:junit:4.12'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

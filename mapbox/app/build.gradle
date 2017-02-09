@@ -55,9 +55,6 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
-    // LOST
-    compile 'com.mapzen.android:lost:2.1.2'
-
     // Google Play Services
     compile 'com.google.android.gms:play-services-location:10.0.1'
 
