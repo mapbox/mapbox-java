@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.HttpUrl;
@@ -42,7 +43,7 @@ public class MapboxDirectionsTest {
   public static final String DIRECTIONS_V5_FIXTURE = "src/test/fixtures/directions_v5.json";
   public static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "src/test/fixtures/directions_v5_precision_6.json";
   public static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
-
+  public static final String DIRECTIONS_EXIT_FIXTURE = "src/test/fixtures/directions_v5_exit_property.json";
   private static final double DELTA = 1E-10;
 
   private MockWebServer server;
@@ -58,12 +59,17 @@ public class MapboxDirectionsTest {
 
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+
         // Switch response on geometry parameter (only false supported, so nice and simple)
         String resource = DIRECTIONS_V5_FIXTURE;
         if (request.getPath().contains("geometries=polyline6")) {
           resource = DIRECTIONS_V5_PRECISION6_FIXTURE;
-        } else if (request.getPath().contains("driving-traffic")) {
+        }
+        if (request.getPath().contains("driving-traffic")) {
           resource = DIRECTIONS_TRAFFIC_FIXTURE;
+        }
+        if (request.getPath().contains("-77.02962")) {
+          resource = DIRECTIONS_EXIT_FIXTURE;
         }
 
         try {
@@ -347,7 +353,36 @@ public class MapboxDirectionsTest {
     assertEquals(maneuver.getType(), "depart");
     assertEquals(maneuver.getModifier(), "left");
     assertEquals(maneuver.getInstruction(), "Head west on Eddy Street");
+    assertEquals(maneuver.getExit(), null);
   }
+
+
+  @Test
+  public void testStepManeuverForExit() throws ServicesException, IOException {
+    List<Position> positionsExit = new ArrayList<>();
+    positionsExit.add(Position.fromCoordinates(-77.02962040901184, 38.90728142481329));
+    positionsExit.add(Position.fromCoordinates(-77.02808618545532, 38.910111607145296));
+
+    MapboxDirections client = new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positionsExit)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .build();
+    Response<DirectionsResponse> response = client.executeCall();
+
+    StepManeuver maneuver = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1).getManeuver();
+    assertEquals(maneuver.asPosition().getLongitude(), -77.029315, DELTA);
+    assertEquals(maneuver.asPosition().getLatitude(), 38.909144, DELTA);
+    assertEquals(maneuver.getBearingBefore(), 43.0, DELTA);
+    assertEquals(maneuver.getBearingAfter(), 63.0, DELTA);
+    assertEquals(maneuver.getType(), "roundabout");
+    assertEquals(maneuver.getModifier(), "straight");
+    assertEquals(maneuver.getInstruction(),
+      "Enter the roundabout and take the 2nd exit onto Rhode Island Avenue Northwest");
+    assertEquals(maneuver.getExit(), new Integer(2));
+  }
+
 
   @Test
   public void testSetCoordinates() {
