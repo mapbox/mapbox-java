@@ -148,10 +148,22 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       // Set defaults
       this.user = DirectionsCriteria.PROFILE_DEFAULT_USER;
 
-      // We only support polyline encoded geometries to reduce the size of the response.
-      // If we need the corresponding LineString object, this SDK can do the decoding with
-      // LineString.fromPolyline(String polyline, int precision).
-      this.geometries = DirectionsCriteria.GEOMETRY_POLYLINE;
+      // by defauly the geometry is polyline with precision 6.
+      this.geometries = DirectionsCriteria.GEOMETRY_POLYLINE6;
+    }
+
+    /**
+     * The SDK currently only supports {@code Polyline} geometry (not GeoJSON) to simplify the response. You do have
+     * the option on whether the precision is 5 or 6 using either {@link DirectionsCriteria#GEOMETRY_POLYLINE} or
+     * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
+     *
+     * @param geometries A {@code String} constant which equals either {@code "polyline"} or {@code "polyline6"}.
+     * @return Builder
+     * @since 2.0.0
+     */
+    public Builder setGeometry(String geometries) {
+      this.geometries = geometries;
+      return this;
     }
 
     /*
@@ -378,7 +390,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
     /**
      * @return {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#GEOMETRY_GEOJSON},
-     * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#GEOMETRY_POLYLINE}
+     * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#GEOMETRY_POLYLINE},
+     * or {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#GEOMETRY_POLYLINE6}
      * @since 1.0.0
      */
     public String getGeometries() {

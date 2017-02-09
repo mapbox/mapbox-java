@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -38,10 +39,11 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest {
 
-  private static final double DELTA = 1E-10;
-
-  public static final String DIRECTIONS_FIXTURE = "src/test/fixtures/directions_v5.json";
+  public static final String DIRECTIONS_V5_FIXTURE = "src/test/fixtures/directions_v5.json";
+  public static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "src/test/fixtures/directions_v5_precision_6.json";
   public static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
+
+  private static final double DELTA = 1E-10;
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -52,13 +54,15 @@ public class MapboxDirectionsTest {
   public void setUp() throws IOException {
     server = new MockWebServer();
 
-    server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
+    server.setDispatcher(new Dispatcher() {
+
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-
-        // Switch response to traffic profile if test is using it.
-        String resource = DIRECTIONS_FIXTURE;
-        if (request.getPath().contains("driving-traffic")) {
+        // Switch response on geometry parameter (only false supported, so nice and simple)
+        String resource = DIRECTIONS_V5_FIXTURE;
+        if (request.getPath().contains("geometries=polyline6")) {
+          resource = DIRECTIONS_V5_PRECISION6_FIXTURE;
+        } else if (request.getPath().contains("driving-traffic")) {
           resource = DIRECTIONS_TRAFFIC_FIXTURE;
         }
 
@@ -68,7 +72,6 @@ public class MapboxDirectionsTest {
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
         }
-
       }
     });
 
@@ -184,13 +187,32 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
     DirectionsRoute route = response.body().getRoutes().get(0);
     assertEquals(route.getDistance(), 77274.3, DELTA);
     assertEquals(route.getDuration(), 3441.8, DELTA);
-    assertTrue(route.getGeometry().startsWith("kqreFhodjVhh"));
+    assertTrue(route.getGeometry().startsWith("kqreFhodjV"));
+    assertEquals(route.getLegs().size(), 1);
+  }
+
+  @Test
+  public void testGeometryPolyline6() throws ServicesException, IOException {
+    MapboxDirections client = new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positions)
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE6)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .build();
+    Response<DirectionsResponse> response = client.executeCall();
+
+    DirectionsRoute route = response.body().getRoutes().get(0);
+    assertEquals(route.getDistance(), 77255.1, DELTA);
+    assertEquals(route.getDuration(), 3935, DELTA);
+    assertTrue(route.getGeometry().startsWith("_wbagAxavn"));
     assertEquals(route.getLegs().size(), 1);
   }
 
@@ -201,6 +223,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
     DirectionsRoute route = response.body().getRoutes().get(0);
@@ -234,6 +257,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
@@ -251,6 +275,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
@@ -271,6 +296,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
@@ -291,6 +317,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 
@@ -308,6 +335,7 @@ public class MapboxDirectionsTest {
       .setCoordinates(positions)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
     Response<DirectionsResponse> response = client.executeCall();
 

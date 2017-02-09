@@ -42,11 +42,18 @@ public class DirectionsCriteria {
   public static final String PROFILE_CYCLING = "cycling";
 
   /**
-   * Format to return route geometry will be encoded polyline.
+   * Format to return route geometry will be an encoded polyline.
    *
    * @since 1.0.0
    */
   public static final String GEOMETRY_POLYLINE = "polyline";
+
+  /**
+   * Format to return route geometry will be an encoded polyline with precision 6.
+   *
+   * @since 2.0.0
+   */
+  public static final String GEOMETRY_POLYLINE6 = "polyline6";
 
   /**
    * Format to return route geometry will be geojson. Note that this isn't supported by the SDK.
