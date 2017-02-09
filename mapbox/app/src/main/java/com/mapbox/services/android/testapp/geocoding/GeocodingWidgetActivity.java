@@ -17,7 +17,7 @@ import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.android.testapp.location.LostLocationEngine;
+import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.ui.geocoder.GeocoderAutoCompleteView;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;

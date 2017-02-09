@@ -1,4 +1,4 @@
-package com.mapbox.services.android.testapp.location;
+package com.mapbox.services.android.location;
 
 import android.content.Context;
 import android.location.Location;
