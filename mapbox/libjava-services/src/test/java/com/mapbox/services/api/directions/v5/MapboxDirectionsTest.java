@@ -64,7 +64,8 @@ public class MapboxDirectionsTest {
         String resource = DIRECTIONS_V5_FIXTURE;
         if (request.getPath().contains("geometries=polyline6")) {
           resource = DIRECTIONS_V5_PRECISION6_FIXTURE;
-        } if (request.getPath().contains("driving-traffic")) {
+        }
+        if (request.getPath().contains("driving-traffic")) {
           resource = DIRECTIONS_TRAFFIC_FIXTURE;
         }
         if (request.getPath().contains("-77.02962")) {
@@ -363,11 +364,11 @@ public class MapboxDirectionsTest {
     positionsExit.add(Position.fromCoordinates(-77.02808618545532, 38.910111607145296));
 
     MapboxDirections client = new MapboxDirections.Builder()
-            .setAccessToken("pk.XXX")
-            .setCoordinates(positionsExit)
-            .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-            .setBaseUrl(mockUrl.toString())
-            .build();
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positionsExit)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .build();
     Response<DirectionsResponse> response = client.executeCall();
 
     StepManeuver maneuver = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1).getManeuver();
@@ -378,7 +379,7 @@ public class MapboxDirectionsTest {
     assertEquals(maneuver.getType(), "roundabout");
     assertEquals(maneuver.getModifier(), "straight");
     assertEquals(maneuver.getInstruction(),
-            "Enter the roundabout and take the 2nd exit onto Rhode Island Avenue Northwest");
+      "Enter the roundabout and take the 2nd exit onto Rhode Island Avenue Northwest");
     assertEquals(maneuver.getExit(), new Integer(2));
   }
 
