@@ -5,11 +5,11 @@ import com.google.gson.GsonBuilder;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
+import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
-import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
-import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -103,7 +103,8 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       builder.getGeocodingTypes(),
       builder.getAutocomplete(),
       builder.getBbox(),
-      builder.getLimit());
+      builder.getLimit(),
+      builder.getLanguage());
 
     return call;
   }
@@ -134,7 +135,8 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       builder.getGeocodingTypes(),
       builder.getAutocomplete(),
       builder.getBbox(),
-      builder.getLimit());
+      builder.getLimit(),
+      builder.getLanguage());
 
     return batchCall;
   }
@@ -242,6 +244,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     private Boolean autocomplete = null;
     private String bbox = null;
     private String limit = null;
+    private String language = null;
 
     /**
      * Constructor
@@ -511,6 +514,37 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      */
     public String getLimit() {
       return limit;
+    }
+
+    /**
+     * @return The locale in which results should be returned.
+     * @since 2.0.0
+     */
+    public String getLanguage() {
+      return language;
+    }
+
+    /**
+     * The locale in which results should be returned.
+     *
+     * This property affects the language of returned results; generally speaking,
+     * it does not determine which results are found. If the Geocoding API does not
+     * recognize the language code, it may fall back to another language or the default
+     * language. Components other than the language code, such as the country and
+     * script codes, are ignored.
+     *
+     * By default, this property is set to `null`, causing results to be in the default
+     * language.
+     *
+     * This option is experimental.
+     *
+     * @param language The locale in which results should be returned.
+     * @return the current MapboxBuilder instance
+     * @since 2.0.0
+     */
+    public T setLanguage(String language) {
+      this.language = language;
+      return (T) this;
     }
 
     public T setClientAppName(String appName) {

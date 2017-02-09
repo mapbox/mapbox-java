@@ -31,6 +31,7 @@ public interface GeocodingService {
    * @param autocomplete True if you want auto complete.
    * @param bbox         Optionally pass in a bounding box to limit results in.
    * @param limit        Optionally pass in a limit the amount of returning results.
+   * @param language     The locale in which results should be returned.
    * @return A retrofit Call object
    * @since 1.0.0
    */
@@ -46,7 +47,8 @@ public interface GeocodingService {
     @Query("types") String types,
     @Query("autocomplete") Boolean autocomplete,
     @Query("bbox") String bbox,
-    @Query("limit") String limit);
+    @Query("limit") String limit,
+    @Query("language") String language);
 
   /**
    * Call-based interface
@@ -62,6 +64,7 @@ public interface GeocodingService {
    * @param autocomplete True if you want auto complete.
    * @param bbox         Optionally pass in a bounding box to limit results in.
    * @param limit        Optionally pass in a limit the amount of returning results.
+   * @param language     The locale in which results should be returned.
    * @return A retrofit Call object
    * @since 1.0.0
    */
@@ -77,5 +80,6 @@ public interface GeocodingService {
     @Query("types") String types,
     @Query("autocomplete") Boolean autocomplete,
     @Query("bbox") String bbox,
-    @Query("limit") String limit);
+    @Query("limit") String limit,
+    @Query("language") String language);
 }

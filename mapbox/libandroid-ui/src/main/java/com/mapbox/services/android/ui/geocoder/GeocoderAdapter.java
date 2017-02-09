@@ -39,6 +39,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   private double[] bbox;
   private Position position;
   private int limit;
+  private String language;
   private Call call;
 
   private GeocoderFilter geocoderFilter;
@@ -251,6 +252,35 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   }
 
   /**
+   * @return The locale in which results should be returned.
+   * @since 2.0.0
+   */
+  public String getLanguage() {
+    return language;
+  }
+
+  /**
+   * The locale in which results should be returned.
+   * <p>
+   * This property affects the language of returned results; generally speaking,
+   * it does not determine which results are found. If the Geocoding API does not
+   * recognize the language code, it may fall back to another language or the default
+   * language. Components other than the language code, such as the country and
+   * script codes, are ignored.
+   * <p>
+   * By default, this property is set to `null`, causing results to be in the default
+   * language.
+   * <p>
+   * This option is experimental.
+   *
+   * @param language The locale in which results should be returned.
+   * @since 2.0.0
+   */
+  public void setLanguage(String language) {
+    this.language = language;
+  }
+
+  /**
    * Can be used to cancel any calls currently in progress. It's a good idea to include in onDestroy() to prevent
    * memory leaks
    *
@@ -404,6 +434,9 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
         }
         if (getLimit() != 0) {
           builder.setLimit(limit);
+        }
+        if (getLanguage() != null) {
+          builder.setLanguage(language);
         }
 
         call = builder.build().getCall();
