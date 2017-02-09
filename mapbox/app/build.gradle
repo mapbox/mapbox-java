@@ -47,6 +47,7 @@ dependencies {
     compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:5.0.0-SNAPSHOT@aar') {
         transitive=true
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-java-geojson'
+        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
     }
 
     // Leak Canary

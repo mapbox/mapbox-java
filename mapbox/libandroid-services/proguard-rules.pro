@@ -1,4 +1,4 @@
-# Retrofit 2
+# Retrofit 2 (https://square.github.io/retrofit/#ProGuard)
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
 # Platform used when running on RoboVM on iOS. Will not be used at runtime.
@@ -10,10 +10,17 @@
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
 
+# Gson (https://github.com/google/gson/blob/master/examples/android-proguard-example/proguard.cfg)
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+-keepattributes Signature
+
 # For using GSON @Expose annotation
 -keepattributes *Annotation*
+
 # Gson specific classes
--dontwarn sun.misc.**
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
 
 # Prevent proguard from stripping interface information from TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
@@ -21,19 +28,14 @@
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
 
-# MAS Data Models
--keep class com.mapbox.services.mapmatching.v4.models.** { *; }
--keep class com.mapbox.services.distance.v1.models.** { *; }
--keep class com.mapbox.services.directions.v4.models.** { *; }
--keep class com.mapbox.services.directions.v5.models.** { *; }
--keep class com.mapbox.services.geocoding.v5.models.** { *; }
+# MAS data models that will be serialized/deserialized over Gson
+-keep class com.mapbox.services.api.directions.v5.models.** { *; }
+-keep class com.mapbox.services.api.distance.v1.models.** { *; }
+-keep class com.mapbox.services.api.geocoding.v5.models.** { *; }
+-keep class com.mapbox.services.api.mapmatching.v5.models.** { *; }
+-keep class com.mapbox.services.commons.geojson.** { *; }
 
 -dontwarn javax.annotation.**
-
--keepclassmembers class rx.internal.util.unsafe.** {
-    long producerIndex;
-    long consumerIndex;
-}
 
 -keep class com.google.**
 -dontwarn com.google.**
