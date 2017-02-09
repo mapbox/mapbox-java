@@ -1,16 +1,13 @@
 package com.mapbox.services.android.testapp.directions;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.Polyline;
@@ -65,10 +62,7 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_route_utils_v5);
 
-    // Create an Icon object for the marker to use
-    IconFactory iconFactory = IconFactory.getInstance(this);
-    Drawable iconDrawable = ContextCompat.getDrawable(this, R.drawable.ic_my_location_black_24dp);
-    tapIcon = iconFactory.fromDrawable(iconDrawable);
+    tapIcon = Utils.drawableToIcon(this, R.drawable.ic_my_location_black_24dp);
 
     // Set up a standard Mapbox map
     mapView = (MapView) findViewById(R.id.mapview);

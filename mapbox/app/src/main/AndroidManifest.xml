@@ -187,7 +187,7 @@
             android:exported="false"/>
 
         <!-- Telemetry -->
-        <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService"/>
+        <service android:name="com.mapbox.services.android.telemetry.service.TelemetryService"/>
 
     </application>
 
