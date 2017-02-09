@@ -94,7 +94,6 @@ directions-fixtures:
 directions-fixtures-exit-property:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-77.02962040901184,38.90728142481329;-77.02808618545532,38.910111607145296?geometries=polyline&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/directions_v5_exit_property.json
->>>>>>> 13d3c16... added directions exit property fixture to makefile and created test fixture
 
 directions-traffic-fixtures:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/-122.416667,37.783333;-121.900000,37.333333?geometries=polyline&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
