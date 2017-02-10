@@ -161,9 +161,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @return Builder
      * @since 2.0.0
      */
-    public Builder setGeometry(String geometries) {
+    public T setGeometry(String geometries) {
       this.geometries = geometries;
-      return this;
+      return (T) this;
     }
 
     /*
