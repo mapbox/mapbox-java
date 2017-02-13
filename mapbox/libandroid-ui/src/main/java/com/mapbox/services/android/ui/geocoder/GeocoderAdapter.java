@@ -31,6 +31,7 @@ import retrofit2.Response;
 public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
   private final Context context;
+  private String baseUrl;
   private String accessToken;
   private String country;
   private String[] countries;
@@ -53,6 +54,26 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   /*
    * Getters and setters
    */
+
+  /**
+   * Get the base url of the API.
+   *
+   * @return the base url used as endpoint.
+   * @since 2.0.0
+   */
+  public String getBaseUrl() {
+    return baseUrl;
+  }
+
+  /**
+   * Set the base url of the API.
+   *
+   * @param baseUrl base url used as end point
+   * @since 2.0.0
+   */
+  public void setBaseUrl(String baseUrl) {
+    this.baseUrl = baseUrl;
+  }
 
   /**
    * Get the access token used with making the Mapbox geocoding API call.
@@ -414,6 +435,9 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
           .setAutocomplete(true);
 
         // Optional params
+        if (getBaseUrl() != null) {
+          builder.setBaseUrl(getBaseUrl());
+        }
         if (getCountry() != null) {
           builder.setCountry(getCountry());
         }

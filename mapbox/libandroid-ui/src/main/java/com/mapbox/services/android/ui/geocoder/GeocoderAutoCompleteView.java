@@ -104,6 +104,16 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
    */
 
   /**
+   * Set the base url of the API.
+   *
+   * @param baseUrl base url used as end point
+   * @since 2.0.0
+   */
+  public void setBaseUrl(String baseUrl) {
+    adapter.setBaseUrl(baseUrl);
+  }
+
+  /**
    * You'll need to have a Mapbox access token to use the geocoding API within MAS.
    *
    * @param accessToken Your Mapbox access token
