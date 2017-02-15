@@ -113,7 +113,7 @@ public class LegStep {
    * @since 2.0.0
    */
   public String getPronunciation() {
-    return rotaryPronunciation;
+    return pronunciation;
   }
 
 }
