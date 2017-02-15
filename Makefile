@@ -91,9 +91,9 @@ directions-fixtures:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.416667,37.783333;-121.900000,37.333333?geometries=polyline6&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/directions_v5_precision_6.json
 
-directions-fixtures-exit-property:
-	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-77.02962040901184,38.90728142481329;-77.02808618545532,38.910111607145296?geometries=polyline&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/directions_v5_exit_property.json
+directions-fixtures-rotary:
+	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-77.04430818557739,38.908650612656864;-77.04192638397217,38.90963574367117?geometries=polyline&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o mapbox/libjava-services/src/test/fixtures/directions_v5_fixtures_rotary.json
 
 directions-traffic-fixtures:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/-122.416667,37.783333;-121.900000,37.333333?geometries=polyline&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
