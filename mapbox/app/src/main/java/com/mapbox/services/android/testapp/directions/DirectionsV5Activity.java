@@ -111,6 +111,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setSteps(true)
       .setOverview(DirectionsCriteria.OVERVIEW_FULL)
+      .setBearings(new double[] {60, 45}, new double[] {45, 45})
       .build();
 
     MapboxDirectionsRx clientRx = new MapboxDirectionsRx.Builder()
@@ -135,6 +136,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
     client.enqueueCall(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+
         // You can get generic HTTP info about the response
         Log.d(LOG_TAG, "Response code: " + response.code());
         if (response.body() == null) {
@@ -161,7 +163,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
 
   private void drawRoute(DirectionsRoute route) {
     // Convert LineString coordinates into LatLng[]
-    LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.OSRM_PRECISION_V5);
+    LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.PRECISION_6);
     List<Position> coordinates = lineString.getCoordinates();
     LatLng[] points = new LatLng[coordinates.size()];
     for (int i = 0; i < coordinates.size(); i++) {

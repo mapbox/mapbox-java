@@ -2,6 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.0.0-beta.2
+
+* Bearing query parameter added to the Directions API
+
 ### v2.0.0-beta.1
 
 * Introduce support for Mapbox Distance API
@@ -16,10 +20,10 @@ Mapbox welcomes participation and contributions from everyone.
 * Directions improvements:
   * Added direction v5 lanes
   * Added support for the `driving-traffic` profile
-  * Added support for polyline6 
+  * Added support for polyline6
   * Remove support for `v4`
 * Geocoding improvements:
-  * Batch requests support 
+  * Batch requests support
   * Added landmark, limit, country parameters support
   * Added cancel method, setting multiple types, and language method setting to autocomplete widget
 
