@@ -60,7 +60,7 @@ For more details on how to install and use MAS in an application, see the [Mapbo
 
 ### Sample code
 
-Check the [Android Test App](https://github.com/mapbox/mapbox-java/tree/master/libandroid/app) for examples or download the [Mapbox Demo App](https://play.google.com/store/apps/details?id=com.mapbox.mapboxandroiddemo) to see what's possible with Mapbox Android Services. You can also visit the [Mapbox Android SDK examples page](https://www.mapbox.com/android-sdk/examples/) for additional code examples.
+Check the [Android Test App](https://github.com/mapbox/mapbox-java/tree/master/mapbox/app) for examples or download the [Mapbox Demo App](https://play.google.com/store/apps/details?id=com.mapbox.mapboxandroiddemo) to see what's possible with Mapbox Android Services. You can also visit the [Mapbox Android SDK examples page](https://www.mapbox.com/android-sdk/examples/) for additional code examples.
 
 ### Contributing
 
