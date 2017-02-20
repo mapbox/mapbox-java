@@ -136,7 +136,6 @@ public class DirectionsV5Activity extends AppCompatActivity {
     client.enqueueCall(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-        System.out.println(call.request().url().toString());
 
         // You can get generic HTTP info about the response
         Log.d(LOG_TAG, "Response code: " + response.code());
