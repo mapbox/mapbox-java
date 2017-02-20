@@ -70,6 +70,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       builder.getOverview(),
       builder.getRadiuses(),
       builder.isSteps(),
+      builder.getBearings(),
       builder.isContinueStraight());
 
     // Done
@@ -136,6 +137,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     private String geometries = null;
     private String overview = null;
     private double[] radiuses = null;
+    private double[][] bearings = null;
     private Boolean steps = null;
     private Boolean continueStraight = null;
 
@@ -287,6 +289,11 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return (T) this;
     }
 
+    public T setBearings(double[]... bearings) {
+      this.bearings = bearings;
+      return (T) this;
+    }
+
     /**
      * Optionally, set a radius values for the coordinates to allow for a more flexible origin
      * and destinations point locations.
@@ -404,6 +411,19 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      */
     public String getOverview() {
       return overview;
+    }
+
+    public String getBearings() {
+      if (bearings == null || bearings.length == 0) {
+        return null;
+      }
+
+      String[] bearingFormatted = new String[bearings.length];
+      for (int i = 0; i < bearings.length; i++) {
+          bearingFormatted[i] = String.format(Locale.US, "%f,%f", bearings[i][0], bearings[i][1]);
+      }
+
+      return TextUtils.join(";", bearingFormatted);
     }
 
     /**

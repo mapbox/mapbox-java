@@ -63,6 +63,7 @@ public class MapboxDirectionsRx extends MapboxDirections {
       builder.getOverview(),
       builder.getRadiuses(),
       builder.isSteps(),
+      builder.getBearings(),
       builder.isContinueStraight());
 
     // Done

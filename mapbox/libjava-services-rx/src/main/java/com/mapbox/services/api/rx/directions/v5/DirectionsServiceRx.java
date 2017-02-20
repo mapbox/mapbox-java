@@ -28,6 +28,8 @@ public interface DirectionsServiceRx {
    * @param overview         Route full, simplified, etc.
    * @param radiuses         start at the most efficient point within the radius.
    * @param steps            Define if you'd like the route steps.
+   * @param bearings         Used to filter the road segment the waypoint will be placed on by direction and dictates
+   *                         the angle of approach
    * @param continueStraight Define whether the route should continue straight even if the route
    *                         will be slower.
    * @return A retrofit Observable object
@@ -45,6 +47,7 @@ public interface DirectionsServiceRx {
     @Query("overview") String overview,
     @Query("radiuses") String radiuses,
     @Query("steps") Boolean steps,
+    @Query("bearings") String bearings,
     @Query("continue_straight") Boolean continueStraight
   );
 }
