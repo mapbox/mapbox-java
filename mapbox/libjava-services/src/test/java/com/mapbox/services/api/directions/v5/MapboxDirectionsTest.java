@@ -186,7 +186,8 @@ public class MapboxDirectionsTest {
       .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
 
-    assertTrue(client.executeCall().raw().request().url().toString().contains("bearings=60,45;;45,45"));
+    assertTrue(client.executeCall().raw().request().url().toString()
+      .contains("bearings=60.000000,45.000000;;45.000000,45.000000"));
   }
 
   @Test
