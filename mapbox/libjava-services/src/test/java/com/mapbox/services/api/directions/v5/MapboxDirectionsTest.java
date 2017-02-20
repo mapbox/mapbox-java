@@ -171,6 +171,53 @@ public class MapboxDirectionsTest {
   }
 
   @Test
+  public void testBearing() throws ServicesException, IOException {
+    List<Position> coordinates = new ArrayList<>();
+    coordinates.add(Position.fromCoordinates(13.4301, 52.5109));
+    coordinates.add(Position.fromCoordinates(13.4265, 52.5080));
+    coordinates.add(Position.fromCoordinates(13.4316, 52.5021));
+
+    MapboxDirections client = new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(coordinates)
+      .setBearings(new double[] {60, 45}, new double[] {}, new double[] {45, 45})
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
+      .build();
+
+    assertTrue(client.executeCall().raw().request().url().toString().contains("bearings=60,45;;45,45"));
+  }
+
+  @Test
+  public void testBearingNotEnoughBearingsGiven() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("There must be as many bearings as there are coordinates."));
+
+    new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positions)
+      .setBearings(new double[] {})
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .build();
+  }
+
+  @Test
+  public void testBearingArrayLengthNotExactlyTwo() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Requesting a route which includes bearings requires"));
+
+    new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positions)
+      .setBearings(new double[] {0, 0}, new double[] {0})
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .build();
+  }
+
+  @Test
   public void testDirectionsResponse() throws ServicesException, IOException {
     MapboxDirections client = new MapboxDirections.Builder()
       .setAccessToken("pk.XXX")
@@ -388,7 +435,6 @@ public class MapboxDirectionsTest {
     assertEquals(step.getRotaryPronunciation(), null);
     assertEquals(step.getPronunciation(), null);
   }
-
 
   @Test
   public void testSetCoordinates() {

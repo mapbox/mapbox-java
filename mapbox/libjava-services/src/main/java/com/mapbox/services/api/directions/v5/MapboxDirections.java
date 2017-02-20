@@ -289,6 +289,22 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return (T) this;
     }
 
+    /**
+     * Used to filter the road segment the waypoint will be placed on by direction and dictates the angle of approach.
+     * This option should always be used in conjunction with the {@link MapboxDirections.Builder#setRadiuses(double[])}
+     * parameter. The parameter takes two values per waypoint: the first is an angle clockwise from true north
+     * between 0 and 360. The second is the range of degrees the angle can deviate by. We recommend a value of 45
+     * degrees or 90 degrees for the range, as bearing measurements tend to be inaccurate. This is useful for making
+     * sure we reroute vehicles on new routes that continue traveling in their current direction. A request that does
+     * this would provide bearing and radius values for the first waypoint and leave the remaining values empty. If
+     * provided, the list of bearings must be the same length as the list of waypoints, but you can skip a coordinate
+     * and show its position by passing in a double array with no values included like so: {@code new double[] {}}.
+     *
+     * @param bearings a double array with two values indicating the angle and the other value indicating the deviating
+     *                 range.
+     * @return Builder
+     * @since 2.0.0
+     */
     public T setBearings(double[]... bearings) {
       this.bearings = bearings;
       return (T) this;
@@ -413,6 +429,10 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return overview;
     }
 
+    /**
+     * @return The optional bearing values if given, otherwise null.
+     * @since 2.0.0
+     */
     public String getBearings() {
       if (bearings == null || bearings.length == 0) {
         return null;
@@ -420,9 +440,12 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
       String[] bearingFormatted = new String[bearings.length];
       for (int i = 0; i < bearings.length; i++) {
+        if (bearings[i].length == 0) {
+          bearingFormatted[i] = "";
+        } else {
           bearingFormatted[i] = String.format(Locale.US, "%f,%f", bearings[i][0], bearings[i][1]);
+        }
       }
-
       return TextUtils.join(";", bearingFormatted);
     }
 
@@ -520,9 +543,20 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
           "There must be as many radiuses as there are coordinates.");
       }
 
+      if (bearings != null) {
+        for (double[] bearing : bearings) {
+          if (bearing.length != 2 && bearing.length != 0) {
+            throw new ServicesException(
+              "Requesting a route which includes bearings requires exactly 2 values in each double array.");
+          }
+        }
+      }
+
+      if (bearings != null && bearings.length != coordinates.size()) {
+        throw new ServicesException(
+          "There must be as many bearings as there are coordinates.");
+      }
       return new MapboxDirections(this);
     }
-
   }
-
 }
