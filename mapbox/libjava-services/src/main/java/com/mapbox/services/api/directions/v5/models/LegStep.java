@@ -1,5 +1,6 @@
 package com.mapbox.services.api.directions.v5.models;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
@@ -14,6 +15,11 @@ public class LegStep {
   private String geometry;
   private String name;
   private String mode;
+  private String pronunciation;
+  @SerializedName("rotary_name")
+  private String rotaryName;
+  @SerializedName("rotary_pronunciation")
+  private String rotaryPronunciation;
   private StepManeuver maneuver;
   private List<StepIntersection> intersections;
 
@@ -78,4 +84,36 @@ public class LegStep {
   public List<StepIntersection> getIntersections() {
     return intersections;
   }
+
+
+  /**
+   * An optional string indicating the name of the rotary.
+   *
+   * @return String with the rotary name
+   * @since 2.0.0
+   */
+  public String getRotaryName() {
+    return rotaryName;
+  }
+
+  /**
+   * An optional string indicating the pronunciation of the name of the rotary.
+   *
+   * @return String in IPA with the rotary name's pronunciation
+   * @since 2.0.0
+   */
+  public String getRotaryPronunciation() {
+    return rotaryPronunciation;
+  }
+
+  /**
+   * The pronunciation hint of the way name. Will be undefined if no pronunciation is hit.
+   *
+   * @return String with the pronunciation
+   * @since 2.0.0
+   */
+  public String getPronunciation() {
+    return pronunciation;
+  }
+
 }

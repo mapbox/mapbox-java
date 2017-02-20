@@ -43,7 +43,7 @@ public class MapboxDirectionsTest {
   public static final String DIRECTIONS_V5_FIXTURE = "src/test/fixtures/directions_v5.json";
   public static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "src/test/fixtures/directions_v5_precision_6.json";
   public static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
-  public static final String DIRECTIONS_EXIT_FIXTURE = "src/test/fixtures/directions_v5_exit_property.json";
+  public static final String DIRECTIONS_ROTARY_FIXTURE = "src/test/fixtures/directions_v5_fixtures_rotary.json";
   private static final double DELTA = 1E-10;
 
   private MockWebServer server;
@@ -68,8 +68,8 @@ public class MapboxDirectionsTest {
         if (request.getPath().contains("driving-traffic")) {
           resource = DIRECTIONS_TRAFFIC_FIXTURE;
         }
-        if (request.getPath().contains("-77.02962")) {
-          resource = DIRECTIONS_EXIT_FIXTURE;
+        if (request.getPath().contains("-77.04430")) {
+          resource = DIRECTIONS_ROTARY_FIXTURE;
         }
 
         try {
@@ -358,10 +358,10 @@ public class MapboxDirectionsTest {
 
 
   @Test
-  public void testStepManeuverForExit() throws ServicesException, IOException {
+  public void testRotaryLegStepAndStepManeuver() throws ServicesException, IOException {
     List<Position> positionsExit = new ArrayList<>();
-    positionsExit.add(Position.fromCoordinates(-77.02962040901184, 38.90728142481329));
-    positionsExit.add(Position.fromCoordinates(-77.02808618545532, 38.910111607145296));
+    positionsExit.add(Position.fromCoordinates(-77.04430818557739, 38.908650612656864));
+    positionsExit.add(Position.fromCoordinates(-77.04192638397217, 38.90963574367117));
 
     MapboxDirections client = new MapboxDirections.Builder()
       .setAccessToken("pk.XXX")
@@ -372,15 +372,21 @@ public class MapboxDirectionsTest {
     Response<DirectionsResponse> response = client.executeCall();
 
     StepManeuver maneuver = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1).getManeuver();
-    assertEquals(maneuver.asPosition().getLongitude(), -77.029315, DELTA);
-    assertEquals(maneuver.asPosition().getLatitude(), 38.909144, DELTA);
-    assertEquals(maneuver.getBearingBefore(), 43.0, DELTA);
-    assertEquals(maneuver.getBearingAfter(), 63.0, DELTA);
-    assertEquals(maneuver.getType(), "roundabout");
-    assertEquals(maneuver.getModifier(), "straight");
+    assertEquals(maneuver.asPosition().getLongitude(), -77.043755, DELTA);
+    assertEquals(maneuver.asPosition().getLatitude(), 38.909075, DELTA);
+    assertEquals(maneuver.getBearingBefore(), 84.0, DELTA);
+    assertEquals(maneuver.getBearingAfter(), 111.0, DELTA);
+    assertEquals(maneuver.getType(), "rotary");
+    assertEquals(maneuver.getModifier(), "slight right");
     assertEquals(maneuver.getInstruction(),
-      "Enter the roundabout and take the 2nd exit onto Rhode Island Avenue Northwest");
-    assertEquals(maneuver.getExit(), new Integer(2));
+      "Enter Dupont Circle Northwest and take the 3rd exit onto P Street Northwest");
+    assertEquals(maneuver.getExit(), new Integer(3));
+
+
+    LegStep step = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1);
+    assertEquals(step.getRotaryName(), "Dupont Circle Northwest");
+    assertEquals(step.getRotaryPronunciation(), null);
+    assertEquals(step.getPronunciation(), null);
   }
 
 
