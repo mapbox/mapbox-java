@@ -1,5 +1,7 @@
 package com.mapbox.services.api.navigation.v5;
 
+import com.mapbox.services.Constants;
+import com.mapbox.services.Experimental;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.directions.v5.models.LegStep;
@@ -17,13 +19,15 @@ import com.mapbox.services.commons.utils.PolylineUtils;
 import java.util.List;
 import java.util.Locale;
 
-import static com.mapbox.services.Constants.PRECISION_6;
-
 /**
  * A few utilities to work with RouteLeg objects.
  *
+ * This is an experimental API. Experimental APIs are quickly evolving and
+ * might change or be removed in minor versions.
+ *
  * @since 1.3.0
  */
+@Experimental
 public class RouteUtils {
 
   // Default threshold for the user to be considered to be off-route (100 meters)
@@ -137,7 +141,7 @@ public class RouteUtils {
     LegStep step = validateStep(routeLeg, stepIndex);
 
     // Decode the geometry
-    List<Position> coords = PolylineUtils.decode(step.getGeometry(), PRECISION_6);
+    List<Position> coords = PolylineUtils.decode(step.getGeometry(), Constants.PRECISION_6);
 
     LineString slicedLine = TurfMisc.lineSlice(
       Point.fromCoordinates(position),
@@ -157,7 +161,7 @@ public class RouteUtils {
    */
   public static double getDistanceToEndOfRoute(Position position, DirectionsRoute route) throws TurfException {
     // Decode the geometry
-    List<Position> coords = PolylineUtils.decode(route.getGeometry(), PRECISION_6);
+    List<Position> coords = PolylineUtils.decode(route.getGeometry(), Constants.PRECISION_6);
 
     LineString slicedLine = TurfMisc.lineSlice(
       Point.fromCoordinates(position),
@@ -184,7 +188,7 @@ public class RouteUtils {
     LegStep step = validateStep(routeLeg, stepIndex);
 
     // Decode the geometry
-    List<Position> coords = PolylineUtils.decode(step.getGeometry(), PRECISION_6);
+    List<Position> coords = PolylineUtils.decode(step.getGeometry(), Constants.PRECISION_6);
 
     // No need to do the math if the step has one coordinate only
     if (coords.size() == 1) {
@@ -262,14 +266,14 @@ public class RouteUtils {
     int lastStepIndex = route.getLegs().get(lastLegIndex).getSteps().size() - 1;
 
     String polyline = route.getLegs().get(lastLegIndex).getSteps().get(lastStepIndex).getGeometry();
-    LineString lastStepInLastLegLineString = LineString.fromPolyline(polyline, PRECISION_6);
+    LineString lastStepInLastLegLineString = LineString.fromPolyline(polyline, Constants.PRECISION_6);
     int lastStepLastIndex = lastStepInLastLegLineString.getCoordinates().size() - 1;
     Position lastStepInLastLegPostion = lastStepInLastLegLineString.getCoordinates().get(lastStepLastIndex);
 
     return TurfMisc.lineSlice(
       Point.fromCoordinates(position),
       Point.fromCoordinates(lastStepInLastLegPostion),
-      LineString.fromPolyline(route.getGeometry(), PRECISION_6)
+      LineString.fromPolyline(route.getGeometry(), Constants.PRECISION_6)
     );
   }
 

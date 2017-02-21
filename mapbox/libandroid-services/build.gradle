@@ -33,6 +33,7 @@ dependencies {
 
     // Android Support libraries
     compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:support-compat:25.1.0'
 
     // LOST
     compile 'com.mapzen.android:lost:2.1.2'
