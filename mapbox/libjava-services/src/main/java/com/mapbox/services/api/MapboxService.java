@@ -22,6 +22,8 @@ import static com.mapbox.services.commons.utils.TextUtils.isEmpty;
 public abstract class MapboxService<T> {
 
   private boolean enableDebug = false;
+  private OkHttpClient okHttpClient = null;
+  private okhttp3.Call.Factory callFactory = null;
 
   public abstract Response<T> executeCall() throws IOException;
 
@@ -40,21 +42,49 @@ public abstract class MapboxService<T> {
   }
 
   /**
+   * Gets the call factory for creating {@link Call} instances.
+   *
+   * @return the call factory, or the default OkHttp client if it's null.
+   * @since 2.0.0
+   */
+  public okhttp3.Call.Factory getCallFactory() {
+    if (callFactory == null) {
+      return getOkHttpClient();
+    }
+
+    return callFactory;
+  }
+
+  /**
+   * Specify a custom call factory for creating {@link Call} instances.
+   *
+   * @param callFactory implementation
+   * @since 2.0.0
+   */
+  public void setCallFactory(okhttp3.Call.Factory callFactory) {
+    this.callFactory = callFactory;
+  }
+
+  /**
    * Used Internally.
    *
    * @return OkHttpClient
    * @since 1.0.0
    */
   public OkHttpClient getOkHttpClient() {
-    if (isEnableDebug()) {
-      HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-      logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-      OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-      httpClient.addInterceptor(logging);
-      return httpClient.build();
-    } else {
-      return new OkHttpClient();
+    if (okHttpClient == null) {
+      if (isEnableDebug()) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(logging);
+        okHttpClient = httpClient.build();
+      } else {
+        okHttpClient = new OkHttpClient();
+      }
     }
+
+    return okHttpClient;
   }
 
   /**

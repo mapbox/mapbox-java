@@ -71,6 +71,7 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
       .addConverterFactory(GsonConverterFactory.create(getGson()))
+      .callFactory(getCallFactory())
       .build();
 
     service = retrofit.create(GeocodingService.class);

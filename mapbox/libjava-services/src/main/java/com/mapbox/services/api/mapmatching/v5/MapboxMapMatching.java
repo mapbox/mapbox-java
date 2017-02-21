@@ -52,6 +52,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
       .addConverterFactory(GsonConverterFactory.create())
+      .callFactory(getCallFactory())
       .build();
 
     // MapMatching service
