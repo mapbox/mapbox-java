@@ -188,6 +188,60 @@ public class MapboxDirectionsTest {
   }
 
   @Test
+  public void testRadius() throws ServicesException, IOException {
+    List<Position> coordinates = new ArrayList<>();
+    coordinates.add(Position.fromCoordinates(13.4301, 52.5109));
+    coordinates.add(Position.fromCoordinates(13.4265, 52.5080));
+    coordinates.add(Position.fromCoordinates(13.4316, 52.5021));
+
+    MapboxDirections client = new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(coordinates)
+      .setRadiuses(new double[] {100, 100, 100})
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
+      .build();
+
+    assertTrue(client.executeCall().raw().request().url().toString()
+      .contains("radiuses=100.000000;100.000000;100.000000"));
+  }
+
+  @Test
+  public void testRadiusWithUnlimitedDistance() throws ServicesException, IOException {
+    List<Position> coordinates = new ArrayList<>();
+    coordinates.add(Position.fromCoordinates(13.4301, 52.5109));
+    coordinates.add(Position.fromCoordinates(13.4265, 52.5080));
+    coordinates.add(Position.fromCoordinates(13.4316, 52.5021));
+
+    MapboxDirections client = new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(coordinates)
+      .setRadiuses(new double[] {100, Double.POSITIVE_INFINITY, 100})
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
+      .build();
+
+    assertTrue(client.executeCall().raw().request().url().toString()
+      .contains("radiuses=100.000000;unlimited;100.000000"));
+  }
+
+  @Test
+  public void testRadiusesContainingNegativeDistance() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Radius values need to be greater than zero."));
+
+    new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positions)
+      .setRadiuses(new double[] {-1, -2})
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .build();
+  }
+
+  @Test
   public void testBearing() throws ServicesException, IOException {
     List<Position> coordinates = new ArrayList<>();
     coordinates.add(Position.fromCoordinates(13.4301, 52.5109));

@@ -291,15 +291,16 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     /**
-     * Used to filter the road segment the waypoint will be placed on by direction and dictates the angle of approach.
-     * This option should always be used in conjunction with the {@link MapboxDirections.Builder#setRadiuses(double[])}
-     * parameter. The parameter takes two values per waypoint: the first is an angle clockwise from true north
-     * between 0 and 360. The second is the range of degrees the angle can deviate by. We recommend a value of 45
-     * degrees or 90 degrees for the range, as bearing measurements tend to be inaccurate. This is useful for making
-     * sure we reroute vehicles on new routes that continue traveling in their current direction. A request that does
-     * this would provide bearing and radius values for the first waypoint and leave the remaining values empty. If
-     * provided, the list of bearings must be the same length as the list of waypoints, but you can skip a coordinate
-     * and show its position by passing in a double array with no values included like so: {@code new double[] {}}.
+     * Optionally, Use to filter the road segment the waypoint will be placed on by direction and dictates the angle of
+     * approach. This option should always be used in conjunction with the
+     * {@link MapboxDirections.Builder#setRadiuses(double[])} parameter. The parameter takes two values per waypoint:
+     * the first is an angle clockwise from true north between 0 and 360. The second is the range of degrees the angle
+     * can deviate by. We recommend a value of 45 degrees or 90 degrees for the range, as bearing measurements tend to
+     * be inaccurate. This is useful for making sure we reroute vehicles on new routes that continue traveling in their
+     * current direction. A request that does this would provide bearing and radius values for the first waypoint and
+     * leave the remaining values empty. If provided, the list of bearings must be the same length as the list of
+     * waypoints, but you can skip a coordinate and show its position by passing in a double array with no values
+     * included like so: {@code new double[] {}}.
      *
      * @param bearings a double array with two values indicating the angle and the other value indicating the deviating
      *                 range.
@@ -312,11 +313,14 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     /**
-     * Optionally, set a radius values for the coordinates to allow for a more flexible origin
-     * and destinations point locations.
+     * Optionally, set the maximum distance in meters that each coordinate is allowed to move when snapped to a nearby
+     * road segment. There must be as many radiuses as there are coordinates in the request. Values can be any number
+     * greater than 0 or they can be unlimited simply by passing {@link Double#POSITIVE_INFINITY}. If no routable road
+     * is found within the radius, a {@code NoSegment} error is returned.
      *
-     * @param radiuses double array containing the radiuses
+     * @param radiuses double array containing the radiuses defined in unit meters.
      * @return Builder
+     * @since 1.0.0
      */
     public T setRadiuses(double[] radiuses) {
       this.radiuses = radiuses;
@@ -472,7 +476,11 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
       String[] radiusesFormatted = new String[radiuses.length];
       for (int i = 0; i < radiuses.length; i++) {
-        radiusesFormatted[i] = String.format(Locale.US, "%f", radiuses[i]);
+        if (radiuses[i] == Double.POSITIVE_INFINITY) {
+          radiusesFormatted[i] = "unlimited";
+        } else {
+          radiusesFormatted[i] = String.format(Locale.US, "%f", radiuses[i]);
+        }
       }
 
       return TextUtils.join(";", radiusesFormatted);
@@ -542,6 +550,15 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       if (radiuses != null && radiuses.length != coordinates.size()) {
         throw new ServicesException(
           "There must be as many radiuses as there are coordinates.");
+      }
+
+      if (radiuses != null) {
+        for (double radius : radiuses) {
+          if (radius < 0) {
+            throw new ServicesException(
+              "Radius values need to be greater than zero.");
+          }
+        }
       }
 
       if (bearings != null) {
