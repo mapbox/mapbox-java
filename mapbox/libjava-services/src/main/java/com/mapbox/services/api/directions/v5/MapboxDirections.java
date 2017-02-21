@@ -555,7 +555,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         for (double radius : radiuses) {
           if (radius < 0) {
             throw new ServicesException(
-              "Radius values need to be greater then zero.");
+              "Radius values need to be greater than zero.");
           }
         }
       }

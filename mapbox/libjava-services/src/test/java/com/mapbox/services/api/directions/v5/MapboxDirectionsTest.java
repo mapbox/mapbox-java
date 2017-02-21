@@ -213,7 +213,7 @@ public class MapboxDirectionsTest {
   @Test
   public void testRadiusesContainingNegativeDistance() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Radius values need to be greater then zero."));
+    thrown.expectMessage(startsWith("Radius values need to be greater than zero."));
 
     new MapboxDirections.Builder()
       .setAccessToken("pk.XXX")
