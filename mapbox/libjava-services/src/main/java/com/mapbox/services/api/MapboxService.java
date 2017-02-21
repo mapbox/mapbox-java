@@ -45,6 +45,7 @@ public abstract class MapboxService<T> {
    * Gets the call factory for creating {@link Call} instances.
    *
    * @return the call factory, or the default OkHttp client if it's null.
+   * @since 2.0.0
    */
   public okhttp3.Call.Factory getCallFactory() {
     if (callFactory == null) {
@@ -58,6 +59,7 @@ public abstract class MapboxService<T> {
    * Specify a custom call factory for creating {@link Call} instances.
    *
    * @param callFactory implementation
+   * @since 2.0.0
    */
   public void setCallFactory(okhttp3.Call.Factory callFactory) {
     this.callFactory = callFactory;
