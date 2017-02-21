@@ -22,6 +22,7 @@ import static com.mapbox.services.commons.utils.TextUtils.isEmpty;
 public abstract class MapboxService<T> {
 
   private boolean enableDebug = false;
+  private OkHttpClient okHttpClient = null;
   private okhttp3.Call.Factory callFactory = null;
 
   public abstract Response<T> executeCall() throws IOException;
@@ -69,15 +70,19 @@ public abstract class MapboxService<T> {
    * @since 1.0.0
    */
   public OkHttpClient getOkHttpClient() {
-    if (isEnableDebug()) {
-      HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-      logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-      OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-      httpClient.addInterceptor(logging);
-      return httpClient.build();
-    } else {
-      return new OkHttpClient();
+    if (okHttpClient == null) {
+      if (isEnableDebug()) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(logging);
+        okHttpClient = httpClient.build();
+      } else {
+        okHttpClient = new OkHttpClient();
+      }
     }
+
+    return okHttpClient;
   }
 
   /**
