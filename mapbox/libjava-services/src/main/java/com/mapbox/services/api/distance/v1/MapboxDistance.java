@@ -73,6 +73,7 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
       .addConverterFactory(GsonConverterFactory.create(getGson()))
+      .callFactory(getCallFactory())
       .build();
 
     // Distance service

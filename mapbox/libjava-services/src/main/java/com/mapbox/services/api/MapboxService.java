@@ -22,6 +22,7 @@ import static com.mapbox.services.commons.utils.TextUtils.isEmpty;
 public abstract class MapboxService<T> {
 
   private boolean enableDebug = false;
+  private okhttp3.Call.Factory callFactory = null;
 
   public abstract Response<T> executeCall() throws IOException;
 
@@ -37,6 +38,28 @@ public abstract class MapboxService<T> {
 
   public void setEnableDebug(boolean enableDebug) {
     this.enableDebug = enableDebug;
+  }
+
+  /**
+   * Gets the call factory for creating {@link Call} instances.
+   *
+   * @return the call factory, or the default OkHttp client if it's null.
+     */
+  public okhttp3.Call.Factory getCallFactory() {
+    if (callFactory == null) {
+      return getOkHttpClient();
+    }
+
+    return callFactory;
+  }
+
+  /**
+   * Specify a custom call factory for creating {@link Call} instances.
+   *
+   * @param callFactory implementation
+     */
+  public void setCallFactory(okhttp3.Call.Factory callFactory) {
+    this.callFactory = callFactory;
   }
 
   /**

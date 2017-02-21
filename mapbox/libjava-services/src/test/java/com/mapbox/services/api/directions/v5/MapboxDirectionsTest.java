@@ -106,6 +106,23 @@ public class MapboxDirectionsTest {
   }
 
   @Test
+  public void callFactoryNonNull() throws ServicesException, IOException {
+    MapboxDirections client = new MapboxDirections.Builder()
+            .setAccessToken("pk.XXX")
+            .setCoordinates(positions)
+            .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+            .setBaseUrl(mockUrl.toString())
+            .build();
+
+    // Setting a null call factory doesn't make the request fail
+    // (the default OkHttp client is used)
+    client.setCallFactory(null);
+    Response<DirectionsResponse> response = client.executeCall();
+    assertEquals(response.code(), 200);
+    assertEquals(response.body().getCode(), DirectionsCriteria.RESPONSE_OK);
+  }
+
+  @Test
   public void coordinatesOverLimit() throws ServicesException {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(startsWith("All profiles (except driving-traffic) allows for maximum of 25 coordinates."));

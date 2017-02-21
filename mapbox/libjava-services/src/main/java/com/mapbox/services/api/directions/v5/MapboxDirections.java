@@ -46,6 +46,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
       .addConverterFactory(GsonConverterFactory.create())
+      .callFactory(getCallFactory())
       .build();
 
     // Directions service
