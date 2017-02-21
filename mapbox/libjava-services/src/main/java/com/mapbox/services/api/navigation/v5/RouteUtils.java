@@ -215,7 +215,7 @@ public class RouteUtils {
   public boolean isOffRoute(Position position, RouteLeg routeLeg) throws ServicesException, TurfException {
     for (int stepIndex = 0; stepIndex < routeLeg.getSteps().size(); stepIndex++) {
       if (isInStep(position, routeLeg, stepIndex)) {
-        // We aren't off-routeLeg if we're close to at least one routeLeg step
+        // We aren't off-route if we're close to at least one routeLeg step
         return false;
       }
     }

@@ -100,7 +100,7 @@ public class RouteUtilsTest extends BaseTest {
     LegStep lastStep = route.getSteps().get(route.getSteps().size() - 1);
     List<Position> lastCoords = PolylineUtils.decode(lastStep.getGeometry(), Constants.PRECISION_6);
     Position offRoutePoint = TurfMeasurement.destination(
-      lastCoords.get(0), routeUtils.getOffRouteThresholdKm(), 180, TurfConstants.UNIT_DEFAULT);
+      lastCoords.get(0), routeUtils.getOffRouteThresholdKm() + 0.1, 180, TurfConstants.UNIT_DEFAULT);
     assertTrue(routeUtils.isOffRoute(offRoutePoint, route));
   }
 
