@@ -4,10 +4,10 @@ import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.distance.v1.MapboxDistance;
 import com.mapbox.services.api.distance.v1.models.DistanceResponse;
 
+import io.reactivex.Observable;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 
 /**
  * Note this API is still in preview.
@@ -46,7 +46,7 @@ public class MapboxDistanceRx extends MapboxDistance {
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
-      .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
       .addConverterFactory(GsonConverterFactory.create(getGson()))
       .build();
 

@@ -31,12 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 public class DirectionsV5Activity extends AppCompatActivity {
 
@@ -124,9 +124,9 @@ public class DirectionsV5Activity extends AppCompatActivity {
     clientRx.getObservable()
       .subscribeOn(Schedulers.newThread())
       .observeOn(AndroidSchedulers.mainThread())
-      .subscribe(new Action1<DirectionsResponse>() {
+      .subscribe(new Consumer<DirectionsResponse>() {
         @Override
-        public void call(DirectionsResponse response) {
+        public void accept(DirectionsResponse response) throws Exception {
           DirectionsRoute currentRoute = response.getRoutes().get(0);
           Log.d(LOG_TAG, "Response code: " + response.getCode());
           Log.d(LOG_TAG, "Distance: " + currentRoute.getDistance());

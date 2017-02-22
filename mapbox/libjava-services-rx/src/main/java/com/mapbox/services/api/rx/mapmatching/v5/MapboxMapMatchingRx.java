@@ -4,10 +4,10 @@ import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.mapmatching.v5.MapboxMapMatching;
 import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
 
+import io.reactivex.Observable;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 
 /**
  * The Mapbox map matching interface (v4)
@@ -40,7 +40,7 @@ public class MapboxMapMatchingRx extends MapboxMapMatching {
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
-      .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
       .addConverterFactory(GsonConverterFactory.create())
       .build();
 
