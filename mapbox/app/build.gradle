@@ -39,34 +39,34 @@ dependencies {
     compile project(':libjava-services-rx')
 
     // Android Support libraries
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    compile "com.android.support:recyclerview-v7:25.1.0"
+    compile rootProject.ext.dep.supportAppcompat
+    compile rootProject.ext.dep.supportDesign
+    compile rootProject.ext.dep.supportRecyclerview
 
     // Mapbox SDK
-    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:5.0.0-SNAPSHOT@aar') {
-        transitive=true
+    compile(rootProject.ext.dep.mapbox) {
+        transitive = true
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-java-geojson'
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
     }
 
     // Leak Canary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugCompile rootProject.ext.dep.leakcanaryDebug
+    releaseCompile rootProject.ext.dep.leakcanaryRelease
+    testCompile rootProject.ext.dep.leakcanaryTest
 
     // Google Play Services
-    compile 'com.google.android.gms:play-services-location:10.0.1'
+    compile rootProject.ext.dep.gmsLocation
 
     // Picasso (Static Image)
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile rootProject.ext.dep.picasso
 
     // RxAndroid
-    compile 'io.reactivex:rxandroid:1.1.0'
+    compile rootProject.ext.dep.rxandroid
 
     // Testing
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    testCompile rootProject.ext.dep.junit
+    androidTestCompile(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

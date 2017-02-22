@@ -9,13 +9,51 @@ ext {
     buildToolsVersion = "25.0.2"
 
     dep = [
-        gson: 'com.google.code.gson:gson:2.8.0',
-        retrofit2Main: 'com.squareup.retrofit2:retrofit:2.1.0',
-        retrofit2Gson: 'com.squareup.retrofit2:converter-gson:2.1.0',
-        retrofit2Rx: 'com.squareup.retrofit2:adapter-rxjava:2.1.0',
-        okhttp3Logging: 'com.squareup.okhttp3:logging-interceptor:3.5.0',
-        okhttp3Mockwebserver: 'com.squareup.okhttp3:mockwebserver:3.5.0',
-        junit: 'junit:junit:4.12',
-        hamcrestJunit: 'org.hamcrest:hamcrest-junit:2.0.0.0'
+            // Support
+            supportAppcompat     : 'com.android.support:appcompat-v7:25.1.0',
+            supportCompat        : 'com.android.support:support-compat:25.1.0',
+            supportDesign        : 'com.android.support:design:25.1.0',
+            supportRecyclerview  : 'com.android.support:recyclerview-v7:25.1.0',
+
+            // mapbox
+            mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.0.0-SNAPSHOT@aar',
+
+            // gson
+            gson                 : 'com.google.code.gson:gson:2.8.0',
+
+            // timber
+            timber               : 'com.jakewharton.timber:timber:4.5.0',
+
+            // retrofit
+            retrofit2Main        : 'com.squareup.retrofit2:retrofit:2.1.0',
+            retrofit2Gson        : 'com.squareup.retrofit2:converter-gson:2.1.0',
+            retrofit2Rx          : 'com.squareup.retrofit2:adapter-rxjava:2.1.0',
+
+            // okhttp
+            okhttp3              : 'com.squareup.okhttp3:okhttp:3.5.0',
+            okhttp3Logging       : 'com.squareup.okhttp3:logging-interceptor:3.5.0',
+            okhttp3Mockwebserver : 'com.squareup.okhttp3:mockwebserver:3.5.0',
+
+            // lost
+            lost                 : 'com.mapzen.android:lost:2.1.2',
+
+            // play services
+            gmsLocation          : 'com.google.android.gms:play-services-location:10.2.0',
+
+            // picasso
+            picasso              : 'com.squareup.picasso:picasso:2.5.2',
+
+            // rx android
+            rxandroid            : 'io.reactivex:rxandroid:1.1.0',
+
+            // leak canary
+            leakcanaryDebug      : 'com.squareup.leakcanary:leakcanary-android:1.5',
+            leakcanaryRelease    : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5',
+            leakcanaryTest       : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5',
+
+            // testing
+            junit                : 'junit:junit:4.12',
+            hamcrestJunit        : 'org.hamcrest:hamcrest-junit:2.0.0.0',
+            supportEspresso      : 'com.android.support.test.espresso:espresso-core:2.2.2'
     ]
 }
