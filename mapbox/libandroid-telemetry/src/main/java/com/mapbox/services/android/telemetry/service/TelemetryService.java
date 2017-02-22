@@ -6,15 +6,16 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.mapbox.services.android.telemetry.TelemetryLocationReceiver;
-
-import timber.log.Timber;
 
 /**
  * Android telemetry Service
  */
 public class TelemetryService extends Service {
+
+  private static final String LOG_TAG = TelemetryService.class.getSimpleName();
 
   private TelemetryLocationReceiver receiver = null;
 
@@ -25,7 +26,7 @@ public class TelemetryService extends Service {
   @Override
   public IBinder onBind(Intent intent) {
     // A service may return null if clients can not bind to the service.
-    Timber.w("The service doesn't support a binder interface.");
+    Log.w(LOG_TAG, "The service doesn't support a binder interface.");
     return null;
   }
 
@@ -35,7 +36,7 @@ public class TelemetryService extends Service {
   @Override
   public void onCreate() {
     // Enable location listening for lifecycle of app
-    Timber.v("Create event.");
+    Log.v(LOG_TAG, "Create event.");
     receiver = new TelemetryLocationReceiver();
     LocalBroadcastManager.getInstance(getApplicationContext())
       .registerReceiver(receiver, new IntentFilter(TelemetryLocationReceiver.INTENT_STRING));
@@ -47,7 +48,7 @@ public class TelemetryService extends Service {
    */
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-    Timber.v("Start command event.");
+    Log.v(LOG_TAG, "Start command event.");
     return START_NOT_STICKY;
   }
 
@@ -57,7 +58,7 @@ public class TelemetryService extends Service {
    */
   @Override
   public void onTaskRemoved(Intent rootIntent) {
-    Timber.v("Task removed event.");
+    Log.v(LOG_TAG, "Task removed event.");
     shutdownTelemetryService();
   }
 
@@ -68,17 +69,17 @@ public class TelemetryService extends Service {
    */
   @Override
   public void onDestroy() {
-    Timber.v("Destroy event.");
+    Log.v(LOG_TAG, "Destroy event.");
     shutdownTelemetryService();
   }
 
   private void shutdownTelemetryService() {
     try {
-      Timber.v("Unregistering location receiver.");
+      Log.v(LOG_TAG, "Unregistering location receiver.");
       LocalBroadcastManager.getInstance(getApplicationContext())
         .unregisterReceiver(receiver);
     } catch (Exception exception) {
-      Timber.e("Unregistering receiver failed: %s.", exception.getMessage());
+      Log.e(LOG_TAG, String.format("Unregistering receiver failed: %s.", exception.getMessage()));
     }
   }
 

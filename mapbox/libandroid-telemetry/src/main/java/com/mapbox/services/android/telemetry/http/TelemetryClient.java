@@ -1,6 +1,7 @@
 package com.mapbox.services.android.telemetry.http;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.mapbox.services.android.telemetry.BuildConfig;
 import com.mapbox.services.android.telemetry.MapboxEvent;
@@ -20,12 +21,13 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import timber.log.Timber;
 
 /**
  * HTTP client to Mapbox telemetry
  */
 public class TelemetryClient {
+
+  private static final String LOG_TAG = TelemetryClient.class.getSimpleName();
 
   private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -109,14 +111,14 @@ public class TelemetryClient {
 
   public void sendEvents(Vector<Hashtable<String, Object>> events, Callback callback) {
     if (events == null || events.size() == 0) {
-      Timber.v("Returning, no event data to send.");
+      Log.v(LOG_TAG, "Returning, no event data to send.");
       return;
     }
 
     try {
       sendEventsWrapped(events, callback);
     } catch (Exception exception) {
-      Timber.e("Request preparation failed: %s.", exception.getMessage());
+      Log.e(LOG_TAG, String.format("Request preparation failed: %s.", exception.getMessage()));
     }
   }
 
@@ -205,8 +207,8 @@ public class TelemetryClient {
 
     // Extra debug in staging mode
     if (isStagingEnvironment()) {
-      Timber.d("Sending POST to %s with %d event(s) (user agent: %s) with payload: %s",
-        url, events.size(), userAgent, payload);
+      Log.d(LOG_TAG, String.format("Sending POST to %s with %d event(s) (user agent: %s) with payload: %s",
+        url, events.size(), userAgent, payload));
     }
 
     // Async request
