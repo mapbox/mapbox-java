@@ -1,0 +1,9 @@
+machine:
+  node:
+    version: 6
+test:
+  post:
+    - npm run build
+    - mv index.html $CIRCLE_ARTIFACTS
+    - mv bundle.js $CIRCLE_ARTIFACTS
+    - mv css $CIRCLE_ARTIFACTS
