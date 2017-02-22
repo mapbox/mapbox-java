@@ -122,7 +122,9 @@ public class GoogleLocationEngine extends LocationEngine implements
 
   @Override
   public void removeLocationUpdates() {
-    LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+    if (googleApiClient.isConnected()) {
+      LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+    }
   }
 
   @Override

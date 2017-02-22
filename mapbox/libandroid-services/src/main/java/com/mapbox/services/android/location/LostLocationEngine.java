@@ -111,7 +111,9 @@ public class LostLocationEngine extends LocationEngine implements
 
   @Override
   public void removeLocationUpdates() {
-    LocationServices.FusedLocationApi.removeLocationUpdates(lostApiClient, this);
+    if (lostApiClient.isConnected()) {
+      LocationServices.FusedLocationApi.removeLocationUpdates(lostApiClient, this);
+    }
   }
 
   @Override
