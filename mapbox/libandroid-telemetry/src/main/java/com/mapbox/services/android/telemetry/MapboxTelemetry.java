@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.mapbox.services.android.telemetry.backoff.ExponentialBackoff;
@@ -42,12 +43,13 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import okhttp3.internal.Util;
-import timber.log.Timber;
 
 /**
  * This is the entry point to manage Mapbox telemetry
  */
 public class MapboxTelemetry implements Callback, LocationEngineListener {
+
+  private static final String LOG_TAG = MapboxTelemetry.class.getSimpleName();
 
   private static MapboxTelemetry instance;
 
@@ -109,7 +111,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       return;
     }
 
-    Timber.v("Initializing telemetry.");
+    Log.v(LOG_TAG, "Initializing telemetry.");
     this.context = context.getApplicationContext();
     this.accessToken = accessToken;
     if (this.context == null || TextUtils.isEmpty(this.accessToken)) {
@@ -184,7 +186,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
 
       // Set new client information (if needed)
       if (!TextUtils.isEmpty(stagingURL) && !TextUtils.isEmpty(stagingAccessToken)) {
-        Timber.w("Using staging server '%s' with access token '%s'.", stagingURL, stagingAccessToken);
+        Log.w(LOG_TAG, String.format("Using staging server '%s' with access token '%s'.",
+          stagingURL, stagingAccessToken));
         client.setEventsEndpoint(stagingURL);
         client.setAccessToken(stagingAccessToken);
         client.setStagingEnvironment(true);
@@ -197,11 +200,11 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
         && !TextUtils.isEmpty(appIdentifier)) {
         String updatedUserAgent = Util.toHumanReadableAscii(
           String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
-        Timber.v("Updating user agent value: '%s", updatedUserAgent);
+        Log.v(LOG_TAG, String.format("Updating user agent value: '%s", updatedUserAgent));
         client.setUserAgent(updatedUserAgent);
       }
     } catch (Exception exception) {
-      Timber.e("Failed to check for staging credentials: %s", exception.getMessage());
+      Log.e(LOG_TAG, String.format("Failed to check for staging credentials: %s", exception.getMessage()));
     }
   }
 
@@ -286,12 +289,12 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    */
   public void setTelemetryEnabled(boolean telemetryEnabled) {
     if (initialized && isTelemetryEnabled() == telemetryEnabled) {
-      Timber.v("Telemetry was already initialized on that state (enabled: %b).", telemetryEnabled);
+      Log.v(LOG_TAG, String.format("Telemetry was already initialized on that state (enabled: %b).", telemetryEnabled));
       return;
     }
 
     if (telemetryEnabled) {
-      Timber.v("Enabling telemetry.");
+      Log.v(LOG_TAG, "Enabling telemetry.");
       context.startService(new Intent(context, TelemetryService.class));
 
       // Check for location permissions, periodically if necessary
@@ -310,7 +313,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
         }
       }, TelemetryConstants.FLUSH_DELAY_MS, TelemetryConstants.FLUSH_PERIOD_MS);
     } else {
-      Timber.v("Disabling telemetry.");
+      Log.v(LOG_TAG, "Disabling telemetry.");
       withShutDown = true;
 
       // This event is always recorded
@@ -339,14 +342,16 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
         } else {
           // Restart handler
           long nextWaitTime = counter.nextBackOffMillis();
-          Timber.v("Location permissions not granted (checking again in %d seconds).", nextWaitTime / 1000);
+          Log.v(LOG_TAG, String.format("Location permissions not granted (checking again in %d seconds).",
+            nextWaitTime / 1000));
           handler.postDelayed(this, nextWaitTime);
         }
       }
     };
 
     long nextWaitTime = counter.nextBackOffMillis();
-    Timber.v("Location permissions not granted (checking again in %d seconds).", nextWaitTime / 1000);
+    Log.v(LOG_TAG, String.format("Location permissions not granted (checking again in %d seconds).",
+      nextWaitTime / 1000));
     handler.postDelayed(runnable, nextWaitTime);
   }
 
@@ -486,7 +491,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       eventWithAttributes.put(MapboxEvent.KEY_WIFI, TelemetryUtils.getConnectedToWifi(context));
       putEventOnQueue(eventWithAttributes);
     } else {
-      Timber.w("Unknown event type provided: %s.", eventType);
+      Log.w(LOG_TAG, String.format("Unknown event type provided: %s.", eventType));
     }
   }
 
@@ -522,7 +527,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    */
   @Override
   public void onFailure(Call call, IOException e) {
-    Timber.v("HTTP request failed: %s", e);
+    Log.v(LOG_TAG, "HTTP request failed: %s", e);
 
     // Make sure that events don't pile up (e.g. offline) and thus impact available memory over time.
     events.removeAllElements();
@@ -544,7 +549,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    */
   @Override
   public void onResponse(Call call, Response response) throws IOException {
-    Timber.v("HTTP request succeeded.");
+    Log.v(LOG_TAG, "HTTP request succeeded.");
 
     // Make sure that events don't pile up (e.g. offline) and thus impact available memory over time.
     events.removeAllElements();
@@ -560,7 +565,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   }
 
   private void shutdownTelemetry() {
-    Timber.d("Shutting down telemetry service.");
+    Log.d(LOG_TAG, "Shutting down telemetry service.");
     withShutDown = false;
     events.removeAllElements();
     context.stopService(new Intent(context, TelemetryService.class));
