@@ -4,7 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### v2.0.0-beta.2
 
-* Bearing query parameter added to the Directions API
+* Mapbox Navigation SDK
+* Bearing query parameter and rotary convenience methods added to the Directions API
+* Base URL method setting added to geocoder autocomplete widget
+* AppEngine support
 
 ### v2.0.0-beta.1
 
