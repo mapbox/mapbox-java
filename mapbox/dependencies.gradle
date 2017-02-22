@@ -10,10 +10,10 @@ ext {
 
     dep = [
             // Support
-            supportAppcompat     : 'com.android.support:appcompat-v7:25.1.0',
-            supportCompat        : 'com.android.support:support-compat:25.1.0',
-            supportDesign        : 'com.android.support:design:25.1.0',
-            supportRecyclerview  : 'com.android.support:recyclerview-v7:25.1.0',
+            supportAppcompat     : 'com.android.support:appcompat-v7:25.2.0',
+            supportCompat        : 'com.android.support:support-compat:25.2.0',
+            supportDesign        : 'com.android.support:design:25.2.0',
+            supportRecyclerview  : 'com.android.support:recyclerview-v7:25.2.0',
 
             // mapbox
             mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.0.0-SNAPSHOT@aar',
@@ -22,17 +22,17 @@ ext {
             gson                 : 'com.google.code.gson:gson:2.8.0',
 
             // timber
-            timber               : 'com.jakewharton.timber:timber:4.5.0',
+            timber               : 'com.jakewharton.timber:timber:4.5.1',
 
             // retrofit
-            retrofit2Main        : 'com.squareup.retrofit2:retrofit:2.1.0',
-            retrofit2Gson        : 'com.squareup.retrofit2:converter-gson:2.1.0',
-            retrofit2Rx          : 'com.squareup.retrofit2:adapter-rxjava:2.1.0',
+            retrofit2Main        : 'com.squareup.retrofit2:retrofit:2.2.0',
+            retrofit2Gson        : 'com.squareup.retrofit2:converter-gson:2.2.0',
+            retrofit2Rx          : 'com.squareup.retrofit2:adapter-rxjava2:2.2.0',
 
             // okhttp
-            okhttp3              : 'com.squareup.okhttp3:okhttp:3.5.0',
-            okhttp3Logging       : 'com.squareup.okhttp3:logging-interceptor:3.5.0',
-            okhttp3Mockwebserver : 'com.squareup.okhttp3:mockwebserver:3.5.0',
+            okhttp3              : 'com.squareup.okhttp3:okhttp:3.6.0',
+            okhttp3Logging       : 'com.squareup.okhttp3:logging-interceptor:3.6.0',
+            okhttp3Mockwebserver : 'com.squareup.okhttp3:mockwebserver:3.6.0',
 
             // lost
             lost                 : 'com.mapzen.android:lost:2.1.2',
@@ -44,7 +44,7 @@ ext {
             picasso              : 'com.squareup.picasso:picasso:2.5.2',
 
             // rx android
-            rxandroid            : 'io.reactivex:rxandroid:1.1.0',
+            rxandroid            : 'io.reactivex.rxjava2:rxandroid:2.0.1',
 
             // leak canary
             leakcanaryDebug      : 'com.squareup.leakcanary:leakcanary-android:1.5',
