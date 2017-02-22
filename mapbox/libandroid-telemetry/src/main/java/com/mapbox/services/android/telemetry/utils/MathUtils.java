@@ -63,4 +63,16 @@ public class MathUtils {
     }
     return direction;
   }
+
+  /**
+   * Returns the smallest angle between two angles.
+   *
+   * @param alpha First angle in degrees
+   * @param beta  Second angle in degrees
+   * @return Smallest angle between two angles.
+   */
+  public static double differenceBetweenAngles(double alpha, double beta) {
+    double phi = Math.abs(beta - alpha) % 360;
+    return phi > 180 ? 360 - phi : phi;
+  }
 }
