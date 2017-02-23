@@ -18,11 +18,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.observers.TestObserver;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import rx.observers.TestSubscriber;
 
 import static org.junit.Assert.assertEquals;
 
@@ -84,17 +84,16 @@ public class MapboxDirectionsRxTest {
       .setBaseUrl(mockUrl.toString())
       .build();
 
-    TestSubscriber<DirectionsResponse> testSubscriber = new TestSubscriber<>();
-    client.getObservable().subscribe(testSubscriber);
+    TestObserver<DirectionsResponse> testObserver = new TestObserver();
+    client.getObservable().subscribe(testObserver);
+    testObserver.assertComplete();
+    testObserver.assertNoErrors();
+    testObserver.assertValueCount(1);
 
-    testSubscriber.assertCompleted();
-    testSubscriber.assertNoErrors();
-    testSubscriber.assertValueCount(1);
+    List<List<Object>> events = testObserver.getEvents();
+    assertEquals(1, events.get(0).size());
 
-    List<DirectionsResponse> events = testSubscriber.getOnNextEvents();
-    assertEquals(1, events.size());
-
-    DirectionsResponse response = events.get(0);
+    DirectionsResponse response = (DirectionsResponse) events.get(0).get(0);
     assertEquals(response.getCode(), DirectionsCriteria.RESPONSE_OK);
   }
 

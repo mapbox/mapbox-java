@@ -32,18 +32,18 @@ dependencies {
     compile project(':libandroid-telemetry')
 
     // Android Support libraries
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:support-compat:25.1.0'
+    compile rootProject.ext.dep.supportAppcompat
+    compile rootProject.ext.dep.supportCompat
 
     // Timber for logging
-    compile 'com.jakewharton.timber:timber:4.5.0'
+    compile rootProject.ext.dep.timber
 
     // LOST
-    compile 'com.mapzen.android:lost:2.1.2'
+    compile rootProject.ext.dep.lost
 
     // Testing
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    testCompile rootProject.ext.dep.junit
+    androidTestCompile(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

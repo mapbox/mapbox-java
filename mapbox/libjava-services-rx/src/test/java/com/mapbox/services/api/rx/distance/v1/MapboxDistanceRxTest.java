@@ -18,12 +18,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.observers.TestObserver;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import rx.observers.TestSubscriber;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -86,17 +86,17 @@ public class MapboxDistanceRxTest {
       .setBaseUrl(mockUrl.toString())
       .build();
 
-    TestSubscriber<DistanceResponse> testSubscriber = new TestSubscriber<>();
-    client.getObservable().subscribe(testSubscriber);
+    TestObserver<DistanceResponse> testObserver = new TestObserver<>();
+    client.getObservable().subscribe(testObserver);
 
-    testSubscriber.assertCompleted();
-    testSubscriber.assertNoErrors();
-    testSubscriber.assertValueCount(1);
+    testObserver.assertComplete();
+    testObserver.assertNoErrors();
+    testObserver.assertValueCount(1);
 
-    List<DistanceResponse> events = testSubscriber.getOnNextEvents();
-    assertEquals(1, events.size());
+    List<List<Object>> events = testObserver.getEvents();
+    assertEquals(1, events.get(0).size());
 
-    DistanceResponse response = events.get(0);
+    DistanceResponse response = (DistanceResponse) events.get(0).get(0);
     assertNotNull(response);
     assertEquals(3, response.getDurations().length);
     assertNotNull(response.getDurations()[0][0]);

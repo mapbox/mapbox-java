@@ -2,11 +2,11 @@ package com.mapbox.services.api.rx.directions.v5;
 
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Interface that defines the directions service (v5).

@@ -2,11 +2,11 @@ package com.mapbox.services.api.rx.mapmatching.v5;
 
 import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Interface that defines the map matching service.

@@ -6,10 +6,10 @@ import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 
 /**
  * The Mapbox geocoding client (v5).
@@ -38,7 +38,7 @@ public class MapboxGeocodingRx extends MapboxGeocoding {
     Retrofit retrofit = new Retrofit.Builder()
       .client(getOkHttpClient())
       .baseUrl(builder.getBaseUrl())
-      .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
       .addConverterFactory(GsonConverterFactory.create(getGson()))
       .build();
 

@@ -31,14 +31,14 @@ android {
 
 dependencies {
     // Android Support libraries
-    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile rootProject.ext.dep.supportAppcompat
 
     // OkHttp for network requests
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile rootProject.ext.dep.okhttp3
 
     // Testing
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    testCompile rootProject.ext.dep.junit
+    androidTestCompile(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

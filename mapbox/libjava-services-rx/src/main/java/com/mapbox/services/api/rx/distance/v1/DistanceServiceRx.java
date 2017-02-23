@@ -3,13 +3,13 @@ package com.mapbox.services.api.rx.distance.v1;
 import com.mapbox.services.api.distance.v1.models.DistanceResponse;
 import com.mapbox.services.commons.geojson.MultiPoint;
 
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Interface that defines the distance service.

@@ -30,12 +30,12 @@ dependencies {
     compile project(':libandroid-services')
 
     // Android Support libraries
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
+    compile rootProject.ext.dep.supportAppcompat
+    compile rootProject.ext.dep.supportDesign
 
     // Testing
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    testCompile rootProject.ext.dep.junit
+    androidTestCompile(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

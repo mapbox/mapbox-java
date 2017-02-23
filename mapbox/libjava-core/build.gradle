@@ -11,7 +11,7 @@ dependencies {
 buildConfig {
     packageName = 'com.mapbox.services'
     constants = [
-            VERSION: rootProject.ext.MasVersionName,
+            VERSION     : rootProject.ext.MasVersionName,
             GIT_REVISION: getGitRevision(),
     ]
 }
