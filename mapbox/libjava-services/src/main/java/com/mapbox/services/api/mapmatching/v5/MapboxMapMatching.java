@@ -48,15 +48,17 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     }
 
     // Retrofit instance
-    Retrofit retrofit = new Retrofit.Builder()
-      .client(getOkHttpClient())
+    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(builder.getBaseUrl())
-      .addConverterFactory(GsonConverterFactory.create())
-      .callFactory(getCallFactory())
-      .build();
+      .addConverterFactory(GsonConverterFactory.create());
+    if (getCallFactory() != null) {
+      retrofitBuilder.callFactory(getCallFactory());
+    } else {
+      retrofitBuilder.client(getOkHttpClient());
+    }
 
     // MapMatching service
-    service = retrofit.create(MapMatchingService.class);
+    service = retrofitBuilder.build().create(MapMatchingService.class);
     return service;
   }
 

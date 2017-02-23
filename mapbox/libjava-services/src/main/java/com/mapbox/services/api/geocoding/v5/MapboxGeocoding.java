@@ -67,14 +67,16 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       return service;
     }
 
-    Retrofit retrofit = new Retrofit.Builder()
-      .client(getOkHttpClient())
+    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(builder.getBaseUrl())
-      .addConverterFactory(GsonConverterFactory.create(getGson()))
-      .callFactory(getCallFactory())
-      .build();
+      .addConverterFactory(GsonConverterFactory.create(getGson()));
+    if (getCallFactory() != null) {
+      retrofitBuilder.callFactory(getCallFactory());
+    } else {
+      retrofitBuilder.client(getOkHttpClient());
+    }
 
-    service = retrofit.create(GeocodingService.class);
+    service = retrofitBuilder.build().create(GeocodingService.class);
     return service;
   }
 

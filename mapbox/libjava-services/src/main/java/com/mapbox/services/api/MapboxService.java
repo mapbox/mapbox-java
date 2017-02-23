@@ -48,10 +48,6 @@ public abstract class MapboxService<T> {
    * @since 2.0.0
    */
   public okhttp3.Call.Factory getCallFactory() {
-    if (callFactory == null) {
-      return getOkHttpClient();
-    }
-
     return callFactory;
   }
 

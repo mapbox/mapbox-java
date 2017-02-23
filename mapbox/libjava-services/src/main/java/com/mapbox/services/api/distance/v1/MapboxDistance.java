@@ -69,15 +69,17 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
     }
 
     // Retrofit instance
-    Retrofit retrofit = new Retrofit.Builder()
-      .client(getOkHttpClient())
+    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(builder.getBaseUrl())
-      .addConverterFactory(GsonConverterFactory.create(getGson()))
-      .callFactory(getCallFactory())
-      .build();
+      .addConverterFactory(GsonConverterFactory.create(getGson()));
+    if (getCallFactory() != null) {
+      retrofitBuilder.callFactory(getCallFactory());
+    } else {
+      retrofitBuilder.client(getOkHttpClient());
+    }
 
     // Distance service
-    service = retrofit.create(DistanceService.class);
+    service = retrofitBuilder.build().create(DistanceService.class);
     return service;
   }
 
