@@ -1,0 +1,150 @@
+/* BASE OVERRIDES */
+
+/* Add buffer for nicer anchor links */
+.prose h2:first-child {
+  padding-top: 20px;
+}
+
+.prose h3:first-child {
+  padding-top: 20px;
+}
+
+/* Header gets big */
+@media only screen and (max-width:960px) {
+  .prose h2:first-child {
+    padding-top: 60px;
+  }
+
+  .prose h3:first-child {
+    padding-top: 60px;
+  }
+}
+
+/* Header gets bigger */
+@media only screen and (max-width:640px) {
+  .prose h2:first-child {
+    padding-top: 100px;
+  }
+
+  .prose h3:first-child {
+    padding-top: 100px;
+  }
+}
+
+
+/* tables are too giant */
+.prose table,
+.prose table code {
+  margin-bottom: 20px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.prose table th, .prose table td {
+  padding: 5px;
+}
+
+.dark.keyline-top,
+.dark.keyline-bottom {
+  border-color: #313131;
+}
+
+.error, .warning, .info, .success	{
+	border-left: 5px solid #FD0;
+	padding: 10px 15px;
+	margin-left: -20px;
+	margin-right: -15px;
+	background-color: #FAFAFA;
+	border-radius: 2px;
+}
+
+.info {
+	border-color: #56ADEC;
+}
+
+html, body, #app, .container {
+  height: 100%;
+}
+
+body pre {
+  padding: 0;
+}
+
+code, pre {
+  font-family: 'Fira Mono Medium', Monaco, monospace;
+  font-weight: bold;
+  font-size: 13px;
+  word-break: normal;
+}
+
+/* BASE ADDONS */
+.fill-light { background:#232323; }
+.fill-dark2 { background-color: #313131; }
+.fill-dark2 .rounded-toggle input[type=radio]:checked + label,
+.fill-dark2 .rounded-toggle .active { background-color: #313131; }
+.space-top3 { margin-top: 30px;}
+.space-top5 { margin-top: 50px;}
+.line-height15 { line-height: 15px; }
+.pad00y { padding-top: 2px; padding-bottom: 2px; }
+.space-bottom00 { margin-bottom: 3px;}
+
+.endpoint {
+  width: 100%;
+  display: flex;
+}
+
+.endpoint-method {
+}
+
+.endpoint-url {
+  flex-grow: 1;
+  word-wrap: break-word;
+}
+
+.endpoint-url a {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  font-weight:bold;
+  padding: 2px;
+  color: #fff;
+}
+
+.endpoint-url a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.endpoint-token {
+}
+
+a.hljs-linked {
+  border-radius: 2px;
+  color: #a5c261;
+  background: #383C2F;
+  padding: 2px;
+}
+
+body .prose blockquote {
+  border-left: 5px solid #56ADEC;
+	background-color: #FAFAFA;
+	border-radius: 2px;
+  word-wrap: break-word;
+}
+
+.preview {
+  background-image: -webkit-linear-gradient(#F1F075, #F1F075);
+  background-size: 10px 10px;
+  background-repeat: repeat-y;
+}
+
+.preview h2::after,
+.preview h3::after {
+  content: 'PREVIEW';
+  background-color: #F1F075;
+  border-radius: 2px;
+  font-size: 9px;
+  font-weight: normal;
+  padding: 2px 5px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-left: 10px;
+  vertical-align: middle;
+}
