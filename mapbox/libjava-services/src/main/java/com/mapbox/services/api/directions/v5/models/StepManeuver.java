@@ -22,6 +22,9 @@ public class StepManeuver {
   private String instruction;
   private Integer exit;
 
+  public StepManeuver() {
+  }
+
   /**
    * @return double array of [longitude, latitude] for the snapped coordinate.
    * @since 1.0.0

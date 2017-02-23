@@ -13,6 +13,9 @@ public class DirectionsResponse {
   private List<DirectionsRoute> routes;
   private List<DirectionsWaypoint> waypoints;
 
+  public DirectionsResponse() {
+  }
+
   public DirectionsResponse(List<DirectionsRoute> routes, List<DirectionsWaypoint> waypoints) {
     this.routes = routes;
     this.waypoints = waypoints;

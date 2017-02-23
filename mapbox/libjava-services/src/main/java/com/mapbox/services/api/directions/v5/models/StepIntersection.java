@@ -14,6 +14,9 @@ public class StepIntersection {
   private int out;
   private IntersectionLanes[] lanes;
 
+  public StepIntersection() {
+  }
+
   /**
    * @return A [longitude, latitude] pair describing the location of the turn.
    * @since 1.3.0
