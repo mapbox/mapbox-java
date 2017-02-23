@@ -12,6 +12,9 @@ public class DirectionsWaypoint {
   private String name;
   private double[] location;
 
+  public DirectionsWaypoint() {
+  }
+
   /**
    * @return String with the name of the way the coordinate snapped to.
    * @since 1.0.0

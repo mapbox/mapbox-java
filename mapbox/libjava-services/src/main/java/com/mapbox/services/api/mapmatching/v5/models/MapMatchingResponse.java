@@ -14,6 +14,9 @@ public class MapMatchingResponse {
   private List<MapMatchingMatching> matchings;
   private List<MapMatchingTracepoint> tracepoints;
 
+  public MapMatchingResponse() {
+  }
+
   /**
    * A string depicting the state of the response.
    * <ul>

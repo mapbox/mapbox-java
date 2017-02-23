@@ -23,6 +23,9 @@ public class LegStep {
   private StepManeuver maneuver;
   private List<StepIntersection> intersections;
 
+  public LegStep() {
+  }
+
   /**
    * The distance traveled from the maneuver to the next {@link LegStep}.
    *

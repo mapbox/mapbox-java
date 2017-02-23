@@ -14,6 +14,9 @@ public class DirectionsRoute {
   private String geometry;
   private List<RouteLeg> legs;
 
+  public DirectionsRoute() {
+  }
+
   /**
    * The distance traveled from origin to destination.
    *

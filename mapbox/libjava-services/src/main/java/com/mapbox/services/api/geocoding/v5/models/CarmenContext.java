@@ -21,6 +21,9 @@ public class CarmenContext {
   private String category;
   private String maki;
 
+  public CarmenContext() {
+  }
+
   /**
    * ID of the feature of the form {index}.{id} where index is the id/handle of the datasource
    * that contributed the result.

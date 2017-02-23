@@ -9,6 +9,9 @@ public class MapMatchingMatching extends DirectionsRoute {
 
   private double confidence;
 
+  public MapMatchingMatching() {
+  }
+
   /**
    * A number between 0 (low) and 1 (high) indicating level of confidence in the returned match
    *

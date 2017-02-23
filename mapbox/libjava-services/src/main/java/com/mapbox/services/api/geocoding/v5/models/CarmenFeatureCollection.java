@@ -15,7 +15,10 @@ public class CarmenFeatureCollection extends BaseFeatureCollection {
 
   private List<String> query;
   private String attribution;
-  private final List<CarmenFeature> features;
+  private List<CarmenFeature> features;
+
+  public CarmenFeatureCollection() {
+  }
 
   /**
    * Protected constructor.

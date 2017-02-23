@@ -14,6 +14,9 @@ public class MapMatchingTracepoint extends DirectionsWaypoint {
   @SerializedName("waypoint_index")
   private int waypointIndex;
 
+  public MapMatchingTracepoint() {
+  }
+
   /**
    * Index to the match object in matchings the sub-trace was matched to.
    *

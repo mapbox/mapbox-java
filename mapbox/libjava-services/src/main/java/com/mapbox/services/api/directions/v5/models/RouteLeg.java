@@ -14,6 +14,9 @@ public class RouteLeg {
   private String summary;
   private List<LegStep> steps;
 
+  public RouteLeg() {
+  }
+
   /**
    * The distance traveled from one waypoint to another.
    *
