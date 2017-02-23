@@ -30,6 +30,14 @@ compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.0.0'
 
 TODO
 
+```xml
+<dependency>
+    <groupId>com.mapbox.mapboxsdk</groupId>
+    <artifactId>mapbox-java-services</artifactId>
+    <version>1.3.1</version>
+</dependency>
+```
+
 ### Selectively compiling APIs
 
 In previous versions of Mapbox Java prior to 2.0, you would have to compile the entire package of APIs. This in some cases, could cause Android applications to go over the 65,536 method count limit.
