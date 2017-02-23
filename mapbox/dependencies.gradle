@@ -10,10 +10,10 @@ ext {
 
     dep = [
             // Support
-            supportAppcompat     : 'com.android.support:appcompat-v7:25.2.0',
-            supportCompat        : 'com.android.support:support-compat:25.2.0',
-            supportDesign        : 'com.android.support:design:25.2.0',
-            supportRecyclerview  : 'com.android.support:recyclerview-v7:25.2.0',
+            supportAppcompat     : 'com.android.support:appcompat-v7:25.1.0',
+            supportCompat        : 'com.android.support:support-compat:25.1.0',
+            supportDesign        : 'com.android.support:design:25.1.0',
+            supportRecyclerview  : 'com.android.support:recyclerview-v7:25.1.0',
 
             // mapbox
             mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.0.0-SNAPSHOT@aar',
