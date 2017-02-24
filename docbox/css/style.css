@@ -70,6 +70,11 @@ body pre {
   padding: 0;
 }
 
+code p {
+  font-weight: lighter;
+  font-size: 11px;
+}
+
 code, pre {
   font-family: 'Fira Mono Medium', Monaco, monospace;
   font-weight: bold;
@@ -131,7 +136,6 @@ body .prose blockquote {
 }
 
 .preview {
-  background-image: -webkit-linear-gradient(#F1F075, #F1F075);
   background-size: 10px 10px;
   background-repeat: repeat-y;
 }

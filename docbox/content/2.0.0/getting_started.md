@@ -7,7 +7,7 @@ Mapbox Java is an open source toolset for building applications that need naviga
 
 ## Access tokens
 
-If you plan to use any of our APIs such as directions, geocoding, navigation, etc. you'll need to have a Mapbox Access token which you'll pass in as a parameter. An access token isn't needed if you plan to use Mapbox Java only for GeoJSON parsing, or Turf calculations. To learn more about Access tokens, read [this document](https://www.mapbox.com/help/create-api-access-token/).
+If you plan to use any of our APIs such as directions, geocoding, navigation, etc. you'll need to have a Mapbox access token which you'll pass in as a parameter. An access token isn't needed if you plan to use Mapbox Java only for GeoJSON parsing, or Turf calculations. To learn more about access tokens, read [this document](https://www.mapbox.com/help/create-api-access-token/).
 
 ## Installation
 To start developing your application using Mapbox Java, you'll need to first determine which installation method works best for you. The SDK is fully compatible with Android using Gradle and most of the project (besides the Android dependent modules) can also be included in a generic Java project using either Gradle or Maven. All dependencies given below can be found on MavenCentral.
@@ -20,7 +20,7 @@ To start developing your application using Mapbox Java, you'll need to first det
 4. Under dependencies add a new build rule for the latest mapbox-android-services
 5. Click the Sync Project with Gradle Files near the toolbar in Studio
 
-> **Note:** If your application is close or exceeds the 65k method count limit, you can mitigate this problem by specifying only the specific Mapbox Android Service APIs instead of all of them. See the Selectively compiling APIs section below.
+> **Note:** If your application is close or exceeds the 65k method count limit, you can mitigate this problem by specifying only the specific Mapbox Android Service APIs instead of all of them. See the selectively compiling APIs section below.
 
 ```groovy
 compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.0.0'
@@ -28,7 +28,7 @@ compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.0.0'
 
 ### Maven
 
-TODO
+If your project's using Maven instead of Gradle, you can add the dependency inside your projects `POM.xml` file. 
 
 ```xml
 <dependency>
