@@ -203,18 +203,18 @@ public class TelemetryClient {
     // Build body and URL
     String payload = jsonArray.toString();
     RequestBody body = RequestBody.create(JSON, payload);
-    String url = eventsEndpoint + "/events/v2?access_token=" + accessToken;
+    String url = getEventsEndpoint() + "/events/v2?access_token=" + getAccessToken();
 
     // Extra debug in staging mode
     if (isStagingEnvironment()) {
       Log.d(LOG_TAG, String.format("Sending POST to %s with %d event(s) (user agent: %s) with payload: %s",
-        url, events.size(), userAgent, payload));
+        url, events.size(), getUserAgent(), payload));
     }
 
     // Async request
     Request request = new Request.Builder()
       .url(url)
-      .header("User-Agent", userAgent)
+      .header("User-Agent", getUserAgent())
       .post(body)
       .build();
     client.newCall(request).enqueue(callback);
