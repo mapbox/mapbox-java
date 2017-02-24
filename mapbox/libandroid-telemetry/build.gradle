@@ -13,7 +13,7 @@ android {
 
         // Telemetry
         buildConfigField "String", "MAPBOX_EVENTS_USER_AGENT_BASE",
-                String.format("\"MapboxEventsAndroid/%s\"", project.VERSION_NAME)
+                String.format("\"MapboxTelemetryAndroid/%s\"", project.VERSION_NAME)
     }
 
     compileOptions {
