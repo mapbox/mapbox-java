@@ -3,24 +3,42 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv='X-UA-Compatible' content='IE=11' />
-    <title>Docbox</title>
+    <title>Mapbox-Java-Docs</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <link href='css/base.css' rel='stylesheet' />
     <link href='css/style.css' rel='stylesheet' />
     <link href='css/railscasts.css' rel='stylesheet' />
   </head>
   <body>
-    <!--START--><div id='app'><div class="container unlimiter" data-reactroot="" data-reactid="1" data-react-checksum="-287241726"><div class="fixed-top fixed-right space-left16" data-reactid="2"><div class="fill-light col6 pin-right" data-reactid="3"></div></div><div class="space-top5 scroll-styled overflow-auto pad1 width16 sidebar fixed-left fill-dark dark" data-reactid="4"><div class="pad0x small" data-reactid="5"><div class="small pad0x quiet space-top1" data-reactid="6">Getting started</div><a href="#introduction" class="line-height15 pad0x pad00y quiet block " data-reactid="7">Introduction</a><a href="#access-tokens" class="line-height15 pad0x pad00y quiet block " data-reactid="8">Access tokens</a><a href="#installation" class="line-height15 pad0x pad00y quiet block " data-reactid="9">Installation</a><div class="small pad0x quiet space-top1" data-reactid="10">Navigation</div><a href="#navigation-1" class="line-height15 pad0x pad00y quiet block " data-reactid="11">Navigation</a><a href="#mapboxnavigation-object" class="line-height15 pad0x pad00y quiet block " data-reactid="12">MapboxNavigation object</a><a href="#routeprogress-object" class="line-height15 pad0x pad00y quiet block " data-reactid="13">RouteProgress object</a></div></div><div class="space-left16" data-reactid="14"><div class="" data-reactid="15"><div class="clearfix" data-reactid="16"><div data-title="Introduction" class="keyline-top section contain clearfix " data-reactid="17"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="18"><h2 id="introduction">Introduction</h2>
+    <!--START--><div id='app'><div class="container unlimiter" data-reactroot="" data-reactid="1" data-react-checksum="854086592"><div class="fixed-top fixed-right space-left16" data-reactid="2"><div class="fill-light col6 pin-right" data-reactid="3"></div></div><div class="space-top5 scroll-styled overflow-auto pad1 width16 sidebar fixed-left fill-dark dark" data-reactid="4"><div class="pad0x small" data-reactid="5"><div class="small pad0x quiet space-top1" data-reactid="6">Getting started</div><a href="#introduction" class="line-height15 pad0x pad00y quiet block " data-reactid="7">Introduction</a><a href="#installation" class="line-height15 pad0x pad00y quiet block " data-reactid="8">Installation</a><div class="small pad0x quiet space-top1" data-reactid="9">Navigation</div><a href="#navigation-1" class="line-height15 pad0x pad00y quiet block " data-reactid="10">Navigation</a><a href="#mapboxnavigation-object" class="line-height15 pad0x pad00y quiet block " data-reactid="11">MapboxNavigation object</a><a href="#routeprogress-object" class="line-height15 pad0x pad00y quiet block " data-reactid="12">RouteProgress object</a><a href="#listeners" class="line-height15 pad0x pad00y quiet block " data-reactid="13">Listeners</a><a href="#routeutils" class="line-height15 pad0x pad00y quiet block " data-reactid="14">RouteUtils</a></div></div><div class="space-left16" data-reactid="15"><div class="" data-reactid="16"><div class="clearfix" data-reactid="17"><div data-title="Introduction" class="keyline-top section contain clearfix " data-reactid="18"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="19"><h2 id="introduction">Introduction</h2>
 <p>Mapbox Java is an open source toolset for building applications that need navigation, directions, geocoding, static map imagery, etc. It conveniently wraps Mapbox APIs and builds off of them with with tools useful for your applications. This SDK consist of two parts:</p>
 <ol>
 <li><strong>Mapbox-Java-Services:</strong> Has no dependency on the Android API and can be used in any of your Java projects.</li>
 <li><strong>Mapbox-Android-Services:</strong> Contains specific code for Android applications such as widgets and UI elements.</li>
 </ol>
-</div></div><div data-title="Access tokens" class="keyline-top section contain clearfix " data-reactid="19"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="20"><h2 id="access-tokens">Access tokens</h2>
-<p>If you plan to use any of our APIs such as directions, geocoding, navigation, etc. you'll need to have a Mapbox Access token which you'll pass in as a parameter. An access token isn't needed if you plan to use Mapbox Java only for GeoJSON parsing, or Turf calculations. To learn more about Access tokens, read <a href="https://www.mapbox.com/help/create-api-access-token/">this document</a>.</p>
-</div></div><div data-title="Installation" class="keyline-top section contain clearfix " data-reactid="21"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="22"><h2 id="installation">Installation</h2>
+</div></div><div data-title="Support and contributions" class="keyline-top section contain clearfix " data-reactid="20"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="21"><h3 id="support-and-contributions">Support and contributions</h3>
+<ul>
+<li>If you are looking for support using this SDK, either reach out through <a href="https://stackoverflow.com/questions/tagged/mapbox+android">Stack Overflow</a> or through our <a href="https://www.mapbox.com/contact/">contact page</a>.</li>
+<li>If you have found a bug, and can provide steps to reliably reproduce it, open an issue in the /mapbox-java repository on Github and apply the bug label.</li>
+<li>If you have a feature request, open an issue in the /mapbox-java repository on Github, and apply the enhancement label.</li>
+<li>If you want to contribute, look over our contribution guild lines and open a pull request with your changes.</li>
+</ul>
+</div></div><div data-title="API reference" class="keyline-top section contain clearfix " data-reactid="22"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="23"><h3 id="api-reference">API reference</h3>
+<p>All public methods in all the project modules are well documented and even include a since tag so you can determine when an API was first added. A link for all the module javadoc pages can be found in the list below:</p>
+<ul>
+<li><a href="http://mapbox.github.io/mapbox-java/api/libjava-core/2.0.0-beta.1/">mapbox-java-core</a></li>
+<li><a href="http://mapbox.github.io/mapbox-java/api/libjava-geojson/2.0.0-beta.1/">mapbox-java-geojson</a></li>
+<li><a href="http://mapbox.github.io/mapbox-java/api/libjava-services/2.0.0-beta.1/">mapbox-java-services</a></li>
+<li><a href="http://mapbox.github.io/mapbox-java/api/libjava-services-rx/2.0.0-beta.1/">mapbox-java-services-rx</a></li>
+<li><a href="http://mapbox.github.io/mapbox-java/api/libandroid-services/2.0.0-beta.1/">mapbox-android-services</a></li>
+<li><a href="http://mapbox.github.io/mapbox-java/api/libandroid-telemetry/2.0.0-beta.1/">mapbox-android-telemetry</a></li>
+<li><a href="http://mapbox.github.io/mapbox-java/api/libandroid-ui/2.0.0-beta.1/">mapbox-android-ui</a></li>
+</ul>
+</div></div><div data-title="Access tokens" class="keyline-top section contain clearfix " data-reactid="24"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="25"><h3 id="access-tokens">Access tokens</h3>
+<p>If you plan to use any of our APIs such as directions, geocoding, navigation, etc. you'll need to have a Mapbox access token which you'll pass in as a parameter. An access token isn't needed if you plan to use Mapbox Java only for GeoJSON parsing, or Turf calculations. To learn more about access tokens, read <a href="https://www.mapbox.com/help/create-api-access-token/">this document</a>.</p>
+</div></div><div data-title="Installation" class="keyline-top section contain clearfix " data-reactid="26"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="27"><h2 id="installation">Installation</h2>
 <p>To start developing your application using Mapbox Java, you'll need to first determine which installation method works best for you. The SDK is fully compatible with Android using Gradle and most of the project (besides the Android dependent modules) can also be included in a generic Java project using either Gradle or Maven. All dependencies given below can be found on MavenCentral.</p>
-</div></div><div data-title="Gradle" class="keyline-top section contain clearfix " data-reactid="23"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="24"><h3 id="gradle">Gradle</h3>
+</div></div><div data-title="Gradle" class="keyline-top section contain clearfix " data-reactid="28"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="29"><h3 id="gradle">Gradle</h3>
 <ol>
 <li>Start Android Studio</li>
 <li>Open up your applications <code>build.gradle</code></li>
@@ -29,11 +47,17 @@
 <li>Click the Sync Project with Gradle Files near the toolbar in Studio</li>
 </ol>
 <blockquote>
-<p><strong>Note:</strong> If your application is close or exceeds the 65k method count limit, you can mitigate this problem by specifying only the specific Mapbox Android Service APIs instead of all of them. See the Selectively compiling APIs section below.</p>
+<p><strong>Note:</strong> If your application is close or exceeds the 65k method count limit, you can mitigate this problem by specifying only the specific Mapbox Android Service APIs instead of all of them. See the selectively compiling APIs section below.</p>
 </blockquote>
-</div></div><div data-title="Maven" class="keyline-top section contain clearfix " data-reactid="25"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="26"><h3 id="maven">Maven</h3>
-<p>TODO</p>
-</div></div><div data-title="Selectively compiling APIs" class="keyline-top section contain clearfix " data-reactid="27"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="28"><h3 id="selectively-compiling-apis">Selectively compiling APIs</h3>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="30"><pre class="hljs"><span class="hljs-keyword">compile</span> <span class="hljs-string">'com.mapbox.mapboxsdk:mapbox-android-services:2.0.0'</span></pre>
+</div></div><div data-title="Maven" class="keyline-top section contain clearfix " data-reactid="31"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="32"><h3 id="maven">Maven</h3>
+<p>If your project's using Maven instead of Gradle, you can add the dependency inside your projects <code>POM.xml</code> file.</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="33"><pre class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.mapbox.mapboxsdk<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>mapbox-java-services<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span></pre>
+</div></div><div data-title="Selectively compiling APIs" class="keyline-top section contain clearfix " data-reactid="34"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="35"><h3 id="selectively-compiling-apis">Selectively compiling APIs</h3>
 <p>In previous versions of Mapbox Java prior to 2.0, you would have to compile the entire package of APIs. This in some cases, could cause Android applications to go over the 65,536 method count limit.</p>
 <p>Starting with 2.0, you now have the option to include either the entire package of APIs (using the dependencies listed above) or you can now selectively choose which specific APIs your application needs. For example, if you only need to handle GeoJSON serialization or deserialization inside your application you only need to include the GeoJSON dependency in your project.</p>
 <p>The list below shows all the current separated dependencies you can use in your Android application.</p>
@@ -49,24 +73,41 @@
 <blockquote>
 <p><strong>Note:</strong> ProGuard directives are included in the Android dependencies to preserve the required classes.</p>
 </blockquote>
-</div></div><div data-title="Navigation" class="keyline-top section contain clearfix " data-reactid="29"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="30"><h2 id="navigation-1">Navigation</h2>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="36"><pre class="hljs"><span class="hljs-keyword">compile</span> <span class="hljs-string">'com.mapbox.mapboxsdk:mapbox-java-core:2.0.0'</span>
+<span class="hljs-keyword">compile</span> <span class="hljs-string">'com.mapbox.mapboxsdk:mapbox-java-geojson:2.0.0'</span>
+<span class="hljs-keyword">compile</span> <span class="hljs-string">'com.mapbox.mapboxsdk:mapbox-java-services:2.0.0'</span>
+<span class="hljs-keyword">compile</span> <span class="hljs-string">'com.mapbox.mapboxsdk:mapbox-java-services-rx:2.0.0'</span>
+<span class="hljs-keyword">compile</span> <span class="hljs-string">'com.mapbox.mapboxsdk:mapbox-android-services:2.0.0'</span>
+<span class="hljs-keyword">compile</span> <span class="hljs-string">'com.mapbox.mapboxsdk:mapbox-android-telemetry:2.0.0'</span>
+<span class="hljs-keyword">compile</span> <span class="hljs-string">'com.mapbox.mapboxsdk:mapbox-android-ui:2.0.0'</span></pre>
+</div></div><div data-title="Navigation" class="keyline-top section contain clearfix preview" data-reactid="37"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="38"><h2 id="navigation-1">Navigation</h2>
 <p>The navigation part of Mapbox Java is built on top of our Directions API and contains logic needed to get timed navigation instructions. The calculations use the users current location and compare it to the current route the user's traversing to provide critical information at any given moment.</p>
 <blockquote>
 <p>Currently this is only offered for Driving instructions and takes traffic into consideration by default.</p>
 </blockquote>
 <p>Much of the navigation APIs require being inside an Android application. However, we do expose some of the lower level logic inside the RouteUtils class.</p>
-<p>Ensure your Android project includes the <code>mapbox-android-services</code> dependency to gain full access to the navigation APIs.</p>
-</div></div><div data-title="MapboxNavigation object" class="keyline-top section contain clearfix " data-reactid="31"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="32"><h2 id="mapboxnavigation-object">MapboxNavigation object</h2>
+<p>Ensure your Android project includes the <code>mapbox-android-ui</code> dependency to gain full access to the navigation APIs. Much of the navigation logic is handled in an Android service meaning you'll be able to continue tracking the users progress along the navigation route even when your application is not in the foreground. Since this is a service, it's required to add the service inside your <code>AndroidManifest.xml</code> file. In addition, navigation requires adding two permissions, internet and fine location. The user location permission should also be checked during runtime using the PermissionManager.</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="39"><pre class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">uses-permission</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">"android.permission.ACCESS_FINE_LOCATION"</span>/&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">uses-permission</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">"android.permission.INTERNET"</span>/&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">application</span>&gt;</span>
+
+  ...
+
+  <span class="hljs-tag">&lt;<span class="hljs-name">service</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">"com.mapbox.services.android.navigation.NavigationService"</span>/&gt;</span>
+
+<span class="hljs-tag">&lt;/<span class="hljs-name">application</span>&gt;</span></pre>
+</div></div><div data-title="MapboxNavigation object" class="keyline-top section contain clearfix preview" data-reactid="40"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="41"><h2 id="mapboxnavigation-object">MapboxNavigation object</h2>
 <p>Most of the navigation options are found inside the MapboxNavigation class including fetching the route, starting and ending the navigation session and attaching listeners for events you'd like to handle. Assign and initialize a new instance of MapboxNavigation inside your Navigation activity. When initializing, you'll need to pass in a <code>Context</code> and your Mapbox access token. Checkout the access token section in the getting started section to learn how to attain a free access token.</p>
-</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="33"><pre class='hljs'>MapboxNavigation navigation = <span class="hljs-keyword">new</span> MapboxNavigation(<span class="hljs-keyword">this</span>, MAPBOX_ACCESS_TOKEN);</pre>
-</div></div><div data-title="LocationEngine" class="keyline-top section contain clearfix " data-reactid="34"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="35"><h3 id="locationengine">LocationEngine</h3>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="42"><pre class='hljs'>MapboxNavigation navigation = <span class="hljs-keyword">new</span> MapboxNavigation(<span class="hljs-keyword">this</span>, MAPBOX_ACCESS_TOKEN);</pre>
+</div></div><div data-title="LocationEngine" class="keyline-top section contain clearfix preview" data-reactid="43"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="44"><h3 id="locationengine">LocationEngine</h3>
 <p>Navigation requires the users location in order to operate, this is done using the LocationEngine class introduced in 2.0. For detailed instructions on how to use this class, visit the LocationEngine documentation. You'll need to setup an instance of a location engine and pass it into the MapboxNavigation object.</p>
-</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="36"><pre class='hljs'>LocationEngine locationEngine = LostLocationEngine.getLocationEngine(<span class="hljs-keyword">this</span>);
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="45"><pre class='hljs'>LocationEngine locationEngine = LostLocationEngine.getLocationEngine(<span class="hljs-keyword">this</span>);
 navigation.setLocationEngine(locationEngine);</pre>
-</div></div><div data-title="Requesting a route" class="keyline-top section contain clearfix " data-reactid="37"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="38"><h3 id="requesting-a-route">Requesting a route</h3>
+</div></div><div data-title="Requesting a route" class="keyline-top section contain clearfix preview" data-reactid="46"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="47"><h3 id="requesting-a-route">Requesting a route</h3>
 <p>Now that you have setup a way for the MapboxNavigation object to get the users location, the other thing it will need is a route. The order in which these Positions are passed in doesn't matter as long as they are both provided before calling <code>getRoute</code>.</p>
-<p>Actually requesting the route's done by calling <code>getRoute</code> passing in a new Callback. If you've ever worked with Retrofit, the callback here will look familiar since this is what we are using under the hood.</p>
-</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="39"><pre class='hljs'>navigation.setStart(Position.fromCoordinates());
+<p>Actually requesting the route's done by calling <code>getRoute</code> passing in a new callback. If you've ever worked with Retrofit, the callback here will look familiar since this is what we are using under the hood.</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="48"><pre class='hljs'>navigation.setStart(Position.fromCoordinates());
 navigation.setEnd(Position.fromCoordinates());</pre>
 <pre class='hljs'>navigation.getRoute(<span class="hljs-keyword">new</span> Callback&lt;DirectionsResponse&gt;() {
   <span class="hljs-meta">@Override</span>
@@ -80,26 +121,167 @@ navigation.setEnd(Position.fromCoordinates());</pre>
 
   }
 });</pre>
-</div></div><div data-title="RouteProgress object" class="keyline-top section contain clearfix " data-reactid="40"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="41"><h2 id="routeprogress-object">RouteProgress object</h2>
-<p>TODO</p>
-</div></div><div data-title="Listeners" class="keyline-top section contain clearfix " data-reactid="42"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="43"><h3 id="listeners">Listeners</h3>
-<p>Chances are, if you are using the navigation SDK, you'll want to listen in to events such as when the user makes progress along the route or when they go off route. By listening into these events provide the user with instructions at the proper times.</p>
-</div></div><div data-title="NavigationRunning" class="keyline-top section contain clearfix " data-reactid="44"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="45"><h3 id="navigationrunning">NavigationRunning</h3>
-<p>TODO
-navigation.setEventCallback(this);</p>
-</div></div><div data-title="AlertLevelChange" class="keyline-top section contain clearfix " data-reactid="46"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="47"><h3 id="alertlevelchange">AlertLevelChange</h3>
-</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="48"><pre class='hljs'>navigation.setAlertLevelChangeListener(<span class="hljs-keyword">new</span> AlertLevelChangeListener() {
-              <span class="hljs-meta">@Override</span>
-              <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAlertLevelChange</span><span class="hljs-params">(<span class="hljs-keyword">int</span> alertLevel, RouteProgress routeProgress)</span> </span>{
+</div></div><div data-title="RouteProgress object" class="keyline-top section contain clearfix preview" data-reactid="49"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="50"><h2 id="routeprogress-object">RouteProgress object</h2>
+<p>The RouteProgress class contains all progress information of the user along the route, leg and steps. The objects provided inside <code>AlertLevelChangeListener</code> and <code>ProgressChangeListener</code> allowing you to get distance measurements, the percentage of route complete, current step index, and much more. A full list of the APIs exposed in RouteProgress is given in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getPreviousAlertLevel</td>
+<td align="center">Returns the previous alert level provided by the AlertLevelChangeListener</td>
+</tr>
+<tr>
+<td>getRoute</td>
+<td align="center">Get the route acquired from the directions API and being used for navigation.</td>
+</tr>
+<tr>
+<td>getDistanceTraveledOnRoute</td>
+<td align="center">The total distance the user has traveled along the route</td>
+</tr>
+<tr>
+<td>getFractionTraveledOnRoute</td>
+<td align="center">A 
+<code>float</code>
+ value between 0 and 1 giving the total percentage the user has completed in the navigation session.</td>
+</tr>
+<tr>
+<td>getDistanceRemainingOnRoute</td>
+<td align="center">The distance between the users current location to the next maneuver.</td>
+</tr>
+<tr>
+<td>getLegIndex</td>
+<td align="center">The routes current leg index the user's on.</td>
+</tr>
+<tr>
+<td>getCurrentLeg</td>
+<td align="center">Returns the routes current leg as a 
+<code>routeLeg</code>
+ object.</td>
+</tr>
+<tr>
+<td>getUpComingStep</td>
+<td align="center">Returns the next step the user will be on from their current location.</td>
+</tr>
+<tr>
+<td>getStepIndex</td>
+<td align="center">The routes current step index the user's on.</td>
+</tr>
+<tr>
+<td>getCurrentStep</td>
+<td align="center">Returns the current step the user's on.</td>
+</tr>
+<tr>
+<td>getDistanceTraveledOnStep</td>
+<td align="center">Measures from the current steps maneuver to the users snapped position.</td>
+</tr>
+<tr>
+<td>getDurationRemainingOnStep</td>
+<td align="center">The estimated time remaining till the user reaches end of current step.</td>
+</tr>
+<tr>
+<td>getDistanceRemainingOnStep</td>
+<td align="center">Measures from the users current snapped position to the last coordinate in the step.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>This object will be null from when the NavigationService starts till the first location change occurs. Therefore if you are using this to initialize a variable, it's reasonable to check if null beforehand. Since this object is mutable, the values given can change at anytime.</p>
+</blockquote>
+</div></div><div data-title="Listeners" class="keyline-top section contain clearfix preview" data-reactid="51"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="52"><h2 id="listeners">Listeners</h2>
+<p>Chances are, if you are using the navigation SDK, you'll want to listen in to events such as when the user makes progress along the route or when they go off route. By listening into these events you are able to provide the user with instructions at the proper times. At the bare minimum, it is strongly encouraged to use the <code>OnProgressChange</code> listener which is called every time the users locations updated.</p>
+</div></div><div data-title="NavigationRunning" class="keyline-top section contain clearfix preview" data-reactid="53"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="54"><h3 id="navigationrunning">NavigationRunning</h3>
+<p>The event callback is handy for being notified when the navigation session has started, user has canceled the session, or the user has arrived at their final destination. From this information you are able to determine when to show navigation notifications, know when it's safe to stop requesting user location updates, and much more.</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="55"><pre class='hljs'>navigation.setEventCallback(<span class="hljs-keyword">new</span> NavigationEventListener() {
+  <span class="hljs-meta">@Override</span>
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onRunning</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> running)</span> </span>{
 
-              }
-            });</pre>
-</div></div><div data-title="OnProgressChange" class="keyline-top section contain clearfix " data-reactid="49"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="50"><h3 id="onprogresschange">OnProgressChange</h3>
-</div></div><div data-title="OffRoute" class="keyline-top section contain clearfix " data-reactid="51"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="52"><h3 id="offroute">OffRoute</h3>
-</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="53"><h4 id="routeutils">RouteUtils</h4>
-</div></div></div></div></div><div class="fixed-top space-left16" data-reactid="54"><div class="events fill-light bottom-shadow pad1 col6 pin-topright  " data-reactid="55"><div class="fr pad0" data-reactid="56"><a title="Display as 1 column" style="cursor:pointer;" class="icon quiet caret-left pad0 fill-darken0 round" data-reactid="57"></a></div></div></div><div class="fill-dark dark bottom-shadow fixed-top pad0 width16" data-reactid="58"><a href="/" class="active space-top1 space-left1 pin-topleft icon round dark pad0 fill-red" data-reactid="59"></a><div class="strong small pad0
+  }
+});</pre>
+</div></div><div data-title="AlertLevelChange" class="keyline-top section contain clearfix preview" data-reactid="56"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="57"><h3 id="alertlevelchange">AlertLevelChange</h3>
+<p>Listening in to the alertLevelChange is useful for correctly getting the timing of user notifications while the user is traversing along the route. The listener's invoked only when the user's reached a specific point along the current step they are on. The alert thresholds can be adjusted within the constants file while developing and are based on time (in seconds) till the user reaches the next maneuver.</p>
+<table>
+<thead>
+<tr>
+<th>Alert level</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DEPART_ALERT_LEVEL</code></td>
+<td align="center">Occurs when the user first leaves the origin and shouldn't be invoked again for the rest of the navigation session.</td>
+</tr>
+<tr>
+<td><code>LOW_ALERT_LEVEL</code></td>
+<td align="center">Invoked right after the user performs a maneuver and they have started traversing along a new step.</td>
+</tr>
+<tr>
+<td><code>MEDIUM_ALERT_LEVEL</code></td>
+<td align="center">Occurs when the user's x seconds away from their next maneuver. By default this is 70 seconds from next maneuver.</td>
+</tr>
+<tr>
+<td><code>HIGH_ALERT_LEVEL</code></td>
+<td align="center">Useful to know when the users about to perform the next maneuver on the route. By default this is 15 seconds.</td>
+</tr>
+<tr>
+<td><code>ARRIVE_ALERT_LEVEL</code></td>
+<td align="center">Occurs when the user has performed the last maneuver along the route and reached their final destination.</td>
+</tr>
+<tr>
+<td><code>NONE_ALERT_LEVEL</code></td>
+<td align="center">In a rare case when the alert level can not be determined this might be invoked.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>While the AlertLevelChange listener can help you correctly notify your users to perform an action, it relies heavily on the users current position, this means that the alert is rarely changed exactly at the correct time and might be delayed till a new location update occurs and the user is within the alerts threshold.</p>
+</blockquote>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="58"><pre class='hljs'>navigation.setAlertLevelChangeListener(<span class="hljs-keyword">new</span> AlertLevelChangeListener() {
+  <span class="hljs-meta">@Override</span>
+  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onAlertLevelChange</span><span class="hljs-params">(<span class="hljs-keyword">int</span> alertLevel, RouteProgress routeProgress)</span> </span>{
+    <span class="hljs-keyword">switch</span> (alertLevel) {
+      <span class="hljs-keyword">case</span> HIGH_ALERT_LEVEL:
+        Toast.makeText(MainActivity.<span class="hljs-keyword">this</span>, <span class="hljs-string">"HIGH"</span>, Toast.LENGTH_LONG).show();
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> MEDIUM_ALERT_LEVEL:
+        Toast.makeText(MainActivity.<span class="hljs-keyword">this</span>, <span class="hljs-string">"MEDIUM"</span>, Toast.LENGTH_LONG).show();
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> LOW_ALERT_LEVEL:
+        Toast.makeText(MainActivity.<span class="hljs-keyword">this</span>, <span class="hljs-string">"LOW"</span>, Toast.LENGTH_LONG).show();
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> ARRIVE_ALERT_LEVEL:
+        Toast.makeText(MainActivity.<span class="hljs-keyword">this</span>, <span class="hljs-string">"ARRIVE"</span>, Toast.LENGTH_LONG).show();
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> NONE_ALERT_LEVEL:
+        Toast.makeText(MainActivity.<span class="hljs-keyword">this</span>, <span class="hljs-string">"NONE"</span>, Toast.LENGTH_LONG).show();
+        <span class="hljs-keyword">break</span>;
+      <span class="hljs-keyword">case</span> DEPART_ALERT_LEVEL:
+        Toast.makeText(MainActivity.<span class="hljs-keyword">this</span>, <span class="hljs-string">"DEPART"</span>, Toast.LENGTH_LONG).show();
+        <span class="hljs-keyword">break</span>;
+    }
+  }
+});</pre>
+</div></div><div data-title="OnProgressChange" class="keyline-top section contain clearfix preview" data-reactid="59"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="60"><h3 id="onprogresschange">OnProgressChange</h3>
+<p>Similar to listening into user location changes, this listener's invoked every time the user's location changes but provides an updated RouteProgress object. This listener is strong encouraged to use since you can typically update most of your application's user interface. An example of this would be if you are displaying the users current progress till they need to perform the next maneuver, every time this listeners invoked, you are able to update your view with the new information from RouteProgress.</p>
+<p>Besides receiving information about the route progress, the callback also provides you with the users current location which can provide their current speed, bearing, etc. If you have snapping to the route enabled, the location object will be updated to provide the snapped coordinates.</p>
+</div><div class="space-bottom4 col6 pad2 prose clip fill-light space-top5" data-reactid="61"><pre class='hljs'>navigation.setProgressChangeListener(<span class="hljs-keyword">new</span> ProgressChangeListener() {
+      <span class="hljs-meta">@Override</span>
+      <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onProgressChange</span><span class="hljs-params">(Location location, RouteProgress routeProgress)</span> </span>{
+
+      }
+    });</pre>
+</div></div><div data-title="OffRoute" class="keyline-top section contain clearfix preview" data-reactid="62"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="63"><h3 id="offroute">OffRoute</h3>
+<p>Not implemented in SDK yet.</p>
+</div></div><div data-title="RouteUtils" class="keyline-top section contain clearfix preview" data-reactid="64"><div class="space-bottom8 col6 pad2x prose clip" data-reactid="65"><h2 id="routeutils">RouteUtils</h2>
+<p>The RouteUtils class can be found in the mapbox-java-services module and provides many of the methods used for calculations done in the RouteProgress object. Examples of this are getting the total route distance left till the user reaches their destination. If you would like to perform these calculations on your own or would like the change the behavior of navigation, you can directly call these methods and handle the calculations yourself. </p>
+</div></div></div></div></div><div class="fixed-top space-top2 space-left16" data-reactid="66"><div class="fr pad0" data-reactid="67"><a title="Display as 1 column" style="cursor:pointer;" class="icon quiet caret-left fill-lighten1 pad0 space-right2 space-top2 round" data-reactid="68"></a></div></div><div class="fill-dark dark bottom-shadow fixed-top pad0 width16" data-reactid="69"><a href="/" class="active space-top1 space-left1 pin-topleft icon round dark pad0 fill-blue" data-reactid="70"></a><div class="strong small pad0
           
-          space-left4 line-height15" data-reactid="60">Wobble API Documentation</div></div></div></div><!--STOP-->
+          space-left4 line-height15" data-reactid="71">Mapbox Java Documentation</div></div></div></div><!--STOP-->
     <script src='bundle.js'></script>
   </body>
 </html>

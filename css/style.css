@@ -7,6 +7,7 @@
 
 .prose h3:first-child {
   padding-top: 20px;
+  font-size: 17px;
 }
 
 /* Header gets big */
@@ -18,6 +19,10 @@
   .prose h3:first-child {
     padding-top: 60px;
   }
+}
+
+strong {
+  font-weight: bold;
 }
 
 /* Header gets bigger */
@@ -68,6 +73,11 @@ html, body, #app, .container {
 
 body pre {
   padding: 0;
+}
+
+code p {
+  font-weight: lighter;
+  font-size: 11px;
 }
 
 code, pre {
@@ -131,7 +141,6 @@ body .prose blockquote {
 }
 
 .preview {
-  background-image: -webkit-linear-gradient(#F1F075, #F1F075);
   background-size: 10px 10px;
   background-repeat: repeat-y;
 }
