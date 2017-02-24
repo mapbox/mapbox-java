@@ -1,0 +1,13 @@
+com.mapbox.services
+com.mapbox.services.commons
+com.mapbox.services.commons.geojson
+com.mapbox.services.commons.geojson.custom
+com.mapbox.services.commons.models
+com.mapbox.services.commons.utils
+com.mapbox.services.directions.v4
+com.mapbox.services.directions.v4.models
+com.mapbox.services.directions.v5
+com.mapbox.services.directions.v5.models
+com.mapbox.services.geocoding.v5
+com.mapbox.services.geocoding.v5.models
+com.mapbox.services.staticimage.v1

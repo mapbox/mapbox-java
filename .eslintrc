@@ -1,0 +1,48 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "react",
+    "babel"
+  ],
+  "globals": {
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "comma-dangle": [2, "never"],
+    "jsx-quotes": [2, "prefer-single"],
+    "key-spacing": [0],
+    "max-len": [1, 360],
+    "no-bitwise": [2],
+    "no-console": [0],
+    "no-redeclare": [2],
+    "no-trailing-spaces": [2],
+    "no-undef": [2],
+    "no-underscore-dangle": [2],
+    "no-unused-vars": [2],
+    "no-use-before-define": [0],
+    "quotes": [2, "single", {"allowTemplateLiterals": true}],
+    "react/display-name": [2],
+    "react/jsx-no-bind": 2,
+    "react/jsx-no-duplicate-props": 2,
+    "react/jsx-no-undef": 2,
+    "react/jsx-uses-vars": 2,
+    "react/jsx-uses-react": 2,
+    "react/react-in-jsx-scope": 2,
+    "react/no-unknown-property": [2],
+    "react/prop-types": 2,
+    "react/require-extension": [2, { "extensions": [".js", ".jsx"] }],
+    "react/self-closing-comp": [2],
+    "react/wrap-multilines": [2],
+    "semi": [2, "always"],
+    "keyword-spacing": [2, { "before": true, "after": true }],
+    "space-before-blocks": 2,
+    "space-before-function-paren": [2, "never"],
+    "space-in-parens": [2, "never"],
+    "strict": [0],
+    "valid-typeof": 2
+  }
+}

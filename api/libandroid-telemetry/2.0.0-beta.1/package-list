@@ -1,0 +1,9 @@
+com.mapbox.services.android.telemetry
+com.mapbox.services.android.telemetry.backoff
+com.mapbox.services.android.telemetry.connectivity
+com.mapbox.services.android.telemetry.constants
+com.mapbox.services.android.telemetry.http
+com.mapbox.services.android.telemetry.location
+com.mapbox.services.android.telemetry.permissions
+com.mapbox.services.android.telemetry.service
+com.mapbox.services.android.telemetry.utils

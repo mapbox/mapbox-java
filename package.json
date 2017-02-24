@@ -1,0 +1,73 @@
+{
+  "name": "mapbox-java",
+  "version": "1.0.4",
+  "description": "documentation for mapbox-java",
+  "main": "index.js",
+  "scripts": {
+    "start": "budo src/index.js --serve=bundle.js --live",
+    "test": "npm run test-unit && eslint src && npm run prerender -- /dev/null && rm -rf lib",
+    "test-unit": "mocha --compilers js:babel-register test",
+    "prerender": "babel src --out-dir lib && node lib/render.js",
+    "build": "NODE_ENV=production browserify src/index.js | uglifyjs -c -m > bundle.js && npm run prerender -- index.html"
+  },
+  "browserify": {
+    "transform": [
+      "babelify",
+      "brfs"
+    ]
+  },
+  "keywords": [
+    "MAS",
+    "mapbox-java",
+    "documentation"
+  ],
+  "author": "Tom MacWright",
+  "license": "ISC",
+  "dependencies": {
+    "@mapbox/token-widget": "^1.0.4",
+    "babel-cli": "^6.4.0",
+    "babel-eslint": "^6.1.2",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "babelify": "^7.2.0",
+    "brfs": "^1.4.2",
+    "browserify": "^13.0.0",
+    "budo": "^8.3.0",
+    "cssnano": "^3.4.0",
+    "es6-promise": "^3.0.2",
+    "eslint": "^3.1.0",
+    "eslint-plugin-babel": "^3.0.0",
+    "eslint-plugin-react": "^5.2.2",
+    "github-slugger": "^1.0.1",
+    "highlight.js": "^9.2.0",
+    "isomorphic-fetch": "^2.2.0",
+    "js-yaml": "^3.5.5",
+    "lodash.debounce": "^4.0.3",
+    "mdast-util-to-string": "^1.0.1",
+    "minifyify": "^7.1.0",
+    "nlcst-search": "^1.1.1",
+    "nlcst-to-string": "^2.0.0",
+    "parse-latin": "^3.0.0",
+    "raven-js": "^3.2.1",
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
+    "react-pure-render": "^1.0.2",
+    "remark": "^5.0.1",
+    "remark-html": "^5.0.0",
+    "remark-slug": "^4.1.0",
+    "retext": "^3.0.0",
+    "unist-util-select": "^1.5.0",
+    "unist-util-visit": "^1.0.1",
+    "whatwg-fetch": "1.0.0"
+  },
+  "devDependencies": {
+    "babel-register": "^6.3.13",
+    "expect": "^1.13.4",
+    "mocha": "^2.3.4",
+    "retext-mapbox-standard": "^2.0.0",
+    "to-vfile": "^1.0.0",
+    "uglifyjs": "^2.4.10"
+  }
+}

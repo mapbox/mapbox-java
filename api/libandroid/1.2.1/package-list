@@ -1,0 +1,4 @@
+com.mapbox.services.android
+com.mapbox.services.android.geocoder
+com.mapbox.services.android.geocoder.ui
+com.mapbox.services.android.utils
