@@ -547,7 +547,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    */
   @Override
   public void onResponse(Call call, Response response) throws IOException {
-    Log.v(LOG_TAG, "HTTP request succeeded.");
+    String result = response.isSuccessful() ? "succeeded" : "failed";
+    Log.v(LOG_TAG, String.format("HTTP request %s (%d).", result, response.code()));
 
     // Make sure that events don't pile up (e.g. offline) and thus impact available memory over time.
     events.removeAllElements();
