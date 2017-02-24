@@ -10,10 +10,6 @@ android {
         versionCode rootProject.ext.MasVersionCode
         versionName rootProject.ext.MasVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        // Telemetry
-        buildConfigField "String", "MAPBOX_EVENTS_USER_AGENT_BASE",
-                String.format("\"MapboxTelemetryAndroid/%s\"", project.VERSION_NAME)
     }
 
     compileOptions {

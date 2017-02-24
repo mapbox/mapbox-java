@@ -56,6 +56,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private boolean initialized = false;
   private Context context = null;
   private String accessToken = null;
+  private String userAgent = null;
   private String mapboxSessionId = null;
   private long mapboxSessionIdLastSet = 0;
   private String mapboxVendorId = null;
@@ -95,9 +96,9 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * @param locationEngine Initialize telemetry with a custom location engine
    */
   public void initialize(@NonNull Context context, @NonNull String accessToken,
-                         @NonNull LocationEngine locationEngine) {
+                         @NonNull String userAgent, @NonNull LocationEngine locationEngine) {
     this.locationEngine = locationEngine;
-    initialize(context, accessToken);
+    initialize(context, accessToken, userAgent);
   }
 
   /**
@@ -106,7 +107,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * @param context     The context associated with the application
    * @param accessToken The accessToken associated with the application
    */
-  public void initialize(@NonNull Context context, @NonNull String accessToken) {
+  public void initialize(@NonNull Context context, @NonNull String accessToken, @NonNull String userAgent) {
     if (initialized) {
       return;
     }
@@ -114,9 +115,10 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     Log.v(LOG_TAG, "Initializing telemetry.");
     this.context = context.getApplicationContext();
     this.accessToken = accessToken;
-    if (this.context == null || TextUtils.isEmpty(this.accessToken)) {
+    this.userAgent = userAgent;
+    if (this.context == null || TextUtils.isEmpty(this.accessToken) || TextUtils.isEmpty(this.userAgent)) {
       throw new TelemetryException(
-        "Please, make sure you provide a valid context and access token. "
+        "Please, make sure you provide a valid context, access token, and user agent. "
           + "For more information, please visit https://www.mapbox.com/android-sdk.");
     }
 
@@ -193,16 +195,12 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
         client.setStagingEnvironment(true);
       }
 
-      // Append appIdentifier to user agent
+      // Append app identifier to user agent if present
       String appIdentifier = TelemetryUtils.getApplicationIdentifier(context);
-      String userAgent = client.getUserAgent();
-      if (TextUtils.equals(userAgent, BuildConfig.MAPBOX_EVENTS_USER_AGENT_BASE)
-        && !TextUtils.isEmpty(appIdentifier)) {
-        String updatedUserAgent = Util.toHumanReadableAscii(
-          String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
-        Log.v(LOG_TAG, String.format("Updating user agent value: '%s", updatedUserAgent));
-        client.setUserAgent(updatedUserAgent);
-      }
+      String fullUserAgent = TextUtils.isEmpty(appIdentifier) ? userAgent : Util.toHumanReadableAscii(
+        String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
+      Log.v(LOG_TAG, String.format("Setting user agent value: %s", fullUserAgent));
+      client.setUserAgent(fullUserAgent);
     } catch (Exception exception) {
       Log.e(LOG_TAG, String.format("Failed to check for staging credentials: %s", exception.getMessage()));
     }

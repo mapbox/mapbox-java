@@ -3,7 +3,6 @@ package com.mapbox.services.android.telemetry.http;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.mapbox.services.android.telemetry.BuildConfig;
 import com.mapbox.services.android.telemetry.MapboxEvent;
 import com.mapbox.services.android.telemetry.constants.GeoConstants;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
@@ -31,12 +30,11 @@ public class TelemetryClient {
 
   private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-  private String userAgent = BuildConfig.MAPBOX_EVENTS_USER_AGENT_BASE;
-
-  private String eventsEndpoint = MapboxEvent.MAPBOX_EVENTS_BASE_URL;
   private String accessToken = null;
-  private boolean stagingEnvironment = false;
 
+  private String userAgent = null;
+  private String eventsEndpoint = MapboxEvent.MAPBOX_EVENTS_BASE_URL;
+  private boolean stagingEnvironment = false;
   private OkHttpClient client;
 
   public TelemetryClient(String accessToken) {
