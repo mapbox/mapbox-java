@@ -1,19 +1,22 @@
 'use strict';
 
+import groovy from 'highlight.js/lib/languages/groovy';
+import hljs from 'highlight.js/lib/highlight';
+
 /**
  * Brand names, in order to decreasing length, for different
  * media queries.
  */
 module.exports.brandNames = {
-  desktop: 'Wobble API Documentation',
-  tablet: 'Wobble API Docs',
-  mobile: 'API Docs'
+  desktop: 'Mapbox Java Documentation',
+  tablet: 'Mapbox Java Docs',
+  mobile: 'Java Docs'
 };
 
 /**
  * Classes that define the top-left brand box.
  */
-module.exports.brandClasses = 'fill-red';
+module.exports.brandClasses = 'fill-blue';
 
 
 /**
@@ -57,6 +60,17 @@ module.exports.transformURL = function(value) {
       <div class='round-left pad0y pad1x fill-lighten0 code small endpoint-method'>${parts[0]}</div>
       <div class='pad0 code small endpoint-url'>${highlightTokens(parts[1])}</div>
     </div>`
+  };
+};
+
+
+
+module.exports.transformHighlight = function(value) {
+  let parts = value.split(/\s+/);
+  return {
+    type: 'html',
+    value:
+    `<pre class="hljs">${hljs.highlightAuto(value).value}</pre>`
   };
 };
 

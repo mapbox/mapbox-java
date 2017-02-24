@@ -3,6 +3,8 @@ import Section from './section';
 import PureRenderMixin from 'react-pure-render/mixin';
 import GithubSlugger from 'github-slugger';
 import { transformURL } from '../custom';
+import { transformHighlight } from '../custom';
+
 let slugger = new GithubSlugger();
 let slug = title => { slugger.reset(); return slugger.slug(title); };
 
@@ -45,7 +47,10 @@ function chunkifyAST(ast, language) {
           right.push(transformURL(node.value));
         } else if (node.lang === null) {
           left.push(node);
+        } else if (node.lang === 'groovy' || node.lang === 'xml') {
+          right.push(transformHighlight(node.value));
         }
+
       } else if (node.type === 'heading' && node.depth >= 4) {
         right.push(node);
       } else if (node.type === 'blockquote') {
