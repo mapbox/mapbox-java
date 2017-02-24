@@ -50,17 +50,13 @@ If your project's using Maven instead of Gradle, you can add the dependency insi
 <dependency>
     <groupId>com.mapbox.mapboxsdk</groupId>
     <artifactId>mapbox-java-services</artifactId>
-    <version>1.3.1</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
 ### Selectively compiling APIs
 
 In previous versions of Mapbox Java prior to 2.0, you would have to compile the entire package of APIs. This in some cases, could cause Android applications to go over the 65,536 method count limit.
-
-```groovy
-compile 'com.mapbox.mapboxsdk:mapbox-java-geojson:2.0.0'
-```
 
 Starting with 2.0, you now have the option to include either the entire package of APIs (using the dependencies listed above) or you can now selectively choose which specific APIs your application needs. For example, if you only need to handle GeoJSON serialization or deserialization inside your application you only need to include the GeoJSON dependency in your project.
 
