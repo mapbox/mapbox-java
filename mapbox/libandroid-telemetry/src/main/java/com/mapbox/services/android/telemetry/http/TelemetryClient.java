@@ -3,7 +3,6 @@ package com.mapbox.services.android.telemetry.http;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.mapbox.services.android.telemetry.BuildConfig;
 import com.mapbox.services.android.telemetry.MapboxEvent;
 import com.mapbox.services.android.telemetry.constants.GeoConstants;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
@@ -31,12 +30,11 @@ public class TelemetryClient {
 
   private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-  private String userAgent = BuildConfig.MAPBOX_EVENTS_USER_AGENT_BASE;
-
-  private String eventsEndpoint = MapboxEvent.MAPBOX_EVENTS_BASE_URL;
   private String accessToken = null;
-  private boolean stagingEnvironment = false;
 
+  private String userAgent = null;
+  private String eventsEndpoint = MapboxEvent.MAPBOX_EVENTS_BASE_URL;
+  private boolean stagingEnvironment = false;
   private OkHttpClient client;
 
   public TelemetryClient(String accessToken) {
@@ -203,18 +201,18 @@ public class TelemetryClient {
     // Build body and URL
     String payload = jsonArray.toString();
     RequestBody body = RequestBody.create(JSON, payload);
-    String url = eventsEndpoint + "/events/v2?access_token=" + accessToken;
+    String url = getEventsEndpoint() + "/events/v2?access_token=" + getAccessToken();
 
     // Extra debug in staging mode
     if (isStagingEnvironment()) {
       Log.d(LOG_TAG, String.format("Sending POST to %s with %d event(s) (user agent: %s) with payload: %s",
-        url, events.size(), userAgent, payload));
+        url, events.size(), getUserAgent(), payload));
     }
 
     // Async request
     Request request = new Request.Builder()
       .url(url)
-      .header("User-Agent", userAgent)
+      .header("User-Agent", getUserAgent())
       .post(body)
       .build();
     client.newCall(request).enqueue(callback);
