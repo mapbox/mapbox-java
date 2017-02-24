@@ -11,6 +11,6 @@ var fs = require('fs');
  */
 module.exports =
   '# Getting started\n' +
-  fs.readFileSync('./content/getting_started.md', 'utf8') + '\n' +
+  fs.readFileSync('./content/2.0.0/getting_started.md', 'utf8') + '\n' +
   '# Navigation\n' +
-  fs.readFileSync('./content/navigation.md', 'utf8') + '\n';
+  fs.readFileSync('./content/2.0.0/navigation.md', 'utf8') + '\n';
