@@ -4,16 +4,12 @@ format_version: "1.0.0"
 trigger_map:
   -
     is_pull_request_allowed: false
-    pattern: scheduled
-    workflow: scheduled
-  -
-    is_pull_request_allowed: false
     pattern: gh-pages
     workflow: gh-pages
   -
     is_pull_request_allowed: true
     pattern: "*"
-    workflow: primary
+    workflow: gh-pages
 workflows:
   gh-pages:
     steps:

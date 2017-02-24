@@ -1,6 +1,0 @@
-apply plugin: 'com.getkeepsafe.dexcount'
-
-dexcount {
-    includeTotalMethodCount = true
-    orderByMethodCount = true
-}

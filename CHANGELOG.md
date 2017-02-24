@@ -1,93 +1,31 @@
-## Changelog for Mapbox Java and Android Services
+# Change Log
 
-Mapbox welcomes participation and contributions from everyone.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### v2.0.0-beta.2
+<a name="1.0.4"></a>
+## [1.0.4](https://github.com/mapbox/docbox/compare/v1.0.3...v1.0.4) (2017-01-25)
 
-* Mapbox Navigation SDK
-* Bearing query parameter and rotary convenience methods added to the Directions API
-* Base URL method setting added to geocoder autocomplete widget
-* AppEngine support
 
-### v2.0.0-beta.1
 
-* Introduce support for Mapbox Distance API
-* Update Map Matching API to support new `v5`
-* Divide library into smaller modules to reduce method count on Android projects (`libjava-core`, `libjava-geojson`, `libjava-services`, `libjava-services-rx`, `libandroid-telemetry`, `libandroid-services`, `libandroid-ui`)
-* Introduce support for Mapbox Telemetry
-  * Added reusable components for permission and connectivity management
-  * Abstracted the location engine from a specific provider and provide default implementations
-* Shared improvements across clients:
-  * RxJava support
-  * Enabled setting a base URL to facilitate testing
-* Directions improvements:
-  * Added direction v5 lanes
-  * Added support for the `driving-traffic` profile
-  * Added support for polyline6
-  * Remove support for `v4`
-* Geocoding improvements:
-  * Batch requests support
-  * Added landmark, limit, country parameters support
-  * Added cancel method, setting multiple types, and language method setting to autocomplete widget
+<a name="1.0.3"></a>
+## [1.0.3](https://github.com/mapbox/docbox/compare/v1.0.2...v1.0.3) (2017-01-25)
 
-### v1.3.2
 
-* Geocoding: added poi.landmark type
 
-### v1.3.1
+### March 22, 2016
 
-* GeoJson: Feature properties are now properly serialized and raw array tests have been added
-* Introduce checkstyle to the project
+* Fixes non-unique IDs on section headers.
+* You can now run `npm run build` multiple times without any problems.
 
-### v1.3.0
+### March 17, 2016
 
-* `RouteUtils` class to simplify work with `RouteLeg` objects
-* `geojson-tidy` integrated with Map Matching client
-* Added Turf's `midpoint`, `along`, and `within` methods
-* Added an example to showcase Turf's `lineslice`
-* Geocoding widget now supports the `bbox` parameter
+* Support for linking to specific languages. URLs were previously like
+  `#the-section` but now are `?language=JavaScript#the-section` when a language
+  is selected, so that you can link to both a specific section and a specific
+  language.
+* Changes how Docbox uses highlight.js - instead of including tons and tons
+  of languages, we include only a few.
 
-### v1.2.1
+### March 14, 2016
 
-* Bring back `toString()` method in `CarmenFeature`
-* Fixes regresion in `GeocoderAutoCompleteView`
-
-Full changelog: https://github.com/mapbox/mapbox-java/issues?q=milestone%3Av1.2.1+is%3Aclosed
-
-### v1.2.0
-
-* Support for the Map Matching API
-* Improved Geocoder API (including support for `wikidata` and `bbox`)
-* Better Static Image API
-* Some [Turf](http://turfjs.org/) methods ported to Java: `TurfMeasurement.bearing`, `TurfMeasurement.destination`, `TurfMeasurement.distance`, `TurfMeasurement.lineDistance`, `TurfHelpers.distanceToRadians`, `TurfHelpers.radiansToDistance`, `TurfMisc.lineSlice`
-* [`simplify-js`](https://github.com/mourner/simplify-js) ported to Java
-* Updated to `libjava` v1.2.0
-* Several examples added to the TestApp
-* Improved documentation
-
-Full changelog: https://github.com/mapbox/mapbox-java/issues?q=milestone%3Av1.2.0+is%3Aclosed
-
-### v1.1.0
-
-* Support for directions API v5
-* Support for Maki 3 and directions icons in Test App
-* Fixed a bug where locale was different from `Locale.US`
-* Updated to `libjava` v1.1.0
-* Removed extra dependencies to reduce method count
-
-Full changelog: https://github.com/mapbox/mapbox-java/issues?q=milestone%3Av1.1.0+is%3Aclosed
-
-### v1.0.0
-
-* Initial release: Java module with no Android dependencies
-* Support for Geocoding API v5
-* Support for Directions API v4 and v5
-* Support for Static API v1
-* RxJava support
-* Support for GeoJSON objects
-* Polyline encoder and decoder
-* Initial release
-* Full replacement for the stock `AndroidGeocoder`
-* Geocoder autocomplete widget based on Android's `AutoCompleteTextView`
-* Utility class to handle the new permission system in 6.0
-* TestApp with sample code for directions v4 and v5, geocoding (reverse, widget, service), and static image with Picasso
+* Support for toggling between 1 and 2 column mode
