@@ -15,6 +15,9 @@ public class BaseFeatureCollection implements GeoJSON {
 
   private final String type = "FeatureCollection";
 
+  public BaseFeatureCollection() {
+  }
+
   /**
    * Should always be "FeatureCollection".
    *
