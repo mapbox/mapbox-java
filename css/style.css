@@ -1,46 +1,29 @@
 /* BASE OVERRIDES */
-
-/* Add buffer for nicer anchor links */
+.prose h3:first-child,
 .prose h2:first-child {
   padding-top: 20px;
 }
 
-.prose h3:first-child {
-  padding-top: 20px;
-  font-size: 17px;
+/* Add buffer for nicer anchor links */
+.prose h3:target,
+.prose h2:target,
+.prose h1:target {
+  padding-top: 60px;
 }
 
-/* Header gets big */
-@media only screen and (max-width:960px) {
-  .prose h2:first-child {
-    padding-top: 60px;
+/* Header gets bigger */
+@media only screen and (max-width:640px) {
+  .prose h2:target {
+    padding-top: 120px;
   }
-
-  .prose h3:first-child {
-    padding-top: 60px;
+  .prose h3:target {
+    padding-top: 120px;
   }
-}
-
-.nav-bottom {
-  bottom:0;
-  position: absolute;
 }
 
 strong {
   font-weight: bold;
 }
-
-/* Header gets bigger */
-@media only screen and (max-width:640px) {
-  .prose h2:first-child {
-    padding-top: 100px;
-  }
-
-  .prose h3:first-child {
-    padding-top: 100px;
-  }
-}
-
 
 /* tables are too giant */
 .prose table,
@@ -128,7 +111,15 @@ code, pre {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-.endpoint-token {
+.bottom-shadow:after {
+  content: '';
+  height: 15px;
+  left: 0;
+  right: 0;
+  display: block;
+  background: linear-gradient(rgba(0,0,0,.08), transparent);
+  position: absolute;
+  top: 50px;
 }
 
 a.hljs-linked {
