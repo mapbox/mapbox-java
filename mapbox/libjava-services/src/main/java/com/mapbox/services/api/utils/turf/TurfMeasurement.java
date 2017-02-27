@@ -1,10 +1,11 @@
 package com.mapbox.services.api.utils.turf;
 
-import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.FeatureCollection;
-import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.geojson.MultiLineString;
+import com.mapbox.services.commons.geojson.MultiPoint;
+import com.mapbox.services.commons.geojson.MultiPolygon;
 import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.commons.geojson.Polygon;
 import com.mapbox.services.commons.models.Position;
 
 import java.util.List;
@@ -101,7 +102,7 @@ public class TurfMeasurement {
     double latitude2 = Math.asin(Math.sin(latitude1) * Math.cos(radians)
       + Math.cos(latitude1) * Math.sin(radians) * Math.cos(bearingRad));
     double longitude2 = longitude1 + Math.atan2(Math.sin(bearingRad)
-      * Math.sin(radians) * Math.cos(latitude1),
+        * Math.sin(radians) * Math.cos(latitude1),
       Math.cos(radians) - Math.sin(latitude1) * Math.sin(latitude2));
 
     return Point.fromCoordinates(
@@ -168,17 +169,35 @@ public class TurfMeasurement {
   /**
    * Takes a line and measures its length in the specified units.
    *
-   * @param line  Line to measure.
+   * @param lineString  Line to measure.
    * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
    * @return Length of the input line.
    * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(FeatureCollection line, String units) throws TurfException {
-    double d = 0;
-    for (int i = 0; i < line.getFeatures().size(); i++) {
-      d += lineDistance(line.getFeatures().get(i), units);
+  public static double lineDistance(LineString lineString, String units) throws TurfException {
+    List<Position> coordinates = lineString.getCoordinates();
+    return length(coordinates, units);
+  }
+
+  /**
+   * Takes a line and measures its length in the specified units.
+   *
+   * @param polygon  Line to measure.
+   * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
+   * @return Length of the input line.
+   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+   * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
+   * @since 1.2.0
+   */
+  public static double lineDistance(Polygon polygon, String units) throws TurfException {
+    double d;
+
+    List<List<Position>> coordinates = polygon.getCoordinates();
+    d = 0;
+    for (int i = 0; i < coordinates.size(); i++) {
+      d += length(coordinates.get(i), units);
     }
     return d;
   }
@@ -186,54 +205,45 @@ public class TurfMeasurement {
   /**
    * Takes a line and measures its length in the specified units.
    *
-   * @param line  Line to measure.
+   * @param multiLineString  Line to measure.
    * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
    * @return Length of the input line.
    * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(Feature line, String units) throws TurfException {
-    return lineDistance(line.getGeometry(), units);
+  public static double lineDistance(MultiLineString multiLineString, String units) throws TurfException {
+    double d;
+
+    List<List<Position>> coordinates = multiLineString.getCoordinates();
+    d = 0;
+    for (int i = 0; i < coordinates.size(); i++) {
+      d += length(coordinates.get(i), units);
+    }
+    return d;
   }
 
   /**
    * Takes a line and measures its length in the specified units.
    *
-   * @param line  Line to measure.
+   * @param multiPolygon  Line to measure.
    * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
    * @return Length of the input line.
    * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(Geometry line, String units) throws TurfException {
+  public static double lineDistance(MultiPolygon multiPolygon, String units) throws TurfException {
     double d;
 
-    if (line.getType().equals("LineString")) {
-      List<Position> coordinates = (List<Position>) line.getCoordinates();
-      return length(coordinates, units);
-    } else if (line.getType().equals("Polygon") || line.getType().equals("MultiLineString")) {
-      List<List<Position>> coordinates = (List<List<Position>>) line.getCoordinates();
-      d = 0;
-      for (int i = 0; i < coordinates.size(); i++) {
-        d += length(coordinates.get(i), units);
+    List<List<List<Position>>> coordinates = multiPolygon.getCoordinates();
+    d = 0;
+    for (int i = 0; i < coordinates.size(); i++) {
+      for (int j = 0; j < coordinates.get(i).size(); j++) {
+        d += length(coordinates.get(i).get(j), units);
       }
-      return d;
-    } else if (line.getType().equals("MultiPolygon")) {
-      List<List<List<Position>>> coordinates = (List<List<List<Position>>>) line.getCoordinates();
-      d = 0;
-      for (int i = 0; i < coordinates.size(); i++) {
-        for (int j = 0; j < coordinates.get(i).size(); j++) {
-          d += length(coordinates.get(i).get(j), units);
-        }
-      }
-      return d;
-    } else {
-      throw new TurfException("Input must be a LineString, MultiLineString, "
-        + "Polygon, or MultiPolygon Feature or Geometry (or a FeatureCollection "
-        + "containing only those types)");
     }
+    return d;
   }
 
   private static double length(List<Position> coords, String units) throws TurfException {
@@ -306,5 +316,106 @@ public class TurfMeasurement {
     }
 
     return Point.fromCoordinates(coords.get(coords.size() - 1));
+  }
+
+  /*
+   * Bounding box
+   */
+
+  /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param point A {@link Point} object.
+   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @since 2.0.0
+   */
+  public static double[] bbox(Point point) {
+    List<Position> resultCoords = TurfMeta.coordAll(point);
+    return bboxCalculator(resultCoords);
+  }
+
+  /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param lineString A {@link LineString} object.
+   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @since 2.0.0
+   */
+  public static double[] bbox(LineString lineString) {
+    List<Position> resultCoords = TurfMeta.coordAll(lineString);
+    return bboxCalculator(resultCoords);
+  }
+
+  /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param multiPoint A {@link MultiPoint} object.
+   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @since 2.0.0
+   */
+  public static double[] bbox(MultiPoint multiPoint) {
+    List<Position> resultCoords = TurfMeta.coordAll(multiPoint);
+    return bboxCalculator(resultCoords);
+  }
+
+  /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param polygon A {@link Polygon} object.
+   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @since 2.0.0
+   */
+  public static double[] bbox(Polygon polygon) {
+    List<Position> resultCoords = TurfMeta.coordAll(polygon, false);
+    return bboxCalculator(resultCoords);
+  }
+
+  /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param multiLineString A {@link MultiLineString} object.
+   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @since 2.0.0
+   */
+  public static double[] bbox(MultiLineString multiLineString) {
+    List<Position> resultCoords = TurfMeta.coordAll(multiLineString);
+    return bboxCalculator(resultCoords);
+  }
+
+  /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param multiPolygon A {@link MultiPolygon} object.
+   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @since 2.0.0
+   */
+  public static double[] bbox(MultiPolygon multiPolygon) {
+    List<Position> resultCoords = TurfMeta.coordAll(multiPolygon, false);
+    return bboxCalculator(resultCoords);
+  }
+
+  private static double[] bboxCalculator(List<Position> resultCoords) {
+    double[] bbox = new double[4];
+
+    bbox[0] = Double.POSITIVE_INFINITY;
+    bbox[1] = Double.POSITIVE_INFINITY;
+    bbox[2] = Double.NEGATIVE_INFINITY;
+    bbox[3] = Double.NEGATIVE_INFINITY;
+
+    for (Position position : resultCoords) {
+      if (bbox[0] > position.getLongitude()) {
+        bbox[0] = position.getLongitude();
+      }
+      if (bbox[1] > position.getLatitude()) {
+        bbox[1] = position.getLatitude();
+      }
+      if (bbox[2] < position.getLongitude()) {
+        bbox[2] = position.getLongitude();
+      }
+      if (bbox[3] < position.getLatitude()) {
+        bbox[3] = position.getLatitude();
+      }
+    }
+    return bbox;
   }
 }
