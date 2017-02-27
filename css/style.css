@@ -21,6 +21,11 @@
   }
 }
 
+.nav-bottom {
+  bottom:0;
+  position: absolute;
+}
+
 strong {
   font-weight: bold;
 }

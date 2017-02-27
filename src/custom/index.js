@@ -1,6 +1,6 @@
 'use strict';
 
-import groovy from 'highlight.js/lib/languages/groovy';
+import React from 'react';
 import hljs from 'highlight.js/lib/highlight';
 
 /**
@@ -18,11 +18,28 @@ module.exports.brandNames = {
  */
 module.exports.brandClasses = 'fill-blue';
 
+/**
+ * Text for the link back to the linking website.
+ */
+module.exports.backLink = 'Back to mapbox.com';
 
 /**
  * Text for the link back to the linking website.
  */
-module.exports.backLink = 'Back to wobbles.com';
+module.exports.footerContent = (<div className='space-top2 nav-bottom pad1y keyline-top'>
+  <a
+    href='https://github.com/mapbox/mapbox-java'
+    className='block small quiet'>Mapbox-Java on Github</a>
+  <a
+    href='https://www.mapbox.com/help/'
+    className='block small quiet'>Help &amp; Support</a>
+  <a
+    href='https://www.mapbox.com/tos/'
+    className='block small quiet'>Terms of Service</a>
+  <a
+    href='https://github.com/mapbox/mapbox-java/blob/master/CHANGELOG.md'
+    className='block small quiet'>Changelog</a>
+</div>);
 
 /**
  * Runs after highlighting code samples. You can use this

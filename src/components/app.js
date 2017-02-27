@@ -208,8 +208,8 @@ var App = React.createClass({
       </div>
 
       {/* Header */ }
-      <div className={`fill-dark dark bottom-shadow fixed-top ${queryMatches.tablet ? 'pad1y pad2x col6' : 'pad0 width16'}`}>
-        <a href='/' className={`active space-top1 space-left1 pin-topleft icon round dark pad0 ${brandClasses}`}></a>
+      <div className={`fill-denim dark bottom-shadow fixed-top ${queryMatches.tablet ? 'pad1y pad2x col6' : 'pad0 width16'}`}>
+        <a href='/' className={`active space-top1 space-left1 pin-topleft icon round dark mapbox pad0 ${brandClasses}`}></a>
         <div className={`strong small pad0
           ${queryMatches.mobile ? 'space-left3' : ''}
           ${queryMatches.tablet ? 'space-left2' : 'space-left4 line-height15' }`}>
