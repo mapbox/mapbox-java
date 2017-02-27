@@ -54,7 +54,7 @@ var App = React.createClass({
     ast: React.PropTypes.object.isRequired
   },
   getInitialState() {
-    var active = 'Introduction';
+    var active = 'introduction';
 
     if (process.browser) {
       let hash = window.location.hash.split('#').pop();
@@ -170,13 +170,47 @@ var App = React.createClass({
     let col1 = columnMode === 1 && queryMatches.desktop;
     return (<div className='container unlimiter'>
 
+
+      {/* Header */ }
+      <div className={`fill-denim z100  dark bottom-shadow fixed-top pad1y pad2x`}>
+        <a href='/' className={`active space-top1 space-left1 pin-topleft icon round dark mapbox pad0 ${brandClasses}`}></a>
+        <div className={`strong small
+          ${queryMatches.mobile ? 'space-left3' : ''}
+          ${queryMatches.tablet ? 'space-left2' : 'space-left4 line-height15 width16' }`}>
+          {queryMatches.desktop ? brandNames.desktop :
+            queryMatches.mobile ? brandNames.mobile : brandNames.tablet}
+        </div>
+        {queryMatches.tablet && <div>
+          <button
+            onClick={this.toggleNav}
+            className={`short quiet pin-topright button rcon ${showNav ? 'caret-up' : 'caret-down'} space-right1 space-top1`}>
+            <span className='micro'>{activeSection}</span>
+          </button>
+          {showNav && <div
+            className='fixed-left keyline-top fill-dark pin-left pad2 scroll-styled space-top5'>
+              <Navigation
+                navigationItemClicked={this.navigationItemClicked}
+                activeSection={activeSection}
+                ast={ast} />
+            </div>}
+          </div>}
+          <div className='pin-topright space-top1 space-right1 pad0'>
+            {queryMatches.desktop ?
+              <a
+                title={`Display as ${col1 ? 2 : 1} column`}
+                onClick={this.toggleColumnMode}
+                style={{ cursor: 'pointer' }}
+                className={`icon quiet caret-${col1 ? 'right' : 'left'} fill-lighten1 pad0 round`}></a> : null}
+          </div>
+      </div>
+
       {/* Content background */ }
       {(!col1 && !queryMatches.mobile) && <div className={`fixed-top fixed-right ${queryMatches.desktop && 'space-left16'}`}>
         <div className='fill-light col6 pin-right'></div>
       </div>}
 
       {/* Desktop nav */ }
-      {queryMatches.desktop && <div className='space-top5 scroll-styled overflow-auto pad1 width16 sidebar fixed-left fill-dark dark'>
+      {queryMatches.desktop && <div className='space-top5 overflow-auto pad1 width16 sidebar fixed-left fill-dark dark'>
         <Navigation
           navigationItemClicked={this.navigationItemClicked}
           activeSection={activeSection}
@@ -194,43 +228,8 @@ var App = React.createClass({
         </div>
       </div>
 
-      {/* Language toggle */ }
-      <div className={`fixed-top space-top2 ${queryMatches.desktop && 'space-left16'}`}>
-          <div className='fr pad0'>
-            {queryMatches.desktop ?
-              <a
-                title={`Display as ${col1 ? 2 : 1} column`}
-                onClick={this.toggleColumnMode}
-                style={{ cursor: 'pointer' }}
-                className={`icon quiet caret-${col1 ? 'right' : 'left'} fill-lighten1 pad0 space-right2 space-top2 round`}></a> : null}
-          </div>
 
-      </div>
 
-      {/* Header */ }
-      <div className={`fill-dark dark bottom-shadow fixed-top ${queryMatches.tablet ? 'pad1y pad2x col6' : 'pad0 width16'}`}>
-        <a href='/' className={`active space-top1 space-left1 pin-topleft icon round dark pad0 ${brandClasses}`}></a>
-        <div className={`strong small pad0
-          ${queryMatches.mobile ? 'space-left3' : ''}
-          ${queryMatches.tablet ? 'space-left2' : 'space-left4 line-height15' }`}>
-          {queryMatches.desktop ? brandNames.desktop :
-            queryMatches.mobile ? brandNames.mobile : brandNames.tablet}
-        </div>
-        {queryMatches.tablet && <div>
-          <button
-            onClick={this.toggleNav}
-            className={`short quiet pin-topright button rcon ${showNav ? 'caret-up' : 'caret-down'} space-right1 space-top1`}>
-            <span className='micro'>{activeSection}</span>
-          </button>
-          {showNav && <div
-            className='fixed-left keyline-top fill-dark pin-left col6 pad2 scroll-styled space-top5'>
-              <Navigation
-                navigationItemClicked={this.navigationItemClicked}
-                activeSection={activeSection}
-                ast={ast} />
-            </div>}
-          </div>}
-      </div>
 
     </div>);
   }
