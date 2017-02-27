@@ -90,7 +90,8 @@ public class TurfMeasurementTest extends BaseTurf {
   @Test
   public void testLineDistanceMultiLineString() throws IOException, TurfException {
     Feature feature = Feature.fromJson(loadJsonFixture("turf-line-distance", "multilinestring.geojson"));
-    assertEquals(Math.round(1000 * TurfMeasurement.lineDistance((MultiLineString) feature.getGeometry(), "kilometers")), 4705);
+    assertEquals(Math.round(1000
+      * TurfMeasurement.lineDistance((MultiLineString) feature.getGeometry(), "kilometers")), 4705);
   }
 
   /*
