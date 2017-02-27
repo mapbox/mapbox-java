@@ -25,6 +25,20 @@ All public methods in all the project modules are well documented and even inclu
 ### Access tokens
 If you plan to use any of our APIs such as directions, geocoding, navigation, etc. you'll need to have a Mapbox access token which you'll pass in as a parameter. An access token isn't needed if you plan to use Mapbox Java only for GeoJSON parsing, or Turf calculations. To learn more about access tokens, read [this document](https://www.mapbox.com/help/create-api-access-token/).
 
+### Position and Point objects
+Throughout the APIs exposed within Mapbox-Java you'll notice the Position object's used heavily representing a coordinate. The order in which the coordinate pair are longitude followed by latitude. Creating a new Position is fairly straight forward and can easily be converted from a LatLng object if you are using our Maps SDK.
+
+The SDK will attempt to detect if your coordinates are outside the excepted range and log a warning. This range is between -180 to 180 for longitudes and -90 to 90 for latitude.
+
+> **Note:** if you happen to be using our Maps SDK in addition to this SDK, you'll notice that the LatLng object has the reverse order, latitude comes before the longitude value.
+
+Point will also be found in this SDK which is used specifically for GeoJSON objects. you can create a Point either directly from a Position object or passing in a longitude, latitude double array.
+
+```java
+// Position representing The White House
+Position position = Position.fromCoordinates(-77.03655, 38.89770);
+```
+
 ## Installation
 To start developing your application using Mapbox Java, you'll need to first determine which installation method works best for you. The SDK is fully compatible with Android using Gradle and most of the project (besides the Android dependent modules) can also be included in a generic Java project using either Gradle or Maven. All dependencies given below can be found on MavenCentral.
 
