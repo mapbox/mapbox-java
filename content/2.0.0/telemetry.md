@@ -1,23 +1,7 @@
 ## Telemetry
-Mapbox SDKs collect anonymous data about the map and device location to continuously update and improve your maps. For Android, it is designed to be lightweight and minimize impact on performance and battery life. If you are using our maps SDK, telemetry's already included in your project. In other cases you might want to use our locationEngine or permissionManager inside your project. The Telemetry module has no dependencies on any of the other Mapbox-Java modules and only depends on having the Android API plugin inside your project.
+The telemetry library includes a bunch of utilities that you can use in your projects such as our locationEngine or permissionManager that you can include inside your project. The Telemetry module has no dependencies on any of the other Mapbox-Java modules and only depends on having the Android API plugin inside your project.
 
 > Find out more about telemetry on [our website](https://www.mapbox.com/telemetry/)
-
-### Setup
-To start using telemetry independently inside your application, you'll first need to include the telemetry dependency and then add the following service and permissions inside your `AndroidManifest.xml` file:
-
-```xml
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-<uses-permission android:name="android.permission.INTERNET"/>
-
-<application>
-
-  ...
-
-  <service android:name="com.mapbox.services.android.telemetry.service.TelemetryService"/>
-
-</application>
-```
 
 ## PermissionsManager
 If your Android project is built targeting API level 23 or higher, your application will need to request permission during runtime. Handling this directly in your activity produces a bunch of boilerplate and can oftentimes be hard to get correct. That's where the PermissionsManager comes into play. With the PermissionsManager, you can check if the user has granted location permission and request permissions if the user hasn't granted them yet.
