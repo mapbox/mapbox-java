@@ -4,4 +4,5 @@ pages/*.html
 pages/*.md
 node_modules
 npm-debug.log
+mapbox/
 .idea/
