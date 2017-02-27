@@ -174,9 +174,9 @@ var App = React.createClass({
       {/* Header */ }
       <div className={`fill-denim z100  dark bottom-shadow fixed-top pad1y pad2x`}>
         <a href='/' className={`active space-top1 space-left1 pin-topleft icon round dark mapbox pad0 ${brandClasses}`}></a>
-        <div className={`strong small pad0
+        <div className={`strong small
           ${queryMatches.mobile ? 'space-left3' : ''}
-          ${queryMatches.tablet ? 'space-left2' : 'space-left4' }`}>
+          ${queryMatches.tablet ? 'space-left2' : 'space-left4 line-height15 width16' }`}>
           {queryMatches.desktop ? brandNames.desktop :
             queryMatches.mobile ? brandNames.mobile : brandNames.tablet}
         </div>
@@ -187,7 +187,7 @@ var App = React.createClass({
             <span className='micro'>{activeSection}</span>
           </button>
           {showNav && <div
-            className='fixed-left keyline-top fill-dark pin-left col6 pad2 scroll-styled space-top5'>
+            className='fixed-left keyline-top fill-dark pin-left pad2 scroll-styled space-top5'>
               <Navigation
                 navigationItemClicked={this.navigationItemClicked}
                 activeSection={activeSection}

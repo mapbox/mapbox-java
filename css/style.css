@@ -33,6 +33,11 @@ strong {
   line-height: 1.5;
 }
 
+.custom-nav-bottom {
+  position: absolute;
+  bottom: 0;
+}
+
 .prose table th, .prose table td {
   padding: 5px;
 }

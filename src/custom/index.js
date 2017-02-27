@@ -26,7 +26,7 @@ module.exports.backLink = 'Back to mapbox.com';
 /**
  * Text for the link back to the linking website.
  */
-module.exports.footerContent = (<div className='space-top2 nav-bottom pad1y keyline-top'>
+module.exports.footerContent = (<div className='space-top2 nav-bottom custom-nav-bottom pad1y keyline-top'>
   <a
     href='https://github.com/mapbox/mapbox-java'
     className='block small quiet'>Mapbox-Java on Github</a>
