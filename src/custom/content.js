@@ -14,5 +14,7 @@ module.exports =
   fs.readFileSync('./content/2.0.0/getting_started.md', 'utf8') + '\n' +
   '# Navigation\n' +
   fs.readFileSync('./content/2.0.0/navigation.md', 'utf8') + '\n' +
+  '# Geocoder\n' +
+  fs.readFileSync('./content/2.0.0/geocoder.md', 'utf8') + '\n' +
   '# Telemetry\n' +
   fs.readFileSync('./content/2.0.0/telemetry.md', 'utf8') + '\n';

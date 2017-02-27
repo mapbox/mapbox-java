@@ -1,23 +1,23 @@
 /* BASE OVERRIDES */
-
-/* Add buffer for nicer anchor links */
+.prose h3:first-child,
 .prose h2:first-child {
   padding-top: 20px;
 }
 
-.prose h3:first-child {
-  padding-top: 20px;
-  font-size: 17px;
+/* Add buffer for nicer anchor links */
+.prose h3:target,
+.prose h2:target,
+.prose h1:target {
+  padding-top: 60px;
 }
 
-/* Header gets big */
-@media only screen and (max-width:960px) {
-  .prose h2:first-child {
-    padding-top: 60px;
+/* Header gets bigger */
+@media only screen and (max-width:640px) {
+  .prose h2:target {
+    padding-top: 120px;
   }
-
-  .prose h3:first-child {
-    padding-top: 60px;
+  .prose h3:target {
+    padding-top: 120px;
   }
 }
 
@@ -25,24 +25,17 @@ strong {
   font-weight: bold;
 }
 
-/* Header gets bigger */
-@media only screen and (max-width:640px) {
-  .prose h2:first-child {
-    padding-top: 100px;
-  }
-
-  .prose h3:first-child {
-    padding-top: 100px;
-  }
-}
-
-
 /* tables are too giant */
 .prose table,
 .prose table code {
   margin-bottom: 20px;
   font-size: 12px;
   line-height: 1.5;
+}
+
+.custom-nav-bottom {
+  position: absolute;
+  bottom: 0;
 }
 
 .prose table th, .prose table td {
@@ -123,7 +116,15 @@ code, pre {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-.endpoint-token {
+.bottom-shadow:after {
+  content: '';
+  height: 15px;
+  left: 0;
+  right: 0;
+  display: block;
+  background: linear-gradient(rgba(0,0,0,.08), transparent);
+  position: absolute;
+  top: 50px;
 }
 
 a.hljs-linked {
@@ -140,9 +141,23 @@ body .prose blockquote {
   word-wrap: break-word;
 }
 
+.enterprise,
 .preview {
   background-size: 10px 10px;
   background-repeat: repeat-y;
+}
+
+.enterprise h2::after,
+.enterprise h3::after {
+  content: 'ENTERPRISE';
+  background-color: #3887be;
+  border-radius: 2px;
+  font-size: 9px;
+  font-weight: normal;
+  padding: 2px 5px;
+  color: rgba(255, 255, 255, 0.80);
+  margin-left: 10px;
+  vertical-align: middle;
 }
 
 .preview h2::after,

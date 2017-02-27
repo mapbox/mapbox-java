@@ -28,10 +28,10 @@ var Section = React.createClass({
   },
   render() {
     let { chunk, leftClassname, rightClassname } = this.props;
-    let { left, right, preview } = chunk;
+    let { left, right, preview, enterprise } = chunk;
     return (<div
       data-title={chunk.title}
-      className={`keyline-top section contain clearfix ${preview ? 'preview' : ''}`}>
+      className={`keyline-top section contain clearfix ${enterprise ? 'enterprise' : ''} ${preview ? 'preview' : ''}`}>
       <div
         className={leftClassname}
         dangerouslySetInnerHTML={renderHighlighted(left)} />
