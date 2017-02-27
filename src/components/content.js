@@ -15,6 +15,7 @@ var roundedToggleOptionType = React.PropTypes.shape({
 
 function chunkifyAST(ast, language) {
   var preview = false;
+  var enterprise = false;
   return ast.children.reduce((chunks, node) => {
     if (node.type === 'heading' && node.depth === 1) {
       return chunks;
@@ -31,6 +32,7 @@ function chunkifyAST(ast, language) {
       language = 'bash';
     }
     if (chunk[0].depth < 3) {
+      enterprise = false;
       preview = false;
     }
     chunk.forEach(node => {
@@ -67,12 +69,15 @@ function chunkifyAST(ast, language) {
           if (content === 'preview') {
             preview = true;
           }
+          if (content === 'enterprise') {
+            enterprise = true
+          }
         }
       } else {
         left.push(node);
       }
     });
-    return { left, right, title, preview, slug: slug(title) };
+    return { left, right, title, preview, enterprise, slug: slug(title) };
   });
 }
 

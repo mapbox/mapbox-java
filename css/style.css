@@ -141,9 +141,23 @@ body .prose blockquote {
   word-wrap: break-word;
 }
 
+.enterprise,
 .preview {
   background-size: 10px 10px;
   background-repeat: repeat-y;
+}
+
+.enterprise h2::after,
+.enterprise h3::after {
+  content: 'ENTERPRISE';
+  background-color: #3887be;
+  border-radius: 2px;
+  font-size: 9px;
+  font-weight: normal;
+  padding: 2px 5px;
+  color: rgba(255, 255, 255, 0.80);
+  margin-left: 10px;
+  vertical-align: middle;
 }
 
 .preview h2::after,

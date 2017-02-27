@@ -89,6 +89,9 @@ autoComplete.setOnFeatureListener(new GeocoderAutoCompleteView.OnFeatureListener
 ```
 
 ### Batch geocoding
+
+<!-- enterprise -->
+
 Batch requests have the same parameters as normal requests, but can include more than one query by separating queries with the ; character. The mode parameter also needs to use `MODE_PLACES_PERMANENT`. You can do up to 50 forward or reverse geocoding queries in a single request. The response is an array of individual geocoder responses formatted the same as individual results. Each query in a batch request counts individually against your account's rate limits.
 
 ```java
