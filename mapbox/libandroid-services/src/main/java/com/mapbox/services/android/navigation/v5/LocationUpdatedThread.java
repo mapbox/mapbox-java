@@ -106,7 +106,9 @@ public class LocationUpdatedThread extends HandlerThread {
               alertLevelChangeListener.onAlertLevelChange(alertLevel, target);
             }
           }
-          progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, target);
+          if (progressChangeListener != null) {
+            progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, target);
+          }
         }
       });
 
