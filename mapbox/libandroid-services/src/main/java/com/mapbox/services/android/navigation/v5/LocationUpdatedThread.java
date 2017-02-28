@@ -101,8 +101,10 @@ public class LocationUpdatedThread extends HandlerThread {
       responseHandler.post(new Runnable() {
         public void run() {
           if (target.getPreviousAlertLevel() != alertLevel) {
-            target.setAlertUserLevel(alertLevel);
-            alertLevelChangeListener.onAlertLevelChange(alertLevel, target);
+            if (alertLevelChangeListener != null) {
+              target.setAlertUserLevel(alertLevel);
+              alertLevelChangeListener.onAlertLevelChange(alertLevel, target);
+            }
           }
           progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, target);
         }
