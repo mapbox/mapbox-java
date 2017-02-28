@@ -45,6 +45,8 @@ public class MapboxNavigation {
   private DirectionsRoute route;
   private boolean snapToRoute;
 
+  private String profile = DirectionsCriteria.PROFILE_DRIVING_TRAFFIC;
+
   /*
    * Constructor
    */
@@ -165,6 +167,10 @@ public class MapboxNavigation {
     }
   }
 
+  public void disableTraffic() {
+    profile = DirectionsCriteria.PROFILE_DRIVING;
+  }
+
   private Intent getServiceIntent() {
     return new Intent(context, NavigationService.class);
   }
@@ -194,7 +200,7 @@ public class MapboxNavigation {
   public void getRoute(Callback<DirectionsResponse> callback) {
     try {
       MapboxDirections directions = new MapboxDirections.Builder()
-        .setProfile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+        .setProfile(profile)
         .setAccessToken(accessToken)
         .setOverview(DirectionsCriteria.OVERVIEW_FULL)
         .setOrigin(origin)
