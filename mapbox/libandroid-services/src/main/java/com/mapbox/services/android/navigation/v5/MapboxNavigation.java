@@ -197,7 +197,24 @@ public class MapboxNavigation {
     }
   }
 
-  public void getRoute(Callback<DirectionsResponse> callback) {
+  /**
+   * Request navigation to acquire a route and notify your callback when a response comes in. A
+   * {@link ServicesException} will be thrown if you haven't set your access token, origin or destination before
+   * calling {@code getRoute}.
+   *
+   * @param callback A callback of type {@link DirectionsResponse} which allows you to handle the Directions API
+   *                 response.
+   * @since 2.0.0
+   */
+  public void getRoute(Callback<DirectionsResponse> callback) throws ServicesException {
+    if (accessToken == null) {
+      throw new ServicesException("A Mapbox access token must be passed into your MapboxNavigation instance before"
+        + "calling getRoute");
+    } else if (origin == null || destination == null) {
+      throw new ServicesException("A origin and destination Postion must be passed into your MapboxNavigation instance"
+        + "before calling getRoute");
+    }
+
     try {
       MapboxDirections directions = new MapboxDirections.Builder()
         .setProfile(profile)
