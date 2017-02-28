@@ -89,22 +89,6 @@ public class MapboxNavigation {
     }
   }
 
-  public Position getOrigin() {
-    return origin;
-  }
-
-  public void setOrigin(Position origin) {
-    this.origin = origin;
-  }
-
-  public Position getDestination() {
-    return destination;
-  }
-
-  public void setDestination(Position destination) {
-    this.destination = destination;
-  }
-
   public void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
     this.alertLevelChangeListener = alertLevelChangeListener;
   }
@@ -167,10 +151,6 @@ public class MapboxNavigation {
     }
   }
 
-  public void disableTraffic() {
-    profile = DirectionsCriteria.PROFILE_DRIVING;
-  }
-
   private Intent getServiceIntent() {
     return new Intent(context, NavigationService.class);
   }
@@ -196,6 +176,10 @@ public class MapboxNavigation {
       setBound(false);
     }
   }
+
+  /*
+   * Directions API request methods
+   */
 
   /**
    * Request navigation to acquire a route and notify your callback when a response comes in. A
@@ -228,5 +212,61 @@ public class MapboxNavigation {
     } catch (ServicesException serviceException) {
       Timber.e("Failed to get route: %s", serviceException.getMessage());
     }
+  }
+
+  /**
+   * Get the current origin {@link Position} that will be used for the beginning of the route. If no origin's provided,
+   * null will be returned. An origin must be provided before calling {@link MapboxNavigation#getRoute(Callback)}.
+   *
+   * @return A {@link Position} object representing the origin of your route.
+   * @since 2.0.0
+   */
+  public Position getOrigin() {
+    return origin;
+  }
+
+  /**
+   * Set the origin that will be used for the beginning of the route. This will be used once
+   * {@link MapboxNavigation#getRoute(Callback)}'s called.
+   *
+   * @param origin A {@link Position} representing the origin of your route.
+   * @since 2.0.0
+   */
+  public void setOrigin(Position origin) {
+    this.origin = origin;
+  }
+
+  /**
+   * Get the current destination {@link Position} that will be used for the end of the route. If no destinations's
+   * provided, null will be returned. A destination must be provided before calling
+   * {@link MapboxNavigation#getRoute(Callback)}.
+   *
+   * @return A {@link Position} object representing the destination of your route.
+   * @since 2.0.0
+   */
+  public Position getDestination() {
+    return destination;
+  }
+
+  /**
+   * Set the destination that will be used for the end of the route. This will be used once
+   * {@link MapboxNavigation#getRoute(Callback)}'s called.
+   *
+   * @param destination A {@link Position} representing the destination of your route.
+   * @since 2.0.0
+   */
+  public void setDestination(Position destination) {
+    this.destination = destination;
+  }
+
+  /**
+   * Calling this will change the default profile used when requesting your route to not consider traffic when routing.
+   * For more accurate timing and ensuring the quickest routes provided to the user, it isn't recommend to disable
+   * traffic. It is good if you are looking to reproduce the same route over and over for testing for example.
+   *
+   * @since 2.0.0
+   */
+  public void disableTraffic() {
+    profile = DirectionsCriteria.PROFILE_DRIVING;
   }
 }
