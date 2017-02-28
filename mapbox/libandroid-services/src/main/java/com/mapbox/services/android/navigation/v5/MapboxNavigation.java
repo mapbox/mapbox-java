@@ -40,8 +40,8 @@ public class MapboxNavigation {
   private ProgressChangeListener progressChangeListener;
   private LocationEngine locationEngine;
 
-  private Position start;
-  private Position end;
+  private Position origin;
+  private Position destination;
   private DirectionsRoute route;
   private boolean snapToRoute;
 
@@ -87,20 +87,20 @@ public class MapboxNavigation {
     }
   }
 
-  public Position getStart() {
-    return start;
+  public Position getOrigin() {
+    return origin;
   }
 
-  public void setStart(Position start) {
-    this.start = start;
+  public void setOrigin(Position origin) {
+    this.origin = origin;
   }
 
-  public Position getEnd() {
-    return end;
+  public Position getDestination() {
+    return destination;
   }
 
-  public void setEnd(Position end) {
-    this.end = end;
+  public void setDestination(Position destination) {
+    this.destination = destination;
   }
 
   public void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
@@ -141,7 +141,7 @@ public class MapboxNavigation {
 
   public void startNavigation(DirectionsRoute route) {
     if (!isServiceAvailable()) {
-      Timber.d("MapboxNavigation start navigation.");
+      Timber.d("MapboxNavigation origin navigation.");
       this.route = route;
       if (!isBound) {
         context.bindService(getServiceIntent(), connection, 0);
@@ -159,7 +159,7 @@ public class MapboxNavigation {
 
   public void endNavigation() {
     if (isServiceAvailable()) {
-      Timber.d("MapboxNavigation end navigation.");
+      Timber.d("MapboxNavigation destination navigation.");
       navigationService.endNavigation();
       isBound = false;
     }
@@ -197,8 +197,8 @@ public class MapboxNavigation {
         .setProfile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
         .setAccessToken(accessToken)
         .setOverview(DirectionsCriteria.OVERVIEW_FULL)
-        .setOrigin(start)
-        .setDestination(end)
+        .setOrigin(origin)
+        .setDestination(destination)
         .setSteps(true)
         .build();
       directions.enqueueCall(callback);
