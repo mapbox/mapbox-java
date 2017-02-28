@@ -80,7 +80,9 @@ public class MapboxNavigation {
     Timber.d("MapboxNavigation onStart.");
 
     // Only bind if the service was previously started
+
     context.bindService(getServiceIntent(), connection, 0);
+    isBound = true;
   }
 
   /**
@@ -91,9 +93,16 @@ public class MapboxNavigation {
    */
   public void onStop() {
     Timber.d("MapboxNavigation onStop.");
+    System.out.println(isBound);
     if (isBound) {
+      Timber.d("unbindService called");
       context.unbindService(connection);
     }
+  }
+
+  public void onDestroy() {
+    Timber.d("MapboxNavigation onDestroy.");
+    context.stopService(getServiceIntent());
   }
 
   /*
@@ -118,7 +127,7 @@ public class MapboxNavigation {
    *                                occur.
    * @since 2.0.0
    */
-  public void setEventCallback(NavigationEventListener navigationEventListener) {
+  public void setNavigationEventListener(NavigationEventListener navigationEventListener) {
     Timber.d("MapboxNavigation callback set.");
     this.navigationEventListener = navigationEventListener;
   }
@@ -171,6 +180,7 @@ public class MapboxNavigation {
       this.route = route;
       if (!isBound) {
         context.bindService(getServiceIntent(), connection, 0);
+        isBound = true;
       }
       context.startService(getServiceIntent());
     }
@@ -188,7 +198,6 @@ public class MapboxNavigation {
     if (isServiceAvailable()) {
       Timber.d("MapboxNavigation endNavigation called");
       navigationService.endNavigation();
-      isBound = false;
     }
   }
 
@@ -344,7 +353,7 @@ public class MapboxNavigation {
   }
 
   private boolean isServiceAvailable() {
-    boolean isAvailable = (navigationService != null) && isBound;
+    boolean isAvailable = (navigationService != null);
     Timber.d("MapboxNavigation service available: %b", isAvailable);
     return isAvailable;
   }
