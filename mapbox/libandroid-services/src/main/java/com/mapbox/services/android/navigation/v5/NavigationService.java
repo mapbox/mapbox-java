@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.mapbox.services.Experimental;
 import com.mapbox.services.android.R;
