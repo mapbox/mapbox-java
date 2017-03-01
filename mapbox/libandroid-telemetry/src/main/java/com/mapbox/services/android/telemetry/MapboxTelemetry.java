@@ -38,6 +38,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.Vector;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -68,6 +69,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private LocationEngine locationEngine = null;
   private boolean withShutDown = false;
   private Boolean telemetryEnabled = null;
+  protected CopyOnWriteArrayList<TelemetryListener> telemetryListeners;
 
   /**
    * Private constructor for configuring the single instance per app.
@@ -122,6 +124,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
           + "For more information, please visit https://www.mapbox.com/android-sdk.");
     }
 
+    this.telemetryListeners = new CopyOnWriteArrayList<>();
     validateTelemetryServiceConfigured();
     setupHttpClient();
     checkStagingServerInformation();
@@ -131,6 +134,16 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     loadUserPreferences();
 
     initialized = true;
+  }
+
+  public void addTelemetryListener(TelemetryListener listener) {
+    if (!this.telemetryListeners.contains(listener)) {
+      this.telemetryListeners.add(listener);
+    }
+  }
+
+  public boolean removeTelemetryListener(TelemetryListener listener) {
+    return this.telemetryListeners.remove(listener);
   }
 
   /**
@@ -500,6 +513,9 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     boolean doRequest = hasTurnstileEvent || isReadyForEvent();
     if (events.size() > 0 && ConnectivityReceiver.isConnected(context) && doRequest) {
       client.sendEvents(events, this);
+      for (TelemetryListener listener : telemetryListeners) {
+        listener.onSendEvents(events.size());
+      }
     } else if (withShutDown) {
       shutdownTelemetry();
     }
@@ -525,7 +541,9 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    */
   @Override
   public void onFailure(Call call, IOException e) {
-    Log.v(LOG_TAG, "HTTP request failed: %s", e);
+    for (TelemetryListener listener : telemetryListeners) {
+      listener.onHttpFailure(e.getMessage());
+    }
 
     // Make sure that events don't pile up (e.g. offline) and thus impact available memory over time.
     events.removeAllElements();
@@ -547,8 +565,9 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    */
   @Override
   public void onResponse(Call call, Response response) throws IOException {
-    String result = response.isSuccessful() ? "succeeded" : "failed";
-    Log.v(LOG_TAG, String.format("HTTP request %s (%d).", result, response.code()));
+    for (TelemetryListener listener : telemetryListeners) {
+      listener.onHttpResponse(response.isSuccessful(), response.code());
+    }
 
     // Make sure that events don't pile up (e.g. offline) and thus impact available memory over time.
     events.removeAllElements();
