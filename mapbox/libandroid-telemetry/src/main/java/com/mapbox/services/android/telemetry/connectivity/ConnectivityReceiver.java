@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.UiThread;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,6 +27,7 @@ public class ConnectivityReceiver extends BroadcastReceiver {
   private Context context;
   private CopyOnWriteArrayList<ConnectivityListener> connectivityListeners;
   private Boolean connectedFlag;
+  private int activationCounter;
 
   /**
    * ConnectivityReceiver constructor
@@ -113,12 +115,20 @@ public class ConnectivityReceiver extends BroadcastReceiver {
     return connectivityListeners.remove(listener);
   }
 
+  @UiThread
   public void requestConnectivityUpdates() {
-    context.registerReceiver(this, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+    if (activationCounter == 0) {
+      context.registerReceiver(this, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+    }
+    activationCounter++;
   }
 
+  @UiThread
   public void removeConnectivityUpdates() {
-    context.unregisterReceiver(this);
+    activationCounter--;
+    if (activationCounter == 0) {
+      context.unregisterReceiver(this);
+    }
   }
 
   @Override
