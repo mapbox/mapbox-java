@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.annotation.VisibleForTesting;
 
 import com.mapbox.services.Experimental;
 import com.mapbox.services.android.Constants;
@@ -28,7 +29,7 @@ import timber.log.Timber;
  * might change or be removed in minor versions.
  */
 @Experimental
-public class LocationUpdatedThread extends HandlerThread {
+class LocationUpdatedThread extends HandlerThread {
 
   private static final String TAG = "LocationUpdatedThread";
   private static final int MESSAGE_LOCATION_UPDATED = 0;
@@ -41,6 +42,8 @@ public class LocationUpdatedThread extends HandlerThread {
   private AlertLevelChangeListener alertLevelChangeListener;
   private ProgressChangeListener progressChangeListener;
   private double userDistanceToManeuverLocation;
+  private OffRouteListener offRouteListener;
+  private boolean userStillOnRoute = true;
   private boolean snapToRoute;
   private Location location;
 
@@ -64,7 +67,7 @@ public class LocationUpdatedThread extends HandlerThread {
     requestHandler.obtainMessage(MESSAGE_LOCATION_UPDATED, target).sendToTarget();
   }
 
-  private void handleRequest(final RouteProgress target, Location location) {
+  private void handleRequest(final RouteProgress target, final Location location) {
     if (location == null) {
       return;
     }
@@ -85,7 +88,6 @@ public class LocationUpdatedThread extends HandlerThread {
       List<StepIntersection> intersections = getNextIntersections(target, snappedPosition);
 
       // Test the closest intersection to the user only.
-      boolean userStillOnRoute = true;
       if (intersections.size() > 0) {
         userStillOnRoute = isUserStillOnRoute(intersections.get(0), location.getBearing());
       }
@@ -100,11 +102,19 @@ public class LocationUpdatedThread extends HandlerThread {
       // Post back to the UI Thread.
       responseHandler.post(new Runnable() {
         public void run() {
-          if (target.getPreviousAlertLevel() != alertLevel) {
-            target.setAlertUserLevel(alertLevel);
-            alertLevelChangeListener.onAlertLevelChange(alertLevel, target);
+          if (offRouteListener != null && !userStillOnRoute) {
+            offRouteListener.userOffRoute(location);
           }
-          progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, target);
+
+          if (target.getPreviousAlertLevel() != alertLevel) {
+            if (alertLevelChangeListener != null) {
+              target.setAlertUserLevel(alertLevel);
+              alertLevelChangeListener.onAlertLevelChange(alertLevel, target);
+            }
+          }
+          if (progressChangeListener != null) {
+            progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, target);
+          }
         }
       });
 
@@ -119,6 +129,10 @@ public class LocationUpdatedThread extends HandlerThread {
 
   void setProgressChangeListener(ProgressChangeListener progressChangeListener) {
     this.progressChangeListener = progressChangeListener;
+  }
+
+  void setOffRouteListener(OffRouteListener offRouteListener) {
+    this.offRouteListener = offRouteListener;
   }
 
   void setSnapToRoute(boolean snapToRoute) {
@@ -209,7 +223,8 @@ public class LocationUpdatedThread extends HandlerThread {
    * @throws TurfException Thrown if turf calculation error occurs.
    * @since 2.0.0
    */
-  private List<StepIntersection> getNextIntersections(RouteProgress routeProgress, Position userPosition)
+  @VisibleForTesting
+  public List<StepIntersection> getNextIntersections(RouteProgress routeProgress, Position userPosition)
     throws TurfException {
     List<StepIntersection> intersectionsWithinRange = new ArrayList<>();
     List<StepIntersection> stepIntersections = new ArrayList<>();
@@ -263,6 +278,7 @@ public class LocationUpdatedThread extends HandlerThread {
    * @return boolean true if the user remains on the route through the intersection, else false.
    * @since 2.0.0
    */
+  @VisibleForTesting
   private boolean isUserStillOnRoute(StepIntersection intersection, double userHeading) {
     // We start off assuming the user is on route.
     boolean isOnRoute = true;

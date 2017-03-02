@@ -23,3 +23,6 @@ libandroid/app/src/main/res/values/developer-config.xml
 
 # Do not track signing file
 secring.gpg
+
+# Documentation files
+node_modules/

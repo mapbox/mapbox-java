@@ -24,6 +24,10 @@ android {
             consumerProguardFiles 'proguard-rules.pro'
         }
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -42,7 +46,11 @@ dependencies {
     compile rootProject.ext.dep.lost
 
     // Testing
+    testCompile rootProject.ext.dep.mockito
+    testCompile rootProject.ext.dep.okhttp3Mockwebserver
+    testCompile rootProject.ext.dep.hamcrestJunit
     testCompile rootProject.ext.dep.junit
+
     androidTestCompile(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

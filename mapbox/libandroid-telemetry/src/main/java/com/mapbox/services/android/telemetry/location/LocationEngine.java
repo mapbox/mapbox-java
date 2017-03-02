@@ -1,6 +1,8 @@
 package com.mapbox.services.android.telemetry.location;
 
+import android.Manifest;
 import android.location.Location;
+import android.support.annotation.RequiresPermission;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,8 +28,10 @@ public abstract class LocationEngine {
 
   public abstract boolean isConnected();
 
+  @RequiresPermission(anyOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
   public abstract Location getLastLocation();
 
+  @RequiresPermission(anyOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
   public abstract void requestLocationUpdates();
 
   public abstract void removeLocationUpdates();

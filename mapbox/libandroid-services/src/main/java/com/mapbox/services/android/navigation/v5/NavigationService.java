@@ -1,10 +1,8 @@
 package com.mapbox.services.android.navigation.v5;
 
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Binder;
@@ -39,9 +37,8 @@ public class NavigationService extends Service implements LocationEngineListener
   private final IBinder localBinder = new LocalBinder();
 
   private LocationEngine locationEngine;
-  private boolean running;
+  private NavigationEventListener navigationEventListener;
   private NotificationCompat.Builder notifyBuilder;
-  private NotificationManager notificationManager;
   private LocationUpdatedThread locationUpdatedThread;
 
   private RouteProgress routeProgress;
@@ -56,15 +53,15 @@ public class NavigationService extends Service implements LocationEngineListener
   public int onStartCommand(Intent intent, int flags, int startId) {
     Timber.d("Navigation service started.");
     this.startId = startId;
-    running = false;
+    if (navigationEventListener != null) {
+      navigationEventListener.onRunning(false);
+    }
     startNavigation();
     return Service.START_NOT_STICKY;
   }
 
   public void setupNotification(Activity activity) {
     Timber.d("Setting up notification.");
-
-    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
     // Sets up the top bar notification
     notifyBuilder = new NotificationCompat.Builder(this)
@@ -120,7 +117,9 @@ public class NavigationService extends Service implements LocationEngineListener
   private void startNavigation() {
     Timber.d("Navigation session started.");
     routeProgress = new RouteProgress();
-    running = true;
+    if (navigationEventListener != null) {
+      navigationEventListener.onRunning(true);
+    }
 
     Handler responseHandler = new Handler();
     locationUpdatedThread = new LocationUpdatedThread(responseHandler);
@@ -145,7 +144,9 @@ public class NavigationService extends Service implements LocationEngineListener
 
   public void endNavigation() {
     Timber.d("Navigation session ended.");
-    running = false;
+    if (navigationEventListener != null) {
+      navigationEventListener.onRunning(false);
+    }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
       locationUpdatedThread.quitSafely();
@@ -165,12 +166,20 @@ public class NavigationService extends Service implements LocationEngineListener
     stopSelf(startId);
   }
 
+  public void setNavigationEventListener(NavigationEventListener navigationEventListener) {
+    this.navigationEventListener = navigationEventListener;
+  }
+
   public void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
     locationUpdatedThread.setAlertLevelChangeListener(alertLevelChangeListener);
   }
 
   public void setProgressChangeListener(ProgressChangeListener progressChangeListener) {
     locationUpdatedThread.setProgressChangeListener(progressChangeListener);
+  }
+
+  public void setOffRouteListener(OffRouteListener offRouteListener) {
+    locationUpdatedThread.setOffRouteListener(offRouteListener);
   }
 
   public void setLocationEngine(LocationEngine locationEngine) {
@@ -193,10 +202,5 @@ public class NavigationService extends Service implements LocationEngineListener
     if (locationUpdatedThread != null && location != null) {
       locationUpdatedThread.updateLocation(routeProgress, location);
     }
-  }
-
-  public boolean isRunning() {
-    Timber.d("Navigation session is running: %b", running);
-    return running;
   }
 }
