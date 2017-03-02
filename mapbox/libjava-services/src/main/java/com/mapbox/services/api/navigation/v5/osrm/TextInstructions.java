@@ -2,12 +2,14 @@ package com.mapbox.services.api.navigation.v5.osrm;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mapbox.services.Experimental;
 import com.mapbox.services.api.directions.v5.models.IntersectionLanes;
 import com.mapbox.services.api.directions.v5.models.LegStep;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+@Experimental
 public class TextInstructions {
 
   private JsonObject versionObject;
