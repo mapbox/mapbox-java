@@ -4,8 +4,6 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.support.annotation.Keep;
-import android.support.annotation.RestrictTo;
 import android.support.annotation.VisibleForTesting;
 
 import com.mapbox.services.Experimental;
@@ -25,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
-
-import static android.support.annotation.RestrictTo.Scope.TESTS;
 
 /**
  * This is an experimental API. Experimental APIs are quickly evolving and
