@@ -72,55 +72,50 @@ class LocationUpdatedThread extends HandlerThread {
       return;
     }
 
-    try {
-      // Convert the location object to both the true position and a snapped (to the route) position.
-      Position truePosition = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
-      Position snappedPosition = RouteUtils.getSnapToRoute(
-        truePosition,
-        target.getRoute().getLegs().get((target).getLegIndex()),
-        target.getStepIndex()
-      );
+    // Convert the location object to both the true position and a snapped (to the route) position.
+    Position truePosition = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
+    Position snappedPosition = RouteUtils.getSnapToRoute(
+      truePosition,
+      target.getRoute().getLegs().get((target).getLegIndex()),
+      target.getStepIndex()
+    );
 
-      // Even if the user isn't listening in to the alert listener, we need to run monitorStepProgress inorder to
-      // update the routeProgress object
-      final int alertLevel = monitorStepProgress(target, location, truePosition, snappedPosition);
+    // Even if the user isn't listening in to the alert listener, we need to run monitorStepProgress inorder to
+    // update the routeProgress object
+    final int alertLevel = monitorStepProgress(target, location, truePosition, snappedPosition);
 
-      List<StepIntersection> intersections = getNextIntersections(target, snappedPosition);
+    List<StepIntersection> intersections = getNextIntersections(target, snappedPosition);
 
-      // Test the closest intersection to the user only.
-      if (intersections.size() > 0) {
-        userStillOnRoute = isUserStillOnRoute(intersections.get(0), location.getBearing());
-      }
-      if (snapToRoute && userStillOnRoute) {
-        // Pass in the snapped location with all the other location data remaining intact for their use.
-        location.setLatitude(snappedPosition.getLatitude());
-        location.setLongitude(snappedPosition.getLongitude());
-      }
+    // Test the closest intersection to the user only.
+    if (intersections.size() > 0) {
+      userStillOnRoute = isUserStillOnRoute(intersections.get(0), location.getBearing());
+    }
+    if (snapToRoute && userStillOnRoute) {
+      // Pass in the snapped location with all the other location data remaining intact for their use.
+      location.setLatitude(snappedPosition.getLatitude());
+      location.setLongitude(snappedPosition.getLongitude());
+    }
 
-      this.location = location;
+    this.location = location;
 
-      // Post back to the UI Thread.
-      responseHandler.post(new Runnable() {
-        public void run() {
-          if (offRouteListener != null && !userStillOnRoute) {
-            offRouteListener.userOffRoute(location);
-          }
+    // Post back to the UI Thread.
+    responseHandler.post(new Runnable() {
+      public void run() {
+        if (offRouteListener != null && !userStillOnRoute) {
+          offRouteListener.userOffRoute(location);
+        }
 
-          if (target.getPreviousAlertLevel() != alertLevel) {
-            if (alertLevelChangeListener != null) {
-              target.setAlertUserLevel(alertLevel);
-              alertLevelChangeListener.onAlertLevelChange(alertLevel, target);
-            }
-          }
-          if (progressChangeListener != null) {
-            progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, target);
+        if (target.getPreviousAlertLevel() != alertLevel) {
+          if (alertLevelChangeListener != null) {
+            target.setAlertUserLevel(alertLevel);
+            alertLevelChangeListener.onAlertLevelChange(alertLevel, target);
           }
         }
-      });
-
-    } catch (ServicesException | TurfException exception) {
-      exception.printStackTrace();
-    }
+        if (progressChangeListener != null) {
+          progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, target);
+        }
+      }
+    });
   }
 
   void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
@@ -223,7 +218,6 @@ class LocationUpdatedThread extends HandlerThread {
    * @throws TurfException Thrown if turf calculation error occurs.
    * @since 2.0.0
    */
-  @VisibleForTesting
   public List<StepIntersection> getNextIntersections(RouteProgress routeProgress, Position userPosition)
     throws TurfException {
     List<StepIntersection> intersectionsWithinRange = new ArrayList<>();

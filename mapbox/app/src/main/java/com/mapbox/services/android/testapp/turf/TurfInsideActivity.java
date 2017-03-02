@@ -19,7 +19,6 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
-import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfJoins;
 import com.mapbox.services.commons.models.Position;
 
@@ -122,14 +121,9 @@ public class TurfInsideActivity extends AppCompatActivity {
             polygonPositions.add(Position.fromCoordinates(latLng.getLongitude(), latLng.getLatitude()));
           }
 
-          try {
-            boolean pointWithin = TurfJoins.inside(Position.fromCoordinates(
-              withinMarker.getPosition().getLongitude(), withinMarker.getPosition().getLatitude()), polygonPositions);
-            Snackbar.make(container, "Point lands within polygon = " + pointWithin, Snackbar.LENGTH_INDEFINITE).show();
-          } catch (TurfException turfException) {
-            Log.e(TAG, "onMapClick: " + turfException.getMessage());
-            turfException.printStackTrace();
-          }
+          boolean pointWithin = TurfJoins.inside(Position.fromCoordinates(
+            withinMarker.getPosition().getLongitude(), withinMarker.getPosition().getLatitude()), polygonPositions);
+          Snackbar.make(container, "Point lands within polygon = " + pointWithin, Snackbar.LENGTH_INDEFINITE).show();
         }
       }
     });

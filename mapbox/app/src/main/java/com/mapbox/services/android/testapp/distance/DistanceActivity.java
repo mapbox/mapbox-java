@@ -13,7 +13,6 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer;
-import com.mapbox.mapboxsdk.style.layers.NoSuchLayerException;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
@@ -209,11 +208,10 @@ public class DistanceActivity extends AppCompatActivity implements OnMapReadyCal
 
     for (int i = 0; i < restaurants.size(); i++) {
 
-      try {
+      if (mapboxMap.getLayer(restaurants.get(i).getStringProperty("name" + "-layer")) != null) {
         mapboxMap.removeLayer(restaurants.get(i).getStringProperty("name") + "-layer");
-      } catch (NoSuchLayerException exception) {
-        // Layer hasn't been added yet. No worries :)
       }
+
 
       SymbolLayer marker = new SymbolLayer(
         restaurants.get(i).getStringProperty("name") + "-layer",

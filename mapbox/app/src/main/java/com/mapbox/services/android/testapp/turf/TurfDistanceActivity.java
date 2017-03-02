@@ -153,13 +153,10 @@ public class TurfDistanceActivity extends AppCompatActivity {
           .title("point 2"));
 
         double distance = 0;
-        try {
-          distance = TurfMeasurement.distance(
-            Point.fromCoordinates(cadillacHotelPosition),
-            Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(), point.getLatitude())), units);
-        } catch (TurfException turfException) {
-          turfException.printStackTrace();
-        }
+
+        distance = TurfMeasurement.distance(
+          Point.fromCoordinates(cadillacHotelPosition),
+          Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(), point.getLatitude())), units);
         Snackbar.make(container, "Distance = " + distance + " " + units, Snackbar.LENGTH_INDEFINITE).show();
       }
     });

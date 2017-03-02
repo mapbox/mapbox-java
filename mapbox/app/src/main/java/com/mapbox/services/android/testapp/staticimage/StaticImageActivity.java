@@ -5,17 +5,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
 
 public class StaticImageActivity extends AppCompatActivity {
-
-  private static final String LOG_TAG = "StaticImageActivity";
 
   // All default Mapbox styles
   public static final String[] MAPBOX_STYLES = {
@@ -66,22 +62,16 @@ public class StaticImageActivity extends AppCompatActivity {
     int i = 0;
     for (double[] place : PLACES) {
       for (String style : MAPBOX_STYLES) {
-        String imageUrl = null;
-        try {
-          imageUrl = getImageUrl(style, place, isRetina);
-          dataset[i] = imageUrl;
-          i++;
-        } catch (ServicesException servicesException) {
-          Log.e(LOG_TAG, "Error: " + servicesException.getMessage());
-          servicesException.printStackTrace();
-        }
+        String imageUrl = getImageUrl(style, place, isRetina);
+        dataset[i] = imageUrl;
+        i++;
       }
     }
 
     return dataset;
   }
 
-  private String getImageUrl(String style, double[] place, boolean isRetina) throws ServicesException {
+  private String getImageUrl(String style, double[] place, boolean isRetina) {
     MapboxStaticImage staticImage = new MapboxStaticImage.Builder()
       .setAccessToken(Utils.getMapboxAccessToken(this))
       .setUsername(Constants.MAPBOX_USER)

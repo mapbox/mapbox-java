@@ -33,7 +33,6 @@ import com.mapbox.services.api.directions.v5.MapboxDirections;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.navigation.v5.RouteUtils;
-import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
@@ -102,19 +101,12 @@ public class OffRouteDetectionActivity extends AppCompatActivity {
 
             destination = Position.fromCoordinates(point.getLongitude(), point.getLatitude());
 
-            try {
-              getRoute(
-                Position.fromCoordinates(car.getPosition().getLongitude(), car.getPosition().getLatitude()),
-                Position.fromCoordinates(point.getLongitude(), point.getLatitude())
-              );
-            } catch (ServicesException servicesException) {
-              servicesException.printStackTrace();
-              Log.e(TAG, "onMapReady: " + servicesException.getMessage());
-            }
-
+            getRoute(
+              Position.fromCoordinates(car.getPosition().getLongitude(), car.getPosition().getLatitude()),
+              Position.fromCoordinates(point.getLongitude(), point.getLatitude())
+            );
           }
         });
-
       } // End onMapReady
     });
   } // End onCreate
@@ -281,7 +273,7 @@ public class OffRouteDetectionActivity extends AppCompatActivity {
     }
   }
 
-  private void checkIfOffRoute() throws ServicesException, TurfException {
+  private void checkIfOffRoute() {
 
     Position carCurrentPosition = Position.fromCoordinates(
       car.getPosition().getLongitude(),
@@ -344,12 +336,7 @@ public class OffRouteDetectionActivity extends AppCompatActivity {
           // Check that the vehicles off route or not. If you aren't simulating the car,
           // and want to use this example in the real world, the checkingIfOffRoute method
           // should go in a locationListener.
-          try {
-            checkIfOffRoute();
-          } catch (ServicesException | TurfException exception) {
-            exception.printStackTrace();
-            Log.e(TAG, "check if off route error: " + exception.getMessage());
-          }
+          checkIfOffRoute();
 
           // Keeping the current point count we are on.
           count++;
