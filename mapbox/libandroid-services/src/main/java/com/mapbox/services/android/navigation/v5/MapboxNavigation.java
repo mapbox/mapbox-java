@@ -41,6 +41,7 @@ public class MapboxNavigation {
   private AlertLevelChangeListener alertLevelChangeListener;
   private NavigationEventListener navigationEventListener;
   private ProgressChangeListener progressChangeListener;
+  private OffRouteListener offRouteListener;
   private LocationEngine locationEngine;
   private boolean snapToRoute;
 
@@ -152,6 +153,10 @@ public class MapboxNavigation {
    */
   public void setProgressChangeListener(ProgressChangeListener progressChangeListener) {
     this.progressChangeListener = progressChangeListener;
+  }
+
+  public void setOffRouteListener(OffRouteListener offRouteListener) {
+    this.offRouteListener = offRouteListener;
   }
 
   /**
@@ -372,6 +377,7 @@ public class MapboxNavigation {
       navigationService.setNavigationEventListener(navigationEventListener);
       navigationService.setAlertLevelChangeListener(alertLevelChangeListener);
       navigationService.setProgressChangeListener(progressChangeListener);
+      navigationService.setOffRouteListener(offRouteListener);
       navigationService.setSnapToRoute(snapToRoute);
       navigationService.startRoute(route);
     }

@@ -178,6 +178,10 @@ public class NavigationService extends Service implements LocationEngineListener
     locationUpdatedThread.setProgressChangeListener(progressChangeListener);
   }
 
+  public void setOffRouteListener(OffRouteListener offRouteListener) {
+    locationUpdatedThread.setOffRouteListener(offRouteListener);
+  }
+
   public void setLocationEngine(LocationEngine locationEngine) {
     this.locationEngine = locationEngine;
   }

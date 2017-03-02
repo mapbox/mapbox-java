@@ -53,6 +53,7 @@ ext {
 
             // testing
             junit                : 'junit:junit:4.12',
+            mockito              : 'org.mockito:mockito-core:2.7.13',
             hamcrestJunit        : 'org.hamcrest:hamcrest-junit:2.0.0.0',
             supportEspresso      : 'com.android.support.test.espresso:espresso-core:2.2.2'
     ]
