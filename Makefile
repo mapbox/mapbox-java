@@ -108,3 +108,8 @@ distance-fixtures:
 	curl -X POST --header "Content-Type:application/json" -d @mapbox/libjava-services/src/test/fixtures/distance_coordinates.json \
 		"https://api.mapbox.com/distances/v1/mapbox/driving?access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/distance_v1.json
+
+libosrm:
+	rm -rf mapbox/libjava-services/src/main/resources/translations
+	mkdir -p mapbox/libjava-services/src/main/resources/translations
+	cp ../osrm-text-instructions/languages/translations/* mapbox/libjava-services/src/main/resources/translations
