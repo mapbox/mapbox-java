@@ -18,7 +18,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -151,7 +150,7 @@ public class TextInstructionsTest {
 
   @Test
   public void testFixturesMatchGeneratedInstructions() throws IOException {
-    List<File> fixtures = listFilesForFolder(new File("libjava-services/src/test/fixtures/osrm/v5"));
+    List<File> fixtures = listFilesForFolder(new File("src/test/fixtures/osrm/v5"));
     for (File fixture : fixtures) {
       String body = new String(Files.readAllBytes(Paths.get(fixture.getPath())), Charset.forName("utf-8"));
       FixtureModel model = new Gson().fromJson(body, FixtureModel.class);
@@ -166,7 +165,6 @@ public class TextInstructionsTest {
 
   private List<File> listFilesForFolder(File folder) {
     List<File> files = new ArrayList<>();
-
     for (File fileEntry : folder.listFiles()) {
       if (fileEntry.isDirectory()) {
         files.addAll(listFilesForFolder(fileEntry));

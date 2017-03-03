@@ -196,7 +196,7 @@ public class TextInstructions {
     switch (type) {
       case "use lane":
         laneInstruction = getVersionObject().getAsJsonObject("constants")
-          .getAsJsonObject("lanes").getAsJsonObject(laneConfig(step)).getAsString();
+          .getAsJsonObject("lanes").getAsJsonPrimitive(laneConfig(step)).getAsString();
         if (TextUtils.isEmpty(laneInstruction)) {
           // If the lane combination is not found, default to continue straight
           instructionObject = getVersionObject().getAsJsonObject("use lane")
@@ -247,12 +247,12 @@ public class TextInstructions {
     String instruction;
     if (!TextUtils.isEmpty(step.getDestinations())
       && instructionObject.getAsJsonObject("destination") != null) {
-      instruction = instructionObject.getAsJsonObject("destination").getAsString();
+      instruction = instructionObject.getAsJsonPrimitive("destination").getAsString();
     } else if (!TextUtils.isEmpty(wayName)
       && instructionObject.getAsJsonPrimitive("name") != null) {
       instruction = instructionObject.getAsJsonPrimitive("name").getAsString();
     } else {
-      instruction = instructionObject.getAsJsonObject("default").getAsString();
+      instruction = instructionObject.getAsJsonPrimitive("default").getAsString();
     }
 
     if (getTokenizedInstructionHook() != null) {
