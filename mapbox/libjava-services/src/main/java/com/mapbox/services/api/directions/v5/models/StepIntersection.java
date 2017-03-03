@@ -17,6 +17,10 @@ public class StepIntersection {
   public StepIntersection() {
   }
 
+  public StepIntersection(IntersectionLanes[] lanes) {
+    this.lanes = lanes;
+  }
+
   /**
    * @return A [longitude, latitude] pair describing the location of the turn.
    * @since 1.3.0

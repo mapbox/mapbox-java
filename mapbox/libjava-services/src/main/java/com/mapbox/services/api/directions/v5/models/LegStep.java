@@ -29,6 +29,16 @@ public class LegStep {
   public LegStep() {
   }
 
+  public LegStep(List<StepIntersection> intersections) {
+    this.intersections = intersections;
+  }
+
+  public LegStep(String name, String rotaryName, StepManeuver maneuver) {
+    this.name = name;
+    this.rotaryName = rotaryName;
+    this.maneuver = maneuver;
+  }
+
   /**
    * The distance traveled from the maneuver to the next {@link LegStep}.
    *

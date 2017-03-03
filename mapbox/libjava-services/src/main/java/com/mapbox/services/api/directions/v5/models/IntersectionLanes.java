@@ -11,6 +11,10 @@ public class IntersectionLanes {
   public IntersectionLanes() {
   }
 
+  public IntersectionLanes(boolean valid) {
+    this.valid = valid;
+  }
+
   /**
    * @return Boolean value for whether this lane can be taken to complete the maneuver. For
    * instance, if the lane array has four objects and the first two are marked as valid, then the

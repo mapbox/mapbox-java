@@ -25,6 +25,12 @@ public class StepManeuver {
   public StepManeuver() {
   }
 
+  public StepManeuver(String type, String modifier, Integer exit) {
+    this.type = type;
+    this.modifier = modifier;
+    this.exit = exit;
+  }
+
   /**
    * @return double array of [longitude, latitude] for the snapped coordinate.
    * @since 1.0.0
