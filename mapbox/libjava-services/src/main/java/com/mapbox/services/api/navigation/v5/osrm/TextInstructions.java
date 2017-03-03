@@ -76,7 +76,7 @@ public class TextInstructions {
     try {
       return getVersionObject().getAsJsonObject("constants").getAsJsonObject("ordinalize")
         .getAsJsonPrimitive(String.valueOf(number)).getAsString();
-    } catch (Exception e) {
+    } catch (Exception exception) {
       return "";
     }
   }
@@ -269,7 +269,8 @@ public class TextInstructions {
       .replace("{exit_number}", TextUtils.isEmpty(ordinalizedExit) ? "1" : ordinalizedExit)
       .replace("{rotary_name}", step.getRotaryName())
       .replace("{lane_instruction}", laneInstruction)
-      .replace("{modifier}", getVersionObject().getAsJsonObject("constants").getAsJsonObject("modifier").getAsJsonPrimitive(modifier).getAsString())
+      .replace("{modifier}", getVersionObject().getAsJsonObject("constants").getAsJsonObject("modifier")
+        .getAsJsonPrimitive(modifier).getAsString())
       .replace("{direction}", directionFromDegree(step.getManeuver().getBearingAfter()))
       .replace("{nth}", nthWaypoint)
       .replaceAll("\\s+", " "); // remove excess spaces
