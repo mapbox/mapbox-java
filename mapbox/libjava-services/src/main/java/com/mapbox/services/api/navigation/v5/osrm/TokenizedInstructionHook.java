@@ -1,9 +1,10 @@
 package com.mapbox.services.api.navigation.v5.osrm;
 
 /**
- * Created by antonio on 3/3/17.
+ * A function to change the raw instruction string before tokens are replaced.
+ * Useful to inject custom markup for tokens.
  */
 
 public interface TokenizedInstructionHook {
-  String compile(String instruction);
+  String change(String instruction);
 }
