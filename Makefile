@@ -110,6 +110,7 @@ distance-fixtures:
 		-o mapbox/libjava-services/src/test/fixtures/distance_v1.json
 
 libosrm:
-	rm -rf mapbox/libjava-services/src/main/resources/translations
-	mkdir -p mapbox/libjava-services/src/main/resources/translations
-	cp ../osrm-text-instructions/languages/translations/* mapbox/libjava-services/src/main/resources/translations
+	rm -rf mapbox/libjava-services/src/main/resources/translations mapbox/libjava-services/src/test/fixtures/osrm/v5
+	mkdir -p mapbox/libjava-services/src/main/resources/translations mapbox/libjava-services/src/test/fixtures/osrm/v5
+	cp -R ../osrm-text-instructions/languages/translations/* mapbox/libjava-services/src/main/resources/translations
+	cp -R ../osrm-text-instructions/test/fixtures/v5/* mapbox/libjava-services/src/test/fixtures/osrm/v5

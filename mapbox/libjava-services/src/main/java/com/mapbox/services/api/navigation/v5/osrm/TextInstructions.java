@@ -267,7 +267,7 @@ public class TextInstructions {
       .replace("{way_name}", wayName)
       .replace("{destination}", TextUtils.isEmpty(step.getDestinations()) ? "" : step.getDestinations().split(",")[0])
       .replace("{exit_number}", TextUtils.isEmpty(ordinalizedExit) ? "1" : ordinalizedExit)
-      .replace("{rotary_name}", step.getRotaryName())
+      .replace("{rotary_name}", TextUtils.isEmpty(step.getRotaryName()) ? "": step.getRotaryName())
       .replace("{lane_instruction}", laneInstruction)
       .replace("{modifier}", getVersionObject().getAsJsonObject("constants").getAsJsonObject("modifier")
         .getAsJsonPrimitive(modifier).getAsString())

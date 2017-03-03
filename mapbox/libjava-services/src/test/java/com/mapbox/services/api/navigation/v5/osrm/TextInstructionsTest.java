@@ -1,5 +1,6 @@
 package com.mapbox.services.api.navigation.v5.osrm;
 
+import com.google.gson.Gson;
 import com.mapbox.services.api.directions.v5.models.IntersectionLanes;
 import com.mapbox.services.api.directions.v5.models.LegStep;
 import com.mapbox.services.api.directions.v5.models.StepIntersection;
@@ -9,8 +10,16 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.startsWith;
@@ -138,5 +147,50 @@ public class TextInstructionsTest {
 
     LegStep step = new LegStep("Way Name", "", new StepManeuver("turn", "left", null));
     assertEquals("Turn left onto <blink>Way Name</blink>", textInstructions.compile(step));
+  }
+
+  @Test
+  public void testFixturesMatchGeneratedInstructions() throws IOException {
+    List<File> fixtures = listFilesForFolder(new File("libjava-services/src/test/fixtures/osrm/v5"));
+    for (File fixture : fixtures) {
+      String body = new String(Files.readAllBytes(Paths.get(fixture.getPath())), Charset.forName("utf-8"));
+      FixtureModel model = new Gson().fromJson(body, FixtureModel.class);
+      for (Object entry : model.getInstructions().entrySet()) {
+        Map.Entry pair = (Map.Entry) entry;
+        String language = (String) pair.getKey();
+        String compiled = (String) pair.getValue();
+        assertEquals(compiled, new TextInstructions(language, "v5").compile(model.getStep()));
+      }
+    }
+  }
+
+  private List<File> listFilesForFolder(File folder) {
+    List<File> files = new ArrayList<>();
+
+    for (File fileEntry : folder.listFiles()) {
+      if (fileEntry.isDirectory()) {
+        files.addAll(listFilesForFolder(fileEntry));
+      } else {
+        files.add(fileEntry);
+      }
+    }
+
+    return files;
+  }
+
+  private class FixtureModel {
+    private LegStep step;
+    private Map<String, String> instructions;
+
+    public FixtureModel() {
+    }
+
+    public LegStep getStep() {
+      return step;
+    }
+
+    public Map<String, String> getInstructions() {
+      return instructions;
+    }
   }
 }
