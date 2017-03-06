@@ -16,7 +16,7 @@ ext {
             supportRecyclerview  : 'com.android.support:recyclerview-v7:25.1.0',
 
             // mapbox
-            mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.0.0-SNAPSHOT@aar',
+            mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.0.1@aar',
 
             // gson
             gson                 : 'com.google.code.gson:gson:2.8.0',
