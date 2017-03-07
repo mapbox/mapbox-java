@@ -13,7 +13,6 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer;
-import com.mapbox.mapboxsdk.style.layers.NoSuchLayerException;
 import com.mapbox.mapboxsdk.style.layers.Property;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
@@ -177,7 +176,7 @@ public class DistanceActivity extends AppCompatActivity implements OnMapReadyCal
   private void addMarkers() {
     for (int i = 0; i < restaurants.size(); i++) {
       CircleLayer circleLayer = new CircleLayer(
-              restaurants.get(i).getStringProperty("name") + "-circle-layer",
+        restaurants.get(i).getStringProperty("name") + "-circle-layer",
         restaurants.get(i).getStringProperty("name") + "-source"
       ).withProperties(
         circleColor(Color.parseColor("#e55e5e")),
@@ -208,12 +207,7 @@ public class DistanceActivity extends AppCompatActivity implements OnMapReadyCal
   private void updateLayers() {
 
     for (int i = 0; i < restaurants.size(); i++) {
-
-      try {
-        mapboxMap.removeLayer(restaurants.get(i).getStringProperty("name") + "-layer");
-      } catch (NoSuchLayerException exception) {
-        // Layer hasn't been added yet. No worries :)
-      }
+      mapboxMap.removeLayer(restaurants.get(i).getStringProperty("name") + "-layer");
 
       SymbolLayer marker = new SymbolLayer(
         restaurants.get(i).getStringProperty("name") + "-layer",
