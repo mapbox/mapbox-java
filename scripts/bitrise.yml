@@ -114,7 +114,7 @@ workflows:
             wget -O mapbox/app/src/main/res/values/developer-config.xml "$BITRISEIO_DEVELOPER_CONFIG_URL"
 
             echo "Run Robo tests on firebase:"
-            gcloud auth activate-service-account --key-file secret.json --project android-gl-native
+            gcloud auth activate-service-account --key-file secret.json --project mapbox-java
             gcloud beta test android devices list
             gcloud beta test android run --type robo --app app-debug.apk --device-ids shamu --os-version-ids 22 --locales en --orientations portrait --timeout 10m
     - slack:
