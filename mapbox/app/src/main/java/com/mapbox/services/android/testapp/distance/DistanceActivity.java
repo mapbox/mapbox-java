@@ -207,7 +207,9 @@ public class DistanceActivity extends AppCompatActivity implements OnMapReadyCal
   private void updateLayers() {
 
     for (int i = 0; i < restaurants.size(); i++) {
-      mapboxMap.removeLayer(restaurants.get(i).getStringProperty("name") + "-layer");
+      if (mapboxMap.getLayer(restaurants.get(i).getStringProperty("name" + "-layer")) != null) {
+        mapboxMap.removeLayer(restaurants.get(i).getStringProperty("name") + "-layer");
+      }
 
       SymbolLayer marker = new SymbolLayer(
         restaurants.get(i).getStringProperty("name") + "-layer",

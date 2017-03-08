@@ -23,10 +23,9 @@ public class TurfGrids {
    * @param points   input points.
    * @param polygons input polygons.
    * @return points that land within at least one polygon.
-   * @throws TurfException Signals that a Turf exception of some sort has occurred.
    * @since 1.3.0
    */
-  public static FeatureCollection within(FeatureCollection points, FeatureCollection polygons) throws TurfException {
+  public static FeatureCollection within(FeatureCollection points, FeatureCollection polygons) {
     ArrayList<Feature> features = new ArrayList<>();
     for (int i = 0; i < polygons.getFeatures().size(); i++) {
       for (int j = 0; j < points.getFeatures().size(); j++) {

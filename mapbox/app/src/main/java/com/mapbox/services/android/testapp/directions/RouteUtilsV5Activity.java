@@ -30,7 +30,6 @@ import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.directions.v5.models.LegStep;
 import com.mapbox.services.api.directions.v5.models.RouteLeg;
 import com.mapbox.services.api.navigation.v5.RouteUtils;
-import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.PolylineUtils;
 
@@ -94,15 +93,7 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
         } else if (to == null) {
           setTo(point);
         } else {
-          try {
-            doUtils(point);
-          } catch (ServicesException servicesException) {
-            Log.e(LOG_TAG, "Services exception: " + servicesException.getMessage());
-            servicesException.printStackTrace();
-          } catch (TurfException turfException) {
-            Log.e(LOG_TAG, "Turf exception: " + turfException.getMessage());
-            turfException.printStackTrace();
-          }
+          doUtils(point);
         }
       }
     });
@@ -121,16 +112,11 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
       .position(point)
       .title("To"));
 
-    try {
-      getRoute(Position.fromCoordinates(from.getLongitude(), from.getLatitude()),
-        Position.fromCoordinates(to.getLongitude(), to.getLatitude()));
-    } catch (ServicesException servicesException) {
-      showMessage(servicesException.getMessage());
-      servicesException.printStackTrace();
-    }
+    getRoute(Position.fromCoordinates(from.getLongitude(), from.getLatitude()),
+      Position.fromCoordinates(to.getLongitude(), to.getLatitude()));
   }
 
-  private void doUtils(LatLng point) throws ServicesException, TurfException {
+  private void doUtils(LatLng point) {
     // Remove previous
     if (userTap != null) {
       mapboxMap.removeMarker(userTap);
@@ -159,7 +145,7 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
     // Draw snap to route lines
     snapLines = new ArrayList<>();
     for (int stepIndex = 0; stepIndex < route.getSteps().size(); stepIndex++) {
-      Position snapPoint = routeUtils.getSnapToRoute(position, route, stepIndex);
+      Position snapPoint = RouteUtils.getSnapToRoute(position, route, stepIndex);
       LatLng[] points = new LatLng[] {
         point,
         new LatLng(snapPoint.getLatitude(), snapPoint.getLongitude())};

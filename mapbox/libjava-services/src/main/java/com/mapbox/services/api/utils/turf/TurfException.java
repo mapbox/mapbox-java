@@ -7,7 +7,7 @@ package com.mapbox.services.api.utils.turf;
  * @see <a href="http://turfjs.org/docs/">Turfjs documentation</a>
  * @since 1.2.0
  */
-public class TurfException extends Exception {
+public class TurfException extends RuntimeException {
 
   /**
    * A form of {@code Throwable} that indicates conditions that a reasonable application might want

@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
     // Check for location permission
     permissionsManager = new PermissionsManager(this);
-    if (!permissionsManager.areLocationPermissionsGranted(this)) {
+    if (!PermissionsManager.areLocationPermissionsGranted(this)) {
       recyclerView.setEnabled(false);
       permissionsManager.requestLocationPermissions(this);
     }

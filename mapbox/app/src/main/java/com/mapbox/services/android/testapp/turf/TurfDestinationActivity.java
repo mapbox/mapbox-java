@@ -20,7 +20,6 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
-import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
@@ -142,34 +141,31 @@ public class TurfDestinationActivity extends AppCompatActivity {
             Toast.makeText(TurfDestinationActivity.this, "missing bearing value", Toast.LENGTH_LONG).show();
             return;
           }
-          try {
-            Point result = TurfMeasurement.destination(
-              Point.fromCoordinates(cadillacHotelPosition),
-              distance,
-              bearing,
-              distanceUnitsSpinner.getSelectedItem().toString()
-            );
-            Position resultPosition = result.getCoordinates();
-            if (destinationMarker != null) {
-              map.removeMarker(destinationMarker);
-            }
-            destinationMarker = map.addMarker(new MarkerViewOptions()
-              .position(new LatLng(result.getCoordinates().getLatitude(), result.getCoordinates().getLongitude()))
-              .title("destination"));
-            LatLngBounds latLngBounds = new LatLngBounds.Builder()
-              .include(new LatLng(cadillacHotelPosition.getLatitude(), cadillacHotelPosition.getLongitude()))
-              .include(new LatLng(resultPosition.getLatitude(), resultPosition.getLongitude()))
-              .build();
 
-            map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 80, 160, 80, 160), 1000);
-
-            Snackbar.make(
-              container,
-              "Destination = " + resultPosition.getLatitude() + ", " + resultPosition.getLongitude(),
-              Snackbar.LENGTH_INDEFINITE).show();
-          } catch (TurfException turfException) {
-            turfException.printStackTrace();
+          Point result = TurfMeasurement.destination(
+            Point.fromCoordinates(cadillacHotelPosition),
+            distance,
+            bearing,
+            distanceUnitsSpinner.getSelectedItem().toString()
+          );
+          Position resultPosition = result.getCoordinates();
+          if (destinationMarker != null) {
+            map.removeMarker(destinationMarker);
           }
+          destinationMarker = map.addMarker(new MarkerViewOptions()
+            .position(new LatLng(result.getCoordinates().getLatitude(), result.getCoordinates().getLongitude()))
+            .title("destination"));
+          LatLngBounds latLngBounds = new LatLngBounds.Builder()
+            .include(new LatLng(cadillacHotelPosition.getLatitude(), cadillacHotelPosition.getLongitude()))
+            .include(new LatLng(resultPosition.getLatitude(), resultPosition.getLongitude()))
+            .build();
+
+          map.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 80, 160, 80, 160), 1000);
+
+          Snackbar.make(
+            container,
+            "Destination = " + resultPosition.getLatitude() + ", " + resultPosition.getLongitude(),
+            Snackbar.LENGTH_INDEFINITE).show();
 
           dialog.dismiss();
 

@@ -18,7 +18,6 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.directions.v5.MapboxDirections;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
@@ -91,16 +90,13 @@ public class DirectionsV5Activity extends AppCompatActivity {
           .snippet("San Jose"));
 
         // Get route from API
-        try {
-          getRoute(origin, destination);
-        } catch (ServicesException servicesException) {
-          servicesException.printStackTrace();
-        }
+        getRoute(origin, destination);
+
       }
     });
   }
 
-  private void getRoute(Position origin, Position destination) throws ServicesException {
+  private void getRoute(Position origin, Position destination) {
     ArrayList<Position> positions = new ArrayList<>();
     positions.add(origin);
     positions.add(destination);

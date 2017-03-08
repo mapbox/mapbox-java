@@ -244,25 +244,20 @@ public class MapboxNavigation {
         + "before calling getRoute");
     }
 
-    try {
-      MapboxDirections.Builder directionsBuilder = new MapboxDirections.Builder()
-        .setProfile(profile)
-        .setAccessToken(accessToken)
-        .setOverview(DirectionsCriteria.OVERVIEW_FULL)
-        .setOrigin(getOrigin())
-        .setDestination(getDestination())
-        .setSteps(true);
+    MapboxDirections.Builder directionsBuilder = new MapboxDirections.Builder()
+      .setProfile(profile)
+      .setAccessToken(accessToken)
+      .setOverview(DirectionsCriteria.OVERVIEW_FULL)
+      .setOrigin(getOrigin())
+      .setDestination(getDestination())
+      .setSteps(true);
 
-      // Optionally set the bearing and radiuses if the developer provider the user bearing. A tolerance of 90 degrees
-      // is given.
-      if (userBearing != null) {
-        directionsBuilder.setBearings(new double[] {getUserOriginBearing(), 90});
-      }
-
-      directionsBuilder.build().enqueueCall(callback);
-    } catch (ServicesException serviceException) {
-      Timber.e("Failed to get route: %s", serviceException.getMessage());
+    // Optionally set the bearing and radiuses if the developer provider the user bearing. A tolerance of 90 degrees
+    // is given.
+    if (userBearing != null) {
+      directionsBuilder.setBearings(new double[] {getUserOriginBearing(), 90});
     }
+    directionsBuilder.build().enqueueCall(callback);
   }
 
   /**

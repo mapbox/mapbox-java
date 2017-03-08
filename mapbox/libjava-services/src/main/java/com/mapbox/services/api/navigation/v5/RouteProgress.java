@@ -6,7 +6,6 @@ import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.directions.v5.models.LegStep;
 import com.mapbox.services.api.directions.v5.models.RouteLeg;
 import com.mapbox.services.api.utils.turf.TurfConstants;
-import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.geojson.LineString;
 
@@ -149,7 +148,7 @@ public class RouteProgress {
    *
    * @since 2.0.0
    */
-  public double getDistanceTraveledOnStep() throws TurfException {
+  public double getDistanceTraveledOnStep() {
     LineString lineString = LineString.fromPolyline(getCurrentStep().getGeometry(), Constants.PRECISION_6);
     return TurfMeasurement.lineDistance(lineString, TurfConstants.UNIT_METERS) - distanceRemainingOnStep;
   }

@@ -16,7 +16,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.api.utils.turf.TurfConstants;
-import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
@@ -153,13 +152,10 @@ public class TurfDistanceActivity extends AppCompatActivity {
           .title("point 2"));
 
         double distance = 0;
-        try {
-          distance = TurfMeasurement.distance(
-            Point.fromCoordinates(cadillacHotelPosition),
-            Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(), point.getLatitude())), units);
-        } catch (TurfException turfException) {
-          turfException.printStackTrace();
-        }
+
+        distance = TurfMeasurement.distance(
+          Point.fromCoordinates(cadillacHotelPosition),
+          Point.fromCoordinates(Position.fromCoordinates(point.getLongitude(), point.getLatitude())), units);
         Snackbar.make(container, "Distance = " + distance + " " + units, Snackbar.LENGTH_INDEFINITE).show();
       }
     });
