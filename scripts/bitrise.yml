@@ -104,15 +104,15 @@ workflows:
         inputs:
         - content: |-
             #!/bin/bash
+            echo "Downloading Mapbox accesstoken for running tests:"
+            wget -O mapbox/app/src/main/res/values/developer-config.xml "$BITRISEIO_DEVELOPER_CONFIG_URL"
+
             cd mapbox && ./gradlew :app:assembleDebug --continue
     - script:
         title: Run Firebase Robo tests
         inputs:
         - content: |-
-            #!/bin/bash
-            echo "Downloading Mapbox accesstoken for running tests:"
-            wget -O mapbox/app/src/main/res/values/developer-config.xml "$BITRISEIO_DEVELOPER_CONFIG_URL"
-
+            #!/bin/bash        
             echo "Run Robo tests on firebase:"
             gcloud auth activate-service-account --key-file secret.json --project mapbox-java
             gcloud beta test android devices list
