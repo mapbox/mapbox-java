@@ -3,9 +3,9 @@ package com.mapbox.services.api.directions.v5;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
-import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -131,6 +131,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    */
   public static class Builder<T extends Builder> extends MapboxBuilder {
 
+    private static final int TWO_COORDINATES = 2;
+    private static final int END = 1;
+    public static final int BEGINNING = 0;
     // We use `Boolean` instead of `boolean` to allow unset (null) values.
     private String user = null;
     private String profile = null;
@@ -223,11 +226,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         coordinates = new ArrayList<>();
       }
 
-      // The default behavior of ArrayList is to inserts the specified element at the
-      // specified position in this list (beginning) and to shift the element currently at
-      // that position (if any) and any subsequent elements to the right (adds one to
-      // their indices)
-      coordinates.add(0, origin);
+      insertOrigin(origin);
 
       return (T) this;
     }
@@ -246,9 +245,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         coordinates = new ArrayList<>();
       }
 
-      // The default behavior for ArrayList is to appends the specified element
-      // to the end of this list.
-      coordinates.add(destination);
+      insertDestination(destination);
 
       return (T) this;
     }
@@ -577,6 +574,26 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
           "There must be as many bearings as there are coordinates.");
       }
       return new MapboxDirections(this);
+    }
+
+    private void insertOrigin(Position origin) {
+      if (isThereOnlyOriginAndDestination(coordinates)) {
+        coordinates.set(BEGINNING, origin);
+      } else {
+        coordinates.add(BEGINNING, origin);
+      }
+    }
+
+    private void insertDestination(Position destination) {
+      if (isThereOnlyOriginAndDestination(coordinates)) {
+        coordinates.set(END, destination);
+      } else {
+        coordinates.add(destination);
+      }
+    }
+
+    private boolean isThereOnlyOriginAndDestination(List<Position> coordinates) {
+      return coordinates.size() == TWO_COORDINATES;
     }
   }
 }
