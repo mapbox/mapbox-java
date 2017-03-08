@@ -2,6 +2,7 @@ package com.mapbox.services.api.navigation.v5.osrm;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.mapbox.services.Experimental;
 import com.mapbox.services.api.directions.v5.models.IntersectionLanes;
 import com.mapbox.services.api.directions.v5.models.LegStep;
@@ -169,7 +170,7 @@ public class TextInstructions {
       throw new RuntimeException("Missing step maneuver modifier.");
     }
 
-    if (getVersionObject().getAsJsonObject("type") == null) {
+    if (getVersionObject().getAsJsonObject(type) == null) {
       // Log for debugging
       logger.log(Level.FINE, "Encountered unknown instruction type: " + type);
 
@@ -192,12 +193,12 @@ public class TextInstructions {
     }
 
     // Special case handling
-    String laneInstruction = "";
+    JsonPrimitive laneInstruction = null;
     switch (type) {
       case "use lane":
         laneInstruction = getVersionObject().getAsJsonObject("constants")
-          .getAsJsonObject("lanes").getAsJsonPrimitive(laneConfig(step)).getAsString();
-        if (TextUtils.isEmpty(laneInstruction)) {
+          .getAsJsonObject("lanes").getAsJsonPrimitive(laneConfig(step));
+        if (laneInstruction == null) {
           // If the lane combination is not found, default to continue straight
           instructionObject = getVersionObject().getAsJsonObject("use lane")
             .getAsJsonObject("no_lanes");
@@ -246,7 +247,7 @@ public class TextInstructions {
     // Destination takes precedence over name
     String instruction;
     if (!TextUtils.isEmpty(step.getDestinations())
-      && instructionObject.getAsJsonObject("destination") != null) {
+      && instructionObject.getAsJsonPrimitive("destination") != null) {
       instruction = instructionObject.getAsJsonPrimitive("destination").getAsString();
     } else if (!TextUtils.isEmpty(wayName)
       && instructionObject.getAsJsonPrimitive("name") != null) {
@@ -262,15 +263,16 @@ public class TextInstructions {
     // Replace tokens
     // NOOP if they don't exist
     String nthWaypoint = ""; // TODO, add correct waypoint counting
-    String ordinalizedExit = ordinalize(step.getManeuver().getExit());
+    String modifierValue = getVersionObject().getAsJsonObject("constants").getAsJsonObject("modifier").getAsJsonPrimitive(modifier) == null
+      ? ""
+      : getVersionObject().getAsJsonObject("constants").getAsJsonObject("modifier").getAsJsonPrimitive(modifier).getAsString();
     instruction = instruction
       .replace("{way_name}", wayName)
       .replace("{destination}", TextUtils.isEmpty(step.getDestinations()) ? "" : step.getDestinations().split(",")[0])
-      .replace("{exit_number}", TextUtils.isEmpty(ordinalizedExit) ? "1" : ordinalizedExit)
+      .replace("{exit_number}", step.getManeuver().getExit() == null ? ordinalize(1) : ordinalize(step.getManeuver().getExit()))
       .replace("{rotary_name}", TextUtils.isEmpty(step.getRotaryName()) ? "": step.getRotaryName())
-      .replace("{lane_instruction}", laneInstruction)
-      .replace("{modifier}", getVersionObject().getAsJsonObject("constants").getAsJsonObject("modifier")
-        .getAsJsonPrimitive(modifier).getAsString())
+      .replace("{lane_instruction}", laneInstruction == null ? "" : laneInstruction.getAsString())
+      .replace("{modifier}", modifierValue)
       .replace("{direction}", directionFromDegree(step.getManeuver().getBearingAfter()))
       .replace("{nth}", nthWaypoint)
       .replaceAll("\\s+", " "); // remove excess spaces
