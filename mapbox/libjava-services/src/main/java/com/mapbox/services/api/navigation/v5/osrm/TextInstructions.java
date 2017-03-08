@@ -263,16 +263,14 @@ public class TextInstructions {
     // Replace tokens
     // NOOP if they don't exist
     String nthWaypoint = ""; // TODO, add correct waypoint counting
-    String modifierValue = getVersionObject().getAsJsonObject("constants").getAsJsonObject("modifier").getAsJsonPrimitive(modifier) == null
-      ? ""
-      : getVersionObject().getAsJsonObject("constants").getAsJsonObject("modifier").getAsJsonPrimitive(modifier).getAsString();
+    JsonPrimitive modifierValue = getVersionObject().getAsJsonObject("constants").getAsJsonObject("modifier").getAsJsonPrimitive(modifier);
     instruction = instruction
       .replace("{way_name}", wayName)
       .replace("{destination}", TextUtils.isEmpty(step.getDestinations()) ? "" : step.getDestinations().split(",")[0])
       .replace("{exit_number}", step.getManeuver().getExit() == null ? ordinalize(1) : ordinalize(step.getManeuver().getExit()))
-      .replace("{rotary_name}", TextUtils.isEmpty(step.getRotaryName()) ? "": step.getRotaryName())
+      .replace("{rotary_name}", TextUtils.isEmpty(step.getRotaryName()) ? "" : step.getRotaryName())
       .replace("{lane_instruction}", laneInstruction == null ? "" : laneInstruction.getAsString())
-      .replace("{modifier}", modifierValue)
+      .replace("{modifier}", modifierValue == null ? "" : modifierValue.getAsString())
       .replace("{direction}", directionFromDegree(step.getManeuver().getBearingAfter()))
       .replace("{nth}", nthWaypoint)
       .replaceAll("\\s+", " "); // remove excess spaces
