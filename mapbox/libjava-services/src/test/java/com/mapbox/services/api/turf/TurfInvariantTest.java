@@ -42,7 +42,7 @@ public class TurfInvariantTest extends BaseTurf {
   }
 
   @Test
-  public void testInvariantGeojsonType4() throws TurfException {
+  public void testInvariantGeojsonType4() {
     String json = "{ type: 'Point', coordinates: [0, 0] }";
     TurfInvariant.geojsonType(Point.fromJson(json), "Point", "myfn");
   }
@@ -72,7 +72,7 @@ public class TurfInvariantTest extends BaseTurf {
   }
 
   @Test
-  public void testInvariantFeatureOf4() throws TurfException {
+  public void testInvariantFeatureOf4() {
     String json = "{ type: 'Feature', geometry: { type: 'Point', coordinates: [0, 0]}, properties: {}}";
     TurfInvariant.featureOf(Feature.fromJson(json), "Point", "myfn");
   }
@@ -103,7 +103,7 @@ public class TurfInvariantTest extends BaseTurf {
   }
 
   @Test
-  public void testInvariantCollectionOf4() throws TurfException {
+  public void testInvariantCollectionOf4() {
     String json = "{type: 'FeatureCollection', features: [{ type: 'Feature', geometry: { type: 'Point', coordinates: "
       + "[0, 0]}, properties: {}}]}";
     TurfInvariant.collectionOf(FeatureCollection.fromJson(json), "Point", "myfn");
@@ -111,7 +111,7 @@ public class TurfInvariantTest extends BaseTurf {
 
 
   @Test
-  public void testInvariantGetCoord() throws TurfException {
+  public void testInvariantGetCoord() {
     String jsonPoint = "{type: 'Point', coordinates: [1, 2]}";
     String jsonFeature = "{type: 'Feature', geometry: {type: 'Point', coordinates: [1, 2]}}";
 

@@ -16,7 +16,6 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.mapmatching.v5.MapMatchingCriteria;
 import com.mapbox.services.api.mapmatching.v5.MapboxMapMatching;
 import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
@@ -158,61 +157,56 @@ public class MapMatchingActivity extends AppCompatActivity {
   }
 
   private void drawMapMatched(Position[] coordinates) {
-    try {
-      // Setup the request using a client.
-      MapboxMapMatching client = new MapboxMapMatching.Builder()
-        .setAccessToken(Utils.getMapboxAccessToken(MapMatchingActivity.this))
-        .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
-        .setCoordinates(coordinates)
-        .build();
+    // Setup the request using a client.
+    MapboxMapMatching client = new MapboxMapMatching.Builder()
+      .setAccessToken(Utils.getMapboxAccessToken(MapMatchingActivity.this))
+      .setProfile(MapMatchingCriteria.PROFILE_DRIVING)
+      .setCoordinates(coordinates)
+      .build();
 
-      // Execute the API call and handle the response.
-      client.enqueueCall(new Callback<MapMatchingResponse>() {
-        @Override
-        public void onResponse(Call<MapMatchingResponse> call, Response<MapMatchingResponse> response) {
-          // Create a new list to store the map matched coordinates.
-          List<LatLng> mapMatchedPoints = new ArrayList<>();
+    // Execute the API call and handle the response.
+    client.enqueueCall(new Callback<MapMatchingResponse>() {
+      @Override
+      public void onResponse(Call<MapMatchingResponse> call, Response<MapMatchingResponse> response) {
+        // Create a new list to store the map matched coordinates.
+        List<LatLng> mapMatchedPoints = new ArrayList<>();
 
-          // Check that the map matching API response is "OK".
-          if (response.code() == 200) {
-            // Convert the map matched response list from position to latlng coordinates.
-            // By default, the SDK uses MapMatchingCriteria.GEOMETRY_POLYLINE_6, therefore
-            // you need Constants.PRECISION_6 for the decode to be right
-            String geometry = response.body().getMatchings().get(0).getGeometry();
-            List<Position> positions = PolylineUtils.decode(geometry, Constants.PRECISION_6);
-            if (positions == null) {
-              return;
-            }
-
-            for (int i = 0; i < positions.size(); i++) {
-              mapMatchedPoints.add(new LatLng(
-                positions.get(i).getLatitude(),
-                positions.get(i).getLongitude()));
-            }
-
-            if (mapMatchedRoute != null) {
-              map.removeAnnotation(mapMatchedRoute);
-            }
-
-            // Add the map matched route to the Mapbox map.
-            mapMatchedRoute = map.addPolyline(new PolylineOptions()
-              .addAll(mapMatchedPoints)
-              .color(Color.parseColor("#3bb2d0"))
-              .width(4));
-          } else {
-            // If the response code does not response "OK" an error has occurred.
-            Log.e(TAG, "Too many coordinates, profile not found, invalid input, or no match.");
+        // Check that the map matching API response is "OK".
+        if (response.code() == 200) {
+          // Convert the map matched response list from position to latlng coordinates.
+          // By default, the SDK uses MapMatchingCriteria.GEOMETRY_POLYLINE_6, therefore
+          // you need Constants.PRECISION_6 for the decode to be right
+          String geometry = response.body().getMatchings().get(0).getGeometry();
+          List<Position> positions = PolylineUtils.decode(geometry, Constants.PRECISION_6);
+          if (positions == null) {
+            return;
           }
-        }
 
-        @Override
-        public void onFailure(Call<MapMatchingResponse> call, Throwable throwable) {
-          Log.e(TAG, "MapboxMapMatching error: " + throwable.getMessage());
+          for (int i = 0; i < positions.size(); i++) {
+            mapMatchedPoints.add(new LatLng(
+              positions.get(i).getLatitude(),
+              positions.get(i).getLongitude()));
+          }
+
+          if (mapMatchedRoute != null) {
+            map.removeAnnotation(mapMatchedRoute);
+          }
+
+          // Add the map matched route to the Mapbox map.
+          mapMatchedRoute = map.addPolyline(new PolylineOptions()
+            .addAll(mapMatchedPoints)
+            .color(Color.parseColor("#3bb2d0"))
+            .width(4));
+        } else {
+          // If the response code does not response "OK" an error has occurred.
+          Log.e(TAG, "Too many coordinates, profile not found, invalid input, or no match.");
         }
-      });
-    } catch (ServicesException servicesException) {
-      Log.e(TAG, "MapboxMapMatching error: " + servicesException.getMessage());
-      servicesException.printStackTrace();
-    }
+      }
+
+      @Override
+      public void onFailure(Call<MapMatchingResponse> call, Throwable throwable) {
+        Log.e(TAG, "MapboxMapMatching error: " + throwable.getMessage());
+      }
+    });
   }
 }

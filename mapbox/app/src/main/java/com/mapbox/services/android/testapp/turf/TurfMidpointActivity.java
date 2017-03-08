@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -14,13 +13,11 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.android.testapp.R;
-import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.models.Position;
 
 public class TurfMidpointActivity extends AppCompatActivity {
 
-  private static final String TAG = "TurfMidpointActivity";
   private MapView mapView;
   private MapboxMap map;
   private Marker secondMarker;
@@ -113,21 +110,15 @@ public class TurfMidpointActivity extends AppCompatActivity {
           .position(point)
           .title("point 2"));
 
-        try {
-          Position midpoint = TurfMeasurement.midpoint(cadillacHotelPosition,
-            Position.fromCoordinates(point.getLongitude(), point.getLatitude()));
+        Position midpoint = TurfMeasurement.midpoint(cadillacHotelPosition,
+          Position.fromCoordinates(point.getLongitude(), point.getLatitude()));
 
-          midpointMarker = map.addMarker(new MarkerViewOptions()
-            .position(new LatLng(midpoint.getLatitude(), midpoint.getLongitude()))
-            .title("midpoint"));
+        midpointMarker = map.addMarker(new MarkerViewOptions()
+          .position(new LatLng(midpoint.getLatitude(), midpoint.getLongitude()))
+          .title("midpoint"));
 
-          Snackbar.make(container, "Midpoint = " + " Latitiude: " + midpoint.getLatitude()
-            + "Longitude: " + midpoint.getLongitude(), Snackbar.LENGTH_INDEFINITE).show();
-
-        } catch (TurfException turfException) {
-          turfException.printStackTrace();
-          Log.e(TAG, "onMapClick: " + turfException.getMessage());
-        }
+        Snackbar.make(container, "Midpoint = " + " Latitiude: " + midpoint.getLatitude()
+          + "Longitude: " + midpoint.getLongitude(), Snackbar.LENGTH_INDEFINITE).show();
       }
     });
   }

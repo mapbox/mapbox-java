@@ -20,13 +20,11 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
-import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.directions.v5.MapboxDirections;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.navigation.v5.RouteUtils;
-import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfMisc;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
@@ -120,19 +118,11 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
       .position(point)
     );
 
-    RouteUtils routeUtils = new RouteUtils();
-    Position snappedPosition = null;
-
-    try {
-      snappedPosition = routeUtils.getSnapToRoute(
-        Position.fromCoordinates(point.getLongitude(), point.getLatitude()),
-        currentRoute.getLegs().get(0),
-        stepCount
-      );
-    } catch (ServicesException | TurfException exception) {
-      exception.printStackTrace();
-      Log.e(TAG, "snap to route util: " + exception.getMessage());
-    }
+    Position snappedPosition = RouteUtils.getSnapToRoute(
+      Position.fromCoordinates(point.getLongitude(), point.getLatitude()),
+      currentRoute.getLegs().get(0),
+      stepCount
+    );
 
     if (snappedPosition == null) {
       Log.i(TAG, "snapPosition is null");
@@ -155,27 +145,23 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
       mapboxMap.removePolyline(distancePolyline);
     }
 
-    try {
-      LineString slicedLine = TurfMisc.lineSlice(
-        Point.fromCoordinates(snappedPosition),
-        Point.fromCoordinates(coords.get(coords.size() - 1)),
-        LineString.fromCoordinates(coords)
-      );
+    LineString slicedLine = TurfMisc.lineSlice(
+      Point.fromCoordinates(snappedPosition),
+      Point.fromCoordinates(coords.get(coords.size() - 1)),
+      LineString.fromCoordinates(coords)
+    );
 
-      List<Position> linePositions = slicedLine.getCoordinates();
-      List<LatLng> lineLatLng = new ArrayList<>();
-      for (Position pos : linePositions) {
-        lineLatLng.add(new LatLng(pos.getLatitude(), pos.getLongitude()));
-      }
-
-      distancePolyline = mapboxMap.addPolyline(new PolylineOptions()
-        .addAll(lineLatLng)
-        .color(Color.parseColor("#f1f075"))
-        .width(5f)
-      );
-    } catch (TurfException turfException) {
-      turfException.printStackTrace();
+    List<Position> linePositions = slicedLine.getCoordinates();
+    List<LatLng> lineLatLng = new ArrayList<>();
+    for (Position pos : linePositions) {
+      lineLatLng.add(new LatLng(pos.getLatitude(), pos.getLongitude()));
     }
+
+    distancePolyline = mapboxMap.addPolyline(new PolylineOptions()
+      .addAll(lineLatLng)
+      .color(Color.parseColor("#f1f075"))
+      .width(5f)
+    );
   }
 
   @Override
@@ -183,11 +169,7 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
     SnapToRouteActivity.this.mapboxMap = mapboxMap;
     mapboxMap.setOnMapClickListener(this);
 
-    try {
-      getRoute(origin, destination);
-    } catch (ServicesException servicesException) {
-      servicesException.printStackTrace();
-    }
+    getRoute(origin, destination);
   }
 
   private void drawDistanceRoutePolyline(Position snappedPosition) {
@@ -199,30 +181,26 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
       mapboxMap.removePolyline(distanceRoutePolyline);
     }
 
-    try {
-      LineString slicedRouteLine = TurfMisc.lineSlice(
-        Point.fromCoordinates(snappedPosition),
-        Point.fromCoordinates(routeCoords.get(routeCoords.size() - 1)),
-        LineString.fromCoordinates(routeCoords)
-      );
+    LineString slicedRouteLine = TurfMisc.lineSlice(
+      Point.fromCoordinates(snappedPosition),
+      Point.fromCoordinates(routeCoords.get(routeCoords.size() - 1)),
+      LineString.fromCoordinates(routeCoords)
+    );
 
-      List<Position> linePositions = slicedRouteLine.getCoordinates();
-      List<LatLng> lineLatLng = new ArrayList<>();
-      for (Position pos : linePositions) {
-        lineLatLng.add(new LatLng(pos.getLatitude(), pos.getLongitude()));
-      }
-
-      distanceRoutePolyline = mapboxMap.addPolyline(new PolylineOptions()
-        .addAll(lineLatLng)
-        .color(Color.parseColor("#3887be"))
-        .width(5f)
-      );
-    } catch (TurfException turfException) {
-      turfException.printStackTrace();
+    List<Position> linePositions = slicedRouteLine.getCoordinates();
+    List<LatLng> lineLatLng = new ArrayList<>();
+    for (Position pos : linePositions) {
+      lineLatLng.add(new LatLng(pos.getLatitude(), pos.getLongitude()));
     }
+
+    distanceRoutePolyline = mapboxMap.addPolyline(new PolylineOptions()
+      .addAll(lineLatLng)
+      .color(Color.parseColor("#3887be"))
+      .width(5f)
+    );
   }
 
-  private void getRoute(Position origin, Position destination) throws ServicesException {
+  private void getRoute(Position origin, Position destination) {
 
     MapboxDirections client = new MapboxDirections.Builder()
       .setOrigin(origin)

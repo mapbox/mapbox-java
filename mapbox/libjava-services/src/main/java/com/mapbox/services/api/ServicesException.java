@@ -3,8 +3,10 @@ package com.mapbox.services.api;
 /**
  * Generic Exception for all things Mapbox, this is used for geocoding, directions, and other APIs
  * in this SDK.
+ *
+ * @since 1.0.0
  */
-public class ServicesException extends Exception {
+public class ServicesException extends RuntimeException {
 
   /**
    * A form of {@code Throwable} that indicates conditions that a reasonable application might
