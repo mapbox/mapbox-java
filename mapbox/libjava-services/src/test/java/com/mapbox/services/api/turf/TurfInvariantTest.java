@@ -43,7 +43,7 @@ public class TurfInvariantTest extends BaseTurf {
 
   @Test
   public void testInvariantGeojsonType4() {
-    String json = "{ type: 'Point'`, coordinates: [0, 0] }";
+    String json = "{ type: 'Point', coordinates: [0, 0] }";
     TurfInvariant.geojsonType(Point.fromJson(json), "Point", "myfn");
   }
 
