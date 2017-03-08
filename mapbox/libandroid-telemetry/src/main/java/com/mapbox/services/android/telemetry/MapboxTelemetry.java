@@ -103,6 +103,14 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     initialize(context, accessToken, userAgent);
   }
 
+  /*
+   * Temporary: re-added only for CI purposes
+   */
+  public void initialize(@NonNull Context context, @NonNull String accessToken,
+                         @NonNull LocationEngine locationEngine) {
+    initialize(context, accessToken, "userAgent", locationEngine);
+  }
+
   /**
    * Initialize MapboxTelemetry.
    *
