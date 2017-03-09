@@ -2,6 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.0.0-beta.3
+
+* Make `ServicesException` and `TurfException` unchecked exceptions
+
 ### v2.0.0-beta.2
 
 * Mapbox Navigation SDK
