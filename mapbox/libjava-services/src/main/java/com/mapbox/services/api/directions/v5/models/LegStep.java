@@ -1,6 +1,7 @@
 package com.mapbox.services.api.directions.v5.models;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -14,6 +15,8 @@ public class LegStep {
   private double duration;
   private String geometry;
   private String name;
+  private String ref;
+  private String destinations;
   private String mode;
   private String pronunciation;
   @SerializedName("rotary_name")
@@ -24,6 +27,16 @@ public class LegStep {
   private List<StepIntersection> intersections;
 
   public LegStep() {
+  }
+
+  public LegStep(List<StepIntersection> intersections) {
+    this.intersections = intersections;
+  }
+
+  public LegStep(String name, String rotaryName, StepManeuver maneuver) {
+    this.name = name;
+    this.rotaryName = rotaryName;
+    this.maneuver = maneuver;
   }
 
   /**
@@ -62,6 +75,24 @@ public class LegStep {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * @return String with reference number or code of the way along which the travel proceeds.
+   * Optionally included, if data is available.
+   * @since 2.0.0
+   */
+  public String getRef() {
+    return ref;
+  }
+
+  /**
+   * @return String with the destinations of the way along which the travel proceeds.
+   * Optionally included, if data is available.
+   * @since 2.0.0
+   */
+  public String getDestinations() {
+    return destinations;
   }
 
   /**
