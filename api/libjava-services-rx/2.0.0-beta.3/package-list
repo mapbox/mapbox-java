@@ -1,0 +1,5 @@
+com.mapbox.services.api.rx
+com.mapbox.services.api.rx.directions.v5
+com.mapbox.services.api.rx.distance.v1
+com.mapbox.services.api.rx.geocoding.v5
+com.mapbox.services.api.rx.mapmatching.v5

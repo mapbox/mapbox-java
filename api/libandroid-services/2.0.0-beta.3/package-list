@@ -1,0 +1,4 @@
+com.mapbox.services.android
+com.mapbox.services.android.geocoder
+com.mapbox.services.android.location
+com.mapbox.services.android.navigation.v5
