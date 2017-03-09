@@ -133,7 +133,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
     private static final int TWO_COORDINATES = 2;
     private static final int END = 1;
-    public static final int BEGINNING = 0;
+    private static final int BEGINNING = 0;
     // We use `Boolean` instead of `boolean` to allow unset (null) values.
     private String user = null;
     private String profile = null;

@@ -41,10 +41,10 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest {
 
-  public static final String DIRECTIONS_V5_FIXTURE = "src/test/fixtures/directions_v5.json";
-  public static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "src/test/fixtures/directions_v5_precision_6.json";
-  public static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
-  public static final String DIRECTIONS_ROTARY_FIXTURE = "src/test/fixtures/directions_v5_fixtures_rotary.json";
+  private static final String DIRECTIONS_V5_FIXTURE = "src/test/fixtures/directions_v5.json";
+  private static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "src/test/fixtures/directions_v5_precision_6.json";
+  private static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
+  private static final String DIRECTIONS_ROTARY_FIXTURE = "src/test/fixtures/directions_v5_fixtures_rotary.json";
   private static final double DELTA = 1E-10;
 
   private MockWebServer server;
@@ -122,7 +122,7 @@ public class MapboxDirectionsTest {
     Response<DirectionsResponse> response = client.executeCall();
 
     assertEquals(200, response.code());
-    assertEquals("Ok", response.body().getCode());
+    assertEquals(DirectionsCriteria.RESPONSE_OK, response.body().getCode());
   }
 
   @Test
@@ -190,7 +190,7 @@ public class MapboxDirectionsTest {
     Response<DirectionsResponse> response = client.executeCall();
 
     assertEquals(200, response.code());
-    assertEquals("Ok", response.body().getCode());
+    assertEquals(DirectionsCriteria.RESPONSE_OK, response.body().getCode());
   }
 
   @Test
@@ -307,7 +307,7 @@ public class MapboxDirectionsTest {
     Response<DirectionsResponse> response = client.executeCall();
     DirectionsResponse body = response.body();
 
-    assertEquals("Ok", body.getCode());
+    assertEquals(DirectionsCriteria.RESPONSE_OK, body.getCode());
     assertEquals(1, body.getRoutes().size());
     assertEquals(2, body.getWaypoints().size());
   }
