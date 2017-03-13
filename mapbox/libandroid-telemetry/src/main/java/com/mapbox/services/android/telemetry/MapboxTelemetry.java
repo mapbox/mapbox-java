@@ -510,13 +510,24 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * Immediately attempt to send all events data in the queue to the server.
    */
   private void flushEventsQueueImmediately(boolean hasTurnstileEvent) {
-    boolean doRequest = hasTurnstileEvent || isInitializedAndEnabled();
-    if (events.size() > 0 && ConnectivityReceiver.isConnected(context) && doRequest) {
-      client.sendEvents(events, this);
-      for (TelemetryListener listener : telemetryListeners) {
-        listener.onSendEvents(events.size());
+    if (initialized && events.size() > 0) {
+      if (ConnectivityReceiver.isConnected(context)) {
+        if (hasTurnstileEvent || isTelemetryEnabled()) {
+          client.sendEvents(events, this);
+          for (TelemetryListener listener : telemetryListeners) {
+            listener.onSendEvents(events.size());
+          }
+        } else {
+          // Not enabled or doesn't include turnstile event
+          events.removeAllElements();
+        }
+      } else {
+        // No network connection
+        events.removeAllElements();
       }
-    } else if (withShutDown) {
+    }
+
+    if (withShutDown) {
       shutdownTelemetry();
     }
   }
