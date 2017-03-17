@@ -2,6 +2,31 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.0.0 - March 17th, 2017
+
+* Mapbox Navigation SDK [#346](https://github.com/mapbox/mapbox-java/pull/346)
+* Introduce support for Mapbox Distance API [#219](https://github.com/mapbox/mapbox-java/pull/219)
+* Update Map Matching API to support new `v5`
+* Divide library into smaller modules to reduce method count on Android projects [#251](https://github.com/mapbox/mapbox-java/pull/251)
+* AppEngine support [#344](https://github.com/mapbox/mapbox-java/pull/344)
+* Introduce support for Mapbox Telemetry [#282](https://github.com/mapbox/mapbox-java/pull/282)
+  * Added reusable components for permission and connectivity management [#276](https://github.com/mapbox/mapbox-java/pull/276)
+  * Abstracted the location engine from a specific provider [#269](https://github.com/mapbox/mapbox-java/pull/269) and provide default implementations [#320](https://github.com/mapbox/mapbox-java/pull/320)
+* Shared improvements across clients
+  * RxJava support [#304](https://github.com/mapbox/mapbox-java/pull/304)
+  * Enabled setting a base URL to facilitate testing [#245](https://github.com/mapbox/mapbox-java/pull/245)
+* Directions improvements:
+  * Added direction v5 lanes [#214](https://github.com/mapbox/mapbox-java/pull/214)
+  * Added support for the `driving-traffic` profile [#292](https://github.com/mapbox/mapbox-java/pull/292)
+  * Added support for polyline6  [#287](https://github.com/mapbox/mapbox-java/pull/287)
+  * Added rotary convenience methods [#329](https://github.com/mapbox/mapbox-java/pull/329)
+  * Added bearing query parameter [#337](https://github.com/mapbox/mapbox-java/pull/337)
+  * Remove support for `v4` [#260](https://github.com/mapbox/mapbox-java/pull/260)
+* Geocoding improvements:
+  * Batch requests support [#267](https://github.com/mapbox/mapbox-java/pull/267)
+  * Added landmark, limit, country parameters support [#209](https://github.com/mapbox/mapbox-java/pull/209) [#217](https://github.com/mapbox/mapbox-java/pull/217)
+  * Added cancel method [#226](https://github.com/mapbox/mapbox-java/pull/226), setting multiple types [#230](https://github.com/mapbox/mapbox-java/pull/230), and language, base URL method setting to autocomplete widget [#315](https://github.com/mapbox/mapbox-java/pull/315) [#328](https://github.com/mapbox/mapbox-java/pull/328)
+
 ### v2.0.0-beta.3
 
 * Make `ServicesException` and `TurfException` unchecked exceptions
