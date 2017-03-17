@@ -1,0 +1,17 @@
+com.mapbox.services.api
+com.mapbox.services.api.directions.v5
+com.mapbox.services.api.directions.v5.models
+com.mapbox.services.api.distance.v1
+com.mapbox.services.api.distance.v1.gson
+com.mapbox.services.api.distance.v1.models
+com.mapbox.services.api.geocoding.v5
+com.mapbox.services.api.geocoding.v5.gson
+com.mapbox.services.api.geocoding.v5.models
+com.mapbox.services.api.mapmatching.v5
+com.mapbox.services.api.mapmatching.v5.models
+com.mapbox.services.api.navigation.v5
+com.mapbox.services.api.navigation.v5.osrm
+com.mapbox.services.api.staticimage.v1
+com.mapbox.services.api.utils.tidy
+com.mapbox.services.api.utils.turf
+com.mapbox.services.api.utils.turf.models
