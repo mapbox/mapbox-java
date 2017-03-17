@@ -387,7 +387,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     LocalBroadcastManager.getInstance(context.getApplicationContext()).sendBroadcast(intent);
   }
 
-  private boolean isReadyForEvent() {
+  private boolean isInitializedAndEnabled() {
     return initialized && isTelemetryEnabled();
   }
 
@@ -410,7 +410,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    */
   protected void addLocationEvent(Location location) {
     // Only add events when we're properly initialized and the user has opted-in
-    if (!isReadyForEvent()) {
+    if (!isInitializedAndEnabled()) {
       return;
     }
 
@@ -454,7 +454,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    */
   public void pushEvent(Hashtable<String, Object> eventWithAttributes) {
     // Only add events when we're properly initialized and the user has opted-in
-    if (!isReadyForEvent()) {
+    if (!isInitializedAndEnabled()) {
       return;
     }
 
@@ -510,13 +510,24 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * Immediately attempt to send all events data in the queue to the server.
    */
   private void flushEventsQueueImmediately(boolean hasTurnstileEvent) {
-    boolean doRequest = hasTurnstileEvent || isReadyForEvent();
-    if (events.size() > 0 && ConnectivityReceiver.isConnected(context) && doRequest) {
-      client.sendEvents(events, this);
-      for (TelemetryListener listener : telemetryListeners) {
-        listener.onSendEvents(events.size());
+    if (initialized && events.size() > 0) {
+      if (ConnectivityReceiver.isConnected(context)) {
+        if (hasTurnstileEvent || isTelemetryEnabled()) {
+          client.sendEvents(events, this);
+          for (TelemetryListener listener : telemetryListeners) {
+            listener.onSendEvents(events.size());
+          }
+        } else {
+          // Not enabled or doesn't include turnstile event
+          events.removeAllElements();
+        }
+      } else {
+        // No network connection
+        events.removeAllElements();
       }
-    } else if (withShutDown) {
+    }
+
+    if (withShutDown) {
       shutdownTelemetry();
     }
   }
