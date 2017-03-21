@@ -9,10 +9,14 @@ import android.support.annotation.Size;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * In part inspired by the LocationSource interface
- * https://developers.google.com/android/reference/com/google/android/gms/maps/LocationSource
+ * Abstract implementation of a location engine. A location engine makes it simple to switch between providers without
+ * the hassle of including boilerplate inside your code. This allows developers to use Google Play Services location
+ * provider or the default LOST location provider, among others. For a good example setting up a location engine from
+ * this abstract class, have a look at the {@code LostLocationEngine} found inside the {@code libandroid-services}
+ * module.
+ *
+ * @since 2.0.0
  */
-
 public abstract class LocationEngine {
 
   private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -23,22 +27,70 @@ public abstract class LocationEngine {
   protected float smallestDisplacement = 3.0f;
   protected CopyOnWriteArrayList<LocationEngineListener> locationListeners;
 
+  /**
+   * Construct a location engine.
+   *
+   * @since 2.0.0
+   */
   public LocationEngine() {
     locationListeners = new CopyOnWriteArrayList<>();
   }
 
+  /**
+   * Activate the location engine which will connect whichever location provider you are using. You'll need to call
+   * this before requesting user location updates using {@link LocationEngine#requestLocationUpdates()}.
+   *
+   * @since 2.0.0
+   */
   public abstract void activate();
 
+  /**
+   * Disconnect the location engine, useful when you no longer need location updates or requesting the users
+   * {@link LocationEngine#getLastLocation()}. Before deactivating you'll need to stop request user location updates
+   * using {@link LocationEngine#removeLocationUpdates()}.
+   *
+   * @since 2.0.0
+   */
   public abstract void deactivate();
 
+  /**
+   * Check if your location provider has been activated/connected. This is mainly used internally but is also useful in
+   * the rare cases when you'd like to know if your location engine is connected or not.
+   *
+   * @return boolean true if the location engine has been activated/connected, else false.
+   * @since 2.0.0
+   */
   public abstract boolean isConnected();
 
+  /**
+   * When first initializing the location engine the location updates oftentimes aren't immediate and your user
+   * experience might diminish since they are forced to wait till a more accurate update arrives. A solution to this is
+   * to request the last known user location. There are no guarantees this won't return null since the {@link Location}
+   * object is simply stored in cache.
+   *
+   * @return The last known user location as a {@link Location} object.
+   * @since 2.0.0
+   */
   @RequiresPermission(anyOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
   public abstract Location getLastLocation();
 
+  /**
+   * if a {@link LocationEngineListener} is setup, registering for location updates will tell the provider to begin
+   * sending updates.
+   *
+   * @since 2.0.0
+   */
   @RequiresPermission(anyOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
   public abstract void requestLocationUpdates();
 
+
+  /**
+   * When you no longer wish to receive location updates, you should call this method to prevent the devices battery
+   * from draining. It's important to note that your location listeners will remain intake until you call
+   * {@link LocationEngine#removeLocationEngineListener(LocationEngineListener)}.
+   *
+   * @since 2.0.0
+   */
   public abstract void removeLocationUpdates();
 
   /**
