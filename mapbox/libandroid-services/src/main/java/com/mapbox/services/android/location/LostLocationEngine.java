@@ -89,9 +89,9 @@ public class LostLocationEngine extends LocationEngine implements
   public void requestLocationUpdates() {
     // Common params
     LocationRequest request = LocationRequest.create()
-      .setInterval(1000)
-      .setFastestInterval(1000)
-      .setSmallestDisplacement(3.0f);
+      .setInterval(interval)
+      .setFastestInterval(fastestInterval)
+      .setSmallestDisplacement(smallestDisplacement);
 
     // Priority matching is straightforward
     if (priority == LocationEnginePriority.NO_POWER) {
