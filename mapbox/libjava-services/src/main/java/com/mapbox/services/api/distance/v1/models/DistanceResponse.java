@@ -6,6 +6,7 @@ import com.mapbox.services.commons.geojson.FeatureCollection;
 
 import java.util.List;
 
+@Deprecated
 public class DistanceResponse extends FeatureCollection {
 
   private String code;
@@ -18,19 +19,24 @@ public class DistanceResponse extends FeatureCollection {
    *
    * @param features List of {@link Feature}.
    * @since 2.0.0
+   * @deprecated replace by the Directions Matrix API.
    */
+  @Deprecated
   protected DistanceResponse(List<Feature> features) {
     super(features);
   }
 
+  @Deprecated
   public String getCode() {
     return code;
   }
 
+  @Deprecated
   public void setCode(String code) {
     this.code = code;
   }
 
+  @Deprecated
   public int[][] getDurations() {
 
     int[][] tempDurations = new int[durations.size()][durations.size()];

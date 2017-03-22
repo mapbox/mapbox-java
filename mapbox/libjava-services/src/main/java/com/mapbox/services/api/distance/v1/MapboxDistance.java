@@ -39,7 +39,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  * @see <a href="https://www.mapbox.com/api-documentation/?language=Java#distance">Mapbox Distance API documentation</a>
  * @since 2.0.0
+ * @deprecated replace by the Directions Matrix API.
  */
+@Deprecated
 public class MapboxDistance extends MapboxService<DistanceResponse> {
 
   protected Builder builder = null;
@@ -47,10 +49,12 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
   private Call<DistanceResponse> call = null;
   private Gson gson;
 
+  @Deprecated
   protected MapboxDistance(Builder builder) {
     this.builder = builder;
   }
 
+  @Deprecated
   protected Gson getGson() {
     // Gson instance with type adapters
     if (gson == null) {
@@ -62,6 +66,7 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
     return gson;
   }
 
+  @Deprecated
   private DistanceService getService() {
     //No need to recreate it
     if (service != null) {
@@ -88,7 +93,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
    *
    * @return call
    * @since 2.0.0
+   * @deprecated replace by the Directions Matrix API.
    */
+  @Deprecated
   public Call<DistanceResponse> getCall() {
     // No need to recreate it
     if (call != null) {
@@ -112,7 +119,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
    * @return The distance v1 response.
    * @throws IOException Signals that an I/O exception of some sort has occurred.
    * @since 2.0.0
+   * @deprecated replace by the Directions Matrix API.
    */
+  @Deprecated
   @Override
   public Response<DistanceResponse> executeCall() throws IOException {
     return getCall().execute();
@@ -123,7 +132,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
    *
    * @param callback A Retrofit callback.
    * @since 2.0.0
+   * @deprecated replace by the Directions Matrix API.
    */
+  @Deprecated
   @Override
   public void enqueueCall(Callback<DistanceResponse> callback) {
     getCall().enqueue(callback);
@@ -133,7 +144,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
    * Cancel the call
    *
    * @since 2.0.0
+   * @deprecated replace by the Directions Matrix API.
    */
+  @Deprecated
   @Override
   public void cancelCall() {
     getCall().cancel();
@@ -144,7 +157,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
    *
    * @return cloned call
    * @since 2.0.0
+   * @deprecated replace by the Directions Matrix API.
    */
+  @Deprecated
   @Override
   public Call<DistanceResponse> cloneCall() {
     return getCall().clone();
@@ -154,7 +169,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
    * Builds your distance query by adding parameters.
    *
    * @since 2.0.0
+   * @deprecated replace by the Directions Matrix API.
    */
+  @Deprecated
   public static class Builder<T extends Builder> extends MapboxBuilder {
 
     private String accessToken;
@@ -167,7 +184,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      * Constructor
      *
      * @since 2.0.0
+     * @deprecated replace by the Directions Matrix API.
      */
+    @Deprecated
     public Builder() {
     }
 
@@ -176,7 +195,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      *             {@link DirectionsCriteria#PROFILE_DEFAULT_USER}.
      * @return Builder
      * @since 2.0.0
+     * @deprecated replace by the Directions Matrix API.
      */
+    @Deprecated
     public T setUser(String user) {
       this.user = user;
       return (T) this;
@@ -185,7 +206,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
     /**
      * @return the user as String.
      * @since 2.0.0
+     * @deprecated replace by the Directions Matrix API.
      */
+    @Deprecated
     public String getUser() {
       return user;
     }
@@ -199,7 +222,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      *                {@link DirectionsCriteria} constants.
      * @return Builder
      * @since 2.0.0
+     * @deprecated replace by the Directions Matrix API.
      */
+    @Deprecated
     public T setProfile(String profile) {
       this.profile = profile;
       return (T) this;
@@ -209,7 +234,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      * @return String containing A directions profile ID; either {@code driving},
      * {@code walking}, or {@code cycling}.
      * @since 2.0.0
+     * @deprecated replace by the Directions Matrix API.
      */
+    @Deprecated
     public String getProfile() {
       return profile;
     }
@@ -220,11 +247,13 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
         MultiPoint.fromCoordinates(coordinates).toJson());
     }
 
+    @Deprecated
     public T setCoordinates(List<Position> coordinates) {
       this.coordinates = coordinates;
       return (T) this;
     }
 
+    @Deprecated
     private void validateProfile() throws ServicesException {
       if (profile == null || !(profile.equals(DirectionsCriteria.PROFILE_CYCLING)
         || profile.equals(DirectionsCriteria.PROFILE_DRIVING)
@@ -234,6 +263,7 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
       }
     }
 
+    @Deprecated
     private void validateTrace() throws ServicesException {
       if (coordinates == null || coordinates.size() <= 0) {
         throw new ServicesException("Using Mapbox Distance API requires to set some coordinates.");
@@ -252,7 +282,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      *                    this API.
      * @return Builder
      * @since 2.0.0
+     * @deprecated replace by the Directions Matrix API.
      */
+    @Deprecated
     @Override
     public T setAccessToken(String accessToken) {
       this.accessToken = accessToken;
@@ -262,7 +294,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
     /**
      * @return Mapbox access token
      * @since 2.0.0
+     * @deprecated replace by the Directions Matrix API.
      */
+    @Deprecated
     @Override
     public String getAccessToken() {
       return this.accessToken;
@@ -279,7 +313,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      * @param baseUrl base url used as end point
      * @return Builder
      * @since 2.0.0
+     * @deprecated replace by the Directions Matrix API.
      */
+    @Deprecated
     @Override
     public T setBaseUrl(String baseUrl) {
       super.baseUrl = baseUrl;
@@ -293,7 +329,9 @@ public class MapboxDistance extends MapboxService<DistanceResponse> {
      * @throws ServicesException Generic Exception occurring when something with the Distance
      *                           API goes wrong.
      * @since 2.0.0
+     * @deprecated replace by the Directions Matrix API.
      */
+    @Deprecated
     @Override
     public MapboxDistance build() throws ServicesException {
       validateAccessToken(accessToken);

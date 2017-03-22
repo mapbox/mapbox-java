@@ -15,7 +15,9 @@ import retrofit2.http.Query;
  * Interface that defines the distance service.
  *
  * @since 2.0.0
+ * @deprecated replace by the Directions Matrix API.
  */
+@Deprecated
 public interface DistanceService {
 
   /**
@@ -28,7 +30,9 @@ public interface DistanceService {
    * @param coordinates converted to a {@link MultiPoint#toJson()}.
    * @return The {@link DistanceResponse} in a Call wrapper
    * @since 2.0.0
+   * @deprecated replace by the Directions Matrix API.
    */
+  @Deprecated
   @POST("distances/v1/{user}/{profile}")
   Call<DistanceResponse> getCall(
     // NOTE: DistanceServiceRx should be updated as well
