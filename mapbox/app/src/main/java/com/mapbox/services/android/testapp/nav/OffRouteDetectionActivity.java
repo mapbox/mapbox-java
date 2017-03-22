@@ -239,7 +239,7 @@ public class OffRouteDetectionActivity extends AppCompatActivity {
   private void drawRoute(DirectionsRoute route) {
 
     // Convert the route to latlng values and add to list.
-    LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.OSRM_PRECISION_V5);
+    LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.PRECISION_6);
     List<Position> coordinates = lineString.getCoordinates();
     List<LatLng> newRoutePoints = new ArrayList<>();
     for (int j = 0; j < coordinates.size(); j++) {
