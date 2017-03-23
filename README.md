@@ -1,4 +1,4 @@
-[![](https://github.com/mapbox/mapbox-java/blob/cam-link-image-correctly/.github/splash-img.png?raw=true)](https://www.mapbox.com/android-docs/mapbox-services/)
+[![](https://raw.githubusercontent.com/mapbox/mapbox-java/master/.github/splash-img.png)](https://www.mapbox.com/android-docs/mapbox-services/)
 
 [![Build Status](https://www.bitrise.io/app/a7eea7d04be1e2e5.svg?token=OruuJNhnjyeRnlBv0wXsFQ&branch=master)](https://www.bitrise.io/app/a7eea7d04be1e2e5) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services)
 
