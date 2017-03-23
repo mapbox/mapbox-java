@@ -13,7 +13,9 @@ import java.lang.reflect.Type;
  * A custom deserializer that assumes a {@link MultiPoint} string.
  *
  * @since 2.0.0
+ * @deprecated replace by the Directions Matrix API.
  */
+@Deprecated
 public class DistanceGeometryDeserializer implements JsonDeserializer<Geometry> {
 
   /**
@@ -26,7 +28,9 @@ public class DistanceGeometryDeserializer implements JsonDeserializer<Geometry> 
    * @throws JsonParseException This exception is raised if there is a serious issue that occurs
    *                            during parsing of a Json string.
    * @since 2.0.0
+   * @deprecated replace by the Directions Matrix API.
    */
+  @Deprecated
   @Override
   public Geometry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
     throws JsonParseException {
