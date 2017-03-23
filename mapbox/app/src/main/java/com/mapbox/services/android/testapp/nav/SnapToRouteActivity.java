@@ -174,7 +174,7 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
 
   private void drawDistanceRoutePolyline(Position snappedPosition) {
     // Decode the geometry and draw the route from current position to end of route
-    List<Position> routeCoords = PolylineUtils.decode(currentRoute.getGeometry(), Constants.OSRM_PRECISION_V5);
+    List<Position> routeCoords = PolylineUtils.decode(currentRoute.getGeometry(), Constants.PRECISION_6);
 
     // remove old line
     if (distanceRoutePolyline != null) {
@@ -248,7 +248,7 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
 
   private void drawRoute(DirectionsRoute route) {
     // Convert LineString coordinates into LatLng[]
-    LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.OSRM_PRECISION_V5);
+    LineString lineString = LineString.fromPolyline(route.getGeometry(), Constants.PRECISION_6);
     List<Position> coordinates = lineString.getCoordinates();
     LatLng[] points = new LatLng[coordinates.size()];
     for (int i = 0; i < coordinates.size(); i++) {
@@ -267,7 +267,7 @@ public class SnapToRouteActivity extends AppCompatActivity implements OnMapReady
   private void drawStepPolyline() {
     LineString lineString = LineString.fromPolyline(
       currentRoute.getLegs().get(0).getSteps().get(stepCount).getGeometry(),
-      Constants.OSRM_PRECISION_V5
+      Constants.PRECISION_6
     );
 
     List<Position> coordinates = lineString.getCoordinates();

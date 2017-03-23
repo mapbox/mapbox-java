@@ -19,7 +19,6 @@ import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.testapp.connectivity.ConnectivityActivity;
 import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
 import com.mapbox.services.android.testapp.directions.RouteUtilsV5Activity;
-import com.mapbox.services.android.testapp.distance.DistanceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
@@ -62,11 +61,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         getString(R.string.title_location),
         getString(R.string.description_location),
         LocationEngineActivity.class),
-      new SampleItem(
-        getString(R.string.title_distance),
-        getString(R.string.description_distance),
-        DistanceActivity.class
-      ),
       new SampleItem(
         getString(R.string.title_directions_v5),
         getString(R.string.description_directions_v5),

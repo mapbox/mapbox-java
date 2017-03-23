@@ -215,7 +215,7 @@ public class RouteUtilsV5Activity extends AppCompatActivity implements OnMapRead
     int colorIndex = 0;
     for (int i = 0; i < route.getLegs().get(0).getSteps().size(); i++) {
       LegStep step = route.getLegs().get(0).getSteps().get(i);
-      coordinates = PolylineUtils.decode(step.getGeometry(), Constants.OSRM_PRECISION_V5);
+      coordinates = PolylineUtils.decode(step.getGeometry(), Constants.PRECISION_6);
       points = new LatLng[coordinates.size()];
       for (int j = 0; j < coordinates.size(); j++) {
         points[j] = new LatLng(
