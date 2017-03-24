@@ -88,10 +88,17 @@ public class LostLocationEngine extends LocationEngine implements
   @Override
   public void requestLocationUpdates() {
     // Common params
-    LocationRequest request = LocationRequest.create()
-      .setInterval(1000)
-      .setFastestInterval(1000)
-      .setSmallestDisplacement(3.0f);
+    LocationRequest request = LocationRequest.create();
+
+    if (interval != null) {
+      request.setInterval(interval);
+    }
+    if (fastestInterval != null) {
+      request.setFastestInterval(fastestInterval);
+    }
+    if (smallestDisplacement != null) {
+      request.setSmallestDisplacement(smallestDisplacement);
+    }
 
     // Priority matching is straightforward
     if (priority == LocationEnginePriority.NO_POWER) {
