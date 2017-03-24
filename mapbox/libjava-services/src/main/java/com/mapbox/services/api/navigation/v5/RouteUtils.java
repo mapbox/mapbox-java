@@ -19,9 +19,11 @@ import com.mapbox.services.commons.utils.PolylineUtils;
 import java.util.List;
 import java.util.Locale;
 
+import static com.mapbox.services.Constants.PRECISION_6;
+
 /**
  * A few utilities to work with RouteLeg objects.
- *
+ * <p>
  * This is an experimental API. Experimental APIs are quickly evolving and
  * might change or be removed in minor versions.
  *
@@ -93,7 +95,7 @@ public class RouteUtils {
    * @throws TurfException     signals that a Turf exception of some sort has occurred.
    * @since 1.3.0
    */
-  public double getDistanceToStep(Position position, RouteLeg routeLeg, int stepIndex) throws ServicesException,
+  public static double getDistanceToStep(Position position, RouteLeg routeLeg, int stepIndex) throws ServicesException,
     TurfException {
     Position closestPoint = getSnapToRoute(position, routeLeg, stepIndex);
     return TurfMeasurement.distance(
@@ -136,12 +138,31 @@ public class RouteUtils {
    * @since 2.0.0
    */
   public static double getDistanceToNextStep(Position position, RouteLeg routeLeg, int stepIndex, String units)
-    throws ServicesException,
-    TurfException {
+    throws ServicesException, TurfException {
+    return getDistanceToNextStep(position, routeLeg, stepIndex, units, PRECISION_6);
+  }
+
+  /**
+   * Measures the distance from a position to the end of the route step. The position provided is snapped to the route
+   * before distance is calculated.
+   *
+   * @param position          you want to measure distance to from route. If using for navigation, this would typically
+   *                          be the users current location.
+   * @param routeLeg          a directions route.
+   * @param stepIndex         integer index for step in route.
+   * @param geometryPrecision either {@link Constants#PRECISION_5} or {@link Constants#PRECISION_6}
+   * @return double value giving distance in kilometers.
+   * @throws ServicesException if error occurs Mapbox API related.
+   * @throws TurfException     signals that a Turf exception of some sort has occurred.
+   * @since 2.1.0
+   */
+  public static double getDistanceToNextStep(Position position, RouteLeg routeLeg, int stepIndex, String units,
+                                             int geometryPrecision)
+    throws ServicesException, TurfException {
     LegStep step = validateStep(routeLeg, stepIndex);
 
     // Decode the geometry
-    List<Position> coords = PolylineUtils.decode(step.getGeometry(), Constants.PRECISION_6);
+    List<Position> coords = PolylineUtils.decode(step.getGeometry(), geometryPrecision);
 
     LineString slicedLine = TurfMisc.lineSlice(
       Point.fromCoordinates(position),
@@ -160,8 +181,22 @@ public class RouteUtils {
    * @since 2.0.0
    */
   public static double getDistanceToEndOfRoute(Position position, DirectionsRoute route) throws TurfException {
+    return getDistanceToEndOfRoute(position, route, PRECISION_6);
+  }
+
+  /**
+   * @param position          you want to measure distance to from route. If using for navigation, this would typically
+   *                          be the users current location.
+   * @param route             a {@link DirectionsRoute}.
+   * @param geometryPrecision either {@link Constants#PRECISION_5} or {@link Constants#PRECISION_6}
+   * @return double value giving distance in kilometers.
+   * @throws TurfException signals that a Turf exception of some sort has occurred.
+   * @since 2.1.0
+   */
+  public static double getDistanceToEndOfRoute(Position position, DirectionsRoute route, int geometryPrecision)
+    throws TurfException {
     // Decode the geometry
-    List<Position> coords = PolylineUtils.decode(route.getGeometry(), Constants.PRECISION_6);
+    List<Position> coords = PolylineUtils.decode(route.getGeometry(), geometryPrecision);
 
     LineString slicedLine = TurfMisc.lineSlice(
       Point.fromCoordinates(position),
@@ -185,10 +220,28 @@ public class RouteUtils {
    */
   public static Position getSnapToRoute(Position position, RouteLeg routeLeg, int stepIndex)
     throws ServicesException, TurfException {
+    return getSnapToRoute(position, routeLeg, stepIndex, PRECISION_6);
+  }
+
+  /**
+   * Snaps given position to a {@link RouteLeg} step.
+   *
+   * @param position          that you want to snap to routeLeg. If using for navigation, this would
+   *                          typically be the users current location.
+   * @param routeLeg          that you want to snap position to.
+   * @param stepIndex         integer index for step in routeLeg.
+   * @param geometryPrecision either {@link Constants#PRECISION_5} or {@link Constants#PRECISION_6}
+   * @return your position snapped to the route.
+   * @throws ServicesException if error occurs Mapbox API related.
+   * @throws TurfException     signals that a Turf exception of some sort has occurred.
+   * @since 2.1.0
+   */
+  public static Position getSnapToRoute(Position position, RouteLeg routeLeg, int stepIndex, int geometryPrecision)
+    throws ServicesException, TurfException {
     LegStep step = validateStep(routeLeg, stepIndex);
 
     // Decode the geometry
-    List<Position> coords = PolylineUtils.decode(step.getGeometry(), Constants.PRECISION_6);
+    List<Position> coords = PolylineUtils.decode(step.getGeometry(), geometryPrecision);
 
     // No need to do the math if the step has one coordinate only
     if (coords.size() == 1) {
@@ -234,7 +287,7 @@ public class RouteUtils {
    * @throws TurfException     signals that a Turf exception of some sort has occurred.
    * @since 1.3.0
    */
-  public int getClosestStep(Position position, RouteLeg routeLeg) throws TurfException, ServicesException {
+  public static int getClosestStep(Position position, RouteLeg routeLeg) throws TurfException, ServicesException {
     double minDistance = Double.MAX_VALUE;
     int closestIndex = 0;
 
@@ -262,18 +315,35 @@ public class RouteUtils {
    * @since 2.0.0
    */
   public static LineString getGeometryRemainingOnRoute(Position position, DirectionsRoute route) throws TurfException {
+    return getGeometryRemainingOnRoute(position, route, PRECISION_6);
+  }
+
+  /**
+   * Get the remaining route geometry from the position provided to the end of the directions route. This is useful
+   * when the user location is traversing along the route and you don't want the past route geometry to show on the map.
+   *
+   * @param position          the new starting postion of the route geometry. If using for navigation, this would typically be
+   *                          the users current location.
+   * @param route             a Directions route.
+   * @param geometryPrecision either {@link Constants#PRECISION_5} or {@link Constants#PRECISION_6}
+   * @return the {@link LineString} representing the new route geometry.
+   * @throws TurfException signals that a Turf exception of some sort has occurred.
+   * @since 2.1.0
+   */
+  public static LineString getGeometryRemainingOnRoute(Position position, DirectionsRoute route, int geometryPrecision)
+    throws TurfException {
     int lastLegIndex = route.getLegs().size() - 1;
     int lastStepIndex = route.getLegs().get(lastLegIndex).getSteps().size() - 1;
 
     String polyline = route.getLegs().get(lastLegIndex).getSteps().get(lastStepIndex).getGeometry();
-    LineString lastStepInLastLegLineString = LineString.fromPolyline(polyline, Constants.PRECISION_6);
+    LineString lastStepInLastLegLineString = LineString.fromPolyline(polyline, geometryPrecision);
     int lastStepLastIndex = lastStepInLastLegLineString.getCoordinates().size() - 1;
     Position lastStepInLastLegPostion = lastStepInLastLegLineString.getCoordinates().get(lastStepLastIndex);
 
     return TurfMisc.lineSlice(
       Point.fromCoordinates(position),
       Point.fromCoordinates(lastStepInLastLegPostion),
-      LineString.fromPolyline(route.getGeometry(), Constants.PRECISION_6)
+      LineString.fromPolyline(route.getGeometry(), geometryPrecision)
     );
   }
 
