@@ -19,8 +19,6 @@ import com.mapbox.services.commons.utils.PolylineUtils;
 import java.util.List;
 import java.util.Locale;
 
-import static com.mapbox.services.Constants.PRECISION_6;
-
 /**
  * A few utilities to work with RouteLeg objects.
  * <p>
@@ -139,7 +137,7 @@ public class RouteUtils {
    */
   public static double getDistanceToNextStep(Position position, RouteLeg routeLeg, int stepIndex, String units)
     throws ServicesException, TurfException {
-    return getDistanceToNextStep(position, routeLeg, stepIndex, units, PRECISION_6);
+    return getDistanceToNextStep(position, routeLeg, stepIndex, units, Constants.PRECISION_6);
   }
 
   /**
@@ -181,7 +179,7 @@ public class RouteUtils {
    * @since 2.0.0
    */
   public static double getDistanceToEndOfRoute(Position position, DirectionsRoute route) throws TurfException {
-    return getDistanceToEndOfRoute(position, route, PRECISION_6);
+    return getDistanceToEndOfRoute(position, route, Constants.PRECISION_6);
   }
 
   /**
@@ -220,7 +218,7 @@ public class RouteUtils {
    */
   public static Position getSnapToRoute(Position position, RouteLeg routeLeg, int stepIndex)
     throws ServicesException, TurfException {
-    return getSnapToRoute(position, routeLeg, stepIndex, PRECISION_6);
+    return getSnapToRoute(position, routeLeg, stepIndex, Constants.PRECISION_6);
   }
 
   /**
@@ -315,7 +313,7 @@ public class RouteUtils {
    * @since 2.0.0
    */
   public static LineString getGeometryRemainingOnRoute(Position position, DirectionsRoute route) throws TurfException {
-    return getGeometryRemainingOnRoute(position, route, PRECISION_6);
+    return getGeometryRemainingOnRoute(position, route, Constants.PRECISION_6);
   }
 
   /**
