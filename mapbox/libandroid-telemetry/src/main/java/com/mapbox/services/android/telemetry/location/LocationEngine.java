@@ -22,9 +22,9 @@ public abstract class LocationEngine {
   private static final int TWO_MINUTES = 1000 * 60 * 2;
 
   protected int priority;
-  protected int interval = 1000;
-  protected int fastestInterval = 1000;
-  protected float smallestDisplacement = 3.0f;
+  protected Integer interval = 1000;
+  protected Integer fastestInterval = 1000;
+  protected Float smallestDisplacement = 3.0f;
   protected CopyOnWriteArrayList<LocationEngineListener> locationListeners;
 
   /**
