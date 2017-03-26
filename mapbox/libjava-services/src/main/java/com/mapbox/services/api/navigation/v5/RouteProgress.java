@@ -1,24 +1,17 @@
 package com.mapbox.services.api.navigation.v5;
 
-import com.mapbox.services.Constants;
 import com.mapbox.services.Experimental;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.services.api.directions.v5.models.LegStep;
 import com.mapbox.services.api.directions.v5.models.RouteLeg;
-import com.mapbox.services.api.utils.turf.TurfConstants;
-import com.mapbox.services.api.utils.turf.TurfMeasurement;
-import com.mapbox.services.commons.geojson.LineString;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.mapbox.services.api.navigation.v5.models.RouteLegProgress;
+import com.mapbox.services.commons.models.Position;
 
 /**
  * The {@code routeProgress} class contains all progress information of user along the route, leg and step.
  * <p>
  * You can use this together with MapboxNavigation to obtain this object from the AlertLevelChangeListener
- * or the ProgressChangeListener. This object will be null from when the NavigationService starts till
- * the first location change occurs. Therefore if you are using this to initialize a variable, it's
- * reasonable to check if null beforehand. Since this object is mutable, the values given can change at anytime.
+ * or the ProgressChangeListener. This object is immutable and a new, updated routeProgress object will be provided with
+ * each new location update.
  * <p>
  * This is an experimental API. Experimental APIs are quickly evolving and
  * might change or be removed in minor versions.
@@ -27,180 +20,129 @@ import java.util.logging.Logger;
  */
 @Experimental
 public class RouteProgress {
-  private final Logger logger = Logger.getLogger(RouteProgress.class.getSimpleName());
 
+  private RouteLegProgress currentLegProgress;
+  private Position userSnappedPosition;
   private DirectionsRoute route;
-
-  private int legIndex = 0;
-  private int stepIndex;
-  private double durationRemainingOnStep;
-  private double distanceRemainingOnStep;
-  private double distanceTraveled;
-  private double userSnapToStepDistanceFromManeuver;
+  private int currentLegIndex;
   private int alertUserLevel;
 
-  /*
-   * Route progress getters
+  /**
+   * Constructor for the route routeProgress information.
+   *
+   * @param route               the {@link DirectionsRoute} being used for the navigation session. When a user is
+   *                            rerouted this route is updated.
+   * @param userSnappedPosition the users location snapped to the closest point along the route geometry.
+   * @param currentStepIndex    an {@code integer} representing the current step index the user is on.
+   * @param alertUserLevel      the most recently calculated alert level.
+   * @since 2.1.0
    */
+  public RouteProgress(DirectionsRoute route, Position userSnappedPosition, int currentLegIndex,
+                       int currentStepIndex, int alertUserLevel) {
+    this.route = route;
+    currentLegProgress = new RouteLegProgress(getCurrentLeg(), currentStepIndex, userSnappedPosition);
+    this.alertUserLevel = alertUserLevel;
+    this.currentLegIndex = currentLegIndex;
+    this.userSnappedPosition = userSnappedPosition;
+  }
 
-  public int getPreviousAlertLevel() {
+  /**
+   * Gives a {@link RouteLegProgress} object with information about the particular leg the user is currently on.
+   *
+   * @return a {@link RouteLegProgress} object.
+   * @since 2.1.0
+   */
+  public RouteLegProgress getCurrentLegProgress() {
+    return currentLegProgress;
+  }
+
+  /**
+   * Index representing the current leg.
+   *
+   * @return an {@code integer} representing the current leg the user is on.
+   * @since 2.1.0
+   */
+  public int getLegIndex() {
+    return currentLegIndex;
+  }
+
+  /**
+   * Provides the current {@link RouteLeg} the user is on.
+   *
+   * @return a {@link RouteLeg} the user is currently on.
+   */
+  public RouteLeg getCurrentLeg() {
+    return route.getLegs().get(getLegIndex());
+  }
+
+  /**
+   * Total distance traveled in meters along route.
+   *
+   * @return a double value representing the total distance the user has traveled along the route, using unit meters.
+   * @since 2.1.0
+   */
+  public double getDistanceTraveled() {
+    return route.getDistance() - getDistanceRemaining();
+  }
+
+  /**
+   * Provides the duration remaining in seconds till the user reaches the end of the route.
+   *
+   * @return {@code long} value representing the duration remaining till end of route, in unit seconds.
+   * @since 2.1.0
+   */
+  public long getDurationRemaining() {
+    return (long) ((1 - getFractionTraveled()) * route.getDuration());
+  }
+
+  /**
+   * Get the fraction traveled along the current route, this is a float value between 0 and 1 and isn't guaranteed to
+   * reach 1 before the user reaches the end of the route.
+   *
+   * @return a float value between 0 and 1 representing the fraction the user has traveled along the route.
+   * @since 2.1.0
+   */
+  public float getFractionTraveled() {
+    return (float) (getDistanceTraveled() / route.getDistance());
+  }
+
+  /**
+   * Provides the duration remaining in seconds till the user reaches the end of the route.
+   *
+   * @return {@code long} value representing the duration remaining till end of route, in unit seconds.
+   * @since 2.1.0
+   */
+  public double getDistanceRemaining() {
+    return route.getDistance() - getDistanceTraveled();
+  }
+
+  /**
+   * Get the most recently provided alert level, this can and will only be one of the alert constants.
+   *
+   * @return an {@code integer} representing the most recent user alert level.
+   * @since 2.1.0
+   */
+  public int getAlertUserLevel() {
     return alertUserLevel;
   }
 
   /**
-   * Get the current {@code DirectionsRoute} object the user is traversing along during navigation.
+   * Get the route the navigation session is currently using.
    *
-   * @return {@link DirectionsRoute} object.
-   * @since 2.0.0
+   * @return a {@link DirectionsRoute} currently being used for the navigation session.
+   * @since 2.1.0
    */
   public DirectionsRoute getRoute() {
     return route;
   }
 
   /**
-   * Get the total distance traveled by user along all {@link RouteLeg}s in meters.
+   * Provides the users location snapped to the current route they are navigating on.
    *
-   * @since 2.0.0
+   * @return {@link Position} object with coordinates snapping the user to the route.
+   * @since 2.1.0
    */
-  public double getDistanceTraveledOnRoute() {
-    return distanceTraveled;
-  }
-
-  /**
-   * Number between 0 and 1 representing how far along the {@link DirectionsRoute} the user has traveled.
-   *
-   * @since 2.0.0
-   */
-  public double getFractionTraveledOnRoute() {
-    logger.log(Level.FINE, "fraction %f", distanceTraveled / route.getDistance());
-    return distanceTraveled / route.getDistance();
-  }
-
-  /**
-   * Total distance remaining in meters along the {@link DirectionsRoute}.
-   *
-   * @since 2.0.0
-   */
-  public double getDistanceRemainingOnRoute() {
-    return route.getDistance() - distanceTraveled;
-  }
-
-  /*
-   * Leg progress getters
-   */
-
-  /**
-   * Get the current leg index the user is on during navigation.
-   *
-   * @return integer representing the current leg index.
-   * @since 2.0.0
-   */
-  public int getLegIndex() {
-    return legIndex;
-  }
-
-  public RouteLeg getCurrentLeg() {
-    return route.getLegs().get(getLegIndex());
-  }
-
-  /**
-   * Gets the next {@link LegStep}, if the route is on it's last step, we check if the route has an additional leg
-   * and if not, return the current index.
-   *
-   * @return A {@link LegStep} representing the next (or final) step in the route.
-   * @since 2.0.0
-   */
-  public LegStep getUpComingStep() {
-    if (stepIndex + 1 < route.getLegs().get(legIndex).getSteps().size()) {
-      return route.getLegs().get(legIndex).getSteps().get(stepIndex + 1);
-    } else if ((route.getLegs().size() - 1) > legIndex) {
-      // User has reached the end of the route leg, we adjust our indices and return the next step in new leg.
-      legIndex += 1;
-      stepIndex = 0;
-      return route.getLegs().get(legIndex).getSteps().get(stepIndex);
-    } else {
-      // The user is on the last step.
-      return route.getLegs().get(legIndex).getSteps().get(stepIndex);
-    }
-  }
-
-  /*
-   * Step progress getters
-   */
-
-  /**
-   * Get the current step index the user is on during navigation.
-   *
-   * @return integer representing the current step index.
-   * @since 2.0.0
-   */
-  public int getStepIndex() {
-    return stepIndex;
-  }
-
-  public LegStep getCurrentStep() {
-    return route.getLegs().get(legIndex).getSteps().get(stepIndex);
-  }
-
-
-  /**
-   * Total distance traveled in meters along current {@link LegStep}.
-   *
-   * @since 2.0.0
-   */
-  public double getDistanceTraveledOnStep() {
-    LineString lineString = LineString.fromPolyline(getCurrentStep().getGeometry(), Constants.PRECISION_6);
-    return TurfMeasurement.lineDistance(lineString, TurfConstants.UNIT_METERS) - distanceRemainingOnStep;
-  }
-
-  public double getDurationRemainingOnStep() {
-    return durationRemainingOnStep;
-  }
-
-  public double getDistanceRemainingOnStep() {
-    logger.log(Level.FINE, "distance %f", distanceRemainingOnStep);
-    return distanceRemainingOnStep;
-  }
-
-
-  /*
-   * Protected setters
-   */
-
-  protected void setLegIndex(int legIndex) {
-    this.legIndex = legIndex;
-  }
-
-  public void setAlertUserLevel(int alertUserLevel) {
-    this.alertUserLevel = alertUserLevel;
-  }
-
-  public void setStepIndex(int stepIndex) {
-    this.stepIndex = stepIndex;
-  }
-
-  public void setRoute(DirectionsRoute route) {
-    this.route = route;
-  }
-
-  public void setDurationRemainingOnStep(double durationRemainingOnStep) {
-    this.durationRemainingOnStep = durationRemainingOnStep;
-  }
-
-  public void setDistanceRemainingOnStep(double distanceRemainingOnStep) {
-    this.distanceRemainingOnStep = distanceRemainingOnStep;
-  }
-
-  protected void setDistanceTraveled(double distanceTraveled) {
-    this.distanceTraveled = distanceTraveled;
-  }
-
-
-  public double getUserSnapToStepDistanceFromManeuver() {
-    return userSnapToStepDistanceFromManeuver;
-  }
-
-  public void setUserSnapToStepDistanceFromManeuver(double userSnapToStepDistanceFromManeuver) {
-    this.userSnapToStepDistanceFromManeuver = userSnapToStepDistanceFromManeuver;
+  public Position usersCurrentSnappedPosition() {
+    return userSnappedPosition;
   }
 }
