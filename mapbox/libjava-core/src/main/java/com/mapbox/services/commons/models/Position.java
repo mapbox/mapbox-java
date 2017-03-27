@@ -31,7 +31,7 @@ public class Position {
     this.latitude = latitude;
     this.altitude = altitude;
 
-    if (latitude < -90 || latitude > 90) {
+    if (latitude < -90 || latitude > 90 && latitude != Double.POSITIVE_INFINITY) {
       // Checks the latitude value is within range or provide a warning otherwise
       logger.warning(String.format(Constants.DEFAULT_LOCALE,
         "Latitude value seems to be out of range (found: %f, expected: [-90, 90]). "
@@ -39,7 +39,7 @@ public class Position {
         latitude));
     }
 
-    if (longitude < -180 || longitude > 180) {
+    if (longitude < -180 || longitude > 180 && longitude != Double.POSITIVE_INFINITY) {
       // Checks the longitude value is within range or provide a warning otherwise
       logger.warning(String.format(Constants.DEFAULT_LOCALE,
         "Longitude value seems to be out of range (found: %f, expected: [-180, 180]). "
