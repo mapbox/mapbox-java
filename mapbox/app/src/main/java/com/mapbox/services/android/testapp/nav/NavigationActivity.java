@@ -7,9 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -24,6 +24,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
+import com.mapbox.services.android.navigation.v5.AlertLevelChangeListener;
 import com.mapbox.services.android.navigation.v5.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.NavigationEventListener;
 import com.mapbox.services.android.navigation.v5.ProgressChangeListener;
@@ -43,42 +44,56 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 import static com.mapbox.mapboxsdk.maps.MapboxMap.OnMapClickListener;
+import static com.mapbox.services.android.Constants.ARRIVE_ALERT_LEVEL;
+import static com.mapbox.services.android.Constants.DEPART_ALERT_LEVEL;
+import static com.mapbox.services.android.Constants.HIGH_ALERT_LEVEL;
+import static com.mapbox.services.android.Constants.LOW_ALERT_LEVEL;
+import static com.mapbox.services.android.Constants.MEDIUM_ALERT_LEVEL;
+import static com.mapbox.services.android.Constants.NONE_ALERT_LEVEL;
 
 public class NavigationActivity extends AppCompatActivity implements OnMapReadyCallback, OnMapClickListener,
-  ProgressChangeListener, NavigationEventListener {
-
-  private static final String TAG = "NavigationActivity";
+  ProgressChangeListener, NavigationEventListener, AlertLevelChangeListener {
 
   // Map variables
   private MapView mapView;
+  private Polyline routeLine;
   private MapboxMap mapboxMap;
   private Marker destinationMarker;
 
-  private MapboxNavigation navigation;
+  // Navigation related variables
   private LocationEngine locationEngine;
-  private DirectionsRoute route;
+  private MapboxNavigation navigation;
   private Button startRouteButton;
-  private Polyline routeLine;
+  private DirectionsRoute route;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_navigation_activity);
 
+
     startRouteButton = (Button) findViewById(R.id.startRouteButton);
     startRouteButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         if (navigation != null && route != null) {
+
+          // Hide the start button
+          startRouteButton.setVisibility(View.INVISIBLE);
+
+          // Attach all of our navigation listeners.
           navigation.setNavigationEventListener(NavigationActivity.this);
           navigation.setProgressChangeListener(NavigationActivity.this);
+          navigation.setAlertLevelChangeListener(NavigationActivity.this);
 
           // Adjust location engine to force a gps reading every second. This isn't required but gives an overall
-          // better navigation experience for users.
+          // better navigation experience for users. The updating only occurs if the user moves 3 meters or further
+          // from the last update.
           locationEngine.setInterval(0);
-          locationEngine.setSmallestDisplacement(0f);
+          locationEngine.setSmallestDisplacement(3.0f);
           locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
           locationEngine.setFastestInterval(1000);
 
@@ -145,7 +160,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
   private void calculateRoute(Position destination) {
     Location userLocation = mapboxMap.getMyLocation();
     if (userLocation == null) {
-      Log.d(TAG, "calculateRoute: User location is null, therefore, origin can't be set.");
+      Timber.d("calculateRoute: User location is null, therefore, origin can't be set.");
       return;
     }
 
@@ -162,7 +177,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
       @Override
       public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
-        Log.e(TAG, "onFailure: navigation.getRoute()", throwable);
+        Timber.e("onFailure: navigation.getRoute()", throwable);
       }
     });
   }
@@ -174,15 +189,40 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
   @Override
   public void onRunning(boolean running) {
     if (running) {
-      Log.d(TAG, "onRunning: Started");
+      Timber.d("onRunning: Started");
     } else {
-      Log.d(TAG, "onRunning: Stopped");
+      Timber.d("onRunning: Stopped");
     }
   }
 
   @Override
   public void onProgressChange(Location location, RouteProgress routeProgress) {
-    Log.d(TAG, "onProgressChange: called");
+    Timber.d("onProgressChange: fraction of route traveled: %d", routeProgress.getFractionTraveledOnRoute());
+  }
+
+  @Override
+  public void onAlertLevelChange(int alertLevel, RouteProgress routeProgress) {
+
+    switch (alertLevel) {
+      case HIGH_ALERT_LEVEL:
+        Toast.makeText(NavigationActivity.this, "HIGH", Toast.LENGTH_LONG).show();
+        break;
+      case MEDIUM_ALERT_LEVEL:
+        Toast.makeText(NavigationActivity.this, "MEDIUM", Toast.LENGTH_LONG).show();
+        break;
+      case LOW_ALERT_LEVEL:
+        Toast.makeText(NavigationActivity.this, "LOW", Toast.LENGTH_LONG).show();
+        break;
+      case ARRIVE_ALERT_LEVEL:
+        Toast.makeText(NavigationActivity.this, "ARRIVE", Toast.LENGTH_LONG).show();
+        break;
+      case NONE_ALERT_LEVEL:
+        Toast.makeText(NavigationActivity.this, "NONE", Toast.LENGTH_LONG).show();
+        break;
+      case DEPART_ALERT_LEVEL:
+        Toast.makeText(NavigationActivity.this, "DEPART", Toast.LENGTH_LONG).show();
+        break;
+    }
   }
 
   /*
