@@ -216,11 +216,12 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
       case ARRIVE_ALERT_LEVEL:
         Toast.makeText(NavigationActivity.this, "ARRIVE", Toast.LENGTH_LONG).show();
         break;
-      case NONE_ALERT_LEVEL:
-        Toast.makeText(NavigationActivity.this, "NONE", Toast.LENGTH_LONG).show();
-        break;
       case DEPART_ALERT_LEVEL:
         Toast.makeText(NavigationActivity.this, "DEPART", Toast.LENGTH_LONG).show();
+        break;
+      default:
+      case NONE_ALERT_LEVEL:
+        Toast.makeText(NavigationActivity.this, "NONE", Toast.LENGTH_LONG).show();
         break;
     }
   }
