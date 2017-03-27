@@ -28,6 +28,7 @@ import com.mapbox.services.android.navigation.v5.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.NavigationEventListener;
 import com.mapbox.services.android.navigation.v5.ProgressChangeListener;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
@@ -56,6 +57,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
   private Marker destinationMarker;
 
   private MapboxNavigation navigation;
+  private LocationEngine locationEngine;
   private DirectionsRoute route;
   private Button startRouteButton;
   private Polyline routeLine;
@@ -72,6 +74,15 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         if (navigation != null && route != null) {
           navigation.setNavigationEventListener(NavigationActivity.this);
           navigation.setProgressChangeListener(NavigationActivity.this);
+
+          // Adjust location engine to force a gps reading every second. This isn't required but gives an overall
+          // better navigation experience for users.
+          locationEngine.setInterval(0);
+          locationEngine.setSmallestDisplacement(0f);
+          locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
+          locationEngine.setFastestInterval(1000);
+
+          navigation.setLocationEngine(locationEngine);
           navigation.startNavigation(route);
         }
       }
@@ -80,10 +91,10 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     mapView = (MapView) findViewById(R.id.mapView);
     mapView.onCreate(savedInstanceState);
 
-    LocationEngine locationEngine = LocationSource.getLocationEngine(this);
+
+    locationEngine = LocationSource.getLocationEngine(this);
 
     navigation = new MapboxNavigation(this, Mapbox.getAccessToken());
-    navigation.setLocationEngine(LocationSource.getLocationEngine(this));
 
     mapView.getMapAsync(this);
   }
