@@ -180,11 +180,11 @@ public class RouteUtils {
    * @param routeLeg a directions {@link RouteLeg}.
    * @return double value giving distance in specified units
    */
-  public static double getDistanceToNextLeg(Position position, RouteLeg routeLeg, String units) {
+  public static double getDistanceToNextLeg(Position position, RouteLeg routeLeg, String units, int geometryPrecision) {
     // Decode the geometry
     List<Position> coords = new ArrayList<>();
     for (int i = 0; i < routeLeg.getSteps().size(); i++) {
-      coords.addAll(PolylineUtils.decode(routeLeg.getSteps().get(i).getGeometry(), Constants.PRECISION_6));
+      coords.addAll(PolylineUtils.decode(routeLeg.getSteps().get(i).getGeometry(), geometryPrecision));
     }
     LineString slicedLine = TurfMisc.lineSlice(
       Point.fromCoordinates(position),

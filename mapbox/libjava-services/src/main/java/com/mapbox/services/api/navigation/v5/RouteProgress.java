@@ -4,6 +4,7 @@ import com.mapbox.services.Experimental;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.directions.v5.models.RouteLeg;
 import com.mapbox.services.api.navigation.v5.models.RouteLegProgress;
+import com.mapbox.services.api.utils.turf.TurfConstants;
 import com.mapbox.services.commons.models.Position;
 
 /**
@@ -26,6 +27,7 @@ public class RouteProgress {
   private DirectionsRoute route;
   private int currentLegIndex;
   private int alertUserLevel;
+  private double routeDistance;
 
   /**
    * Constructor for the route routeProgress information.
@@ -40,10 +42,18 @@ public class RouteProgress {
   public RouteProgress(DirectionsRoute route, Position userSnappedPosition, int currentLegIndex,
                        int currentStepIndex, int alertUserLevel) {
     this.route = route;
-    currentLegProgress = new RouteLegProgress(getCurrentLeg(), currentStepIndex, userSnappedPosition);
     this.alertUserLevel = alertUserLevel;
     this.currentLegIndex = currentLegIndex;
     this.userSnappedPosition = userSnappedPosition;
+    currentLegProgress = new RouteLegProgress(getCurrentLeg(), currentStepIndex, userSnappedPosition);
+
+    // Measure route from beginning to end. This is done since the directions API gives a different distance then the
+    // one we measure using turf.
+    routeDistance = RouteUtils.getDistanceToEndOfRoute(
+      route.getLegs().get(0).getSteps().get(0).getManeuver().asPosition(),
+      route,
+      TurfConstants.UNIT_METERS
+    );
   }
 
   /**
@@ -82,7 +92,7 @@ public class RouteProgress {
    * @since 2.1.0
    */
   public double getDistanceTraveled() {
-    return route.getDistance() - getDistanceRemaining();
+    return routeDistance - getDistanceRemaining();
   }
 
   /**
@@ -103,7 +113,7 @@ public class RouteProgress {
    * @since 2.1.0
    */
   public float getFractionTraveled() {
-    return (float) (getDistanceTraveled() / route.getDistance());
+    return (float) (getDistanceTraveled() / routeDistance);
   }
 
   /**
@@ -113,7 +123,7 @@ public class RouteProgress {
    * @since 2.1.0
    */
   public double getDistanceRemaining() {
-    return route.getDistance() - getDistanceTraveled();
+    return RouteUtils.getDistanceToEndOfRoute(userSnappedPosition, route, TurfConstants.UNIT_METERS);
   }
 
   /**

@@ -1,5 +1,6 @@
 package com.mapbox.services.api.navigation.v5.models;
 
+import com.mapbox.services.Constants;
 import com.mapbox.services.Experimental;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.models.LegStep;
@@ -15,6 +16,7 @@ public class RouteLegProgress {
   private int stepIndex;
   private Position userSnappedPosition;
   private RouteStepProgress currentStepProgress;
+  private double legDistance;
 
   /**
    * Constructor for the route leg routeProgress information.
@@ -29,6 +31,17 @@ public class RouteLegProgress {
     this.stepIndex = stepIndex;
     this.userSnappedPosition = userSnappedPosition;
     currentStepProgress = new RouteStepProgress(routeLeg, stepIndex, userSnappedPosition);
+
+    if (userSnappedPosition == null) {
+      throw new ServicesException("NULL");
+    }
+
+    legDistance = RouteUtils.getDistanceToNextLeg(
+      routeLeg.getSteps().get(0).getManeuver().asPosition(),
+      routeLeg,
+      TurfConstants.UNIT_METERS,
+      Constants.PRECISION_6
+    );
   }
 
   /**
@@ -62,7 +75,19 @@ public class RouteLegProgress {
    * @since 2.1.0
    */
   public double getDistanceTraveled() {
-    return RouteUtils.getDistanceToNextLeg(userSnappedPosition, routeLeg, TurfConstants.UNIT_METERS);
+    return legDistance - getDistanceRemaining();
+  }
+
+  /**
+   * Provides the duration remaining in seconds till the user reaches the end of the route.
+   *
+   * @return {@code long} value representing the duration remaining till end of route, in unit seconds.
+   * @since 2.1.0
+   */
+  public double getDistanceRemaining() {
+    return RouteUtils.getDistanceToNextLeg(
+      userSnappedPosition, routeLeg, TurfConstants.UNIT_METERS, Constants.PRECISION_6
+    );
   }
 
   /**
@@ -83,7 +108,7 @@ public class RouteLegProgress {
    * @since 2.1.0
    */
   public float getFractionTraveled() {
-    return (float) (getDistanceTraveled() / routeLeg.getDistance());
+    return (float) (getDistanceTraveled() / legDistance);
   }
 
   /**

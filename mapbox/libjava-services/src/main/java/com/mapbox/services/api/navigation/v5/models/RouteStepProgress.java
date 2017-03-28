@@ -15,6 +15,7 @@ public class RouteStepProgress {
   private RouteLeg routeLeg;
   private int stepIndex;
   private Position userSnappedPosition;
+  private double stepDistance;
 
   /**
    * Constructor for the step progress.
@@ -28,6 +29,13 @@ public class RouteStepProgress {
     this.step = routeLeg.getSteps().get(stepIndex);
     this.stepIndex = stepIndex;
     this.routeLeg = routeLeg;
+
+    stepDistance = RouteUtils.getDistanceToNextStep(
+      routeLeg.getSteps().get(stepIndex).getManeuver().asPosition(),
+      routeLeg,
+      stepIndex,
+      TurfConstants.UNIT_METERS
+    );
   }
 
   /**
@@ -38,7 +46,7 @@ public class RouteStepProgress {
    * @since 2.1.0
    */
   public double getDistanceTraveled() {
-    return step.getDistance() - getDistanceRemaining();
+    return stepDistance - getDistanceRemaining();
   }
 
   /**
@@ -60,7 +68,7 @@ public class RouteStepProgress {
    * @since 2.1.0
    */
   public float getFractionTraveled() {
-    return (float) (getDistanceTraveled() / step.getDistance());
+    return (float) (getDistanceTraveled() / stepDistance);
   }
 
   /**

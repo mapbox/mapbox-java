@@ -7,6 +7,8 @@ import java.io.Reader;
 
 public class BaseNavigationTest {
 
+  protected static final double DELTA = 1E-10;
+
   static String convertStreamToString(InputStream is) throws IOException {
     final int bufferSize = 1024;
     final char[] buffer = new char[bufferSize];
