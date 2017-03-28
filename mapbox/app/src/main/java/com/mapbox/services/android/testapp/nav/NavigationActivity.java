@@ -93,7 +93,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
           // better navigation experience for users. The updating only occurs if the user moves 3 meters or further
           // from the last update.
           locationEngine.setInterval(0);
-          locationEngine.setSmallestDisplacement(0f);
+          locationEngine.setSmallestDisplacement(3.0f);
           locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
           locationEngine.setFastestInterval(1000);
 
@@ -197,7 +197,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
   @Override
   public void onProgressChange(Location location, RouteProgress routeProgress) {
-   // Timber.d("onProgressChange: fraction of route traveled: %d", routeProgress.getFractionTraveled());
+    Timber.d("onProgressChange: fraction of route traveled: %d", routeProgress.getFractionTraveled());
   }
 
   @Override
