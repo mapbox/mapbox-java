@@ -23,6 +23,7 @@ import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.location.LocationEngineActivity;
+import com.mapbox.services.android.testapp.nav.NavigationActivity;
 import com.mapbox.services.android.testapp.nav.OffRouteDetectionActivity;
 import com.mapbox.services.android.testapp.nav.SnapToRouteActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
@@ -145,6 +146,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         getString(R.string.title_snap_to_route),
         getString(R.string.description_snap_to_route),
         SnapToRouteActivity.class
+      ),
+      new SampleItem(
+        getString(R.string.title_navigation),
+        getString(R.string.description_navigation),
+        NavigationActivity.class
       )
     ));
 

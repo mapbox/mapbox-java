@@ -117,9 +117,6 @@ public class NavigationService extends Service implements LocationEngineListener
   private void startNavigation() {
     Timber.d("Navigation session started.");
     routeProgress = new RouteProgress();
-    if (navigationEventListener != null) {
-      navigationEventListener.onRunning(true);
-    }
 
     Handler responseHandler = new Handler();
     locationUpdatedThread = new LocationUpdatedThread(responseHandler);
@@ -137,6 +134,11 @@ public class NavigationService extends Service implements LocationEngineListener
       locationEngine.setPriority(HIGH_ACCURACY);
       locationEngine.requestLocationUpdates();
       locationEngine.addLocationEngineListener(this);
+
+      if (navigationEventListener != null) {
+        navigationEventListener.onRunning(true);
+      }
+
     } else {
       Timber.d("locationEngine null in NavigationService");
     }

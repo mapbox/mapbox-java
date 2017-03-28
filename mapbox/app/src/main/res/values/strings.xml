@@ -65,6 +65,8 @@
     <string name="description_off_route_detection">Uses the Route Utils class to determine if a users off route.</string>
     <string name="description_connectivity">Keep track of the connectivity status.</string>
     <string name="description_snap_to_route">Move forward or backwards between route steps and snap a point to the line.</string>
+    <string name="description_navigation">Use the Navigation service</string>
+    <string name="title_navigation">Navigation</string>
 
     <string-array name="turf_calculation_items">
         <item>Select calculation</item>

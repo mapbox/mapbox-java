@@ -155,6 +155,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
+        <activity
+            android:name=".nav.NavigationActivity"
+            android:label="@string/title_navigation">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
 
         <!--
         Service to asynchronously fetch a location address using a Geocoder. Setting the

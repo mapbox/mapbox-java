@@ -94,7 +94,6 @@ public class MapboxNavigation {
    */
   public void onStop() {
     Timber.d("MapboxNavigation onStop.");
-    System.out.println(isBound);
     if (isBound) {
       Timber.d("unbindService called");
       context.unbindService(connection);
@@ -255,7 +254,7 @@ public class MapboxNavigation {
     // Optionally set the bearing and radiuses if the developer provider the user bearing. A tolerance of 90 degrees
     // is given.
     if (userBearing != null) {
-      directionsBuilder.setBearings(new double[] {getUserOriginBearing(), 90});
+      directionsBuilder.setBearings(new double[] {getUserOriginBearing(), 90}, new double[] {});
     }
     directionsBuilder.build().enqueueCall(callback);
   }
@@ -370,9 +369,19 @@ public class MapboxNavigation {
       navigationService = binder.getService();
       navigationService.setLocationEngine(getLocationEngine());
       navigationService.setNavigationEventListener(navigationEventListener);
-      navigationService.setAlertLevelChangeListener(alertLevelChangeListener);
-      navigationService.setProgressChangeListener(progressChangeListener);
-      navigationService.setOffRouteListener(offRouteListener);
+
+      if (alertLevelChangeListener != null) {
+        navigationService.setAlertLevelChangeListener(alertLevelChangeListener);
+      }
+
+      if (progressChangeListener != null) {
+        navigationService.setProgressChangeListener(progressChangeListener);
+      }
+
+      if (offRouteListener != null) {
+        navigationService.setOffRouteListener(offRouteListener);
+      }
+
       navigationService.setSnapToRoute(snapToRoute);
       navigationService.startRoute(route);
     }
