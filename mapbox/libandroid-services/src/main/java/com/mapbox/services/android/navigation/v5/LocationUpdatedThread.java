@@ -40,7 +40,7 @@ class LocationUpdatedThread extends HandlerThread {
   // Navigation Variables
   private AlertLevelChangeListener alertLevelChangeListener;
   private ProgressChangeListener progressChangeListener;
-  private double userDistanceToManeuverLocation;
+  private NewRouteProgressListener newRouteProgressListener;
   private OffRouteListener offRouteListener;
   private boolean userStillOnRoute = true;
   private boolean snapToRoute;
@@ -74,6 +74,8 @@ class LocationUpdatedThread extends HandlerThread {
       return;
     }
 
+    Timber.d("%d", previousRouteProgress.getAlertUserLevel());
+
     // Even if the user isn't listening in to the alert listener, we need to run monitorStepProgress inorder to
     // update the routeProgress object
     final RouteProgress routeProgress = monitorStepProgress(previousRouteProgress, location);
@@ -103,14 +105,20 @@ class LocationUpdatedThread extends HandlerThread {
 
         if (previousRouteProgress.getAlertUserLevel() != routeProgress.getAlertUserLevel()) {
           if (alertLevelChangeListener != null) {
-            alertLevelChangeListener.onAlertLevelChange(routeProgress.getAlertUserLevel(), previousRouteProgress);
+            alertLevelChangeListener.onAlertLevelChange(routeProgress.getAlertUserLevel(), routeProgress);
           }
         }
         if (progressChangeListener != null) {
-          progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, previousRouteProgress);
+          progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, routeProgress);
         }
+
+        newRouteProgressListener.onRouteProgressChange(routeProgress);
       }
     });
+  }
+
+  void setNewRouteProgressListener(NewRouteProgressListener newRouteProgressListener) {
+    this.newRouteProgressListener = newRouteProgressListener;
   }
 
   void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
@@ -128,7 +136,6 @@ class LocationUpdatedThread extends HandlerThread {
   void setSnapToRoute(boolean snapToRoute) {
     this.snapToRoute = snapToRoute;
   }
-
 
   private RouteProgress monitorStepProgress(@NonNull RouteProgress routeProgress, Location location) {
     int currentStepIndex = routeProgress.getCurrentLegProgress().getStepIndex();
@@ -213,6 +220,8 @@ class LocationUpdatedThread extends HandlerThread {
       directionsRoute.getLegs().get(routeProgress.getLegIndex()),
       routeProgress.getCurrentLegProgress().getStepIndex()
     );
+
+    Timber.d("New alertLevel: %d", alertLevel);
 
     // Create an updated RouteProgress object to return
     return new RouteProgress(directionsRoute, snappedPosition, currentLegIndex, currentStepIndex, alertLevel);

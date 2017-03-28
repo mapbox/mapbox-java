@@ -7,6 +7,8 @@ import android.util.Log;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.squareup.leakcanary.LeakCanary;
 
+import timber.log.Timber;
+
 public class MasApplication extends Application {
 
   private static final String LOG_TAG = MasApplication.class.getSimpleName();
@@ -20,6 +22,10 @@ public class MasApplication extends Application {
       return;
     }
     LeakCanary.install(this);
+
+    if (BuildConfig.DEBUG) {
+      Timber.plant(new Timber.DebugTree());
+    }
 
     // Access token
     String mapboxAccessToken = Utils.getMapboxAccessToken(getApplicationContext());

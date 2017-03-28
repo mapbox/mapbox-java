@@ -118,9 +118,9 @@ public class RouteLegProgress {
    * @since 2.1.0
    */
   public LegStep getUpComingStep() {
-    if (routeLeg.getSteps().size() >= getStepIndex()) {
-      return null;
+    if (routeLeg.getSteps().size() > getStepIndex()) {
+      return routeLeg.getSteps().get(getStepIndex() + 1);
     }
-    return routeLeg.getSteps().get(getStepIndex() + 1);
+    return null;
   }
 }

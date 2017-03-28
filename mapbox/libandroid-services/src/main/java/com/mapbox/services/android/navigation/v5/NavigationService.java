@@ -129,6 +129,13 @@ public class NavigationService extends Service implements LocationEngineListener
     locationUpdatedThread.start();
     locationUpdatedThread.getLooper();
     Timber.d("Background thread started");
+
+    locationUpdatedThread.setNewRouteProgressListener(new NewRouteProgressListener() {
+      @Override
+      public void onRouteProgressChange(RouteProgress routeProgress) {
+        NavigationService.this.routeProgress = routeProgress;
+      }
+    });
   }
 
   public void startRoute(DirectionsRoute directionsRoute) {
@@ -197,17 +204,17 @@ public class NavigationService extends Service implements LocationEngineListener
   @Override
   public void onConnected() {
     Timber.d("NavigationService now connected to location listener");
-    locationEngine.requestLocationUpdates();
     Location lastLocation = locationEngine.getLastLocation();
+    if (routeProgress == null) {
+      Timber.d("Create new routeProgress object");
+      routeProgress = new RouteProgress(
+        directionsRoute,
+        Position.fromCoordinates(lastLocation.getLongitude(), lastLocation.getLatitude()),
+        0, 0,
+        Constants.NONE_ALERT_LEVEL
+      );
+    }
     if (locationUpdatedThread != null && lastLocation != null) {
-      if (routeProgress == null) {
-        routeProgress = new RouteProgress(
-          directionsRoute,
-          Position.fromCoordinates(lastLocation.getLongitude(), lastLocation.getLatitude()),
-          0, 0,
-          Constants.NONE_ALERT_LEVEL
-        );
-      }
       locationUpdatedThread.updateLocation(directionsRoute, routeProgress, lastLocation);
     }
   }
@@ -215,6 +222,15 @@ public class NavigationService extends Service implements LocationEngineListener
   @Override
   public void onLocationChanged(Location location) {
     Timber.d("LocationChange occurred");
+    if (routeProgress == null && location != null) {
+      Timber.d("Create new routeProgress object");
+      routeProgress = new RouteProgress(
+        directionsRoute,
+        Position.fromCoordinates(location.getLongitude(), location.getLatitude()),
+        0, 0,
+        Constants.NONE_ALERT_LEVEL
+      );
+    }
     if (locationUpdatedThread != null && location != null) {
       locationUpdatedThread.updateLocation(directionsRoute, routeProgress, location);
     }
