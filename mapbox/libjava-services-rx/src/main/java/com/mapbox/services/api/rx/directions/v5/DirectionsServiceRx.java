@@ -32,6 +32,9 @@ public interface DirectionsServiceRx {
    *                         the angle of approach
    * @param continueStraight Define whether the route should continue straight even if the route
    *                         will be slower.
+   * @param annotations       An annotations object that contains additional details about each line segment along the
+   *                         route geometry. Each entry in an annotations field corresponds to a coordinate along the
+   *                         route geometry.
    * @return A retrofit Observable object
    * @since 2.0.0
    */
@@ -48,6 +51,7 @@ public interface DirectionsServiceRx {
     @Query("radiuses") String radiuses,
     @Query("steps") Boolean steps,
     @Query("bearings") String bearings,
-    @Query("continue_straight") Boolean continueStraight
+    @Query("continue_straight") Boolean continueStraight,
+    @Query("annotations") String annotations
   );
 }

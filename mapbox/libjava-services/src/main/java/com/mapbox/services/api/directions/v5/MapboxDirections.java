@@ -74,7 +74,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       builder.getRadiuses(),
       builder.isSteps(),
       builder.getBearings(),
-      builder.isContinueStraight());
+      builder.isContinueStraight(),
+      builder.getAnnotation());
 
     // Done
     return call;
@@ -145,6 +146,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     private Boolean continueStraight = null;
     private Position origin = null;
     private Position destination = null;
+    private String[] annotation = null;
 
     /**
      * Constructor
@@ -340,6 +342,22 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return (T) this;
     }
 
+    /**
+     * Whether or not to return additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotation can be used by separating them with {@code ,}.
+     *
+     * @param annotation String referencing one of the annotation direction criteria's.
+     * @return Builder
+     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object documentation</a> for
+     * more information.
+     * @since 2.1.0
+     */
+    public T setAnnotation(String... annotation) {
+      this.annotation = annotation;
+      return (T) this;
+    }
+
     /*
      * Getters, they return the value in a format ready for the API to consume
      */
@@ -506,6 +524,20 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return continueStraight;
     }
 
+    /**
+     * returns one or a combination of {@link DirectionsCriteria#ANNOTATION_DISTANCE},
+     * {@link DirectionsCriteria#ANNOTATION_DURATION}, or {@link DirectionsCriteria#ANNOTATION_SPEED}.
+     *
+     * @return String with 1 or several annotations that have been set.
+     * @since 2.1.0
+     */
+    public String getAnnotation() {
+      if (annotation == null || annotation.length == 0) {
+        return null;
+      }
+      return TextUtils.join(",", annotation);
+    }
+
     public T setClientAppName(String appName) {
       super.clientAppName = appName;
       return (T) this;
@@ -576,6 +608,24 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         throw new ServicesException(
           "There must be as many bearings as there are coordinates.");
       }
+
+      if (annotation != null) {
+        if (annotation.length > 3) {
+          throw new ServicesException(
+            "Annotation request can only contain one of the three DirectionsCriteria constants.");
+        }
+
+        // Check that user isn't using incorrect annotation request.
+        for (String annotationEntry : annotation) {
+          if (!annotationEntry.equals(DirectionsCriteria.ANNOTATION_DISTANCE)
+            && !annotationEntry.equals(DirectionsCriteria.ANNOTATION_DURATION)
+            && !annotationEntry.equals(DirectionsCriteria.ANNOTATION_SPEED)) {
+            throw new ServicesException(
+              "Annotation value must be one of the constant values found inside DirectionsCriteria");
+          }
+        }
+      }
+
       return new MapboxDirections(this);
     }
   }

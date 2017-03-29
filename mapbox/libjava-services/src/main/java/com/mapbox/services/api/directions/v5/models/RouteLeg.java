@@ -13,6 +13,7 @@ public class RouteLeg {
   private double duration;
   private String summary;
   private List<LegStep> steps;
+  private LegAnnotation annotation;
 
   public RouteLeg() {
   }
@@ -55,5 +56,16 @@ public class RouteLeg {
    */
   public List<LegStep> getSteps() {
     return steps;
+  }
+
+  /**
+   * An annotations object that contains additional details about each line segment along the route geometry. If you'd l
+   * ike to receiving this, you must request it inside your Directions request before executing the call.
+   *
+   * @return An {@link LegAnnotation} object.
+   * @since 2.1.0
+   */
+  public LegAnnotation getAnnotation() {
+    return annotation;
   }
 }

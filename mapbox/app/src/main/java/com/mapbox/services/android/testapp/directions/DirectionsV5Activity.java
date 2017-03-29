@@ -108,6 +108,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
       .setSteps(true)
       .setOverview(DirectionsCriteria.OVERVIEW_FULL)
       .setBearings(new double[] {60, 45}, new double[] {45, 45})
+      .setAnnotation(DirectionsCriteria.ANNOTATION_DISTANCE, DirectionsCriteria.ANNOTATION_DURATION)
       .build();
 
     MapboxDirectionsRx clientRx = new MapboxDirectionsRx.Builder()
@@ -132,6 +133,7 @@ public class DirectionsV5Activity extends AppCompatActivity {
     client.enqueueCall(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+        Log.d(LOG_TAG, "API call URL: " + call.request().url().toString());
 
         // You can get generic HTTP info about the response
         Log.d(LOG_TAG, "Response code: " + response.code());
