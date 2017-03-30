@@ -2,6 +2,7 @@ package com.mapbox.services.commons.models;
 
 import com.mapbox.services.Constants;
 
+import java.text.DecimalFormat;
 import java.util.logging.Logger;
 
 /**
@@ -27,6 +28,9 @@ public class Position {
    * @since 1.0.0
    */
   private Position(double longitude, double latitude, double altitude) {
+    // Used to remove any trailing zeros and prevent a coordinate being over 7 significant figures.
+    DecimalFormat decimalFormat = new DecimalFormat("0.######");
+
     this.longitude = longitude;
     this.latitude = latitude;
     this.altitude = altitude;
@@ -34,17 +38,17 @@ public class Position {
     if (latitude < -90 || latitude > 90) {
       // Checks the latitude value is within range or provide a warning otherwise
       logger.warning(String.format(Constants.DEFAULT_LOCALE,
-        "Latitude value seems to be out of range (found: %f, expected: [-90, 90]). "
+        "Latitude value seems to be out of range (found: %s, expected: [-90, 90]). "
           + "Did you accidentally reverse the longitude/latitude order?",
-        latitude));
+        decimalFormat.format(latitude)));
     }
 
     if (longitude < -180 || longitude > 180) {
       // Checks the longitude value is within range or provide a warning otherwise
       logger.warning(String.format(Constants.DEFAULT_LOCALE,
-        "Longitude value seems to be out of range (found: %f, expected: [-180, 180]). "
-        + "Did you accidentally reverse the longitude/latitude order?",
-        longitude));
+        "Longitude value seems to be out of range (found: %s, expected: [-180, 180]). "
+          + "Did you accidentally reverse the longitude/latitude order?",
+        decimalFormat.format(longitude)));
     }
   }
 

@@ -40,7 +40,6 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest {
 
-
   private static final String DIRECTIONS_V5_FIXTURE = "src/test/fixtures/directions_v5.json";
   private static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "src/test/fixtures/directions_v5_precision_6.json";
   private static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
@@ -222,7 +221,7 @@ public class MapboxDirectionsTest {
       .build();
 
     assertTrue(client.executeCall().raw().request().url().toString()
-      .contains("radiuses=100.000000;100.000000;100.000000"));
+      .contains("radiuses=100;100;100"));
   }
 
   @Test
@@ -242,7 +241,7 @@ public class MapboxDirectionsTest {
       .build();
 
     assertTrue(client.executeCall().raw().request().url().toString()
-      .contains("radiuses=100.000000;unlimited;100.000000"));
+      .contains("radiuses=100;unlimited;100"));
   }
 
   @Test
@@ -295,7 +294,7 @@ public class MapboxDirectionsTest {
       .build();
 
     assertTrue(client.executeCall().raw().request().url().toString()
-      .contains("bearings=60.000000,45.000000;;45.000000,45.000000"));
+      .contains("bearings=60,45;;45,45"));
   }
 
   @Test
@@ -554,7 +553,7 @@ public class MapboxDirectionsTest {
     String coordinates = new MapboxDirections.Builder()
       .setCoordinates(test)
       .getCoordinates();
-    assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
+    assertEquals(coordinates, "2.1,2.2;3.1,3.2");
   }
 
   @Test
@@ -563,7 +562,7 @@ public class MapboxDirectionsTest {
       .setOrigin(Position.fromCoordinates(2.1, 2.2))
       .setDestination(Position.fromCoordinates(3.1, 3.2))
       .getCoordinates();
-    assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
+    assertEquals(coordinates, "2.1,2.2;3.1,3.2");
   }
 
   @Test
@@ -578,7 +577,7 @@ public class MapboxDirectionsTest {
       .setOrigin(Position.fromCoordinates(1.1, 1.2))
       .setDestination(Position.fromCoordinates(4.1, 4.2))
       .getCoordinates();
-    assertEquals(coordinates, "1.100000,1.200000;2.100000,2.200000;3.100000,3.200000;4.100000,4.200000");
+    assertEquals(coordinates, "1.1,1.2;2.1,2.2;3.1,3.2;4.1,4.2");
   }
 
   @Test
@@ -594,7 +593,7 @@ public class MapboxDirectionsTest {
       .setDestination(Position.fromCoordinates(4.1, 4.2))
       .setCoordinates(test)
       .getCoordinates();
-    assertEquals(coordinates, "1.100000,1.200000;2.100000,2.200000;3.100000,3.200000;4.100000,4.200000");
+    assertEquals(coordinates, "1.1,1.2;2.1,2.2;3.1,3.2;4.1,4.2");
   }
 
   @Test
@@ -622,7 +621,7 @@ public class MapboxDirectionsTest {
 
     String callUrl = client.executeCall().raw().request().url().toString();
     assertTrue(
-      callUrl.contains("-122.431300,37.778900;-122.416667,37.783333;-121.900000,37.333333;-121.800100,37.227500")
+      callUrl.contains("-122.4313,37.7789;-122.416667,37.783333;-121.9,37.333333;-121.8001,37.2275")
     );
   }
 }

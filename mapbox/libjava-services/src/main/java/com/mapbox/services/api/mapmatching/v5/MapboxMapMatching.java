@@ -10,6 +10,7 @@ import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -141,6 +142,8 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
    * @since 2.0.0
    */
   public static class Builder<T extends Builder> extends MapboxBuilder {
+    // Used to remove any trailing zeros and prevent a coordinate being over 7 significant figures.
+    DecimalFormat decimalFormat = new DecimalFormat("0.######");
 
     private String accessToken = null;
     private String user = null;
@@ -213,9 +216,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     public String getCoordinates() {
       List<String> coordinatesFormatted = new ArrayList<>();
       for (Position coordinate : coordinates) {
-        coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
-          coordinate.getLongitude(),
-          coordinate.getLatitude()));
+        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+          decimalFormat.format(coordinate.getLongitude()),
+          decimalFormat.format(coordinate.getLatitude())));
       }
 
       return TextUtils.join(";", coordinatesFormatted.toArray());
