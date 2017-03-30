@@ -49,13 +49,4 @@ public class Constants {
   public static final String MAPBOX_STYLE_SATELLITE = "satellite-v9";
   public static final String MAPBOX_STYLE_SATELLITE_HYBRID = "satellite-streets-v9";
 
-  /**
-   * Get the version of the library
-   *
-   * @return version string
-   */
-  public static String getVersion() {
-    return BuildConfig.VERSION;
-  }
-
 }

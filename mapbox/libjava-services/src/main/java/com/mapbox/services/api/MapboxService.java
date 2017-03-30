@@ -3,9 +3,6 @@ package com.mapbox.services.api;
 import com.mapbox.services.Constants;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -25,7 +22,7 @@ import static com.mapbox.services.commons.utils.TextUtils.isEmpty;
  */
 public abstract class MapboxService<T> {
 
-  private final static Logger logger = Logger.getLogger(MapboxService.class.getSimpleName());
+  private static final Logger logger = Logger.getLogger(MapboxService.class.getSimpleName());
 
   private boolean enableDebug = false;
   private OkHttpClient okHttpClient = null;
@@ -116,15 +113,8 @@ public abstract class MapboxService<T> {
       userAgent = Constants.HEADER_USER_AGENT;
     }
 
-    // Print userAgent and version number
-    String libVersion  = Constants.getVersion();
-
-
-      //get current date and time in format 2016/11/16 12:08:43
-      DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-      Date date = new Date();
-
-    logger.fine(String.format(Locale.US, "%s UserAgent - %s, JavaSDKVersion - %s ",dateFormat.format(date), userAgent, libVersion));
+    // Log the user agent (which includes the version number) for debugging purposes
+    logger.info(String.format(Constants.DEFAULT_LOCALE, "Current version: %s", userAgent));
 
     return userAgent;
   }
