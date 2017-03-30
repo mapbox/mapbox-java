@@ -29,6 +29,17 @@ public class RouteLeg {
   }
 
   /**
+   * The distance traveled from one waypoint to another.
+   * <p>
+   * Sets a double number with unit meters.
+   *
+   * @since 2.0.1
+   */
+  public void setDistance(double distance) {
+    this.distance = distance;
+  }
+
+  /**
    * The estimated travel time from one waypoint to another.
    *
    * @return a double number with unit seconds.
@@ -36,6 +47,17 @@ public class RouteLeg {
    */
   public double getDuration() {
     return duration;
+  }
+
+  /**
+   * The estimated travel time from one waypoint to another.
+   * <p>
+   * Sets a double number with unit seconds.
+   *
+   * @since 2.0.1
+   */
+  public void setDuration(double duration) {
+    this.duration = duration;
   }
 
   /**
@@ -49,6 +71,17 @@ public class RouteLeg {
   }
 
   /**
+   * A short human-readable summary of major roads traversed. Useful to distinguish alternatives.
+   * <p>
+   * Sets String with summary.
+   *
+   * @since 2.0.1
+   */
+  public void setSummary(String summary) {
+    this.summary = summary;
+  }
+
+  /**
    * Gives a List including all the steps to get from one waypoint to another.
    *
    * @return List of {@link LegStep}.
@@ -56,6 +89,18 @@ public class RouteLeg {
    */
   public List<LegStep> getSteps() {
     return steps;
+  }
+
+
+  /**
+   * Gives a List including all the steps to get from one waypoint to another.
+   * <p>
+   * Sets List of {@link LegStep}.
+   *
+   * @since 2.0.1
+   */
+  public void setSteps(List<LegStep> steps) {
+    this.steps = steps;
   }
 
   /**
