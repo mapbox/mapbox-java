@@ -545,21 +545,6 @@ public class MapboxDirectionsTest {
   }
 
   @Test
-  public void testSetCoordinatesMixedHidden() {
-    List<Position> test = new ArrayList<>();
-    test.add(Position.fromCoordinates(2.1, 2.2));
-    test.add(Position.fromCoordinates(3.1, 3.2));
-
-    // The order matters
-    String coordinates = new MapboxDirections.Builder()
-      .setOrigin(Position.fromCoordinates(1.1, 1.2))
-      .setDestination(Position.fromCoordinates(4.1, 4.2))
-      .setCoordinates(test)
-      .getCoordinates();
-    assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
-  }
-
-  @Test
   public void testLocale() {
     List<Position> test = new ArrayList<>();
     test.add(Position.fromCoordinates(2.1, 2.2));
@@ -572,7 +557,7 @@ public class MapboxDirectionsTest {
       .setDestination(Position.fromCoordinates(4.1, 4.2))
       .setCoordinates(test)
       .getCoordinates();
-    assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
+    assertEquals(coordinates, "1.100000,1.200000;2.100000,2.200000;3.100000,3.200000;4.100000,4.200000");
   }
 
   @Test
