@@ -13,11 +13,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 
 import com.mapbox.services.Experimental;
+import com.mapbox.services.android.Constants;
 import com.mapbox.services.android.R;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.navigation.v5.RouteProgress;
+import com.mapbox.services.commons.models.Position;
 
 import timber.log.Timber;
 
@@ -42,6 +44,7 @@ public class NavigationService extends Service implements LocationEngineListener
   private LocationUpdatedThread locationUpdatedThread;
 
   private RouteProgress routeProgress;
+  private DirectionsRoute directionsRoute;
 
   @Override
   public void onCreate() {
@@ -66,7 +69,8 @@ public class NavigationService extends Service implements LocationEngineListener
     // Sets up the top bar notification
     notifyBuilder = new NotificationCompat.Builder(this)
       .setContentTitle("Mapbox Navigation")
-      .setContentText("Distance: " + routeProgress.getDistanceRemainingOnStep())
+      .setContentText("Distance: " + routeProgress.getCurrentLegProgress().getCurrentStepProgress()
+        .getDistanceRemaining())
       .setSmallIcon(R.drawable.ic_navigation_black)
       .setContentIntent(PendingIntent.getActivity(this, 0,
         new Intent(this, activity.getClass()), 0));
@@ -116,18 +120,27 @@ public class NavigationService extends Service implements LocationEngineListener
 
   private void startNavigation() {
     Timber.d("Navigation session started.");
-    routeProgress = new RouteProgress();
+    if (navigationEventListener != null) {
+      navigationEventListener.onRunning(true);
+    }
 
     Handler responseHandler = new Handler();
     locationUpdatedThread = new LocationUpdatedThread(responseHandler);
     locationUpdatedThread.start();
     locationUpdatedThread.getLooper();
     Timber.d("Background thread started");
+
+    locationUpdatedThread.setNewRouteProgressListener(new NewRouteProgressListener() {
+      @Override
+      public void onRouteProgressChange(RouteProgress routeProgress) {
+        NavigationService.this.routeProgress = routeProgress;
+      }
+    });
   }
 
-  public void startRoute(DirectionsRoute route) {
+  public void startRoute(DirectionsRoute directionsRoute) {
     Timber.d("Start Route called.");
-    routeProgress.setRoute(route);
+    this.directionsRoute = directionsRoute;
 
     if (locationEngine != null) {
       // Begin listening into location at its highest accuracy and add navigation location listener
@@ -191,18 +204,35 @@ public class NavigationService extends Service implements LocationEngineListener
   @Override
   public void onConnected() {
     Timber.d("NavigationService now connected to location listener");
-    locationEngine.requestLocationUpdates();
     Location lastLocation = locationEngine.getLastLocation();
+    if (routeProgress == null) {
+      Timber.d("Create new routeProgress object");
+      routeProgress = new RouteProgress(
+        directionsRoute,
+        Position.fromCoordinates(lastLocation.getLongitude(), lastLocation.getLatitude()),
+        0, 0,
+        Constants.NONE_ALERT_LEVEL
+      );
+    }
     if (locationUpdatedThread != null && lastLocation != null) {
-      locationUpdatedThread.updateLocation(routeProgress, lastLocation);
+      locationUpdatedThread.updateLocation(directionsRoute, routeProgress, lastLocation);
     }
   }
 
   @Override
   public void onLocationChanged(Location location) {
     Timber.d("LocationChange occurred");
+    if (routeProgress == null && location != null) {
+      Timber.d("Create new routeProgress object");
+      routeProgress = new RouteProgress(
+        directionsRoute,
+        Position.fromCoordinates(location.getLongitude(), location.getLatitude()),
+        0, 0,
+        Constants.NONE_ALERT_LEVEL
+      );
+    }
     if (locationUpdatedThread != null && location != null) {
-      locationUpdatedThread.updateLocation(routeProgress, location);
+      locationUpdatedThread.updateLocation(directionsRoute, routeProgress, location);
     }
   }
 }

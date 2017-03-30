@@ -65,6 +65,11 @@ dex-count:
 	cd mapbox; ./gradlew countDebugDexMethods
 	cd mapbox; ./gradlew countReleaseDexMethods
 
+navigation-fixtures:
+	# Navigation: Taylor street to Page street
+	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.413165,37.795042;-122.433378,37.7727?geometries=polyline6&overview=full&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o mapbox/libandroid-services/src/test/resources/navigation.json
+
 geocoding-fixtures:
 	# Geocoding: 1600 Pennsylvania Ave NW
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/1600+pennsylvania+ave+nw.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \

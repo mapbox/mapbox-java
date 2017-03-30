@@ -16,6 +16,7 @@ import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.PolylineUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -128,7 +129,7 @@ public class RouteUtils {
    *
    * @param position  you want to measure distance to from route. If using for navigation, this would typically be the
    *                  users current location.
-   * @param routeLeg  a directions route.
+   * @param routeLeg  a directions {@link RouteLeg}.
    * @param stepIndex integer index for step in route.
    * @return double value giving distance in kilometers.
    * @throws ServicesException if error occurs Mapbox API related.
@@ -171,28 +172,57 @@ public class RouteUtils {
   }
 
   /**
+   * Measures the distance from a position to the end of the given {@link RouteLeg}. The position provided is snapped
+   * to the route before distance is calculated.
+   *
    * @param position you want to measure distance to from route. If using for navigation, this would typically be the
    *                 users current location.
-   * @param route    a {@link DirectionsRoute}.
-   * @return double value giving distance in kilometers.
-   * @throws TurfException signals that a Turf exception of some sort has occurred.
-   * @since 2.0.0
+   * @param routeLeg a directions {@link RouteLeg}.
+   * @return double value giving distance in specified units
    */
-  public static double getDistanceToEndOfRoute(Position position, DirectionsRoute route) throws TurfException {
-    return getDistanceToEndOfRoute(position, route, Constants.PRECISION_6);
+  public static double getDistanceToNextLeg(Position position, RouteLeg routeLeg, String units, int geometryPrecision) {
+    // Decode the geometry
+    List<Position> coords = new ArrayList<>();
+    for (int i = 0; i < routeLeg.getSteps().size(); i++) {
+      coords.addAll(PolylineUtils.decode(routeLeg.getSteps().get(i).getGeometry(), geometryPrecision));
+    }
+    LineString slicedLine = TurfMisc.lineSlice(
+      Point.fromCoordinates(position),
+      Point.fromCoordinates(coords.get(coords.size() - 1)),
+      LineString.fromCoordinates(coords)
+    );
+    return TurfMeasurement.lineDistance(slicedLine, units);
   }
 
   /**
+   * Measures from the provided position (typically the user location), to the end of a {@link DirectionsRoute}. The
+   * {@link Position} provided will be automatically snapped to the closest point to the route.
+   *
+   * @param position you want to measure distance to from route. If using for navigation, this would typically be the
+   *                 users current location.
+   * @param route    a {@link DirectionsRoute}.
+   * @param units    pass in the measurement units.
+   * @return double value giving distance in kilometers.
+   * @since 2.0.0
+   */
+  public static double getDistanceToEndOfRoute(Position position, DirectionsRoute route, String units) {
+    return getDistanceToEndOfRoute(position, route, Constants.PRECISION_6, units);
+  }
+
+  /**
+   * Measures from the provided position (typically the user location), to the end of a {@link DirectionsRoute}. The
+   * {@link Position} provided will be automatically snapped to the closest point to the route.
+   *
    * @param position          you want to measure distance to from route. If using for navigation, this would typically
    *                          be the users current location.
    * @param route             a {@link DirectionsRoute}.
+   * @param units             pass in the measurement units.
    * @param geometryPrecision either {@link Constants#PRECISION_5} or {@link Constants#PRECISION_6}
-   * @return double value giving distance in kilometers.
-   * @throws TurfException signals that a Turf exception of some sort has occurred.
+   * @return double value giving distance your specified unit of measurement.
    * @since 2.1.0
    */
-  public static double getDistanceToEndOfRoute(Position position, DirectionsRoute route, int geometryPrecision)
-    throws TurfException {
+  public static double getDistanceToEndOfRoute(Position position, DirectionsRoute route, int geometryPrecision,
+                                               String units) {
     // Decode the geometry
     List<Position> coords = PolylineUtils.decode(route.getGeometry(), geometryPrecision);
 
@@ -201,7 +231,7 @@ public class RouteUtils {
       Point.fromCoordinates(coords.get(coords.size() - 1)),
       LineString.fromCoordinates(coords)
     );
-    return TurfMeasurement.lineDistance(slicedLine, TurfConstants.UNIT_DEFAULT);
+    return TurfMeasurement.lineDistance(slicedLine, units);
   }
 
   /**

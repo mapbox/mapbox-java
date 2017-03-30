@@ -197,7 +197,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
   @Override
   public void onProgressChange(Location location, RouteProgress routeProgress) {
-    Timber.d("onProgressChange: fraction of route traveled: %d", routeProgress.getFractionTraveledOnRoute());
+    Timber.d("onProgressChange: fraction of route traveled: %d", routeProgress.getFractionTraveled());
   }
 
   @Override

@@ -4,17 +4,16 @@ import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.support.annotation.VisibleForTesting;
+import android.support.annotation.NonNull;
 
 import com.mapbox.services.Experimental;
 import com.mapbox.services.android.Constants;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
-import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.directions.v5.models.StepIntersection;
 import com.mapbox.services.api.navigation.v5.RouteProgress;
 import com.mapbox.services.api.navigation.v5.RouteUtils;
 import com.mapbox.services.api.utils.turf.TurfConstants;
-import com.mapbox.services.api.utils.turf.TurfException;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.models.Position;
 
@@ -41,10 +40,11 @@ class LocationUpdatedThread extends HandlerThread {
   // Navigation Variables
   private AlertLevelChangeListener alertLevelChangeListener;
   private ProgressChangeListener progressChangeListener;
-  private double userDistanceToManeuverLocation;
+  private NewRouteProgressListener newRouteProgressListener;
   private OffRouteListener offRouteListener;
   private boolean userStillOnRoute = true;
   private boolean snapToRoute;
+  private DirectionsRoute directionsRoute;
   private Location location;
 
 
@@ -60,31 +60,29 @@ class LocationUpdatedThread extends HandlerThread {
     requestHandler = new RequestHandler(this);
   }
 
-  void updateLocation(RouteProgress target, Location location) {
+  void updateLocation(DirectionsRoute directionsRoute, RouteProgress previousRouteProgress, Location location) {
     Timber.d("updateLocation called");
     this.location = location;
+    this.directionsRoute = directionsRoute;
 
-    requestHandler.obtainMessage(MESSAGE_LOCATION_UPDATED, target).sendToTarget();
+    requestHandler.obtainMessage(MESSAGE_LOCATION_UPDATED, previousRouteProgress).sendToTarget();
   }
 
-  private void handleRequest(final RouteProgress target, final Location location) {
-    if (location == null) {
+  private void handleRequest(final DirectionsRoute directionsRoute, final RouteProgress previousRouteProgress,
+                             final Location location) {
+    if (location == null || directionsRoute == null) {
       return;
     }
 
-    // Convert the location object to both the true position and a snapped (to the route) position.
-    Position truePosition = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
-    Position snappedPosition = RouteUtils.getSnapToRoute(
-      truePosition,
-      target.getRoute().getLegs().get((target).getLegIndex()),
-      target.getStepIndex()
-    );
+    Timber.d("%d", previousRouteProgress.getAlertUserLevel());
 
     // Even if the user isn't listening in to the alert listener, we need to run monitorStepProgress inorder to
     // update the routeProgress object
-    final int alertLevel = monitorStepProgress(target, location, truePosition, snappedPosition);
+    final RouteProgress routeProgress = monitorStepProgress(previousRouteProgress, location);
 
-    List<StepIntersection> intersections = getNextIntersections(target, snappedPosition);
+    List<StepIntersection> intersections = getNextIntersections(previousRouteProgress,
+      routeProgress.usersCurrentSnappedPosition()
+    );
 
     // Test the closest intersection to the user only.
     if (intersections.size() > 0) {
@@ -92,8 +90,8 @@ class LocationUpdatedThread extends HandlerThread {
     }
     if (snapToRoute && userStillOnRoute) {
       // Pass in the snapped location with all the other location data remaining intact for their use.
-      location.setLatitude(snappedPosition.getLatitude());
-      location.setLongitude(snappedPosition.getLongitude());
+      location.setLatitude(routeProgress.usersCurrentSnappedPosition().getLatitude());
+      location.setLongitude(routeProgress.usersCurrentSnappedPosition().getLongitude());
     }
 
     this.location = location;
@@ -105,17 +103,22 @@ class LocationUpdatedThread extends HandlerThread {
           offRouteListener.userOffRoute(location);
         }
 
-        if (target.getPreviousAlertLevel() != alertLevel) {
+        if (previousRouteProgress.getAlertUserLevel() != routeProgress.getAlertUserLevel()) {
           if (alertLevelChangeListener != null) {
-            target.setAlertUserLevel(alertLevel);
-            alertLevelChangeListener.onAlertLevelChange(alertLevel, target);
+            alertLevelChangeListener.onAlertLevelChange(routeProgress.getAlertUserLevel(), routeProgress);
           }
         }
         if (progressChangeListener != null) {
-          progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, target);
+          progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, routeProgress);
         }
+
+        newRouteProgressListener.onRouteProgressChange(routeProgress);
       }
     });
+  }
+
+  void setNewRouteProgressListener(NewRouteProgressListener newRouteProgressListener) {
+    this.newRouteProgressListener = newRouteProgressListener;
   }
 
   void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
@@ -134,80 +137,96 @@ class LocationUpdatedThread extends HandlerThread {
     this.snapToRoute = snapToRoute;
   }
 
-  private int monitorStepProgress(final RouteProgress routeProgress, Location location, Position truePosition,
-                                  Position snappedPosition)
-    throws ServicesException, TurfException {
+  private RouteProgress monitorStepProgress(@NonNull RouteProgress routeProgress, Location location) {
+    int currentStepIndex = routeProgress.getCurrentLegProgress().getStepIndex();
+    int currentLegIndex = routeProgress.getLegIndex();
 
     // Force an announcement when the user begins a route
-    int alertLevel = routeProgress.getPreviousAlertLevel() == Constants.NONE_ALERT_LEVEL ? Constants.DEPART_ALERT_LEVEL
-      : routeProgress.getPreviousAlertLevel();
+    int alertLevel = routeProgress.getAlertUserLevel() == Constants.NONE_ALERT_LEVEL
+      ? Constants.DEPART_ALERT_LEVEL : routeProgress.getAlertUserLevel();
 
     double userSnapToStepDistanceFromManeuver = RouteUtils.getDistanceToNextStep(
-      snappedPosition,
-      routeProgress.getRoute().getLegs().get(routeProgress.getLegIndex()),
-      routeProgress.getStepIndex(),
-      TurfConstants.UNIT_METERS);
+      Position.fromCoordinates(location.getLongitude(), location.getLatitude()),
+      routeProgress.getCurrentLeg(),
+      routeProgress.getCurrentLegProgress().getStepIndex()
+    );
 
-    routeProgress.setDistanceRemainingOnStep(userSnapToStepDistanceFromManeuver);
+    double secondsToEndOfStep = userSnapToStepDistanceFromManeuver / location.getSpeed();
+    boolean courseMatchesManeuverFinalHeading = false;
 
-    routeProgress.setDurationRemainingOnStep(userSnapToStepDistanceFromManeuver / location.getSpeed());
-    boolean courseMatchesManeuverFinalHeading;
+    // TODO set to eventually adjust for different direction profiles.
+    int minimumDistanceForHighAlert = Constants.MINIMUM_DISTANCE_FOR_HIGH_ALERT;
+    int minimumDistanceForMediumAlert = Constants.MINIMUM_DISTANCE_FOR_MEDIUM_ALERT;
 
-    double finalHeading = routeProgress.getUpComingStep().getManeuver().getBearingAfter();
-    double finalHeadingNormalized = MathUtils.wrap(finalHeading, 0, 360);
-    double userHeadingNormalized = MathUtils.wrap(location.getBearing(), 0, 360);
-    courseMatchesManeuverFinalHeading = MathUtils.differenceBetweenAngles(finalHeadingNormalized, userHeadingNormalized)
-      <= Constants.MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION;
-
-    Timber.v("finalHeading: " + finalHeadingNormalized);
-    Timber.v("user heading: " + userHeadingNormalized);
-    Timber.v("userSnapToStepDistanceFromManeuver: %f", userSnapToStepDistanceFromManeuver);
-    if (userSnapToStepDistanceFromManeuver <= Constants.MANEUVER_ZONE_RADIUS) {
-
-      double userAbsoluteDistance = TurfMeasurement.distance(
-        truePosition, routeProgress.getUpComingStep().getManeuver().asPosition(), TurfConstants.UNIT_METERS
-      );
-
-      // userAbsoluteDistanceToManeuverLocation is set to nil by default
-      // If it's set to nil, we know the user has never entered the maneuver radius
-      if (userDistanceToManeuverLocation == 0.0) {
-        userDistanceToManeuverLocation = Constants.MANEUVER_ZONE_RADIUS;
-      }
-
-      double lastKnownUserAbsoluteDistance = userDistanceToManeuverLocation;
-
-      // The objective here is to make sure the user is moving away from the maneuver location
-      // This helps on maneuvers where the difference between the exit and enter heading are similar
-      if (userAbsoluteDistance <= lastKnownUserAbsoluteDistance) {
-        userDistanceToManeuverLocation = userAbsoluteDistance;
-      }
-
-      if (routeProgress.getUpComingStep().getManeuver().getType().equals(Constants.STEP_MANEUVER_TYPE_ARRIVE)) {
-        alertLevel = Constants.ARRIVE_ALERT_LEVEL;
-      } else if (courseMatchesManeuverFinalHeading) {
-        routeProgress.setStepIndex(routeProgress.getStepIndex() + 1);
-        userSnapToStepDistanceFromManeuver = RouteUtils.getDistanceToNextStep(
-          snappedPosition,
-          routeProgress.getRoute().getLegs().get(routeProgress.getLegIndex()),
-          routeProgress.getStepIndex(),
-          TurfConstants.UNIT_METERS);
-
-        routeProgress.setDurationRemainingOnStep(userSnapToStepDistanceFromManeuver / location.getSpeed());
-        alertLevel = routeProgress.getDurationRemainingOnStep()
-          <= Constants.MEDIUM_ALERT_INTERVAL ? Constants.MEDIUM_ALERT_LEVEL : Constants.LOW_ALERT_LEVEL;
-      }
-
-    } else if (routeProgress.getDurationRemainingOnStep() <= Constants.HIGH_ALERT_INTERVAL
-      && routeProgress.getRoute().getLegs().get(routeProgress.getLegIndex())
-      .getSteps().get(routeProgress.getStepIndex()).getDistance() > Constants.MINIMUM_DISTANCE_FOR_HIGH_ALERT) {
-      alertLevel = Constants.HIGH_ALERT_LEVEL;
-    } else if (routeProgress.getDurationRemainingOnStep() <= Constants.MEDIUM_ALERT_INTERVAL
-      && routeProgress.getRoute().getLegs().get(routeProgress.getLegIndex())
-      .getSteps().get(routeProgress.getStepIndex()).getDistance() > Constants.MINIMUM_DISTANCE_FOR_MEDIUM_ALERT) {
-      alertLevel = Constants.MEDIUM_ALERT_LEVEL;
+    // Bearings need to be normalized so when the bearingAfter is 359 and the user heading is 1, we count this as
+    // within the MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION.
+    if (routeProgress.getCurrentLegProgress().getUpComingStep() != null) {
+      double finalHeading = routeProgress.getCurrentLegProgress().getUpComingStep().getManeuver().getBearingAfter();
+      double finalHeadingNormalized = MathUtils.wrap(finalHeading, 0, 360);
+      double userHeadingNormalized = MathUtils.wrap(location.getBearing(), 0, 360);
+      courseMatchesManeuverFinalHeading = MathUtils.differenceBetweenAngles(
+        finalHeadingNormalized, userHeadingNormalized
+      ) <= Constants.MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION;
     }
-    return alertLevel;
+
+    // When departing, userSnapToStepDistanceFromManeuver is most often less than RouteControllerManeuverZoneRadius
+    // since the user will most often be at the beginning of the route, in the maneuver zone
+    if (alertLevel == Constants.DEPART_ALERT_LEVEL && userSnapToStepDistanceFromManeuver
+      <= Constants.MANEUVER_ZONE_RADIUS) {
+      // If the user is close to the maneuver location, don't give a departure instruction, instead, give a high alert.
+      if (secondsToEndOfStep <= Constants.HIGH_ALERT_INTERVAL) {
+        alertLevel = Constants.HIGH_ALERT_LEVEL;
+      }
+
+    } else if (userSnapToStepDistanceFromManeuver <= Constants.MANEUVER_ZONE_RADIUS) {
+
+      // Use the currentStep if there is not a next step, this occurs when arriving.
+      if (routeProgress.getCurrentLegProgress().getUpComingStep() != null) {
+
+        if (routeProgress.getCurrentLegProgress().getUpComingStep().getManeuver().getType().equals("arrive")) {
+          alertLevel = Constants.ARRIVE_ALERT_LEVEL;
+        } else if (courseMatchesManeuverFinalHeading) {
+
+          // Check if we are in the last step in the current routeLeg and iterate it if needed.
+          if (currentStepIndex >= directionsRoute.getLegs().get(routeProgress.getLegIndex()).getSteps().size() - 1
+            && currentLegIndex < directionsRoute.getLegs().size()) {
+            currentLegIndex += 1;
+            currentStepIndex = 0;
+          } else {
+            currentStepIndex += 1;
+          }
+          userSnapToStepDistanceFromManeuver = RouteUtils.getDistanceToNextStep(
+            Position.fromCoordinates(location.getLongitude(), location.getLatitude()),
+            routeProgress.getCurrentLeg(),
+            routeProgress.getCurrentLegProgress().getStepIndex()
+          );
+          secondsToEndOfStep = userSnapToStepDistanceFromManeuver / location.getSpeed();
+          alertLevel = secondsToEndOfStep <= Constants.MEDIUM_ALERT_INTERVAL
+            ? Constants.MEDIUM_ALERT_LEVEL : Constants.LOW_ALERT_LEVEL;
+        }
+      } else if (secondsToEndOfStep <= Constants.HIGH_ALERT_INTERVAL
+        && routeProgress.getCurrentLegProgress().getCurrentStep().getDistance() > minimumDistanceForHighAlert) {
+        alertLevel = Constants.HIGH_ALERT_LEVEL;
+        // Don't alert if the route segment is shorter than X however, if it's the beginning of the route There needs to
+        // be an alert
+      } else if (secondsToEndOfStep <= Constants.MEDIUM_ALERT_INTERVAL
+        && routeProgress.getCurrentLegProgress().getCurrentStep().getDistance() > minimumDistanceForMediumAlert) {
+        alertLevel = Constants.MEDIUM_ALERT_LEVEL;
+      }
+    }
+
+    Position snappedPosition = RouteUtils.getSnapToRoute(
+      Position.fromCoordinates(location.getLongitude(), location.getLatitude()),
+      directionsRoute.getLegs().get(routeProgress.getLegIndex()),
+      routeProgress.getCurrentLegProgress().getStepIndex()
+    );
+
+    Timber.d("New alertLevel: %d", alertLevel);
+
+    // Create an updated RouteProgress object to return
+    return new RouteProgress(directionsRoute, snappedPosition, currentLegIndex, currentStepIndex, alertLevel);
   }
+
 
   /**
    * Gets the currents step and next steps intersections and returns a list of the intersections x meters ahead of the
@@ -215,24 +234,23 @@ class LocationUpdatedThread extends HandlerThread {
    *
    * @param userPosition Snap the user to the route so we get a more accurate measurement.
    * @return A list containing all intersections x meters away
-   * @throws TurfException Thrown if turf calculation error occurs.
    * @since 2.0.0
    */
-  public List<StepIntersection> getNextIntersections(RouteProgress routeProgress, Position userPosition)
-    throws TurfException {
+  private List<StepIntersection> getNextIntersections(RouteProgress routeProgress, Position userPosition) {
     List<StepIntersection> intersectionsWithinRange = new ArrayList<>();
     List<StepIntersection> stepIntersections = new ArrayList<>();
 
-    double closestIntersectionDistance = routeProgress.getDistanceTraveledOnStep();
+    double closestIntersectionDistance = routeProgress.getCurrentLegProgress().getCurrentStepProgress()
+      .getDistanceTraveled();
 
     // Add all the intersections for current and next step to list.
-    stepIntersections.addAll(routeProgress.getCurrentStep().getIntersections());
+    stepIntersections.addAll(routeProgress.getCurrentLegProgress().getCurrentStep().getIntersections());
 
     for (StepIntersection intersection : stepIntersections) {
       // Measures the distance between the beginning of step to the current intersection. If this distance is less then
       // the users distance traveled on route, we know they have passed the intersection already.
       double disToIntersection = TurfMeasurement.distance(
-        routeProgress.getCurrentStep().getManeuver().asPosition(),
+        routeProgress.getCurrentLegProgress().getCurrentStep().getManeuver().asPosition(),
         intersection.asPosition(),
         TurfConstants.UNIT_METERS
       );
@@ -250,10 +268,10 @@ class LocationUpdatedThread extends HandlerThread {
     if (intersectionsWithinRange.size() < 1) {
       if (TurfMeasurement.distance(
         userPosition,
-        routeProgress.getUpComingStep().getIntersections().get(0).asPosition(),
+        routeProgress.getCurrentLegProgress().getUpComingStep().getIntersections().get(0).asPosition(),
         TurfConstants.UNIT_METERS
       ) <= Constants.METERS_TO_INTERSECTION) {
-        intersectionsWithinRange.add(routeProgress.getUpComingStep().getIntersections().get(0));
+        intersectionsWithinRange.add(routeProgress.getCurrentLegProgress().getUpComingStep().getIntersections().get(0));
       }
     }
     return intersectionsWithinRange;
@@ -272,7 +290,7 @@ class LocationUpdatedThread extends HandlerThread {
    * @return boolean true if the user remains on the route through the intersection, else false.
    * @since 2.0.0
    */
-  @VisibleForTesting
+
   private boolean isUserStillOnRoute(StepIntersection intersection, double userHeading) {
     // We start off assuming the user is on route.
     boolean isOnRoute = true;
@@ -331,7 +349,8 @@ class LocationUpdatedThread extends HandlerThread {
         if (msg.what == MESSAGE_LOCATION_UPDATED) {
           RouteProgress target = (RouteProgress) msg.obj;
           Timber.d("Received request to calculate new location information");
-          locationUpdatedThread.handleRequest(target, locationUpdatedThread.location);
+          locationUpdatedThread.handleRequest(locationUpdatedThread.directionsRoute, target,
+            locationUpdatedThread.location);
         }
       }
     }
