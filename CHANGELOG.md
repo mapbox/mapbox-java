@@ -2,6 +2,18 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.0.1
+
+* Support for the Distance Matrix has been added, this replaces the distance API.
+* The `RouteProgress` object is now immutable and structure has been split up.
+* Support for direction annotations has been added.
+* Deprecated the Distance API.
+* Added getters and setters for location engine interval, fastest interval, and displacement.
+* Added getters and setters for Direction models.
+* Optional precision parameters have been added to some methods inside the RouteUtils class.
+* Setting both origin/destination and the coordinates inside your directions builder, the coordinate list no longer get's overwritten.
+* Fixed bug when using Turf point on line, false warnings would occur stating your Position coordinates are outside the recommended range.
+
 ### v2.0.0 - March 17th, 2017
 
 * Mapbox Navigation SDK [#346](https://github.com/mapbox/mapbox-java/pull/346)
