@@ -588,7 +588,7 @@ public class MapboxDirectionsTest {
   }
 
   @Test
-  public void OriginDestinationCoordinatesListCorrectOrder() throws ServicesException, IOException {
+  public void originDestinationCoordinatesListCorrectOrder() throws ServicesException, IOException {
     MapboxDirections client = new MapboxDirections.Builder()
       .setAccessToken("pk.XXX")
       .setOrigin(Position.fromCoordinates(-122.4313, 37.7789))
