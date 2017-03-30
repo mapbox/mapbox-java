@@ -3,7 +3,11 @@ package com.mapbox.services.api;
 import com.mapbox.services.Constants;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -20,6 +24,8 @@ import static com.mapbox.services.commons.utils.TextUtils.isEmpty;
  * @since 1.0.0
  */
 public abstract class MapboxService<T> {
+
+  private final static Logger logger = Logger.getLogger(MapboxService.class.getSimpleName());
 
   private boolean enableDebug = false;
   private OkHttpClient okHttpClient = null;
@@ -91,21 +97,35 @@ public abstract class MapboxService<T> {
    * @since 1.0.0
    */
   public static String getHeaderUserAgent(String clientAppName) {
+    String userAgent;
+
     try {
       String osName = System.getProperty("os.name");
       String osVersion = System.getProperty("os.version");
       String osArch = System.getProperty("os.arch");
 
       if (isEmpty(osName) || isEmpty(osVersion) || isEmpty(osArch)) {
-        return Constants.HEADER_USER_AGENT;
+        userAgent = Constants.HEADER_USER_AGENT;
       } else {
         String baseUa = String.format(
           Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
-        return isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s", clientAppName, baseUa);
+        userAgent = isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s", clientAppName, baseUa);
       }
 
     } catch (Exception exception) {
-      return Constants.HEADER_USER_AGENT;
+      userAgent = Constants.HEADER_USER_AGENT;
     }
+
+    // Print userAgent and version number
+    String libVersion  = Constants.getVersion();
+
+
+      //get current date and time in format 2016/11/16 12:08:43
+      DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+      Date date = new Date();
+
+    logger.fine(String.format(Locale.US, "%s UserAgent - %s, JavaSDKVersion - %s ",dateFormat.format(date), userAgent, libVersion));
+
+    return userAgent;
   }
 }
