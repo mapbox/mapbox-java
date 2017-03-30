@@ -2,7 +2,7 @@
 
 [![Build Status](https://www.bitrise.io/app/a7eea7d04be1e2e5.svg?token=OruuJNhnjyeRnlBv0wXsFQ&branch=master)](https://www.bitrise.io/app/a7eea7d04be1e2e5) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services)
 
-Mapbox Android Services contains navigation, directions, geocoding, and much more APIs to use inside your Android or Java application. This repository holds the source code for the project and is divided into several modules to make it easier for developers to only include the dependencies needed for their project.
+Mapbox Android Services contains navigation, directions, geocoding, and many more APIs to use inside your Android or Java application. This repository holds the source code for the project and is divided into several modules to make it easier for developers to only include the dependencies needed for their project.
 
 ## Getting Started
 
@@ -10,17 +10,17 @@ If you are looking to include this inside your project, please take a look at [t
 
 ## Documentation
 
-You'll find all the documentation for this SDK on [our website](https://www.mapbox.com/android-docs/mapbox-services/), this includes information on installation, using the APIs, and also includes links to the API reference.
+You'll find all of the documentation for this SDK on [our Mapbox Services page](https://www.mapbox.com/android-docs/mapbox-services/). This includes information on installation, using the APIs, and links to the API reference.
 
 ## Getting Help
 
 - **Need help with your code?**: Look for previous questions on the [#mapbox tag](https://stackoverflow.com/questions/tagged/mapbox+android) — or [ask a new question](https://stackoverflow.com/questions/tagged/mapbox+android).
 - **Have a bug to report?** [Open an issue](https://github.com/mapbox/mapbox-java/issues/new). If possible, include the version of Mapbox Services, a full log, and a project that shows the issue.
-- **Have a feature request?** [Open an issue](https://github.com/mapbox/mapbox-java/issues/new). Tell us what the feature should do, and why you want the feature.
+- **Have a feature request?** [Open an issue](https://github.com/mapbox/mapbox-java/issues/new). Tell us what the feature should do and why you want the feature.
 
 ## Using Snapshots
 
-If you want to test recent bugfixes or features that have not been packaged in an official release yet, you can use a `-SNAPSHOT` release of the current development version of Mapbox Services via Gradle, available on [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/com/mapbox/mapboxsdk/). There are several different snapshots built nightly, feel free to use any of the modules as needed.
+If you want to test recent bugfixes or features that have not been packaged in an official release yet, you can use a `-SNAPSHOT` release of the current development version of Mapbox Services via Gradle, available on [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/com/mapbox/mapboxsdk/). There are several different snapshots built nightly. Feel free to use any of the modules as needed.
 
 ```gradle
 repositories {
@@ -39,4 +39,4 @@ Check the [Android Test App](https://github.com/mapbox/mapbox-java/tree/master/m
 
 ## Contributing
 
-All libraries are contained within the `mapbox` folder. You can import the project using Android Studio or IntelliJ IDEA. Read the [contribution](https://github.com/mapbox/mapbox-java/blob/master/CONTRIBUTING.md) guide to get setup properly.
+All libraries are contained within the `mapbox` folder. You can import the project using Android Studio or IntelliJ IDEA. Read [the contribution guide](https://github.com/mapbox/mapbox-java/blob/master/CONTRIBUTING.md) to get setup properly.
