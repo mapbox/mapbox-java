@@ -40,10 +40,10 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest {
 
-  public static final String DIRECTIONS_V5_FIXTURE = "src/test/fixtures/directions_v5.json";
-  public static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "src/test/fixtures/directions_v5_precision_6.json";
-  public static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
-  public static final String DIRECTIONS_ROTARY_FIXTURE = "src/test/fixtures/directions_v5_fixtures_rotary.json";
+  private static final String DIRECTIONS_V5_FIXTURE = "src/test/fixtures/directions_v5.json";
+  private static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "src/test/fixtures/directions_v5_precision_6.json";
+  private static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
+  private static final String DIRECTIONS_ROTARY_FIXTURE = "src/test/fixtures/directions_v5_fixtures_rotary.json";
   private static final double DELTA = 1E-10;
 
   private MockWebServer server;
@@ -108,11 +108,11 @@ public class MapboxDirectionsTest {
   @Test
   public void callFactoryNonNull() throws ServicesException, IOException {
     MapboxDirections client = new MapboxDirections.Builder()
-            .setAccessToken("pk.XXX")
-            .setCoordinates(positions)
-            .setProfile(DirectionsCriteria.PROFILE_DRIVING)
-            .setBaseUrl(mockUrl.toString())
-            .build();
+      .setAccessToken("pk.XXX")
+      .setCoordinates(positions)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .build();
 
     // Setting a null call factory doesn't make the request fail
     // (the default OkHttp client is used)
@@ -499,7 +499,7 @@ public class MapboxDirectionsTest {
     assertEquals(maneuver.getModifier(), "slight right");
     assertEquals(maneuver.getInstruction(),
       "Enter Dupont Circle Northwest and take the 3rd exit onto P Street Northwest");
-    assertEquals(maneuver.getExit(), new Integer(3));
+    assertEquals(maneuver.getExit(), Integer.valueOf(3));
 
 
     LegStep step = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1);
@@ -510,7 +510,7 @@ public class MapboxDirectionsTest {
 
   @Test
   public void testSetCoordinates() {
-    ArrayList test = new ArrayList<>();
+    List<Position> test = new ArrayList<>();
     test.add(Position.fromCoordinates(2.1, 2.2));
     test.add(Position.fromCoordinates(3.1, 3.2));
 
@@ -531,7 +531,7 @@ public class MapboxDirectionsTest {
 
   @Test
   public void testSetCoordinatesMixed() {
-    ArrayList test = new ArrayList<>();
+    List<Position> test = new ArrayList<>();
     test.add(Position.fromCoordinates(2.1, 2.2));
     test.add(Position.fromCoordinates(3.1, 3.2));
 
@@ -545,23 +545,8 @@ public class MapboxDirectionsTest {
   }
 
   @Test
-  public void testSetCoordinatesMixedHidden() {
-    ArrayList test = new ArrayList<>();
-    test.add(Position.fromCoordinates(2.1, 2.2));
-    test.add(Position.fromCoordinates(3.1, 3.2));
-
-    // The order matters
-    String coordinates = new MapboxDirections.Builder()
-      .setOrigin(Position.fromCoordinates(1.1, 1.2))
-      .setDestination(Position.fromCoordinates(4.1, 4.2))
-      .setCoordinates(test)
-      .getCoordinates();
-    assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
-  }
-
-  @Test
   public void testLocale() {
-    ArrayList test = new ArrayList<>();
+    List<Position> test = new ArrayList<>();
     test.add(Position.fromCoordinates(2.1, 2.2));
     test.add(Position.fromCoordinates(3.1, 3.2));
 
@@ -572,7 +557,7 @@ public class MapboxDirectionsTest {
       .setDestination(Position.fromCoordinates(4.1, 4.2))
       .setCoordinates(test)
       .getCoordinates();
-    assertEquals(coordinates, "2.100000,2.200000;3.100000,3.200000");
+    assertEquals(coordinates, "1.100000,1.200000;2.100000,2.200000;3.100000,3.200000;4.100000,4.200000");
   }
 
   @Test
@@ -585,5 +570,22 @@ public class MapboxDirectionsTest {
       .setBaseUrl(mockUrl.toString())
       .build();
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
+  }
+
+  @Test
+  public void originDestinationCoordinatesListCorrectOrder() throws ServicesException, IOException {
+    MapboxDirections client = new MapboxDirections.Builder()
+      .setAccessToken("pk.XXX")
+      .setOrigin(Position.fromCoordinates(-122.4313, 37.7789))
+      .setCoordinates(positions)
+      .setDestination(Position.fromCoordinates(-121.8001, 37.2275))
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .build();
+
+    String callUrl = client.executeCall().raw().request().url().toString();
+    assertTrue(
+      callUrl.contains("-122.431300,37.778900;-122.416667,37.783333;-121.900000,37.333333;-121.800100,37.227500")
+    );
   }
 }

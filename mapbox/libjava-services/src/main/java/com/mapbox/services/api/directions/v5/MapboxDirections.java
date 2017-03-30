@@ -143,6 +143,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     private double[][] bearings = null;
     private Boolean steps = null;
     private Boolean continueStraight = null;
+    private Position origin = null;
+    private Position destination = null;
 
     /**
      * Constructor
@@ -219,16 +221,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @since 1.0.0
      */
     public T setOrigin(Position origin) {
-      if (coordinates == null) {
-        coordinates = new ArrayList<>();
-      }
-
-      // The default behavior of ArrayList is to inserts the specified element at the
-      // specified position in this list (beginning) and to shift the element currently at
-      // that position (if any) and any subsequent elements to the right (adds one to
-      // their indices)
-      coordinates.add(0, origin);
-
+      this.origin = origin;
       return (T) this;
     }
 
@@ -242,14 +235,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * @since 1.0.0
      */
     public T setDestination(Position destination) {
-      if (coordinates == null) {
-        coordinates = new ArrayList<>();
-      }
-
-      // The default behavior for ArrayList is to appends the specified element
-      // to the end of this list.
-      coordinates.add(destination);
-
+      this.destination = destination;
       return (T) this;
     }
 
@@ -392,10 +378,24 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      */
     public String getCoordinates() {
       List<String> coordinatesFormatted = new ArrayList<>();
-      for (Position coordinate : coordinates) {
+      // Insert origin at beginning of list if one is provided.
+      if (origin != null) {
         coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
-          coordinate.getLongitude(),
-          coordinate.getLatitude()));
+          origin.getLongitude(),
+          origin.getLatitude()));
+      }
+      if (coordinates != null) {
+        for (Position coordinate : coordinates) {
+          coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
+            coordinate.getLongitude(),
+            coordinate.getLatitude()));
+        }
+      }
+      // Insert destination at end of list if one is provided.
+      if (destination != null) {
+        coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
+          destination.getLongitude(),
+          destination.getLatitude()));
       }
 
       return TextUtils.join(";", coordinatesFormatted.toArray());
