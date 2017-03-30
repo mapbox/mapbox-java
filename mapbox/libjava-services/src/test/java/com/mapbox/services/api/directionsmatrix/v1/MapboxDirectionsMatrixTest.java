@@ -119,7 +119,7 @@ public class MapboxDirectionsMatrixTest extends BaseTest {
   @Test
   public void validProfile() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Profile must be one of the constants found inside the DirectionsCriteria file."));
+    thrown.expectMessage(startsWith("Profile must be one of the values found inside the DirectionsCriteria."));
     new MapboxDirectionsMatrix.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setCoordinates(positions)
@@ -147,7 +147,7 @@ public class MapboxDirectionsMatrixTest extends BaseTest {
     }
 
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("All profiles allows for maximum of 25 coordinates."));
+    thrown.expectMessage(startsWith("All profiles allow for a maximum of 25 coordinates."));
     new MapboxDirectionsMatrix.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
