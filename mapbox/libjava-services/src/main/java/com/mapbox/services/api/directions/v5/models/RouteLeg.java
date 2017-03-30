@@ -113,4 +113,8 @@ public class RouteLeg {
   public LegAnnotation getAnnotation() {
     return annotation;
   }
+
+  public void setAnnotation(LegAnnotation annotation) {
+    this.annotation = annotation;
+  }
 }
