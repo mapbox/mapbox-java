@@ -2,6 +2,8 @@ package com.mapbox.services.api.directions.v5.models;
 
 /**
  * Object representing lanes in an intersection.
+ *
+ * @since 2.0.0
  */
 public class IntersectionLanes {
 

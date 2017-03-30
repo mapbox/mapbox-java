@@ -84,6 +84,27 @@ public class DirectionsCriteria {
   public static final String OVERVIEW_FALSE = "false";
 
   /**
+   * The duration, in seconds, between each pair of coordinates.
+   *
+   * @since 2.1.0
+   */
+  public static final String ANNOTATION_DURATION = "duration";
+
+  /**
+   * The distance, in meters, between each pair of coordinates.
+   *
+   * @since 2.1.0
+   */
+  public static final String ANNOTATION_DISTANCE = "distance";
+
+  /**
+   * The speed, in km/h, between each pair of coordinates.
+   *
+   * @since 2.1.0
+   */
+  public static final String ANNOTATION_SPEED = "speed";
+
+  /**
    * Server responds with no errors.
    *
    * @since 1.0.0
