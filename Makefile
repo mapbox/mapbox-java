@@ -78,7 +78,6 @@ directions-matrix-fixtures:
 	# request an asymmetric 2x3 matrix for bicycles
 	curl "https://api.mapbox.com/directions-matrix/v1/mapbox/cycling/-122.42,37.78;-122.45,37.91;-122.48,37.73?sources=0;2&destinations=all&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/directions_matrix_2x3.json.json
->>>>>>> 6dc0637... added some test
 
 geocoding-fixtures:
 	# Geocoding: 1600 Pennsylvania Ave NW
