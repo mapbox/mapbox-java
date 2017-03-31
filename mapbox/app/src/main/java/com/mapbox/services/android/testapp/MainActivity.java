@@ -24,6 +24,7 @@ import com.mapbox.services.android.testapp.location.LocationEngineActivity;
 import com.mapbox.services.android.testapp.optimizedtrip.OptimizedTripActivity;
 
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
+import com.mapbox.services.android.testapp.staticimage.StaticImageWithAnnotationsActivity;
 import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
 import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
 import com.mapbox.services.android.testapp.turf.TurfDistanceActivity;
@@ -88,6 +89,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         getString(R.string.description_static_image),
         StaticImageActivity.class
       ),
+            new SampleItem(
+                    getString(R.string.title_static_image_with_annotations),
+                    getString(R.string.description_static_image_with_annotations),
+                    StaticImageWithAnnotationsActivity.class
+            ),
       new SampleItem(
         getString(R.string.title_simplify_polyline),
         getString(R.string.description_simplify_polyline),

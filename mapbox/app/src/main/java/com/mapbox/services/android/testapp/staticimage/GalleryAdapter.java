@@ -46,6 +46,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
   public void onBindViewHolder(ViewHolder holder, int position) {
     Picasso.with(context)
       .load(dataset[position])
+      .fit()
+      .centerCrop()
       .placeholder(R.drawable.mapbox)
       .error(R.drawable.mapbox_error)
       .into(holder.imageView);
