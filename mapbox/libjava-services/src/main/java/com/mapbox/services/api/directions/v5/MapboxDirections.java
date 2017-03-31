@@ -577,11 +577,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
             + "DirectionsCriteria.java file.");
       }
 
-      if (origin == null && destination == null) {
-        if (coordinates == null || coordLength < 2) {
-          throw new ServicesException(
-            "You should provide at least two coordinates (from/to).");
-        }
+      if (coordLength < 2) {
+        throw new ServicesException(
+          "You should provide at least two coordinates (from/to).");
       }
 
       if (profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
@@ -601,7 +599,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         throw new ServicesException(
           "There must be as many radiuses as there are coordinates.");
       }
-      
+
       if (radiuses != null) {
         for (double radius : radiuses) {
           if (radius < 0) {
