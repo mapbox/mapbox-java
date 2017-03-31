@@ -24,11 +24,29 @@ public class DirectionsWaypoint {
   }
 
   /**
+   * Sets String with the name of the way the coordinate snapped to.
+   *
+   * @since 2.0.1
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
    * @return double array of [longitude, latitude] for the snapped coordinate.
    * @since 1.0.0
    */
   public double[] getLocation() {
     return location;
+  }
+
+  /**
+   * Sets double array of [longitude, latitude] for the snapped coordinate.
+   *
+   * @since 2.0.1
+   */
+  public void setLocation(double[] location) {
+    this.location = location;
   }
 
   /**
