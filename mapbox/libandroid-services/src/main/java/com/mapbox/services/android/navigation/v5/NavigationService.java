@@ -148,7 +148,7 @@ public class NavigationService extends Service implements LocationEngineListener
   }
 
   public void startRoute(DirectionsRoute directionsRoute) {
-    Timber.d("Start Route called.");
+    Timber.d("Start route called.");
     this.directionsRoute = directionsRoute;
 
     if (locationEngine != null) {
@@ -164,6 +164,12 @@ public class NavigationService extends Service implements LocationEngineListener
     } else {
       Timber.d("locationEngine null in NavigationService");
     }
+  }
+
+  public void updateRoute(DirectionsRoute directionsRoute) {
+    Timber.d("Updating route");
+
+
   }
 
   public void endNavigation() {

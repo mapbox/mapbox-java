@@ -23,7 +23,12 @@ import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.commons.models.Position;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
 /**
@@ -177,7 +182,8 @@ public class MapboxNavigation {
 
   /**
    * Call {@code startNavigation} passing in a {@link DirectionsRoute} object to begin a navigation session. It is
-   * recommend to call {@link MapboxNavigation#getRoute(Callback)} before starting a navigation session.
+   * recommend to call {@link MapboxNavigation#getRoute(Position, Position, Callback)} before starting a navigation
+   * session.
    *
    * @param route A {@link DirectionsRoute} that makes up the path your user will traverse along.
    * @since 2.0.0
@@ -238,7 +244,10 @@ public class MapboxNavigation {
    *                 response.
    * @since 2.0.0
    */
-  public void getRoute(@NonNull Callback<DirectionsResponse> callback) throws ServicesException {
+  public void getRoute(Position origin, Position destination, Callback<DirectionsResponse> callback)
+    throws ServicesException {
+    this.origin = origin;
+    this.destination = destination;
     if (accessToken == null) {
       throw new ServicesException("A Mapbox access token must be passed into your MapboxNavigation instance before"
         + "calling getRoute");
@@ -251,8 +260,8 @@ public class MapboxNavigation {
       .setProfile(profile)
       .setAccessToken(accessToken)
       .setOverview(DirectionsCriteria.OVERVIEW_FULL)
-      .setOrigin(getOrigin())
-      .setDestination(getDestination())
+      .setOrigin(origin)
+      .setDestination(destination)
       .setSteps(true);
 
     // Optionally set the bearing and radiuses if the developer provider the user bearing. A tolerance of 90 degrees
@@ -263,9 +272,39 @@ public class MapboxNavigation {
     directionsBuilder.build().enqueueCall(callback);
   }
 
+  public void updateRoute(Position origin, Position destination, final Callback<DirectionsResponse> callback) {
+    getRoute(origin, destination, new Callback<DirectionsResponse>() {
+      @Override
+      public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+        if (response.body() == null) {
+          Timber.e("No routes found, make sure you set the right user and access token.");
+          return;
+        } else if (response.body().getRoutes().size() < 1) {
+          Timber.e("No routes found");
+          return;
+        }
+
+        call.enqueue(callback);
+
+        DirectionsRoute route = response.body().getRoutes().get(0);
+        MapboxNavigation.this.route = route;
+
+        if (isServiceAvailable()) {
+          navigationService.updateRoute(route);
+        }
+      }
+
+      @Override
+      public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+        Timber.e("The request for reroute failed with error: ", throwable);
+      }
+    });
+  }
+
   /**
    * Get the current origin {@link Position} that will be used for the beginning of the route. If no origin's provided,
-   * null will be returned. An origin must be provided before calling {@link MapboxNavigation#getRoute(Callback)}.
+   * null will be returned. An origin can be set using the
+   * {@link MapboxNavigation#getRoute(Position, Position, Callback)} method.
    *
    * @return A {@link Position} object representing the origin of your route.
    * @since 2.0.0
@@ -275,37 +314,15 @@ public class MapboxNavigation {
   }
 
   /**
-   * Set the origin that will be used for the beginning of the route. This will be used once
-   * {@link MapboxNavigation#getRoute(Callback)}'s called.
-   *
-   * @param origin A {@link Position} representing the origin of your route.
-   * @since 2.0.0
-   */
-  public void setOrigin(@NonNull Position origin) {
-    this.origin = origin;
-  }
-
-  /**
    * Get the current destination {@link Position} that will be used for the end of the route. If no destinations's
-   * provided, null will be returned. A destination must be provided before calling
-   * {@link MapboxNavigation#getRoute(Callback)}.
+   * provided, null will be returned. A destination can be set using the
+   * {@link MapboxNavigation#getRoute(Position, Position, Callback)} method.
    *
    * @return A {@link Position} object representing the destination of your route.
    * @since 2.0.0
    */
   public Position getDestination() {
     return destination;
-  }
-
-  /**
-   * Set the destination that will be used for the end of the route. This will be used once
-   * {@link MapboxNavigation#getRoute(Callback)}'s called.
-   *
-   * @param destination A {@link Position} representing the destination of your route.
-   * @since 2.0.0
-   */
-  public void setDestination(@NonNull Position destination) {
-    this.destination = destination;
   }
 
   /**
@@ -320,8 +337,9 @@ public class MapboxNavigation {
   }
 
   /**
-   * Gets the current user bearing that will be used when {@link MapboxNavigation#getRoute(Callback)}'s called. If no
-   * value's set, the return value will be {@code null}.
+   * Gets the current user bearing that will be used when
+   * {@link MapboxNavigation#getRoute(Position, Position, Callback)}'s called. If no value's set, the return value will
+   * be {@code null}.
    *
    * @return A value between 0 and 360 or null if the userOriginBearing hasn't been set.
    * @since 2.0.0

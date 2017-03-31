@@ -24,9 +24,10 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
-import com.mapbox.services.android.navigation.v5.listeners.AlertLevelChangeListener;
 import com.mapbox.services.android.navigation.v5.MapboxNavigation;
+import com.mapbox.services.android.navigation.v5.listeners.AlertLevelChangeListener;
 import com.mapbox.services.android.navigation.v5.listeners.NavigationEventListener;
+import com.mapbox.services.android.navigation.v5.listeners.OffRouteListener;
 import com.mapbox.services.android.navigation.v5.listeners.ProgressChangeListener;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
@@ -55,7 +56,7 @@ import static com.mapbox.services.android.Constants.MEDIUM_ALERT_LEVEL;
 import static com.mapbox.services.android.Constants.NONE_ALERT_LEVEL;
 
 public class NavigationActivity extends AppCompatActivity implements OnMapReadyCallback, OnMapClickListener,
-  ProgressChangeListener, NavigationEventListener, AlertLevelChangeListener {
+  ProgressChangeListener, NavigationEventListener, AlertLevelChangeListener, OffRouteListener {
 
   // Map variables
   private MapView mapView;
@@ -68,6 +69,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
   private MapboxNavigation navigation;
   private Button startRouteButton;
   private DirectionsRoute route;
+  private Position destination;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +138,9 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     destinationMarker = mapboxMap.addMarker(new MarkerOptions().position(point));
 
     startRouteButton.setVisibility(View.VISIBLE);
-    calculateRoute(Position.fromCoordinates(point.getLongitude(), point.getLatitude()));
+
+    this.destination = Position.fromCoordinates(point.getLongitude(), point.getLatitude());
+    calculateRoute();
   }
 
   private void drawRouteLine(DirectionsRoute route) {
@@ -157,16 +161,15 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
       .width(5f));
   }
 
-  private void calculateRoute(Position destination) {
+  private void calculateRoute() {
     Location userLocation = mapboxMap.getMyLocation();
     if (userLocation == null) {
       Timber.d("calculateRoute: User location is null, therefore, origin can't be set.");
       return;
     }
 
-    navigation.setOrigin(Position.fromCoordinates(userLocation.getLongitude(), userLocation.getLatitude()));
-    navigation.setDestination(destination);
-    navigation.getRoute(new Callback<DirectionsResponse>() {
+    Position origin = (Position.fromCoordinates(userLocation.getLongitude(), userLocation.getLatitude()));
+    navigation.getRoute(origin, destination, new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
         DirectionsRoute route = response.body().getRoutes().get(0);
@@ -197,7 +200,7 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
 
   @Override
   public void onProgressChange(Location location, RouteProgress routeProgress) {
-    Timber.d("onProgressChange: fraction of route traveled: %d", routeProgress.getFractionTraveled());
+    Timber.d("onProgressChange: fraction of route traveled: %f", routeProgress.getFractionTraveled());
   }
 
   @Override
@@ -224,6 +227,12 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         Toast.makeText(NavigationActivity.this, "NONE", Toast.LENGTH_LONG).show();
         break;
     }
+  }
+
+  @Override
+  public void userOffRoute(Location location) {
+    Position newOrigin = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
+    navigation.updateRoute(newOrigin, destination);
   }
 
   /*
