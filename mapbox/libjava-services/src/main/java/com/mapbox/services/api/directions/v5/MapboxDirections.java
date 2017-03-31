@@ -588,12 +588,10 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
           "Using the driving-traffic profile allows for maximum of 3 coordinates.");
       }
 
-
       if (coordLength > 25) {
         throw new ServicesException(
           "All profiles (except driving-traffic) allows for maximum of 25 coordinates.");
       }
-
 
       if (radiuses != null && radiuses.length != coordLength) {
         throw new ServicesException(
