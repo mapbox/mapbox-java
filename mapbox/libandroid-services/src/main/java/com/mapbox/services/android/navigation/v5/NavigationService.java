@@ -15,6 +15,11 @@ import android.support.v4.app.NotificationCompat;
 import com.mapbox.services.Experimental;
 import com.mapbox.services.android.Constants;
 import com.mapbox.services.android.R;
+import com.mapbox.services.android.navigation.v5.listeners.AlertLevelChangeListener;
+import com.mapbox.services.android.navigation.v5.listeners.NavigationEventListener;
+import com.mapbox.services.android.navigation.v5.listeners.NewRouteProgressListener;
+import com.mapbox.services.android.navigation.v5.listeners.OffRouteListener;
+import com.mapbox.services.android.navigation.v5.listeners.ProgressChangeListener;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
@@ -31,7 +36,7 @@ import static com.mapbox.services.android.telemetry.location.LocationEnginePrior
  * might change or be removed in minor versions.
  */
 @Experimental
-public class NavigationService extends Service implements LocationEngineListener {
+public class NavigationService extends Service implements LocationEngineListener, NewRouteProgressListener {
   private static final int ONGOING_NOTIFICATION_ID = 1;
 
   private int startId;
@@ -130,12 +135,16 @@ public class NavigationService extends Service implements LocationEngineListener
     locationUpdatedThread.getLooper();
     Timber.d("Background thread started");
 
-    locationUpdatedThread.setNewRouteProgressListener(new NewRouteProgressListener() {
-      @Override
-      public void onRouteProgressChange(RouteProgress routeProgress) {
-        NavigationService.this.routeProgress = routeProgress;
-      }
-    });
+    locationUpdatedThread.setNewRouteProgressListener(this);
+  }
+
+  @Override
+  public void onRouteProgressChange(RouteProgress routeProgress) {
+    NavigationService.this.routeProgress = routeProgress;
+    // If the user arrives at the final destination, end the navigation session.
+    if (routeProgress.getAlertUserLevel() == Constants.ARRIVE_ALERT_LEVEL) {
+      endNavigation();
+    }
   }
 
   public void startRoute(DirectionsRoute directionsRoute) {

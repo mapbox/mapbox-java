@@ -8,6 +8,10 @@ import android.support.annotation.NonNull;
 
 import com.mapbox.services.Experimental;
 import com.mapbox.services.android.Constants;
+import com.mapbox.services.android.navigation.v5.listeners.AlertLevelChangeListener;
+import com.mapbox.services.android.navigation.v5.listeners.NewRouteProgressListener;
+import com.mapbox.services.android.navigation.v5.listeners.OffRouteListener;
+import com.mapbox.services.android.navigation.v5.listeners.ProgressChangeListener;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.directions.v5.models.StepIntersection;
@@ -55,6 +59,26 @@ class LocationUpdatedThread extends HandlerThread {
     snapToRoute = true;
   }
 
+  void setNewRouteProgressListener(NewRouteProgressListener newRouteProgressListener) {
+    this.newRouteProgressListener = newRouteProgressListener;
+  }
+
+  void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
+    this.alertLevelChangeListener = alertLevelChangeListener;
+  }
+
+  void setProgressChangeListener(ProgressChangeListener progressChangeListener) {
+    this.progressChangeListener = progressChangeListener;
+  }
+
+  void setOffRouteListener(OffRouteListener offRouteListener) {
+    this.offRouteListener = offRouteListener;
+  }
+
+  void setSnapToRoute(boolean snapToRoute) {
+    this.snapToRoute = snapToRoute;
+  }
+
   @Override
   protected void onLooperPrepared() {
     requestHandler = new RequestHandler(this);
@@ -76,9 +100,10 @@ class LocationUpdatedThread extends HandlerThread {
 
     Timber.d("%d", previousRouteProgress.getAlertUserLevel());
 
-    // Even if the user isn't listening in to the alert listener, we need to run monitorStepProgress inorder to
-    // update the routeProgress object
+    // With a new location update, we create a new RouteProgress object.
     final RouteProgress routeProgress = monitorStepProgress(previousRouteProgress, location);
+
+
 
     List<StepIntersection> intersections = getNextIntersections(previousRouteProgress,
       routeProgress.usersCurrentSnappedPosition()
@@ -115,26 +140,6 @@ class LocationUpdatedThread extends HandlerThread {
         newRouteProgressListener.onRouteProgressChange(routeProgress);
       }
     });
-  }
-
-  void setNewRouteProgressListener(NewRouteProgressListener newRouteProgressListener) {
-    this.newRouteProgressListener = newRouteProgressListener;
-  }
-
-  void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
-    this.alertLevelChangeListener = alertLevelChangeListener;
-  }
-
-  void setProgressChangeListener(ProgressChangeListener progressChangeListener) {
-    this.progressChangeListener = progressChangeListener;
-  }
-
-  void setOffRouteListener(OffRouteListener offRouteListener) {
-    this.offRouteListener = offRouteListener;
-  }
-
-  void setSnapToRoute(boolean snapToRoute) {
-    this.snapToRoute = snapToRoute;
   }
 
   private RouteProgress monitorStepProgress(@NonNull RouteProgress routeProgress, Location location) {
