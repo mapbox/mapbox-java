@@ -584,47 +584,45 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         }
       }
 
-      if (coordinates != null) {
-        if (profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
-          && coordLength > 3) {
-          throw new ServicesException(
-            "Using the driving-traffic profile allows for maximum of 3 coordinates.");
-        }
-
-        if (coordLength > 25) {
-          throw new ServicesException(
-            "All profiles (except driving-traffic) allows for maximum of 25 coordinates.");
-        }
+      if (profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+        && coordLength > 3) {
+        throw new ServicesException(
+          "Using the driving-traffic profile allows for maximum of 3 coordinates.");
+      }
 
 
-        if (radiuses != null && radiuses.length != coordLength) {
-          throw new ServicesException(
-            "There must be as many radiuses as there are coordinates.");
-        }
+      if (coordLength > 25) {
+        throw new ServicesException(
+          "All profiles (except driving-traffic) allows for maximum of 25 coordinates.");
+      }
 
 
-        if (radiuses != null) {
-          for (double radius : radiuses) {
-            if (radius < 0) {
-              throw new ServicesException(
-                "Radius values need to be greater than zero.");
-            }
+      if (radiuses != null && radiuses.length != coordLength) {
+        throw new ServicesException(
+          "There must be as many radiuses as there are coordinates.");
+      }
+      
+      if (radiuses != null) {
+        for (double radius : radiuses) {
+          if (radius < 0) {
+            throw new ServicesException(
+              "Radius values need to be greater than zero.");
           }
         }
+      }
 
-        if (bearings != null) {
-          for (double[] bearing : bearings) {
-            if (bearing.length != 2 && bearing.length != 0) {
-              throw new ServicesException(
-                "Requesting a route which includes bearings requires exactly 2 values in each double array.");
-            }
+      if (bearings != null) {
+        for (double[] bearing : bearings) {
+          if (bearing.length != 2 && bearing.length != 0) {
+            throw new ServicesException(
+              "Requesting a route which includes bearings requires exactly 2 values in each double array.");
           }
         }
+      }
 
-        if (bearings != null && bearings.length != coordLength) {
-          throw new ServicesException(
-            "There must be as many bearings as there are coordinates.");
-        }
+      if (bearings != null && bearings.length != coordLength) {
+        throw new ServicesException(
+          "There must be as many bearings as there are coordinates.");
       }
 
       if (annotation != null) {
