@@ -46,6 +46,7 @@ class LocationUpdatedThread extends HandlerThread {
   private ProgressChangeListener progressChangeListener;
   private NewRouteProgressListener newRouteProgressListener;
   private OffRouteListener offRouteListener;
+  private boolean previousUserStillOnRoute = true;
   private boolean userStillOnRoute = true;
   private boolean snapToRoute;
   private DirectionsRoute directionsRoute;
@@ -125,7 +126,11 @@ class LocationUpdatedThread extends HandlerThread {
     responseHandler.post(new Runnable() {
       public void run() {
         if (offRouteListener != null && !userStillOnRoute) {
-          offRouteListener.userOffRoute(location);
+          // Only report user off route once.
+          if (userStillOnRoute != previousUserStillOnRoute) {
+            offRouteListener.userOffRoute(location);
+          }
+          previousUserStillOnRoute = userStillOnRoute;
         }
 
         if (previousRouteProgress.getAlertUserLevel() != routeProgress.getAlertUserLevel()) {
@@ -295,7 +300,6 @@ class LocationUpdatedThread extends HandlerThread {
    * @return boolean true if the user remains on the route through the intersection, else false.
    * @since 2.0.0
    */
-
   private boolean isUserStillOnRoute(StepIntersection intersection, double userHeading) {
     // We start off assuming the user is on route.
     boolean isOnRoute = true;
