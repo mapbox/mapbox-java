@@ -559,29 +559,41 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     public MapboxDirections build() throws ServicesException {
       validateAccessToken(accessToken);
 
+      // Get the total number of coordinates being passed to API
+      int coordLength = 0;
+      if (coordinates != null) {
+        coordLength = coordinates.size();
+      }
+      if (origin != null) {
+        coordLength += 1;
+      }
+      if (destination != null) {
+        coordLength += 1;
+      }
+
       if (profile == null) {
         throw new ServicesException(
           "A profile is required for the Directions API. Use one of the profiles found in the"
             + "DirectionsCriteria.java file.");
       }
 
-      if (coordinates == null || coordinates.size() < 2) {
+      if (coordLength < 2) {
         throw new ServicesException(
           "You should provide at least two coordinates (from/to).");
       }
 
       if (profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
-        && coordinates.size() > 3) {
+        && coordLength > 3) {
         throw new ServicesException(
           "Using the driving-traffic profile allows for maximum of 3 coordinates.");
       }
 
-      if (coordinates.size() > 25) {
+      if (coordLength > 25) {
         throw new ServicesException(
           "All profiles (except driving-traffic) allows for maximum of 25 coordinates.");
       }
 
-      if (radiuses != null && radiuses.length != coordinates.size()) {
+      if (radiuses != null && radiuses.length != coordLength) {
         throw new ServicesException(
           "There must be as many radiuses as there are coordinates.");
       }
@@ -604,7 +616,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         }
       }
 
-      if (bearings != null && bearings.length != coordinates.size()) {
+      if (bearings != null && bearings.length != coordLength) {
         throw new ServicesException(
           "There must be as many bearings as there are coordinates.");
       }
