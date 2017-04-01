@@ -387,7 +387,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * <p>
      * {longitude},{latitude};{longitude},{latitude}[;{longitude},{latitude} ...]
      * <p>
-     * - Each coordinate is a pair of a longitude float and latitude float, which are separated by a ,
+     * - Each coordinate is a pair of a longitude double and latitude double, which are separated by a ,
      * - Coordinates are separated by a ; from each other
      * - A query must at minimum have 2 coordinates and may at maximum have 25 coordinates
      *
