@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import com.mapbox.services.Experimental;
 import com.mapbox.services.android.Constants;
 import com.mapbox.services.android.navigation.v5.listeners.AlertLevelChangeListener;
-import com.mapbox.services.android.navigation.v5.listeners.NewRouteProgressListener;
 import com.mapbox.services.android.navigation.v5.listeners.OffRouteListener;
 import com.mapbox.services.android.navigation.v5.listeners.ProgressChangeListener;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
@@ -24,6 +23,7 @@ import com.mapbox.services.commons.models.Position;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import timber.log.Timber;
 
@@ -42,10 +42,9 @@ class LocationUpdatedThread extends HandlerThread {
   private Handler responseHandler;
 
   // Navigation Variables
-  private AlertLevelChangeListener alertLevelChangeListener;
-  private ProgressChangeListener progressChangeListener;
-  private NewRouteProgressListener newRouteProgressListener;
-  private OffRouteListener offRouteListener;
+  private CopyOnWriteArrayList<AlertLevelChangeListener> alertLevelChangeListeners;
+  private CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners;
+  private CopyOnWriteArrayList<OffRouteListener> offRouteListeners;
   private boolean previousUserStillOnRoute = true;
   private boolean userStillOnRoute = true;
   private boolean snapToRoute;
@@ -60,20 +59,16 @@ class LocationUpdatedThread extends HandlerThread {
     snapToRoute = true;
   }
 
-  void setNewRouteProgressListener(NewRouteProgressListener newRouteProgressListener) {
-    this.newRouteProgressListener = newRouteProgressListener;
+  void setAlertLevelChangeListener(CopyOnWriteArrayList<AlertLevelChangeListener> alertLevelChangeListeners) {
+    this.alertLevelChangeListeners = alertLevelChangeListeners;
   }
 
-  void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
-    this.alertLevelChangeListener = alertLevelChangeListener;
+  void setProgressChangeListener(CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners) {
+    this.progressChangeListeners = progressChangeListeners;
   }
 
-  void setProgressChangeListener(ProgressChangeListener progressChangeListener) {
-    this.progressChangeListener = progressChangeListener;
-  }
-
-  void setOffRouteListener(OffRouteListener offRouteListener) {
-    this.offRouteListener = offRouteListener;
+  void setOffRouteListener(CopyOnWriteArrayList<OffRouteListener> offRouteListeners) {
+    this.offRouteListeners = offRouteListeners;
   }
 
   void setSnapToRoute(boolean snapToRoute) {
@@ -105,7 +100,6 @@ class LocationUpdatedThread extends HandlerThread {
     final RouteProgress routeProgress = monitorStepProgress(previousRouteProgress, location);
 
 
-
     List<StepIntersection> intersections = getNextIntersections(previousRouteProgress,
       routeProgress.usersCurrentSnappedPosition()
     );
@@ -125,24 +119,29 @@ class LocationUpdatedThread extends HandlerThread {
     // Post back to the UI Thread.
     responseHandler.post(new Runnable() {
       public void run() {
-        if (offRouteListener != null && !userStillOnRoute) {
+        if (offRouteListeners != null && !userStillOnRoute) {
           // Only report user off route once.
           if (userStillOnRoute != previousUserStillOnRoute) {
-            offRouteListener.userOffRoute(location);
+            for (OffRouteListener offRouteListener : offRouteListeners) {
+              offRouteListener.userOffRoute(location);
+            }
           }
           previousUserStillOnRoute = userStillOnRoute;
         }
 
         if (previousRouteProgress.getAlertUserLevel() != routeProgress.getAlertUserLevel()) {
-          if (alertLevelChangeListener != null) {
-            alertLevelChangeListener.onAlertLevelChange(routeProgress.getAlertUserLevel(), routeProgress);
+          if (alertLevelChangeListeners != null) {
+            for (AlertLevelChangeListener alertLevelChangeListener : alertLevelChangeListeners) {
+              alertLevelChangeListener.onAlertLevelChange(routeProgress.getAlertUserLevel(), routeProgress);
+            }
           }
         }
-        if (progressChangeListener != null) {
-          progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, routeProgress);
-        }
 
-        newRouteProgressListener.onRouteProgressChange(routeProgress);
+        if (progressChangeListeners != null) {
+          for (ProgressChangeListener progressChangeListener : progressChangeListeners) {
+            progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, routeProgress);
+          }
+        }
       }
     });
   }

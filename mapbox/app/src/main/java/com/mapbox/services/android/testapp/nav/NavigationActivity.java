@@ -87,9 +87,9 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
           startRouteButton.setVisibility(View.INVISIBLE);
 
           // Attach all of our navigation listeners.
-          navigation.setNavigationEventListener(NavigationActivity.this);
-          navigation.setProgressChangeListener(NavigationActivity.this);
-          navigation.setAlertLevelChangeListener(NavigationActivity.this);
+          navigation.addNavigationEventListener(NavigationActivity.this);
+          navigation.addProgressChangeListener(NavigationActivity.this);
+          navigation.addAlertLevelChangeListener(NavigationActivity.this);
 
           // Adjust location engine to force a gps reading every second. This isn't required but gives an overall
           // better navigation experience for users. The updating only occurs if the user moves 3 meters or further
@@ -232,7 +232,22 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
   @Override
   public void userOffRoute(Location location) {
     Position newOrigin = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
-    navigation.updateRoute(newOrigin, destination);
+    navigation.updateRoute(newOrigin, destination, new Callback<DirectionsResponse>() {
+      @Override
+      public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+        DirectionsRoute route = response.body().getRoutes().get(0);
+        NavigationActivity.this.route = route;
+
+        // Remove old route line from map and draw the new one.
+        mapboxMap.removePolyline(routeLine);
+        drawRouteLine(route);
+      }
+
+      @Override
+      public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+        Timber.e("onFailure: navigation.getRoute()", throwable);
+      }
+    });
   }
 
   /*
@@ -275,6 +290,10 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
   protected void onDestroy() {
     super.onDestroy();
     mapView.onDestroy();
+    navigation.removeAlertLevelChangeListener(this);
+    navigation.removeNavigationEventListener(this);
+    navigation.removeProgressChangeListener(this);
+    navigation.removeOffRouteListener(this);
   }
 
   @Override
