@@ -51,7 +51,6 @@ class LocationUpdatedThread extends HandlerThread {
   private DirectionsRoute directionsRoute;
   private Location location;
 
-
   LocationUpdatedThread(Handler responseHandler) {
     super(TAG);
     this.responseHandler = responseHandler;
@@ -94,7 +93,7 @@ class LocationUpdatedThread extends HandlerThread {
       return;
     }
 
-    Timber.d("%d", previousRouteProgress.getAlertUserLevel());
+    Timber.d("Previous route alert level: %d", previousRouteProgress.getAlertUserLevel());
 
     // With a new location update, we create a new RouteProgress object.
     final RouteProgress routeProgress = monitorStepProgress(previousRouteProgress, location);
@@ -119,28 +118,24 @@ class LocationUpdatedThread extends HandlerThread {
     // Post back to the UI Thread.
     responseHandler.post(new Runnable() {
       public void run() {
-        if (offRouteListeners != null && !userStillOnRoute) {
-          // Only report user off route once.
-          if (userStillOnRoute != previousUserStillOnRoute) {
-            for (OffRouteListener offRouteListener : offRouteListeners) {
-              offRouteListener.userOffRoute(location);
-            }
+
+        // Only report user off route once.
+        if (!userStillOnRoute && (userStillOnRoute != previousUserStillOnRoute)) {
+          for (OffRouteListener offRouteListener : offRouteListeners) {
+            offRouteListener.userOffRoute(location);
           }
           previousUserStillOnRoute = userStillOnRoute;
         }
 
         if (previousRouteProgress.getAlertUserLevel() != routeProgress.getAlertUserLevel()) {
-          if (alertLevelChangeListeners != null) {
-            for (AlertLevelChangeListener alertLevelChangeListener : alertLevelChangeListeners) {
-              alertLevelChangeListener.onAlertLevelChange(routeProgress.getAlertUserLevel(), routeProgress);
-            }
+
+          for (AlertLevelChangeListener alertLevelChangeListener : alertLevelChangeListeners) {
+            alertLevelChangeListener.onAlertLevelChange(routeProgress.getAlertUserLevel(), routeProgress);
           }
         }
 
-        if (progressChangeListeners != null) {
-          for (ProgressChangeListener progressChangeListener : progressChangeListeners) {
-            progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, routeProgress);
-          }
+        for (ProgressChangeListener progressChangeListener : progressChangeListeners) {
+          progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, routeProgress);
         }
       }
     });
@@ -346,8 +341,8 @@ class LocationUpdatedThread extends HandlerThread {
     //Using a weak reference means you won't prevent garbage collection
     private final WeakReference<LocationUpdatedThread> locationUpdatedHandler;
 
-    RequestHandler(LocationUpdatedThread myClassInstance) {
-      locationUpdatedHandler = new WeakReference<>(myClassInstance);
+    RequestHandler(LocationUpdatedThread locationUpdatedThread) {
+      locationUpdatedHandler = new WeakReference<>(locationUpdatedThread);
     }
 
     @Override
@@ -355,9 +350,9 @@ class LocationUpdatedThread extends HandlerThread {
       LocationUpdatedThread locationUpdatedThread = this.locationUpdatedHandler.get();
       if (locationUpdatedThread != null) {
         if (msg.what == MESSAGE_LOCATION_UPDATED) {
-          RouteProgress target = (RouteProgress) msg.obj;
+          RouteProgress previousRouteProgress = (RouteProgress) msg.obj;
           Timber.d("Received request to calculate new location information");
-          locationUpdatedThread.handleRequest(locationUpdatedThread.directionsRoute, target,
+          locationUpdatedThread.handleRequest(locationUpdatedThread.directionsRoute, previousRouteProgress,
             locationUpdatedThread.location);
         }
       }

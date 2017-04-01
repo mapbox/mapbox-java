@@ -24,12 +24,14 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.services.Constants;
+import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.navigation.v5.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.listeners.AlertLevelChangeListener;
 import com.mapbox.services.android.navigation.v5.listeners.NavigationEventListener;
 import com.mapbox.services.android.navigation.v5.listeners.OffRouteListener;
 import com.mapbox.services.android.navigation.v5.listeners.ProgressChangeListener;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.testapp.R;
@@ -76,6 +78,14 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_navigation_activity);
 
+    mapView = (MapView) findViewById(R.id.mapView);
+    mapView.onCreate(savedInstanceState);
+    mapView.getMapAsync(this);
+
+    locationEngine = LocationSource.getLocationEngine(this);
+
+    navigation = new MapboxNavigation(this, Mapbox.getAccessToken());
+
 
     startRouteButton = (Button) findViewById(R.id.startRouteButton);
     startRouteButton.setOnClickListener(new View.OnClickListener() {
@@ -104,16 +114,6 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         }
       }
     });
-
-    mapView = (MapView) findViewById(R.id.mapView);
-    mapView.onCreate(savedInstanceState);
-
-
-    locationEngine = LocationSource.getLocationEngine(this);
-
-    navigation = new MapboxNavigation(this, Mapbox.getAccessToken());
-
-    mapView.getMapAsync(this);
   }
 
   @Override
@@ -290,10 +290,15 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
   protected void onDestroy() {
     super.onDestroy();
     mapView.onDestroy();
+
+    // Remove all navigation listeners
     navigation.removeAlertLevelChangeListener(this);
     navigation.removeNavigationEventListener(this);
     navigation.removeProgressChangeListener(this);
     navigation.removeOffRouteListener(this);
+
+    // End the navigation session
+    navigation.endNavigation();
   }
 
   @Override

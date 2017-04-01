@@ -47,7 +47,9 @@ public class NavigationService extends Service implements LocationEngineListener
   private LocationEngine locationEngine;
   private CopyOnWriteArrayList<NavigationEventListener> navigationEventListeners;
   private NotificationCompat.Builder notifyBuilder;
+  private CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners;
   private LocationUpdatedThread locationUpdatedThread;
+  private Handler responseHandler;
 
   private RouteProgress routeProgress;
   private DirectionsRoute directionsRoute;
@@ -134,7 +136,7 @@ public class NavigationService extends Service implements LocationEngineListener
       }
     }
 
-    Handler responseHandler = new Handler();
+    responseHandler = new Handler();
     locationUpdatedThread = new LocationUpdatedThread(responseHandler);
     locationUpdatedThread.start();
     locationUpdatedThread.getLooper();
@@ -173,8 +175,7 @@ public class NavigationService extends Service implements LocationEngineListener
 
   public void updateRoute(DirectionsRoute directionsRoute) {
     Timber.d("Updating route");
-
-
+    this.directionsRoute = directionsRoute;
   }
 
   public void endNavigation() {
@@ -185,6 +186,11 @@ public class NavigationService extends Service implements LocationEngineListener
       }
     }
 
+    // Remove the this navigation service progress change listener
+    progressChangeListeners.remove(this);
+
+    responseHandler.removeCallbacksAndMessages(null);
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
       locationUpdatedThread.quitSafely();
     } else {
@@ -192,8 +198,10 @@ public class NavigationService extends Service implements LocationEngineListener
     }
 
     // Lower accuracy to minimize battery usage while not in navigation mode.
+    // TODO restore accuracy state to what user had before nav session
     locationEngine.setPriority(BALANCED_POWER_ACCURACY);
     locationEngine.removeLocationEngineListener(this);
+    locationEngine.removeLocationUpdates();
     locationEngine.deactivate();
 
     // Removes the foreground notification
@@ -215,6 +223,7 @@ public class NavigationService extends Service implements LocationEngineListener
     // Add a progress listener so this service is notified when the user arrives at their destination.
     progressChangeListeners.add(this);
     locationUpdatedThread.setProgressChangeListener(progressChangeListeners);
+    this.progressChangeListeners = progressChangeListeners;
   }
 
   public void setOffRouteListeners(CopyOnWriteArrayList<OffRouteListener> offRouteListeners) {
