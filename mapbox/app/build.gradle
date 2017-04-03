@@ -69,7 +69,6 @@ dependencies {
     androidTestCompile(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support.constraint:constraint-layout:+'
 }
 
 apply from: 'gradle-dexcount.gradle'

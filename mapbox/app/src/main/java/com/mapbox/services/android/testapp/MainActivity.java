@@ -89,11 +89,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         getString(R.string.description_static_image),
         StaticImageActivity.class
       ),
-            new SampleItem(
-                    getString(R.string.title_static_image_with_annotations),
-                    getString(R.string.description_static_image_with_annotations),
-                    StaticImageWithAnnotationsActivity.class
-            ),
+      new SampleItem(
+        getString(R.string.title_static_image_with_annotations),
+        getString(R.string.description_static_image_with_annotations),
+        StaticImageWithAnnotationsActivity.class
+      ),
       new SampleItem(
         getString(R.string.title_simplify_polyline),
         getString(R.string.description_simplify_polyline),
