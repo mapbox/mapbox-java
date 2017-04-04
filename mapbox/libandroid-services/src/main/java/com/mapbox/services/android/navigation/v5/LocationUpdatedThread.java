@@ -46,6 +46,7 @@ class LocationUpdatedThread extends HandlerThread {
   private CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners;
   private CopyOnWriteArrayList<OffRouteListener> offRouteListeners;
   private boolean previousUserStillOnRoute = true;
+  private double userDistanceToManeuverLocation;
   private boolean userStillOnRoute = true;
   private boolean snapToRoute;
   private DirectionsRoute directionsRoute;
@@ -142,8 +143,9 @@ class LocationUpdatedThread extends HandlerThread {
     int alertLevel = routeProgress.getAlertUserLevel() == Constants.NONE_ALERT_LEVEL
       ? Constants.DEPART_ALERT_LEVEL : routeProgress.getAlertUserLevel();
 
+    Position truePosition = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
     double userSnapToStepDistanceFromManeuver = RouteUtils.getDistanceToNextStep(
-      Position.fromCoordinates(location.getLongitude(), location.getLatitude()),
+      truePosition,
       routeProgress.getCurrentLeg(),
       routeProgress.getCurrentLegProgress().getStepIndex()
     );
@@ -179,6 +181,25 @@ class LocationUpdatedThread extends HandlerThread {
 
       // Use the currentStep if there is not a next step, this occurs when arriving.
       if (routeProgress.getCurrentLegProgress().getUpComingStep() != null) {
+
+        double userAbsoluteDistance = TurfMeasurement.distance(
+          truePosition, routeProgress.getCurrentLegProgress().getUpComingStep().getManeuver().asPosition(),
+          TurfConstants.UNIT_METERS
+        );
+
+        // userAbsoluteDistanceToManeuverLocation is set to nil by default
+        // If it's set to nil, we know the user has never entered the maneuver radius
+        if (userDistanceToManeuverLocation == 0.0) {
+          userDistanceToManeuverLocation = Constants.MANEUVER_ZONE_RADIUS;
+        }
+
+        double lastKnownUserAbsoluteDistance = userDistanceToManeuverLocation;
+
+        // The objective here is to make sure the user is moving away from the maneuver location
+        // This helps on maneuvers where the difference between the exit and enter heading are similar
+        if (userAbsoluteDistance <= lastKnownUserAbsoluteDistance) {
+          userDistanceToManeuverLocation = userAbsoluteDistance;
+        }
 
         if (routeProgress.getCurrentLegProgress().getUpComingStep().getManeuver().getType().equals("arrive")) {
           alertLevel = Constants.ARRIVE_ALERT_LEVEL;
