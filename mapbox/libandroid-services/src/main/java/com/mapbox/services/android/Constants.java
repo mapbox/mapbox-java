@@ -79,4 +79,17 @@ public class Constants {
    */
   @Experimental public static final int MINIMUM_DISTANCE_FOR_MEDIUM_ALERT = 400;
 
+  /**
+   * Maximum number of meters the user can travel away from step before the
+   * {@link com.mapbox.services.android.navigation.v5.listeners.OffRouteListener}'s called.
+   */
+  @Experimental public static final double MAXIMUM_DISTANCE_BEFORE_OFF_ROUTE = 50;
+
+  /**
+   * When calculating whether or not the user is on the route, we look where the user will be given their speed and
+   * this variable.
+   */
+  @Experimental public static final double DEAD_RECKONING_TIME_INTERVAL = 1.0;
+
 }
+

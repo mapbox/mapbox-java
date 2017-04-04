@@ -40,7 +40,9 @@ public class RouteUtils {
    * RouteUtils constructor using default threshold of 100 meters.
    *
    * @since 1.3.0
+   * @deprecated All methods in RouteUtils are now static.
    */
+  @Deprecated
   public RouteUtils() {
     this.offRouteThresholdKm = DEFAULT_OFF_ROUTE_THRESHOLD_KM;
   }
@@ -51,7 +53,9 @@ public class RouteUtils {
    * @param offRouteThresholdKm Double value using unit kilometers. This value determines the
    *                            distance till you are notified.
    * @since 1.3.0
+   * @deprecated All methods in RouteUtils are now static.
    */
+  @Deprecated
   public RouteUtils(double offRouteThresholdKm) {
     this.offRouteThresholdKm = offRouteThresholdKm;
   }
@@ -59,7 +63,9 @@ public class RouteUtils {
   /**
    * @return the RouteUtils threshold as a double value; defaults 100 meters.
    * @since 1.3.0
+   * @deprecated All methods in RouteUtils are now static.
    */
+  @Deprecated
   public double getOffRouteThresholdKm() {
     return offRouteThresholdKm;
   }
@@ -76,10 +82,28 @@ public class RouteUtils {
    * @throws ServicesException if error occurs Mapbox API related.
    * @throws TurfException     signals that a Turf exception of some sort has occurred.
    * @since 1.3.0
+   * @deprecated use the static equivalent of this method.
    */
+  @Deprecated
   public boolean isInStep(Position position, RouteLeg routeLeg, int stepIndex) throws ServicesException, TurfException {
     double distance = getDistanceToStep(position, routeLeg, stepIndex);
     return (distance <= offRouteThresholdKm);
+  }
+
+  /**
+   * Compute the distance between the position and the step line (the closest point), and checks
+   * if it's within the off-route threshold.
+   *
+   * @param position  you want to verify is on or near the routeLeg step. If using for navigation,
+   *                  this would typically be the users current location.
+   * @param routeLeg  a directions routeLeg.
+   * @param stepIndex integer index for step in routeLeg.
+   * @return true if the position is outside the OffRoute threshold.
+   * @since 2.0.1
+   */
+  public static boolean isInStep(Position position, RouteLeg routeLeg, int stepIndex, double threshold) {
+    double distance = getDistanceToStep(position, routeLeg, stepIndex);
+    return (distance <= threshold);
   }
 
   /**
@@ -292,7 +316,9 @@ public class RouteUtils {
    * @throws ServicesException if error occurs Mapbox API related.
    * @throws TurfException     signals that a Turf exception of some sort has occurred.
    * @since 1.3.0
+   * @deprecated Use the new static {@code isOffRoute()} method.
    */
+  @Deprecated
   public boolean isOffRoute(Position position, RouteLeg routeLeg) throws ServicesException, TurfException {
     for (int stepIndex = 0; stepIndex < routeLeg.getSteps().size(); stepIndex++) {
       if (isInStep(position, routeLeg, stepIndex)) {
@@ -300,7 +326,26 @@ public class RouteUtils {
         return false;
       }
     }
+    return true;
+  }
 
+  /**
+   * Method to check whether the position given is outside the routeLeg using the threshold.
+   *
+   * @param position  you want to verify is on or near the routeLeg. If using for navigation, this
+   *                  would typically be the users current location.
+   * @param routeLeg  a directions routeLeg.
+   * @param threshold double value used to determine if position is outside the range.
+   * @return true if the position is beyond the threshold limit from the routeLeg.
+   * @since 2.1.0
+   */
+  public static boolean isOffRoute(Position position, RouteLeg routeLeg, double threshold) {
+    for (int stepIndex = 0; stepIndex < routeLeg.getSteps().size(); stepIndex++) {
+      if (isInStep(position, routeLeg, stepIndex, threshold)) {
+        // We aren't off-route if we're close to at least one routeLeg step
+        return false;
+      }
+    }
     return true;
   }
 

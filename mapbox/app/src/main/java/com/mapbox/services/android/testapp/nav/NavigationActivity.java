@@ -173,7 +173,6 @@ public class NavigationActivity extends AppCompatActivity implements OnMapReadyC
         DirectionsRoute route = response.body().getRoutes().get(0);
         NavigationActivity.this.route = route;
         drawRouteLine(route);
-
       }
 
       @Override
