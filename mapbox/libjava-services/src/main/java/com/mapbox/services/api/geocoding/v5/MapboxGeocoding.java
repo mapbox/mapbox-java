@@ -235,8 +235,6 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    * @since 1.0.0
    */
   public static class Builder<T extends Builder> extends MapboxBuilder {
-    // Used to remove any trailing zeros and prevent a coordinate being over 7 significant figures.
-    DecimalFormat decimalFormat = new DecimalFormat("0.######");
 
     // Required
     private String accessToken;
@@ -299,8 +297,8 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       }
 
       query = String.format(Locale.US, "%s,%s",
-        decimalFormat.format(position.getLongitude()),
-        decimalFormat.format(position.getLatitude()));
+        TextUtils.formatCoordinate(position.getLongitude()),
+        TextUtils.formatCoordinate(position.getLatitude()));
       return (T) this;
     }
 
@@ -352,8 +350,8 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         return (T) this;
       }
       proximity = String.format(Locale.US, "%s,%s",
-        decimalFormat.format(position.getLongitude()),
-        decimalFormat.format(position.getLatitude()));
+        TextUtils.formatCoordinate(position.getLongitude()),
+        TextUtils.formatCoordinate(position.getLatitude()));
       return (T) this;
     }
 
@@ -426,10 +424,10 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       }
 
       this.bbox = String.format(Locale.US, "%s,%s,%s,%s",
-        decimalFormat.format(minX),
-        decimalFormat.format(minY),
-        decimalFormat.format(maxX),
-        decimalFormat.format(maxY));
+        TextUtils.formatCoordinate(minX),
+        TextUtils.formatCoordinate(minY),
+        TextUtils.formatCoordinate(maxX),
+        TextUtils.formatCoordinate(maxY));
       return (T) this;
     }
 

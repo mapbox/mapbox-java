@@ -133,8 +133,6 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    * @since 1.0.0
    */
   public static class Builder<T extends Builder> extends MapboxBuilder {
-    // Used to remove any trailing zeros and prevent a coordinate being over 7 significant figures.
-    DecimalFormat decimalFormat = new DecimalFormat("0.######", new DecimalFormatSymbols(Locale.US));
 
     // We use `Boolean` instead of `boolean` to allow unset (null) values.
     private String user = null;
@@ -403,21 +401,21 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       // Insert origin at beginning of list if one is provided.
       if (origin != null) {
         coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          decimalFormat.format(origin.getLongitude()),
-          decimalFormat.format(origin.getLatitude())));
+          TextUtils.formatCoordinate(origin.getLongitude()),
+          TextUtils.formatCoordinate(origin.getLatitude())));
       }
       if (coordinates != null) {
         for (Position coordinate : coordinates) {
           coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-            decimalFormat.format(coordinate.getLongitude()),
-            decimalFormat.format(coordinate.getLatitude())));
+            TextUtils.formatCoordinate(coordinate.getLongitude()),
+            TextUtils.formatCoordinate(coordinate.getLatitude())));
         }
       }
       // Insert destination at end of list if one is provided.
       if (destination != null) {
         coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          decimalFormat.format(destination.getLongitude()),
-          decimalFormat.format(destination.getLatitude())));
+          TextUtils.formatCoordinate(destination.getLongitude()),
+          TextUtils.formatCoordinate(destination.getLatitude())));
       }
 
       return TextUtils.join(";", coordinatesFormatted.toArray());
@@ -473,8 +471,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
           bearingFormatted[i] = "";
         } else {
           bearingFormatted[i] = String.format(Locale.US, "%s,%s",
-            decimalFormat.format(bearings[i][0]),
-            decimalFormat.format(bearings[i][1]));
+            TextUtils.formatCoordinate(bearings[i][0]),
+            TextUtils.formatCoordinate(bearings[i][1]));
         }
       }
       return TextUtils.join(";", bearingFormatted);
@@ -505,7 +503,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         if (radiuses[i] == Double.POSITIVE_INFINITY) {
           radiusesFormatted[i] = "unlimited";
         } else {
-          radiusesFormatted[i] = String.format(Locale.US, "%s", decimalFormat.format(radiuses[i]));
+          radiusesFormatted[i] = String.format(Locale.US, "%s", TextUtils.formatCoordinate(radiuses[i]));
         }
       }
 

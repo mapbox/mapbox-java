@@ -1,5 +1,9 @@
 package com.mapbox.services.commons.utils;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 /**
  * We avoid including a full library like org.apache.commons:commons-lang3 to avoid an unnecessary
  * large number of methods, which is inconvenient to Android devs.
@@ -47,4 +51,10 @@ public class TextUtils {
     return sb.toString();
   }
 
+  public static String formatCoordinate(double coordinate) {
+    // Used to remove any trailing zeros and prevent a coordinate being over 7 significant figures.
+    DecimalFormat decimalFormat = new DecimalFormat("0.######", new DecimalFormatSymbols(Locale.US));
+    return String.format(Locale.US, "%s",
+      decimalFormat.format(coordinate));
+  }
 }

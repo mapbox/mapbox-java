@@ -142,8 +142,6 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
    * @since 2.0.0
    */
   public static class Builder<T extends Builder> extends MapboxBuilder {
-    // Used to remove any trailing zeros and prevent a coordinate being over 7 significant figures.
-    DecimalFormat decimalFormat = new DecimalFormat("0.######");
 
     private String accessToken = null;
     private String user = null;
@@ -217,8 +215,8 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
       List<String> coordinatesFormatted = new ArrayList<>();
       for (Position coordinate : coordinates) {
         coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          decimalFormat.format(coordinate.getLongitude()),
-          decimalFormat.format(coordinate.getLatitude())));
+          TextUtils.formatCoordinate(coordinate.getLongitude()),
+          TextUtils.formatCoordinate(coordinate.getLatitude())));
       }
 
       return TextUtils.join(";", coordinatesFormatted.toArray());
