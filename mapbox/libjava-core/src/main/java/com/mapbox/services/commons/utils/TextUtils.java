@@ -1,5 +1,7 @@
 package com.mapbox.services.commons.utils;
 
+import com.mapbox.services.Constants;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -51,10 +53,16 @@ public class TextUtils {
     return sb.toString();
   }
 
+  /**
+   * Useful to remove any trailing zeros and prevent a coordinate being over 7 significant figures.
+   *
+   * @param coordinate a double value representing a coordinate.
+   * @return a formatted string.
+   * @since 2.0.1
+   */
   public static String formatCoordinate(double coordinate) {
-    // Used to remove any trailing zeros and prevent a coordinate being over 7 significant figures.
     DecimalFormat decimalFormat = new DecimalFormat("0.######", new DecimalFormatSymbols(Locale.US));
-    return String.format(Locale.US, "%s",
+    return String.format(Constants.DEFAULT_LOCALE, "%s",
       decimalFormat.format(coordinate));
   }
 }
