@@ -134,7 +134,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
   @Override
   public void onStatusChanged(String provider, int status, Bundle extras) {
     Log.v(LOG_TAG, String.format("Provider %s status changed to %d (current provider is %s).",
-      status, provider, currentProvider));
+      provider, status, currentProvider));
   }
 
   /**
