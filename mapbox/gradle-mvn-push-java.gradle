@@ -22,10 +22,10 @@ def isReleaseBuild() {
 }
 
 def isLocalBuild() {
-    if(System.getenv('IS_LOCAL_DEVELOPMENT') != null) {
+    if (System.getenv('IS_LOCAL_DEVELOPMENT') != null) {
         return System.getenv('IS_LOCAL_DEVELOPMENT').toBoolean()
     }
-    return false
+    return true
 }
 
 def getReleaseRepositoryUrl() {
