@@ -109,7 +109,6 @@ public class TelemetryClient {
 
   public void sendEvents(Vector<Hashtable<String, Object>> events, Callback callback) {
     if (events == null || events.size() == 0) {
-      Log.v(LOG_TAG, "Returning, no event data to send.");
       return;
     }
 
