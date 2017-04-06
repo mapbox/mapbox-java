@@ -83,7 +83,6 @@ public abstract class LocationEngine {
   @RequiresPermission(anyOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
   public abstract void requestLocationUpdates();
 
-
   /**
    * When you no longer wish to receive location updates, you should call this method to prevent the devices battery
    * from draining. It's important to note that your location listeners will remain intake until you call
