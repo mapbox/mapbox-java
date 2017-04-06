@@ -212,7 +212,6 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       String appIdentifier = TelemetryUtils.getApplicationIdentifier(context);
       String fullUserAgent = TextUtils.isEmpty(appIdentifier) ? userAgent : Util.toHumanReadableAscii(
         String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
-      Log.v(LOG_TAG, String.format("Setting user agent value: %s", fullUserAgent));
       client.setUserAgent(fullUserAgent);
     } catch (Exception exception) {
       Log.e(LOG_TAG, String.format("Failed to check for staging credentials: %s", exception.getMessage()));
@@ -353,16 +352,12 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
         } else {
           // Restart handler
           long nextWaitTime = counter.nextBackOffMillis();
-          Log.v(LOG_TAG, String.format("Location permissions not granted (checking again in %d seconds).",
-            nextWaitTime / 1000));
           handler.postDelayed(this, nextWaitTime);
         }
       }
     };
 
     long nextWaitTime = counter.nextBackOffMillis();
-    Log.v(LOG_TAG, String.format("Location permissions not granted (checking again in %d seconds).",
-      nextWaitTime / 1000));
     handler.postDelayed(runnable, nextWaitTime);
   }
 
