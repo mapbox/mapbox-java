@@ -62,14 +62,15 @@ public class MapboxEvent implements Serializable {
   /**
    * Helper method for tracking gesture events
    *
-   * @param gestureId Type of Gesture See {@see MapboxEvent#GESTURE_SINGLETAP
-   *                  MapboxEvent#GESTURE_DOUBLETAP
-   *                  MapboxEvent#GESTURE_TWO_FINGER_SINGLETAP
-   *                  MapboxEvent#GESTURE_QUICK_ZOOM
-   *                  MapboxEvent#GESTURE_PAN_START
-   *                  MapboxEvent#GESTURE_PINCH_START
-   *                  MapboxEvent#GESTURE_ROTATION_START
-   *                  MapboxEvent#GESTURE_PITCH_START}
+   * @param gestureId Type of Gesture
+   * @see MapboxEvent#GESTURE_SINGLETAP
+   * @see MapboxEvent#GESTURE_DOUBLETAP
+   * @see MapboxEvent#GESTURE_TWO_FINGER_SINGLETAP
+   * @see MapboxEvent#GESTURE_QUICK_ZOOM
+   * @see MapboxEvent#GESTURE_PAN_START
+   * @see MapboxEvent#GESTURE_PINCH_START
+   * @see MapboxEvent#GESTURE_ROTATION_START
+   * @see MapboxEvent#GESTURE_PITCH_START
    * @param location  Location coordinates at start of gesture
    * @param zoom      Zoom level to be registered
    */
@@ -96,7 +97,7 @@ public class MapboxEvent implements Serializable {
 
   /**
    * Helper method for tracking DragEnd gesture event
-   * See {@see MapboxEvent#TYPE_MAP_DRAG_END}
+   * @see MapboxEvent#TYPE_MAP_DRAG_END
    *
    * @param location Original location coordinate at end of drag
    * @param zoom     Zoom level to be registered
