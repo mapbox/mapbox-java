@@ -45,9 +45,9 @@ class LocationUpdatedThread extends HandlerThread {
   private CopyOnWriteArrayList<AlertLevelChangeListener> alertLevelChangeListeners;
   private CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners;
   private CopyOnWriteArrayList<OffRouteListener> offRouteListeners;
-  private boolean previousUserStillOnRoute = true;
+  private boolean previousUserOffRoute;
   private double userDistanceToManeuverLocation;
-  private boolean userStillOnRoute = true;
+  private boolean userOffRoute;
   private boolean snapToRoute;
   private DirectionsRoute directionsRoute;
   private Location location;
@@ -99,9 +99,9 @@ class LocationUpdatedThread extends HandlerThread {
     // With a new location update, we create a new RouteProgress object.
     final RouteProgress routeProgress = monitorStepProgress(previousRouteProgress, location);
 
-    userStillOnRoute = userIsOnRoute(location, routeProgress.getCurrentLeg());
+    userOffRoute = userIsOnRoute(location, routeProgress.getCurrentLeg());
 
-    if (snapToRoute && userStillOnRoute) {
+    if (snapToRoute && !userOffRoute) {
       // Pass in the snapped location with all the other location data remaining intact for their use.
       location.setLatitude(routeProgress.usersCurrentSnappedPosition().getLatitude());
       location.setLongitude(routeProgress.usersCurrentSnappedPosition().getLongitude());
@@ -114,11 +114,11 @@ class LocationUpdatedThread extends HandlerThread {
       public void run() {
 
         // Only report user off route once.
-        if (!userStillOnRoute && (userStillOnRoute != previousUserStillOnRoute)) {
+        if (userOffRoute && (userOffRoute != previousUserOffRoute)) {
           for (OffRouteListener offRouteListener : offRouteListeners) {
             offRouteListener.userOffRoute(location);
           }
-          previousUserStillOnRoute = userStillOnRoute;
+          previousUserOffRoute = userOffRoute;
         }
 
         if (previousRouteProgress.getAlertUserLevel() != routeProgress.getAlertUserLevel()) {
@@ -263,6 +263,7 @@ class LocationUpdatedThread extends HandlerThread {
     Position locationInFrontOfUser = TurfMeasurement.destination(
       locationToPosition, metersInFrontOfUser, location.getBearing(), TurfConstants.UNIT_METERS
     );
+
     return RouteUtils.isOffRoute(locationInFrontOfUser, routeLeg, Constants.MAXIMUM_DISTANCE_BEFORE_OFF_ROUTE);
   }
 
