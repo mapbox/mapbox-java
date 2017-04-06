@@ -17,7 +17,11 @@ import com.mapbox.services.api.directions.v5.models.RouteLeg;
 import com.mapbox.services.api.navigation.v5.RouteProgress;
 import com.mapbox.services.api.navigation.v5.RouteUtils;
 import com.mapbox.services.api.utils.turf.TurfConstants;
+import com.mapbox.services.api.utils.turf.TurfHelpers;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
+import com.mapbox.services.api.utils.turf.TurfMisc;
+import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
 import java.lang.ref.WeakReference;
@@ -26,6 +30,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import timber.log.Timber;
 
 import static com.mapbox.services.android.Constants.DEAD_RECKONING_TIME_INTERVAL;
+import static com.mapbox.services.android.Constants.MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION;
+import static com.mapbox.services.android.Constants.MAX_MANIPULATED_COURSE_ANGLE;
 
 /**
  * This is an experimental API. Experimental APIs are quickly evolving and
@@ -105,6 +111,8 @@ class LocationUpdatedThread extends HandlerThread {
       // Pass in the snapped location with all the other location data remaining intact for their use.
       location.setLatitude(routeProgress.usersCurrentSnappedPosition().getLatitude());
       location.setLongitude(routeProgress.usersCurrentSnappedPosition().getLongitude());
+
+      location.setBearing(snapUserBearing(routeProgress));
     }
 
     this.location = location;
@@ -165,7 +173,7 @@ class LocationUpdatedThread extends HandlerThread {
       double userHeadingNormalized = MathUtils.wrap(location.getBearing(), 0, 360);
       courseMatchesManeuverFinalHeading = MathUtils.differenceBetweenAngles(
         finalHeadingNormalized, userHeadingNormalized
-      ) <= Constants.MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION;
+      ) <= MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION;
     }
 
     // When departing, userSnapToStepDistanceFromManeuver is most often less than RouteControllerManeuverZoneRadius
@@ -265,6 +273,53 @@ class LocationUpdatedThread extends HandlerThread {
     );
 
     return RouteUtils.isOffRoute(locationInFrontOfUser, routeLeg, Constants.MAXIMUM_DISTANCE_BEFORE_OFF_ROUTE);
+  }
+
+  private float snapUserBearing(RouteProgress routeProgress) {
+
+    LineString lineString = LineString.fromPolyline(routeProgress.getRoute().getGeometry(), com.mapbox.services.Constants.PRECISION_6);
+
+    Position newCoordinate;
+    if (snapToRoute) {
+      newCoordinate = routeProgress.usersCurrentSnappedPosition();
+    } else {
+      newCoordinate = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
+    }
+
+    double userDistanceBuffer = location.getSpeed() * DEAD_RECKONING_TIME_INTERVAL;
+
+    if (routeProgress.getDistanceTraveled() + userDistanceBuffer
+      > RouteUtils.getDistanceToEndOfRoute(
+        routeProgress.getRoute().getLegs().get(0).getSteps().get(0).getManeuver().asPosition(),
+        routeProgress.getRoute(),
+        TurfConstants.UNIT_METERS)) {
+      // If the user is near the end of the route, take the remaining distance and divide by two
+      userDistanceBuffer = routeProgress.getDistanceRemaining() / 2;
+    }
+
+    Point pointOneClosest = TurfMeasurement.along(lineString, routeProgress.getDistanceTraveled() + userDistanceBuffer, TurfConstants.UNIT_METERS);
+    Point pointTwoClosest = TurfMeasurement.along(lineString, routeProgress.getDistanceTraveled() + (userDistanceBuffer * 2), TurfConstants.UNIT_METERS);
+
+    // Get direction of these points
+    double pointOneBearing = TurfMeasurement.bearing(Point.fromCoordinates(newCoordinate), pointOneClosest);
+    double pointTwoBearing = TurfMeasurement.bearing(Point.fromCoordinates(newCoordinate), pointTwoClosest);
+
+    double wrappedPointOne = MathUtils.wrap(pointOneBearing, -180, 180);
+    double wrappedPointTwo = MathUtils.wrap(pointTwoBearing, -180, 180);
+    double wrappedCurrentBearing = MathUtils.wrap(location.getBearing(), -180, 180);
+
+    double relativeAnglepointOne = MathUtils.wrap(wrappedPointOne - wrappedCurrentBearing, -180, 180);
+    double relativeAnglepointTwo = MathUtils.wrap(wrappedPointTwo - wrappedCurrentBearing, -180, 180);
+
+    double averageRelativeAngle = (relativeAnglepointOne + relativeAnglepointTwo) / 2;
+
+    double absoluteBearing = MathUtils.wrap(wrappedCurrentBearing + averageRelativeAngle, 0, 360);
+
+    if (MathUtils.differenceBetweenAngles(absoluteBearing, location.getBearing()) > MAX_MANIPULATED_COURSE_ANGLE) {
+      return location.getBearing();
+    }
+
+    return averageRelativeAngle <= MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION ? (float) absoluteBearing : location.getBearing();
   }
 
   /**

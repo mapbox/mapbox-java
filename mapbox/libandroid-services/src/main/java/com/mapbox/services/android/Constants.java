@@ -91,5 +91,10 @@ public class Constants {
    */
   @Experimental public static final double DEAD_RECKONING_TIME_INTERVAL = 1.0;
 
+  /**
+   *  Maximum angle the user puck will be rotated when snapping the user's course to the route line.
+   */
+  @Experimental public static final double MAX_MANIPULATED_COURSE_ANGLE = 25;
+
 }
 
