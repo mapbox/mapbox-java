@@ -41,25 +41,25 @@ javadoc:
 	cd mapbox; ./gradlew :libandroid-ui:javadocrelease
 
 publish-java:
-	cd mapbox; ./gradlew :libjava-core:uploadArchives
-	cd mapbox; ./gradlew :libjava-geojson:uploadArchives
-	cd mapbox; ./gradlew :libjava-services:uploadArchives
-	cd mapbox; ./gradlew :libjava-services-rx:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=false; ./gradlew :libjava-core:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=false; ./gradlew :libjava-geojson:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=false; ./gradlew :libjava-services:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=false; ./gradlew :libjava-services-rx:uploadArchives
 
 publish-android:
-	cd mapbox; ./gradlew :libandroid-telemetry:uploadArchives
-	cd mapbox; ./gradlew :libandroid-services:uploadArchives
-	cd mapbox; ./gradlew :libandroid-ui:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=false; ./gradlew :libandroid-telemetry:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=false; ./gradlew :libandroid-services:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=false; ./gradlew :libandroid-ui:uploadArchives
 
 publish-local:
 	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
-	cd mapbox; ./gradlew :libjava-core:install
-	cd mapbox; ./gradlew :libjava-geojson:install
-	cd mapbox; ./gradlew :libjava-services:install
-	cd mapbox; ./gradlew :libjava-services-rx:install
-	# cd mapbox; ./gradlew :libandroid-telemetry:install
-	# cd mapbox; ./gradlew :libandroid-services:install
-	# cd mapbox; ./gradlew :libandroid-ui:install
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=true; ./gradlew :libjava-core:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=true; ./gradlew :libjava-geojson:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=true; ./gradlew :libjava-services:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=true; ./gradlew :libjava-services-rx:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=true; ./gradlew :libandroid-telemetry:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=true; ./gradlew :libandroid-services:uploadArchives
+	cd mapbox; export IS_LOCAL_DEVELOPMENT=true; ./gradlew :libandroid-ui:uploadArchives
 
 dex-count:
 	cd mapbox; ./gradlew countDebugDexMethods

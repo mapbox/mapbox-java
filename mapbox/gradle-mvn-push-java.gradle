@@ -21,6 +21,13 @@ def isReleaseBuild() {
     return VERSION_NAME.contains("SNAPSHOT") == false
 }
 
+def isLocalBuild() {
+    if (System.getenv('IS_LOCAL_DEVELOPMENT') != null) {
+        return System.getenv('IS_LOCAL_DEVELOPMENT').toBoolean()
+    }
+    return true
+}
+
 def getReleaseRepositoryUrl() {
     return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
             : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
@@ -29,6 +36,10 @@ def getReleaseRepositoryUrl() {
 def getSnapshotRepositoryUrl() {
     return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
             : "https://oss.sonatype.org/content/repositories/snapshots/"
+}
+
+def obtainMavenLocalUrl() {
+    return getRepositories().mavenLocal().getUrl()
 }
 
 def getRepositoryUsername() {
@@ -49,11 +60,15 @@ afterEvaluate { project ->
                 pom.artifactId = POM_ARTIFACT_ID
                 pom.version = VERSION_NAME
 
-                repository(url: getReleaseRepositoryUrl()) {
-                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-                }
-                snapshotRepository(url: getSnapshotRepositoryUrl()) {
-                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                if (isLocalBuild()) {
+                    repository(url: obtainMavenLocalUrl())
+                } else {
+                    repository(url: getReleaseRepositoryUrl()) {
+                        authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                    }
+                    snapshotRepository(url: getSnapshotRepositoryUrl()) {
+                        authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+                    }
                 }
 
                 pom.project {
