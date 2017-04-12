@@ -1,6 +1,5 @@
 package com.mapbox.services.api.staticimage.v1;
 
-import com.mapbox.services.BuildConfig;
 import com.mapbox.services.Constants;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.ServicesException;
@@ -13,8 +12,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import okhttp3.HttpUrl;
 
@@ -43,14 +40,20 @@ public class MapboxStaticImage {
       .addPathSegment(builder.getUsername())
       .addPathSegment(builder.getStyleId())
       .addPathSegment("static")
-      .addPathSegment(builder.getAnnotationPathSegment())
-      .addPathSegment(builder.getLocationPathSegment())
-      .addPathSegment(builder.getSizePathSegment())
       .addQueryParameter("access_token", builder.getAccessToken());
 
-    if (builder.auto) {
-      urlBuilder.addPathSegment("auto");
+    if (builder.getMarkers() != null) {
+      urlBuilder.addPathSegment(builder.getMarkers());
     }
+
+    if (builder.isAuto()) {
+      urlBuilder.addPathSegment("auto");
+    } else {
+      urlBuilder.addPathSegment(builder.getLocationPathSegment());
+    }
+
+    // Has to be last segment in URL
+    urlBuilder.addPathSegment(builder.getSizePathSegment());
 
     if (builder.beforeLayer != null) {
       urlBuilder.addQueryParameter("before_layer", builder.beforeLayer);
@@ -103,8 +106,7 @@ public class MapboxStaticImage {
     private boolean retina = false;
     private boolean attribution = true;
     private boolean logo = true;
-
-    private List<Marker> markers = new ArrayList<>();
+    private Marker[] markers;
 
     // This field isn't part of the URL
     private int precision = -1;
@@ -223,9 +225,21 @@ public class MapboxStaticImage {
       return this;
     }
 
+    /**
+     * If auto is set to true, the viewport will fit the bounds of the overlay. Using this will replace any latitude or
+     * longitude you provide.
+     *
+     * @param auto true if you'd like the viewport to be centered to display all map annotations, defaults false.
+     * @return Builder
+     * @since 2.1.0
+     */
     public Builder setAuto(boolean auto) {
       this.auto = auto;
       return this;
+    }
+
+    public boolean isAuto() {
+      return auto;
     }
 
     /**
@@ -301,9 +315,21 @@ public class MapboxStaticImage {
       return this;
     }
 
+    /**
+     * String value for controlling where the overlay is inserted in the style. All overlays will be inserted before
+     * this specified layer.
+     *
+     * @param beforeLayer A string representing the map layer you'd like to place your overlays below.
+     * @return Builder
+     * @since 2.1.0
+     */
     public Builder setBeforeLayer(String beforeLayer) {
       this.beforeLayer = beforeLayer;
       return this;
+    }
+
+    public String getBeforeLayer() {
+      return beforeLayer;
     }
 
     /**
@@ -370,26 +396,23 @@ public class MapboxStaticImage {
       return String.format(Locale.US, "%dx%d%s", width, height, retinaPath);
     }
 
-    public String getAnnotationPathSegment() {
-      if (markers.size() > 0) {
 
-        String annotationPath = markers.get(0).getMarkerPathSegment();
-        for (int i = 1; i < markers.size(); i++) {
-
-          annotationPath = annotationPath + "," + markers.get(i).getMarkerPathSegment();
-        }
-        return annotationPath;
-      }
-      return "";
+    public Builder setMarkers(Marker... markers) {
+      this.markers = markers;
+      return this;
     }
 
-    public Builder setMarker(List<Marker> markerList) {
-      for (Marker marker : markerList) {
-        marker.isValid();
-        markers.add(marker);
+    public String getMarkers() {
+      if (markers == null || markers.length == 0) {
+        return null;
+      }
+      List<String> formattedMarkers = new ArrayList<>();
+      for (Marker marker :
+        markers) {
+        formattedMarkers.add(marker.getMarker());
       }
 
-      return this;
+      return TextUtils.join(",", formattedMarkers.toArray());
     }
 
     /**
@@ -453,15 +476,13 @@ public class MapboxStaticImage {
       }
 
       if ((lon == null || lat == null) && !auto) {
-        throw new ServicesException("You need to set the map lon/lat coordinates.");
+        throw new ServicesException("You need to set the map lon/lat coordinates or set auto to true.");
       }
 
-      if (zoom == null) {
-        throw new ServicesException("You need to set the map zoom level.");
-      }
-
-      if (zoom < 0 || zoom > 20) {
-        throw new ServicesException("The zoom level provided must be a value between 0 and 20.");
+      if (zoom != null) {
+        if (zoom < 0 || zoom > 20) {
+          throw new ServicesException("The zoom level provided must be a value between 0 and 20.");
+        }
       }
 
       if (width == null || width < 1 || width > 1280) {
@@ -473,7 +494,6 @@ public class MapboxStaticImage {
         throw new ServicesException(
           "You need to set a valid image height (between 1 and 1280).");
       }
-
 
       return new MapboxStaticImage(this);
 
