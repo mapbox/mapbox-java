@@ -6,6 +6,7 @@ import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.staticimage.v1.models.Marker;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.utils.TextUtils;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -47,6 +48,14 @@ public class MapboxStaticImage {
       .addPathSegment(builder.getSizePathSegment())
       .addQueryParameter("access_token", builder.getAccessToken());
 
+    if (builder.auto) {
+      urlBuilder.addPathSegment("auto");
+    }
+
+    if (builder.beforeLayer != null) {
+      urlBuilder.addQueryParameter("before_layer", builder.beforeLayer);
+    }
+
     if (!builder.isAttribution()) {
       // Default is true
       urlBuilder.addQueryParameter("attribution", "false");
@@ -87,6 +96,8 @@ public class MapboxStaticImage {
     private Double zoom;
     private double bearing = 0;
     private double pitch = 0;
+    private boolean auto;
+    private String beforeLayer;
     private Integer width;
     private Integer height;
     private boolean retina = false;
@@ -212,6 +223,11 @@ public class MapboxStaticImage {
       return this;
     }
 
+    public Builder setAuto(boolean auto) {
+      this.auto = auto;
+      return this;
+    }
+
     /**
      * width of the image.
      *
@@ -282,6 +298,11 @@ public class MapboxStaticImage {
      */
     public Builder setPrecision(int precision) {
       this.precision = precision;
+      return this;
+    }
+
+    public Builder setBeforeLayer(String beforeLayer) {
+      this.beforeLayer = beforeLayer;
       return this;
     }
 
@@ -431,12 +452,16 @@ public class MapboxStaticImage {
         throw new ServicesException("You need to set a map style.");
       }
 
-      if (lon == null || lat == null) {
+      if ((lon == null || lat == null) && !auto) {
         throw new ServicesException("You need to set the map lon/lat coordinates.");
       }
 
       if (zoom == null) {
         throw new ServicesException("You need to set the map zoom level.");
+      }
+
+      if (zoom < 0 || zoom > 20) {
+        throw new ServicesException("The zoom level provided must be a value between 0 and 20.");
       }
 
       if (width == null || width < 1 || width > 1280) {
