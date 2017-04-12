@@ -59,9 +59,15 @@ public class StaticImageWithAnnotationsActivity extends AppCompatActivity {
 
     Picasso.with(this).load(veniceStaticImage.getUrl().toString()).into(veniceImageView);
 
+    Marker customMarker = new Marker.Builder()
+      .setUrl("https://www.mapbox.com/img/rocket.png")
+      .setPosition(Position.fromCoordinates(2.29450, 48.85826))
+      .build();
+
     MapboxStaticImage parisStaticImage = new MapboxStaticImage.Builder()
       .setAccessToken(Mapbox.getAccessToken())
       .setStyleId(Constants.MAPBOX_STYLE_OUTDOORS)
+      .setMarkers(customMarker)
       .setLat(48.85826)
       .setLon(2.29450)
       .setZoom(16)

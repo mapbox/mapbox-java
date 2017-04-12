@@ -183,8 +183,23 @@ public class MapboxStaticImage {
      * @param position Position object with valid latitude and longitude values
      * @return Builder
      * @since 1.2.0
+     * @deprecated Use {@link MapboxStaticImage.Builder#setPosition(Position)} instead.
      */
+    @Deprecated
     public Builder setLocation(Position position) {
+      this.lat = position.getLatitude();
+      this.lon = position.getLongitude();
+      return this;
+    }
+
+    /**
+     * Location for the center point of the static map.
+     *
+     * @param position Position object with valid latitude and longitude values
+     * @return Builder
+     * @since 2.1.0
+     */
+    public Builder setPosition(Position position) {
       this.lat = position.getLatitude();
       this.lon = position.getLongitude();
       return this;
@@ -410,15 +425,16 @@ public class MapboxStaticImage {
     }
 
     public String getOverlays() {
-      if (markers == null || markers.length == 0) {
-        return null;
-      }
       List<String> formattedOverlays = new ArrayList<>();
-      for (Marker marker : markers) {
-        formattedOverlays.add(marker.getMarker());
+      if (markers != null) {
+        for (Marker marker : markers) {
+          formattedOverlays.add(marker.getMarker());
+        }
       }
-      for (Polyline polyline : polylines) {
-        formattedOverlays.add(polyline.getPath());
+      if (polylines != null) {
+        for (Polyline polyline : polylines) {
+          formattedOverlays.add(polyline.getPath());
+        }
       }
 
       return TextUtils.join(",", formattedOverlays.toArray());

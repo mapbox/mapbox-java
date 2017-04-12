@@ -2,22 +2,17 @@ package com.mapbox.services.api.staticimage.v1;
 
 import com.mapbox.services.Constants;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.staticimage.v1.models.Marker;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import okhttp3.HttpUrl;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class MapboxStaticImageTest {
 
@@ -144,7 +139,7 @@ public class MapboxStaticImageTest {
     MapboxStaticImage client = new MapboxStaticImage.Builder()
       .setAccessToken("pk.")
       .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setLocation(Position.fromCoordinates(1.23456789, -98.76))
+      .setPosition(Position.fromCoordinates(1.23456789, -98.76))
       .setZoom(10).setBearing(345.67890123456789).setPitch(0.000000005)
       .setWidth(100).setHeight(200)
       .setPrecision(5)
@@ -154,178 +149,4 @@ public class MapboxStaticImageTest {
       url.toString(),
       "https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/1.23456,-98.76000,10.00000,345.67890,0.00000/100x200?access_token=pk.");
   }
-
-  @Test
-  public void requireMarkerName() throws ServicesException {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith(
-      "You need to set a marker name using one of the three Mapbox Service Constant names"));
-
-    List<Marker> markers = new ArrayList<>();
-    Marker m = new Marker();
-    m.setName("");
-    markers.add(m);
-
-    new MapboxStaticImage.Builder()
-      .setAccessToken("pk.")
-      .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setLon(2.0)
-      .setLat(2.0)
-      .setZoom(10)
-      .setWidth(100)
-      .setHeight(200)
-      .setMarker(markers)
-      .build();
-  }
-
-  @Test
-  public void requireMarkerLat() throws ServicesException {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You need to give the marker either lon/lat coordinates or a Position object."));
-
-    ArrayList<Marker> markers = new ArrayList<>();
-    Marker marker = new Marker();
-    marker.setName(Constants.PIN_SMALL);
-    marker.setLon(2.0);
-    markers.add(marker);
-
-    new MapboxStaticImage.Builder()
-      .setAccessToken("pk.")
-      .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setLon(2.0)
-      .setLat(2.0)
-      .setZoom(10)
-      .setWidth(100).setHeight(200)
-      .setMarker(markers)
-      .build();
-  }
-
-  @Test
-  public void requireMarkerLon() throws ServicesException {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You need to give the marker either lon/lat coordinates or a Position object."));
-
-    List<Marker> markers = new ArrayList<>();
-    Marker marker = new Marker();
-    marker.setName("pin-s");
-    marker.setLat(2.0);
-    markers.add(marker);
-
-    new MapboxStaticImage.Builder()
-      .setAccessToken("pk.")
-      .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setLon(2.0)
-      .setLat(2.0)
-      .setZoom(10)
-      .setWidth(100).setHeight(200)
-      .setMarker(markers)
-      .build();
-  }
-
-  @Test
-  public void requireValidMarkerColor() throws ServicesException {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You need to pass 3- or 6-digit hexadecimal color code."));
-
-    List<Marker> markers = new ArrayList<>();
-    Marker marker = new Marker();
-    marker.setName("pin-s");
-    marker.setLat(2.0);
-    marker.setLon(2.0);
-    marker.setColor("34564");
-    markers.add(marker);
-
-    new MapboxStaticImage.Builder()
-      .setAccessToken("pk.")
-      .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setLon(2.0)
-      .setLat(2.0)
-      .setZoom(10)
-      .setWidth(100)
-      .setHeight(200)
-      .setMarker(markers)
-      .build();
-  }
-
-  @Test
-  public void markerPosition() throws ServicesException {
-    ArrayList<Marker> markers = new ArrayList<>();
-    Marker marker = new Marker();
-    marker.setName(Constants.PIN_SMALL);
-    marker.setPosition(Position.fromCoordinates(2.0, 1.0));
-    marker.setColor("9ed4bd");
-    marker.setLabel("a");
-    markers.add(marker);
-
-    MapboxStaticImage client = new MapboxStaticImage.Builder()
-      .setAccessToken("pk.")
-      .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setLocation(Position.fromCoordinates(2.0, 1.0))
-      .setZoom(10)
-      .setWidth(100)
-      .setHeight(200)
-      .setMarker(markers)
-      .build();
-    assertTrue(client.getUrl().toString().contains("pin-s-a+9ed4bd(2.000000,1.000000)"));
-  }
-
-  @Test
-  public void testAnnotationPathSegmentSingleMarker() throws ServicesException {
-
-    ArrayList<Marker> markers = new ArrayList<>();
-    markers.add(getMarker());
-
-    MapboxStaticImage client = new MapboxStaticImage.Builder()
-      .setAccessToken("pk.")
-      .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setMarker(markers)
-      .setLocation(Position.fromCoordinates(1.23456789, 37.75965))
-      .setZoom(10)
-      .setBearing(345.67890123456789)
-      .setPitch(0.000000005)
-      .setWidth(100)
-      .setHeight(200)
-      .setPrecision(5)
-      .build();
-    HttpUrl url = client.getUrl();
-    assertEquals(
-      url.toString(),
-      "https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/pin-s-a+9ed4bd(1.23456,37.75965)/1.23456,37.75965,10.00000,345.67890,0.00000/100x200?access_token=pk.");
-  }
-
-  @Test
-  public void testAnnotationPathSegmentMultipleMarkers() throws ServicesException {
-
-    ArrayList<Marker> markers = new ArrayList<>();
-    markers.add(getMarker());
-    markers.add(getMarker());
-
-    MapboxStaticImage client = new MapboxStaticImage.Builder()
-      .setAccessToken("pk.")
-      .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setMarker(markers)
-      .setLocation(Position.fromCoordinates(1.23456789, 37.75965))
-      .setZoom(10).setBearing(345.67890123456789).setPitch(0.000000005)
-      .setWidth(100).setHeight(200)
-      .setPrecision(5)
-      .build();
-    HttpUrl url = client.getUrl();
-    assertEquals(
-      url.toString(),
-      "https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/pin-s-a+9ed4bd(1.23456,37.75965),pin-s-a+9ed4bd(1.23456,37.75965)/1.23456,37.75965,10.00000,345.67890,0.00000/100x200?access_token=pk.");
-  }
-
-  private Marker getMarker() {
-
-    Marker marker = new Marker();
-    marker.setName("pin-s");
-    marker.setLat(37.75965);
-    marker.setLon(1.23456789);
-    marker.setPrecision(5);
-    marker.setLabel("a");
-    marker.setColor("9ed4bd");
-
-    return marker;
-  }
-
 }

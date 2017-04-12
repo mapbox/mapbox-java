@@ -1,9 +1,7 @@
 package com.mapbox.services.api.staticimage.v1.models;
 
 import com.mapbox.services.Constants;
-import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
 import com.mapbox.services.commons.models.Position;
 
 import java.math.RoundingMode;
@@ -29,12 +27,25 @@ public class Marker {
       DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
       df.applyPattern(pattern);
       df.setRoundingMode(RoundingMode.FLOOR);
-      marker = String.format(Constants.DEFAULT_LOCALE, "%s-%s+%s(%s,%s)",
-        builder.getName(), builder.getLabel(), builder.getColor(), df.format(builder.getLon()),
-        df.format(builder.getLat()));
+
+      // Check if using a custom marker url
+      if (builder.getUrl() != null) {
+        marker = String.format(Constants.DEFAULT_LOCALE, "url-%s(%s,%s)",
+          builder.getUrl(), df.format(builder.getLon()), df.format(builder.getLat()));
+      } else {
+        marker = String.format(Constants.DEFAULT_LOCALE, "%s-%s+%s(%s,%s)",
+          builder.getName(), builder.getLabel(), builder.getColor(), df.format(builder.getLon()),
+          df.format(builder.getLat()));
+      }
     } else {
-      marker = String.format(Constants.DEFAULT_LOCALE, "%s-%s+%s(%f,%f)", builder.getName(),
-        builder.getLabel(), builder.getColor(), builder.getLon(), builder.getLat());
+      // Check if using a custom marker url
+      if (builder.getUrl() != null) {
+        marker = String.format(Constants.DEFAULT_LOCALE, "url-%s(%s,%s)",
+          builder.getUrl(), builder.getLon(), builder.getLat());
+      } else {
+        marker = String.format(Constants.DEFAULT_LOCALE, "%s-%s+%s(%f,%f)", builder.getName(),
+          builder.getLabel(), builder.getColor(), builder.getLon(), builder.getLat());
+      }
     }
   }
 
@@ -42,18 +53,27 @@ public class Marker {
     return marker;
   }
 
-
   public static class Builder {
-
 
     private String name;
     private String label = "";
     private String color = "";
     private Double lat;
     private Double lon;
+    private String url;
 
     // This field isn't part of the URL
     private int precision = -1;
+
+
+    public String getUrl() {
+      return url;
+    }
+
+    public Builder setUrl(String url) {
+      this.url = url;
+      return this;
+    }
 
     /**
      * Marker shape and size. Options are pin-s, pin-m, pin-l
@@ -193,8 +213,8 @@ public class Marker {
 
     public Marker build() throws ServicesException {
 
-      if (name == null || name.isEmpty() || !name.equals(Constants.PIN_SMALL)
-        && !name.equals(Constants.PIN_MEDIUM) && !name.equals(Constants.PIN_LARGE)) {
+      if (url == null && (name == null || name.isEmpty() || !name.equals(Constants.PIN_SMALL)
+        && !name.equals(Constants.PIN_MEDIUM) && !name.equals(Constants.PIN_LARGE))) {
         throw new ServicesException(
           "You need to set a marker name using one of the three Mapbox Service Constant names."
         );
