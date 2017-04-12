@@ -11,15 +11,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Marker class containing name, label and color to pass it through the overlay for static map.
+ * Mapbox Static Image API marker overlay. Building this object allows you to place a marker on top or within
+ * your static image. The marker can either use the default marker (though you can change it's color and size) or you
+ * have the option to also pass in a custom marker icon using it's url.
  *
  * @since 2.1.0
  */
-
 public class Marker {
 
   private String marker;
 
+  /**
+   * A Marker constructor
+   *
+   * @param builder a Marker builder.
+   * @since 2.1.0
+   */
   public Marker(Builder builder) {
 
     if (builder.getPrecision() > 0) {
@@ -49,10 +56,21 @@ public class Marker {
     }
   }
 
+  /**
+   * Gives a formatted string containing the built marker for usage with the static image API.
+   *
+   * @return A String representing a single marker object usable when requesting a static image.
+   * @since 2.1.0
+   */
   public String getMarker() {
     return marker;
   }
 
+  /**
+   * Builder used for passing in custom parameters.
+   *
+   * @since 2.1.0
+   */
   public static class Builder {
 
     private String name;
@@ -65,20 +83,32 @@ public class Marker {
     // This field isn't part of the URL
     private int precision = -1;
 
-
+    /**
+     * The URL for the your custom marker icon.
+     *
+     * @return A string with the Image address URL being used for your marker.
+     * @since 2.1.0
+     */
     public String getUrl() {
       return url;
     }
 
+    /**
+     * The URL for the your custom marker icon. Can be of type {@code PNG} or {@code JPG}.
+     *
+     * @param url The direct url to your image that will be used for the marker icon.
+     * @return This Marker builder.
+     * @since 2.1.0
+     */
     public Builder setUrl(String url) {
       this.url = url;
       return this;
     }
 
     /**
-     * Marker shape and size. Options are pin-s, pin-m, pin-l
+     * The markers shape and size which can only be one of the three constants.
      *
-     * @return String containing the shape and size.
+     * @return String containing the shape and size of the marker.
      * @since 2.1.0
      */
     public String getName() {
@@ -86,9 +116,11 @@ public class Marker {
     }
 
     /**
-     * Marker shape and size. Options are pin-s, pin-m, pin-l
+     * Marker shape and size. Options are {@link Constants#PIN_SMALL}, {@link Constants#PIN_MEDIUM}, or
+     * {@link Constants#PIN_SMALL}.
      *
      * @param name String containing the shape and size
+     * @return This Marker builder
      * @since 2.1.0
      */
     public Builder setName(String name) {
@@ -97,9 +129,8 @@ public class Marker {
     }
 
     /**
-     * Marker symbol. Options are an alphanumeric label  a through  z ,
-     * 0 through  99 , or a valid Maki icon. If a letter is requested,
-     * it will be rendered uppercase only.
+     * Marker symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through {@code 99}, or a
+     * valid Mapbox Maki icon. If a letter is requested, it will be rendered uppercase only.
      *
      * @return String containing the marker symbol.
      * @since 2.1.0
@@ -109,11 +140,11 @@ public class Marker {
     }
 
     /**
-     * Marker symbol. Options are an alphanumeric label  a through  z ,
-     * 0 through  99 , or a valid Maki icon. If a letter is requested,
-     * it will be rendered uppercase only.
+     * Marker symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through {@code 99}, or a
+     * valid Maki icon. If a letter is requested, it will be rendered uppercase only.
      *
      * @param label String containing the marker symbol.
+     * @return This Marker builder.
      * @since 2.1.0
      */
     public Builder setLabel(String label) {
@@ -122,7 +153,7 @@ public class Marker {
     }
 
     /**
-     * A 3- or 6-digit hexadecimal color code.
+     * A 3- or 6-digit hexadecimal color code represented as a String. This defines the marker background color.
      *
      * @return String containing the color.
      * @since 2.1.0
@@ -132,9 +163,11 @@ public class Marker {
     }
 
     /**
-     * A 3 or 6-digit hexadecimal color code.
+     * A 3- or 6-digit hexadecimal color code represented as a String. If a non-valid color value's provided, a
+     * {@link ServicesException} will occur.
      *
      * @param color String containing the color.
+     * @return This Marker builder.
      * @since 2.1.0
      */
     public Builder setColor(String color) {
@@ -142,10 +175,24 @@ public class Marker {
       return this;
     }
 
+    /**
+     * Get the markers latitude and longitude coordinate as a {@link Position} object.
+     *
+     * @return a {@link Position} object representing where the marker will be placed on the static image.
+     * @since 2.1.0
+     */
     public Position getPosition() {
       return Position.fromCoordinates(lon, lat);
     }
 
+    /**
+     * Optionally pass in a {@link Position} object containing the latitude and longitude coordinates you'd like your
+     * marker to be placed.
+     *
+     * @param position A {@link Position} object.
+     * @return This Marker builder.
+     * @since 2.1.0
+     */
     public Builder setPosition(Position position) {
       this.lat = position.getLatitude();
       this.lon = position.getLongitude();
@@ -194,7 +241,6 @@ public class Marker {
       return this;
     }
 
-
     /**
      * In order to make the returned images better cacheable on the client, you can set the
      * precision in decimals instead of manually rounding the parameters.
@@ -207,6 +253,12 @@ public class Marker {
       return this;
     }
 
+    /**
+     * The precision value being used for the coordinates.
+     *
+     * @return an integer value representing the precision being used.
+     * @since 2.1.0
+     */
     public int getPrecision() {
       return precision;
     }
