@@ -40,6 +40,39 @@ public class StaticImagePolylineTest {
   }
 
   @Test
+  public void requirePositiveWidth() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith(
+      "The stroke width must be a positive number."));
+
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(1.0, 2.0));
+    coords.add(Position.fromCoordinates(5.0, 6.0));
+
+    new Polyline.Builder()
+      .setStrokeWidth(-10)
+      .setPolyline(PolylineUtils.encode(coords, Constants.PRECISION_5))
+      .build();
+  }
+
+  @Test
+  public void requireValidOpacity() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith(
+      "Stroke opacity can only be a float value between 0 and 1."));
+
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(1.0, 2.0));
+    coords.add(Position.fromCoordinates(5.0, 6.0));
+
+    new Polyline.Builder()
+      .setStrokeWidth(2)
+      .setStrokeOpacity(2)
+      .setPolyline(PolylineUtils.encode(coords, Constants.PRECISION_5))
+      .build();
+  }
+
+  @Test
   public void singlePathInUrl() {
     List<Position> coords = new ArrayList<>();
     coords.add(Position.fromCoordinates(1.0, 2.0));

@@ -225,8 +225,8 @@ public class Marker {
       }
 
       if (!color.isEmpty()) {
-        String hex_pattern = "^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
-        Pattern pattern = Pattern.compile(hex_pattern);
+        String hexPattern = "^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
+        Pattern pattern = Pattern.compile(hexPattern);
         Matcher matcher = pattern.matcher(color);
         if (!matcher.matches()) {
           throw new ServicesException("You need to pass 3- or 6-digit hexadecimal color code.");

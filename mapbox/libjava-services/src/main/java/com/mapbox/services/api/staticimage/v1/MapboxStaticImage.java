@@ -413,7 +413,6 @@ public class MapboxStaticImage {
       return String.format(Locale.US, "%dx%d%s", width, height, retinaPath);
     }
 
-
     public Builder setMarkers(Marker... markers) {
       this.markers = markers;
       return this;
