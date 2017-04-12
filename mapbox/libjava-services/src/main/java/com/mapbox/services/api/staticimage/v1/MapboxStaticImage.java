@@ -255,12 +255,18 @@ public class MapboxStaticImage {
       return this;
     }
 
+    /**
+     * Determine if auto has been set for the static image camera positioning.
+     *
+     * @return boolean true if auto has been set, otherwise false.
+     * @since 2.1.0
+     */
     public boolean isAuto() {
       return auto;
     }
 
     /**
-     * width of the image.
+     * Width of the image.
      *
      * @param width int number between 1 and 1280.
      * @return Builder
@@ -345,6 +351,12 @@ public class MapboxStaticImage {
       return this;
     }
 
+    /**
+     * Provides the string being used to represent the layer you wish to place all your overlays below.
+     *
+     * @return a String representing the map styles layer.
+     * @since 2.1.0
+     */
     public String getBeforeLayer() {
       return beforeLayer;
     }
@@ -413,16 +425,36 @@ public class MapboxStaticImage {
       return String.format(Locale.US, "%dx%d%s", width, height, retinaPath);
     }
 
+    /**
+     * Allows the passing of a {@link Marker} or Markers which are placed on the static map image returned.
+     *
+     * @param markers One or more {@link Marker}s to be placed on your static image.
+     * @return This static image builder.
+     * @since 2.1.0
+     */
     public Builder setMarkers(Marker... markers) {
       this.markers = markers;
       return this;
     }
 
+    /**
+     * Allows the passing of a {@link Polyline} or Polylines which are placed on the static map image returned.
+     *
+     * @param polylines One or more {@link Polyline}s to be placed on your static image.
+     * @return This static image builder.
+     * @since 2.1.0
+     */
     public Builder setPolylines(Polyline... polylines) {
       this.polylines = polylines;
       return this;
     }
 
+    /**
+     * Provides a String containing all of the currently added overlays added to the static image builder.
+     *
+     * @return the formated string which will be used to pass in any overlays to be placed on the static image.
+     * @since 2.1.0
+     */
     public String getOverlays() {
       List<String> formattedOverlays = new ArrayList<>();
       if (markers != null) {
@@ -520,8 +552,6 @@ public class MapboxStaticImage {
       }
 
       return new MapboxStaticImage(this);
-
     }
   }
-
 }
