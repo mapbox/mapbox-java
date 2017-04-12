@@ -9,6 +9,7 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
 import com.mapbox.services.api.staticimage.v1.models.Marker;
+import com.mapbox.services.api.staticimage.v1.models.Polyline;
 import com.mapbox.services.commons.models.Position;
 import com.squareup.picasso.Picasso;
 
@@ -37,18 +38,19 @@ public class StaticImageWithAnnotationsActivity extends AppCompatActivity {
       .setLabel("b")
       .build();
 
-
-//path-5+f44-0.5(%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM)/auto/500x300?
-
-
-
-
+    Polyline polyline = new Polyline.Builder()
+      .setPolyline("%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM")
+      .setStrokeOpacity(0.5f)
+      .setStrokeColor("f44")
+      .setStrokeWidth(5)
+      .build();
 
 
     MapboxStaticImage veniceStaticImage = new MapboxStaticImage.Builder()
       .setAccessToken(Mapbox.getAccessToken())
-      .setStyleId(Constants.MAPBOX_STYLE_LIGHT)
+      .setStyleId("streets-v10")
       .setMarkers(firstMarker, secondMarker)
+      .setPolylines(polyline)
       .setAuto(true)
       .setWidth(320)
       .setHeight(320)

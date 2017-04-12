@@ -4,6 +4,7 @@ import com.mapbox.services.Constants;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.staticimage.v1.models.Marker;
+import com.mapbox.services.api.staticimage.v1.models.Polyline;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
 
@@ -42,8 +43,8 @@ public class MapboxStaticImage {
       .addPathSegment("static")
       .addQueryParameter("access_token", builder.getAccessToken());
 
-    if (builder.getMarkers() != null) {
-      urlBuilder.addPathSegment(builder.getMarkers());
+    if (builder.getOverlays() != null) {
+      urlBuilder.addEncodedPathSegment(builder.getOverlays());
     }
 
     if (builder.isAuto()) {
@@ -107,6 +108,7 @@ public class MapboxStaticImage {
     private boolean attribution = true;
     private boolean logo = true;
     private Marker[] markers;
+    private Polyline[] polylines;
 
     // This field isn't part of the URL
     private int precision = -1;
@@ -402,17 +404,24 @@ public class MapboxStaticImage {
       return this;
     }
 
-    public String getMarkers() {
+    public Builder setPolylines(Polyline... polylines) {
+      this.polylines = polylines;
+      return this;
+    }
+
+    public String getOverlays() {
       if (markers == null || markers.length == 0) {
         return null;
       }
-      List<String> formattedMarkers = new ArrayList<>();
-      for (Marker marker :
-        markers) {
-        formattedMarkers.add(marker.getMarker());
+      List<String> formattedOverlays = new ArrayList<>();
+      for (Marker marker : markers) {
+        formattedOverlays.add(marker.getMarker());
+      }
+      for (Polyline polyline : polylines) {
+        formattedOverlays.add(polyline.getPath());
       }
 
-      return TextUtils.join(",", formattedMarkers.toArray());
+      return TextUtils.join(",", formattedOverlays.toArray());
     }
 
     /**
