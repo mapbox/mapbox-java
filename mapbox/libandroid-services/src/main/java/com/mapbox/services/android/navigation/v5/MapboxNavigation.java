@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
 
 import com.mapbox.services.Experimental;
 import com.mapbox.services.android.location.LostLocationEngine;
+import com.mapbox.services.android.navigation.v5.listeners.AlertLevelChangeListener;
+import com.mapbox.services.android.navigation.v5.listeners.NavigationEventListener;
+import com.mapbox.services.android.navigation.v5.listeners.OffRouteListener;
+import com.mapbox.services.android.navigation.v5.listeners.ProgressChangeListener;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
@@ -19,7 +22,11 @@ import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.commons.models.Position;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
 /**
@@ -38,10 +45,10 @@ public class MapboxNavigation {
   private boolean isBound;
 
   // Navigation variables
-  private AlertLevelChangeListener alertLevelChangeListener;
-  private NavigationEventListener navigationEventListener;
-  private ProgressChangeListener progressChangeListener;
-  private OffRouteListener offRouteListener;
+  private CopyOnWriteArrayList<AlertLevelChangeListener> alertLevelChangeListeners;
+  private CopyOnWriteArrayList<NavigationEventListener> navigationEventListeners;
+  private CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners;
+  private CopyOnWriteArrayList<OffRouteListener> offRouteListeners;
   private LocationEngine locationEngine;
   private boolean snapToRoute;
 
@@ -65,6 +72,10 @@ public class MapboxNavigation {
     isBound = false;
     navigationService = null;
     snapToRoute = true;
+    alertLevelChangeListeners = new CopyOnWriteArrayList<>();
+    navigationEventListeners = new CopyOnWriteArrayList<>();
+    progressChangeListeners = new CopyOnWriteArrayList<>();
+    offRouteListeners = new CopyOnWriteArrayList<>();
   }
 
   /*
@@ -127,9 +138,14 @@ public class MapboxNavigation {
    *                                occur.
    * @since 2.0.0
    */
-  public void setNavigationEventListener(NavigationEventListener navigationEventListener) {
-    Timber.d("MapboxNavigation callback set.");
-    this.navigationEventListener = navigationEventListener;
+  public void addNavigationEventListener(NavigationEventListener navigationEventListener) {
+    if (!this.navigationEventListeners.contains(navigationEventListener)) {
+      this.navigationEventListeners.add(navigationEventListener);
+    }
+  }
+
+  public void removeNavigationEventListener(NavigationEventListener navigationEventListener) {
+    this.navigationEventListeners.remove(navigationEventListener);
   }
 
   /**
@@ -139,8 +155,14 @@ public class MapboxNavigation {
    * @param alertLevelChangeListener a new {@link AlertLevelChangeListener} which will be notified when event occurs.
    * @since 2.0.0
    */
-  public void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
-    this.alertLevelChangeListener = alertLevelChangeListener;
+  public void addAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
+    if (!this.alertLevelChangeListeners.contains(alertLevelChangeListener)) {
+      this.alertLevelChangeListeners.add(alertLevelChangeListener);
+    }
+  }
+
+  public void removeAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
+    this.alertLevelChangeListeners.remove(alertLevelChangeListener);
   }
 
   /**
@@ -150,12 +172,24 @@ public class MapboxNavigation {
    * @param progressChangeListener a new {@link ProgressChangeListener} which will be notified when event occurs.
    * @since 2.0.0
    */
-  public void setProgressChangeListener(ProgressChangeListener progressChangeListener) {
-    this.progressChangeListener = progressChangeListener;
+  public void addProgressChangeListener(ProgressChangeListener progressChangeListener) {
+    if (!this.progressChangeListeners.contains(progressChangeListener)) {
+      this.progressChangeListeners.add(progressChangeListener);
+    }
   }
 
-  public void setOffRouteListener(OffRouteListener offRouteListener) {
-    this.offRouteListener = offRouteListener;
+  public void removeProgressChangeListener(ProgressChangeListener progressChangeListener) {
+    progressChangeListeners.remove(progressChangeListener);
+  }
+
+  public void addOffRouteListener(OffRouteListener offRouteListener) {
+    if (!this.offRouteListeners.contains(offRouteListener)) {
+      this.offRouteListeners.add(offRouteListener);
+    }
+  }
+
+  public void removeOffRouteListener(OffRouteListener offRouteListener) {
+    offRouteListeners.remove(offRouteListener);
   }
 
   /**
@@ -173,7 +207,8 @@ public class MapboxNavigation {
 
   /**
    * Call {@code startNavigation} passing in a {@link DirectionsRoute} object to begin a navigation session. It is
-   * recommend to call {@link MapboxNavigation#getRoute(Callback)} before starting a navigation session.
+   * recommend to call {@link MapboxNavigation#getRoute(Position, Position, Callback)} before starting a navigation
+   * session.
    *
    * @param route A {@link DirectionsRoute} that makes up the path your user will traverse along.
    * @since 2.0.0
@@ -193,7 +228,7 @@ public class MapboxNavigation {
   /**
    * Call this method to end a navigation session before the user reaches their destination. There isn't a need to call
    * this once the user reaches their destination. You can use the
-   * {@link MapboxNavigation#setAlertLevelChangeListener(AlertLevelChangeListener)} to be notified when the user
+   * {@link MapboxNavigation#addAlertLevelChangeListener(AlertLevelChangeListener)} to be notified when the user
    * arrives at their location.
    *
    * @since 2.0.0
@@ -208,7 +243,7 @@ public class MapboxNavigation {
   /**
    * Optionally, set up navigation notification using the default builder provided in the SDK. Alternatively, you can
    * create your own notifications by using the
-   * {@link MapboxNavigation#setAlertLevelChangeListener(AlertLevelChangeListener)} to correctly time your
+   * {@link MapboxNavigation#addAlertLevelChangeListener(AlertLevelChangeListener)} to correctly time your
    * notifications.
    *
    * @param activity The activity being used for the navigation session.
@@ -234,7 +269,10 @@ public class MapboxNavigation {
    *                 response.
    * @since 2.0.0
    */
-  public void getRoute(@NonNull Callback<DirectionsResponse> callback) throws ServicesException {
+  public void getRoute(Position origin, Position destination, Callback<DirectionsResponse> callback)
+    throws ServicesException {
+    this.origin = origin;
+    this.destination = destination;
     if (accessToken == null) {
       throw new ServicesException("A Mapbox access token must be passed into your MapboxNavigation instance before"
         + "calling getRoute");
@@ -247,8 +285,8 @@ public class MapboxNavigation {
       .setProfile(profile)
       .setAccessToken(accessToken)
       .setOverview(DirectionsCriteria.OVERVIEW_FULL)
-      .setOrigin(getOrigin())
-      .setDestination(getDestination())
+      .setOrigin(origin)
+      .setDestination(destination)
       .setSteps(true);
 
     // Optionally set the bearing and radiuses if the developer provider the user bearing. A tolerance of 90 degrees
@@ -259,9 +297,39 @@ public class MapboxNavigation {
     directionsBuilder.build().enqueueCall(callback);
   }
 
+  public void updateRoute(Position origin, Position destination, final Callback<DirectionsResponse> callback) {
+    getRoute(origin, destination, new Callback<DirectionsResponse>() {
+      @Override
+      public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+        if (response.body() == null) {
+          Timber.e("No routes found, make sure you set the right user and access token.");
+          return;
+        } else if (response.body().getRoutes().size() < 1) {
+          Timber.e("No routes found");
+          return;
+        }
+
+        call.enqueue(callback);
+
+        DirectionsRoute route = response.body().getRoutes().get(0);
+        MapboxNavigation.this.route = route;
+
+        if (isServiceAvailable()) {
+          navigationService.updateRoute(route);
+        }
+      }
+
+      @Override
+      public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+        Timber.e("The request for reroute failed with error: ", throwable);
+      }
+    });
+  }
+
   /**
    * Get the current origin {@link Position} that will be used for the beginning of the route. If no origin's provided,
-   * null will be returned. An origin must be provided before calling {@link MapboxNavigation#getRoute(Callback)}.
+   * null will be returned. An origin can be set using the
+   * {@link MapboxNavigation#getRoute(Position, Position, Callback)} method.
    *
    * @return A {@link Position} object representing the origin of your route.
    * @since 2.0.0
@@ -271,37 +339,15 @@ public class MapboxNavigation {
   }
 
   /**
-   * Set the origin that will be used for the beginning of the route. This will be used once
-   * {@link MapboxNavigation#getRoute(Callback)}'s called.
-   *
-   * @param origin A {@link Position} representing the origin of your route.
-   * @since 2.0.0
-   */
-  public void setOrigin(@NonNull Position origin) {
-    this.origin = origin;
-  }
-
-  /**
    * Get the current destination {@link Position} that will be used for the end of the route. If no destinations's
-   * provided, null will be returned. A destination must be provided before calling
-   * {@link MapboxNavigation#getRoute(Callback)}.
+   * provided, null will be returned. A destination can be set using the
+   * {@link MapboxNavigation#getRoute(Position, Position, Callback)} method.
    *
    * @return A {@link Position} object representing the destination of your route.
    * @since 2.0.0
    */
   public Position getDestination() {
     return destination;
-  }
-
-  /**
-   * Set the destination that will be used for the end of the route. This will be used once
-   * {@link MapboxNavigation#getRoute(Callback)}'s called.
-   *
-   * @param destination A {@link Position} representing the destination of your route.
-   * @since 2.0.0
-   */
-  public void setDestination(@NonNull Position destination) {
-    this.destination = destination;
   }
 
   /**
@@ -316,8 +362,9 @@ public class MapboxNavigation {
   }
 
   /**
-   * Gets the current user bearing that will be used when {@link MapboxNavigation#getRoute(Callback)}'s called. If no
-   * value's set, the return value will be {@code null}.
+   * Gets the current user bearing that will be used when
+   * {@link MapboxNavigation#getRoute(Position, Position, Callback)}'s called. If no value's set, the return value will
+   * be {@code null}.
    *
    * @return A value between 0 and 360 or null if the userOriginBearing hasn't been set.
    * @since 2.0.0
@@ -368,18 +415,18 @@ public class MapboxNavigation {
       NavigationService.LocalBinder binder = (NavigationService.LocalBinder) service;
       navigationService = binder.getService();
       navigationService.setLocationEngine(getLocationEngine());
-      navigationService.setNavigationEventListener(navigationEventListener);
+      navigationService.setNavigationEventListeners(navigationEventListeners);
 
-      if (alertLevelChangeListener != null) {
-        navigationService.setAlertLevelChangeListener(alertLevelChangeListener);
+      if (alertLevelChangeListeners != null) {
+        navigationService.setAlertLevelChangeListeners(alertLevelChangeListeners);
       }
 
-      if (progressChangeListener != null) {
-        navigationService.setProgressChangeListener(progressChangeListener);
+      if (progressChangeListeners != null) {
+        navigationService.setProgressChangeListeners(progressChangeListeners);
       }
 
-      if (offRouteListener != null) {
-        navigationService.setOffRouteListener(offRouteListener);
+      if (offRouteListeners != null) {
+        navigationService.setOffRouteListeners(offRouteListeners);
       }
 
       navigationService.setSnapToRoute(snapToRoute);

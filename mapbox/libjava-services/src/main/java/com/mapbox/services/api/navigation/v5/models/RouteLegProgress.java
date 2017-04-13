@@ -7,7 +7,11 @@ import com.mapbox.services.api.directions.v5.models.LegStep;
 import com.mapbox.services.api.directions.v5.models.RouteLeg;
 import com.mapbox.services.api.navigation.v5.RouteUtils;
 import com.mapbox.services.api.utils.turf.TurfConstants;
+import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.models.Position;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Experimental
 public class RouteLegProgress {
@@ -147,5 +151,24 @@ public class RouteLegProgress {
       return routeLeg.getSteps().get(getStepIndex() + 1);
     }
     return null;
+  }
+
+  /*
+     Returns an array of `CLLocationCoordinate2D` of the prior, current and upcoming step geometry
+    */
+  public List<Position> nearbyCoordinates() {
+    List<Position> nearbyCoordinates = new ArrayList<>();
+    if (getPreviousStep() != null) {
+      nearbyCoordinates.addAll(
+        LineString.fromPolyline(getPreviousStep().getGeometry(), Constants.PRECISION_6).getCoordinates());
+    }
+    if (getUpComingStep() != null) {
+      nearbyCoordinates.addAll(
+        LineString.fromPolyline(getUpComingStep().getGeometry(), Constants.PRECISION_6).getCoordinates());
+    }
+    nearbyCoordinates.addAll(
+      LineString.fromPolyline(getCurrentStep().getGeometry(), Constants.PRECISION_6).getCoordinates());
+
+    return nearbyCoordinates;
   }
 }

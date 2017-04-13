@@ -15,11 +15,17 @@ import android.support.v4.app.NotificationCompat;
 import com.mapbox.services.Experimental;
 import com.mapbox.services.android.Constants;
 import com.mapbox.services.android.R;
+import com.mapbox.services.android.navigation.v5.listeners.AlertLevelChangeListener;
+import com.mapbox.services.android.navigation.v5.listeners.NavigationEventListener;
+import com.mapbox.services.android.navigation.v5.listeners.OffRouteListener;
+import com.mapbox.services.android.navigation.v5.listeners.ProgressChangeListener;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.navigation.v5.RouteProgress;
 import com.mapbox.services.commons.models.Position;
+
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import timber.log.Timber;
 
@@ -31,7 +37,7 @@ import static com.mapbox.services.android.telemetry.location.LocationEnginePrior
  * might change or be removed in minor versions.
  */
 @Experimental
-public class NavigationService extends Service implements LocationEngineListener {
+public class NavigationService extends Service implements LocationEngineListener, ProgressChangeListener {
   private static final int ONGOING_NOTIFICATION_ID = 1;
 
   private int startId;
@@ -39,9 +45,11 @@ public class NavigationService extends Service implements LocationEngineListener
   private final IBinder localBinder = new LocalBinder();
 
   private LocationEngine locationEngine;
-  private NavigationEventListener navigationEventListener;
+  private CopyOnWriteArrayList<NavigationEventListener> navigationEventListeners;
   private NotificationCompat.Builder notifyBuilder;
+  private CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners;
   private LocationUpdatedThread locationUpdatedThread;
+  private Handler responseHandler;
 
   private RouteProgress routeProgress;
   private DirectionsRoute directionsRoute;
@@ -56,8 +64,10 @@ public class NavigationService extends Service implements LocationEngineListener
   public int onStartCommand(Intent intent, int flags, int startId) {
     Timber.d("Navigation service started.");
     this.startId = startId;
-    if (navigationEventListener != null) {
-      navigationEventListener.onRunning(false);
+    if (navigationEventListeners != null) {
+      for (NavigationEventListener navigationEventListener : navigationEventListeners) {
+        navigationEventListener.onRunning(false);
+      }
     }
     startNavigation();
     return Service.START_NOT_STICKY;
@@ -120,26 +130,30 @@ public class NavigationService extends Service implements LocationEngineListener
 
   private void startNavigation() {
     Timber.d("Navigation session started.");
-    if (navigationEventListener != null) {
-      navigationEventListener.onRunning(true);
+    if (navigationEventListeners != null) {
+      for (NavigationEventListener navigationEventListener : navigationEventListeners) {
+        navigationEventListener.onRunning(true);
+      }
     }
 
-    Handler responseHandler = new Handler();
+    responseHandler = new Handler();
     locationUpdatedThread = new LocationUpdatedThread(responseHandler);
     locationUpdatedThread.start();
     locationUpdatedThread.getLooper();
     Timber.d("Background thread started");
+  }
 
-    locationUpdatedThread.setNewRouteProgressListener(new NewRouteProgressListener() {
-      @Override
-      public void onRouteProgressChange(RouteProgress routeProgress) {
-        NavigationService.this.routeProgress = routeProgress;
-      }
-    });
+  @Override
+  public void onProgressChange(Location location, RouteProgress routeProgress) {
+    NavigationService.this.routeProgress = routeProgress;
+    // If the user arrives at the final destination, end the navigation session.
+    if (routeProgress.getAlertUserLevel() == Constants.ARRIVE_ALERT_LEVEL) {
+      endNavigation();
+    }
   }
 
   public void startRoute(DirectionsRoute directionsRoute) {
-    Timber.d("Start Route called.");
+    Timber.d("Start route called.");
     this.directionsRoute = directionsRoute;
 
     if (locationEngine != null) {
@@ -148,8 +162,10 @@ public class NavigationService extends Service implements LocationEngineListener
       locationEngine.requestLocationUpdates();
       locationEngine.addLocationEngineListener(this);
 
-      if (navigationEventListener != null) {
-        navigationEventListener.onRunning(true);
+      if (navigationEventListeners != null) {
+        for (NavigationEventListener navigationEventListener : navigationEventListeners) {
+          navigationEventListener.onRunning(true);
+        }
       }
 
     } else {
@@ -157,11 +173,23 @@ public class NavigationService extends Service implements LocationEngineListener
     }
   }
 
+  public void updateRoute(DirectionsRoute directionsRoute) {
+    Timber.d("Updating route");
+    this.directionsRoute = directionsRoute;
+  }
+
   public void endNavigation() {
     Timber.d("Navigation session ended.");
-    if (navigationEventListener != null) {
-      navigationEventListener.onRunning(false);
+    if (navigationEventListeners != null) {
+      for (NavigationEventListener navigationEventListener : navigationEventListeners) {
+        navigationEventListener.onRunning(false);
+      }
     }
+
+    // Remove the this navigation service progress change listener
+    progressChangeListeners.remove(this);
+
+    responseHandler.removeCallbacksAndMessages(null);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
       locationUpdatedThread.quitSafely();
@@ -170,8 +198,10 @@ public class NavigationService extends Service implements LocationEngineListener
     }
 
     // Lower accuracy to minimize battery usage while not in navigation mode.
+    // TODO restore accuracy state to what user had before nav session
     locationEngine.setPriority(BALANCED_POWER_ACCURACY);
     locationEngine.removeLocationEngineListener(this);
+    locationEngine.removeLocationUpdates();
     locationEngine.deactivate();
 
     // Removes the foreground notification
@@ -181,20 +211,23 @@ public class NavigationService extends Service implements LocationEngineListener
     stopSelf(startId);
   }
 
-  public void setNavigationEventListener(NavigationEventListener navigationEventListener) {
-    this.navigationEventListener = navigationEventListener;
+  public void setNavigationEventListeners(CopyOnWriteArrayList<NavigationEventListener> navigationEventListeners) {
+    this.navigationEventListeners = navigationEventListeners;
   }
 
-  public void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
-    locationUpdatedThread.setAlertLevelChangeListener(alertLevelChangeListener);
+  public void setAlertLevelChangeListeners(CopyOnWriteArrayList<AlertLevelChangeListener> alertLevelChangeListeners) {
+    locationUpdatedThread.setAlertLevelChangeListener(alertLevelChangeListeners);
   }
 
-  public void setProgressChangeListener(ProgressChangeListener progressChangeListener) {
-    locationUpdatedThread.setProgressChangeListener(progressChangeListener);
+  public void setProgressChangeListeners(CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners) {
+    // Add a progress listener so this service is notified when the user arrives at their destination.
+    progressChangeListeners.add(this);
+    locationUpdatedThread.setProgressChangeListener(progressChangeListeners);
+    this.progressChangeListeners = progressChangeListeners;
   }
 
-  public void setOffRouteListener(OffRouteListener offRouteListener) {
-    locationUpdatedThread.setOffRouteListener(offRouteListener);
+  public void setOffRouteListeners(CopyOnWriteArrayList<OffRouteListener> offRouteListeners) {
+    locationUpdatedThread.setOffRouteListener(offRouteListeners);
   }
 
   public void setLocationEngine(LocationEngine locationEngine) {

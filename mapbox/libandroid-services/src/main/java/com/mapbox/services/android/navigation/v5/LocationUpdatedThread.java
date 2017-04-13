@@ -8,20 +8,28 @@ import android.support.annotation.NonNull;
 
 import com.mapbox.services.Experimental;
 import com.mapbox.services.android.Constants;
+import com.mapbox.services.android.navigation.v5.listeners.AlertLevelChangeListener;
+import com.mapbox.services.android.navigation.v5.listeners.OffRouteListener;
+import com.mapbox.services.android.navigation.v5.listeners.ProgressChangeListener;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.services.api.directions.v5.models.StepIntersection;
+import com.mapbox.services.api.directions.v5.models.RouteLeg;
 import com.mapbox.services.api.navigation.v5.RouteProgress;
 import com.mapbox.services.api.navigation.v5.RouteUtils;
 import com.mapbox.services.api.utils.turf.TurfConstants;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
+import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import timber.log.Timber;
+
+import static com.mapbox.services.android.Constants.DEAD_RECKONING_TIME_INTERVAL;
+import static com.mapbox.services.android.Constants.MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION;
+import static com.mapbox.services.android.Constants.MAX_MANIPULATED_COURSE_ANGLE;
 
 /**
  * This is an experimental API. Experimental APIs are quickly evolving and
@@ -38,21 +46,37 @@ class LocationUpdatedThread extends HandlerThread {
   private Handler responseHandler;
 
   // Navigation Variables
-  private AlertLevelChangeListener alertLevelChangeListener;
-  private ProgressChangeListener progressChangeListener;
-  private NewRouteProgressListener newRouteProgressListener;
-  private OffRouteListener offRouteListener;
-  private boolean userStillOnRoute = true;
+  private CopyOnWriteArrayList<AlertLevelChangeListener> alertLevelChangeListeners;
+  private CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners;
+  private CopyOnWriteArrayList<OffRouteListener> offRouteListeners;
+  private boolean previousUserOffRoute;
+  private double userDistanceToManeuverLocation;
+  private boolean userOffRoute;
   private boolean snapToRoute;
   private DirectionsRoute directionsRoute;
   private Location location;
-
 
   LocationUpdatedThread(Handler responseHandler) {
     super(TAG);
     this.responseHandler = responseHandler;
     // By default we snap to route when possible.
     snapToRoute = true;
+  }
+
+  void setAlertLevelChangeListener(CopyOnWriteArrayList<AlertLevelChangeListener> alertLevelChangeListeners) {
+    this.alertLevelChangeListeners = alertLevelChangeListeners;
+  }
+
+  void setProgressChangeListener(CopyOnWriteArrayList<ProgressChangeListener> progressChangeListeners) {
+    this.progressChangeListeners = progressChangeListeners;
+  }
+
+  void setOffRouteListener(CopyOnWriteArrayList<OffRouteListener> offRouteListeners) {
+    this.offRouteListeners = offRouteListeners;
+  }
+
+  void setSnapToRoute(boolean snapToRoute) {
+    this.snapToRoute = snapToRoute;
   }
 
   @Override
@@ -74,24 +98,19 @@ class LocationUpdatedThread extends HandlerThread {
       return;
     }
 
-    Timber.d("%d", previousRouteProgress.getAlertUserLevel());
+    Timber.d("Previous route alert level: %d", previousRouteProgress.getAlertUserLevel());
 
-    // Even if the user isn't listening in to the alert listener, we need to run monitorStepProgress inorder to
-    // update the routeProgress object
+    // With a new location update, we create a new RouteProgress object.
     final RouteProgress routeProgress = monitorStepProgress(previousRouteProgress, location);
 
-    List<StepIntersection> intersections = getNextIntersections(previousRouteProgress,
-      routeProgress.usersCurrentSnappedPosition()
-    );
+    userOffRoute = userIsOnRoute(location, routeProgress.getCurrentLeg());
 
-    // Test the closest intersection to the user only.
-    if (intersections.size() > 0) {
-      userStillOnRoute = isUserStillOnRoute(intersections.get(0), location.getBearing());
-    }
-    if (snapToRoute && userStillOnRoute) {
+    if (snapToRoute && !userOffRoute) {
       // Pass in the snapped location with all the other location data remaining intact for their use.
       location.setLatitude(routeProgress.usersCurrentSnappedPosition().getLatitude());
       location.setLongitude(routeProgress.usersCurrentSnappedPosition().getLongitude());
+
+      location.setBearing(snapUserBearing(routeProgress));
     }
 
     this.location = location;
@@ -99,42 +118,27 @@ class LocationUpdatedThread extends HandlerThread {
     // Post back to the UI Thread.
     responseHandler.post(new Runnable() {
       public void run() {
-        if (offRouteListener != null && !userStillOnRoute) {
-          offRouteListener.userOffRoute(location);
+
+        // Only report user off route once.
+        if (userOffRoute && (userOffRoute != previousUserOffRoute)) {
+          for (OffRouteListener offRouteListener : offRouteListeners) {
+            offRouteListener.userOffRoute(location);
+          }
+          previousUserOffRoute = userOffRoute;
         }
 
         if (previousRouteProgress.getAlertUserLevel() != routeProgress.getAlertUserLevel()) {
-          if (alertLevelChangeListener != null) {
+
+          for (AlertLevelChangeListener alertLevelChangeListener : alertLevelChangeListeners) {
             alertLevelChangeListener.onAlertLevelChange(routeProgress.getAlertUserLevel(), routeProgress);
           }
         }
-        if (progressChangeListener != null) {
+
+        for (ProgressChangeListener progressChangeListener : progressChangeListeners) {
           progressChangeListener.onProgressChange(LocationUpdatedThread.this.location, routeProgress);
         }
-
-        newRouteProgressListener.onRouteProgressChange(routeProgress);
       }
     });
-  }
-
-  void setNewRouteProgressListener(NewRouteProgressListener newRouteProgressListener) {
-    this.newRouteProgressListener = newRouteProgressListener;
-  }
-
-  void setAlertLevelChangeListener(AlertLevelChangeListener alertLevelChangeListener) {
-    this.alertLevelChangeListener = alertLevelChangeListener;
-  }
-
-  void setProgressChangeListener(ProgressChangeListener progressChangeListener) {
-    this.progressChangeListener = progressChangeListener;
-  }
-
-  void setOffRouteListener(OffRouteListener offRouteListener) {
-    this.offRouteListener = offRouteListener;
-  }
-
-  void setSnapToRoute(boolean snapToRoute) {
-    this.snapToRoute = snapToRoute;
   }
 
   private RouteProgress monitorStepProgress(@NonNull RouteProgress routeProgress, Location location) {
@@ -145,8 +149,9 @@ class LocationUpdatedThread extends HandlerThread {
     int alertLevel = routeProgress.getAlertUserLevel() == Constants.NONE_ALERT_LEVEL
       ? Constants.DEPART_ALERT_LEVEL : routeProgress.getAlertUserLevel();
 
+    Position truePosition = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
     double userSnapToStepDistanceFromManeuver = RouteUtils.getDistanceToNextStep(
-      Position.fromCoordinates(location.getLongitude(), location.getLatitude()),
+      truePosition,
       routeProgress.getCurrentLeg(),
       routeProgress.getCurrentLegProgress().getStepIndex()
     );
@@ -166,7 +171,7 @@ class LocationUpdatedThread extends HandlerThread {
       double userHeadingNormalized = MathUtils.wrap(location.getBearing(), 0, 360);
       courseMatchesManeuverFinalHeading = MathUtils.differenceBetweenAngles(
         finalHeadingNormalized, userHeadingNormalized
-      ) <= Constants.MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION;
+      ) <= MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION;
     }
 
     // When departing, userSnapToStepDistanceFromManeuver is most often less than RouteControllerManeuverZoneRadius
@@ -182,6 +187,25 @@ class LocationUpdatedThread extends HandlerThread {
 
       // Use the currentStep if there is not a next step, this occurs when arriving.
       if (routeProgress.getCurrentLegProgress().getUpComingStep() != null) {
+
+        double userAbsoluteDistance = TurfMeasurement.distance(
+          truePosition, routeProgress.getCurrentLegProgress().getUpComingStep().getManeuver().asPosition(),
+          TurfConstants.UNIT_METERS
+        );
+
+        // userAbsoluteDistanceToManeuverLocation is set to nil by default
+        // If it's set to nil, we know the user has never entered the maneuver radius
+        if (userDistanceToManeuverLocation == 0.0) {
+          userDistanceToManeuverLocation = Constants.MANEUVER_ZONE_RADIUS;
+        }
+
+        double lastKnownUserAbsoluteDistance = userDistanceToManeuverLocation;
+
+        // The objective here is to make sure the user is moving away from the maneuver location
+        // This helps on maneuvers where the difference between the exit and enter heading are similar
+        if (userAbsoluteDistance <= lastKnownUserAbsoluteDistance) {
+          userDistanceToManeuverLocation = userAbsoluteDistance;
+        }
 
         if (routeProgress.getCurrentLegProgress().getUpComingStep().getManeuver().getType().equals("arrive")) {
           alertLevel = Constants.ARRIVE_ALERT_LEVEL;
@@ -227,107 +251,77 @@ class LocationUpdatedThread extends HandlerThread {
     return new RouteProgress(directionsRoute, snappedPosition, currentLegIndex, currentStepIndex, alertLevel);
   }
 
-
   /**
-   * Gets the currents step and next steps intersections and returns a list of the intersections x meters ahead of the
-   * user. This is done so we narrow down the number of intersections needed to calculate angle.
+   * Determine if the user is off route or not using the value set in
+   * {@link Constants#MAXIMUM_DISTANCE_BEFORE_OFF_ROUTE}. We first calculate the users next predicted location one
+   * second from the current time.
    *
-   * @param userPosition Snap the user to the route so we get a more accurate measurement.
-   * @return A list containing all intersections x meters away
-   * @since 2.0.0
+   * @param location The users current location.
+   * @param routeLeg The route leg the user is currently on.
+   * @return true if the user is found to be off route, otherwise false.
+   * @since 2.1.0
    */
-  private List<StepIntersection> getNextIntersections(RouteProgress routeProgress, Position userPosition) {
-    List<StepIntersection> intersectionsWithinRange = new ArrayList<>();
-    List<StepIntersection> stepIntersections = new ArrayList<>();
+  private boolean userIsOnRoute(Location location, RouteLeg routeLeg) {
+    Position locationToPosition = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
+    // Find future location of user
+    double metersInFrontOfUser = location.getSpeed() * DEAD_RECKONING_TIME_INTERVAL;
 
-    double closestIntersectionDistance = routeProgress.getCurrentLegProgress().getCurrentStepProgress()
-      .getDistanceTraveled();
+    Position locationInFrontOfUser = TurfMeasurement.destination(
+      locationToPosition, metersInFrontOfUser, location.getBearing(), TurfConstants.UNIT_METERS
+    );
 
-    // Add all the intersections for current and next step to list.
-    stepIntersections.addAll(routeProgress.getCurrentLegProgress().getCurrentStep().getIntersections());
-
-    for (StepIntersection intersection : stepIntersections) {
-      // Measures the distance between the beginning of step to the current intersection. If this distance is less then
-      // the users distance traveled on route, we know they have passed the intersection already.
-      double disToIntersection = TurfMeasurement.distance(
-        routeProgress.getCurrentLegProgress().getCurrentStep().getManeuver().asPosition(),
-        intersection.asPosition(),
-        TurfConstants.UNIT_METERS
-      );
-
-      if (disToIntersection > closestIntersectionDistance) {
-        // If the user is within x meters of the intersection we add it to the returning list.
-        if (TurfMeasurement.distance(
-          userPosition, intersection.asPosition(), TurfConstants.UNIT_METERS
-        ) <= Constants.METERS_TO_INTERSECTION) {
-          intersectionsWithinRange.add(intersection);
-        }
-      }
-    }
-    // none the current step doesn't have any steps left, we go ahead and watch for the next steps first intersection
-    if (intersectionsWithinRange.size() < 1) {
-      if (TurfMeasurement.distance(
-        userPosition,
-        routeProgress.getCurrentLegProgress().getUpComingStep().getIntersections().get(0).asPosition(),
-        TurfConstants.UNIT_METERS
-      ) <= Constants.METERS_TO_INTERSECTION) {
-        intersectionsWithinRange.add(routeProgress.getCurrentLegProgress().getUpComingStep().getIntersections().get(0));
-      }
-    }
-    return intersectionsWithinRange;
+    return RouteUtils.isOffRoute(locationInFrontOfUser, routeLeg, Constants.MAXIMUM_DISTANCE_BEFORE_OFF_ROUTE);
   }
 
-  /**
-   * Method actually detects if the user has made a wrong turn in an intersection. While this greatly reduces the
-   * amount of likelihood that the user made a wrong turn, it still isn't guaranteed to detect that the user is still
-   * on the route or not, sometimes giving a false positive. Errors in calculations here tend to happen in
-   * intersections that have turns with very close angles to the correct turn angle (since this decreases the
-   * calculated tolerance). A false positive can also occur when the users bearing turns outside the calculated
-   * tolerance.
-   *
-   * @param intersection The intersection you want to calculate whether the user made a wrong turn or not.
-   * @param userHeading  Provided by the {@link Location} objects {@code getBearing()} method.
-   * @return boolean true if the user remains on the route through the intersection, else false.
-   * @since 2.0.0
-   */
+  private float snapUserBearing(RouteProgress routeProgress) {
 
-  private boolean isUserStillOnRoute(StepIntersection intersection, double userHeading) {
-    // We start off assuming the user is on route.
-    boolean isOnRoute = true;
+    LineString lineString = LineString.fromPolyline(routeProgress.getRoute().getGeometry(),
+      com.mapbox.services.Constants.PRECISION_6);
 
-    // Loop over all the turn possibilities in the intersection.
-    for (int i = 0; i < intersection.getEntry().length; i++) {
-      // Entry is false if the turn is illegal, therefore we ignore these.
-      if (intersection.getEntry()[i]) {
-
-        // Get the ange
-        int in = intersection.getBearings()[intersection.getIn()] - 180;
-        int out = intersection.getBearings()[intersection.getOut()];
-        Timber.d("Correct angle into intersection: %d Correct angle leaving intersection: %d", in, out);
-
-        // Correct angle the user must maintain to stay on route.
-        int correctAngle = 180 - Math.abs(Math.abs(in - out) - 180);
-        // The angle between the user and the correct outter angle.
-        int userAngle = 180 - Math.abs(Math.abs((int) userHeading - out) - 180);
-        Timber.d("Correct Angle: %d User Angle: %d", correctAngle, userAngle);
-
-        // Adjust the angle tolerance to account for the smallest valid angle in the intersection. For example, if the
-        // intersections sharpest turn is 50 degrees, the tolerance would equal plus or minus 25.
-        int tolerance = Constants.DEFAULT_ANGLE_TOLERANCE;
-        int intersectionPossibleTurnAngle = 180 - Math.abs(Math.abs(intersection.getBearings()[i] - out) - 180);
-        if (tolerance > intersectionPossibleTurnAngle && intersectionPossibleTurnAngle != 0) {
-          tolerance = intersectionPossibleTurnAngle;
-        }
-
-        Timber.d("tolerance value %d", tolerance);
-
-        // If the user is within the tolerance, we know they are following the route correctly
-        if (Math.abs(userAngle - correctAngle) > tolerance) {
-          isOnRoute = false;
-        }
-      }
+    Position newCoordinate;
+    if (snapToRoute) {
+      newCoordinate = routeProgress.usersCurrentSnappedPosition();
+    } else {
+      newCoordinate = Position.fromCoordinates(location.getLongitude(), location.getLatitude());
     }
-    return isOnRoute;
+
+    double userDistanceBuffer = location.getSpeed() * DEAD_RECKONING_TIME_INTERVAL;
+
+    if (routeProgress.getDistanceTraveled() + userDistanceBuffer
+      > RouteUtils.getDistanceToEndOfRoute(
+      routeProgress.getRoute().getLegs().get(0).getSteps().get(0).getManeuver().asPosition(),
+      routeProgress.getRoute(),
+      TurfConstants.UNIT_METERS)) {
+      // If the user is near the end of the route, take the remaining distance and divide by two
+      userDistanceBuffer = routeProgress.getDistanceRemaining() / 2;
+    }
+
+    Point pointOneClosest = TurfMeasurement.along(lineString, routeProgress.getDistanceTraveled()
+      + userDistanceBuffer, TurfConstants.UNIT_METERS);
+    Point pointTwoClosest = TurfMeasurement.along(lineString, routeProgress.getDistanceTraveled()
+      + (userDistanceBuffer * 2), TurfConstants.UNIT_METERS);
+
+    // Get direction of these points
+    double pointOneBearing = TurfMeasurement.bearing(Point.fromCoordinates(newCoordinate), pointOneClosest);
+    double pointTwoBearing = TurfMeasurement.bearing(Point.fromCoordinates(newCoordinate), pointTwoClosest);
+
+    double wrappedPointOne = MathUtils.wrap(pointOneBearing, -180, 180);
+    double wrappedPointTwo = MathUtils.wrap(pointTwoBearing, -180, 180);
+    double wrappedCurrentBearing = MathUtils.wrap(location.getBearing(), -180, 180);
+
+    double relativeAnglepointOne = MathUtils.wrap(wrappedPointOne - wrappedCurrentBearing, -180, 180);
+    double relativeAnglepointTwo = MathUtils.wrap(wrappedPointTwo - wrappedCurrentBearing, -180, 180);
+
+    double averageRelativeAngle = (relativeAnglepointOne + relativeAnglepointTwo) / 2;
+
+    double absoluteBearing = MathUtils.wrap(wrappedCurrentBearing + averageRelativeAngle, 0, 360);
+
+    if (MathUtils.differenceBetweenAngles(absoluteBearing, location.getBearing()) > MAX_MANIPULATED_COURSE_ANGLE) {
+      return location.getBearing();
+    }
+
+    return averageRelativeAngle <= MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION ? (float) absoluteBearing
+      : location.getBearing();
   }
 
   /**
@@ -338,8 +332,8 @@ class LocationUpdatedThread extends HandlerThread {
     //Using a weak reference means you won't prevent garbage collection
     private final WeakReference<LocationUpdatedThread> locationUpdatedHandler;
 
-    RequestHandler(LocationUpdatedThread myClassInstance) {
-      locationUpdatedHandler = new WeakReference<>(myClassInstance);
+    RequestHandler(LocationUpdatedThread locationUpdatedThread) {
+      locationUpdatedHandler = new WeakReference<>(locationUpdatedThread);
     }
 
     @Override
@@ -347,9 +341,9 @@ class LocationUpdatedThread extends HandlerThread {
       LocationUpdatedThread locationUpdatedThread = this.locationUpdatedHandler.get();
       if (locationUpdatedThread != null) {
         if (msg.what == MESSAGE_LOCATION_UPDATED) {
-          RouteProgress target = (RouteProgress) msg.obj;
+          RouteProgress previousRouteProgress = (RouteProgress) msg.obj;
           Timber.d("Received request to calculate new location information");
-          locationUpdatedThread.handleRequest(locationUpdatedThread.directionsRoute, target,
+          locationUpdatedThread.handleRequest(locationUpdatedThread.directionsRoute, previousRouteProgress,
             locationUpdatedThread.location);
         }
       }

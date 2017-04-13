@@ -1,6 +1,4 @@
-package com.mapbox.services.android.navigation.v5;
-
-import android.location.Location;
+package com.mapbox.services.android.navigation.v5.listeners;
 
 import com.mapbox.services.Experimental;
 
@@ -9,6 +7,6 @@ import com.mapbox.services.Experimental;
  * might change or be removed in minor versions.
  */
 @Experimental
-public interface OffRouteListener {
-  void userOffRoute(Location location);
+public interface NavigationEventListener {
+  void onRunning(boolean running);
 }
