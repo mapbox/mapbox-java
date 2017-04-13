@@ -17,9 +17,7 @@ import com.mapbox.services.api.directions.v5.models.RouteLeg;
 import com.mapbox.services.api.navigation.v5.RouteProgress;
 import com.mapbox.services.api.navigation.v5.RouteUtils;
 import com.mapbox.services.api.utils.turf.TurfConstants;
-import com.mapbox.services.api.utils.turf.TurfHelpers;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
-import com.mapbox.services.api.utils.turf.TurfMisc;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
@@ -277,7 +275,8 @@ class LocationUpdatedThread extends HandlerThread {
 
   private float snapUserBearing(RouteProgress routeProgress) {
 
-    LineString lineString = LineString.fromPolyline(routeProgress.getRoute().getGeometry(), com.mapbox.services.Constants.PRECISION_6);
+    LineString lineString = LineString.fromPolyline(routeProgress.getRoute().getGeometry(),
+      com.mapbox.services.Constants.PRECISION_6);
 
     Position newCoordinate;
     if (snapToRoute) {
@@ -290,15 +289,17 @@ class LocationUpdatedThread extends HandlerThread {
 
     if (routeProgress.getDistanceTraveled() + userDistanceBuffer
       > RouteUtils.getDistanceToEndOfRoute(
-        routeProgress.getRoute().getLegs().get(0).getSteps().get(0).getManeuver().asPosition(),
-        routeProgress.getRoute(),
-        TurfConstants.UNIT_METERS)) {
+      routeProgress.getRoute().getLegs().get(0).getSteps().get(0).getManeuver().asPosition(),
+      routeProgress.getRoute(),
+      TurfConstants.UNIT_METERS)) {
       // If the user is near the end of the route, take the remaining distance and divide by two
       userDistanceBuffer = routeProgress.getDistanceRemaining() / 2;
     }
 
-    Point pointOneClosest = TurfMeasurement.along(lineString, routeProgress.getDistanceTraveled() + userDistanceBuffer, TurfConstants.UNIT_METERS);
-    Point pointTwoClosest = TurfMeasurement.along(lineString, routeProgress.getDistanceTraveled() + (userDistanceBuffer * 2), TurfConstants.UNIT_METERS);
+    Point pointOneClosest = TurfMeasurement.along(lineString, routeProgress.getDistanceTraveled()
+      + userDistanceBuffer, TurfConstants.UNIT_METERS);
+    Point pointTwoClosest = TurfMeasurement.along(lineString, routeProgress.getDistanceTraveled()
+      + (userDistanceBuffer * 2), TurfConstants.UNIT_METERS);
 
     // Get direction of these points
     double pointOneBearing = TurfMeasurement.bearing(Point.fromCoordinates(newCoordinate), pointOneClosest);
@@ -319,7 +320,8 @@ class LocationUpdatedThread extends HandlerThread {
       return location.getBearing();
     }
 
-    return averageRelativeAngle <= MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION ? (float) absoluteBearing : location.getBearing();
+    return averageRelativeAngle <= MAXIMUM_ALLOWED_DEGREE_OFFSET_FOR_TURN_COMPLETION ? (float) absoluteBearing
+      : location.getBearing();
   }
 
   /**
