@@ -10,6 +10,9 @@ import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
 import com.mapbox.services.api.staticimage.v1.models.Marker;
 import com.mapbox.services.api.staticimage.v1.models.Polyline;
+import com.mapbox.services.commons.geojson.Feature;
+import com.mapbox.services.commons.geojson.LineString;
+import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 import com.squareup.picasso.Picasso;
 
@@ -86,10 +89,13 @@ public class StaticImageWithAnnotationsActivity extends AppCompatActivity {
       .setLat(51.5062)
       .setLon(-0.0756)
       .setZoom(14)
+      .setGeoJson(Feature.fromGeometry(Point.fromCoordinates(Position.fromCoordinates(-0.0756, 51.5062))))
       .setWidth(320)
       .setHeight(320)
       .setRetina(true)
       .build();
+
+    System.out.println(londonStaticImage.getUrl().toString());
 
     Picasso.with(this).load(londonStaticImage.getUrl().toString()).into(londonImageView);
   }

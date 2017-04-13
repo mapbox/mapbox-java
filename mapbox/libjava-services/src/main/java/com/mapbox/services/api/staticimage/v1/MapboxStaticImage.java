@@ -5,6 +5,7 @@ import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.staticimage.v1.models.Marker;
 import com.mapbox.services.api.staticimage.v1.models.Polyline;
+import com.mapbox.services.commons.geojson.GeoJSON;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
 
@@ -109,9 +110,32 @@ public class MapboxStaticImage {
     private boolean logo = true;
     private Marker[] markers;
     private Polyline[] polylines;
+    private String geoJson;
 
     // This field isn't part of the URL
     private int precision = -1;
+
+    /**
+     * If a {@link GeoJSON} object was provided, you can get the formatted version of it by calling this method.
+     *
+     * @return a formatted string ready to be added to the static image URL.
+     * @since 2.1.0
+     */
+    public String getGeoJson() {
+      return geoJson;
+    }
+
+    /**
+     * Pass in a {@link GeoJSON} object which contains geometry where you'd like your annotations to be placed.
+     *
+     * @param geoJson a single {@link GeoJSON} object which includes at least one annotation.
+     * @return This Static image builder.
+     * @since 2.1.0
+     */
+    public Builder setGeoJson(GeoJSON geoJson) {
+      this.geoJson = String.format(Constants.DEFAULT_LOCALE, "geojson(%s)", geoJson.toJson());
+      return this;
+    }
 
     /**
      * Required to call when building {@link com.mapbox.services.api.staticimage.v1.MapboxStaticImage.Builder}.
@@ -452,7 +476,7 @@ public class MapboxStaticImage {
     /**
      * Provides a String containing all of the currently added overlays added to the static image builder.
      *
-     * @return the formated string which will be used to pass in any overlays to be placed on the static image.
+     * @return the formatted string which will be used to pass in any overlays to be placed on the static image.
      * @since 2.1.0
      */
     public String getOverlays() {
@@ -466,6 +490,10 @@ public class MapboxStaticImage {
         for (Polyline polyline : polylines) {
           formattedOverlays.add(polyline.getPath());
         }
+      }
+
+      if (geoJson != null) {
+        formattedOverlays.add(geoJson);
       }
 
       return TextUtils.join(",", formattedOverlays.toArray());
