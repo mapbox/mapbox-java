@@ -59,7 +59,7 @@ public class MapboxStaticImageTest {
   @Test
   public void requireLon() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You need to set the map lon/lat coordinates."));
+    thrown.expectMessage(startsWith("You need to set the map lon/lat coordinates or set auto to true."));
     new MapboxStaticImage.Builder()
       .setAccessToken("pk.")
       .setStyleId(Constants.MAPBOX_STYLE_STREETS)
@@ -72,7 +72,7 @@ public class MapboxStaticImageTest {
   @Test
   public void requireLat() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You need to set the map lon/lat coordinates."));
+    thrown.expectMessage(startsWith("You need to set the map lon/lat coordinates or set auto to true."));
     new MapboxStaticImage.Builder()
       .setAccessToken("pk.")
       .setStyleId(Constants.MAPBOX_STYLE_STREETS)
@@ -83,13 +83,14 @@ public class MapboxStaticImageTest {
   }
 
   @Test
-  public void requireZoom() throws ServicesException {
+  public void zoomOutOfRange() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You need to set the map zoom level."));
+    thrown.expectMessage(startsWith("The zoom level provided must be a value between 0 and 20."));
     new MapboxStaticImage.Builder()
       .setAccessToken("pk.")
       .setStyleId(Constants.MAPBOX_STYLE_STREETS)
       .setLat(1.0).setLon(2.0)
+      .setZoom(21)
       .setWidth(100).setHeight(200)
       .build();
   }
