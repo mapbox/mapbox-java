@@ -32,7 +32,7 @@ public interface DirectionsService {
    *                         the angle of approach
    * @param continueStraight Define whether the route should continue straight even if the route
    *                         will be slower.  @return A retrofit Call object
-   * @param annotations       An annotations object that contains additional details about each line segment along the
+   * @param annotations      An annotations object that contains additional details about each line segment along the
    *                         route geometry. Each entry in an annotations field corresponds to a coordinate along the
    *                         route geometry.
    * @since 1.0.0
