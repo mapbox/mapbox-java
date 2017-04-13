@@ -14,6 +14,11 @@ public class OptimizedTripsResponse {
   public OptimizedTripsResponse() {
   }
 
+  public OptimizedTripsResponse(List<DirectionsRoute> trips, List<DirectionsWaypoint> waypoints) {
+    this.trips = trips;
+    this.waypoints = waypoints;
+  }
+
   public void setCode(String code) {
     this.code = code;
   }

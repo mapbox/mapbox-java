@@ -115,9 +115,3 @@ directions-traffic-fixtures:
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/mapmatching_v5_polyline.json
-
-distance-fixtures:
-	# Retrieve a duration matrix
-	curl -X POST --header "Content-Type:application/json" -d @mapbox/libjava-services/src/test/fixtures/distance_coordinates.json \
-		"https://api.mapbox.com/distances/v1/mapbox/driving?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/distance_v1.json

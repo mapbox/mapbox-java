@@ -6,9 +6,12 @@ import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.optimizedtrips.v1.models.OptimizedTripsResponse;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.utils.TextUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -252,8 +255,15 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       return destination;
     }
 
-    public List<Position> getCoordinates() {
-      return coordinates;
+    public String getCoordinates() {
+      List<String> coordinatesFormatted = new ArrayList<>();
+      for (Position coordinate : coordinates) {
+        coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
+          coordinate.getLongitude(),
+          coordinate.getLatitude()));
+      }
+
+      return TextUtils.join(";", coordinatesFormatted.toArray());
     }
 
     public String getGeometries() {
@@ -292,6 +302,26 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
 
     @Override
     public MapboxOptimizedTrips build() throws ServicesException {
+      validateAccessToken(accessToken);
+
+      if (profile == null) {
+        throw new ServicesException("A profile is required for the Optimized Trips API.");
+      } else if (profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)) {
+        throw new ServicesException("The driving traffic profile does not work with this API.");
+      } else if (!profile.equals(DirectionsCriteria.PROFILE_CYCLING)
+        && !profile.equals(DirectionsCriteria.PROFILE_WALKING)
+        && !profile.equals(DirectionsCriteria.PROFILE_DRIVING)) {
+        throw new ServicesException("A valid profile must be used with the Optimized Trips API.");
+      }
+
+      if (coordinates == null) {
+        throw new ServicesException("At least two coordinates must be provided with your API request.");
+      } else if (coordinates.size() < 2) {
+        throw new ServicesException("At least two coordinates must be provided with your API request.");
+      } else if (coordinates.size() > 12) {
+        throw new ServicesException("Maximum of 12 coordinates are allowed for this API.");
+      }
+
       return new MapboxOptimizedTrips(this);
     }
   }

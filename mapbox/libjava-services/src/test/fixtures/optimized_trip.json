@@ -1,0 +1,64 @@
+{
+  "trips": [
+    {
+      "geometry": "q|qeFbdejV}cCzZrNv|Bi[nj@nIb_AeGvk@s_@pn@gmClSoo@|h@co@[oz@fp@qj@vgAs_AfJ}l@vt@ehCgLlY{wAjU_]ut@kpBnFcU`Oh@eB{R`ZgIuAgj@tAfj@aZfIdBzRaOi@oFbUzs@|pB_Uj[q]fiBvnCoAvi@ks@naAgK~j@ihAdy@kn@vo@E~o@ui@|fCoOhj@mo@j_Ab@zc@|Q~pAqD~F`o@`|F{[nEv^`U_^|vAqRbNwuAeb@yt@iu@qMeYiYiUmdAX{dB{Pgi@ojBuc@kq@hTcl@wE_OzR{ApeA_|@hA",
+      "legs": [
+        {
+          "steps": [],
+          "distance": 25785.8,
+          "duration": 1829.6,
+          "summary": "",
+          "weight": 2004.6
+        },
+        {
+          "steps": [],
+          "distance": 28835.6,
+          "duration": 2124.4,
+          "summary": "",
+          "weight": 2231.1
+        },
+        {
+          "steps": [],
+          "distance": 16067.5,
+          "duration": 1317,
+          "summary": "",
+          "weight": 1381.1
+        }
+      ],
+      "distance": 70688.9,
+      "duration": 5271,
+      "weight_name": "routability",
+      "weight": 5616.799999999999
+    }
+  ],
+  "waypoints": [
+    {
+      "waypoint_index": 0,
+      "location": [
+        -122.420019,
+        37.780091
+      ],
+      "name": "McAllister Street",
+      "trips_index": 0
+    },
+    {
+      "waypoint_index": 1,
+      "location": [
+        -122.461997,
+        37.89621
+      ],
+      "name": "Playa Verde",
+      "trips_index": 0
+    },
+    {
+      "waypoint_index": 2,
+      "location": [
+        -122.480005,
+        37.730039
+      ],
+      "name": "",
+      "trips_index": 0
+    }
+  ],
+  "code": "Ok"
+}

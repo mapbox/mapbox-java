@@ -2,8 +2,6 @@ package com.mapbox.services.api.optimizedtrips.v1;
 
 import com.mapbox.services.api.optimizedtrips.v1.models.OptimizedTripsResponse;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -40,7 +38,7 @@ public interface OptimizedTripsService {
     @Header("User-Agent") String userAgent,
     @Path("user") String user,
     @Path("profile") String profile,
-    @Path("coordinates") List coordinates,
+    @Path("coordinates") String coordinates,
     @Query("access_token") String accessToken,
     @Query("roundtrip") Boolean roundTrip,
     @Query("radiuses") double[] radiuses,
