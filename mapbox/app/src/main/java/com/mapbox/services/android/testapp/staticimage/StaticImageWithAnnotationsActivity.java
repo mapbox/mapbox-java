@@ -11,7 +11,6 @@ import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
 import com.mapbox.services.api.staticimage.v1.models.Marker;
 import com.mapbox.services.api.staticimage.v1.models.Polyline;
 import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 import com.squareup.picasso.Picasso;
