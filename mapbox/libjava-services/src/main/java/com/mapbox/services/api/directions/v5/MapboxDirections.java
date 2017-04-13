@@ -161,6 +161,10 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       this.geometries = DirectionsCriteria.GEOMETRY_POLYLINE6;
     }
 
+    /*
+     * Setters
+     */
+
     /**
      * The SDK currently only supports {@code Polyline} geometry (not GeoJSON) to simplify the response. You do have
      * the option on whether the precision is 5 or 6 using either {@link DirectionsCriteria#GEOMETRY_POLYLINE} or
@@ -174,10 +178,6 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       this.geometries = geometries;
       return (T) this;
     }
-
-    /*
-     * Setters
-     */
 
     /**
      * @param user User string
