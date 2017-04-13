@@ -33,7 +33,7 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxOptimizedTripsTest extends BaseTest {
 
-  public static final String OPTIMIZED_TRIP_FIXTURE = "libjava-services/src/test/fixtures/optimized_trip.json";
+  public static final String OPTIMIZED_TRIP_FIXTURE = "src/test/fixtures/optimized_trip.json";
   public static final String OPTIMIZED_TRIP_STEP_FIXTURE = "src/test/fixtures/optimized_trip_step.json";
   public static final String OPTIMIZED_TRIP_DETAILED_FIXTURE = "src/test/fixtures/optimized_trip_detailed.json";
 
