@@ -115,3 +115,8 @@ directions-traffic-fixtures:
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/mapmatching_v5_polyline.json
+
+optimized-trips-fixtures:
+	# request an optimized car trip with no additional options
+	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o mapbox/libjava-services/src/test/fixtures/optimized_trip.json
