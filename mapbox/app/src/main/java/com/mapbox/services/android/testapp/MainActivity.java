@@ -13,19 +13,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mapbox.services.android.BuildConfig;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.testapp.connectivity.ConnectivityActivity;
 import com.mapbox.services.android.testapp.directions.DirectionsV5Activity;
-import com.mapbox.services.android.testapp.directions.RouteUtilsV5Activity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.location.LocationEngineActivity;
-import com.mapbox.services.android.testapp.nav.NavigationActivity;
-import com.mapbox.services.android.testapp.nav.OffRouteDetectionActivity;
-import com.mapbox.services.android.testapp.nav.SnapToRouteActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
 import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
@@ -66,11 +61,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         getString(R.string.title_directions_v5),
         getString(R.string.description_directions_v5),
         DirectionsV5Activity.class
-      ),
-      new SampleItem(
-        getString(R.string.title_route_utils_v5),
-        getString(R.string.description_route_utils),
-        RouteUtilsV5Activity.class
       ),
       new SampleItem(
         getString(R.string.title_reverse_geocoding),
@@ -133,24 +123,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         TurfMidpointActivity.class
       ),
       new SampleItem(
-        getString(R.string.title_off_route_detection),
-        getString(R.string.description_off_route_detection),
-        OffRouteDetectionActivity.class
-      ),
-      new SampleItem(
         getString(R.string.title_connectivity),
         getString(R.string.description_connectivity),
         ConnectivityActivity.class
-      ),
-      new SampleItem(
-        getString(R.string.title_snap_to_route),
-        getString(R.string.description_snap_to_route),
-        SnapToRouteActivity.class
-      ),
-      new SampleItem(
-        getString(R.string.title_navigation),
-        getString(R.string.description_navigation),
-        NavigationActivity.class
       )
     ));
 
