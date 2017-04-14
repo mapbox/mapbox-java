@@ -1,8 +1,12 @@
 package com.mapbox.services.api.staticimage.v1.models;
 
+import com.mapbox.services.Constants;
 import com.mapbox.services.api.ServicesException;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -27,7 +27,8 @@ public class StaticPolylineAnnotationTest {
       .setPolyline("%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM")
       .build();
 
-    assertTrue(staticPolylineAnnotation.getPath().contains("path(%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM)"));
+    assertTrue(staticPolylineAnnotation.getPath()
+      .contains("path(%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM)"));
   }
 
   @Test

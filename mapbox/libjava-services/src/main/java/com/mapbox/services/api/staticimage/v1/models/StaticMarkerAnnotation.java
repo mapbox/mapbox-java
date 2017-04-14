@@ -129,8 +129,8 @@ public class StaticMarkerAnnotation {
     }
 
     /**
-     * StaticMarkerAnnotation symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through {@code 99}, or a
-     * valid Mapbox Maki icon. If a letter is requested, it will be rendered uppercase only.
+     * StaticMarkerAnnotation symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through
+     * {@code 99}, or a valid Mapbox Maki icon. If a letter is requested, it will be rendered uppercase only.
      *
      * @return String containing the marker symbol.
      * @since 2.1.0
@@ -140,8 +140,8 @@ public class StaticMarkerAnnotation {
     }
 
     /**
-     * StaticMarkerAnnotation symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through {@code 99}, or a
-     * valid Maki icon. If a letter is requested, it will be rendered uppercase only.
+     * StaticMarkerAnnotation symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through
+     * {@code 99}, or a valid Maki icon. If a letter is requested, it will be rendered uppercase only.
      *
      * @param label String containing the marker symbol.
      * @return This StaticMarkerAnnotation builder.

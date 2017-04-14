@@ -450,7 +450,8 @@ public class MapboxStaticImage {
     }
 
     /**
-     * Allows the passing of a {@link StaticMarkerAnnotation} or Markers which are placed on the static map image returned.
+     * Allows the passing of a {@link StaticMarkerAnnotation} or Markers which are placed on the static map image
+     * returned.
      *
      * @param staticMarkerAnnotations One or more {@link StaticMarkerAnnotation}s to be placed on your static image.
      * @return This static image builder.
@@ -462,7 +463,8 @@ public class MapboxStaticImage {
     }
 
     /**
-     * Allows the passing of a {@link StaticPolylineAnnotation} or Polylines which are placed on the static map image returned.
+     * Allows the passing of a {@link StaticPolylineAnnotation} or Polylines which are placed on the static map image
+     * returned.
      *
      * @param staticPolylineAnnotations One or more {@link StaticPolylineAnnotation}s to be placed on your static image.
      * @return This static image builder.

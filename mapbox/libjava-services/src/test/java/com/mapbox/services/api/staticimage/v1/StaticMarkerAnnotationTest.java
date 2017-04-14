@@ -82,7 +82,8 @@ public class StaticMarkerAnnotationTest {
   public void markerPositionWorking() throws ServicesException {
     Position position = Position.fromCoordinates(1.0, 2.0);
 
-    StaticMarkerAnnotation staticMarkerAnnotation = new StaticMarkerAnnotation.Builder().setName(Constants.PIN_SMALL).setPosition(position).build();
+    StaticMarkerAnnotation staticMarkerAnnotation
+      = new StaticMarkerAnnotation.Builder().setName(Constants.PIN_SMALL).setPosition(position).build();
     assertTrue(staticMarkerAnnotation.getMarker().contains("(1.000000,2.000000)"));
   }
 
