@@ -19,6 +19,21 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * The Mapbox Optimized Trips API returns a duration-optimized trip between the input coordinates. This is also known
+ * as solving the Traveling Salesperson Problem. A typical use case for this API is planning the route for deliveries
+ * in a city. Optimized trips can be retrieved for car driving, bicycling and walking or hiking.
+ * <p>
+ * Under normal plans, a maximum of 12 coordinates can be passed in at once at a maximum 60 requests per minute. For
+ * higher volumes, reach out through our contact page.
+ * <p>
+ * Note that for under 10 coordinates, the returned results will be optimal. For 10 and more coordinates, the results
+ * will be optimized approximations.
+ *
+ * @see <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">Traveling Salesperson Problem</a>
+ * @see <a href="https://www.mapbox.com/api-documentation/#optimized-trips">API documentation</a>
+ * @since 2.1.0
+ */
 public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> {
 
   protected Builder builder = null;
@@ -66,10 +81,11 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       builder.getRadiuses(),
       builder.getBearings(),
       builder.getSteps(),
+      builder.getOverview(),
       builder.getGeometries(),
       builder.getAnnotation(),
       builder.getDestination(),
-      builder.getSources());
+      builder.getSource());
 
     // Done
     return call;
@@ -131,13 +147,14 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
     private String profile;
     private List<Position> coordinates;
     private Boolean roundTrip;
-    private String sources;
+    private String source;
     private String destination;
     private String geometries;
     private double[] radiuses;
     private Boolean steps;
     private double[][] bearings;
     private String[] annotation;
+    private String overview;
 
     /**
      * Constructor
@@ -190,8 +207,8 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       return (T) this;
     }
 
-    public T setSources(String sources) {
-      this.sources = sources;
+    public T setSource(String source) {
+      this.source = source;
       return (T) this;
     }
 
@@ -207,6 +224,11 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
 
     public T setRadiuses(double[] radiuses) {
       this.radiuses = radiuses;
+      return (T) this;
+    }
+
+    public T setOverview(String overview) {
+      this.overview = overview;
       return (T) this;
     }
 
@@ -247,8 +269,8 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       return roundTrip;
     }
 
-    public String getSources() {
-      return sources;
+    public String getSource() {
+      return source;
     }
 
     public String getDestination() {
@@ -276,6 +298,10 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
 
     public String getUser() {
       return user;
+    }
+
+    public String getOverview() {
+      return overview;
     }
 
     public Boolean getSteps() {

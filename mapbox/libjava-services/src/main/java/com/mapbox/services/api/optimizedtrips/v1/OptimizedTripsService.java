@@ -35,7 +35,7 @@ public interface OptimizedTripsService {
    *                    route geometry. Each entry in an annotations field corresponds to a coordinate along the
    *                    route geometry.
    * @param destination Returned route ends at any or last coordinate. Allowed values are: any (default) or last.
-   * @param sources     Returned route starts at any or first coordinate. Allowed values are: any (default) or first.
+   * @param source     Returned route starts at any or first coordinate. Allowed values are: any (default) or first.
    * @since 2.1.0
    */
   @GET("optimized-trips/v1/{user}/{profile}/{coordinates}")
@@ -50,10 +50,11 @@ public interface OptimizedTripsService {
     @Query("radiuses") double[] radiuses,
     @Query("bearings") double[][] bearings,
     @Query("steps") Boolean steps,
+    @Query("overview") String overview,
     @Query("geometries") String geometries,
     @Query("annotations") String[] annotations,
     @Query("destination") String destination,
-    @Query("sources") String sources
+    @Query("source") String source
   );
 }
 
