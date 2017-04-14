@@ -65,11 +65,6 @@ dex-count:
 	cd mapbox; ./gradlew countDebugDexMethods
 	cd mapbox; ./gradlew countReleaseDexMethods
 
-navigation-fixtures:
-	# Navigation: Taylor street to Page street
-	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.413165,37.795042;-122.433378,37.7727?geometries=polyline6&overview=full&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libandroid-services/src/test/resources/navigation.json
-
 directions-matrix-fixtures:
 	# request a symmetric 3x3 matrix for cars
 	curl "https://api.mapbox.com/directions-matrix/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?access_token=$(MAPBOX_ACCESS_TOKEN)" \
@@ -126,9 +121,3 @@ distance-fixtures:
 	curl -X POST --header "Content-Type:application/json" -d @mapbox/libjava-services/src/test/fixtures/distance_coordinates.json \
 		"https://api.mapbox.com/distances/v1/mapbox/driving?access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/distance_v1.json
-
-libosrm:
-	rm -rf mapbox/libjava-services/src/main/resources/translations mapbox/libjava-services/src/test/fixtures/osrm/v5
-	mkdir -p mapbox/libjava-services/src/main/resources/translations mapbox/libjava-services/src/test/fixtures/osrm/v5
-	cp -R ../osrm-text-instructions/languages/translations/* mapbox/libjava-services/src/main/resources/translations
-	cp -R ../osrm-text-instructions/test/fixtures/v5/* mapbox/libjava-services/src/test/fixtures/osrm/v5
