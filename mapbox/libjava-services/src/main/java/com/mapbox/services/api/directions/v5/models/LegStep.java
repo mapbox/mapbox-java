@@ -24,6 +24,8 @@ public class LegStep {
   @SerializedName("rotary_pronunciation")
   private String rotaryPronunciation;
   private StepManeuver maneuver;
+
+  private double weight;
   private List<StepIntersection> intersections;
 
   public LegStep() {
@@ -37,6 +39,26 @@ public class LegStep {
     this.name = name;
     this.rotaryName = rotaryName;
     this.maneuver = maneuver;
+  }
+
+  /**
+   * Specifies a decimal precision of edge weights, default value 1.
+   *
+   * @return a decimal precision double value.
+   * @since 2.1.0
+   */
+  public double getWeight() {
+    return weight;
+  }
+
+  /**
+   * Specifies a decimal precision of edge weights, default value 1.
+   *
+   * @param weight double value representing the edge weight.
+   * @since 2.1.0
+   */
+  public void setWeight(double weight) {
+    this.weight = weight;
   }
 
   /**

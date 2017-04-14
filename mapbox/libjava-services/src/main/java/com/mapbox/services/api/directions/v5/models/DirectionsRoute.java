@@ -1,5 +1,7 @@
 package com.mapbox.services.api.directions.v5.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -12,6 +14,9 @@ public class DirectionsRoute {
   private double distance;
   private double duration;
   private String geometry;
+  private double weight;
+  @SerializedName("weight_name")
+  private String weightName;
   private List<RouteLeg> legs;
 
   public DirectionsRoute() {
@@ -36,6 +41,22 @@ public class DirectionsRoute {
    */
   public void setDistance(double distance) {
     this.distance = distance;
+  }
+
+  public String getWeightName() {
+    return weightName;
+  }
+
+  public void setWeightName(String weightName) {
+    this.weightName = weightName;
+  }
+
+  public double getWeight() {
+    return weight;
+  }
+
+  public void setWeight(double weight) {
+    this.weight = weight;
   }
 
   /**

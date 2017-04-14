@@ -83,6 +83,12 @@ public class DirectionsCriteria {
    */
   public static final String OVERVIEW_FALSE = "false";
 
+  public static final String WEIGHT_NAME_ROUTABILITY = "routability";
+
+  public static final String WEIGHT_NAME_DISTANCE = "distance";
+  public static final String WEIGHT_NAME_DURATION = "duration";
+
+
   /**
    * The duration, in seconds, between each pair of coordinates.
    *
