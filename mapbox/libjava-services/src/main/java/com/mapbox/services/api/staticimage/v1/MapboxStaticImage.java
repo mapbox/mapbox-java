@@ -426,13 +426,12 @@ public class MapboxStaticImage {
      */
     public String getLocationPathSegment() {
       if (precision > 0) {
-        String pattern = "0." + new String(new char[precision]).replace("\0", "0");
-        DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
-        df.applyPattern(pattern);
-        df.setRoundingMode(RoundingMode.FLOOR);
         return String.format(Locale.US, "%s,%s,%s,%s,%s",
-          df.format(lon), df.format(lat), df.format(zoom),
-          df.format(bearing), df.format(pitch));
+          TextUtils.formatCoordinate(lon, precision),
+          TextUtils.formatCoordinate(lat, precision),
+          TextUtils.formatCoordinate(zoom, precision),
+          TextUtils.formatCoordinate(bearing, precision),
+          TextUtils.formatCoordinate(pitch, precision));
       } else {
         return String.format(Locale.US, "%f,%f,%f,%f,%f", lon, lat, zoom, bearing, pitch);
       }

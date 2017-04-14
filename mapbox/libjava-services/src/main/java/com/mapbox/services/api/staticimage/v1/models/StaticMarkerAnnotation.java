@@ -3,6 +3,7 @@ package com.mapbox.services.api.staticimage.v1.models;
 import com.mapbox.services.Constants;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.utils.TextUtils;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -38,11 +39,18 @@ public class StaticMarkerAnnotation {
       // Check if using a custom marker url
       if (builder.getUrl() != null) {
         marker = String.format(Constants.DEFAULT_LOCALE, "url-%s(%s,%s)",
-          builder.getUrl(), df.format(builder.getLon()), df.format(builder.getLat()));
+          builder.getUrl(),
+          TextUtils.formatCoordinate(builder.getLon(), builder.getPrecision()),
+          TextUtils.formatCoordinate(builder.getLat(), builder.getPrecision())
+        );
       } else {
         marker = String.format(Constants.DEFAULT_LOCALE, "%s-%s+%s(%s,%s)",
-          builder.getName(), builder.getLabel(), builder.getColor(), df.format(builder.getLon()),
-          df.format(builder.getLat()));
+          builder.getName(),
+          builder.getLabel(),
+          builder.getColor(),
+          TextUtils.formatCoordinate(builder.getLon(), builder.getPrecision()),
+          TextUtils.formatCoordinate(builder.getLat(), builder.getPrecision())
+        );
       }
     } else {
       // Check if using a custom marker url
