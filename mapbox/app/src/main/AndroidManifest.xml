@@ -42,13 +42,6 @@
                 android:value=".MainActivity"/>
         </activity>
         <activity
-            android:name=".directions.RouteUtilsV5Activity"
-            android:label="@string/title_route_utils_v5">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
-        </activity>
-        <activity
             android:name=".geocoding.GeocodingReverseActivity"
             android:label="@string/title_reverse_geocoding">
             <meta-data
@@ -135,29 +128,8 @@
                 android:value=".MainActivity"/>
         </activity>
         <activity
-            android:name=".nav.OffRouteDetectionActivity"
-            android:label="@string/title_off_route_detection">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
-        </activity>
-        <activity
             android:name=".connectivity.ConnectivityActivity"
             android:label="@string/title_connectivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
-        </activity>
-        <activity
-            android:name=".nav.SnapToRouteActivity"
-            android:label="@string/title_snap_to_route">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
-        </activity>
-        <activity
-            android:name=".nav.NavigationActivity"
-            android:label="@string/title_navigation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
