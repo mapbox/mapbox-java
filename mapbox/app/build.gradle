@@ -42,6 +42,7 @@ dependencies {
     compile rootProject.ext.dep.supportAppcompat
     compile rootProject.ext.dep.supportDesign
     compile rootProject.ext.dep.supportRecyclerview
+    compile rootProject.ext.dep.supportCardView
 
     // Mapbox SDK
     compile(rootProject.ext.dep.mapbox) {

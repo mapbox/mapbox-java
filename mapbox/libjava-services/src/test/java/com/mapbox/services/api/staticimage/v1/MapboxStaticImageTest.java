@@ -59,7 +59,7 @@ public class MapboxStaticImageTest {
   @Test
   public void requireLon() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You need to set the map lon/lat coordinates."));
+    thrown.expectMessage(startsWith("You need to set the map lon/lat coordinates or set auto to true."));
     new MapboxStaticImage.Builder()
       .setAccessToken("pk.")
       .setStyleId(Constants.MAPBOX_STYLE_STREETS)
@@ -72,7 +72,7 @@ public class MapboxStaticImageTest {
   @Test
   public void requireLat() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You need to set the map lon/lat coordinates."));
+    thrown.expectMessage(startsWith("You need to set the map lon/lat coordinates or set auto to true."));
     new MapboxStaticImage.Builder()
       .setAccessToken("pk.")
       .setStyleId(Constants.MAPBOX_STYLE_STREETS)
@@ -83,13 +83,14 @@ public class MapboxStaticImageTest {
   }
 
   @Test
-  public void requireZoom() throws ServicesException {
+  public void zoomOutOfRange() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You need to set the map zoom level."));
+    thrown.expectMessage(startsWith("The zoom level provided must be a value between 0 and 20."));
     new MapboxStaticImage.Builder()
       .setAccessToken("pk.")
       .setStyleId(Constants.MAPBOX_STYLE_STREETS)
       .setLat(1.0).setLon(2.0)
+      .setZoom(21)
       .setWidth(100).setHeight(200)
       .build();
   }
@@ -139,7 +140,7 @@ public class MapboxStaticImageTest {
     MapboxStaticImage client = new MapboxStaticImage.Builder()
       .setAccessToken("pk.")
       .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setLocation(Position.fromCoordinates(1.23456789, -98.76))
+      .setPosition(Position.fromCoordinates(1.23456789, -98.76))
       .setZoom(10).setBearing(345.67890123456789).setPitch(0.000000005)
       .setWidth(100).setHeight(200)
       .setPrecision(5)
@@ -149,5 +150,4 @@ public class MapboxStaticImageTest {
       url.toString(),
       "https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/1.23456,-98.76000,10.00000,345.67890,0.00000/100x200?access_token=pk.");
   }
-
 }

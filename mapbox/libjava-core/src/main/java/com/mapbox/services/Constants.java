@@ -49,4 +49,8 @@ public class Constants {
   public static final String MAPBOX_STYLE_SATELLITE = "satellite-v9";
   public static final String MAPBOX_STYLE_SATELLITE_HYBRID = "satellite-streets-v9";
 
+  public static final String PIN_SMALL = "pin-s";
+  public static final String PIN_MEDIUM = "pin-m";
+  public static final String PIN_LARGE = "pin-l";
+
 }

@@ -3,10 +3,14 @@ package com.mapbox.services.api.staticimage.v1;
 import com.mapbox.services.Constants;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.staticimage.v1.models.StaticMarkerAnnotation;
+import com.mapbox.services.api.staticimage.v1.models.StaticPolylineAnnotation;
+import com.mapbox.services.commons.geojson.GeoJSON;
 import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.utils.TextUtils;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import okhttp3.HttpUrl;
@@ -36,9 +40,24 @@ public class MapboxStaticImage {
       .addPathSegment(builder.getUsername())
       .addPathSegment(builder.getStyleId())
       .addPathSegment("static")
-      .addPathSegment(builder.getLocationPathSegment())
-      .addPathSegment(builder.getSizePathSegment())
       .addQueryParameter("access_token", builder.getAccessToken());
+
+    if (builder.getOverlays() != null) {
+      urlBuilder.addEncodedPathSegment(builder.getOverlays());
+    }
+
+    if (builder.isAuto()) {
+      urlBuilder.addPathSegment("auto");
+    } else {
+      urlBuilder.addPathSegment(builder.getLocationPathSegment());
+    }
+
+    // Has to be last segment in URL
+    urlBuilder.addPathSegment(builder.getSizePathSegment());
+
+    if (builder.beforeLayer != null) {
+      urlBuilder.addQueryParameter("before_layer", builder.beforeLayer);
+    }
 
     if (!builder.isAttribution()) {
       // Default is true
@@ -80,14 +99,41 @@ public class MapboxStaticImage {
     private Double zoom;
     private double bearing = 0;
     private double pitch = 0;
+    private boolean auto;
+    private String beforeLayer;
     private Integer width;
     private Integer height;
     private boolean retina = false;
     private boolean attribution = true;
     private boolean logo = true;
+    private StaticMarkerAnnotation[] staticMarkerAnnotations;
+    private StaticPolylineAnnotation[] staticPolylineAnnotations;
+    private String geoJson;
 
     // This field isn't part of the URL
     private int precision = -1;
+
+    /**
+     * If a {@link GeoJSON} object was provided, you can get the formatted version of it by calling this method.
+     *
+     * @return a formatted string ready to be added to the static image URL.
+     * @since 2.1.0
+     */
+    public String getGeoJson() {
+      return geoJson;
+    }
+
+    /**
+     * Pass in a {@link GeoJSON} object which contains geometry where you'd like your annotations to be placed.
+     *
+     * @param geoJson a single {@link GeoJSON} object which includes at least one annotation.
+     * @return This Static image builder.
+     * @since 2.1.0
+     */
+    public Builder setGeoJson(GeoJSON geoJson) {
+      this.geoJson = String.format(Constants.DEFAULT_LOCALE, "geojson(%s)", geoJson.toJson());
+      return this;
+    }
 
     /**
      * Required to call when building {@link com.mapbox.services.api.staticimage.v1.MapboxStaticImage.Builder}.
@@ -159,8 +205,23 @@ public class MapboxStaticImage {
      * @param position Position object with valid latitude and longitude values
      * @return Builder
      * @since 1.2.0
+     * @deprecated Use {@link MapboxStaticImage.Builder#setPosition(Position)} instead.
      */
+    @Deprecated
     public Builder setLocation(Position position) {
+      this.lat = position.getLatitude();
+      this.lon = position.getLongitude();
+      return this;
+    }
+
+    /**
+     * Location for the center point of the static map.
+     *
+     * @param position Position object with valid latitude and longitude values
+     * @return Builder
+     * @since 2.1.0
+     */
+    public Builder setPosition(Position position) {
       this.lat = position.getLatitude();
       this.lon = position.getLongitude();
       return this;
@@ -204,7 +265,30 @@ public class MapboxStaticImage {
     }
 
     /**
-     * width of the image.
+     * If auto is set to true, the viewport will fit the bounds of the overlay. Using this will replace any latitude or
+     * longitude you provide.
+     *
+     * @param auto true if you'd like the viewport to be centered to display all map annotations, defaults false.
+     * @return Builder
+     * @since 2.1.0
+     */
+    public Builder setAuto(boolean auto) {
+      this.auto = auto;
+      return this;
+    }
+
+    /**
+     * Determine if auto has been set for the static image camera positioning.
+     *
+     * @return boolean true if auto has been set, otherwise false.
+     * @since 2.1.0
+     */
+    public boolean isAuto() {
+      return auto;
+    }
+
+    /**
+     * Width of the image.
      *
      * @param width int number between 1 and 1280.
      * @return Builder
@@ -277,6 +361,29 @@ public class MapboxStaticImage {
     }
 
     /**
+     * String value for controlling where the overlay is inserted in the style. All overlays will be inserted before
+     * this specified layer.
+     *
+     * @param beforeLayer A string representing the map layer you'd like to place your overlays below.
+     * @return Builder
+     * @since 2.1.0
+     */
+    public Builder setBeforeLayer(String beforeLayer) {
+      this.beforeLayer = beforeLayer;
+      return this;
+    }
+
+    /**
+     * Provides the string being used to represent the layer you wish to place all your overlays below.
+     *
+     * @return a String representing the map styles layer.
+     * @since 2.1.0
+     */
+    public String getBeforeLayer() {
+      return beforeLayer;
+    }
+
+    /**
      * Get the access token
      *
      * @return String with the access token
@@ -317,13 +424,12 @@ public class MapboxStaticImage {
      */
     public String getLocationPathSegment() {
       if (precision > 0) {
-        String pattern = "0." + new String(new char[precision]).replace("\0", "0");
-        DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
-        df.applyPattern(pattern);
-        df.setRoundingMode(RoundingMode.FLOOR);
         return String.format(Locale.US, "%s,%s,%s,%s,%s",
-          df.format(lon), df.format(lat), df.format(zoom),
-          df.format(bearing), df.format(pitch));
+          TextUtils.formatCoordinate(lon, precision),
+          TextUtils.formatCoordinate(lat, precision),
+          TextUtils.formatCoordinate(zoom, precision),
+          TextUtils.formatCoordinate(bearing, precision),
+          TextUtils.formatCoordinate(pitch, precision));
       } else {
         return String.format(Locale.US, "%f,%f,%f,%f,%f", lon, lat, zoom, bearing, pitch);
       }
@@ -338,6 +444,58 @@ public class MapboxStaticImage {
     public String getSizePathSegment() {
       String retinaPath = retina ? "@2x" : "";
       return String.format(Locale.US, "%dx%d%s", width, height, retinaPath);
+    }
+
+    /**
+     * Allows the passing of a {@link StaticMarkerAnnotation} or Markers which are placed on the static map image
+     * returned.
+     *
+     * @param staticMarkerAnnotations One or more {@link StaticMarkerAnnotation}s to be placed on your static image.
+     * @return This static image builder.
+     * @since 2.1.0
+     */
+    public Builder setStaticMarkerAnnotations(StaticMarkerAnnotation... staticMarkerAnnotations) {
+      this.staticMarkerAnnotations = staticMarkerAnnotations;
+      return this;
+    }
+
+    /**
+     * Allows the passing of a {@link StaticPolylineAnnotation} or Polylines which are placed on the static map image
+     * returned.
+     *
+     * @param staticPolylineAnnotations One or more {@link StaticPolylineAnnotation}s to be placed on your static image.
+     * @return This static image builder.
+     * @since 2.1.0
+     */
+    public Builder setStaticPolylineAnnotations(StaticPolylineAnnotation... staticPolylineAnnotations) {
+      this.staticPolylineAnnotations = staticPolylineAnnotations;
+      return this;
+    }
+
+    /**
+     * Provides a String containing all of the currently added overlays added to the static image builder.
+     *
+     * @return the formatted string which will be used to pass in any overlays to be placed on the static image.
+     * @since 2.1.0
+     */
+    public String getOverlays() {
+      List<String> formattedOverlays = new ArrayList<>();
+      if (staticMarkerAnnotations != null) {
+        for (StaticMarkerAnnotation staticMarkerAnnotation : staticMarkerAnnotations) {
+          formattedOverlays.add(staticMarkerAnnotation.getMarker());
+        }
+      }
+      if (staticPolylineAnnotations != null) {
+        for (StaticPolylineAnnotation staticPolylineAnnotation : staticPolylineAnnotations) {
+          formattedOverlays.add(staticPolylineAnnotation.getPath());
+        }
+      }
+
+      if (geoJson != null) {
+        formattedOverlays.add(geoJson);
+      }
+
+      return TextUtils.join(",", formattedOverlays.toArray());
     }
 
     /**
@@ -400,12 +558,14 @@ public class MapboxStaticImage {
         throw new ServicesException("You need to set a map style.");
       }
 
-      if (lon == null || lat == null) {
-        throw new ServicesException("You need to set the map lon/lat coordinates.");
+      if ((lon == null || lat == null) && !auto) {
+        throw new ServicesException("You need to set the map lon/lat coordinates or set auto to true.");
       }
 
-      if (zoom == null) {
-        throw new ServicesException("You need to set the map zoom level.");
+      if (zoom != null) {
+        if (zoom < 0 || zoom > 20) {
+          throw new ServicesException("The zoom level provided must be a value between 0 and 20.");
+        }
       }
 
       if (width == null || width < 1 || width > 1280) {
@@ -420,7 +580,5 @@ public class MapboxStaticImage {
 
       return new MapboxStaticImage(this);
     }
-
   }
-
 }

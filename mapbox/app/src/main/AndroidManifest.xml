@@ -135,6 +135,13 @@
                 android:value=".MainActivity"/>
         </activity>
         <activity
+            android:name=".staticimage.StaticImageWithAnnotationsActivity"
+            android:label="@string/title_static_image_with_annotations">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+        <activity
             android:name=".optimizedtrip.OptimizedTripActivity"
             android:label="@string/title_optimized_trip">
             <meta-data

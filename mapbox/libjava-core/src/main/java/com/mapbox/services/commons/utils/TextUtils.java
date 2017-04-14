@@ -2,6 +2,7 @@ package com.mapbox.services.commons.utils;
 
 import com.mapbox.services.Constants;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -58,11 +59,26 @@ public class TextUtils {
    *
    * @param coordinate a double value representing a coordinate.
    * @return a formatted string.
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public static String formatCoordinate(double coordinate) {
     DecimalFormat decimalFormat = new DecimalFormat("0.######", new DecimalFormatSymbols(Locale.US));
     return String.format(Constants.DEFAULT_LOCALE, "%s",
       decimalFormat.format(coordinate));
+  }
+
+  /**
+   * Allows the specific adjusting of a coordinates precision.
+   *
+   * @param coordinate a double value representing a coordinate.
+   * @return a formatted string.
+   * @since 2.1.0
+   */
+  public static String formatCoordinate(double coordinate, int precision) {
+    String pattern = "0." + new String(new char[precision]).replace("\0", "0");
+    DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(Locale.US);
+    df.applyPattern(pattern);
+    df.setRoundingMode(RoundingMode.FLOOR);
+    return df.format(coordinate);
   }
 }

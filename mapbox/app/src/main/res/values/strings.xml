@@ -31,7 +31,8 @@
     <string name="title_geocoding_service">Geocoding service</string>
     <string name="title_maki_icons">Maki icons</string>
     <string name="title_static_image">Static image</string>
-    <string name="title_simplify_polyline">Simplify polyline</string>
+    <string name="title_static_image_with_annotations">Static Image with Annotations</string>
+    <string name="title_simplify_polyline">Simplify staticPolylineAnnotation</string>
     <string name="title_map_matching">Map matching</string>
     <string name="title_turf_bearing">Turf bearing</string>
     <string name="title_turf_destination">Turf destination</string>
@@ -50,6 +51,7 @@
     <string name="description_geocoding_service">Gets your current location and returns information using geocoder.</string>
     <string name="description_maki_icons">List of the Maki icons.</string>
     <string name="description_static_image">Use the static map API and display in an image view.</string>
+    <string name="description_static_image_with_annotations">Use the static map API with Annotations and display in an image view.</string>
     <string name="description_simplify_polyline">Take a polyline and simplify it\'s geometry.</string>
     <string name="description_map_matching">Use the map matching API to match a route to a road.</string>
     <string name="description_turf_bearing">Use Turf to get the bearing.</string>
