@@ -325,7 +325,6 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       return accessToken;
     }
 
-
     @Override
     public MapboxOptimizedTrips build() throws ServicesException {
       validateAccessToken(accessToken);
@@ -351,6 +350,4 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       return new MapboxOptimizedTrips(this);
     }
   }
-
-
 }
