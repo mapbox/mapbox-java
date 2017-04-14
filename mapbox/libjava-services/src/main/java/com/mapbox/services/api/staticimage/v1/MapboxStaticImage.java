@@ -3,8 +3,8 @@ package com.mapbox.services.api.staticimage.v1;
 import com.mapbox.services.Constants;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.staticimage.v1.models.Marker;
-import com.mapbox.services.api.staticimage.v1.models.Polyline;
+import com.mapbox.services.api.staticimage.v1.models.StaticMarkerAnnotation;
+import com.mapbox.services.api.staticimage.v1.models.StaticPolylineAnnotation;
 import com.mapbox.services.commons.geojson.GeoJSON;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
@@ -108,8 +108,8 @@ public class MapboxStaticImage {
     private boolean retina = false;
     private boolean attribution = true;
     private boolean logo = true;
-    private Marker[] markers;
-    private Polyline[] polylines;
+    private StaticMarkerAnnotation[] staticMarkerAnnotations;
+    private StaticPolylineAnnotation[] staticPolylineAnnotations;
     private String geoJson;
 
     // This field isn't part of the URL
@@ -450,26 +450,26 @@ public class MapboxStaticImage {
     }
 
     /**
-     * Allows the passing of a {@link Marker} or Markers which are placed on the static map image returned.
+     * Allows the passing of a {@link StaticMarkerAnnotation} or Markers which are placed on the static map image returned.
      *
-     * @param markers One or more {@link Marker}s to be placed on your static image.
+     * @param staticMarkerAnnotations One or more {@link StaticMarkerAnnotation}s to be placed on your static image.
      * @return This static image builder.
      * @since 2.1.0
      */
-    public Builder setMarkers(Marker... markers) {
-      this.markers = markers;
+    public Builder setStaticMarkerAnnotations(StaticMarkerAnnotation... staticMarkerAnnotations) {
+      this.staticMarkerAnnotations = staticMarkerAnnotations;
       return this;
     }
 
     /**
-     * Allows the passing of a {@link Polyline} or Polylines which are placed on the static map image returned.
+     * Allows the passing of a {@link StaticPolylineAnnotation} or Polylines which are placed on the static map image returned.
      *
-     * @param polylines One or more {@link Polyline}s to be placed on your static image.
+     * @param staticPolylineAnnotations One or more {@link StaticPolylineAnnotation}s to be placed on your static image.
      * @return This static image builder.
      * @since 2.1.0
      */
-    public Builder setPolylines(Polyline... polylines) {
-      this.polylines = polylines;
+    public Builder setStaticPolylineAnnotations(StaticPolylineAnnotation... staticPolylineAnnotations) {
+      this.staticPolylineAnnotations = staticPolylineAnnotations;
       return this;
     }
 
@@ -481,14 +481,14 @@ public class MapboxStaticImage {
      */
     public String getOverlays() {
       List<String> formattedOverlays = new ArrayList<>();
-      if (markers != null) {
-        for (Marker marker : markers) {
-          formattedOverlays.add(marker.getMarker());
+      if (staticMarkerAnnotations != null) {
+        for (StaticMarkerAnnotation staticMarkerAnnotation : staticMarkerAnnotations) {
+          formattedOverlays.add(staticMarkerAnnotation.getMarker());
         }
       }
-      if (polylines != null) {
-        for (Polyline polyline : polylines) {
-          formattedOverlays.add(polyline.getPath());
+      if (staticPolylineAnnotations != null) {
+        for (StaticPolylineAnnotation staticPolylineAnnotation : staticPolylineAnnotations) {
+          formattedOverlays.add(staticPolylineAnnotation.getPath());
         }
       }
 

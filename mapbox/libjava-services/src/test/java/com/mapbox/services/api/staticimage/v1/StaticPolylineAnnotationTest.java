@@ -2,7 +2,7 @@ package com.mapbox.services.api.staticimage.v1;
 
 import com.mapbox.services.Constants;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.staticimage.v1.models.Polyline;
+import com.mapbox.services.api.staticimage.v1.models.StaticPolylineAnnotation;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.PolylineUtils;
 
@@ -16,18 +16,18 @@ import java.util.List;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertTrue;
 
-public class StaticImagePolylineTest {
+public class StaticPolylineAnnotationTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void testSanity() throws ServicesException {
-    Polyline polyline = new Polyline.Builder()
+    StaticPolylineAnnotation staticPolylineAnnotation = new StaticPolylineAnnotation.Builder()
       .setPolyline("%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM")
       .build();
 
-    assertTrue(polyline.getPath().contains("path(%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM)"));
+    assertTrue(staticPolylineAnnotation.getPath().contains("path(%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM)"));
   }
 
   @Test
@@ -36,7 +36,7 @@ public class StaticImagePolylineTest {
     thrown.expectMessage(startsWith(
       "Creating a path overlay requires a valid polyline string."));
 
-    new Polyline.Builder().setFillColor("000").build();
+    new StaticPolylineAnnotation.Builder().setFillColor("000").build();
   }
 
   @Test
@@ -49,7 +49,7 @@ public class StaticImagePolylineTest {
     coords.add(Position.fromCoordinates(1.0, 2.0));
     coords.add(Position.fromCoordinates(5.0, 6.0));
 
-    new Polyline.Builder()
+    new StaticPolylineAnnotation.Builder()
       .setStrokeWidth(-10)
       .setPolyline(PolylineUtils.encode(coords, Constants.PRECISION_5))
       .build();
@@ -65,7 +65,7 @@ public class StaticImagePolylineTest {
     coords.add(Position.fromCoordinates(1.0, 2.0));
     coords.add(Position.fromCoordinates(5.0, 6.0));
 
-    new Polyline.Builder()
+    new StaticPolylineAnnotation.Builder()
       .setStrokeWidth(2)
       .setStrokeOpacity(2)
       .setPolyline(PolylineUtils.encode(coords, Constants.PRECISION_5))
@@ -78,14 +78,14 @@ public class StaticImagePolylineTest {
     coords.add(Position.fromCoordinates(1.0, 2.0));
     coords.add(Position.fromCoordinates(5.0, 6.0));
 
-    Polyline polyline = new Polyline.Builder()
+    StaticPolylineAnnotation staticPolylineAnnotation = new StaticPolylineAnnotation.Builder()
       .setPolyline(PolylineUtils.encode(coords, Constants.PRECISION_5))
       .build();
 
     MapboxStaticImage image = new MapboxStaticImage.Builder()
       .setAccessToken("pk.")
       .setStyleId(Constants.MAPBOX_STYLE_STREETS)
-      .setPolylines(polyline)
+      .setStaticPolylineAnnotations(staticPolylineAnnotation)
       .setAuto(true)
       .setWidth(100).setHeight(200)
       .build();

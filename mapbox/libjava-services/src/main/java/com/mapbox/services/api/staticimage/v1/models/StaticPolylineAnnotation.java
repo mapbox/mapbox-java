@@ -13,17 +13,17 @@ import java.util.regex.Pattern;
  *
  * @since 2.1.0
  */
-public class Polyline {
+public class StaticPolylineAnnotation {
 
   private String path;
 
   /**
-   * A Polyline constructor
+   * A StaticPolylineAnnotation constructor
    *
-   * @param builder a Polyline builder.
+   * @param builder a StaticPolylineAnnotation builder.
    * @since 2.1.0
    */
-  public Polyline(Builder builder) {
+  public StaticPolylineAnnotation(Builder builder) {
 
     StringBuilder sb = new StringBuilder();
 
@@ -86,7 +86,7 @@ public class Polyline {
      * occur.
      *
      * @param strokeWidth A positive double value.
-     * @return This Polyline builder.
+     * @return This StaticPolylineAnnotation builder.
      * @since 2.1.0
      */
     public Builder setStrokeWidth(double strokeWidth) {
@@ -109,7 +109,7 @@ public class Polyline {
      * {@link ServicesException} will occur.
      *
      * @param strokeColor A string containing a 3 or 6 digit hexadecimal color code.
-     * @return This Polyline builder.
+     * @return This StaticPolylineAnnotation builder.
      * @since 2.1.0
      */
     public Builder setStrokeColor(String strokeColor) {
@@ -132,7 +132,7 @@ public class Polyline {
      * {@link ServicesException} will occur.
      *
      * @param strokeOpacity a float value between 0 and 1 representing the lines opacity.
-     * @return This Polyline builder.
+     * @return This StaticPolylineAnnotation builder.
      * @since 2.1.0
      */
     public Builder setStrokeOpacity(float strokeOpacity) {
@@ -155,7 +155,7 @@ public class Polyline {
      * {@link ServicesException} will occur.
      *
      * @param fillColor a string containing a 3 or 6 digit hexadecimal color code.
-     * @return This Polyline builder.
+     * @return This StaticPolylineAnnotation builder.
      * @since 2.1.0
      */
     public Builder setFillColor(String fillColor) {
@@ -178,7 +178,7 @@ public class Polyline {
      * provided, a {@link ServicesException} will occur.
      *
      * @param fillOpacity a Float value between 0 and 1.
-     * @return This Polyline builder.
+     * @return This StaticPolylineAnnotation builder.
      * @since 2.1.0
      */
     public Builder setFillOpacity(float fillOpacity) {
@@ -203,7 +203,7 @@ public class Polyline {
      * {@link com.mapbox.services.commons.utils.PolylineUtils#encode(List, int)} utility.
      *
      * @param polyline A string containing the paths geometry information.
-     * @return This Polyline buidler.
+     * @return This StaticPolylineAnnotation buidler.
      * @since 2.1.0
      */
     public Builder setPolyline(String polyline) {
@@ -212,13 +212,13 @@ public class Polyline {
     }
 
     /**
-     * Call to build a new instance of a Polyline object.
+     * Call to build a new instance of a StaticPolylineAnnotation object.
      *
      * @return a polyline object ready for usage with the Static Image API.
      * @throws ServicesException If any issues are recognized that could cause API errors.
      * @since 2.1.0
      */
-    public Polyline build() throws ServicesException {
+    public StaticPolylineAnnotation build() throws ServicesException {
 
       if (polyline == null) {
         throw new ServicesException("Creating a path overlay requires a valid polyline string.");
@@ -260,13 +260,7 @@ public class Polyline {
         }
       }
 
-      return new Polyline(this);
+      return new StaticPolylineAnnotation(this);
     }
   }
 }
-
-
-
-
-
-

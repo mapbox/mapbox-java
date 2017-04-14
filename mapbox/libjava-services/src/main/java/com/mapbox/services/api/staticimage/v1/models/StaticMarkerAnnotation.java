@@ -17,17 +17,17 @@ import java.util.regex.Pattern;
  *
  * @since 2.1.0
  */
-public class Marker {
+public class StaticMarkerAnnotation {
 
   private String marker;
 
   /**
-   * A Marker constructor
+   * A StaticMarkerAnnotation constructor
    *
-   * @param builder a Marker builder.
+   * @param builder a StaticMarkerAnnotation builder.
    * @since 2.1.0
    */
-  public Marker(Builder builder) {
+  public StaticMarkerAnnotation(Builder builder) {
 
     if (builder.getPrecision() > 0) {
       String pattern = "0." + new String(new char[builder.getPrecision()]).replace("\0", "0");
@@ -97,7 +97,7 @@ public class Marker {
      * The URL for the your custom marker icon. Can be of type {@code PNG} or {@code JPG}.
      *
      * @param url The direct url to your image that will be used for the marker icon.
-     * @return This Marker builder.
+     * @return This StaticMarkerAnnotation builder.
      * @since 2.1.0
      */
     public Builder setUrl(String url) {
@@ -116,11 +116,11 @@ public class Marker {
     }
 
     /**
-     * Marker shape and size. Options are {@link Constants#PIN_SMALL}, {@link Constants#PIN_MEDIUM}, or
+     * StaticMarkerAnnotation shape and size. Options are {@link Constants#PIN_SMALL}, {@link Constants#PIN_MEDIUM}, or
      * {@link Constants#PIN_SMALL}.
      *
      * @param name String containing the shape and size
-     * @return This Marker builder
+     * @return This StaticMarkerAnnotation builder
      * @since 2.1.0
      */
     public Builder setName(String name) {
@@ -129,7 +129,7 @@ public class Marker {
     }
 
     /**
-     * Marker symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through {@code 99}, or a
+     * StaticMarkerAnnotation symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through {@code 99}, or a
      * valid Mapbox Maki icon. If a letter is requested, it will be rendered uppercase only.
      *
      * @return String containing the marker symbol.
@@ -140,11 +140,11 @@ public class Marker {
     }
 
     /**
-     * Marker symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through {@code 99}, or a
+     * StaticMarkerAnnotation symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through {@code 99}, or a
      * valid Maki icon. If a letter is requested, it will be rendered uppercase only.
      *
      * @param label String containing the marker symbol.
-     * @return This Marker builder.
+     * @return This StaticMarkerAnnotation builder.
      * @since 2.1.0
      */
     public Builder setLabel(String label) {
@@ -167,7 +167,7 @@ public class Marker {
      * {@link ServicesException} will occur.
      *
      * @param color String containing the color.
-     * @return This Marker builder.
+     * @return This StaticMarkerAnnotation builder.
      * @since 2.1.0
      */
     public Builder setColor(String color) {
@@ -190,7 +190,7 @@ public class Marker {
      * marker to be placed.
      *
      * @param position A {@link Position} object.
-     * @return This Marker builder.
+     * @return This StaticMarkerAnnotation builder.
      * @since 2.1.0
      */
     public Builder setPosition(Position position) {
@@ -263,7 +263,7 @@ public class Marker {
       return precision;
     }
 
-    public Marker build() throws ServicesException {
+    public StaticMarkerAnnotation build() throws ServicesException {
 
       if (url == null && (name == null || name.isEmpty() || !name.equals(Constants.PIN_SMALL)
         && !name.equals(Constants.PIN_MEDIUM) && !name.equals(Constants.PIN_LARGE))) {
@@ -285,7 +285,7 @@ public class Marker {
         }
       }
 
-      return new Marker(this);
+      return new StaticMarkerAnnotation(this);
     }
   }
 }

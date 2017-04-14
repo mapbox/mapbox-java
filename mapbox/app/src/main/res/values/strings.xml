@@ -31,8 +31,8 @@
     <string name="title_geocoding_service">Geocoding service</string>
     <string name="title_maki_icons">Maki icons</string>
     <string name="title_static_image">Static image</string>
-    <string name="title_static_image_with_annotations">Static image with Annotations</string>
-    <string name="title_simplify_polyline">Simplify polyline</string>
+    <string name="title_static_image_with_annotations">Static Image with Annotations</string>
+    <string name="title_simplify_polyline">Simplify staticPolylineAnnotation</string>
     <string name="title_map_matching">Map matching</string>
     <string name="title_turf_bearing">Turf bearing</string>
     <string name="title_turf_destination">Turf destination</string>
@@ -92,7 +92,5 @@
         <item>Lost</item>
         <item>Google Play Services</item>
     </string-array>
-    <string name="title_activity_static_image_with_annotations">Static Image With AnnotationsActivity
-    </string>
 
 </resources>

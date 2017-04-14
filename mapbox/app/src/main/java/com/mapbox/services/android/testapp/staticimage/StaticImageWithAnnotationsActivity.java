@@ -8,8 +8,8 @@ import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.api.staticimage.v1.MapboxStaticImage;
-import com.mapbox.services.api.staticimage.v1.models.Marker;
-import com.mapbox.services.api.staticimage.v1.models.Polyline;
+import com.mapbox.services.api.staticimage.v1.models.StaticMarkerAnnotation;
+import com.mapbox.services.api.staticimage.v1.models.StaticPolylineAnnotation;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
@@ -26,33 +26,32 @@ public class StaticImageWithAnnotationsActivity extends AppCompatActivity {
     ImageView parisImageView = (ImageView) findViewById(R.id.parisImageView);
     ImageView londonImageView = (ImageView) findViewById(R.id.londonImageView);
 
-    Marker firstMarker = new Marker.Builder()
+    StaticMarkerAnnotation firstStaticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
       .setName(Constants.PIN_SMALL)
       .setPosition(Position.fromCoordinates(-122.46589, 37.77343))
       .setColor("9ed4bd")
       .setLabel("a")
       .build();
 
-    Marker secondMarker = new Marker.Builder()
+    StaticMarkerAnnotation secondStaticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
       .setName(Constants.PIN_SMALL)
       .setPosition(Position.fromCoordinates(-122.42816, 37.75965))
       .setColor("000")
       .setLabel("b")
       .build();
 
-    Polyline polyline = new Polyline.Builder()
+    StaticPolylineAnnotation staticPolylineAnnotation = new StaticPolylineAnnotation.Builder()
       .setPolyline("%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM")
       .setStrokeOpacity(0.5f)
       .setStrokeColor("f44")
       .setStrokeWidth(5)
       .build();
 
-
     MapboxStaticImage veniceStaticImage = new MapboxStaticImage.Builder()
       .setAccessToken(Mapbox.getAccessToken())
       .setStyleId("streets-v10")
-      .setMarkers(firstMarker, secondMarker)
-      .setPolylines(polyline)
+      .setStaticMarkerAnnotations(firstStaticMarkerAnnotation, secondStaticMarkerAnnotation)
+      .setStaticPolylineAnnotations(staticPolylineAnnotation)
       .setAuto(true)
       .setWidth(320)
       .setHeight(320)
@@ -61,7 +60,7 @@ public class StaticImageWithAnnotationsActivity extends AppCompatActivity {
 
     Picasso.with(this).load(veniceStaticImage.getUrl().toString()).into(veniceImageView);
 
-    Marker customMarker = new Marker.Builder()
+    StaticMarkerAnnotation customStaticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
       .setUrl("https://www.mapbox.com/img/rocket.png")
       .setPosition(Position.fromCoordinates(2.29450, 48.85826))
       .build();
@@ -69,7 +68,7 @@ public class StaticImageWithAnnotationsActivity extends AppCompatActivity {
     MapboxStaticImage parisStaticImage = new MapboxStaticImage.Builder()
       .setAccessToken(Mapbox.getAccessToken())
       .setStyleId(Constants.MAPBOX_STYLE_OUTDOORS)
-      .setMarkers(customMarker)
+      .setStaticMarkerAnnotations(customStaticMarkerAnnotation)
       .setLat(48.85826)
       .setLon(2.29450)
       .setZoom(16)
@@ -93,8 +92,6 @@ public class StaticImageWithAnnotationsActivity extends AppCompatActivity {
       .setHeight(320)
       .setRetina(true)
       .build();
-
-    System.out.println(londonStaticImage.getUrl().toString());
 
     Picasso.with(this).load(londonStaticImage.getUrl().toString()).into(londonImageView);
   }

@@ -136,7 +136,7 @@
         </activity>
         <activity
             android:name=".staticimage.StaticImageWithAnnotationsActivity"
-            android:label="@string/title_activity_static_image_with_annotations">
+            android:label="@string/title_static_image_with_annotations">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
