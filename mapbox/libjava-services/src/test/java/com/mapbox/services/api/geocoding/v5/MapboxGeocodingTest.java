@@ -6,6 +6,7 @@ import com.mapbox.services.api.geocoding.v5.models.CarmenContext;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.commons.models.Position;
 
 import org.junit.After;
 import org.junit.Before;
@@ -197,6 +198,28 @@ public class MapboxGeocodingTest {
     Response<GeocodingResponse> response = client.executeCall();
 
     assertEquals(0, response.body().getFeatures().size());
+  }
+
+  @Test
+  public void testBbox() throws IOException, ServicesException {
+    MapboxGeocoding clientNeSw = new MapboxGeocoding.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setLocation("1600 pennsylvania ave nw")
+      .setBbox(Position.fromCoordinates(-77.0035, 38.9115), Position.fromCoordinates(-77.0702, 38.8561))
+      .setBaseUrl(mockUrl.toString())
+      .build();
+
+    MapboxGeocoding clientMinMax = new MapboxGeocoding.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setLocation("1600 pennsylvania ave nw")
+      .setBbox(-77.0035, 38.9115, -77.0702, 38.8561)
+      .setBaseUrl(mockUrl.toString())
+      .build();
+
+    assertTrue(
+      clientNeSw.executeCall().raw().request().url().toString().contains("bbox=-77.0702,38.8561,-77.0035,38.9115"));
+    assertTrue(
+      clientMinMax.executeCall().raw().request().url().toString().contains("bbox=-77.0035,38.9115,-77.0702,38.8561"));
   }
 
   @Test

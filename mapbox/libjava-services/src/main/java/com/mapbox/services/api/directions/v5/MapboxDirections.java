@@ -3,9 +3,9 @@ package com.mapbox.services.api.directions.v5;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
-import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -398,22 +398,22 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       List<String> coordinatesFormatted = new ArrayList<>();
       // Insert origin at beginning of list if one is provided.
       if (origin != null) {
-        coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
-          origin.getLongitude(),
-          origin.getLatitude()));
+        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+          TextUtils.formatCoordinate(origin.getLongitude()),
+          TextUtils.formatCoordinate(origin.getLatitude())));
       }
       if (coordinates != null) {
         for (Position coordinate : coordinates) {
-          coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
-            coordinate.getLongitude(),
-            coordinate.getLatitude()));
+          coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+            TextUtils.formatCoordinate(coordinate.getLongitude()),
+            TextUtils.formatCoordinate(coordinate.getLatitude())));
         }
       }
       // Insert destination at end of list if one is provided.
       if (destination != null) {
-        coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
-          destination.getLongitude(),
-          destination.getLatitude()));
+        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+          TextUtils.formatCoordinate(destination.getLongitude()),
+          TextUtils.formatCoordinate(destination.getLatitude())));
       }
 
       return TextUtils.join(";", coordinatesFormatted.toArray());
@@ -468,7 +468,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         if (bearings[i].length == 0) {
           bearingFormatted[i] = "";
         } else {
-          bearingFormatted[i] = String.format(Locale.US, "%f,%f", bearings[i][0], bearings[i][1]);
+          bearingFormatted[i] = String.format(Locale.US, "%s,%s",
+            TextUtils.formatCoordinate(bearings[i][0]),
+            TextUtils.formatCoordinate(bearings[i][1]));
         }
       }
       return TextUtils.join(";", bearingFormatted);
@@ -499,7 +501,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         if (radiuses[i] == Double.POSITIVE_INFINITY) {
           radiusesFormatted[i] = "unlimited";
         } else {
-          radiusesFormatted[i] = String.format(Locale.US, "%f", radiuses[i]);
+          radiusesFormatted[i] = String.format(Locale.US, "%s", TextUtils.formatCoordinate(radiuses[i]));
         }
       }
 

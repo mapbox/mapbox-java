@@ -294,9 +294,10 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       if (position == null) {
         return (T) this;
       }
-      query = String.format(Locale.US, "%f,%f",
-        position.getLongitude(),
-        position.getLatitude());
+
+      query = String.format(Locale.US, "%s,%s",
+        TextUtils.formatCoordinate(position.getLongitude()),
+        TextUtils.formatCoordinate(position.getLatitude()));
       return (T) this;
     }
 
@@ -347,9 +348,9 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       if (position == null) {
         return (T) this;
       }
-      proximity = String.format(Locale.US, "%f,%f",
-        position.getLongitude(),
-        position.getLatitude());
+      proximity = String.format(Locale.US, "%s,%s",
+        TextUtils.formatCoordinate(position.getLongitude()),
+        TextUtils.formatCoordinate(position.getLatitude()));
       return (T) this;
     }
 
@@ -421,7 +422,11 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         throw new ServicesException("You provided an empty bounding box");
       }
 
-      this.bbox = String.format(Locale.US, "%f,%f,%f,%f", minX, minY, maxX, maxY);
+      this.bbox = String.format(Locale.US, "%s,%s,%s,%s",
+        TextUtils.formatCoordinate(minX),
+        TextUtils.formatCoordinate(minY),
+        TextUtils.formatCoordinate(maxX),
+        TextUtils.formatCoordinate(maxY));
       return (T) this;
     }
 
@@ -529,16 +534,16 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
     /**
      * The locale in which results should be returned.
-     *
+     * <p>
      * This property affects the language of returned results; generally speaking,
      * it does not determine which results are found. If the Geocoding API does not
      * recognize the language code, it may fall back to another language or the default
      * language. Components other than the language code, such as the country and
      * script codes, are ignored.
-     *
+     * <p>
      * By default, this property is set to `null`, causing results to be in the default
      * language.
-     *
+     * <p>
      * This option is experimental.
      *
      * @param language The locale in which results should be returned.

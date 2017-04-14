@@ -213,9 +213,9 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     public String getCoordinates() {
       List<String> coordinatesFormatted = new ArrayList<>();
       for (Position coordinate : coordinates) {
-        coordinatesFormatted.add(String.format(Locale.US, "%f,%f",
-          coordinate.getLongitude(),
-          coordinate.getLatitude()));
+        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+          TextUtils.formatCoordinate(coordinate.getLongitude()),
+          TextUtils.formatCoordinate(coordinate.getLatitude())));
       }
 
       return TextUtils.join(";", coordinatesFormatted.toArray());

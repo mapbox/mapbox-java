@@ -36,5 +36,4 @@ public class FeatureCollectionTest extends BaseTest {
     FeatureCollection geo = FeatureCollection.fromJson(geojson);
     compareJson(geojson, geo.toJson());
   }
-
 }
