@@ -21,6 +21,8 @@ import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.location.LocationEngineActivity;
+import com.mapbox.services.android.testapp.optimizedtrip.OptimizedTripActivity;
+
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
 import com.mapbox.services.android.testapp.turf.TurfDestinationActivity;
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     setContentView(R.layout.activity_main);
 
     final List<SampleItem> samples = new ArrayList<>(Arrays.asList(
+      new SampleItem(
+        getString(R.string.title_optimized_trip),
+        getString(R.string.description_optimized_trip),
+        OptimizedTripActivity.class),
       new SampleItem(
         getString(R.string.title_location),
         getString(R.string.description_location),

@@ -116,8 +116,7 @@ mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/mapmatching_v5_polyline.json
 
-distance-fixtures:
-	# Retrieve a duration matrix
-	curl -X POST --header "Content-Type:application/json" -d @mapbox/libjava-services/src/test/fixtures/distance_coordinates.json \
-		"https://api.mapbox.com/distances/v1/mapbox/driving?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/distance_v1.json
+optimized-trips-fixtures:
+	# request an optimized car trip with no additional options
+	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o mapbox/libjava-services/src/test/fixtures/optimized_trip.json

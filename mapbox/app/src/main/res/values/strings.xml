@@ -59,6 +59,9 @@
     <string name="description_turf_inside">Use Turf to determine if something is within a polygon.</string>
     <string name="description_turf_midpoint">Use Turf to get a midpoint.</string>
     <string name="description_connectivity">Keep track of the connectivity status.</string>
+    <string name="title_optimized_trip">Optimized Trip</string>
+    <string name="description_optimized_trip">Use the optimized trip API to solve the traveling salesperson problem</string>
+
 
     <string-array name="turf_calculation_items">
         <item>Select calculation</item>

@@ -117,6 +117,11 @@ public class DirectionsCriteria {
    */
   public static final String RESPONSE_OK = "Ok";
 
+  public static final String SOURCE_FIRST = "first";
+  public static final String SOURCE_ANY = "any";
+  public static final String SOURCE_LAST = "last";
+
+
   /**
    * There was no route found for the given query.
    *

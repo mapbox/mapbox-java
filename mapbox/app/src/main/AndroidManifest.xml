@@ -134,6 +134,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
+        <activity
+            android:name=".optimizedtrip.OptimizedTripActivity"
+            android:label="@string/title_optimized_trip">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
 
         <!--
         Service to asynchronously fetch a location address using a Geocoder. Setting the
