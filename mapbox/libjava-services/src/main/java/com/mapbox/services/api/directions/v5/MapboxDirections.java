@@ -370,6 +370,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     /**
+     * The current profile set for usage with the Directions API.
+     *
      * @return {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING_TRAFFIC},
      * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING},
      * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_CYCLING},
@@ -539,11 +541,25 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return TextUtils.join(",", annotation);
     }
 
+    /**
+     * Base package name or other simple string identifier
+     *
+     * @param appName base package name or other simple string identifier
+     * @return Builder
+     * @since 1.3.0
+     */
     public T setClientAppName(String appName) {
       super.clientAppName = appName;
       return (T) this;
     }
 
+    /**
+     * Optionally change the APIs base URL to something other then the default Mapbox one.
+     *
+     * @param baseUrl base url used as end point
+     * @return Builder
+     * @since 1.3.0
+     */
     public T setBaseUrl(String baseUrl) {
       super.baseUrl = baseUrl;
       return (T) this;
