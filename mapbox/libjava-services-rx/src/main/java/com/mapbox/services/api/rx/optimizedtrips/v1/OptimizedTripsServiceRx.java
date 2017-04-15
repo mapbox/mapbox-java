@@ -1,6 +1,5 @@
 package com.mapbox.services.api.rx.optimizedtrips.v1;
 
-import com.mapbox.services.api.directionsmatrix.v1.models.DirectionsMatrixResponse;
 import com.mapbox.services.api.optimizedtrips.v1.models.OptimizedTripsResponse;
 
 import io.reactivex.Observable;
