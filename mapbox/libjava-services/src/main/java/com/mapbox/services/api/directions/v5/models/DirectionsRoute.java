@@ -37,7 +37,7 @@ public class DirectionsRoute {
    * <p>
    * Sets a double number with unit meters.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setDistance(double distance) {
     this.distance = distance;
@@ -74,7 +74,7 @@ public class DirectionsRoute {
    * <p>
    * Sets a double number with unit seconds.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setDuration(double duration) {
     this.duration = duration;
@@ -95,7 +95,7 @@ public class DirectionsRoute {
    * <p>
    * Sets An encoded polyline string.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setGeometry(String geometry) {
     this.geometry = geometry;
@@ -118,7 +118,7 @@ public class DirectionsRoute {
    * <p>
    * Sets List of {@link RouteLeg} objects.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setLegs(List<RouteLeg> legs) {
     this.legs = legs;

@@ -32,7 +32,7 @@ public class IntersectionLanes {
    * instance, if the lane array has four objects and the first two are marked as valid, then the
    * driver can take either of the left lanes and stay on the route.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setValid(boolean valid) {
     this.valid = valid;
@@ -53,7 +53,7 @@ public class IntersectionLanes {
    * lane can have a sign with an arrow pointing left and another sign with an arrow pointing
    * straight.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setIndications(String[] indications) {
     this.indications = indications;

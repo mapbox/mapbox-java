@@ -221,6 +221,7 @@ public class StaticMarkerAnnotation {
      * Latitude for the center point of the static map.
      *
      * @param lat double number between -90 and 90.
+     * @return This StaticMarkerAnnotation builder.
      * @since 2.1.0
      */
     public Builder setLat(Double lat) {
@@ -242,6 +243,7 @@ public class StaticMarkerAnnotation {
      * Longitude for the center point of the static map.
      *
      * @param lon double number between -180 and 180.
+     * @return This StaticMarkerAnnotation builder.
      * @since 2.1.0
      */
     public Builder setLon(Double lon) {
@@ -254,6 +256,7 @@ public class StaticMarkerAnnotation {
      * precision in decimals instead of manually rounding the parameters.
      *
      * @param precision int number representing the precision for the formatter
+     * @return This StaticMarkerAnnotation builder.
      * @since 2.1.0
      */
     public Builder setPrecision(int precision) {

@@ -42,7 +42,7 @@ public class StepManeuver {
   /**
    * Sets double array of [longitude, latitude] for the snapped coordinate.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setLocation(double[] location) {
     this.location = location;
@@ -65,7 +65,7 @@ public class StepManeuver {
    * <p>
    * Sets double with value from 0 to 360.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setBearingBefore(double bearingBefore) {
     this.bearingBefore = bearingBefore;
@@ -88,7 +88,7 @@ public class StepManeuver {
    * <p>
    * Sets double with value from 0 to 360.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setBearingAfter(double bearingAfter) {
     this.bearingAfter = bearingAfter;
@@ -135,7 +135,7 @@ public class StepManeuver {
    * <p>
    * Sets String with type of maneuver.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setType(String type) {
     this.type = type;
@@ -168,7 +168,7 @@ public class StepManeuver {
    * <p>
    * Sets String of an integer indicating number of the exit to take.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setExit(Integer exit) {
     this.exit = exit;
@@ -194,7 +194,7 @@ public class StepManeuver {
    * <p>
    * Sets String with modifier.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setModifier(String modifier) {
     this.modifier = modifier;
@@ -215,7 +215,7 @@ public class StepManeuver {
    * <p>
    * Sets String with instruction.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setInstruction(String instruction) {
     this.instruction = instruction;

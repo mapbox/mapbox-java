@@ -29,6 +29,7 @@ public interface DirectionsMatrixServiceRx {
    * @param sources      Array of waypoint objects. Each waypoints is an input coordinate snapped to the road and path
    *                     network. The waypoints appear in the array in the order of the input coordinates, or in the
    *                     order as specified in the sources query parameter.
+   * @return A retrofit Observable object
    * @since 2.1.0
    */
   @GET("directions-matrix/v1/{user}/{profile}/{coordinates}")

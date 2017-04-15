@@ -76,7 +76,7 @@ public class LegStep {
    * <p>
    * Sets a double number with unit meters.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setDistance(double distance) {
     this.distance = distance;
@@ -97,7 +97,7 @@ public class LegStep {
    * <p>
    * Sets a double number with unit seconds.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setDuration(double duration) {
     this.duration = duration;
@@ -118,7 +118,7 @@ public class LegStep {
    * <p>
    * Sets An encoded polyline string.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setGeometry(String geometry) {
     this.geometry = geometry;
@@ -154,7 +154,7 @@ public class LegStep {
    * Sets String with reference number or code of the way along which the travel proceeds.
    * Optionally included, if data is available.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setRef(String ref) {
     this.ref = ref;
@@ -173,7 +173,7 @@ public class LegStep {
    * Sets String with the destinations of the way along which the travel proceeds.
    * Optionally included, if data is available.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
 
   public void setDestinations(String destinations) {
@@ -191,7 +191,7 @@ public class LegStep {
   /**
    * Sets String indicating the mode of transportation.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setMode(String mode) {
     this.mode = mode;
@@ -208,7 +208,7 @@ public class LegStep {
   /**
    * Sets One {@link StepManeuver} object.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setManeuver(StepManeuver maneuver) {
     this.maneuver = maneuver;
@@ -225,7 +225,7 @@ public class LegStep {
   /**
    * Sets {@code List} of objects representing all intersections along the step.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setIntersections(List<StepIntersection> intersections) {
     this.intersections = intersections;
@@ -246,7 +246,7 @@ public class LegStep {
    * <p>
    * Sets String with the rotary name
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setRotaryName(String rotaryName) {
     this.rotaryName = rotaryName;
@@ -267,7 +267,7 @@ public class LegStep {
    * <p>
    * Sets String in IPA with the rotary name's pronunciation
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setRotaryPronunciation(String rotaryPronunciation) {
     this.rotaryPronunciation = rotaryPronunciation;
@@ -288,7 +288,7 @@ public class LegStep {
    * <p>
    * Sets String with the pronunciation
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setPronunciation(String pronunciation) {
     this.pronunciation = pronunciation;

@@ -26,7 +26,7 @@ public class DirectionsWaypoint {
   /**
    * Sets String with the name of the way the coordinate snapped to.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setName(String name) {
     this.name = name;
@@ -43,7 +43,7 @@ public class DirectionsWaypoint {
   /**
    * Sets double array of [longitude, latitude] for the snapped coordinate.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setLocation(double[] location) {
     this.location = location;

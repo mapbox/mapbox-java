@@ -71,6 +71,7 @@ public class TextUtils {
    * Allows the specific adjusting of a coordinates precision.
    *
    * @param coordinate a double value representing a coordinate.
+   * @param precision  an integer value you'd like the precision to be at.
    * @return a formatted string.
    * @since 2.1.0
    */

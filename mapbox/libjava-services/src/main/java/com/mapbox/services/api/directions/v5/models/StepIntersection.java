@@ -32,7 +32,7 @@ public class StepIntersection {
   /**
    * Sets A [longitude, latitude] pair describing the location of the turn.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setLocation(double[] location) {
     this.location = location;
@@ -52,7 +52,7 @@ public class StepIntersection {
    * Sets A list of bearing values (for example [0,90,180,270]) that are available at the
    * intersection. The bearings describe all available roads at the intersection.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setBearings(int[] bearings) {
     this.bearings = bearings;
@@ -73,7 +73,7 @@ public class StepIntersection {
    * of true indicates that the respective road could be entered on a valid route. false
    * indicates that the turn onto the respective road would violate a restriction.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setEntry(boolean[] entry) {
     this.entry = entry;
@@ -98,7 +98,7 @@ public class StepIntersection {
    * the bearing has to be rotated by a value of 180. The value is not supplied for departure
    * maneuvers.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setIn(int in) {
     this.in = in;
@@ -119,7 +119,7 @@ public class StepIntersection {
    * Namely, The clockwise angle from true north to the direction of travel after the
    * maneuver/passing the intersection. The value is not supplied for arrive maneuvers.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setOut(int out) {
     this.out = out;
@@ -151,7 +151,7 @@ public class StepIntersection {
    * no lane information is available for an intersection, the lanes property will not be present.
    * Lanes are provided in their order on the street, from left to right.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setLanes(IntersectionLanes[] lanes) {
     this.lanes = lanes;

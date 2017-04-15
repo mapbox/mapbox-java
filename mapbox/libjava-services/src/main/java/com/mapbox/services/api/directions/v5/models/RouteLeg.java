@@ -33,7 +33,7 @@ public class RouteLeg {
    * <p>
    * Sets a double number with unit meters.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setDistance(double distance) {
     this.distance = distance;
@@ -54,7 +54,7 @@ public class RouteLeg {
    * <p>
    * Sets a double number with unit seconds.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setDuration(double duration) {
     this.duration = duration;
@@ -75,7 +75,7 @@ public class RouteLeg {
    * <p>
    * Sets String with summary.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setSummary(String summary) {
     this.summary = summary;
@@ -97,7 +97,7 @@ public class RouteLeg {
    * <p>
    * Sets List of {@link LegStep}.
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   public void setSteps(List<LegStep> steps) {
     this.steps = steps;
