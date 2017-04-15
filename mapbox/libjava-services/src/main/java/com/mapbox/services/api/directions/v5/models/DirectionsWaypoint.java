@@ -12,10 +12,17 @@ public class DirectionsWaypoint {
   private String name;
   private double[] location;
 
+  /**
+   * Empty constructor
+   *
+   * @since 2.0.0
+   */
   public DirectionsWaypoint() {
   }
 
   /**
+   * Provides the way name which the waypoint's coordinate is snapped to.
+   *
    * @return String with the name of the way the coordinate snapped to.
    * @since 1.0.0
    */
@@ -24,8 +31,9 @@ public class DirectionsWaypoint {
   }
 
   /**
-   * Sets String with the name of the way the coordinate snapped to.
+   * Provide a way name which the waypoint's coordinate is snapped to.
    *
+   * @param name a String with the name of the way the coordinate snapped to.
    * @since 2.1.0
    */
   public void setName(String name) {
@@ -33,6 +41,8 @@ public class DirectionsWaypoint {
   }
 
   /**
+   * an array with two double values reresenting the maneuver locations coordinate.
+   *
    * @return double array of [longitude, latitude] for the snapped coordinate.
    * @since 1.0.0
    */
@@ -43,6 +53,7 @@ public class DirectionsWaypoint {
   /**
    * Sets double array of [longitude, latitude] for the snapped coordinate.
    *
+   * @param location array with the order [longitude, latitude].
    * @since 2.1.0
    */
   public void setLocation(double[] location) {

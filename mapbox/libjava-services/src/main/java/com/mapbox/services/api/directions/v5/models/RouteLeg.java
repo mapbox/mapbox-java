@@ -15,6 +15,11 @@ public class RouteLeg {
   private List<LegStep> steps;
   private LegAnnotation annotation;
 
+  /**
+   * Empty constructor
+   *
+   * @since 2.0.0
+   */
   public RouteLeg() {
   }
 
@@ -30,9 +35,8 @@ public class RouteLeg {
 
   /**
    * The distance traveled from one waypoint to another.
-   * <p>
-   * Sets a double number with unit meters.
    *
+   * @param distance a double number with unit meters.
    * @since 2.1.0
    */
   public void setDistance(double distance) {
@@ -51,9 +55,8 @@ public class RouteLeg {
 
   /**
    * The estimated travel time from one waypoint to another.
-   * <p>
-   * Sets a double number with unit seconds.
    *
+   * @param duration a double number with unit seconds.
    * @since 2.1.0
    */
   public void setDuration(double duration) {
@@ -72,9 +75,8 @@ public class RouteLeg {
 
   /**
    * A short human-readable summary of major roads traversed. Useful to distinguish alternatives.
-   * <p>
-   * Sets String with summary.
    *
+   * @param summary a String with a human-readable summary.
    * @since 2.1.0
    */
   public void setSummary(String summary) {
@@ -91,12 +93,10 @@ public class RouteLeg {
     return steps;
   }
 
-
   /**
    * Gives a List including all the steps to get from one waypoint to another.
-   * <p>
-   * Sets List of {@link LegStep}.
    *
+   * @param steps a List of {@link LegStep}.
    * @since 2.1.0
    */
   public void setSteps(List<LegStep> steps) {
@@ -104,16 +104,22 @@ public class RouteLeg {
   }
 
   /**
-   * An annotations object that contains additional details about each line segment along the route geometry. If you'd l
-   * ike to receiving this, you must request it inside your Directions request before executing the call.
+   * An {@link LegAnnotation} that contains additional details about each line segment along the route geometry. If
+   * you'd like to receiving this, you must request it inside your Directions request before executing the call.
    *
-   * @return An {@link LegAnnotation} object.
+   * @return a {@link LegAnnotation} object.
    * @since 2.1.0
    */
   public LegAnnotation getAnnotation() {
     return annotation;
   }
 
+  /**
+   * Provide An {@link LegAnnotation} that contains additional details about each line segment along the route geometry.
+   *
+   * @param annotation a {@link LegAnnotation} object.
+   * @since 2.1.0
+   */
   public void setAnnotation(LegAnnotation annotation) {
     this.annotation = annotation;
   }

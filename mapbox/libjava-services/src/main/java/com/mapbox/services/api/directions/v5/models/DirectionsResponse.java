@@ -13,9 +13,22 @@ public class DirectionsResponse {
   private List<DirectionsRoute> routes;
   private List<DirectionsWaypoint> waypoints;
 
+  /**
+   * Empty constructor
+   *
+   * @since 2.1.0
+   */
   public DirectionsResponse() {
   }
 
+  /**
+   * Constructor taking in both a list of {@link DirectionsRoute} and a list of {@link DirectionsWaypoint}s.
+   *
+   * @param routes    list of routes you can pass in while building this object.
+   * @param waypoints list of waypoints you can pass in while building this object. Ideally these should match what was
+   *                  used to crate the route.
+   * @since 2.0.0
+   */
   public DirectionsResponse(List<DirectionsRoute> routes, List<DirectionsWaypoint> waypoints) {
     this.routes = routes;
     this.waypoints = waypoints;
@@ -32,6 +45,13 @@ public class DirectionsResponse {
     return code;
   }
 
+  /**
+   * String indicating the state of the response. This is a separate code than the HTTP
+   * status code.
+   *
+   * @param code "Ok", "NoRoute", "ProfileNotFound", or "InvalidInput".
+   * @since 2.1.0
+   */
   public void setCode(String code) {
     this.code = code;
   }
@@ -47,6 +67,13 @@ public class DirectionsResponse {
     return waypoints;
   }
 
+  /**
+   * List with Waypoints of locations snapped to the road and path network and should appear in the List
+   * in the order of the input coordinates.
+   *
+   * @param waypoints List of {@link DirectionsWaypoint} objects.
+   * @since 2.1.0
+   */
   public void setWaypoints(List<DirectionsWaypoint> waypoints) {
     this.waypoints = waypoints;
   }
@@ -64,6 +91,15 @@ public class DirectionsResponse {
     return routes;
   }
 
+  /**
+   * List containing all the different route options. It should be ordered by descending recommendation
+   * rank. In other words, object 0 in the List is the highest recommended route. if you don't
+   * setAlternatives to true (default is false) in your builder this should always be a List of
+   * size 1.
+   *
+   * @param routes List of {@link DirectionsRoute} objects.
+   * @since 2.1.0
+   */
   public void setRoutes(List<DirectionsRoute> routes) {
     this.routes = routes;
   }

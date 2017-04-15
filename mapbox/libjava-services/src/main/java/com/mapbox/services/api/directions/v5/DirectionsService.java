@@ -35,6 +35,7 @@ public interface DirectionsService {
    * @param annotations      An annotations object that contains additional details about each line segment along the
    *                         route geometry. Each entry in an annotations field corresponds to a coordinate along the
    *                         route geometry.
+   * @return The {@link DirectionsResponse} in a Call wrapper.
    * @since 1.0.0
    */
   @GET("directions/v5/{user}/{profile}/{coordinates}")

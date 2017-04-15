@@ -349,8 +349,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      *
      * @param annotation String referencing one of the annotation direction criteria's.
      * @return Builder
-     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object documentation</a> for
-     * more information.
+     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object documentation</a>
      * @since 2.1.0
      */
     public T setAnnotation(String... annotation) {
