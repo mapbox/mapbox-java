@@ -42,13 +42,13 @@ public class OptimizedTripsResponse {
    * a server error occurs, the HTTP status code will be 500 or higher and the response will not include a code
    * property. Possible errors include:
    * <ul>
-   * <li> <strong>Ok</strong>: {@code 200} Normal success case</li>
-   * <li> <strong>NoTrips</strong>: {@code 200}	For one coordinate no route to other coordinates could be found. Check
+   * <li><strong>Ok</strong>: {@code 200} Normal success case</li>
+   * <li><strong>NoTrips</strong>: {@code 200} For one coordinate no route to other coordinates could be found. Check
    * for impossible routes (e.g. routes over oceans without ferry connections).</li>
-   * <li> <strong>NotImplemented</strong>:	{@code 200}	For the given combination of {@code source},
-   * {@code destination} and {@code roundtrip}, this request is not supported.</li>
-   * <li> <strong>ProfileNotFound</strong>:	{@code 404}	Use a valid profile</li>
-   * <li> <strong>InvalidInput</strong>: {@code 422} The given request was not valid. The message key of the response
+   * <li><strong>NotImplemented</strong>: {@code 200} For the given combination of {@code source}, {@code destination}
+   * and {@code roundtrip}, this request is not supported.</li>
+   * <li><strong>ProfileNotFound</strong>: {@code 404} Use a valid profile</li>
+   * <li><strong>InvalidInput</strong>: {@code 422} The given request was not valid. The message key of the response
    * will hold an explanation of the invalid input.</li>
    * </ul>
    *
