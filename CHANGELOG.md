@@ -5,15 +5,15 @@ Mapbox welcomes participation and contributions from everyone.
 ### v2.1.0
 
 * Navigation removed from mapbox-java and moved to the [mapbox-navigation-android](https://github.com/mapbox/mapbox-navigation-android) repo [#439](https://github.com/mapbox/mapbox-java/pull/439)
-* Introduce support for the Optimized Trip API [#437](https://github.com/mapbox/mapbox-java/pull/437)
-* Support for the Distance Matrix has been added, this replaces the Distance API [#418](https://github.com/mapbox/mapbox-java/pull/418)
-* Support for direction annotations has been added [#417](https://github.com/mapbox/mapbox-java/pull/417)
+* Introduce support for the [Optimized Trips API](https://www.mapbox.com/api-documentation/#optimized-trips) [#437](https://github.com/mapbox/mapbox-java/pull/437)
+* Support for the [Directions Matrix API](https://www.mapbox.com/api-documentation/#directions-matrix) has been added, this replaces the Distance API [#418](https://github.com/mapbox/mapbox-java/pull/418)
+* Support for direction [annotations](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libjava-services/src/main/java/com/mapbox/services/api/directions/v5/MapboxDirections.java#L345-L358) has been added [#417](https://github.com/mapbox/mapbox-java/pull/417)
 * We have deprecated the Distance API [#405](https://github.com/mapbox/mapbox-java/pull/405)
-* Added interval, fastest interval, and displacement getters/setters inside the LocationEngine class [#402](https://github.com/mapbox/mapbox-java/pull/402)
-* Added setters inside Direction models making it easier to build a DirectionsResponse without needing the call the Directions API [#422](https://github.com/mapbox/mapbox-java/pull/422)
-* Added `weight` and `weight_name` APIs to directions response [#438](https://github.com/mapbox/mapbox-java/pull/438)
-* Setting both origin/destination and the coordinates inside your directions builder, the coordinate list no longer get's overwritten [#420](https://github.com/mapbox/mapbox-java/pull/420)
-* Fixed bug when using Turf point on line, false warnings would occur stating your Position coordinates are outside the recommended range
+* Added [setInterval](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libandroid-telemetry/src/main/java/com/mapbox/services/android/telemetry/location/LocationEngine.java#L127-L137), [setFastestInterval](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libandroid-telemetry/src/main/java/com/mapbox/services/android/telemetry/location/LocationEngine.java#L149-L160), and [setSmallestDisplacement](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libandroid-telemetry/src/main/java/com/mapbox/services/android/telemetry/location/LocationEngine.java#L172-L180) inside the [LocationEngine](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libandroid-telemetry/src/main/java/com/mapbox/services/android/telemetry/location/LocationEngine.java) class [#402](https://github.com/mapbox/mapbox-java/pull/402)
+* Added setters inside direction models making it easier to build a [DirectionsResponse](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libjava-services/src/main/java/com/mapbox/services/api/directions/v5/models/DirectionsResponse.java) without needing to call the Directions API [#422](https://github.com/mapbox/mapbox-java/pull/422)
+* Added `weight` and `weight_name` API support to directions response [#438](https://github.com/mapbox/mapbox-java/pull/438)
+* Fixed setting both origin/destination and the coordinates inside your directions builder, the coordinate list no longer get's overwritten [#420](https://github.com/mapbox/mapbox-java/pull/420)
+* Fixed bug when using [TurfMisc.pointOnLine](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libjava-services/src/main/java/com/mapbox/services/api/utils/turf/TurfMisc.java#L90), false warnings would occur stating your [Position](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libjava-core/src/main/java/com/mapbox/services/commons/models/Position.java) coordinates are outside the recommended range
 * Added better format support for coordinates to remove trailing zeros [#424](https://github.com/mapbox/mapbox-java/pull/424)
 
 ### v2.0.0 - March 17th, 2017
