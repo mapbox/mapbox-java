@@ -56,8 +56,3 @@ public interface OptimizedTripsServiceRx {
     @Query("source") String source
   );
 }
-
-
-
-
-
