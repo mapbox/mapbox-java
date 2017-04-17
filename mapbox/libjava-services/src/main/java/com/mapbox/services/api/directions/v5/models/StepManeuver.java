@@ -22,9 +22,22 @@ public class StepManeuver {
   private String instruction;
   private Integer exit;
 
+  /**
+   * Empty constructor.
+   *
+   * @since 2.0.0
+   */
   public StepManeuver() {
   }
 
+  /**
+   * Constructor taking in a {@code type}, {@code modifier}, and an integer {@code exit} value.
+   *
+   * @param type     indicates the type of maneuver. It can be any of these listed:
+   * @param modifier indicates the mode of the maneuver.
+   * @param exit     integer indicating number of the exit to take.
+   * @since 2.0.0
+   */
   public StepManeuver(String type, String modifier, Integer exit) {
     this.type = type;
     this.modifier = modifier;
@@ -32,6 +45,8 @@ public class StepManeuver {
   }
 
   /**
+   * an array with two double values reresenting the maneuver locations coordinate.
+   *
    * @return double array of [longitude, latitude] for the snapped coordinate.
    * @since 1.0.0
    */
@@ -42,7 +57,8 @@ public class StepManeuver {
   /**
    * Sets double array of [longitude, latitude] for the snapped coordinate.
    *
-   * @since 2.0.1
+   * @param location array with the order [longitude, latitude].
+   * @since 2.1.0
    */
   public void setLocation(double[] location) {
     this.location = location;
@@ -62,10 +78,9 @@ public class StepManeuver {
   /**
    * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
    * travel right before the maneuver.
-   * <p>
-   * Sets double with value from 0 to 360.
    *
-   * @since 2.0.1
+   * @param bearingBefore a double with value from 0 to 360 representing the bearing before the maneuver.
+   * @since 2.1.0
    */
   public void setBearingBefore(double bearingBefore) {
     this.bearingBefore = bearingBefore;
@@ -85,10 +100,9 @@ public class StepManeuver {
   /**
    * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
    * travel right after the maneuver.
-   * <p>
-   * Sets double with value from 0 to 360.
    *
-   * @since 2.0.1
+   * @param bearingAfter a double with value from 0 to 360 representing the bearing after the maneuver.
+   * @since 2.1.0
    */
   public void setBearingAfter(double bearingAfter) {
     this.bearingAfter = bearingAfter;
@@ -118,24 +132,10 @@ public class StepManeuver {
   }
 
   /**
-   * This indicates the type of maneuver. It can be any of these listed:
-   * <br>
-   * <ul>
-   * <li>turn - a basic turn into direction of the modifier</li>
-   * <li>new name - the road name changes (after a mandatory turn)</li>
-   * <li>depart - indicates departure from a leg</li>
-   * <li>arrive - indicates arrival to a destination of a leg</li>
-   * <li>merge - merge onto a street</li>
-   * <li>ramp - take a ramp</li>
-   * <li>fork</li>
-   * <li>end of road - road ends in a T intersection</li>
-   * <li>continue - continue on a street after a turn</li>
-   * <li>roundabout - traverse roundabout</li>
-   * </ul>
-   * <p>
-   * Sets String with type of maneuver.
+   * This indicates the type of maneuver. See the full list of types in {@link StepManeuver#getType()}.
    *
-   * @since 2.0.1
+   * @param type a String with type of maneuver.
+   * @since 2.1.0
    */
   public void setType(String type) {
     this.type = type;
@@ -166,9 +166,9 @@ public class StepManeuver {
    * roundabout - traverse roundabout
    * rotary - a traffic circle
    * <p>
-   * Sets String of an integer indicating number of the exit to take.
    *
-   * @since 2.0.1
+   * @param exit a String of an integer indicating number of the exit to take.
+   * @since 2.1.0
    */
   public void setExit(Integer exit) {
     this.exit = exit;
@@ -191,10 +191,9 @@ public class StepManeuver {
    * This indicates the mode of the maneuver.  If type is of turn, the modifier indicates the
    * change in direction accomplished through the turn. If the type is of depart/arrive, the
    * modifier indicates the position of waypoint from the current direction of travel.
-   * <p>
-   * Sets String with modifier.
    *
-   * @since 2.0.1
+   * @param modifier a String with the modifier.
+   * @since 2.1.0
    */
   public void setModifier(String modifier) {
     this.modifier = modifier;
@@ -212,10 +211,9 @@ public class StepManeuver {
 
   /**
    * A human-readable instruction of how to execute the returned maneuver.
-   * <p>
-   * Sets String with instruction.
    *
-   * @since 2.0.1
+   * @param instruction a String with instruction representing how to execute the maneuver.
+   * @since 2.1.0
    */
   public void setInstruction(String instruction) {
     this.instruction = instruction;
@@ -233,6 +231,8 @@ public class StepManeuver {
   }
 
   /**
+   * Offers a convenient string with all the {@link StepManeuver} variables.
+   *
    * @return String with all {@link StepManeuver} information within.
    * @since 1.0.0
    */
@@ -248,6 +248,4 @@ public class StepManeuver {
       + ", exit=" + exit
       + '}';
   }
-
-
 }

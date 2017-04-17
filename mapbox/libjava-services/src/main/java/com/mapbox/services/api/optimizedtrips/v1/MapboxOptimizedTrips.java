@@ -187,71 +187,190 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       return (T) this;
     }
 
+    /**
+     * @param user User string
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setUser(String user) {
       this.user = user;
       return (T) this;
     }
 
+    /**
+     * @param profile Profile string
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setProfile(String profile) {
       this.profile = profile;
       return (T) this;
     }
 
+    /**
+     * Set the list of coordinates for the Optimized Trips service. If you've previously set an
+     * origin with setOrigin() or a destination with setDestination(), those will be
+     * overridden.
+     *
+     * @param coordinates List of {@link Position} giving origin and destination(s) coordinates.
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setCoordinates(List<Position> coordinates) {
       this.coordinates = coordinates;
       return (T) this;
     }
 
+    /**
+     * set whether the route is a roundtrip (route returns to first location). This defaults to true, but must be
+     * carefully set depending on whether you have used {@link MapboxOptimizedTrips.Builder#setSource(String)} and
+     * {@link MapboxOptimizedTrips.Builder#setDestination(String)}.
+     *
+     * @param roundTrip boolean true if you'd like the route to return to original position, else false.
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setRoundTrip(Boolean roundTrip) {
       this.roundTrip = roundTrip;
       return (T) this;
     }
 
+    /**
+     * Returned route starts at {@link DirectionsCriteria#SOURCE_ANY} (default )or
+     * {@link DirectionsCriteria#SOURCE_FIRST} coordinate.
+     *
+     * @param source either {@code "any" or "first"}.
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setSource(String source) {
       this.source = source;
       return (T) this;
     }
 
+    /**
+     * Returned route ends at {@link DirectionsCriteria#SOURCE_ANY} or {@link DirectionsCriteria#SOURCE_LAST}
+     * coordinate.
+     *
+     * @param destination either {@code "any" or "last"}.
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setDestination(String destination) {
       this.destination = destination;
       return (T) this;
     }
 
+    /**
+     * The SDK currently only supports {@code Polyline} geometry (not GeoJSON) to simplify the response. You do have
+     * the option on whether the precision is 5 or 6 using either {@link DirectionsCriteria#GEOMETRY_POLYLINE} or
+     * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
+     *
+     * @param geometries A {@code String} constant which equals either {@code "polyline"} or {@code "polyline6"}.
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setGeometries(String geometries) {
       this.geometries = geometries;
       return (T) this;
     }
 
+    /**
+     * Optionally, set the maximum distance in meters that each coordinate is allowed to move when snapped to a nearby
+     * road segment. There must be as many radiuses as there are coordinates in the request. Values can be any number
+     * greater than 0 or they can be unlimited simply by passing {@link Double#POSITIVE_INFINITY}. If no routable road
+     * is found within the radius, a {@code NoSegment} error is returned.
+     *
+     * @param radiuses double array containing the radiuses defined in unit meters.
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setRadiuses(double[] radiuses) {
       this.radiuses = radiuses;
       return (T) this;
     }
 
+    /**
+     * Optionally, set whether you want the route geometry to be full, simplified, etc.
+     *
+     * @param overview String defining type of overview you'd like the API to give. Use one of
+     *                 the constants.
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setOverview(String overview) {
       this.overview = overview;
       return (T) this;
     }
 
+    /**
+     * Optionally, call if you'd like to include step information within route.
+     *
+     * @param steps true if you'd like step information.
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setSteps(Boolean steps) {
       this.steps = steps;
       return (T) this;
     }
 
+    /**
+     * Optionally, Use to filter the road segment the waypoint will be placed on by direction and dictates the angle of
+     * approach. This option should always be used in conjunction with the
+     * {@link MapboxOptimizedTrips.Builder#setRadiuses(double[])} parameter. The parameter takes two values per
+     * waypoint: the first is an angle clockwise from true north between 0 and 360. The second is the range of degrees
+     * the angle can deviate by. We recommend a value of 45 degrees or 90 degrees for the range, as bearing measurements
+     * tend to be inaccurate. This is useful for making sure we reroute vehicles on new routes that continue traveling
+     * in their current direction. A request that does this would provide bearing and radius values for the first
+     * waypoint and leave the remaining values empty. If provided, the list of bearings must be the same length as the
+     * list of waypoints, but you can skip a coordinate and show its position by passing in a double array with no
+     * values included like so: {@code new double[] {}}.
+     *
+     * @param bearings a double array with two values indicating the angle and the other value indicating the deviating
+     *                 range.
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setBearings(double[]... bearings) {
       this.bearings = bearings;
       return (T) this;
     }
 
+    /**
+     * Whether or not to return additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotation can be used by separating them with {@code ,}.
+     *
+     * @param annotation String referencing one of the annotation direction criteria's.
+     * @return Builder
+     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object documentation</a>
+     * @since 2.1.0
+     */
     public T setAnnotation(String... annotation) {
       this.annotation = annotation;
       return (T) this;
     }
 
+    /**
+     * Optionally change the APIs base URL to something other then the default Mapbox one.
+     *
+     * @param baseUrl base url used as end point
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setBaseUrl(String baseUrl) {
       super.baseUrl = baseUrl;
       return (T) this;
     }
 
+    /**
+     * Base package name or other simple string identifier
+     *
+     * @param appName base package name or other simple string identifier
+     * @return Builder
+     * @since 2.1.0
+     */
     public T setClientAppName(String appName) {
       super.clientAppName = appName;
       return (T) this;
@@ -261,22 +380,61 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
      * Getters
      */
 
+    /**
+     * The current profile set for usage with the Optimized Trips API.
+     *
+     * @return {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING},
+     * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_CYCLING},
+     * or {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_WALKING}
+     * @since 2.1.0
+     */
     public String getProfile() {
       return profile;
     }
 
+    /**
+     * set whether the route is a roundtrip (route returns to first location). This defaults to true, but must be
+     * carefully set depending on whether you have used {@link MapboxOptimizedTrips.Builder#setSource(String)} and
+     * {@link MapboxOptimizedTrips.Builder#setDestination(String)}.
+     *
+     * @return boolean true if {@link MapboxOptimizedTrips} has been set to have the route return to original position,
+     * else false.
+     * @since 2.1.0
+     */
     public Boolean getRoundTrip() {
       return roundTrip;
     }
 
+    /**
+     * Returned route starts at {@link DirectionsCriteria#SOURCE_ANY} (default )or
+     * {@link DirectionsCriteria#SOURCE_FIRST} coordinate.
+     *
+     * @return either {@code "any" or "first"}.
+     * @since 2.1.0
+     */
     public String getSource() {
       return source;
     }
 
+    /**
+     * Returned route ends at {@link DirectionsCriteria#SOURCE_ANY} or {@link DirectionsCriteria#SOURCE_LAST}
+     * coordinate.
+     *
+     * @return either {@code "any" or "last"}.
+     * @since 2.1.0
+     */
     public String getDestination() {
       return destination;
     }
 
+    /**
+     * Set the list of coordinates for the Optimized Trips service. If you've previously set an
+     * origin with setOrigin() or a destination with setDestination(), those will be
+     * overridden.
+     *
+     * @return List of {@link Position} giving origin and destination(s) coordinates.
+     * @since 2.1.0
+     */
     public String getCoordinates() {
       List<String> coordinatesFormatted = new ArrayList<>();
       for (Position coordinate : coordinates) {
@@ -288,30 +446,78 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       return TextUtils.join(";", coordinatesFormatted.toArray());
     }
 
+    /**
+     * The SDK currently only supports {@code Polyline} geometry (not GeoJSON) to simplify the response. You do have
+     * the option on whether the precision is 5 or 6 using either {@link DirectionsCriteria#GEOMETRY_POLYLINE} or
+     * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
+     *
+     * @return a {@code String} constant which equals either {@code "polyline"} or {@code "polyline6"}.
+     * @since 2.1.0
+     */
     public String getGeometries() {
       return geometries;
     }
 
+    /**
+     * Get the maximum distance in meters you have set that each coordinate is allowed to move when snapped to a nearby
+     * road segment.
+     *
+     * @return double array containing the radiuses defined in unit meters.
+     * @since 2.1.0
+     */
     public double[] getRadiuses() {
       return radiuses;
     }
 
+    /**
+     * @return User string
+     * @since 2.1.0
+     */
     public String getUser() {
       return user;
     }
 
+    /**
+     * Determine whether you want the route geometry to be full, simplified, etc.
+     *
+     * @return String defining type of overview you'd like the API to give. Use one of
+     * the constants.
+     * @since 2.1.0
+     */
     public String getOverview() {
       return overview;
     }
 
+    /**
+     * Determine whether or not you are requesting for the steps information or not in your request.
+     *
+     * @return true if you'd like step information.
+     * @since 2.1.0
+     */
     public Boolean getSteps() {
       return steps;
     }
 
+    /**
+     * Determine whether you are filtering the road segment the waypoint will be placed on by direction and dictating
+     * the angle of approach.
+     *
+     * @return a double array with two values indicating the angle and the other value indicating the deviating
+     * range.
+     * @since 2.1.0
+     */
     public double[][] getBearings() {
       return bearings;
     }
 
+    /**
+     * Determine whether or not you are currently requesting additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotation can be used by separating them with {@code ,}.
+     *
+     * @return String referencing one of the annotation direction criteria's.
+     * @since 2.1.0
+     */
     public String[] getAnnotation() {
       return annotation;
     }
@@ -325,6 +531,13 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       return accessToken;
     }
 
+    /**
+     * Build method
+     *
+     * @return {@link MapboxOptimizedTrips}
+     * @throws ServicesException occurs if your request you've built isn't valid and/or contains errors.
+     * @since 2.1.0
+     */
     @Override
     public MapboxOptimizedTrips build() throws ServicesException {
       validateAccessToken(accessToken);

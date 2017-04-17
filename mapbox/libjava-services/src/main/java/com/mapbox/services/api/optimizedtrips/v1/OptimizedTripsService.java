@@ -30,12 +30,14 @@ public interface OptimizedTripsService {
    * @param bearings    Used to filter the road segment the waypoint will be placed on by direction and dictates
    *                    the angle of approach
    * @param steps       Define if you'd like the route steps.
+   * @param overview    Route full, simplified, etc.
    * @param geometries  Route geometry.
    * @param annotations An annotations object that contains additional details about each line segment along the
    *                    route geometry. Each entry in an annotations field corresponds to a coordinate along the
    *                    route geometry.
    * @param destination Returned route ends at any or last coordinate. Allowed values are: any (default) or last.
-   * @param source     Returned route starts at any or first coordinate. Allowed values are: any (default) or first.
+   * @param source      Returned route starts at any or first coordinate. Allowed values are: any (default) or first.
+   * @return The {@link OptimizedTripsResponse} in a Call wrapper.
    * @since 2.1.0
    */
   @GET("optimized-trips/v1/{user}/{profile}/{coordinates}")

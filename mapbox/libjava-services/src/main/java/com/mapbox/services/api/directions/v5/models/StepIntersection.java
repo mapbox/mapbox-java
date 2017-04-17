@@ -4,6 +4,8 @@ import com.mapbox.services.commons.models.Position;
 
 /**
  * Object representing an intersection along the step.
+ *
+ * @since 1.3.0
  */
 public class StepIntersection {
 
@@ -14,14 +16,27 @@ public class StepIntersection {
   private int out;
   private IntersectionLanes[] lanes;
 
+  /**
+   * Empty constructor
+   *
+   * @since 2.0.0
+   */
   public StepIntersection() {
   }
 
+  /**
+   * Constructor allowing the setting of the {@link IntersectionLanes}.
+   *
+   * @param lanes an Array of {@link IntersectionLanes}.
+   * @since 2.0.0
+   */
   public StepIntersection(IntersectionLanes[] lanes) {
     this.lanes = lanes;
   }
 
   /**
+   * A double array of length 2, first position being the longitude and the other being latitude.
+   *
    * @return A [longitude, latitude] pair describing the location of the turn.
    * @since 1.3.0
    */
@@ -30,9 +45,10 @@ public class StepIntersection {
   }
 
   /**
-   * Sets A [longitude, latitude] pair describing the location of the turn.
+   * A double array of length 2, first position being the longitude and the other being latitude.
    *
-   * @since 2.0.1
+   * @param location array with the order [longitude, latitude].
+   * @since 2.1.0
    */
   public void setLocation(double[] location) {
     this.location = location;
@@ -40,7 +56,9 @@ public class StepIntersection {
 
 
   /**
-   * @return A list of bearing values (for example [0,90,180,270]) that are available at the
+   * An integer array of bearing values available at the step intersection.
+   *
+   * @return An array of bearing values (for example [0,90,180,270]) that are available at the
    * intersection. The bearings describe all available roads at the intersection.
    * @since 1.3.0
    */
@@ -49,17 +67,20 @@ public class StepIntersection {
   }
 
   /**
-   * Sets A list of bearing values (for example [0,90,180,270]) that are available at the
-   * intersection. The bearings describe all available roads at the intersection.
+   * An integer array of bearing values available at the step intersection.
    *
-   * @since 2.0.1
+   * @param bearings an array of bearing values (for example [0,90,180,270]) that are available at the
+   *                 intersection. The bearings describe all available roads at the intersection.
+   * @since 2.1.0
    */
   public void setBearings(int[] bearings) {
     this.bearings = bearings;
   }
 
   /**
-   * @return A list of entry flags, corresponding in a 1:1 relationship to the bearings. A value
+   * An array of entry flags, corresponding in a 1:1 relationship to the bearings.
+   *
+   * @return An array of entry flags, corresponding in a 1:1 relationship to the bearings. A value
    * of true indicates that the respective road could be entered on a valid route. false
    * indicates that the turn onto the respective road would violate a restriction.
    * @since 1.3.0
@@ -69,17 +90,20 @@ public class StepIntersection {
   }
 
   /**
-   * Sets A list of entry flags, corresponding in a 1:1 relationship to the bearings. A value
-   * of true indicates that the respective road could be entered on a valid route. false
-   * indicates that the turn onto the respective road would violate a restriction.
+   * An array of entry flags, corresponding in a 1:1 relationship to the bearings.
    *
-   * @since 2.0.1
+   * @param entry an array of entry flags, corresponding in a 1:1 relationship to the bearings. A value
+   *              of true indicates that the respective road could be entered on a valid route. false
+   *              indicates that the turn onto the respective road would violate a restriction.
+   * @since 2.1.0
    */
   public void setEntry(boolean[] entry) {
     this.entry = entry;
   }
 
   /**
+   * Index into bearings/entry array.
+   *
    * @return Index into bearings/entry array. Used to calculate the bearing before the turn.
    * Namely, the clockwise angle from true north to the direction of travel before the
    * maneuver/passing the intersection. To get the bearing in the direction of driving,
@@ -92,20 +116,23 @@ public class StepIntersection {
   }
 
   /**
-   * Sets Index into bearings/entry array. Used to calculate the bearing before the turn.
-   * Namely, the clockwise angle from true north to the direction of travel before the
-   * maneuver/passing the intersection. To get the bearing in the direction of driving,
-   * the bearing has to be rotated by a value of 180. The value is not supplied for departure
-   * maneuvers.
+   * Index into bearings/entry array.
    *
-   * @since 2.0.1
+   * @param in index into bearings/entry array. Used to calculate the bearing before the turn.
+   *           Namely, the clockwise angle from true north to the direction of travel before the
+   *           maneuver/passing the intersection. To get the bearing in the direction of driving,
+   *           the bearing has to be rotated by a value of 180. The value is not supplied for departure
+   *           maneuvers.
+   * @since 2.1.0
    */
   public void setIn(int in) {
     this.in = in;
   }
 
   /**
-   * @return Index into the bearings/entry array. Used to extract the bearing after the turn.
+   * Index out of the bearings/entry array.
+   *
+   * @return index out of the bearings/entry array. Used to extract the bearing after the turn.
    * Namely, The clockwise angle from true north to the direction of travel after the
    * maneuver/passing the intersection. The value is not supplied for arrive maneuvers.
    * @since 1.3.0
@@ -115,11 +142,12 @@ public class StepIntersection {
   }
 
   /**
-   * Sets Index into the bearings/entry array. Used to extract the bearing after the turn.
-   * Namely, The clockwise angle from true north to the direction of travel after the
-   * maneuver/passing the intersection. The value is not supplied for arrive maneuvers.
+   * Index out of the bearings/entry array.
    *
-   * @since 2.0.1
+   * @param out index out of the bearings/entry array. Used to extract the bearing after the turn.
+   *            Namely, The clockwise angle from true north to the direction of travel after the
+   *            maneuver/passing the intersection. The value is not supplied for arrive maneuvers.
+   * @since 2.1.0
    */
   public void setOut(int out) {
     this.out = out;
@@ -137,7 +165,9 @@ public class StepIntersection {
   }
 
   /**
-   * @return Array of lane objects that represent the available turn lanes at the intersection. If
+   * Array of lane objects that represent the available turn lanes at the intersection.
+   *
+   * @return array of lane objects that represent the available turn lanes at the intersection. If
    * no lane information is available for an intersection, the lanes property will not be present.
    * Lanes are provided in their order on the street, from left to right.
    * @since 2.0.0
@@ -147,11 +177,12 @@ public class StepIntersection {
   }
 
   /**
-   * Sets Array of lane objects that represent the available turn lanes at the intersection. If
-   * no lane information is available for an intersection, the lanes property will not be present.
-   * Lanes are provided in their order on the street, from left to right.
+   * Array of lane objects that represent the available turn lanes at the intersection.
    *
-   * @since 2.0.1
+   * @param lanes an array of lane objects that represent the available turn lanes at the intersection. If
+   *              no lane information is available for an intersection, the lanes property will not be present.
+   *              Lanes are provided in their order on the street, from left to right.
+   * @since 2.1.0
    */
   public void setLanes(IntersectionLanes[] lanes) {
     this.lanes = lanes;

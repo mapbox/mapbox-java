@@ -24,17 +24,35 @@ public class LegStep {
   @SerializedName("rotary_pronunciation")
   private String rotaryPronunciation;
   private StepManeuver maneuver;
-
   private double weight;
   private List<StepIntersection> intersections;
 
+  /**
+   * Empty constructor
+   *
+   * @since 2.0.0
+   */
   public LegStep() {
   }
 
+  /**
+   * Constructor taking in a list of {@link StepIntersection}s.
+   *
+   * @param intersections {@link StepIntersection}
+   * @since 2.0.0
+   */
   public LegStep(List<StepIntersection> intersections) {
     this.intersections = intersections;
   }
 
+  /**
+   * Constructor taking in a {@code String} name, a {@code String} rotaryName and a {@link StepManeuver}.
+   *
+   * @param name       String with the name of the way along which the travel proceeds.
+   * @param rotaryName String indicating the name of the rotary.
+   * @param maneuver   one {@link StepManeuver} object.
+   * @since 2.0.0
+   */
   public LegStep(String name, String rotaryName, StepManeuver maneuver) {
     this.name = name;
     this.rotaryName = rotaryName;
@@ -73,10 +91,9 @@ public class LegStep {
 
   /**
    * The distance traveled from the maneuver to the next {@link LegStep}.
-   * <p>
-   * Sets a double number with unit meters.
    *
-   * @since 2.0.1
+   * @param distance a double number with unit meters.
+   * @since 2.1.0
    */
   public void setDistance(double distance) {
     this.distance = distance;
@@ -94,10 +111,9 @@ public class LegStep {
 
   /**
    * The estimated travel time from the maneuver to the next {@link LegStep}.
-   * <p>
-   * Sets a double number with unit seconds.
    *
-   * @since 2.0.1
+   * @param duration a double number with unit seconds.
+   * @since 2.1.0
    */
   public void setDuration(double duration) {
     this.duration = duration;
@@ -115,17 +131,18 @@ public class LegStep {
 
   /**
    * Sets the geometry of the leg step.
-   * <p>
-   * Sets An encoded polyline string.
    *
-   * @since 2.0.1
+   * @param geometry an encoded polyline string.
+   * @since 2.1.0
    */
   public void setGeometry(String geometry) {
     this.geometry = geometry;
   }
 
   /**
-   * @return String with the name of the way along which the travel proceeds.
+   * String with the name of the way along which the travel proceeds.
+   *
+   * @return a {@code String} representing the way along which the travel proceeds.
    * @since 1.0.0
    */
   public String getName() {
@@ -135,6 +152,7 @@ public class LegStep {
   /**
    * Sets String with the name of the way along which the travel proceeds.
    *
+   * @param name a {@code String} representing the way along which the travel proceeds.
    * @since 2.0.0
    */
   public void setName(String name) {
@@ -142,8 +160,10 @@ public class LegStep {
   }
 
   /**
-   * @return String with reference number or code of the way along which the travel proceeds.
-   * Optionally included, if data is available.
+   * String with reference number or code of the way along which the travel proceeds.
+   *
+   * @return String with reference number or code of the way along which the travel proceeds. Optionally included, if
+   * data is available.
    * @since 2.0.0
    */
   public String getRef() {
@@ -151,18 +171,21 @@ public class LegStep {
   }
 
   /**
-   * Sets String with reference number or code of the way along which the travel proceeds.
-   * Optionally included, if data is available.
+   * Sets String with reference number or code of the way along which the travel proceeds. Optionally included, if data
+   * is available.
    *
-   * @since 2.0.1
+   * @param ref a String representing the reference number or code of the way along which the travel proceeds.
+   * @since 2.1.0
    */
   public void setRef(String ref) {
     this.ref = ref;
   }
 
   /**
-   * @return String with the destinations of the way along which the travel proceeds.
-   * Optionally included, if data is available.
+   * String with the destinations of the way along which the travel proceeds.
+   *
+   * @return String with the destinations of the way along which the travel proceeds. Optionally included, if data
+   * is available.
    * @since 2.0.0
    */
   public String getDestinations() {
@@ -170,10 +193,11 @@ public class LegStep {
   }
 
   /**
-   * Sets String with the destinations of the way along which the travel proceeds.
-   * Optionally included, if data is available.
+   * String with the destinations of the way along which the travel proceeds.
    *
-   * @since 2.0.1
+   * @param destinations a String with the destinations of the way along which the travel proceeds.
+   *                     Optionally included, if data is available.
+   * @since 2.1.0
    */
 
   public void setDestinations(String destinations) {
@@ -181,6 +205,8 @@ public class LegStep {
   }
 
   /**
+   * indicates the mode of transportation in the step.
+   *
    * @return String indicating the mode of transportation.
    * @since 1.0.0
    */
@@ -189,15 +215,19 @@ public class LegStep {
   }
 
   /**
-   * Sets String indicating the mode of transportation.
+   * indicates the mode of transportation in the step.
    *
-   * @since 2.0.1
+   * @param mode a String indicating the mode of transportation.
+   * @since 2.1.0
    */
   public void setMode(String mode) {
     this.mode = mode;
   }
 
   /**
+   * A {@link StepManeuver} object that typically represents the first coordinate making up the
+   * {@link LegStep#getGeometry()}.
+   *
    * @return One {@link StepManeuver} object.
    * @since 1.0.0
    */
@@ -206,16 +236,20 @@ public class LegStep {
   }
 
   /**
-   * Sets One {@link StepManeuver} object.
+   * Provide a {@link StepManeuver} object that typically represents the first coordinate making up the
+   * {@link LegStep#getGeometry()}.
    *
-   * @since 2.0.1
+   * @param maneuver a {@link StepManeuver} for the given step.
+   * @since 2.1.0
    */
   public void setManeuver(StepManeuver maneuver) {
     this.maneuver = maneuver;
   }
 
   /**
-   * @return Array of objects representing all intersections along the step.
+   * Provides a list of all the intersections connected to the current way the user is traveling along.
+   *
+   * @return List of {@link StepIntersection} representing all intersections along the step.
    * @since 1.3.0
    */
   public List<StepIntersection> getIntersections() {
@@ -223,9 +257,10 @@ public class LegStep {
   }
 
   /**
-   * Sets {@code List} of objects representing all intersections along the step.
+   * Provide a {@code List} of objects representing all intersections along the step.
    *
-   * @since 2.0.1
+   * @param intersections List of {@link StepIntersection} representing all intersections along the step.
+   * @since 2.1.0
    */
   public void setIntersections(List<StepIntersection> intersections) {
     this.intersections = intersections;
@@ -243,10 +278,9 @@ public class LegStep {
 
   /**
    * An optional string indicating the name of the rotary.
-   * <p>
-   * Sets String with the rotary name
    *
-   * @since 2.0.1
+   * @param rotaryName a String with the rotary name.
+   * @since 2.1.0
    */
   public void setRotaryName(String rotaryName) {
     this.rotaryName = rotaryName;
@@ -255,7 +289,7 @@ public class LegStep {
   /**
    * An optional string indicating the pronunciation of the name of the rotary.
    *
-   * @return String in IPA with the rotary name's pronunciation
+   * @return String in IPA with the rotary name's pronunciation.
    * @since 2.0.0
    */
   public String getRotaryPronunciation() {
@@ -264,10 +298,9 @@ public class LegStep {
 
   /**
    * An optional string indicating the pronunciation of the name of the rotary.
-   * <p>
-   * Sets String in IPA with the rotary name's pronunciation
    *
-   * @since 2.0.1
+   * @param rotaryPronunciation String in IPA with the rotary name's pronunciation.
+   * @since 2.1.0
    */
   public void setRotaryPronunciation(String rotaryPronunciation) {
     this.rotaryPronunciation = rotaryPronunciation;
@@ -285,10 +318,9 @@ public class LegStep {
 
   /**
    * The pronunciation hint of the way name. Will be undefined if no pronunciation is hit.
-   * <p>
-   * Sets String with the pronunciation
    *
-   * @since 2.0.1
+   * @param pronunciation provide a String with the pronunciation of the way name.
+   * @since 2.1.0
    */
   public void setPronunciation(String pronunciation) {
     this.pronunciation = pronunciation;
