@@ -4,17 +4,16 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### v2.1.0
 
-* Navigation removed from mapbox-java and moved to the [mapbox-navigation-android](https://github.com/mapbox/mapbox-navigation-android) repo [#439](https://github.com/mapbox/mapbox-java/pull/439)
-* Introduce support for the [Optimized Trips API](https://www.mapbox.com/api-documentation/#optimized-trips) [#437](https://github.com/mapbox/mapbox-java/pull/437)
-* Support for the [Directions Matrix API](https://www.mapbox.com/api-documentation/#directions-matrix) has been added, this replaces the Distance API [#418](https://github.com/mapbox/mapbox-java/pull/418)
-* Support for direction [annotations](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libjava-services/src/main/java/com/mapbox/services/api/directions/v5/MapboxDirections.java#L345-L358) has been added [#417](https://github.com/mapbox/mapbox-java/pull/417)
-* We have deprecated the Distance API [#405](https://github.com/mapbox/mapbox-java/pull/405)
-* Added [setInterval](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libandroid-telemetry/src/main/java/com/mapbox/services/android/telemetry/location/LocationEngine.java#L127-L137), [setFastestInterval](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libandroid-telemetry/src/main/java/com/mapbox/services/android/telemetry/location/LocationEngine.java#L149-L160), and [setSmallestDisplacement](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libandroid-telemetry/src/main/java/com/mapbox/services/android/telemetry/location/LocationEngine.java#L172-L180) inside the [LocationEngine](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libandroid-telemetry/src/main/java/com/mapbox/services/android/telemetry/location/LocationEngine.java) class [#402](https://github.com/mapbox/mapbox-java/pull/402)
-* Added setters inside direction models making it easier to build a [DirectionsResponse](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libjava-services/src/main/java/com/mapbox/services/api/directions/v5/models/DirectionsResponse.java) without needing to call the Directions API [#422](https://github.com/mapbox/mapbox-java/pull/422)
-* Added `weight` and `weight_name` API support to directions response [#438](https://github.com/mapbox/mapbox-java/pull/438)
-* Fixed setting both origin/destination and the coordinates inside your directions builder, the coordinate list no longer get's overwritten [#420](https://github.com/mapbox/mapbox-java/pull/420)
-* Fixed bug when using [TurfMisc.pointOnLine](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libjava-services/src/main/java/com/mapbox/services/api/utils/turf/TurfMisc.java#L90), false warnings would occur stating your [Position](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libjava-core/src/main/java/com/mapbox/services/commons/models/Position.java) coordinates are outside the recommended range [#416](https://github.com/mapbox/mapbox-java/pull/416)
-* Added better format support for coordinates to remove trailing zeros [#424](https://github.com/mapbox/mapbox-java/pull/424)
+* The Mapbox Navigation SDK for Android has been moved into its own repository. Code and tickets can now be followed on [mapbox-navigation-android](https://github.com/mapbox/mapbox-navigation-android) [#439](https://github.com/mapbox/mapbox-java/pull/439)
+* Introduced support for the [Optimized Trips API](https://www.mapbox.com/api-documentation/#optimized-trips) [#437](https://github.com/mapbox/mapbox-java/pull/437)
+* Added support for the [Directions Matrix API](https://www.mapbox.com/api-documentation/#directions-matrix). This replaces the Distance API [#418](https://github.com/mapbox/mapbox-java/pull/418), which is now deprectated [#405](https://github.com/mapbox/mapbox-java/pull/405)
+* Added support for direction [annotations](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libjava-services/src/main/java/com/mapbox/services/api/directions/v5/MapboxDirections.java#L345-L358) [#417](https://github.com/mapbox/mapbox-java/pull/417)
+* Added `setInterval`, `setFastestInterval` and `setSmallestDisplacement` to allow configurable [LocationEngine](https://github.com/mapbox/mapbox-java/blob/master/mapbox/libandroid-telemetry/src/main/java/com/mapbox/services/android/telemetry/location/LocationEngine.java) parameters [#402](https://github.com/mapbox/mapbox-java/pull/402)
+* Added setters in `DirectionsResponse` to simplify object creation [#422](https://github.com/mapbox/mapbox-java/pull/422)
+* Added `weight` and `weight_name` support to the Directions API response [#438](https://github.com/mapbox/mapbox-java/pull/438)
+* Fixed issue where some coordinates were overwritten when setting all origin, destination and a coordinates list inside the directions builder [#420](https://github.com/mapbox/mapbox-java/pull/420)
+* Fixed bug when using `TurfMisc.pointOnLine()` where incorrect warnings would state your `Position` values were outside the recommended range [#416](https://github.com/mapbox/mapbox-java/pull/416)
+* Enhanced coordinates formatting to remove trailing zeros [#424](https://github.com/mapbox/mapbox-java/pull/424)
 
 ### v2.0.0 - March 17th, 2017
 
