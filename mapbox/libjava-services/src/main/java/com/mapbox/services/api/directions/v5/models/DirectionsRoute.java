@@ -147,4 +147,57 @@ public class DirectionsRoute {
   public void setLegs(List<RouteLeg> legs) {
     this.legs = legs;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    DirectionsRoute that = (DirectionsRoute) o;
+
+    if (Double.compare(that.getDistance(), getDistance()) != 0) {
+      return false;
+    }
+    if (Double.compare(that.getDuration(), getDuration()) != 0) {
+      return false;
+    }
+    if (Double.compare(that.getWeight(), getWeight()) != 0) {
+      return false;
+    }
+    if (!getGeometry().equals(that.getGeometry())) {
+      return false;
+    }
+    if (!getWeightName().equals(that.getWeightName())) {
+      return false;
+    }
+    return getLegs().equals(that.getLegs());
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + Double.valueOf(getDistance()).hashCode();
+    result = 31 * result + Double.valueOf(getDuration()).hashCode();
+    result = 31 * result + getGeometry().hashCode();
+    result = 31 * result + Double.valueOf(getWeight()).hashCode();
+    result = 31 * result + getWeightName().hashCode();
+    result = 31 * result + getLegs().hashCode();
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "DirectionsRoute{"
+      + "distance=" + distance
+      + ", duration=" + duration
+      + ", geometry='" + geometry + '\''
+      + ", weight=" + weight
+      + ", weightName='" + weightName + '\''
+      + ", legs=" + legs
+      + '}';
+  }
 }

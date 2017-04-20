@@ -230,21 +230,61 @@ public class StepManeuver {
     return Position.fromCoordinates(location[0], location[1]);
   }
 
-  /**
-   * Offers a convenient string with all the {@link StepManeuver} variables.
-   *
-   * @return String with all {@link StepManeuver} information within.
-   * @since 1.0.0
-   */
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    StepManeuver that = (StepManeuver) o;
+
+    if (Double.compare(that.getBearingBefore(), getBearingBefore()) != 0) {
+      return false;
+    }
+    if (Double.compare(that.getBearingAfter(), getBearingAfter()) != 0) {
+      return false;
+    }
+    if (!Arrays.equals(getLocation(), that.getLocation())) {
+      return false;
+    }
+    if (!getType().equals(that.getType())) {
+      return false;
+    }
+    if (!getModifier().equals(that.getModifier())) {
+      return false;
+    }
+    if (!getInstruction().equals(that.getInstruction())) {
+      return false;
+    }
+    return getExit().equals(that.getExit());
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + Arrays.hashCode(getLocation());
+    result = 31 * result + Double.valueOf(getBearingBefore()).hashCode();
+    result = 31 * result + Double.valueOf(getBearingAfter()).hashCode();
+    result = 31 * result + getType().hashCode();
+    result = 31 * result + getModifier().hashCode();
+    result = 31 * result + getInstruction().hashCode();
+    result = 31 * result + getExit().hashCode();
+    return result;
+  }
+
   @Override
   public String toString() {
     return "StepManeuver{"
       + "location=" + Arrays.toString(location)
       + ", bearingBefore=" + bearingBefore
       + ", bearingAfter=" + bearingAfter
-      + ", instruction='" + instruction + '\''
       + ", type='" + type + '\''
       + ", modifier='" + modifier + '\''
+      + ", instruction='" + instruction + '\''
       + ", exit=" + exit
       + '}';
   }

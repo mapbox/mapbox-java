@@ -123,4 +123,53 @@ public class RouteLeg {
   public void setAnnotation(LegAnnotation annotation) {
     this.annotation = annotation;
   }
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    RouteLeg routeLeg = (RouteLeg) o;
+
+    if (Double.compare(routeLeg.getDistance(), getDistance()) != 0) {
+      return false;
+    }
+    if (Double.compare(routeLeg.getDuration(), getDuration()) != 0) {
+      return false;
+    }
+    if (!getSummary().equals(routeLeg.getSummary())) {
+      return false;
+    }
+    if (!getSteps().equals(routeLeg.getSteps())) {
+      return false;
+    }
+    return getAnnotation().equals(routeLeg.getAnnotation());
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + Double.valueOf(getDistance()).hashCode();
+    result = 31 * result + Double.valueOf(getDuration()).hashCode();
+    result = 31 * result + getSummary().hashCode();
+    result = 31 * result + getSteps().hashCode();
+    result = 31 * result + getAnnotation().hashCode();
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "RouteLeg{"
+      + "distance=" + distance
+      + ", duration=" + duration
+      + ", summary='" + summary + '\''
+      + ", steps=" + steps
+      + ", annotation=" + annotation
+      + '}';
+  }
 }

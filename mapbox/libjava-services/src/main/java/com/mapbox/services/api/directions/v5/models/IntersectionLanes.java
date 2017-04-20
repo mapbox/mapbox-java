@@ -1,5 +1,7 @@
 package com.mapbox.services.api.directions.v5.models;
 
+import java.util.Arrays;
+
 /**
  * Object representing lanes in an intersection.
  *
@@ -75,5 +77,39 @@ public class IntersectionLanes {
    */
   public void setIndications(String[] indications) {
     this.indications = indications;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    IntersectionLanes that = (IntersectionLanes) o;
+
+    if (getValid() != that.getValid()) {
+      return false;
+    }
+    return !(getIndications() != null ? !Arrays.equals(getIndications(),
+      that.getIndications()) : that.getIndications() != null);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (getValid() ? 1 : 0);
+    result = 31 * result + Arrays.hashCode(getIndications());
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "IntersectionLanes{"
+      + "valid=" + valid
+      + ", indications=" + Arrays.toString(indications)
+      + '}';
   }
 }

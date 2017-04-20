@@ -2,6 +2,8 @@ package com.mapbox.services.api.directions.v5.models;
 
 import com.mapbox.services.commons.models.Position;
 
+import java.util.Arrays;
+
 /**
  * Object representing an intersection along the step.
  *
@@ -186,5 +188,62 @@ public class StepIntersection {
    */
   public void setLanes(IntersectionLanes[] lanes) {
     this.lanes = lanes;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    StepIntersection stepIntersection = (StepIntersection) o;
+
+    if (getLocation() != null ? !Arrays.equals(getLocation(),
+      stepIntersection.getLocation()) : stepIntersection.getLocation() != null) {
+      return false;
+    }
+    if (getBearings() != null ? !Arrays.equals(getBearings(),
+      stepIntersection.getBearings()) : stepIntersection.getBearings() != null) {
+      return false;
+    }
+    if (getEntry() != null ? !Arrays.equals(getEntry(),
+      stepIntersection.getEntry()) : stepIntersection.getEntry() != null) {
+      return false;
+    }
+    if (getIn() != stepIntersection.getIn()) {
+      return false;
+    }
+    if (getOut() != stepIntersection.getOut()) {
+      return false;
+    }
+    return !(getLanes() != null ? !Arrays.equals(getLanes(),
+      stepIntersection.getLanes()) : stepIntersection.getLanes() != null);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (getLocation() != null ? Arrays.hashCode(getLocation()) : 0);
+    result = 31 * result + (getBearings() != null ? Arrays.hashCode(getBearings()) : 0);
+    result = 31 * result + (getEntry() != null ? Arrays.hashCode(getEntry()) : 0);
+    result = 31 * result + getIn();
+    result = 31 * result + getOut();
+    result = 31 * result + (getLanes() != null ? Arrays.hashCode(getLanes()) : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "StepIntersection{"
+      + "location=" + Arrays.toString(location)
+      + ", bearings=" + Arrays.toString(bearings)
+      + ", entry=" + Arrays.toString(entry)
+      + ", in=" + in
+      + ", out=" + out
+      + ", lanes=" + Arrays.toString(lanes)
+      + '}';
   }
 }

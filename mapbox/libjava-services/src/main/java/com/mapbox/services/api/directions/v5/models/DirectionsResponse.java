@@ -103,4 +103,42 @@ public class DirectionsResponse {
   public void setRoutes(List<DirectionsRoute> routes) {
     this.routes = routes;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    DirectionsResponse response = (DirectionsResponse) o;
+
+    if (!getCode().equals(response.getCode())) {
+      return false;
+    }
+    if (!getRoutes().equals(response.getRoutes())) {
+      return false;
+    }
+    return getWaypoints().equals(response.getWaypoints());
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + getCode().hashCode();
+    result = 31 * result + getRoutes().hashCode();
+    result = 31 * result + getWaypoints().hashCode();
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "DirectionsResponse{"
+      + "code='" + code + '\''
+      + ", routes=" + routes
+      + ", waypoints=" + waypoints
+      + '}';
+  }
 }
