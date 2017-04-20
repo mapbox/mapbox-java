@@ -81,4 +81,43 @@ public class MapMatchingResponse {
   public void setTracepoints(List<MapMatchingTracepoint> tracepoints) {
     this.tracepoints = tracepoints;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    MapMatchingResponse that = (MapMatchingResponse) o;
+
+    if (getCode() != null ? !getCode().equals(that.getCode()) : that.getCode() != null) {
+      return false;
+    }
+    if (getMatchings() != null ? !getMatchings().equals(that.getMatchings()) : that.getMatchings() != null) {
+      return false;
+    }
+    return getTracepoints() != null ? getTracepoints().equals(that.getTracepoints()) : that.getTracepoints() == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (getCode() != null ? getCode().hashCode() : 0);
+    result = 31 * result + (getMatchings() != null ? getMatchings().hashCode() : 0);
+    result = 31 * result + (getTracepoints() != null ? getTracepoints().hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "MapMatchingResponse{"
+      + "code='" + code + '\''
+      + ", matchings=" + matchings
+      + ", tracepoints=" + tracepoints
+      + '}';
+  }
 }

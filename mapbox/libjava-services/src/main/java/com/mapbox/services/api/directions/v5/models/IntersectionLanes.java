@@ -99,8 +99,7 @@ public class IntersectionLanes {
 
   @Override
   public int hashCode() {
-    int result = 17;
-    result = 31 * result + (getValid() ? 1 : 0);
+    int result = (getValid() ? 1 : 0);
     result = 31 * result + Arrays.hashCode(getIndications());
     return result;
   }

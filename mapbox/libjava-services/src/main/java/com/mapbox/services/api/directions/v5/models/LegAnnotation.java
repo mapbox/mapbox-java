@@ -130,6 +130,7 @@ public class LegAnnotation {
     result = 31 * result + Arrays.hashCode(getDistance());
     result = 31 * result + Arrays.hashCode(getDuration());
     result = 31 * result + Arrays.hashCode(getSpeed());
+    result = 31 * result + Arrays.hashCode(getCongestion());
     return result;
   }
 

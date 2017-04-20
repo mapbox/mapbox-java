@@ -230,7 +230,6 @@ public class StepManeuver {
     return Position.fromCoordinates(location[0], location[1]);
   }
 
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -251,16 +250,17 @@ public class StepManeuver {
     if (!Arrays.equals(getLocation(), that.getLocation())) {
       return false;
     }
-    if (!getType().equals(that.getType())) {
+    if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
       return false;
     }
-    if (!getModifier().equals(that.getModifier())) {
+    if (getModifier() != null ? !getModifier().equals(that.getModifier()) : that.getModifier() != null) {
       return false;
     }
-    if (!getInstruction().equals(that.getInstruction())) {
+    if (getInstruction() != null ? !getInstruction().equals(that.getInstruction()) : that.getInstruction() != null) {
       return false;
     }
-    return getExit().equals(that.getExit());
+    return getExit() != null ? getExit().equals(that.getExit()) : that.getExit() == null;
+
   }
 
   @Override
@@ -269,10 +269,10 @@ public class StepManeuver {
     result = 31 * result + Arrays.hashCode(getLocation());
     result = 31 * result + Double.valueOf(getBearingBefore()).hashCode();
     result = 31 * result + Double.valueOf(getBearingAfter()).hashCode();
-    result = 31 * result + getType().hashCode();
-    result = 31 * result + getModifier().hashCode();
-    result = 31 * result + getInstruction().hashCode();
-    result = 31 * result + getExit().hashCode();
+    result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+    result = 31 * result + (getModifier() != null ? getModifier().hashCode() : 0);
+    result = 31 * result + (getInstruction() != null ? getInstruction().hashCode() : 0);
+    result = 31 * result + (getExit() != null ? getExit().hashCode() : 0);
     return result;
   }
 

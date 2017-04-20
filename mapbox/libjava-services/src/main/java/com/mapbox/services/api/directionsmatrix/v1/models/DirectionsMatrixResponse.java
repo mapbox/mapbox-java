@@ -2,6 +2,7 @@ package com.mapbox.services.api.directionsmatrix.v1.models;
 
 import com.mapbox.services.api.directions.v5.models.DirectionsWaypoint;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class DirectionsMatrixResponse {
 
   /**
    * Empty constructor
+   *
    * @since 2.1.0
    */
   public DirectionsMatrixResponse() {
@@ -115,5 +117,50 @@ public class DirectionsMatrixResponse {
    */
   public void setSources(List<DirectionsWaypoint> sources) {
     this.sources = sources;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    DirectionsMatrixResponse that = (DirectionsMatrixResponse) o;
+
+    if (getCode() != null ? !getCode().equals(that.getCode()) : that.getCode() != null) {
+      return false;
+    }
+    if (!Arrays.deepEquals(getDurations(), that.getDurations())) {
+      return false;
+    }
+    if (getDestinations() != null
+      ? !getDestinations().equals(that.getDestinations()) : that.getDestinations() != null) {
+      return false;
+    }
+    return getSources() != null ? getSources().equals(that.getSources()) : that.getSources() == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (getCode() != null ? getCode().hashCode() : 0);
+    result = 31 * result + Arrays.deepHashCode(getDurations());
+    result = 31 * result + (getDestinations() != null ? getDestinations().hashCode() : 0);
+    result = 31 * result + (getSources() != null ? getSources().hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "DirectionsMatrixResponse{"
+      + "code='" + code + '\''
+      + ", durations=" + Arrays.toString(durations)
+      + ", destinations=" + destinations
+      + ", sources=" + sources
+      + '}';
   }
 }

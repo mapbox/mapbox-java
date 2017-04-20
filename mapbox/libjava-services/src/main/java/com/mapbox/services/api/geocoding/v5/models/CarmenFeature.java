@@ -10,6 +10,7 @@ import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
 import com.mapbox.services.commons.models.Position;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -158,15 +159,62 @@ public class CarmenFeature extends Feature {
     return Position.fromCoordinates(center[0], center[1]);
   }
 
-  /**
-   * Human-readable text representing the full result hierarchy
-   * (e.g. "Austin, Texas, United States").
-   *
-   * @return String with human-readable text.
-   * @since 1.0.0
-   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    CarmenFeature that = (CarmenFeature) o;
+
+    if (Double.compare(that.getRelevance(), getRelevance()) != 0) {
+      return false;
+    }
+    if (getText() != null ? !getText().equals(that.getText()) : that.getText() != null) {
+      return false;
+    }
+    if (getPlaceName() != null ? !getPlaceName().equals(that.getPlaceName()) : that.getPlaceName() != null) {
+      return false;
+    }
+    if (!Arrays.equals(getBbox(), that.getBbox())) {
+      return false;
+    }
+    if (getAddress() != null ? !getAddress().equals(that.getAddress()) : that.getAddress() != null) {
+      return false;
+    }
+    if (!Arrays.equals(getCenter(), that.getCenter())) {
+      return false;
+    }
+    return getContext() != null ? getContext().equals(that.getContext()) : that.getContext() == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (getText() != null ? getText().hashCode() : 0);
+    result = 31 * result + (getPlaceName() != null ? getPlaceName().hashCode() : 0);
+    result = 31 * result + Arrays.hashCode(getBbox());
+    result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
+    result = 31 * result + Arrays.hashCode(getCenter());
+    result = 31 * result + (getContext() != null ? getContext().hashCode() : 0);
+    result = 31 * result + Double.valueOf(getRelevance()).hashCode();
+    return result;
+  }
+
   @Override
   public String toString() {
-    return getPlaceName();
+    return "CarmenFeature{"
+      + "text='" + text + '\''
+      + ", placeName='" + placeName + '\''
+      + ", bbox=" + Arrays.toString(bbox)
+      + ", address='" + address + '\''
+      + ", center=" + Arrays.toString(center)
+      + ", context=" + context
+      + ", relevance=" + relevance
+      + '}';
   }
 }

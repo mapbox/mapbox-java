@@ -326,6 +326,7 @@ public class LegStep {
     this.pronunciation = pronunciation;
   }
 
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -346,34 +347,41 @@ public class LegStep {
     if (Double.compare(legStep.getWeight(), getWeight()) != 0) {
       return false;
     }
-    if (!getGeometry().equals(legStep.getGeometry())) {
+    if (getGeometry() != null ? !getGeometry().equals(legStep.getGeometry()) : legStep.getGeometry() != null) {
       return false;
     }
-    if (!getName().equals(legStep.getName())) {
+    if (getName() != null ? !getName().equals(legStep.getName()) : legStep.getName() != null) {
       return false;
     }
-    if (!getRef().equals(legStep.getRef())) {
+    if (getRef() != null ? !getRef().equals(legStep.getRef()) : legStep.getRef() != null) {
       return false;
     }
-    if (!getDestinations().equals(legStep.getDestinations())) {
+    if (getDestinations() != null
+      ? !getDestinations().equals(legStep.getDestinations()) : legStep.getDestinations() != null) {
       return false;
     }
-    if (!getMode().equals(legStep.getMode())) {
+    if (getMode() != null
+      ? !getMode().equals(legStep.getMode()) : legStep.getMode() != null) {
       return false;
     }
-    if (!getPronunciation().equals(legStep.getPronunciation())) {
+    if (getPronunciation() != null
+      ? !getPronunciation().equals(legStep.getPronunciation()) : legStep.getPronunciation() != null) {
       return false;
     }
-    if (!getRotaryName().equals(legStep.getRotaryName())) {
+    if (getRotaryName() != null
+      ? !getRotaryName().equals(legStep.getRotaryName()) : legStep.getRotaryName() != null) {
       return false;
     }
-    if (!getRotaryPronunciation().equals(legStep.getRotaryPronunciation())) {
+    if (getRotaryPronunciation() != null
+      ? !getRotaryPronunciation().equals(legStep.getRotaryPronunciation()) : legStep.getRotaryPronunciation() != null) {
       return false;
     }
-    if (!getManeuver().equals(legStep.getManeuver())) {
+    if (getManeuver() != null
+      ? !getManeuver().equals(legStep.getManeuver()) : legStep.getManeuver() != null) {
       return false;
     }
-    return getIntersections().equals(legStep.getIntersections());
+    return getIntersections() != null
+      ? getIntersections().equals(legStep.getIntersections()) : legStep.getIntersections() == null;
   }
 
   @Override
@@ -381,17 +389,17 @@ public class LegStep {
     int result = 17;
     result = 31 * result + Double.valueOf(getDistance()).hashCode();
     result = 31 * result + Double.valueOf(getDuration()).hashCode();
-    result = 31 * result + getGeometry().hashCode();
-    result = 31 * result + getName().hashCode();
-    result = 31 * result + getRef().hashCode();
-    result = 31 * result + getDestinations().hashCode();
-    result = 31 * result + getMode().hashCode();
-    result = 31 * result + getPronunciation().hashCode();
-    result = 31 * result + getRotaryName().hashCode();
-    result = 31 * result + getRotaryPronunciation().hashCode();
-    result = 31 * result + getManeuver().hashCode();
+    result = 31 * result + (getGeometry() != null ? getGeometry().hashCode() : 0);
+    result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+    result = 31 * result + (getRef() != null ? getRef().hashCode() : 0);
+    result = 31 * result + (getDestinations() != null ? getDestinations().hashCode() : 0);
+    result = 31 * result + (getMode() != null ? getMode().hashCode() : 0);
+    result = 31 * result + (getPronunciation() != null ? getPronunciation().hashCode() : 0);
+    result = 31 * result + (getRotaryName() != null ? getRotaryName().hashCode() : 0);
+    result = 31 * result + (getRotaryPronunciation() != null ? getRotaryPronunciation().hashCode() : 0);
+    result = 31 * result + (getManeuver() != null ? getManeuver().hashCode() : 0);
     result = 31 * result + Double.valueOf(getWeight()).hashCode();
-    result = 31 * result + getIntersections().hashCode();
+    result = 31 * result + (getIntersections() != null ? getIntersections().hashCode() : 0);
     return result;
   }
 

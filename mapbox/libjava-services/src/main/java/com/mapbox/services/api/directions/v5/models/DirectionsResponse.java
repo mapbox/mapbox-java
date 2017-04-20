@@ -115,21 +115,22 @@ public class DirectionsResponse {
 
     DirectionsResponse response = (DirectionsResponse) o;
 
-    if (!getCode().equals(response.getCode())) {
+    if (getCode() != null ? !getCode().equals(response.getCode()) : response.getCode() != null) {
       return false;
     }
-    if (!getRoutes().equals(response.getRoutes())) {
+    if (getRoutes() != null ? !getRoutes().equals(response.getRoutes()) : response.getRoutes() != null) {
       return false;
     }
-    return getWaypoints().equals(response.getWaypoints());
+    return getWaypoints() != null ? getWaypoints().equals(response.getWaypoints()) : response.getWaypoints() == null;
+
   }
 
   @Override
   public int hashCode() {
     int result = 17;
-    result = 31 * result + getCode().hashCode();
-    result = 31 * result + getRoutes().hashCode();
-    result = 31 * result + getWaypoints().hashCode();
+    result = 31 * result + (getCode() != null ? getCode().hashCode() : 0);
+    result = 31 * result + (getRoutes() != null ? getRoutes().hashCode() : 0);
+    result = 31 * result + (getWaypoints() != null ? getWaypoints().hashCode() : 0);
     return result;
   }
 

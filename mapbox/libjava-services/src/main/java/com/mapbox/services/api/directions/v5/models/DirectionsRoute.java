@@ -168,13 +168,14 @@ public class DirectionsRoute {
     if (Double.compare(that.getWeight(), getWeight()) != 0) {
       return false;
     }
-    if (!getGeometry().equals(that.getGeometry())) {
+    if (getGeometry() != null ? !getGeometry().equals(that.getGeometry()) : that.getGeometry() != null) {
       return false;
     }
-    if (!getWeightName().equals(that.getWeightName())) {
+    if (getWeightName() != null ? !getWeightName().equals(that.getWeightName()) : that.getWeightName() != null) {
       return false;
     }
-    return getLegs().equals(that.getLegs());
+    return getLegs() != null ? getLegs().equals(that.getLegs()) : that.getLegs() == null;
+
   }
 
   @Override
@@ -182,10 +183,10 @@ public class DirectionsRoute {
     int result = 17;
     result = 31 * result + Double.valueOf(getDistance()).hashCode();
     result = 31 * result + Double.valueOf(getDuration()).hashCode();
-    result = 31 * result + getGeometry().hashCode();
+    result = 31 * result + (getGeometry() != null ? getGeometry().hashCode() : 0);
     result = 31 * result + Double.valueOf(getWeight()).hashCode();
-    result = 31 * result + getWeightName().hashCode();
-    result = 31 * result + getLegs().hashCode();
+    result = 31 * result + (getWeightName() != null ? getWeightName().hashCode() : 0);
+    result = 31 * result + (getLegs() != null ? getLegs().hashCode() : 0);
     return result;
   }
 

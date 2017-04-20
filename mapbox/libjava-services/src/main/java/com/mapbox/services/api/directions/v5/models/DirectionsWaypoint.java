@@ -84,16 +84,17 @@ public class DirectionsWaypoint {
 
     DirectionsWaypoint that = (DirectionsWaypoint) o;
 
-    if (!getName().equals(that.getName())) {
+    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
       return false;
     }
     return Arrays.equals(getLocation(), that.getLocation());
+
   }
 
   @Override
   public int hashCode() {
     int result = 17;
-    result = 31 * result + getName().hashCode();
+    result = 31 * result + (getName() != null ? getName().hashCode() : 0);
     result = 31 * result + Arrays.hashCode(getLocation());
     return result;
   }
