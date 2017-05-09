@@ -130,14 +130,4 @@ public class LostLocationEngine extends LocationEngine implements
       listener.onLocationChanged(location);
     }
   }
-
-  @Override
-  public void onProviderDisabled(String provider) {
-    Log.d(LOG_TAG, "Provider disabled: " + provider);
-  }
-
-  @Override
-  public void onProviderEnabled(String provider) {
-    Log.d(LOG_TAG, "Provider enabled: " + provider);
-  }
 }
