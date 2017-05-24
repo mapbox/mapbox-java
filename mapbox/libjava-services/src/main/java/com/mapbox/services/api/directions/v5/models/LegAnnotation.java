@@ -36,7 +36,7 @@ public class LegAnnotation {
   }
 
   /**
-   * The speed, in km/h, between each pair of coordinates.
+   * The speed, in meters per second, between each pair of coordinates.
    *
    * @return a double array with each entry being a speed value between two of the routeLeg geometry coordinates.
    * @since 2.1.0
