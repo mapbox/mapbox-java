@@ -2,6 +2,13 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.1.1
+
+* Updates to [LOST `3.0.0`](https://github.com/mapbox/mapbox-java/pull/462)
+* Fixed location [timestamp issue](https://github.com/mapbox/mapbox-java/pull/463)
+* Updated [library dependencies](https://github.com/mapbox/mapbox-java/pull/464)
+* correct [units for `LegAnnotation.speed`](https://github.com/mapbox/mapbox-java/pull/460)
+
 ### v2.1.0
 
 * The Mapbox Navigation SDK for Android has been moved into its own repository. Code and tickets can now be followed on [mapbox-navigation-android](https://github.com/mapbox/mapbox-navigation-android) [#439](https://github.com/mapbox/mapbox-java/pull/439)
