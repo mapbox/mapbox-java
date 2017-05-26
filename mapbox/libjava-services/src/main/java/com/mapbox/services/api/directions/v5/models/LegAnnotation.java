@@ -62,7 +62,7 @@ public class LegAnnotation {
    * The speed, in meters per second, between each pair of coordinates.
    *
    * @return a double array with each entry being a speed value between two of the routeLeg geometry coordinates.
-   * @since 2.2.0
+   * @since 2.1.0
    */
   public double[] getSpeed() {
     return speed;
