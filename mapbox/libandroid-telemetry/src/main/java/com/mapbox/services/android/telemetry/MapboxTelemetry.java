@@ -427,7 +427,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     // Add Location even to queue
     Hashtable<String, Object> event = new Hashtable<>();
     event.put(MapboxEvent.KEY_EVENT, MapboxEvent.TYPE_LOCATION);
-    event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate());
+    event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate(location));
     event.put(MapboxEvent.KEY_SOURCE, MapboxEvent.SOURCE_MAPBOX);
     event.put(MapboxEvent.KEY_SESSION_ID, mapboxSessionId);
     event.put(MapboxEvent.KEY_LATITUDE, latitudeScaled);
@@ -533,7 +533,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private void pushTurnstileEvent() {
     Hashtable<String, Object> event = new Hashtable<>();
     event.put(MapboxEvent.KEY_EVENT, MapboxEvent.TYPE_TURNSTILE);
-    event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate());
+    event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate(null));
     event.put(MapboxEvent.KEY_USER_ID, mapboxVendorId);
     event.put(MapboxEvent.KEY_ENABLED_TELEMETRY, isTelemetryEnabled());
     events.add(event);

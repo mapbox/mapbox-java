@@ -87,7 +87,7 @@ public class MapboxEvent implements Serializable {
 
     Hashtable<String, Object> evt = new Hashtable<>();
     evt.put(MapboxEvent.KEY_EVENT, MapboxEvent.TYPE_MAP_CLICK);
-    evt.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate());
+    evt.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate(location));
     evt.put(MapboxEvent.KEY_GESTURE_ID, gestureId);
     evt.put(MapboxEvent.KEY_LATITUDE, location.getLatitude());
     evt.put(MapboxEvent.KEY_LONGITUDE, location.getLongitude());
@@ -115,7 +115,7 @@ public class MapboxEvent implements Serializable {
 
     Hashtable<String, Object> evt = new Hashtable<>();
     evt.put(MapboxEvent.KEY_EVENT, MapboxEvent.TYPE_MAP_DRAG_END);
-    evt.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate());
+    evt.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate(location));
     evt.put(MapboxEvent.KEY_LATITUDE, location.getLatitude());
     evt.put(MapboxEvent.KEY_LONGITUDE, location.getLongitude());
     evt.put(MapboxEvent.KEY_ZOOM, zoom);
@@ -128,7 +128,7 @@ public class MapboxEvent implements Serializable {
   public static Hashtable<String, Object> buildMapLoadEvent() {
     Hashtable<String, Object> evt = new Hashtable<>();
     evt.put(MapboxEvent.KEY_EVENT, MapboxEvent.TYPE_MAP_LOAD);
-    evt.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate());
+    evt.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate(null));
     return evt;
   }
 }
