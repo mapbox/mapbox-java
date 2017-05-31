@@ -111,6 +111,13 @@ public class DirectionsCriteria {
   public static final String ANNOTATION_SPEED = "speed";
 
   /**
+   * The congestion, provided as a String, between each pair of coordinates
+   *
+   * @since 2.2.0
+   */
+  public static final String ANNOTATION_CONGESTION = "congestion";
+
+  /**
    * Server responds with no errors.
    *
    * @since 1.0.0

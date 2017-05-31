@@ -344,8 +344,9 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
     /**
      * Whether or not to return additional metadata along the route. Possible values are:
-     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
-     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotation can be used by separating them with {@code ,}.
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION},
+     * {@link DirectionsCriteria#ANNOTATION_DURATION} and {@link DirectionsCriteria#ANNOTATION_CONGESTION}. Several
+     * annotation can be used by separating them with {@code ,}.
      *
      * @param annotation String referencing one of the annotation direction criteria's.
      * @return Builder
@@ -648,7 +649,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         for (String annotationEntry : annotation) {
           if (!annotationEntry.equals(DirectionsCriteria.ANNOTATION_DISTANCE)
             && !annotationEntry.equals(DirectionsCriteria.ANNOTATION_DURATION)
-            && !annotationEntry.equals(DirectionsCriteria.ANNOTATION_SPEED)) {
+            && !annotationEntry.equals(DirectionsCriteria.ANNOTATION_SPEED)
+            && !annotationEntry.equals(DirectionsCriteria.ANNOTATION_CONGESTION)) {
             throw new ServicesException(
               "Annotation value must be one of the constant values found inside DirectionsCriteria");
           }
