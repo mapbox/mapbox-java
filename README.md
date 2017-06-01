@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.1.0-SNAPSHOT'
+    compile 'com.mapbox.mapboxsdk:mapbox-android-services:2.2.0-SNAPSHOT'
 }
 ```
 
