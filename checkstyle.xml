@@ -213,5 +213,12 @@
             <property name="exceptionVariableName" value="expected"/>
         </module>
         <module name="CommentsIndentation"/>
+
+        <!-- Custom checks -->
+        <module name="SummaryJavadocCheck">
+            <property name="forbiddenSummaryFragments" value="Created by *"/>
+            <message key="summary.javaDoc"
+             value="Remove the Created by javadoc at the top of classes."/>
+        </module>
     </module>
 </module>
