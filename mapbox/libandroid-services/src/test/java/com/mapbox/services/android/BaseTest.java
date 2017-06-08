@@ -1,11 +1,6 @@
-package com.mapbox.services.api;
+package com.mapbox.services.android;
 
 import com.google.gson.JsonParser;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,10 +12,4 @@ public class BaseTest {
     JsonParser parser = new JsonParser();
     assertEquals(parser.parse(json1), parser.parse(json2));
   }
-
-  protected String loadJsonFixture(String folder, String filename) throws IOException {
-    byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/" + folder + "/" + filename));
-    return new String(content, Charset.forName("utf-8"));
-  }
-
 }

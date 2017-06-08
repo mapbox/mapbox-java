@@ -3,6 +3,7 @@ package com.mapbox.services.android.location;
 import android.location.Location;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
@@ -37,9 +38,9 @@ public class MockLocationEngine extends LocationEngine {
   private Location lastLocation = new Location(MockLocationEngine.class.getSimpleName());
   private List<LocationEngineListener> listeners;
 
-  private boolean noisyGps = DEFAULT_NOISY_GPS;
-  private int speed = DEFAULT_SPEED;
-  private int delay = DEFAULT_DELAY;
+  private boolean noisyGps;
+  private int speed;
+  private int delay;
 
   private List<Position> positions = new ArrayList<>();
   private Runnable runnable;
@@ -61,6 +62,9 @@ public class MockLocationEngine extends LocationEngine {
    */
   public MockLocationEngine() {
     listeners = new ArrayList<>();
+    delay = DEFAULT_DELAY;
+    speed = DEFAULT_SPEED;
+    noisyGps = DEFAULT_NOISY_GPS;
   }
 
   /**
@@ -127,19 +131,30 @@ public class MockLocationEngine extends LocationEngine {
    * @since 2.2.0
    */
   @Override
+  @Nullable
   public Location getLastLocation() {
     if (lastLocation.getLongitude() != 0 && lastLocation.getLatitude() != 0) {
       return lastLocation;
     } else {
-      lastLocation.setLatitude(38.90977);
-      lastLocation.setLongitude(-77.03611);
-      return lastLocation;
+      return null;
     }
   }
 
   public void setLastLocation(Position currentPosition) {
     lastLocation.setLongitude(currentPosition.getLongitude());
     lastLocation.setLatitude(currentPosition.getLatitude());
+  }
+
+  public boolean isNoisyGps() {
+    return noisyGps;
+  }
+
+  public int getSpeed() {
+    return speed;
+  }
+
+  public int getDelay() {
+    return delay;
   }
 
   /**
@@ -342,7 +357,6 @@ public class MockLocationEngine extends LocationEngine {
         calculateStepPoints();
       }
 
-      Timber.v("current position size representing %d", positions.size());
       if (positions.size() > 0) {
         // Notify of an update
         Location location = mockLocation(positions.get(0));
