@@ -51,6 +51,10 @@ public class PermissionsManager {
       || isFineLocationPermissionGranted(context);
   }
 
+  public static boolean areRuntimePermissionsRequired() {
+    return android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+  }
+
   public void requestLocationPermissions(Activity activity) {
     // Request fine location permissions by default
     requestLocationPermissions(activity, true);
