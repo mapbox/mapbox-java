@@ -148,6 +148,6 @@ public class MapboxStaticImageTest {
     HttpUrl url = client.getUrl();
     assertEquals(
       url.toString(),
-      "https://api.mapbox.com/styles/v1/mapbox/streets-v9/static/1.23456,-98.76000,10.00000,345.67890,0.00000/100x200?access_token=pk.");
+      "https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/1.23456,-98.76000,10.00000,345.67890,0.00000/100x200?access_token=pk.");
   }
 }

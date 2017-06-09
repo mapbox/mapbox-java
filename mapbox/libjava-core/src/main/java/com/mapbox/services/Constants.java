@@ -42,12 +42,14 @@ public class Constants {
    * Mapbox default styles
    * https://www.mapbox.com/developers/api/styles/
    */
-  public static final String MAPBOX_STYLE_STREETS = "streets-v9";
+  public static final String MAPBOX_STYLE_STREETS = "streets-v10";
   public static final String MAPBOX_STYLE_LIGHT = "light-v9";
   public static final String MAPBOX_STYLE_DARK = "dark-v9";
-  public static final String MAPBOX_STYLE_OUTDOORS = "outdoors-v9";
+  public static final String MAPBOX_STYLE_OUTDOORS = "outdoors-v10";
   public static final String MAPBOX_STYLE_SATELLITE = "satellite-v9";
-  public static final String MAPBOX_STYLE_SATELLITE_HYBRID = "satellite-streets-v9";
+  public static final String MAPBOX_STYLE_SATELLITE_HYBRID = "satellite-streets-v10";
+  public static final String MAPBOX_STYLE_TRAFFIC_DAY = "traffic-day-v2";
+  public static final String MAPBOX_STYLE_TRAFFIC_NIGHT = "traffic-night-v2";
 
   public static final String PIN_SMALL = "pin-s";
   public static final String PIN_MEDIUM = "pin-m";
