@@ -23,9 +23,11 @@ public class TurfHelpers {
     factors.put(TurfConstants.UNIT_INCHES, 250905600d);
     factors.put(TurfConstants.UNIT_YARDS, 6969600d);
     factors.put(TurfConstants.UNIT_METERS, 6373000d);
+    factors.put(TurfConstants.UNIT_CENTIMETERS, 6.373e+8d);
     factors.put(TurfConstants.UNIT_KILOMETERS, 6373d);
 
     // Also supported
+    factors.put("centimetres", 6.373e+8d);
     factors.put("metres", 6373000d);
     factors.put("kilometres", 6373d);
   }
@@ -87,5 +89,42 @@ public class TurfHelpers {
       throw new TurfException("Invalid unit.");
     }
     return distance / factor;
+  }
+
+  /**
+   * Converts a distance to the requested unit.
+   * Valid units: miles, nauticalmiles, inches, yards, meters, metres, kilometers, centimeters, feet
+   *
+   * @param distance     the distance to be converted
+   * @param originalUnit of the distance
+   * @return the converted distance
+   * @since 2.2.0
+   */
+  public static double convertDistance(double distance, String originalUnit) {
+    return convertDistance(distance, originalUnit, TurfConstants.UNIT_DEFAULT);
+  }
+
+  /**
+   * Converts a distance to the requested unit.
+   * Valid units: miles, nauticalmiles, inches, yards, meters, metres, kilometers, centimeters, feet
+   *
+   * @param distance     the distance to be converted
+   * @param originalUnit of the distance
+   * @param finalUnit    returned unit, {@link TurfConstants#UNIT_DEFAULT} if not specified.
+   * @return the converted distance
+   * @since 2.2.0
+   */
+  public static double convertDistance(double distance, String originalUnit, String finalUnit) {
+    Double factor = factors.get(originalUnit);
+    if (factor == null) {
+      throw new TurfException("Invalid unit.");
+    } else if (!(distance >= 0)) {
+      throw new TurfException("distance must be a positive number");
+    }
+    if (finalUnit == null) {
+      finalUnit = TurfConstants.UNIT_DEFAULT;
+    }
+
+    return radiansToDistance(distanceToRadians(distance, originalUnit), finalUnit);
   }
 }
