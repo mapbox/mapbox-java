@@ -25,6 +25,7 @@ public class TurfHelpers {
     factors.put(TurfConstants.UNIT_METERS, 6373000d);
     factors.put(TurfConstants.UNIT_CENTIMETERS, 6.373e+8d);
     factors.put(TurfConstants.UNIT_KILOMETERS, 6373d);
+    factors.put(TurfConstants.UNIT_FEET, 20908792.65d);
 
     // Also supported
     factors.put("centimetres", 6.373e+8d);

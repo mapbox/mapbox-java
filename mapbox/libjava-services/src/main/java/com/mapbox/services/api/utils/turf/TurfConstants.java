@@ -17,6 +17,7 @@ public class TurfConstants {
   public static final String UNIT_YARDS = "yards";
   public static final String UNIT_METERS = "meters";
   public static final String UNIT_CENTIMETERS = "centimeters";
+  public static final String UNIT_FEET = "feet";
 
   public static final String UNIT_DEFAULT = UNIT_KILOMETERS;
 
