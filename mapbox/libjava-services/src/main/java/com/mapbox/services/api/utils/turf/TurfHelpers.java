@@ -120,7 +120,7 @@ public class TurfHelpers {
     if (factor == null) {
       throw new TurfException("Invalid unit.");
     } else if (!(distance >= 0)) {
-      throw new TurfException("distance must be a positive number");
+      throw new TurfException("Distance must be a positive number.");
     }
     if (finalUnit == null) {
       finalUnit = TurfConstants.UNIT_DEFAULT;

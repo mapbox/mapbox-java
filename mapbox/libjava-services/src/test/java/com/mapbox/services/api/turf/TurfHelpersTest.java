@@ -18,6 +18,20 @@ public class TurfHelpersTest extends BaseTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
+  public void convertDistance_throwNegativeDistanceException() throws TurfException {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("Distance must be a"));
+    TurfHelpers.convertDistance(-1, TurfConstants.UNIT_MILES);
+  }
+
+  @Test
+  public void convertDistance_throwInvalidUnitException() throws TurfException {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("Invalid unit."));
+    TurfHelpers.convertDistance(1, "foo");
+  }
+
+  @Test
   public void convertDistance() throws TurfException {
     Assert.assertEquals(1,
       TurfHelpers.convertDistance(1000, TurfConstants.UNIT_METERS), DELTA);
@@ -29,11 +43,5 @@ public class TurfHelpersTest extends BaseTest {
       TurfHelpers.convertDistance(1, TurfConstants.UNIT_NAUTICAL_MILES), DELTA);
     Assert.assertEquals(100,
       TurfHelpers.convertDistance(1, TurfConstants.UNIT_METERS, TurfConstants.UNIT_CENTIMETERS), DELTA);
-
-    thrown.expect(TurfException.class);
-    thrown.expectMessage(startsWith("Invalid unit."));
-    TurfHelpers.convertDistance(1, "foo");
   }
-
-
 }
