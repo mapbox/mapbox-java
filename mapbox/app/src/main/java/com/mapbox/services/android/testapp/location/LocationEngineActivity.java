@@ -11,10 +11,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mapbox.services.android.location.LostLocationEngine;
+import com.mapbox.services.android.location.MockLocationEngine;
 import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.testapp.R;
+import com.mapbox.services.commons.models.Position;
 
 public class LocationEngineActivity extends AppCompatActivity
   implements AdapterView.OnItemSelectedListener, LocationEngineListener {
@@ -71,6 +73,8 @@ public class LocationEngineActivity extends AppCompatActivity
     if (engineName.equals(locationEngines[1])) {
       // Mock
       locationEngine = new MockLocationEngine();
+      ((MockLocationEngine) locationEngine).setLastLocation(Position.fromLngLat(-87.62877, 41.87827));
+      ((MockLocationEngine) locationEngine).moveToLocation(Position.fromLngLat(-87.6633, 41.8850));
     } else if (engineName.equals(locationEngines[2])) {
       // Android
       locationEngine = AndroidLocationEngine.getLocationEngine(this);
