@@ -26,7 +26,7 @@ public class StaticMarkerAnnotationTest {
       .setName(Constants.PIN_SMALL)
       .build();
 
-    assertTrue(staticMarkerAnnotation.getMarker().contains("pin-s-+(1.000000,2.000000)"));
+    assertTrue(staticMarkerAnnotation.getMarker().contains("pin-s(1.000000,2.000000)"));
   }
 
   @Test
@@ -65,8 +65,76 @@ public class StaticMarkerAnnotationTest {
     new StaticMarkerAnnotation.Builder().setName(Constants.PIN_SMALL).setLat(2.0).build();
   }
 
+  @Test(expected = ServicesException.class)
+  public void requiresOneAlphabetCharLabelIfPresent() throws ServicesException {
+    new StaticMarkerAnnotation.Builder()
+      .setName(Constants.PIN_SMALL)
+      .setLat(2.0)
+      .setLon(2.0)
+      .setLabel("aa")
+      .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void requiresZeroToNinetynineNumericCharLabelIfPresent() throws ServicesException {
+    new StaticMarkerAnnotation.Builder()
+      .setName(Constants.PIN_SMALL)
+      .setLat(2.0)
+      .setLon(2.0)
+      .setLabel("100")
+      .build();
+  }
+
   @Test
-  public void requireValidMarkerColor() throws ServicesException {
+  public void checksMarkerAlphabetCharLabel() throws ServicesException {
+    StaticMarkerAnnotation staticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
+      .setLat(2.0)
+      .setLon(1.0)
+      .setName(Constants.PIN_SMALL)
+      .setLabel("a")
+      .build();
+
+    assertTrue(staticMarkerAnnotation.getMarker().contains("pin-s-a(1.000000,2.000000)"));
+  }
+
+  @Test
+  public void checksMarkerCaseInsensitiveAlphabetCharLabel() throws ServicesException {
+    StaticMarkerAnnotation staticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
+      .setLat(2.0)
+      .setLon(1.0)
+      .setName(Constants.PIN_SMALL)
+      .setLabel("A")
+      .build();
+
+    assertTrue(staticMarkerAnnotation.getMarker().contains("pin-s-a(1.000000,2.000000)"));
+  }
+
+  @Test
+  public void checksMarkerNumericCharLabel() throws ServicesException {
+    StaticMarkerAnnotation staticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
+      .setLat(2.0)
+      .setLon(1.0)
+      .setName(Constants.PIN_SMALL)
+      .setLabel("33")
+      .build();
+
+    assertTrue(staticMarkerAnnotation.getMarker().contains("pin-s-33(1.000000,2.000000)"));
+  }
+
+  @Test
+  public void checksMarkerMapboxMakiIconCharLabel() throws ServicesException {
+    StaticMarkerAnnotation staticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
+      .setLat(2.0)
+      .setLon(1.0)
+      .setName(Constants.PIN_SMALL)
+      .setLabel("bakery")
+      .build();
+
+    assertTrue(staticMarkerAnnotation.getMarker().contains("pin-s-bakery(1.000000,2.000000)"));
+  }
+
+  @Test
+  public void requiresValidColorCodeIfPresent() throws ServicesException {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(startsWith("You need to pass 3- or 6-digit hexadecimal color code."));
 
@@ -76,6 +144,30 @@ public class StaticMarkerAnnotationTest {
       .setLon(2.0)
       .setColor("34564")
       .build();
+  }
+
+  @Test
+  public void checksMarkerWithThreeDigitColorCode() throws ServicesException {
+    StaticMarkerAnnotation staticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
+      .setLat(2.0)
+      .setLon(1.0)
+      .setName(Constants.PIN_SMALL)
+      .setColor("333")
+      .build();
+
+    assertTrue(staticMarkerAnnotation.getMarker().contains("pin-s+333(1.000000,2.000000)"));
+  }
+
+  @Test
+  public void checksMarkerWithSixDigitHexColorCode() throws ServicesException {
+    StaticMarkerAnnotation staticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
+      .setLat(2.0)
+      .setLon(1.0)
+      .setName(Constants.PIN_SMALL)
+      .setColor("666666")
+      .build();
+
+    assertTrue(staticMarkerAnnotation.getMarker().contains("pin-s+666666(1.000000,2.000000)"));
   }
 
   @Test
@@ -102,7 +194,7 @@ public class StaticMarkerAnnotationTest {
       .setWidth(100).setHeight(200)
       .build();
 
-    assertTrue(image.getUrl().toString().contains("pin-s-+(1.000000,2.000000)"));
+    assertTrue(image.getUrl().toString().contains("pin-s(1.000000,2.000000)"));
   }
 
   @Test
@@ -125,7 +217,7 @@ public class StaticMarkerAnnotationTest {
       .setWidth(100).setHeight(200)
       .build();
 
-    assertTrue(image.getUrl().toString().contains("pin-s-+(1.000000,2.000000),pin-m-+(5.000000,6.000000)"));
+    assertTrue(image.getUrl().toString().contains("pin-s(1.000000,2.000000),pin-m(5.000000,6.000000)"));
   }
 
   @Test

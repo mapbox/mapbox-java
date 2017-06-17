@@ -44,7 +44,7 @@ public class StaticMarkerAnnotation {
           TextUtils.formatCoordinate(builder.getLat(), builder.getPrecision())
         );
       } else {
-        marker = String.format(Constants.DEFAULT_LOCALE, "%s-%s+%s(%s,%s)",
+        marker = String.format(Constants.DEFAULT_LOCALE, "%s%s%s(%s,%s)",
           builder.getName(),
           builder.getLabel(),
           builder.getColor(),
@@ -58,7 +58,7 @@ public class StaticMarkerAnnotation {
         marker = String.format(Constants.DEFAULT_LOCALE, "url-%s(%s,%s)",
           builder.getUrl(), builder.getLon(), builder.getLat());
       } else {
-        marker = String.format(Constants.DEFAULT_LOCALE, "%s-%s+%s(%f,%f)", builder.getName(),
+        marker = String.format(Constants.DEFAULT_LOCALE, "%s%s%s(%f,%f)", builder.getName(),
           builder.getLabel(), builder.getColor(), builder.getLon(), builder.getLat());
       }
     }
@@ -81,6 +81,11 @@ public class StaticMarkerAnnotation {
    */
   public static class Builder {
 
+    private static final String EMPTY = "";
+    private static final String HYPHEN_CHAR = "-";
+    private static final String PLUS_CHAR = "+";
+    private static final String NUMERIC_FROM_ZERO_TO_NINETYNINE_REGEX = "^(0|[1-9][0-9]{0,1})$";
+    private static final String ONE_ALPHABET_LETTER_REGEX = "^([a-zA-Z])$";
     private String name;
     private String label = "";
     private String color = "";
@@ -144,12 +149,17 @@ public class StaticMarkerAnnotation {
      * @since 2.1.0
      */
     public String getLabel() {
-      return label;
+      if (label.isEmpty()) {
+        return EMPTY;
+      }
+
+      return HYPHEN_CHAR.concat(label).toLowerCase();
     }
 
     /**
-     * StaticMarkerAnnotation symbol. Options are an alphanumeric label {@code a} through {@code z}, {@code 0} through
-     * {@code 99}, or a valid Maki icon. If a letter is requested, it will be rendered uppercase only.
+     * StaticMarkerAnnotation symbol. Options are an alphanumeric label {@code a}-{@code A} through
+     * {@code z}-{@code Z}, {@code 0} through {@code 99}, or a valid Maki icon. If a letter is requested, it will be
+     * rendered uppercase only.
      *
      * @param label String containing the marker symbol.
      * @return This StaticMarkerAnnotation builder.
@@ -167,7 +177,11 @@ public class StaticMarkerAnnotation {
      * @since 2.1.0
      */
     public String getColor() {
-      return color;
+      if (color.isEmpty()) {
+        return EMPTY;
+      }
+
+      return PLUS_CHAR.concat(color);
     }
 
     /**
@@ -293,6 +307,33 @@ public class StaticMarkerAnnotation {
         Matcher matcher = pattern.matcher(color);
         if (!matcher.matches()) {
           throw new ServicesException("You need to pass 3- or 6-digit hexadecimal color code.");
+        }
+      }
+
+      if (!label.isEmpty()) {
+        boolean isANumber = true;
+        try {
+          Integer.parseInt(label);
+        } catch (NumberFormatException notANumber) {
+          isANumber = false;
+        }
+        if (isANumber) {
+          Pattern pattern = Pattern.compile(NUMERIC_FROM_ZERO_TO_NINETYNINE_REGEX);
+          Matcher matcher = pattern.matcher(label);
+          if (!matcher.matches()) {
+            throw new ServicesException("You need to pass an alphanumeric label [0-99] code.");
+          }
+        } else {
+          // TODO Find a better way to know when a label is not a valid Maki icon
+          // Right now, this is not verified
+          // At the moment there's no Maki icon name with 2 characters or less
+          if (label.length() < 3) {
+            Pattern pattern = Pattern.compile(ONE_ALPHABET_LETTER_REGEX);
+            Matcher matcher = pattern.matcher(label);
+            if (!matcher.matches()) {
+              throw new ServicesException("You need to pass an alphanumeric label [a-zA-Z] code.");
+            }
+          }
         }
       }
 
