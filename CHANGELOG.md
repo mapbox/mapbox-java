@@ -2,6 +2,15 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.1.2
+
+* Update to LOST `3.0.1` which fixes a bug where location requests were too aggressive [#486](https://github.com/mapbox/mapbox-java/pull/486)
+* Expose `MockLocationEngine` as part of the public API [#476](https://github.com/mapbox/mapbox-java/pull/476)
+* Update style versions to `v10` and add traffic styles [#478](https://github.com/mapbox/mapbox-java/pull/478)
+* Fix static marker annotation URL generation [#479](https://github.com/mapbox/mapbox-java/pull/479)
+* Add convert distance method to `TurfHelper` [#481](https://github.com/mapbox/mapbox-java/pull/481)
+* Add new SSL certs for 2018/2019 [#484](https://github.com/mapbox/mapbox-java/pull/484)
+
 ### v2.1.1
 
 * Updates to [LOST `3.0.0`](https://github.com/mapbox/mapbox-java/pull/462)
