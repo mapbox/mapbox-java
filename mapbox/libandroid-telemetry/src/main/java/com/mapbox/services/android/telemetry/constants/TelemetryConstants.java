@@ -10,7 +10,8 @@ import java.util.Locale;
 
 public class TelemetryConstants {
 
-  public static final String OPERATING_SYSTEM = "Android - " + Build.VERSION.RELEASE;
+  public static final String PLATFORM = "Android";
+  public static final String OPERATING_SYSTEM = PLATFORM + " - " + Build.VERSION.RELEASE;
 
   public static final Locale DEFAULT_LOCALE = Locale.US;
 
