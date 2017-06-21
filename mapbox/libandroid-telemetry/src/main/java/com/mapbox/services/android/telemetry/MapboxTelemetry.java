@@ -27,6 +27,7 @@ import com.mapbox.services.android.telemetry.http.TelemetryClient;
 import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.mapbox.services.android.telemetry.navigation.MapboxNavigationEvent;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.telemetry.service.TelemetryService;
 import com.mapbox.services.android.telemetry.utils.TelemetryUtils;
@@ -71,6 +72,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private boolean withShutDown = false;
   private Boolean telemetryEnabled = null;
   protected CopyOnWriteArrayList<TelemetryListener> telemetryListeners;
+  private Hashtable<String, Object> customTurnstileEvent = null;
 
   /**
    * Private constructor for configuring the single instance per app.
@@ -145,6 +147,14 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
 
   public boolean removeTelemetryListener(TelemetryListener listener) {
     return this.telemetryListeners.remove(listener);
+  }
+
+  public Hashtable<String, Object> getCustomTurnstileEvent() {
+    return customTurnstileEvent;
+  }
+
+  public void setCustomTurnstileEvent(Hashtable<String, Object> customTurnstileEvent) {
+    this.customTurnstileEvent = customTurnstileEvent;
   }
 
   /**
@@ -501,6 +511,18 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       eventWithAttributes.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE, TelemetryUtils.getCellularNetworkType(context));
       eventWithAttributes.put(MapboxEvent.KEY_WIFI, TelemetryUtils.getConnectedToWifi(context));
       putEventOnQueue(eventWithAttributes);
+    } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_DEPART)) {
+      // User started a route
+      putEventOnQueue(eventWithAttributes);
+    } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_FEEDBACK)) {
+      // User feedback/reroute event
+      putEventOnQueue(eventWithAttributes);
+    } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_ARRIVE)) {
+      // User arrived
+      putEventOnQueue(eventWithAttributes);
+    } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_CANCEL)) {
+      // User canceled navigation
+      putEventOnQueue(eventWithAttributes);
     } else {
       Log.w(LOG_TAG, String.format("Unknown event type provided: %s.", eventType));
     }
@@ -536,11 +558,16 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * Pushes turnstile event for internal billing purposes.
    */
   private void pushTurnstileEvent() {
-    Hashtable<String, Object> event = new Hashtable<>();
-    event.put(MapboxEvent.KEY_EVENT, MapboxEvent.TYPE_TURNSTILE);
+    Hashtable<String, Object> event = getCustomTurnstileEvent();
+    if (event == null) {
+      event = new Hashtable<>();
+      event.put(MapboxEvent.KEY_EVENT, MapboxEvent.TYPE_TURNSTILE);
+    }
+
     event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate(null));
     event.put(MapboxEvent.KEY_USER_ID, mapboxVendorId);
     event.put(MapboxEvent.KEY_ENABLED_TELEMETRY, isTelemetryEnabled());
+
     events.add(event);
     flushEventsQueueImmediately(true);
   }
