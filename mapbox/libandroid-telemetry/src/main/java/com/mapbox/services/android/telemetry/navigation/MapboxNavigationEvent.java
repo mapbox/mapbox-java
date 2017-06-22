@@ -47,6 +47,11 @@ public class MapboxNavigationEvent {
   public static final String KEY_COMPLETED_DISTANCE = "completedDistance";
   public static final String KEY_COMPLETED_DURATION = "completedDuration";
 
+  /**
+   * Navigation turnstile. The Navigation SDK is
+   * in charge of keeping track of a navigation session, and it should use
+   * {@link TelemetryUtils#buildUUID()} to generate the random UUID.
+   */
   public static Hashtable<String, Object> buildTurnstileEvent(String sdkName, String sdkVersion) {
     Hashtable<String, Object> event = new Hashtable<>();
     event.put(KEY_EVENT, TYPE_TURNSTILE);
@@ -57,6 +62,9 @@ public class MapboxNavigationEvent {
     return event;
   }
 
+  /**
+   * User started a route.
+   */
   public static Hashtable<String, Object> buildDepartEvent(
       String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount) {
@@ -66,6 +74,9 @@ public class MapboxNavigationEvent {
     return event;
   }
 
+  /**
+   * User feedback/reroute event.
+   */
   public static Hashtable<String, Object> buildFeedbackEvent(
       String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount, String feedbackType,
@@ -84,6 +95,9 @@ public class MapboxNavigationEvent {
     return event;
   }
 
+  /**
+   * User arrived.
+   */
   public static Hashtable<String, Object> buildArriveEvent(
       String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount, Date startTimestamp,
@@ -97,6 +111,9 @@ public class MapboxNavigationEvent {
     return event;
   }
 
+  /**
+   * User canceled navigation.
+   */
   public static Hashtable<String, Object> buildCancelEvent(
       String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount, Date startTimestamp,
