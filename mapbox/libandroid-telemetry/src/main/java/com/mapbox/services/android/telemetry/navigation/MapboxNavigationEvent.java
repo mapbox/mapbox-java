@@ -47,14 +47,13 @@ public class MapboxNavigationEvent {
   public static final String KEY_FEEDBACK_TYPE = "feedbackType";
   public static final String KEY_LOCATIONS_BEFORE = "locationsBefore";
   public static final String KEY_LOCATIONS_AFTER = "locationsAfter";
-  public static final String KEY_CURRENT_DISTANCE = "currentDistance";
-  public static final String KEY_CURRENT_DURATION = "currentDuration";
-  public static final String KEY_NEW_ESTIMATED_DISTANCE = "newEstimatedDistance";
-  public static final String KEY_NEW_ESTIMATED_DURATION = "newEstimatedDuration";
+  public static final String KEY_NEW_DISTANCE_REMAINING = "newDistanceRemaining";
+  public static final String KEY_NEW_DURATION_REMAINING = "newDurationRemaining";
   public static final String KEY_START_TIMESTAMP = "startTimestamp";
   public static final String KEY_DISTANCE_COMPLETED = "distanceCompleted";
   public static final String KEY_DISTANCE_REMAINING = "distanceRemaining";
   public static final String KEY_DURATION_REMAINING = "durationRemaining";
+  public static final String KEY_SECONDS_SINCE_LAST_REROUTE = "secondsSinceLastReroute";
 
   /**
    * Navigation turnstile.
@@ -88,19 +87,23 @@ public class MapboxNavigationEvent {
   public static Hashtable<String, Object> buildFeedbackEvent(
       String sdKIdentifier, String sdkVersion, String sessionIdentifier, double lat, double lng,
       String geometry, String profile, int estimatedDistance, int estimatedDuration,
-      int rerouteCount, String feedbackType,
-      Location[] locationsBefore, Location[] locationsAfter, int currentDistance,
-      int currentDuration, int newEstimatedDistance, int newEstimatedDuration) {
+      int rerouteCount, Date startTimestamp, String feedbackType,
+      Location[] locationsBefore, Location[] locationsAfter, int distanceCompleted,
+      int distanceRemaining, int durationRemaining, int newDistanceRemaining,
+      int newDurationRemaining, int secondsSinceLastReroute) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
         lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount);
     event.put(KEY_EVENT, TYPE_FEEDBACK);
+    event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
     event.put(KEY_FEEDBACK_TYPE, feedbackType);
     event.put(KEY_LOCATIONS_BEFORE, locationsBefore);
     event.put(KEY_LOCATIONS_AFTER, locationsAfter);
-    event.put(KEY_CURRENT_DISTANCE, currentDistance);
-    event.put(KEY_CURRENT_DURATION, currentDuration);
-    event.put(KEY_NEW_ESTIMATED_DISTANCE, newEstimatedDistance);
-    event.put(KEY_NEW_ESTIMATED_DURATION, newEstimatedDuration);
+    event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
+    event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
+    event.put(KEY_DURATION_REMAINING, durationRemaining);
+    event.put(KEY_NEW_DISTANCE_REMAINING, newDistanceRemaining);
+    event.put(KEY_NEW_DURATION_REMAINING, newDurationRemaining);
+    event.put(KEY_SECONDS_SINCE_LAST_REROUTE, secondsSinceLastReroute);
     return event;
   }
 
