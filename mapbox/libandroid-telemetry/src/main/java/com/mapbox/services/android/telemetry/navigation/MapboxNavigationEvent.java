@@ -26,7 +26,7 @@ public class MapboxNavigationEvent {
   public static final String KEY_EVENT = "event";
   public static final String KEY_PLATFORM = "platform";
   public static final String KEY_OPERATING_SYSTEM = "operatingSystem";
-  public static final String KEY_SDK_NAME = "sdkName";
+  public static final String KEY_SDK_IDENTIFIER = "sdkIdentifier";
   public static final String KEY_SDK_VERSION = "sdkVersion";
   public static final String KEY_SCHEMA_VERSION = "schemaVersion";
   public static final String KEY_SESSION_UUID = "sessionUUID";
@@ -52,12 +52,12 @@ public class MapboxNavigationEvent {
    * in charge of keeping track of a navigation session, and it should use
    * {@link TelemetryUtils#buildUUID()} to generate the random UUID.
    */
-  public static Hashtable<String, Object> buildTurnstileEvent(String sdkName, String sdkVersion) {
+  public static Hashtable<String, Object> buildTurnstileEvent(String sdKIdentifier, String sdkVersion) {
     Hashtable<String, Object> event = new Hashtable<>();
     event.put(KEY_EVENT, TYPE_TURNSTILE);
     event.put(KEY_PLATFORM, TelemetryConstants.PLATFORM);
     event.put(KEY_OPERATING_SYSTEM, TelemetryConstants.OPERATING_SYSTEM);
-    event.put(KEY_SDK_NAME, sdkName);
+    event.put(KEY_SDK_IDENTIFIER, sdKIdentifier);
     event.put(KEY_SDK_VERSION, sdkVersion);
     return event;
   }
@@ -66,9 +66,9 @@ public class MapboxNavigationEvent {
    * User started a route.
    */
   public static Hashtable<String, Object> buildDepartEvent(
-      String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
+      String sdKIdentifier, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount) {
-    Hashtable<String, Object> event = getMetadata(sdkName, sdkVersion, sessionUUID, geometry,
+    Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionUUID, geometry,
         profile, estimatedDistance, estimatedDuration, rerouteCount);
     event.put(KEY_EVENT, TYPE_DEPART);
     return event;
@@ -78,11 +78,11 @@ public class MapboxNavigationEvent {
    * User feedback/reroute event.
    */
   public static Hashtable<String, Object> buildFeedbackEvent(
-      String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
+      String sdKIdentifier, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount, String feedbackType,
       Location[] locationsBefore, Location[] locationsAfter, int currentDistance,
       int currentDuration, int newEstimatedDistance, int newEstimatedDuration) {
-    Hashtable<String, Object> event = getMetadata(sdkName, sdkVersion, sessionUUID, geometry,
+    Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionUUID, geometry,
         profile, estimatedDistance, estimatedDuration, rerouteCount);
     event.put(KEY_EVENT, TYPE_FEEDBACK);
     event.put(KEY_FEEDBACK_TYPE, feedbackType);
@@ -99,10 +99,10 @@ public class MapboxNavigationEvent {
    * User arrived.
    */
   public static Hashtable<String, Object> buildArriveEvent(
-      String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
+      String sdKIdentifier, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount, Date startTimestamp,
       int completedDistance, int completedDuration) {
-    Hashtable<String, Object> event = getMetadata(sdkName, sdkVersion, sessionUUID, geometry,
+    Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionUUID, geometry,
         profile, estimatedDistance, estimatedDuration, rerouteCount);
     event.put(KEY_EVENT, TYPE_ARRIVE);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
@@ -115,10 +115,10 @@ public class MapboxNavigationEvent {
    * User canceled navigation.
    */
   public static Hashtable<String, Object> buildCancelEvent(
-      String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
+      String sdKIdentifier, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount, Date startTimestamp,
       int completedDistance, int completedDuration) {
-    Hashtable<String, Object> event = getMetadata(sdkName, sdkVersion, sessionUUID, geometry,
+    Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionUUID, geometry,
         profile, estimatedDistance, estimatedDuration, rerouteCount);
     event.put(KEY_EVENT, TYPE_CANCEL);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
@@ -133,11 +133,11 @@ public class MapboxNavigationEvent {
    * {@link TelemetryUtils#buildUUID()} to generate the random UUID.
    */
   private static Hashtable<String, Object> getMetadata(
-      String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
+      String sdKIdentifier, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount) {
     Hashtable<String, Object> event = new Hashtable<>();
     event.put(KEY_OPERATING_SYSTEM, TelemetryConstants.OPERATING_SYSTEM);
-    event.put(KEY_SDK_NAME, sdkName);
+    event.put(KEY_SDK_IDENTIFIER, sdKIdentifier);
     event.put(KEY_SDK_VERSION, sdkVersion);
     event.put(KEY_SCHEMA_VERSION, SCHEMA_VERSION);
     event.put(KEY_SESSION_UUID, sessionUUID);
