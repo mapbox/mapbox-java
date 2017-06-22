@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.location.Location;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
@@ -171,6 +172,25 @@ public class TelemetryUtils {
     }
 
     return isConnectedToWifi;
+  }
+
+  /**
+   * Returns the screen backlight brightness between 0 and 100, -1 if the check failed.
+   */
+  public static int getScreenBrightness(Context context) {
+    int screenBrightness;
+    try {
+      screenBrightness = android.provider.Settings.System.getInt(
+          context.getContentResolver(),
+          android.provider.Settings.System.SCREEN_BRIGHTNESS);
+
+      // Android returns values between 0 and 255, here we normalize to 0-100.
+      screenBrightness = (int) Math.floor(100.0 * screenBrightness / 255.0);
+    } catch (Settings.SettingNotFoundException exception) {
+      screenBrightness = -1;
+    }
+
+    return screenBrightness;
   }
 
   /**
