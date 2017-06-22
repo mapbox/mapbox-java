@@ -391,7 +391,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
      * <p>
      * - Each coordinate is a pair of a longitude double and latitude double, which are separated by a ,
      * - Coordinates are separated by a ; from each other
-     * - A query must at minimum have 2 coordinates and may at maximum have 25 coordinates
+     * - A query must have at least 2 coordinates and at most 25 coordinates (at most 3 when the profile is {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING_TRAFFIC})
      *
      * @return String containing coordinates formatted.
      * @since 1.0.0
