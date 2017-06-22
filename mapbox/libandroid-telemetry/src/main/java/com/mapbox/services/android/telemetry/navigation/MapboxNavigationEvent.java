@@ -111,7 +111,9 @@ public class MapboxNavigationEvent {
   }
 
   /**
-   * The following metadata should be attached to all non-turnstile events.
+   * The following metadata should be attached to all non-turnstile events. The Navigation SDK is
+   * in charge of keeping track of a navigation session, and it should use
+   * {@link TelemetryUtils#buildUUID()} to generate the random UUID.
    */
   private static Hashtable<String, Object> getMetadata(
       String sdkName, String sdkVersion, String sessionUUID, String geometry, String profile,
