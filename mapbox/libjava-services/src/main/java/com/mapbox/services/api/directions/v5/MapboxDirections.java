@@ -1,8 +1,11 @@
 package com.mapbox.services.api.directions.v5;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.directions.DirectionsTypeAdapterFactory;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
@@ -30,9 +33,20 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
   protected Builder builder = null;
   private DirectionsService service = null;
   private Call<DirectionsResponse> call = null;
+  private Gson gson;
 
   protected MapboxDirections(Builder builder) {
     this.builder = builder;
+  }
+
+  protected Gson getGson() {
+    // Gson instance with type adapters
+    if (gson == null) {
+      gson = new GsonBuilder()
+        .registerTypeAdapterFactory(DirectionsTypeAdapterFactory.create())
+        .create();
+    }
+    return gson;
   }
 
   private DirectionsService getService() {
@@ -44,7 +58,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     // Retrofit instance
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(builder.getBaseUrl())
-      .addConverterFactory(GsonConverterFactory.create());
+      .addConverterFactory(GsonConverterFactory.create(getGson()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
     } else {

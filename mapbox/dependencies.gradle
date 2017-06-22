@@ -20,7 +20,7 @@ ext {
             mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.0.2@aar',
 
             // gson
-            gson                 : 'com.google.code.gson:gson:2.8.0',
+            gson                 : 'com.google.code.gson:gson:2.8.1',
 
             // timber
             timber               : 'com.jakewharton.timber:timber:4.5.1',
@@ -29,6 +29,10 @@ ext {
             retrofit2Main        : 'com.squareup.retrofit2:retrofit:2.2.0',
             retrofit2Gson        : 'com.squareup.retrofit2:converter-gson:2.2.0',
             retrofit2Rx          : 'com.squareup.retrofit2:adapter-rxjava2:2.2.0',
+
+            // auto value
+            autoValues           : 'com.google.auto.value:auto-value:1.4.1',
+            autoValuesGson       : 'com.ryanharter.auto.value:auto-value-gson:0.4.6',
 
             // okhttp
             okhttp3              : 'com.squareup.okhttp3:okhttp:3.6.0',
