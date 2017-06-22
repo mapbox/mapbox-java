@@ -13,7 +13,7 @@ import java.util.Hashtable;
  */
 public class MapboxNavigationEvent {
 
-  private static final int SCHEMA_VERSION = 1;
+  private static final int EVENT_VERSION = 1;
 
   // Event types
   public static final String TYPE_TURNSTILE = "navigation.turnstile";
@@ -28,7 +28,7 @@ public class MapboxNavigationEvent {
   public static final String KEY_OPERATING_SYSTEM = "operatingSystem";
   public static final String KEY_SDK_IDENTIFIER = "sdkIdentifier";
   public static final String KEY_SDK_VERSION = "sdkVersion";
-  public static final String KEY_SCHEMA_VERSION = "schemaVersion";
+  public static final String KEY_EVENT_VERSION = "eventVersion";
   public static final String KEY_SESSION_UUID = "sessionUUID";
   public static final String KEY_GEOMETRY = "geometry";
   public static final String KEY_CREATED = "created";
@@ -136,10 +136,11 @@ public class MapboxNavigationEvent {
       String sdKIdentifier, String sdkVersion, String sessionUUID, String geometry, String profile,
       int estimatedDistance, int estimatedDuration, int rerouteCount) {
     Hashtable<String, Object> event = new Hashtable<>();
+    event.put(KEY_PLATFORM, TelemetryConstants.PLATFORM);
     event.put(KEY_OPERATING_SYSTEM, TelemetryConstants.OPERATING_SYSTEM);
     event.put(KEY_SDK_IDENTIFIER, sdKIdentifier);
     event.put(KEY_SDK_VERSION, sdkVersion);
-    event.put(KEY_SCHEMA_VERSION, SCHEMA_VERSION);
+    event.put(KEY_EVENT_VERSION, EVENT_VERSION);
     event.put(KEY_SESSION_UUID, sessionUUID);
     event.put(KEY_GEOMETRY, geometry);
     event.put(KEY_CREATED, TelemetryUtils.generateCreateDate(null));
