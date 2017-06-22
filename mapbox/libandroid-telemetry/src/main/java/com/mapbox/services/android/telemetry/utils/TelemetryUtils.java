@@ -18,6 +18,7 @@ import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Static utilities to complete the event data.
@@ -170,6 +171,13 @@ public class TelemetryUtils {
     }
 
     return isConnectedToWifi;
+  }
+
+  /**
+   * Generates a random UUID that can be used
+   */
+  public static String buildUUID() {
+    return UUID.randomUUID().toString();
   }
 
 }

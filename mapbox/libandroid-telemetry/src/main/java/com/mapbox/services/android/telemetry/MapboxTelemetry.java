@@ -37,7 +37,6 @@ import java.math.BigDecimal;
 import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -236,7 +235,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     long timeSinceLastSet = System.currentTimeMillis() - mapboxSessionIdLastSet;
     if ((TextUtils.isEmpty(mapboxSessionId))
       || (timeSinceLastSet > TelemetryConstants.SESSION_ID_ROTATION_MS)) {
-      mapboxSessionId = UUID.randomUUID().toString();
+      mapboxSessionId = TelemetryUtils.buildUUID();
       mapboxSessionIdLastSet = System.currentTimeMillis();
     }
   }
@@ -287,7 +286,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
 
     // Create vendor ID (if needed)
     if (TextUtils.isEmpty(mapboxVendorId)) {
-      mapboxVendorId = UUID.randomUUID().toString();
+      mapboxVendorId = TelemetryUtils.buildUUID();
       SharedPreferences.Editor editor = prefs.edit();
       editor.putString(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_VENDOR_ID, mapboxVendorId);
       editor.apply();
