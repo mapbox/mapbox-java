@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.media.AudioManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
@@ -194,10 +195,17 @@ public class TelemetryUtils {
   }
 
   /**
+   * Returns the current system volume level
+   */
+  public static int getVolumeLevel(Context context) {
+    AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    return audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM);
+  }
+
+  /**
    * Generates a random UUID that can be used
    */
   public static String buildUUID() {
     return UUID.randomUUID().toString();
   }
-
 }
