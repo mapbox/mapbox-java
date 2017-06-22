@@ -53,6 +53,8 @@ public class MapboxNavigationEvent {
   public static final String KEY_NEW_ESTIMATED_DURATION = "newEstimatedDuration";
   public static final String KEY_START_TIMESTAMP = "startTimestamp";
   public static final String KEY_DISTANCE_COMPLETED = "distanceCompleted";
+  public static final String KEY_DISTANCE_REMAINING = "distanceRemaining";
+  public static final String KEY_DURATION_REMAINING = "durationRemaining";
 
   /**
    * Navigation turnstile.
@@ -123,12 +125,15 @@ public class MapboxNavigationEvent {
   public static Hashtable<String, Object> buildCancelEvent(
       String sdKIdentifier, String sdkVersion, String sessionIdentifier, double lat, double lng,
       String geometry, String profile, int estimatedDistance, int estimatedDuration,
-      int rerouteCount, Date startTimestamp, int distanceCompleted) {
+      int rerouteCount, Date startTimestamp, int distanceCompleted, int distanceRemaining,
+      int durationRemaining) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
         lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount);
     event.put(KEY_EVENT, TYPE_CANCEL);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
+    event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
+    event.put(KEY_DURATION_REMAINING, durationRemaining);
     return event;
   }
 
