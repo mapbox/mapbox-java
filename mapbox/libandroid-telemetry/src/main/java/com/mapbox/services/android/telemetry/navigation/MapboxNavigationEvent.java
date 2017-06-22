@@ -52,7 +52,7 @@ public class MapboxNavigationEvent {
   public static final String KEY_NEW_ESTIMATED_DISTANCE = "newEstimatedDistance";
   public static final String KEY_NEW_ESTIMATED_DURATION = "newEstimatedDuration";
   public static final String KEY_START_TIMESTAMP = "startTimestamp";
-  public static final String KEY_COMPLETED_DISTANCE = "completedDistance";
+  public static final String KEY_DISTANCE_COMPLETED = "distanceCompleted";
 
   /**
    * Navigation turnstile.
@@ -108,12 +108,12 @@ public class MapboxNavigationEvent {
   public static Hashtable<String, Object> buildArriveEvent(
       String sdKIdentifier, String sdkVersion, String sessionIdentifier, double lat, double lng,
       String geometry, String profile, int estimatedDistance, int estimatedDuration,
-      int rerouteCount, Date startTimestamp, int completedDistance, int completedDuration) {
+      int rerouteCount, Date startTimestamp, int distanceCompleted) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
         lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount);
     event.put(KEY_EVENT, TYPE_ARRIVE);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
-    event.put(KEY_COMPLETED_DISTANCE, completedDistance);
+    event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     return event;
   }
 
@@ -123,12 +123,12 @@ public class MapboxNavigationEvent {
   public static Hashtable<String, Object> buildCancelEvent(
       String sdKIdentifier, String sdkVersion, String sessionIdentifier, double lat, double lng,
       String geometry, String profile, int estimatedDistance, int estimatedDuration,
-      int rerouteCount, Date startTimestamp, int completedDistance, int completedDuration) {
+      int rerouteCount, Date startTimestamp, int distanceCompleted) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
         lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount);
     event.put(KEY_EVENT, TYPE_CANCEL);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
-    event.put(KEY_COMPLETED_DISTANCE, completedDistance);
+    event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     return event;
   }
 
