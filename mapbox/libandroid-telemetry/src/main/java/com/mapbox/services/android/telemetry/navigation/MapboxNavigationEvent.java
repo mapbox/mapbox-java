@@ -53,7 +53,6 @@ public class MapboxNavigationEvent {
   public static final String KEY_NEW_ESTIMATED_DURATION = "newEstimatedDuration";
   public static final String KEY_START_TIMESTAMP = "startTimestamp";
   public static final String KEY_COMPLETED_DISTANCE = "completedDistance";
-  public static final String KEY_COMPLETED_DURATION = "completedDuration";
 
   /**
    * Navigation turnstile.
@@ -115,7 +114,6 @@ public class MapboxNavigationEvent {
     event.put(KEY_EVENT, TYPE_ARRIVE);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
     event.put(KEY_COMPLETED_DISTANCE, completedDistance);
-    event.put(KEY_COMPLETED_DURATION, completedDuration);
     return event;
   }
 
@@ -131,7 +129,6 @@ public class MapboxNavigationEvent {
     event.put(KEY_EVENT, TYPE_CANCEL);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
     event.put(KEY_COMPLETED_DISTANCE, completedDistance);
-    event.put(KEY_COMPLETED_DURATION, completedDuration);
     return event;
   }
 
