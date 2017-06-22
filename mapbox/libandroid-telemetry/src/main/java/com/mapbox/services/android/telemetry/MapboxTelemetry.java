@@ -512,15 +512,39 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       putEventOnQueue(eventWithAttributes);
     } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_DEPART)) {
       // User started a route
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_CONNECTIVITY, TelemetryUtils.getCellularNetworkType(context));
       putEventOnQueue(eventWithAttributes);
     } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_FEEDBACK)) {
       // User feedback/reroute event
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_CONNECTIVITY, TelemetryUtils.getCellularNetworkType(context));
       putEventOnQueue(eventWithAttributes);
     } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_ARRIVE)) {
       // User arrived
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_CONNECTIVITY, TelemetryUtils.getCellularNetworkType(context));
       putEventOnQueue(eventWithAttributes);
     } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_CANCEL)) {
       // User canceled navigation
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
+      eventWithAttributes.put(MapboxNavigationEvent.KEY_CONNECTIVITY, TelemetryUtils.getCellularNetworkType(context));
       putEventOnQueue(eventWithAttributes);
     } else {
       Log.w(LOG_TAG, String.format("Unknown event type provided: %s.", eventType));

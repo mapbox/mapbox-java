@@ -38,6 +38,12 @@ public class MapboxNavigationEvent {
   public static final String KEY_ESTIMATED_DISTANCE = "estimatedDistance";
   public static final String KEY_ESTIMATED_DURATION = "estimatedDuration";
   public static final String KEY_REROUTE_COUNT = "rerouteCount";
+  public static final String KEY_VOLUME_LEVEL = "volumeLevel";
+  public static final String KEY_SCREEN_BRIGHTNESS = "screenBrightness";
+  public static final String KEY_APPLICATION_STATE = "applicationState";
+  public static final String KEY_BATTERY_PLUGGED_IN = "batteryPluggedIn";
+  public static final String KEY_BATTERY_LEVEL = "batteryLevel";
+  public static final String KEY_CONNECTIVITY = "connectivity";
   public static final String KEY_FEEDBACK_TYPE = "feedbackType";
   public static final String KEY_LOCATIONS_BEFORE = "locationsBefore";
   public static final String KEY_LOCATIONS_AFTER = "locationsAfter";
