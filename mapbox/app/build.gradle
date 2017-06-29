@@ -49,6 +49,7 @@ dependencies {
         transitive = true
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-java-geojson'
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
+        exclude group: 'com.mapzen.android', module: 'lost'
     }
 
     // Leak Canary

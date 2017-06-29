@@ -2,12 +2,11 @@ package com.mapbox.services.android.location;
 
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
+import android.support.annotation.Nullable;
 
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
-import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapzen.android.lost.api.LocationListener;
 import com.mapzen.android.lost.api.LocationRequest;
 import com.mapzen.android.lost.api.LocationServices;
@@ -18,10 +17,7 @@ import java.lang.ref.WeakReference;
 /**
  * Sample LocationEngine using the Open Source Lost library
  */
-public class LostLocationEngine extends LocationEngine implements
-  LostApiClient.ConnectionCallbacks, LocationListener {
-
-  private static final String LOG_TAG = LostLocationEngine.class.getSimpleName();
+public class LostLocationEngine extends LocationEngine implements LocationListener {
 
   private static LocationEngine instance;
 
@@ -31,9 +27,7 @@ public class LostLocationEngine extends LocationEngine implements
   public LostLocationEngine(Context context) {
     super();
     this.context = new WeakReference<>(context);
-    lostApiClient = new LostApiClient.Builder(this.context.get())
-      .addConnectionCallbacks(this)
-      .build();
+    lostApiClient = new LostApiClient.Builder(this.context.get()).build();
   }
 
   public static synchronized LocationEngine getLocationEngine(Context context) {
@@ -44,50 +38,63 @@ public class LostLocationEngine extends LocationEngine implements
     return instance;
   }
 
+  /**
+   * Activate the location engine which will connect whichever location provider you are using. You'll need to call
+   * this before requesting user location updates using {@link LocationEngine#requestLocationUpdates()}.
+   */
   @Override
   public void activate() {
-    if (lostApiClient != null && !lostApiClient.isConnected()) {
+    if (!lostApiClient.isConnected()) {
       lostApiClient.connect();
     }
-  }
-
-  @Override
-  public void deactivate() {
-    if (lostApiClient != null && lostApiClient.isConnected()) {
-      lostApiClient.disconnect();
-    }
-  }
-
-  @Override
-  public boolean isConnected() {
-    return lostApiClient.isConnected();
-  }
-
-  @Override
-  public void onConnected() {
     for (LocationEngineListener listener : locationListeners) {
       listener.onConnected();
     }
   }
 
+  /**
+   * Disconnect the location engine which is useful when you no longer need location updates or requesting the users
+   * {@link LocationEngine#getLastLocation()}. Before deactivating, you'll need to stop request user location updates
+   * using {@link LocationEngine#removeLocationUpdates()}.
+   */
   @Override
-  public void onConnectionSuspended() {
-    Log.d(LOG_TAG, "Connection suspended.");
+  public void deactivate() {
+    if (lostApiClient.isConnected()) {
+      lostApiClient.disconnect();
+    }
   }
 
+  /**
+   * Check if your location provider has been activated/connected. This is mainly used internally but is also useful in
+   * the rare case when you'd like to know if your location engine is connected or not.
+   *
+   * @return boolean true if the location engine has been activated/connected, else false.
+   */
   @Override
-  public Location getLastLocation() {
-    if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
-      //noinspection MissingPermission
-      return LocationServices.FusedLocationApi.getLastLocation(lostApiClient);
-    }
+  public boolean isConnected() {
+    return lostApiClient.isConnected();
+  }
 
+  /**
+   * Returns the Last known location is the location provider is connected and location permissions are granted.
+   *
+   * @return the last known location
+   */
+  @Override
+  @Nullable
+  public Location getLastLocation() {
+    if (lostApiClient.isConnected()) {
+      //noinspection MissingPermission
+      return LocationServices.FusedLocationApi.getLastLocation();
+    }
     return null;
   }
 
+  /**
+   * Request location updates to the location provider.
+   */
   @Override
   public void requestLocationUpdates() {
-    // Common params
     LocationRequest request = LocationRequest.create();
 
     if (interval != null) {
@@ -111,19 +118,27 @@ public class LostLocationEngine extends LocationEngine implements
       request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    if (lostApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
+    if (lostApiClient.isConnected()) {
       //noinspection MissingPermission
-      LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, this);
+      LocationServices.FusedLocationApi.requestLocationUpdates(request, this);
     }
   }
 
+  /**
+   * Dismiss ongoing location update to the location provider.
+   */
   @Override
   public void removeLocationUpdates() {
     if (lostApiClient.isConnected()) {
-      LocationServices.FusedLocationApi.removeLocationUpdates(lostApiClient, this);
+      LocationServices.FusedLocationApi.removeLocationUpdates(this);
     }
   }
 
+  /**
+   * Invoked when the Location has changed.
+   *
+   * @param location the new location
+   */
   @Override
   public void onLocationChanged(Location location) {
     for (LocationEngineListener listener : locationListeners) {
@@ -131,3 +146,4 @@ public class LostLocationEngine extends LocationEngine implements
     }
   }
 }
+

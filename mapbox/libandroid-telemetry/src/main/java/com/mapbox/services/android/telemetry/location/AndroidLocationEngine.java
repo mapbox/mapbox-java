@@ -70,8 +70,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
 
   @Override
   public Location getLastLocation() {
-    if (!TextUtils.isEmpty(currentProvider)
-      && PermissionsManager.areLocationPermissionsGranted(context.get())) {
+    if (!TextUtils.isEmpty(currentProvider)) {
       //noinspection MissingPermission
       return locationManager.getLastKnownLocation(currentProvider);
     }
@@ -81,8 +80,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
 
   @Override
   public void requestLocationUpdates() {
-    if (!TextUtils.isEmpty(currentProvider)
-      && PermissionsManager.areLocationPermissionsGranted(context.get())) {
+    if (!TextUtils.isEmpty(currentProvider)) {
       //noinspection MissingPermission
       locationManager.requestLocationUpdates(currentProvider, DEFAULT_MIN_TIME, DEFAULT_MIN_DISTANCE, this);
     }
