@@ -15,7 +15,6 @@ import com.google.android.gms.location.LocationServices;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
-import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
 import java.lang.ref.WeakReference;
 
@@ -88,7 +87,7 @@ public class GoogleLocationEngine extends LocationEngine implements
 
   @Override
   public Location getLastLocation() {
-    if (googleApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
+    if (googleApiClient.isConnected()) {
       //noinspection MissingPermission
       return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
     }
@@ -114,7 +113,7 @@ public class GoogleLocationEngine extends LocationEngine implements
       request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    if (googleApiClient.isConnected() && PermissionsManager.areLocationPermissionsGranted(context.get())) {
+    if (googleApiClient.isConnected()) {
       //noinspection MissingPermission
       LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, this);
     }

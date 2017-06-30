@@ -15,8 +15,11 @@ import com.mapbox.services.android.location.MockLocationEngine;
 import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.commons.models.Position;
+
+import timber.log.Timber;
 
 public class LocationEngineActivity extends AppCompatActivity
   implements AdapterView.OnItemSelectedListener, LocationEngineListener {
@@ -88,6 +91,8 @@ public class LocationEngineActivity extends AppCompatActivity
 
     if (!engineName.equals(locationEngines[0]) && locationEngine != null) {
       // Not None
+      Timber.e("Last known location: %s", locationEngine.getLastLocation());
+      locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
       locationEngine.addLocationEngineListener(this);
       locationEngine.activate();
     }
