@@ -301,18 +301,29 @@ public class MockLocationEngine extends LocationEngine {
    */
   private void calculateStepPoints() {
     LineString line = LineString.fromPolyline(
-      route.getLegs().get(currentLeg)
-        .getSteps().get(currentStep).getGeometry(), Constants.PRECISION_6);
+      route.getLegs().get(currentLeg).getSteps().get(currentStep).getGeometry(), Constants.PRECISION_6);
 
-    if (currentStep < route.getLegs().get(currentLeg).getSteps().size() - 1) {
-      currentStep++;
-    } else if (currentLeg < route.getLegs().size() - 1) {
-      currentLeg++;
-    }
+    increaseIndex();
 
     sliceRoute(line, distance);
     if (noisyGps) {
       addNoiseToRoute(distance);
+    }
+
+    // Forces calculation of next step each time a new step occurs. This is done to prevent stalling between steps.
+    if (currentStep == 0 && currentLeg == 0) {
+      currentStep++;
+      currentLeg++;
+      calculateStepPoints();
+    }
+  }
+
+  private void increaseIndex() {
+    if (currentStep < route.getLegs().get(currentLeg).getSteps().size() - 1) {
+      currentStep++;
+    } else if (currentLeg < route.getLegs().size() - 1) {
+      currentLeg++;
+      currentStep = 0;
     }
   }
 
@@ -353,7 +364,7 @@ public class MockLocationEngine extends LocationEngine {
   private class LocationUpdateRunnable implements Runnable {
     @Override
     public void run() {
-      if (positions.size() <= 5) {
+      if (positions.size() <= 1) {
         calculateStepPoints();
       }
 
