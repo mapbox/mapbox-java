@@ -115,8 +115,8 @@ workflows:
             #!/bin/bash        
             echo "Run Robo tests on firebase:"
             gcloud auth activate-service-account --key-file secret.json --project mapbox-java
-            gcloud beta test android devices list
-            gcloud beta test android run --type robo --app mapbox/app/build/outputs/apk/app-debug.apk --device-ids shamu --os-version-ids 22 --locales en --orientations portrait --timeout 10m
+            gcloud firebase test android devices list
+            gcloud firebase test android run --type robo --app mapbox/app/build/outputs/apk/app-debug.apk --device-ids shamu --os-version-ids 22 --locales en --orientations portrait --timeout 10m
     - slack:
         inputs:
         - webhook_url: "$SLACK_HOOK_URL"
