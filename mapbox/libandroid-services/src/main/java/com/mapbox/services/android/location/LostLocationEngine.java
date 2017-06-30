@@ -76,7 +76,7 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
   }
 
   /**
-   * Returns the Last known location is the location provider is connected and location permissions are granted.
+   * Returns the Last known location if the location provider is connected and location permissions are granted.
    *
    * @return the last known location
    */

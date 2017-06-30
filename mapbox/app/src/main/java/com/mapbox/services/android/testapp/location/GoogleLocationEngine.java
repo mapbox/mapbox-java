@@ -15,7 +15,6 @@ import com.google.android.gms.location.LocationServices;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
-import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
 import java.lang.ref.WeakReference;
 
