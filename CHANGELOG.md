@@ -2,6 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.1.3
+
+* Downgrade LOST to v1.1.1 to address stability issues [#493](https://github.com/mapbox/mapbox-java/pull/493)
+
 ### v2.1.2
 
 * Update to LOST `3.0.1` which fixes a bug where location requests were too aggressive [#486](https://github.com/mapbox/mapbox-java/pull/486)
