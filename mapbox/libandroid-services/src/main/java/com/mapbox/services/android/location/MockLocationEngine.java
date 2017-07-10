@@ -20,7 +20,6 @@ import java.util.Random;
 
 import timber.log.Timber;
 
-
 /**
  * Allows for mocking user location along a route. The route comes from the directions API and is instance of
  * {@link DirectionsRoute}. Once the route is passed in the mocking is automatically started. It goes step by step
