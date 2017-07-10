@@ -20,6 +20,7 @@ import java.util.Random;
 
 import timber.log.Timber;
 
+
 /**
  * Allows for mocking user location along a route. The route comes from the directions API and is instance of
  * {@link DirectionsRoute}. Once the route is passed in the mocking is automatically started. It goes step by step
@@ -309,13 +310,6 @@ public class MockLocationEngine extends LocationEngine {
     if (noisyGps) {
       addNoiseToRoute(distance);
     }
-
-    // Forces calculation of next step each time a new step occurs. This is done to prevent stalling between steps.
-    if (currentStep == 0 && currentLeg == 0) {
-      currentStep++;
-      currentLeg++;
-      calculateStepPoints();
-    }
   }
 
   private void increaseIndex() {
@@ -364,7 +358,7 @@ public class MockLocationEngine extends LocationEngine {
   private class LocationUpdateRunnable implements Runnable {
     @Override
     public void run() {
-      if (positions.size() <= 1) {
+      if (positions.size() < 1) {
         calculateStepPoints();
       }
 
