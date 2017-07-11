@@ -357,7 +357,9 @@ public class MockLocationEngine extends LocationEngine {
   private class LocationUpdateRunnable implements Runnable {
     @Override
     public void run() {
-      if (positions.size() < 1) {
+      // Calculate the next steps points if the list becomes empty
+      // so that the mock location continues along the route
+      if (positions.size() <= 0) {
         calculateStepPoints();
       }
 
