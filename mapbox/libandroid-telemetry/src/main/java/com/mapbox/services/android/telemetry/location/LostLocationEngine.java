@@ -1,12 +1,9 @@
-package com.mapbox.services.android.location;
+package com.mapbox.services.android.telemetry.location;
 
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.Nullable;
 
-import com.mapbox.services.android.telemetry.location.LocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngineListener;
-import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 import com.mapzen.android.lost.api.LocationListener;
 import com.mapzen.android.lost.api.LocationRequest;
 import com.mapzen.android.lost.api.LocationServices;

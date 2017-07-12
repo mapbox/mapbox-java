@@ -59,6 +59,11 @@ dependencies {
     // Google Play Services
     compile rootProject.ext.dep.gmsLocation
 
+    // LOST
+    compile(rootProject.ext.dep.lost) {
+        exclude group: 'com.google.guava'
+    }
+
     // Picasso (Static Image)
     compile rootProject.ext.dep.picasso
 

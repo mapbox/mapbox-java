@@ -1,4 +1,4 @@
-package com.mapbox.services.android.testapp.location;
+package com.mapbox.services.android.telemetry.location;
 
 import android.content.Context;
 import android.location.Location;
@@ -12,9 +12,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.mapbox.services.android.telemetry.location.LocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngineListener;
-import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 
 import java.lang.ref.WeakReference;
 

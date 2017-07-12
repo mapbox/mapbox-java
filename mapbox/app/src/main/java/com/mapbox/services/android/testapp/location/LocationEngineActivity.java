@@ -10,14 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.location.MockLocationEngine;
-import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
+import com.mapbox.services.android.telemetry.location.LocationSourceProvider;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.commons.models.Position;
+
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -73,20 +74,15 @@ public class LocationEngineActivity extends AppCompatActivity
     setNoEngine();
 
     String[] locationEngines = getResources().getStringArray(R.array.location_engines);
+    LocationSourceProvider locationSourceProvider = new LocationSourceProvider(this);
+    Map<String, LocationEngine> locationSourceDictionary = locationSourceProvider.obtainLocationSourceDictionary();
     if (engineName.equals(locationEngines[1])) {
       // Mock
       locationEngine = new MockLocationEngine();
       ((MockLocationEngine) locationEngine).setLastLocation(Position.fromLngLat(-87.62877, 41.87827));
       ((MockLocationEngine) locationEngine).moveToLocation(Position.fromLngLat(-87.6633, 41.8850));
-    } else if (engineName.equals(locationEngines[2])) {
-      // Android
-      locationEngine = AndroidLocationEngine.getLocationEngine(this);
-    } else if (engineName.equals(locationEngines[3])) {
-      // Lost
-      locationEngine = LostLocationEngine.getLocationEngine(this);
-    } else if (engineName.equals(locationEngines[4])) {
-      // Google Play Services
-      locationEngine = GoogleLocationEngine.getLocationEngine(this);
+    } else if (!engineName.equals(locationEngines[0])) {
+      locationEngine = locationSourceDictionary.get(engineName);
     }
 
     if (!engineName.equals(locationEngines[0]) && locationEngine != null) {

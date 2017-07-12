@@ -32,11 +32,21 @@ dependencies {
     // OkHttp for network requests
     compile rootProject.ext.dep.okhttp3
 
+    // Google Play Services
+    provided rootProject.ext.dep.gmsLocation
+
+    // LOST
+    provided(rootProject.ext.dep.lost) {
+        exclude group: 'com.google.guava'
+    }
+
     // Testing
     testCompile rootProject.ext.dep.junit
     androidTestCompile(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    testCompile rootProject.ext.dep.junit
+    testCompile rootProject.ext.dep.mockito
 }
 
 apply from: 'gradle-javadoc.gradle'
