@@ -1,21 +1,29 @@
+plugins { id "net.ltgt.apt" version "0.10" }
 apply plugin: 'java'
+apply plugin: 'idea'
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 dependencies {
-    // Mapbox Java Services requires GeoJSON support
-    compile project(':libjava-geojson')
+  // Mapbox Java Services requires GeoJSON support
+  compile project(':libjava-geojson')
 
-    // Retrofit
-    compile rootProject.ext.dep.retrofit2Main
-    compile rootProject.ext.dep.retrofit2Gson
-    compile rootProject.ext.dep.okhttp3Logging
+  // Retrofit
+  compile rootProject.ext.dep.retrofit2Main
+  compile rootProject.ext.dep.retrofit2Gson
+  compile rootProject.ext.dep.okhttp3Logging
 
-    // Testing
-    testCompile rootProject.ext.dep.okhttp3Mockwebserver
-    testCompile rootProject.ext.dep.junit
-    testCompile rootProject.ext.dep.hamcrestJunit
+  // AutoValues
+  compileOnly rootProject.ext.dep.autoValuesGson
+  apt rootProject.ext.dep.autoValuesGson
+//  compileOnly rootProject.ext.dep.autoValues
+//  apt rootProject.ext.dep.autoValues
+
+  // Testing
+  testCompile rootProject.ext.dep.okhttp3Mockwebserver
+  testCompile rootProject.ext.dep.junit
+  testCompile rootProject.ext.dep.hamcrestJunit
 }
 
 apply from: 'gradle-javadoc.gradle'
