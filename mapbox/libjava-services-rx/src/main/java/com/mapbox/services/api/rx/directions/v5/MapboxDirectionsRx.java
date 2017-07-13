@@ -65,7 +65,8 @@ public class MapboxDirectionsRx extends MapboxDirections {
       builder.isSteps(),
       builder.getBearings(),
       builder.isContinueStraight(),
-      builder.getAnnotation());
+      builder.getAnnotation(),
+      builder.getLanguage());
 
     // Done
     return observable;

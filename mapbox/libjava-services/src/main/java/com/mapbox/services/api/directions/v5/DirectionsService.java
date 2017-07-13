@@ -35,6 +35,7 @@ public interface DirectionsService {
    * @param annotations      An annotations object that contains additional details about each line segment along the
    *                         route geometry. Each entry in an annotations field corresponds to a coordinate along the
    *                         route geometry.
+   * @param language         Language of returned turn-by-turn text instructions.
    * @return The {@link DirectionsResponse} in a Call wrapper.
    * @since 1.0.0
    */
@@ -53,6 +54,7 @@ public interface DirectionsService {
     @Query("steps") Boolean steps,
     @Query("bearings") String bearings,
     @Query("continue_straight") Boolean continueStraight,
-    @Query("annotations") String annotations
+    @Query("annotations") String annotations,
+    @Query("language") String language
   );
 }
