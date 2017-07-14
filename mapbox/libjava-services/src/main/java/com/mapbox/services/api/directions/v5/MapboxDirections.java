@@ -75,7 +75,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       builder.isSteps(),
       builder.getBearings(),
       builder.isContinueStraight(),
-      builder.getAnnotation());
+      builder.getAnnotation(),
+      builder.getLanguage());
 
     // Done
     return call;
@@ -147,6 +148,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     private Position origin = null;
     private Position destination = null;
     private String[] annotation = null;
+    private String language = null;
 
     /**
      * Constructor
@@ -157,7 +159,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       // Set defaults
       this.user = DirectionsCriteria.PROFILE_DEFAULT_USER;
 
-      // by defauly the geometry is polyline with precision 6.
+      // by default the geometry is polyline with precision 6.
       this.geometries = DirectionsCriteria.GEOMETRY_POLYLINE6;
     }
 
@@ -358,6 +360,19 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return (T) this;
     }
 
+    /**
+     * Optionally set the language of returned turn-by-turn text instructions. The default is {@code en} for English.
+     *
+     * @param language The locale in which results should be returned.
+     * @return Builder
+     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported languages</a>
+     * @since 2.2.0
+     */
+    public T setLanguage(String language) {
+      this.language = language;
+      return (T) this;
+    }
+
     /*
      * Getters, they return the value in a format ready for the API to consume
      */
@@ -541,6 +556,14 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
         return null;
       }
       return TextUtils.join(",", annotation);
+    }
+
+    /**
+     * @return The language the turn-by-turn directions will be in.
+     * @since 2.2.0
+     */
+    public String getLanguage() {
+      return language;
     }
 
     /**
