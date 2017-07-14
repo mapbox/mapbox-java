@@ -155,7 +155,7 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
     private double[] radiuses;
     private Boolean steps;
     private double[][] bearings;
-    private String[] annotation;
+    private String[] annotations;
     private String overview;
     private String language;
     private double[][] distributions;
@@ -344,15 +344,32 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
     /**
      * Whether or not to return additional metadata along the route. Possible values are:
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
-     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotation can be used by separating them with {@code ,}.
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotations can be used by separating them with {@code ,}.
      *
-     * @param annotation String referencing one of the annotation direction criteria's.
+     * @param annotation String referencing one of the annotations direction criteria's.
+     * @return Builder
+     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object documentation</a>
+     * @since 2.1.0
+     * @deprecated use {@link Builder#getAnnotations()} instead
+     */
+    @Deprecated
+    public T setAnnotation(String... annotation) {
+      this.annotations = annotation;
+      return (T) this;
+    }
+
+    /**
+     * Whether or not to return additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotations can be used by separating them with {@code ,}.
+     *
+     * @param annotation String referencing one of the annotations direction criteria's.
      * @return Builder
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object documentation</a>
      * @since 2.1.0
      */
-    public T setAnnotation(String... annotation) {
-      this.annotation = annotation;
+    public T setAnnotations(String... annotation) {
+      this.annotations = annotation;
       return (T) this;
     }
 
@@ -576,13 +593,27 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
     /**
      * Determine whether or not you are currently requesting additional metadata along the route. Possible values are:
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
-     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotation can be used by separating them with {@code ,}.
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotations can be used by separating them with {@code ,}.
      *
-     * @return String referencing one of the annotation direction criteria's.
+     * @return String referencing one of the annotations direction criteria's.
+     * @since 2.1.0
+     * @deprecated Use {@link Builder#getAnnotations()}
+     */
+    @Deprecated
+    public String[] getAnnotation() {
+      return annotations;
+    }
+
+    /**
+     * Determine whether or not you are currently requesting additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotations can be used by separating them with {@code ,}.
+     *
+     * @return String referencing one of the annotations direction criteria's.
      * @since 2.1.0
      */
-    public String[] getAnnotation() {
-      return annotation;
+    public String[] getAnnotations() {
+      return annotations;
     }
 
     /**

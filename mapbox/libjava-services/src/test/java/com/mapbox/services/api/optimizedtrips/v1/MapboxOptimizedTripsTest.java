@@ -207,7 +207,7 @@ public class MapboxOptimizedTripsTest extends BaseTest {
       .setBaseUrl(mockUrl.toString())
       .setCoordinates(coords)
       .setLanguage("sv")
-      .setAnnotation(DirectionsCriteria.ANNOTATION_DURATION)
+      .setAnnotations(DirectionsCriteria.ANNOTATION_DURATION)
       .build();
 
     String callUrl = client.executeCall().raw().request().url().toString();
@@ -229,7 +229,7 @@ public class MapboxOptimizedTripsTest extends BaseTest {
       .setProfile(DirectionsCriteria.PROFILE_DRIVING)
       .setBaseUrl(mockUrl.toString())
       .setLanguage("sv")
-      .setAnnotation(DirectionsCriteria.ANNOTATION_DURATION)
+      .setAnnotations(DirectionsCriteria.ANNOTATION_DURATION)
       .build();
 
     Response<OptimizedTripsResponse> response = client.executeCall();
