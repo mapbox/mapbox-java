@@ -1,64 +1,64 @@
 {
-  "trips": [
-    {
-      "geometry": "q|qeFbdejV}cCzZrNv|Bi[nj@nIb_AeGvk@s_@pn@gmClSoo@|h@co@[oz@fp@qj@vgAs_AfJ}l@vt@ehCgLlY{wAjU_]ut@kpBnFcU`Oh@eB{R`ZgIuAgj@tAfj@aZfIdBzRaOi@oFbUzs@|pB_Uj[q]fiBvnCoAvi@ks@naAgK~j@ihAdy@kn@vo@E~o@ui@|fCoOhj@mo@j_Ab@zc@|Q~pAqD~F`o@`|F{[nEv^`U_^|vAqRbNwuAeb@yt@iu@qMeYiYiUmdAX{dB{Pgi@ojBuc@kq@hTcl@wE_OzR{ApeA_|@hA",
-      "legs": [
-        {
-          "steps": [],
-          "distance": 25785.8,
-          "duration": 1829.6,
-          "summary": "",
-          "weight": 2004.6
-        },
-        {
-          "steps": [],
-          "distance": 28835.6,
-          "duration": 2124.4,
-          "summary": "",
-          "weight": 2231.1
-        },
-        {
-          "steps": [],
-          "distance": 16067.5,
-          "duration": 1317,
-          "summary": "",
-          "weight": 1381.1
-        }
-      ],
-      "distance": 70688.9,
-      "duration": 5271,
-      "weight_name": "routability",
-      "weight": 5616.799999999999
-    }
-  ],
+  "code": "Ok",
   "waypoints": [
     {
-      "waypoint_index": 0,
       "location": [
         -122.420019,
         37.780091
       ],
       "name": "McAllister Street",
+      "waypoint_index": 0,
       "trips_index": 0
     },
     {
-      "waypoint_index": 1,
       "location": [
         -122.461997,
         37.89621
       ],
       "name": "Playa Verde",
+      "waypoint_index": 1,
       "trips_index": 0
     },
     {
-      "waypoint_index": 2,
       "location": [
         -122.480005,
         37.730039
       ],
       "name": "",
+      "waypoint_index": 2,
       "trips_index": 0
     }
   ],
-  "code": "Ok"
+  "trips": [
+    {
+      "legs": [
+        {
+          "steps": [],
+          "weight": 4297.1,
+          "distance": 25785.8,
+          "summary": "",
+          "duration": 2206.1
+        },
+        {
+          "steps": [],
+          "weight": 4957.5,
+          "distance": 28835.6,
+          "summary": "",
+          "duration": 2526.6
+        },
+        {
+          "steps": [],
+          "weight": 2336.3,
+          "distance": 16096.4,
+          "summary": "",
+          "duration": 1201.1
+        }
+      ],
+      "weight_name": "routability",
+      "geometry": "q|qeFbdejV}cCzZrNv|Bi[nj@nIb_AeGvk@s_@pn@gmClSoo@|h@co@[oz@fp@qj@vgAs_AfJ}l@vt@ehCgLlY{wAjU_]ut@kpBnFcU`Oh@eB{R`ZgIuAgj@tAfj@aZfIdBzRaOi@oFbUzs@|pB_Uj[q]fiBvnCoAvi@ks@naAgK~j@ihAdy@kn@vo@E~o@ui@|fCoOhj@mo@j_Ab@zc@|Q~pAqD~F`o@`|F{[nEv^bQiIh@yS`h@bAnp@qT~MuzAmc@_q@mr@uKyYiX}UkdAb@ybBmQcm@ojBuc@kq@hTcl@wE_OzR{ApeA_|@hA",
+      "weight": 11590.900000000001,
+      "distance": 70717.79999999999,
+      "duration": 5933.799999999999
+    }
+  ]
 }
