@@ -3,6 +3,7 @@ package com.mapbox.services.api.rx.mapmatching.v5;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.mapmatching.v5.MapMatchingCriteria;
 import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
+import com.mapbox.services.api.rx.BaseTest;
 import com.mapbox.services.commons.models.Position;
 
 import org.junit.After;
@@ -12,9 +13,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import io.reactivex.observers.TestObserver;
@@ -29,11 +27,9 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test Rx support on the Mapbox Map Matching API
  */
+public class MapboxMapMatchingRxTest extends BaseTest {
 
-public class MapboxMapMatchingRxTest {
-
-  public static final String POLYLINE_FIXTURE =
-    "../libjava-services/src/test/fixtures/mapmatching_v5_polyline.json";
+  private static final String POLYLINE_FIXTURE = "../libjava-services/src/test/fixtures/mapmatching_v5_polyline.json";
 
   private static final String ACCESS_TOKEN = "pk.XXX";
 
@@ -54,7 +50,7 @@ public class MapboxMapMatchingRxTest {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         try {
-          String body = new String(Files.readAllBytes(Paths.get(POLYLINE_FIXTURE)), Charset.forName("utf-8"));
+          String body = loadJsonFixture(POLYLINE_FIXTURE);
           return new MockResponse().setBody(body);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);

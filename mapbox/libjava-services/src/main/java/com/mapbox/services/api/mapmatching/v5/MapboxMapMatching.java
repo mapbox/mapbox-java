@@ -1,6 +1,5 @@
 package com.mapbox.services.api.mapmatching.v5;
 
-import com.google.gson.Gson;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.ServicesException;
@@ -35,7 +34,6 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
   protected Builder builder = null;
   private MapMatchingService service = null;
   private Call<MapMatchingResponse> call = null;
-  private Gson gson;
 
   protected MapboxMapMatching(Builder builder) {
     this.builder = builder;
@@ -85,7 +83,8 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
       builder.getSteps(),
       builder.getOverview(),
       builder.getTimestamps(),
-      builder.getAnnotations()
+      builder.getAnnotations(),
+      builder.getLanguage()
     );
 
     return call;
@@ -152,6 +151,7 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     private String overview = null;
     private String[] timestamps = null;
     private String annotations = null;
+    private String language;
 
     /**
      * Constructor
@@ -376,6 +376,27 @@ public class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
     public T setBaseUrl(String baseUrl) {
       super.baseUrl = baseUrl;
       return (T) this;
+    }
+
+    /**
+     * Optionally set the language of returned turn-by-turn text instructions. The default is {@code en} for English.
+     *
+     * @param language The locale in which results should be returned.
+     * @return Builder
+     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported languages</a>
+     * @since 2.2.0
+     */
+    public T setLanguage(String language) {
+      this.language = language;
+      return (T) this;
+    }
+
+    /**
+     * @return The language the turn-by-turn directions will be in.
+     * @since 2.2.0
+     */
+    public String getLanguage() {
+      return language;
     }
 
     /**

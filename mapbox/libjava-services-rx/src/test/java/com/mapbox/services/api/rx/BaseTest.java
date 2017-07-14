@@ -1,4 +1,4 @@
-package com.mapbox.services.api;
+package com.mapbox.services.api.rx;
 
 import com.google.gson.JsonParser;
 

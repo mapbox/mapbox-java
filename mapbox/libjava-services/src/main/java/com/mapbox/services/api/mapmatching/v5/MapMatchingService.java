@@ -46,6 +46,7 @@ public interface MapMatchingService {
    *                    along the match geometry. Can be one or all of 'duration', 'distance',
    *                    or 'nodes', each separated by ,. See the response object for more
    *                    details on what it is included with annotations.
+   * @param language    Language of returned turn-by-turn text instructions.
    * @return The MapMatchingResponse in a Call wrapper
    * @since 2.0.0
    */
@@ -62,5 +63,6 @@ public interface MapMatchingService {
     @Query("steps") Boolean steps,
     @Query("overview") String overview,
     @Query("timestamps") String timestamps,
-    @Query("annotations") String annotations);
+    @Query("annotations") String annotations,
+    @Query("language") String language);
 }

@@ -1,84 +1,411 @@
 {
-    "code": "Ok",
-    "matchings": [
+  "tracepoints": [
+    {
+      "waypoint_index": 0,
+      "matchings_index": 0,
+      "alternatives_count": 0,
+      "location": [
+        13.418807,
+        52.500595
+      ],
+      "name": "Adalbertstraße"
+    },
+    {
+      "waypoint_index": 1,
+      "matchings_index": 0,
+      "alternatives_count": 0,
+      "location": [
+        13.419148,
+        52.501096
+      ],
+      "name": "Adalbertstraße"
+    },
+    {
+      "waypoint_index": 2,
+      "matchings_index": 0,
+      "alternatives_count": 0,
+      "location": [
+        13.41962,
+        52.501755
+      ],
+      "name": "Adalbertstraße"
+    },
+    {
+      "waypoint_index": 3,
+      "matchings_index": 0,
+      "alternatives_count": 0,
+      "location": [
+        13.420041,
+        52.502334
+      ],
+      "name": "Adalbertstraße"
+    },
+    {
+      "waypoint_index": 4,
+      "matchings_index": 0,
+      "alternatives_count": 1,
+      "location": [
+        13.420494,
+        52.502984
+      ],
+      "name": "Adalbertstraße"
+    }
+  ],
+  "matchings": [
+    {
+      "duration": 42.9,
+      "distance": 289.20000000000005,
+      "weight": 83.6,
+      "geometry": "w_m_Iqz{pAcBcAcC}AqBsAaCyA",
+      "confidence": 0.8259225426255177,
+      "weight_name": "routability",
+      "legs": [
         {
-            "confidence": 0.8820996720716853,
-            "distance": 291.6,
-            "duration": 49.5,
-            "geometry": "}_m_Iu{{pAEZwA{@aC}AsBsAaCyA",
-            "legs": [
+          "steps": [
+            {
+              "intersections": [
                 {
-                    "distance": 62.7,
-                    "duration": 14.5,
-                    "steps": [],
-                    "summary": ""
-                },
-                {
-                    "distance": 79.9,
-                    "duration": 13.5,
-                    "steps": [],
-                    "summary": ""
-                },
-                {
-                    "distance": 70.5,
-                    "duration": 10.2,
-                    "steps": [],
-                    "summary": ""
-                },
-                {
-                    "distance": 78.5,
-                    "duration": 11.3,
-                    "steps": [],
-                    "summary": ""
+                  "out": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    13.418807,
+                    52.500595
+                  ],
+                  "bearings": [
+                    23
+                  ]
                 }
-            ]
+              ],
+              "geometry": "w_m_Iqz{pAKGoAu@GE",
+              "duration": 8.5,
+              "distance": 60.3,
+              "name": "Adalbertstraße",
+              "weight": 17,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 23,
+                "location": [
+                  13.418807,
+                  52.500595
+                ],
+                "type": "depart",
+                "bearing_before": 0,
+                "modifier": "right",
+                "instruction": "Kör åt nordost på Adalbertstraße"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "in": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    13.419148,
+                    52.501096
+                  ],
+                  "bearings": [
+                    202
+                  ]
+                }
+              ],
+              "geometry": "{bm_Iu|{pA",
+              "duration": 0,
+              "distance": 0,
+              "name": "Adalbertstraße",
+              "weight": 0,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 0,
+                "location": [
+                  13.419148,
+                  52.501096
+                ],
+                "type": "arrive",
+                "bearing_before": 22,
+                "modifier": "left",
+                "instruction": "Du är framme vid din destination, till vänster"
+              }
+            }
+          ],
+          "weight": 17,
+          "distance": 60.3,
+          "summary": "Adalbertstraße",
+          "duration": 8.5
+        },
+        {
+          "steps": [
+            {
+              "intersections": [
+                {
+                  "out": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    13.419148,
+                    52.501096
+                  ],
+                  "bearings": [
+                    22
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false,
+                    true
+                  ],
+                  "location": [
+                    13.419277,
+                    52.501287
+                  ],
+                  "bearings": [
+                    30,
+                    120,
+                    195,
+                    300
+                  ]
+                }
+              ],
+              "geometry": "{bm_Iu|{pAe@Ym@a@o@a@",
+              "duration": 13.2,
+              "distance": 80,
+              "name": "Adalbertstraße",
+              "weight": 24.5,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 22,
+                "location": [
+                  13.419148,
+                  52.501096
+                ],
+                "type": "depart",
+                "bearing_before": 0,
+                "modifier": "left",
+                "instruction": "Kör åt nordost på Adalbertstraße"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "in": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    13.41962,
+                    52.501755
+                  ],
+                  "bearings": [
+                    204
+                  ]
+                }
+              ],
+              "geometry": "_gm_Is_|pA",
+              "duration": 0,
+              "distance": 0,
+              "name": "Adalbertstraße",
+              "weight": 0,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 0,
+                "location": [
+                  13.41962,
+                  52.501755
+                ],
+                "type": "arrive",
+                "bearing_before": 24,
+                "modifier": "right",
+                "instruction": "Du är framme vid din destination, till höger"
+              }
+            }
+          ],
+          "weight": 24.5,
+          "distance": 80,
+          "summary": "Adalbertstraße",
+          "duration": 13.2
+        },
+        {
+          "steps": [
+            {
+              "intersections": [
+                {
+                  "out": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    13.41962,
+                    52.501755
+                  ],
+                  "bearings": [
+                    24
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false,
+                    true
+                  ],
+                  "location": [
+                    13.419982,
+                    52.502249
+                  ],
+                  "bearings": [
+                    30,
+                    120,
+                    210,
+                    300
+                  ]
+                }
+              ],
+              "geometry": "_gm_Is_|pAaBgAOK",
+              "duration": 10.1,
+              "distance": 70.4,
+              "name": "Adalbertstraße",
+              "weight": 19.9,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 24,
+                "location": [
+                  13.41962,
+                  52.501755
+                ],
+                "type": "depart",
+                "bearing_before": 0,
+                "modifier": "right",
+                "instruction": "Kör åt nordost på Adalbertstraße"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "in": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    13.420041,
+                    52.502334
+                  ],
+                  "bearings": [
+                    203
+                  ]
+                }
+              ],
+              "geometry": "qjm_Igb|pA",
+              "duration": 0,
+              "distance": 0,
+              "name": "Adalbertstraße",
+              "weight": 0,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 0,
+                "location": [
+                  13.420041,
+                  52.502334
+                ],
+                "type": "arrive",
+                "bearing_before": 23,
+                "modifier": "left",
+                "instruction": "Du är framme vid din destination, till vänster"
+              }
+            }
+          ],
+          "weight": 19.9,
+          "distance": 70.4,
+          "summary": "Adalbertstraße",
+          "duration": 10.1
+        },
+        {
+          "steps": [
+            {
+              "intersections": [
+                {
+                  "out": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    13.420041,
+                    52.502334
+                  ],
+                  "bearings": [
+                    23
+                  ]
+                }
+              ],
+              "geometry": "qjm_Igb|pAaCyA",
+              "duration": 11.1,
+              "distance": 78.5,
+              "name": "Adalbertstraße",
+              "weight": 22.2,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 23,
+                "location": [
+                  13.420041,
+                  52.502334
+                ],
+                "type": "depart",
+                "bearing_before": 0,
+                "modifier": "left",
+                "instruction": "Kör åt nordost på Adalbertstraße"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "in": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    13.420494,
+                    52.502984
+                  ],
+                  "bearings": [
+                    203
+                  ]
+                }
+              ],
+              "geometry": "snm_Iae|pA",
+              "duration": 0,
+              "distance": 0,
+              "name": "Adalbertstraße",
+              "weight": 0,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 0,
+                "location": [
+                  13.420494,
+                  52.502984
+                ],
+                "type": "arrive",
+                "bearing_before": 23,
+                "modifier": "right",
+                "instruction": "Du är framme vid din destination, till höger"
+              }
+            }
+          ],
+          "weight": 22.2,
+          "distance": 78.5,
+          "summary": "Adalbertstraße",
+          "duration": 11.1
         }
-    ],
-    "tracepoints": [
-        {
-            "location": [
-                13.418991,
-                52.500625
-            ],
-            "matchings_index": 0,
-            "name": "",
-            "waypoint_index": 0
-        },
-        {
-            "location": [
-                13.419147,
-                52.501095
-            ],
-            "matchings_index": 0,
-            "name": "Adalbertstraße",
-            "waypoint_index": 1
-        },
-        {
-            "location": [
-                13.419618,
-                52.501754
-            ],
-            "matchings_index": 0,
-            "name": "Adalbertstraße",
-            "waypoint_index": 2
-        },
-        {
-            "location": [
-                13.42004,
-                52.502333
-            ],
-            "matchings_index": 0,
-            "name": "Adalbertstraße",
-            "waypoint_index": 3
-        },
-        {
-            "location": [
-                13.420492,
-                52.502983
-            ],
-            "matchings_index": 0,
-            "name": "Adalbertstraße",
-            "waypoint_index": 4
-        }
-    ]
+      ]
+    }
+  ],
+  "code": "Ok"
 }

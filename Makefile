@@ -113,7 +113,7 @@ directions-fixtures:
 		-o mapbox/libjava-services/src/test/fixtures/directions_v5_traffic.json
 
 mapmatching-fixtures:
-	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/mapmatching_v5_polyline.json
 
 optimized-trips-fixtures:

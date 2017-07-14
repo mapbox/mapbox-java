@@ -1,6 +1,8 @@
 package com.mapbox.services.api.mapmatching.v5;
 
+import com.mapbox.services.api.BaseTest;
 import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
 import com.mapbox.services.api.mapmatching.v5.models.MapMatchingTracepoint;
 import com.mapbox.services.commons.models.Position;
@@ -12,9 +14,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.List;
 
@@ -33,9 +32,9 @@ import static org.junit.Assert.assertTrue;
 /**
  * Test the Mapbox Map Matching API
  */
-public class MapboxMapMatchingTest {
+public class MapboxMapMatchingTest extends BaseTest {
 
-  public static final String POLYLINE_FIXTURE = "src/test/fixtures/mapmatching_v5_polyline.json";
+  private static final String POLYLINE_FIXTURE = "src/test/fixtures/mapmatching_v5_polyline.json";
 
   private static final String ACCESS_TOKEN = "pk.XXX";
 
@@ -56,7 +55,7 @@ public class MapboxMapMatchingTest {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         try {
-          String body = new String(Files.readAllBytes(Paths.get(POLYLINE_FIXTURE)), Charset.forName("utf-8"));
+          String body = loadJsonFixture(POLYLINE_FIXTURE);
           return new MockResponse().setBody(body);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
@@ -174,11 +173,11 @@ public class MapboxMapMatchingTest {
     assertNotNull(response.body());
     assertEquals(1, response.body().getMatchings().size());
 
-    assertEquals("property confidence", 0.8820996720716853,
+    assertEquals("property confidence", 0.8259225426255177,
       response.body().getMatchings().get(0).getConfidence(), 0);
-    assertEquals("property distance", 291.6,
+    assertEquals("property distance", 289.20000000000005,
       response.body().getMatchings().get(0).getDistance(), 0);
-    assertEquals("property duration", 49.5,
+    assertEquals("property duration", 42.9,
       response.body().getMatchings().get(0).getDuration(), 0);
 
     // Test indices
@@ -186,6 +185,39 @@ public class MapboxMapMatchingTest {
     assertEquals("property indices count", 5, tracepoints.size());
     assertEquals("matchings index", tracepoints.get(0).getMatchingsIndex(), 0);
     assertEquals("waypoint index", tracepoints.get(0).getWaypointIndex(), 0);
+    assertEquals("alternatives count", tracepoints.get(0).getAlternativesCount(), 0);
+  }
+
+  @Test
+  public void setLanguage_urlDoesContainLanguageParam() throws IOException {
+    MapboxMapMatching client = new MapboxMapMatching.Builder()
+      .setAccessToken("pk.XXX")
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .setCoordinates(coordinates)
+      .setLanguage("sv")
+      .build();
+
+    String callUrl = client.executeCall().raw().request().url().toString();
+    assertTrue(
+      callUrl.contains("language=sv")
+    );
+  }
+
+  @Test
+  public void setLanguage_doesReturnCorrectTurnInstructionLanguage() throws IOException {
+    MapboxMapMatching client = new MapboxMapMatching.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(coordinates)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .setSteps(true)
+      .setLanguage("sv")
+      .build();
+
+    Response<MapMatchingResponse> response = client.executeCall();
+    assertTrue(response.body().getMatchings().get(0).getLegs().get(0)
+      .getSteps().get(0).getManeuver().getInstruction().contains("Kör åt nordost på Adalbertstraße"));
   }
 
 }

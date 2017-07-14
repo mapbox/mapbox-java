@@ -66,7 +66,8 @@ public class MapboxMapMatchingRx extends MapboxMapMatching {
       builder.getSteps(),
       builder.getOverview(),
       builder.getTimestamps(),
-      builder.getAnnotations()
+      builder.getAnnotations(),
+      builder.getLanguage()
     );
 
     // Done
