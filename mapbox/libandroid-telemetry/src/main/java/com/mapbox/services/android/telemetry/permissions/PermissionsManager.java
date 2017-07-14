@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -49,6 +50,10 @@ public class PermissionsManager {
   public static boolean areLocationPermissionsGranted(Context context) {
     return isCoarseLocationPermissionGranted(context)
       || isFineLocationPermissionGranted(context);
+  }
+
+  public static boolean areRuntimePermissionsRequired() {
+    return android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
   }
 
   public void requestLocationPermissions(Activity activity) {
