@@ -55,7 +55,7 @@ public class MapboxMapMatchingTest extends BaseTest {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         try {
-          String body = loadJsonFixture("", POLYLINE_FIXTURE);
+          String body = loadJsonFixture(POLYLINE_FIXTURE);
           return new MockResponse().setBody(body);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
