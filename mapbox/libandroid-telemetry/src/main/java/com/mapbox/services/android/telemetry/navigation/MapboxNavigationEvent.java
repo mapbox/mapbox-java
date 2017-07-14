@@ -24,7 +24,6 @@ public class MapboxNavigationEvent {
 
   // Event keys
   public static final String KEY_EVENT = "event";
-  public static final String KEY_PLATFORM = "platform";
   public static final String KEY_OPERATING_SYSTEM = "operatingSystem";
   public static final String KEY_SDK_IDENTIFIER = "sdkIdentifier";
   public static final String KEY_SDK_VERSION = "sdkVersion";
@@ -61,7 +60,6 @@ public class MapboxNavigationEvent {
   public static Hashtable<String, Object> buildTurnstileEvent(String sdKIdentifier, String sdkVersion) {
     Hashtable<String, Object> event = new Hashtable<>();
     event.put(KEY_EVENT, TYPE_TURNSTILE);
-    event.put(KEY_PLATFORM, TelemetryConstants.PLATFORM);
     event.put(KEY_OPERATING_SYSTEM, TelemetryConstants.OPERATING_SYSTEM);
     event.put(KEY_SDK_IDENTIFIER, sdKIdentifier);
     event.put(KEY_SDK_VERSION, sdkVersion);
@@ -152,7 +150,6 @@ public class MapboxNavigationEvent {
       String geometry, String profile, int estimatedDistance, int estimatedDuration,
       int rerouteCount) {
     Hashtable<String, Object> event = new Hashtable<>();
-    event.put(KEY_PLATFORM, TelemetryConstants.PLATFORM);
     event.put(KEY_OPERATING_SYSTEM, TelemetryConstants.OPERATING_SYSTEM);
     event.put(KEY_SDK_IDENTIFIER, sdKIdentifier);
     event.put(KEY_SDK_VERSION, sdkVersion);
