@@ -19,7 +19,7 @@ public class BaseTest {
   }
 
   protected String loadJsonFixture(String folder, String filename) throws IOException {
-    byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/" + folder + "/" + filename));
+    byte[] content = Files.readAllBytes(Paths.get(folder + filename));
     return new String(content, Charset.forName("utf-8"));
   }
 

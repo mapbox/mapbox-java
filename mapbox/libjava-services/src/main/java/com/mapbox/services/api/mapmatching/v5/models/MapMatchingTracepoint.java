@@ -10,11 +10,18 @@ public class MapMatchingTracepoint extends DirectionsWaypoint {
 
   @SerializedName("matchings_index")
   private int matchingsIndex;
-
+  @SerializedName("alternatives_count")
+  private int alternativesCount;
   @SerializedName("waypoint_index")
   private int waypointIndex;
 
   public MapMatchingTracepoint() {
+  }
+
+  public MapMatchingTracepoint(int matchingsIndex, int alternativesCount, int waypointIndex) {
+    this.matchingsIndex = matchingsIndex;
+    this.alternativesCount = alternativesCount;
+    this.waypointIndex = waypointIndex;
   }
 
   /**
@@ -51,5 +58,27 @@ public class MapMatchingTracepoint extends DirectionsWaypoint {
    */
   public void setWaypointIndex(int waypointIndex) {
     this.waypointIndex = waypointIndex;
+  }
+
+  /**
+   * Number of probable alternative matchings for this trace point. A value of zero indicates that this point was
+   * matched unambiguously. Split the trace at these points for incremental map matching.
+   *
+   * @return an integer representing the alternatives count
+   * @since 2.2.0
+   */
+  public int getAlternativesCount() {
+    return alternativesCount;
+  }
+
+  /**
+   * Set the number of probable alternative matchings for this trace point. A value of zero indicates that this point
+   * was matched unambiguously. Split the trace at these points for incremental map matching.
+   *
+   * @param alternativesCount an integer representing the alternatives count
+   * @since 2.2.0
+   */
+  public void setAlternativesCount(int alternativesCount) {
+    this.alternativesCount = alternativesCount;
   }
 }
