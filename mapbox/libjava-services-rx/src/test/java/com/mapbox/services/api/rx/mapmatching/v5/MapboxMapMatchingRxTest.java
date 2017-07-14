@@ -29,11 +29,9 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test Rx support on the Mapbox Map Matching API
  */
-
 public class MapboxMapMatchingRxTest {
 
-  public static final String POLYLINE_FIXTURE =
-    "../libjava-services/src/test/fixtures/mapmatching_v5_polyline.json";
+  private static final String POLYLINE_FIXTURE = "src/test/fixtures/mapmatching_v5_polyline.json";
 
   private static final String ACCESS_TOKEN = "pk.XXX";
 
