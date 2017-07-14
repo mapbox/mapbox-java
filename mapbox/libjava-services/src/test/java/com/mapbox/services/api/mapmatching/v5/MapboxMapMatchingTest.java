@@ -15,7 +15,6 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.HttpUrl;
