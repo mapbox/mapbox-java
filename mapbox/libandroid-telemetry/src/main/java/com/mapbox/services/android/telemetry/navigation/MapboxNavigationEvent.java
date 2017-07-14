@@ -19,6 +19,7 @@ public class MapboxNavigationEvent {
   public static final String TYPE_TURNSTILE = "navigation.turnstile";
   public static final String TYPE_DEPART = "navigation.depart";
   public static final String TYPE_FEEDBACK = "navigation.feedback";
+  public static final String TYPE_REROUTE = "navigation.reroute";
   public static final String TYPE_ARRIVE = "navigation.arrive";
   public static final String TYPE_CANCEL = "navigation.cancel";
 
@@ -80,15 +81,14 @@ public class MapboxNavigationEvent {
   }
 
   /**
-   * User feedback/reroute event.
+   * User feedback event.
    */
   public static Hashtable<String, Object> buildFeedbackEvent(
       String sdKIdentifier, String sdkVersion, String sessionIdentifier, double lat, double lng,
       String geometry, String profile, int estimatedDistance, int estimatedDuration,
       int rerouteCount, Date startTimestamp, String feedbackType,
       Location[] locationsBefore, Location[] locationsAfter, int distanceCompleted,
-      int distanceRemaining, int durationRemaining, int newDistanceRemaining,
-      int newDurationRemaining, int secondsSinceLastReroute) {
+      int distanceRemaining, int durationRemaining) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
         lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount);
     event.put(KEY_EVENT, TYPE_FEEDBACK);
@@ -99,11 +99,32 @@ public class MapboxNavigationEvent {
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
     event.put(KEY_DURATION_REMAINING, durationRemaining);
-    if (feedbackType.equals("reroute")) {
-      event.put(KEY_NEW_DISTANCE_REMAINING, newDistanceRemaining);
-      event.put(KEY_NEW_DURATION_REMAINING, newDurationRemaining);
-      event.put(KEY_SECONDS_SINCE_LAST_REROUTE, secondsSinceLastReroute);
-    }
+    return event;
+  }
+
+  /**
+   * User reroute event.
+   */
+  public static Hashtable<String, Object> buildRerouteEvent(
+      String sdKIdentifier, String sdkVersion, String sessionIdentifier, double lat, double lng,
+      String geometry, String profile, int estimatedDistance, int estimatedDuration,
+      int rerouteCount, Date startTimestamp, String feedbackType,
+      Location[] locationsBefore, Location[] locationsAfter, int distanceCompleted,
+      int distanceRemaining, int durationRemaining, int newDistanceRemaining,
+      int newDurationRemaining, int secondsSinceLastReroute) {
+    Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
+        lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount);
+    event.put(KEY_EVENT, TYPE_REROUTE);
+    event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
+    event.put(KEY_FEEDBACK_TYPE, feedbackType);
+    event.put(KEY_LOCATIONS_BEFORE, locationsBefore);
+    event.put(KEY_LOCATIONS_AFTER, locationsAfter);
+    event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
+    event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
+    event.put(KEY_DURATION_REMAINING, durationRemaining);
+    event.put(KEY_NEW_DISTANCE_REMAINING, newDistanceRemaining);
+    event.put(KEY_NEW_DURATION_REMAINING, newDurationRemaining);
+    event.put(KEY_SECONDS_SINCE_LAST_REROUTE, secondsSinceLastReroute);
     return event;
   }
 
