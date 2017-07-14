@@ -101,9 +101,11 @@ public class MapboxNavigationEvent {
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
     event.put(KEY_DURATION_REMAINING, durationRemaining);
-    event.put(KEY_NEW_DISTANCE_REMAINING, newDistanceRemaining);
-    event.put(KEY_NEW_DURATION_REMAINING, newDurationRemaining);
-    event.put(KEY_SECONDS_SINCE_LAST_REROUTE, secondsSinceLastReroute);
+    if (feedbackType.equals("reroute")) {
+      event.put(KEY_NEW_DISTANCE_REMAINING, newDistanceRemaining);
+      event.put(KEY_NEW_DURATION_REMAINING, newDurationRemaining);
+      event.put(KEY_SECONDS_SINCE_LAST_REROUTE, secondsSinceLastReroute);
+    }
     return event;
   }
 
