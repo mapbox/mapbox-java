@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
@@ -70,6 +72,16 @@ public class TurfMeasurementTest extends BaseTurf {
     thrown.expect(TurfException.class);
     thrown.expectMessage(startsWith("Invalid unit."));
     TurfMeasurement.distance(pt1, pt2, "blah");
+  }
+
+  @Test
+  public void lineDistance_returnsZeroWhenRouteIsPoint() throws Exception {
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(1.0, 1.0));
+
+    LineString lineString = LineString.fromCoordinates(coords);
+    double distance = TurfMeasurement.lineDistance(lineString, TurfConstants.UNIT_METERS);
+    assertEquals(0, distance, DELTA);
   }
 
   @Test
@@ -169,6 +181,17 @@ public class TurfMeasurementTest extends BaseTurf {
       Point.fromCoordinates(mid), TurfConstants.UNIT_MILES),
       TurfMeasurement.distance(Point.fromCoordinates(pt2),
         Point.fromCoordinates(mid), TurfConstants.UNIT_MILES), DELTA);
+  }
+
+  @Test
+  public void turfAlong_returnsZeroWhenRouteIsPoint() throws Exception {
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(1.0, 1.0));
+
+    LineString lineString = LineString.fromCoordinates(coords);
+    Point point = TurfMeasurement.along(lineString, 0, TurfConstants.UNIT_METERS);
+    assertEquals(1.0, point.getCoordinates().getLatitude(), DELTA);
+    assertEquals(1.0, point.getCoordinates().getLongitude(), DELTA);
   }
 
   @Test

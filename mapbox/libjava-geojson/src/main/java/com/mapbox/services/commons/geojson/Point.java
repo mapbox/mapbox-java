@@ -93,4 +93,31 @@ public class Point implements Geometry<Position> {
     gson.registerTypeAdapter(Position.class, new PositionSerializer());
     return gson.create().toJson(this);
   }
+
+  @Override
+  public boolean equals(Object object) {
+    if (!(object instanceof Point)) {
+      return false;
+    }
+    if (this == object) {
+      return true;
+    }
+    Point point = (Point) object;
+    return coordinates.equals(point.coordinates);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = type.hashCode();
+    result = 31 * result + (coordinates != null ? coordinates.hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Point{"
+      + "type='" + type + '\''
+      + ", coordinates=" + coordinates
+      + '}';
+  }
 }
