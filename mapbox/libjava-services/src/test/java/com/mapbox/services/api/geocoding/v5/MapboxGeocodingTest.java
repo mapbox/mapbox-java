@@ -249,8 +249,7 @@ public class MapboxGeocodingTest extends BaseTest {
       .setBaseUrl(mockUrl.toString())
       .build();
 
-    System.out.println(clientLanguage.getCall().request().url().toString());
-    // setLanguage() will include the language query parameter
+    // setLanguage() will include the languages query parameter
     assertTrue(clientLanguage.getCall().request().url().toString().contains("language=en_GB,en_US,ja_JP"));
   }
 }
