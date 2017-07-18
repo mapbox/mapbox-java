@@ -1,6 +1,5 @@
 package com.mapbox.services.api.directions.v5.models;
 
-import com.google.gson.annotations.SerializedName;
 import com.mapbox.services.commons.models.Position;
 
 /**
@@ -12,8 +11,6 @@ public class DirectionsWaypoint {
 
   private String name;
   private double[] location;
-  @SerializedName("waypoint_index")
-  private int waypointIndex;
 
   /**
    * Empty constructor
@@ -72,31 +69,5 @@ public class DirectionsWaypoint {
    */
   public Position asPosition() {
     return Position.fromCoordinates(location[0], location[1]);
-  }
-
-  /**
-   * Index of the waypoint inside the matched route (MapMatching API) or within the trip (Optimization API).
-   * <p>
-   * Note: Only used with Optimization and MapMatching APIs.
-   * </p>
-   *
-   * @return an integer representing the waypoint position within the trip or matched route
-   * @since 2.2.0
-   */
-  public int getWaypointIndex() {
-    return waypointIndex;
-  }
-
-  /**
-   * Set the index of the waypoint inside the matched route (MapMatching API) or within the trip (Optimization API).
-   * <p>
-   * Note: Only used with Optimization and MapMatching APIs.
-   * </p>
-   *
-   * @param waypointIndex an integer representing the waypoint position within the trip or matched route
-   * @since 2.2.0
-   */
-  public void setWaypointIndex(int waypointIndex) {
-    this.waypointIndex = waypointIndex;
   }
 }

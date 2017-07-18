@@ -15,6 +15,9 @@ public class MapMatchingTracepoint extends DirectionsWaypoint {
   @SerializedName("waypoint_index")
   private int waypointIndex;
 
+  /**
+   * Public constructor
+   */
   public MapMatchingTracepoint() {
   }
 
@@ -28,6 +31,7 @@ public class MapMatchingTracepoint extends DirectionsWaypoint {
    * Index to the match object in matchings the sub-trace was matched to.
    *
    * @return index value
+   * @since 2.2.0
    */
   public int getMatchingsIndex() {
     return matchingsIndex;
@@ -37,6 +41,7 @@ public class MapMatchingTracepoint extends DirectionsWaypoint {
    * Index value
    *
    * @param matchingsIndex value
+   * @since 2.2.0
    */
   public void setMatchingsIndex(int matchingsIndex) {
     this.matchingsIndex = matchingsIndex;
@@ -46,6 +51,7 @@ public class MapMatchingTracepoint extends DirectionsWaypoint {
    * Index of the waypoint inside the matched route.
    *
    * @return index value
+   * @since 2.2.0
    */
   public int getWaypointIndex() {
     return waypointIndex;
