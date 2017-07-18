@@ -13,15 +13,17 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
-import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.ui.geocoder.GeocoderAutoCompleteView;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.commons.models.Position;
+
+import java.util.Locale;
 
 public class GeocodingWidgetActivity extends AppCompatActivity implements LocationEngineListener {
 
@@ -43,6 +45,7 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
     autocomplete.setAccessToken(Utils.getMapboxAccessToken(this));
     autocomplete.setType(GeocodingCriteria.TYPE_POI);
     autocomplete.setLimit(10);
+    autocomplete.setLanguages(Locale.JAPAN.toString());
     autocomplete.setOnFeatureListener(new GeocoderAutoCompleteView.OnFeatureListener() {
       @Override
       public void onFeatureClick(CarmenFeature feature) {
@@ -148,5 +151,4 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
     super.onLowMemory();
     mapView.onLowMemory();
   }
-
 }

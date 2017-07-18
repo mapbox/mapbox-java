@@ -68,7 +68,7 @@ public class MapboxGeocodingRx extends MapboxGeocoding {
       builder.getAutocomplete(),
       builder.getBbox(),
       builder.getLimit(),
-      builder.getLanguage());
+      builder.getLanguages());
 
     // Done
     return observable;
@@ -95,7 +95,7 @@ public class MapboxGeocodingRx extends MapboxGeocoding {
       builder.getAutocomplete(),
       builder.getBbox(),
       builder.getLimit(),
-      builder.getLanguage());
+      builder.getLanguages());
 
     // Done
     return batchObservable;

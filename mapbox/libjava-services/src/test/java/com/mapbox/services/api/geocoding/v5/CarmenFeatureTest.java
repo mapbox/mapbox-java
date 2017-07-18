@@ -6,12 +6,10 @@ import com.mapbox.services.api.geocoding.v5.models.CarmenContext;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.commons.geojson.Geometry;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -21,8 +19,15 @@ import static org.junit.Assert.assertTrue;
 
 public class CarmenFeatureTest extends BaseTest {
 
-  private static final double DELTA = 1E-10;
-  private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoder_tofromjson.json";
+  private static final String GEOCODING_FIXTURE
+    = "src/test/fixtures/geocoding/geocoder_tofromjson.json";
+
+  private String json;
+
+  @Before
+  public void setUp() throws IOException {
+    json = loadJsonFixture(GEOCODING_FIXTURE);
+  }
 
   @Test
   public void checksBuilding() {
@@ -72,10 +77,7 @@ public class CarmenFeatureTest extends BaseTest {
       .address("Text field 3")
       .id("Text field 4");
     CarmenFeature expected = builder.build();
-    String body = new String(Files.readAllBytes(Paths.get(GEOCODING_FIXTURE)), Charset.forName("utf-8"));
-
-    CarmenFeature actual = CarmenFeature.fromJson(body);
-
+    CarmenFeature actual = CarmenFeature.fromJson(json);
     assertEquals(expected.getText(), actual.getText());
   }
 
@@ -87,8 +89,7 @@ public class CarmenFeatureTest extends BaseTest {
       .address("Text field 3")
       .id("Text field 4");
     CarmenFeature feature = builder.build();
-
-    compareJson(loadJsonFixture("", "geocoder_tofromjson.json"), feature.toJson());
+    compareJson(json, feature.toJson());
   }
 
   private class CarmenFeatureBuilder {

@@ -1,6 +1,7 @@
 package com.mapbox.services.api.geocoding.v5;
 
 import com.google.gson.JsonObject;
+import com.mapbox.services.api.BaseTest;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.geocoding.v5.models.CarmenContext;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
@@ -15,9 +16,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import okhttp3.HttpUrl;
@@ -28,9 +26,9 @@ import retrofit2.Response;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class MapboxGeocodingReverseTest {
+public class MapboxGeocodingReverseTest extends BaseTest {
 
-  private static final double DELTA = 1E-10;
+  private static final String REVERSE_GEOCODE_FIXTURE = "src/test/fixtures/geocoding/geocoding_reverse.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -39,8 +37,7 @@ public class MapboxGeocodingReverseTest {
   public void setUp() throws IOException {
     server = new MockWebServer();
 
-    byte[] content = Files.readAllBytes(Paths.get("src/test/fixtures/geocoding_reverse.json"));
-    String body = new String(content, Charset.forName("utf-8"));
+    String body = loadJsonFixture(REVERSE_GEOCODE_FIXTURE);
     server.enqueue(new MockResponse().setBody(body));
 
     server.start();
@@ -96,19 +93,18 @@ public class MapboxGeocodingReverseTest {
     Response<GeocodingResponse> response = client.executeCall();
 
     CarmenFeature feature = response.body().getFeatures().get(1);
-    assertEquals(feature.getId(), "neighborhood.7130293780113160");
+    assertEquals(feature.getId(), "neighborhood.291451");
     assertEquals(feature.getType(), "Feature");
-    assertEquals(feature.getText(), "Franklin Mcpherson Square");
-    assertEquals(feature.getPlaceName(), "Franklin Mcpherson Square, Washington, 20006, District of Columbia, "
-      + "United States");
+    assertEquals(feature.getText(), "Downtown");
+    assertEquals(feature.getPlaceName(), "Downtown, Washington, District of Columbia 20006, United States");
     assertEquals(feature.getRelevance(), 1, DELTA);
     assertEquals(feature.getProperties(), new JsonObject());
-    assertEquals(feature.getBbox()[0], -77.0375061034999, DELTA);
-    assertEquals(feature.getBbox()[1], 38.8942394196779, DELTA);
-    assertEquals(feature.getBbox()[2], -77.0302262036302, DELTA);
-    assertEquals(feature.getBbox()[3], 38.9038583397001, DELTA);
-    assertEquals(feature.asPosition().getLongitude(), -77.033, DELTA);
-    assertEquals(feature.asPosition().getLatitude(), 38.9015, DELTA);
+    assertEquals(feature.getBbox()[0], -77.048808, DELTA);
+    assertEquals(feature.getBbox()[1], 38.891915, DELTA);
+    assertEquals(feature.getBbox()[2], -77.016764, DELTA);
+    assertEquals(feature.getBbox()[3], 38.907241, DELTA);
+    assertEquals(feature.asPosition().getLongitude(), -77.03, DELTA);
+    assertEquals(feature.asPosition().getLatitude(), 38.9, DELTA);
     assertEquals(feature.getContext().size(), 4);
   }
 
@@ -123,8 +119,8 @@ public class MapboxGeocodingReverseTest {
 
     Point point = (Point) response.body().getFeatures().get(1).getGeometry();
     assertEquals(point.getType(), "Point");
-    assertEquals(point.getCoordinates().getLongitude(), -77.033, DELTA);
-    assertEquals(point.getCoordinates().getLatitude(), 38.9015, DELTA);
+    assertEquals(point.getCoordinates().getLongitude(), -77.03, DELTA);
+    assertEquals(point.getCoordinates().getLatitude(), 38.9, DELTA);
   }
 
   @Test
@@ -137,9 +133,8 @@ public class MapboxGeocodingReverseTest {
     Response<GeocodingResponse> response = client.executeCall();
 
     List<CarmenContext> contexts = response.body().getFeatures().get(1).getContext();
-    assertEquals(contexts.get(3).getId(), "country.12862386939497690");
+    assertEquals(contexts.get(3).getId(), "country.3145");
     assertEquals(contexts.get(3).getText(), "United States");
     assertEquals(contexts.get(3).getShortCode(), "us");
   }
-
 }

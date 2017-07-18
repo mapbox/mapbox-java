@@ -1,0 +1,260 @@
+{
+  "type": "FeatureCollection",
+  "query": [
+    "1600",
+    "pennsylvania",
+    "ave",
+    "nw"
+  ],
+  "features": [
+    {
+      "id": "address.3982178573139850",
+      "type": "Feature",
+      "place_type": [
+        "address"
+      ],
+      "relevance": 0.99,
+      "properties": {},
+      "text": "Pennsylvania Ave NW",
+      "place_name": "1600 Pennsylvania Ave NW, Washington, District of Columbia 20006, United States",
+      "center": [
+        -77.036543,
+        38.897702
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.036543,
+          38.897702
+        ]
+      },
+      "address": "1600",
+      "context": [
+        {
+          "id": "neighborhood.291451",
+          "text": "Downtown"
+        },
+        {
+          "id": "postcode.8031694603652840",
+          "text": "20006"
+        },
+        {
+          "id": "place.11387590027246050",
+          "wikidata": "Q61",
+          "text": "Washington"
+        },
+        {
+          "id": "region.3403",
+          "short_code": "US-DC",
+          "wikidata": "Q61",
+          "text": "District of Columbia"
+        },
+        {
+          "id": "country.3145",
+          "short_code": "us",
+          "wikidata": "Q30",
+          "text": "United States"
+        }
+      ]
+    },
+    {
+      "id": "address.10962143377573100",
+      "type": "Feature",
+      "place_type": [
+        "address"
+      ],
+      "relevance": 0.49,
+      "properties": {},
+      "text": "Pennsylvania Ave",
+      "place_name": "1600 Pennsylvania Ave, Baltimore, Maryland 21217, United States",
+      "center": [
+        -76.634388,
+        39.30307
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.634388,
+          39.30307
+        ]
+      },
+      "address": "1600",
+      "context": [
+        {
+          "id": "neighborhood.2101296",
+          "text": "Upton"
+        },
+        {
+          "id": "postcode.11848926911131250",
+          "text": "21217"
+        },
+        {
+          "id": "place.5593629283339210",
+          "wikidata": "Q5092",
+          "text": "Baltimore"
+        },
+        {
+          "id": "region.211891",
+          "short_code": "US-MD",
+          "wikidata": "Q1391",
+          "text": "Maryland"
+        },
+        {
+          "id": "country.3145",
+          "short_code": "us",
+          "wikidata": "Q30",
+          "text": "United States"
+        }
+      ]
+    },
+    {
+      "id": "address.6056934002573100",
+      "type": "Feature",
+      "place_type": [
+        "address"
+      ],
+      "relevance": 0.49,
+      "properties": {},
+      "text": "Pennsylvania Ave",
+      "place_name": "1600 Pennsylvania Ave, West Sacramento, California 95691, United States",
+      "center": [
+        -121.529598,
+        38.568027
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.529598,
+          38.568027
+        ]
+      },
+      "address": "1600",
+      "context": [
+        {
+          "id": "neighborhood.291835",
+          "text": "Old West Sacramento"
+        },
+        {
+          "id": "postcode.11727280407938200",
+          "text": "95691"
+        },
+        {
+          "id": "place.10001298613630220",
+          "wikidata": "Q983600",
+          "text": "West Sacramento"
+        },
+        {
+          "id": "region.3591",
+          "short_code": "US-CA",
+          "wikidata": "Q99",
+          "text": "California"
+        },
+        {
+          "id": "country.3145",
+          "short_code": "us",
+          "wikidata": "Q30",
+          "text": "United States"
+        }
+      ]
+    },
+    {
+      "id": "address.2948163863573100",
+      "type": "Feature",
+      "place_type": [
+        "address"
+      ],
+      "relevance": 0.49,
+      "properties": {},
+      "text": "Pennsylvania Ave",
+      "place_name": "1600 Pennsylvania Ave, Saint Louis, Missouri 63133, United States",
+      "center": [
+        -90.313554,
+        38.681546
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.313554,
+          38.681546
+        ],
+        "interpolated": true
+      },
+      "address": "1600",
+      "context": [
+        {
+          "id": "postcode.10872861601127320",
+          "text": "63133"
+        },
+        {
+          "id": "place.9782398796128090",
+          "wikidata": "Q38022",
+          "text": "Saint Louis"
+        },
+        {
+          "id": "region.28004",
+          "short_code": "US-MO",
+          "wikidata": "Q1581",
+          "text": "Missouri"
+        },
+        {
+          "id": "country.3145",
+          "short_code": "us",
+          "wikidata": "Q30",
+          "text": "United States"
+        }
+      ]
+    },
+    {
+      "id": "address.11159252373890170",
+      "type": "Feature",
+      "place_type": [
+        "address"
+      ],
+      "relevance": 0.39,
+      "properties": {},
+      "text": "Pennsylvania Ave SE",
+      "place_name": "1600 Pennsylvania Ave SE, Washington, District of Columbia 20003, United States",
+      "center": [
+        -76.981041,
+        38.878649
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.981041,
+          38.878649
+        ],
+        "interpolated": true
+      },
+      "address": "1600",
+      "context": [
+        {
+          "id": "neighborhood.295468",
+          "text": "Barney Circle"
+        },
+        {
+          "id": "postcode.7407455452898840",
+          "text": "20003"
+        },
+        {
+          "id": "place.11387590027246050",
+          "wikidata": "Q61",
+          "text": "Washington"
+        },
+        {
+          "id": "region.3403",
+          "short_code": "US-DC",
+          "wikidata": "Q61",
+          "text": "District of Columbia"
+        },
+        {
+          "id": "country.3145",
+          "short_code": "us",
+          "wikidata": "Q30",
+          "text": "United States"
+        }
+      ]
+    }
+  ],
+  "attribution": "NOTICE: © 2017 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained."
+}
