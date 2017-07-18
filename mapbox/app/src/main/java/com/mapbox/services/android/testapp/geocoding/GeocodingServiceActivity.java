@@ -14,9 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapbox.services.android.geocoder.AndroidGeocoder;
-import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.mapbox.services.android.telemetry.location.LocationEngineChainSupplier;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.geocoding.service.Constants;
 import com.mapbox.services.android.testapp.geocoding.service.FetchAddressIntentService;
@@ -125,7 +125,8 @@ public class GeocodingServiceActivity extends AppCompatActivity implements Locat
    * Builds Android location engine
    */
   private synchronized void buildAndroidLocationEngine() {
-    locationEngine = AndroidLocationEngine.getLocationEngine(this);
+    LocationEngineChainSupplier locationEngineChainSupplier = new LocationEngineChainSupplier();
+    locationEngine = locationEngineChainSupplier.supply(this);
     locationEngine.addLocationEngineListener(this);
     locationEngine.activate();
   }

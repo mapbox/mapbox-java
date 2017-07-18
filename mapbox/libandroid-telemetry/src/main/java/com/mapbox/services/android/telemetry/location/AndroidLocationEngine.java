@@ -16,7 +16,7 @@ import java.lang.ref.WeakReference;
  * A location engine that uses core android.location and has no external dependencies
  * https://developer.android.com/guide/topics/location/strategies.html
  */
-public class AndroidLocationEngine extends LocationEngine implements LocationListener {
+class AndroidLocationEngine extends LocationEngine implements LocationListener {
 
   private static final String LOG_TAG = AndroidLocationEngine.class.getSimpleName();
 
@@ -30,7 +30,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
   private LocationManager locationManager;
   private String currentProvider = null;
 
-  public AndroidLocationEngine(Context context) {
+  private AndroidLocationEngine(Context context) {
     super();
 
     Log.v(LOG_TAG, "Initializing.");
@@ -40,7 +40,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
 
   }
 
-  public static synchronized LocationEngine getLocationEngine(Context context) {
+  static synchronized LocationEngine getLocationEngine(Context context) {
     if (instance == null) {
       instance = new AndroidLocationEngine(context.getApplicationContext());
     }

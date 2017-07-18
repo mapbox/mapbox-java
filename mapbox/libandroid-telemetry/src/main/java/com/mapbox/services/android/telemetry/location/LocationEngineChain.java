@@ -3,9 +3,11 @@ package com.mapbox.services.android.telemetry.location;
 
 import android.content.Context;
 
-public interface LocationSourceChain {
+public interface LocationEngineChain {
 
-  void nextChain(LocationSourceChain nextChain);
+  void nextChain(LocationEngineChain nextChain);
 
   LocationEngine supply(Context context);
+
+  boolean hasDependencyOnClasspath();
 }

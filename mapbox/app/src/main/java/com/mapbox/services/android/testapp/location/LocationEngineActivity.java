@@ -14,7 +14,7 @@ import com.mapbox.services.android.location.MockLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
-import com.mapbox.services.android.telemetry.location.LocationSourceProvider;
+import com.mapbox.services.android.telemetry.location.LocationEngineProvider;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.commons.models.Position;
 
@@ -74,8 +74,8 @@ public class LocationEngineActivity extends AppCompatActivity
     setNoEngine();
 
     String[] locationEngines = getResources().getStringArray(R.array.location_engines);
-    LocationSourceProvider locationSourceProvider = new LocationSourceProvider(this);
-    Map<String, LocationEngine> locationSourceDictionary = locationSourceProvider.obtainLocationSourceDictionary();
+    LocationEngineProvider locationEngineProvider = new LocationEngineProvider(this);
+    Map<String, LocationEngine> locationSourceDictionary = locationEngineProvider.obtainLocationEngineDictionary();
     if (engineName.equals(locationEngines[1])) {
       // Mock
       locationEngine = new MockLocationEngine();

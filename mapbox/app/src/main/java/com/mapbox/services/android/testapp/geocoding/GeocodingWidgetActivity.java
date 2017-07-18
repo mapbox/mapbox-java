@@ -13,14 +13,14 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.services.android.telemetry.location.AndroidLocationSourceChain;
+import com.mapbox.services.android.telemetry.location.AndroidLocationEngineChain;
 import com.mapbox.services.android.telemetry.location.ClasspathChecker;
-import com.mapbox.services.android.telemetry.location.GoogleLocationSourceChain;
+import com.mapbox.services.android.telemetry.location.GoogleLocationEngineChain;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
-import com.mapbox.services.android.telemetry.location.LocationSourceChain;
-import com.mapbox.services.android.telemetry.location.LocationSourceChainSupplier;
-import com.mapbox.services.android.telemetry.location.LostLocationSourceChain;
+import com.mapbox.services.android.telemetry.location.LocationEngineChain;
+import com.mapbox.services.android.telemetry.location.LocationEngineChainSupplier;
+import com.mapbox.services.android.telemetry.location.LostLocationEngineChain;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.android.ui.geocoder.GeocoderAutoCompleteView;
@@ -71,8 +71,8 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
     });
 
     // Set up location services to improve accuracy
-    List<LocationSourceChain> locationSources = initLocationSources();
-    LocationSourceChainSupplier locationSourceSupplier = new LocationSourceChainSupplier(locationSources);
+    List<LocationEngineChain> locationSources = initLocationSources();
+    LocationEngineChainSupplier locationSourceSupplier = new LocationEngineChainSupplier(locationSources);
     locationEngine = locationSourceSupplier.supply(this);
     locationEngine.addLocationEngineListener(this);
     locationEngine.activate();
@@ -107,12 +107,12 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
     mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
   }
 
-  private List<LocationSourceChain> initLocationSources() {
+  private List<LocationEngineChain> initLocationSources() {
     ClasspathChecker classpathChecker = new ClasspathChecker();
-    List<LocationSourceChain> locationSources = new ArrayList<>();
-    locationSources.add(new GoogleLocationSourceChain(classpathChecker));
-    locationSources.add(new LostLocationSourceChain(classpathChecker));
-    locationSources.add(new AndroidLocationSourceChain());
+    List<LocationEngineChain> locationSources = new ArrayList<>();
+    locationSources.add(new GoogleLocationEngineChain(classpathChecker));
+    locationSources.add(new LostLocationEngineChain(classpathChecker));
+    locationSources.add(new AndroidLocationEngineChain());
 
     return locationSources;
   }

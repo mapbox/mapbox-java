@@ -25,10 +25,10 @@ import com.mapbox.services.android.telemetry.backoff.ExponentialBackoff;
 import com.mapbox.services.android.telemetry.connectivity.ConnectivityReceiver;
 import com.mapbox.services.android.telemetry.constants.TelemetryConstants;
 import com.mapbox.services.android.telemetry.http.TelemetryClient;
-import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.navigation.MapboxNavigationEvent;
+import com.mapbox.services.android.telemetry.location.LocationEngineProvider;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.telemetry.service.TelemetryService;
 import com.mapbox.services.android.telemetry.utils.TelemetryUtils;
@@ -477,7 +477,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
 
   private void registerLocationUpdates() {
     if (locationEngine == null) {
-      locationEngine = new AndroidLocationEngine(context);
+      LocationEngineProvider locationEngineProvider = new LocationEngineProvider(context);
+      locationEngine = locationEngineProvider.obtainAvailableLocationEngines().get(0);
     }
 
     locationEngine.addLocationEngineListener(this);
