@@ -33,9 +33,10 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxOptimizedTripsTest extends BaseTest {
 
-  public static final String OPTIMIZED_TRIP_FIXTURE = "src/test/fixtures/optimized_trip.json";
-  public static final String OPTIMIZED_TRIP_STEP_FIXTURE = "src/test/fixtures/optimized_trip_step.json";
-  public static final String OPTIMIZED_TRIP_DETAILED_FIXTURE = "src/test/fixtures/optimized_trip_detailed.json";
+  private static final String OPTIMIZED_TRIP_FIXTURE = "src/test/fixtures/optimized_trip.json";
+  private static final String OPTIMIZED_TRIP_STEP_FIXTURE = "src/test/fixtures/optimized_trip_steps.json";
+  private static final String OPTIMIZED_TRIP_DISTRIBUTIONS_FIXTURE
+    = "src/test/fixtures/optimized_trip_distributions.json";
 
   private static final String ACCESS_TOKEN = "pk.XXX";
 
@@ -55,8 +56,16 @@ public class MapboxOptimizedTripsTest extends BaseTest {
 
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+
+        String resource = OPTIMIZED_TRIP_FIXTURE;
+        if (request.getPath().contains("language=sv")) {
+          resource = OPTIMIZED_TRIP_STEP_FIXTURE;
+        } else if (request.getPath().contains("distributions")) {
+          resource = OPTIMIZED_TRIP_DISTRIBUTIONS_FIXTURE;
+        }
+
         try {
-          String body = new String(Files.readAllBytes(Paths.get(OPTIMIZED_TRIP_FIXTURE)), Charset.forName("utf-8"));
+          String body = new String(Files.readAllBytes(Paths.get(resource)), Charset.forName("utf-8"));
           return new MockResponse().setBody(body);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
@@ -173,15 +182,100 @@ public class MapboxOptimizedTripsTest extends BaseTest {
     assertEquals(trip.getTrips().size(), 1);
 
     // Test entire route
-    assertEquals(trip.getTrips().get(0).getDistance(), 70688.9, DELTA);
-    assertEquals(trip.getTrips().get(0).getDuration(), 5271, DELTA);
+    assertEquals(trip.getTrips().get(0).getDistance(), 70717.79999999999, DELTA);
+    assertEquals(trip.getTrips().get(0).getDuration(), 5933.799999999999, DELTA);
+    assertTrue(trip.getTrips().get(0).getGeometry().contains("q|qeFbdejV}cCzZrNv|Bi[nj@nIb_AeGvk@s_@pn@gm"));
 
     // Test leg returned
-    assertTrue(trip.getTrips().get(0).getGeometry().contains("q|qeFbdejV}cCzZrNv|Bi[nj@nIb_AeGvk@s_@pn@gmCl"));
     assertEquals(trip.getTrips().get(0).getLegs().get(0).getDistance(), 25785.8, DELTA);
-    assertEquals(trip.getTrips().get(0).getLegs().get(0).getDuration(), 1829.6, DELTA);
+    assertEquals(trip.getTrips().get(0).getLegs().get(0).getDuration(), 2206.1, DELTA);
 
     assertEquals(trip.getWaypoints().size(), 3);
     assertTrue(trip.getWaypoints().get(0).getName().contains("McAllister Street"));
+  }
+
+  @Test
+  public void setLanguage_urlDoesContainLangaugeParam() throws IOException {
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(-122.42, 37.78));
+    coords.add(Position.fromCoordinates(-122.45, 37.91));
+    coords.add(Position.fromCoordinates(-122.48, 37.73));
+
+    MapboxOptimizedTrips client = new MapboxOptimizedTrips.Builder()
+      .setAccessToken("pk.XXX")
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .setCoordinates(coords)
+      .setLanguage("sv")
+      .setAnnotations(DirectionsCriteria.ANNOTATION_DURATION)
+      .build();
+
+    String callUrl = client.executeCall().raw().request().url().toString();
+    assertTrue(
+      callUrl.contains("language=sv")
+    );
+  }
+
+  @Test
+  public void setLanguage_doesReturnCorrectTurnInstructionLanguage() throws IOException {
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(-122.42, 37.78));
+    coords.add(Position.fromCoordinates(-122.45, 37.91));
+    coords.add(Position.fromCoordinates(-122.48, 37.73));
+
+    MapboxOptimizedTrips client = new MapboxOptimizedTrips.Builder()
+      .setAccessToken("pk.XXX")
+      .setCoordinates(coords)
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .setLanguage("sv")
+      .setAnnotations(DirectionsCriteria.ANNOTATION_DURATION)
+      .build();
+
+    Response<OptimizedTripsResponse> response = client.executeCall();
+    assertTrue(response.body().getTrips().get(0).getLegs().get(0)
+      .getSteps().get(0).getManeuver().getInstruction().contains("Kör åt väster på McAllister Street"));
+  }
+
+  @Test
+  public void setDistribution_urlDoesContainDistributionParam() throws IOException {
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(13.388860, 52.517037));
+    coords.add(Position.fromCoordinates(13.397634, 52.529407));
+    coords.add(Position.fromCoordinates(13.428555, 52.523219));
+    coords.add(Position.fromCoordinates(13.418555, 52.523215));
+
+    MapboxOptimizedTrips client = new MapboxOptimizedTrips.Builder()
+      .setAccessToken("pk.XXX")
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .setCoordinates(coords)
+      .setRoundTrip(true)
+      .setDistributions(new double[] {3, 1})
+      .build();
+
+    String callUrl = client.executeCall().raw().request().url().toString();
+    assertTrue(
+      callUrl.contains("distributions=3,1")
+    );
+  }
+
+  @Test
+  public void optimizationResult_doesContainWaypointIndex() throws IOException {
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(13.388860, 52.517037));
+    coords.add(Position.fromCoordinates(13.397634, 52.529407));
+    coords.add(Position.fromCoordinates(13.428555, 52.523219));
+    coords.add(Position.fromCoordinates(13.418555, 52.523215));
+
+    MapboxOptimizedTrips client = new MapboxOptimizedTrips.Builder()
+      .setAccessToken("pk.XXX")
+      .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+      .setBaseUrl(mockUrl.toString())
+      .setCoordinates(coords)
+      .build();
+
+    Response<OptimizedTripsResponse> response = client.executeCall();
+    assertEquals(response.body().getWaypoints().get(1).getWaypointIndex(), 1);
   }
 }

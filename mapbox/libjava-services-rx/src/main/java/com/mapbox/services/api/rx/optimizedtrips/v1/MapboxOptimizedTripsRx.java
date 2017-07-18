@@ -72,7 +72,9 @@ public class MapboxOptimizedTripsRx extends MapboxOptimizedTrips {
       builder.getGeometries(),
       builder.getAnnotation(),
       builder.getDestination(),
-      builder.getSource());
+      builder.getSource(),
+      builder.getLanguage(),
+      builder.getDistributions());
 
     // Done
     return observable;

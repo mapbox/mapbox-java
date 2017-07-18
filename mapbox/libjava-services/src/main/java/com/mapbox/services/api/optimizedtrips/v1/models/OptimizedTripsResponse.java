@@ -8,7 +8,7 @@ import java.util.List;
 public class OptimizedTripsResponse {
 
   private String code;
-  private List<DirectionsWaypoint> waypoints;
+  private List<OptimizationWaypoint> waypoints;
   private List<DirectionsRoute> trips;
 
   /**
@@ -27,7 +27,7 @@ public class OptimizedTripsResponse {
    *                  want the waypoints to match the ones making up the directions route.
    * @since 2.1.0
    */
-  public OptimizedTripsResponse(List<DirectionsRoute> trips, List<DirectionsWaypoint> waypoints) {
+  public OptimizedTripsResponse(List<DirectionsRoute> trips, List<OptimizationWaypoint> waypoints) {
     this.trips = trips;
     this.waypoints = waypoints;
   }
@@ -71,24 +71,24 @@ public class OptimizedTripsResponse {
   }
 
   /**
-   * List of {@link DirectionsWaypoint} objects. Each waypoint is an input coordinate snapped to the road and path
+   * List of {@link OptimizationWaypoint} objects. Each waypoint is an input coordinate snapped to the road and path
    * network. The waypoints appear in the list in the order of the input coordinates.
    *
-   * @return a list of {@link DirectionsWaypoint}s in the order of the input coordinates.
+   * @return a list of {@link OptimizationWaypoint}s in the order of the input coordinates.
    * @since 2.1.0
    */
-  public List<DirectionsWaypoint> getWaypoints() {
+  public List<OptimizationWaypoint> getWaypoints() {
     return waypoints;
   }
 
   /**
-   * List of {@link DirectionsWaypoint} objects. Each waypoint should be an input coordinate snapped to the road and
+   * List of {@link OptimizationWaypoint} objects. Each waypoint should be an input coordinate snapped to the road and
    * path network. The waypoints should appear in the list in the order of the input coordinates.
    *
-   * @param waypoints a list of {@link DirectionsWaypoint}s in the order of the input coordinates.
+   * @param waypoints a list of {@link OptimizationWaypoint}s in the order of the input coordinates.
    * @since 2.1.0
    */
-  public void setWaypoints(List<DirectionsWaypoint> waypoints) {
+  public void setWaypoints(List<OptimizationWaypoint> waypoints) {
     this.waypoints = waypoints;
   }
 

@@ -41,7 +41,7 @@ public class DirectionsWaypoint {
   }
 
   /**
-   * an array with two double values reresenting the maneuver locations coordinate.
+   * an array with two double values representing the maneuver locations coordinate.
    *
    * @return double array of [longitude, latitude] for the snapped coordinate.
    * @since 1.0.0

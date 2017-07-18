@@ -85,7 +85,9 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
       builder.getGeometries(),
       builder.getAnnotation(),
       builder.getDestination(),
-      builder.getSource());
+      builder.getSource(),
+      builder.getLanguage(),
+      builder.getDistributions());
 
     // Done
     return call;
@@ -153,8 +155,10 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
     private double[] radiuses;
     private Boolean steps;
     private double[][] bearings;
-    private String[] annotation;
+    private String[] annotations;
     private String overview;
+    private String language;
+    private double[][] distributions;
 
     /**
      * Constructor
@@ -340,15 +344,32 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
     /**
      * Whether or not to return additional metadata along the route. Possible values are:
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
-     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotation can be used by separating them with {@code ,}.
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotations can be used by separating them with {@code ,}.
      *
-     * @param annotation String referencing one of the annotation direction criteria's.
+     * @param annotation String referencing one of the annotations direction criteria's.
+     * @return Builder
+     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object documentation</a>
+     * @since 2.1.0
+     * @deprecated use {@link Builder#getAnnotations()} instead
+     */
+    @Deprecated
+    public T setAnnotation(String... annotation) {
+      this.annotations = annotation;
+      return (T) this;
+    }
+
+    /**
+     * Whether or not to return additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotations can be used by separating them with {@code ,}.
+     *
+     * @param annotation String referencing one of the annotations direction criteria's.
      * @return Builder
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object documentation</a>
      * @since 2.1.0
      */
-    public T setAnnotation(String... annotation) {
-      this.annotation = annotation;
+    public T setAnnotations(String... annotation) {
+      this.annotations = annotation;
       return (T) this;
     }
 
@@ -373,6 +394,38 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
      */
     public T setClientAppName(String appName) {
       super.clientAppName = appName;
+      return (T) this;
+    }
+
+    /**
+     * Optionally set the language of returned turn-by-turn text instructions. The default is {@code en} for English.
+     *
+     * @param language The locale in which results should be returned.
+     * @return Builder
+     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported languages</a>
+     * @since 2.2.0
+     */
+    public T setLanguage(String language) {
+      this.language = language;
+      return (T) this;
+    }
+
+    /**
+     * Specify pick-up and drop-off locations for a trip by providing a {@code double[]} each with a number pair that
+     * correspond with the coordinates list. The first number indicates what place the coordinate of the pick-up
+     * location is in the coordinates list, and the second number indicates what place the coordinate of the drop-off
+     * location is in the coordinates list. Each pair must contain exactly two numbers. Pick-up and drop-off locations
+     * in one pair cannot be the same. The returned solution will visit pick-up locations before visiting drop-off
+     * locations. The depot (first location) can only be a pick-up location but not a drop-off location.
+     *
+     * @param distributions {@code double[]} with two values, first being the pickup coordinate in the coordinates list
+     *                      and the second number being the coordinate in the coordinates list which should be the drop
+     *                      off location.
+     * @return Builder
+     * @since 2.2.0
+     */
+    public T setDistributions(double[]... distributions) {
+      this.distributions = distributions;
       return (T) this;
     }
 
@@ -462,11 +515,24 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
      * Get the maximum distance in meters you have set that each coordinate is allowed to move when snapped to a nearby
      * road segment.
      *
-     * @return double array containing the radiuses defined in unit meters.
+     * @return String containing the radiuses defined in unit meters.
      * @since 2.1.0
      */
-    public double[] getRadiuses() {
-      return radiuses;
+    public String getRadiuses() {
+      if (radiuses == null || radiuses.length == 0) {
+        return null;
+      }
+
+      String[] radiusesFormatted = new String[radiuses.length];
+      for (int i = 0; i < radiuses.length; i++) {
+        if (radiuses[i] == Double.POSITIVE_INFINITY) {
+          radiusesFormatted[i] = "unlimited";
+        } else {
+          radiusesFormatted[i] = String.format(Locale.US, "%s", TextUtils.formatCoordinate(radiuses[i]));
+        }
+      }
+
+      return TextUtils.join(";", radiusesFormatted);
     }
 
     /**
@@ -502,24 +568,52 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
      * Determine whether you are filtering the road segment the waypoint will be placed on by direction and dictating
      * the angle of approach.
      *
-     * @return a double array with two values indicating the angle and the other value indicating the deviating
+     * @return String with two values indicating the angle and the other value indicating the deviating
      * range.
      * @since 2.1.0
      */
-    public double[][] getBearings() {
-      return bearings;
+    public String getBearings() {
+      if (bearings == null || bearings.length == 0) {
+        return null;
+      }
+
+      String[] bearingFormatted = new String[bearings.length];
+      for (int i = 0; i < bearings.length; i++) {
+        if (bearings[i].length == 0) {
+          bearingFormatted[i] = "";
+        } else {
+          bearingFormatted[i] = String.format(Locale.US, "%s,%s",
+            TextUtils.formatCoordinate(bearings[i][0]),
+            TextUtils.formatCoordinate(bearings[i][1]));
+        }
+      }
+      return TextUtils.join(";", bearingFormatted);
     }
 
     /**
      * Determine whether or not you are currently requesting additional metadata along the route. Possible values are:
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
-     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotation can be used by separating them with {@code ,}.
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotations can be used by separating them with {@code ,}.
      *
-     * @return String referencing one of the annotation direction criteria's.
+     * @return String referencing one of the annotations direction criteria's.
+     * @since 2.1.0
+     * @deprecated Use {@link Builder#getAnnotations()}
+     */
+    @Deprecated
+    public String[] getAnnotation() {
+      return annotations;
+    }
+
+    /**
+     * Determine whether or not you are currently requesting additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION}, and
+     * {@link DirectionsCriteria#ANNOTATION_SPEED}. Several annotations can be used by separating them with {@code ,}.
+     *
+     * @return String referencing one of the annotations direction criteria's.
      * @since 2.1.0
      */
-    public String[] getAnnotation() {
-      return annotation;
+    public String[] getAnnotations() {
+      return annotations;
     }
 
     /**
@@ -529,6 +623,38 @@ public class MapboxOptimizedTrips extends MapboxService<OptimizedTripsResponse> 
     @Override
     public String getAccessToken() {
       return accessToken;
+    }
+
+    /**
+     * @return The language the turn-by-turn directions will be in.
+     * @since 2.2.0
+     */
+    public String getLanguage() {
+      return language;
+    }
+
+    /**
+     * If distribution values are set inside your request, this will return a String containing the given values.
+     *
+     * @return String containing the provided distribution values.
+     * @since 2.2.0
+     */
+    public String getDistributions() {
+      if (distributions == null || distributions.length == 0) {
+        return null;
+      }
+
+      String[] distributionsFormatted = new String[distributions.length];
+      for (int i = 0; i < distributions.length; i++) {
+        if (distributions[i].length == 0) {
+          distributionsFormatted[i] = "";
+        } else {
+          distributionsFormatted[i] = String.format(Locale.US, "%s,%s",
+            TextUtils.formatCoordinate(distributions[i][0]),
+            TextUtils.formatCoordinate(distributions[i][1]));
+        }
+      }
+      return TextUtils.join(";", distributionsFormatted);
     }
 
     /**
