@@ -52,6 +52,12 @@ public class TurfMisc {
   public static LineString lineSlice(Point startPt, Point stopPt, LineString line) throws TurfException {
     List<Position> coords = line.getCoordinates();
 
+    if (coords.size() < 2) {
+      throw new TurfException("Turf lineSlice requires a LineString made up of at least 2 coordinates.");
+    } else if (startPt.equals(stopPt)) {
+      throw new TurfException("Start and stop points in Turf lineSlice cannot equal each other.");
+    }
+
     Feature startVertex = pointOnLine(startPt, coords);
     Feature stopVertex = pointOnLine(stopPt, coords);
     List<Feature> ends = new ArrayList<>();

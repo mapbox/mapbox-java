@@ -9,18 +9,50 @@ import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class TurfMiscTest extends BaseTurf {
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
+  @Test
+  public void lineSlice_throwsStartStopPointException() throws Exception {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("Turf lineSlice requires a LineString made up of at least 2 coordinates."));
+
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(1.0, 1.0));
+    Point point = Point.fromCoordinates(new double[] {1.0, 1.0});
+    Point point2 = Point.fromCoordinates(new double[] {2.0, 2.0});
+    LineString lineString = LineString.fromCoordinates(coords);
+    TurfMisc.lineSlice(point, point2, lineString);
+  }
+
+  @Test
+  public void lineSlice_throwLineMustContainTwoOrMorePoints() throws Exception {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("Start and stop points in Turf lineSlice cannot equal each other."));
+
+    List<Position> coords = new ArrayList<>();
+    coords.add(Position.fromCoordinates(1.0, 1.0));
+    coords.add(Position.fromCoordinates(2.0, 2.0));
+    Point point = Point.fromCoordinates(new double[] {1.0, 1.0});
+    LineString lineString = LineString.fromCoordinates(coords);
+    TurfMisc.lineSlice(point, point, lineString);
+  }
 
   @Test
   public void testTurfLineSliceLine1() throws IOException, TurfException {
