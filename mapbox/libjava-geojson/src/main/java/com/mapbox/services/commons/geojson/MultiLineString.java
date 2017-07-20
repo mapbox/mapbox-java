@@ -105,4 +105,33 @@ public class MultiLineString implements Geometry<List<List<Position>>> {
     gson.registerTypeAdapter(Position.class, new PositionSerializer());
     return gson.create().toJson(this);
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    MultiLineString that = (MultiLineString) o;
+
+    if (!type.equals(that.type)) {
+      return false;
+    }
+    return coordinates != null ? coordinates.equals(that.coordinates) : that.coordinates == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = type.hashCode();
+    result = 31 * result + (coordinates != null ? coordinates.hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return this.toJson();
+  }
 }
