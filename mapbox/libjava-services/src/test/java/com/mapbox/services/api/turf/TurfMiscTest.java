@@ -53,7 +53,7 @@ public class TurfMiscTest extends BaseTurf {
     LineString lineString = LineString.fromCoordinates(coords);
     TurfMisc.lineSlice(point, point, lineString);
   }
-  
+
   @Test
   public void testTurfLineSliceLine1() throws IOException, TurfException {
     Point start = Point.fromCoordinates(Position.fromCoordinates(-97.79617309570312, 22.254624939561698));
