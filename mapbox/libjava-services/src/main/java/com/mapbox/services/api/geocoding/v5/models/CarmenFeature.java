@@ -31,7 +31,6 @@ public class CarmenFeature extends Feature {
   private String address;
   private double[] center;
   private List<CarmenContext> context;
-
   private double relevance;
 
   /**

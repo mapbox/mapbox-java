@@ -69,4 +69,41 @@ public class OptimizationWaypoint extends DirectionsWaypoint {
   public void setTripsIndex(int tripsIndex) {
     this.tripsIndex = tripsIndex;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+
+    OptimizationWaypoint that = (OptimizationWaypoint) o;
+
+    if (waypointIndex != that.waypointIndex) {
+      return false;
+    }
+    return tripsIndex == that.tripsIndex;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + waypointIndex;
+    result = 31 * result + tripsIndex;
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "OptimizationWaypoint{"
+      + "waypointIndex=" + waypointIndex
+      + ", tripsIndex=" + tripsIndex
+      + '}';
+  }
 }
