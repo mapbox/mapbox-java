@@ -51,6 +51,7 @@ import okhttp3.internal.Util;
 public class MapboxTelemetry implements Callback, LocationEngineListener {
 
   private static final String LOG_TAG = "MapboxTelemetry";
+  private static final int UNAVAILABLE_BATTERY_LEVEL = 100;
 
   private static MapboxTelemetry instance;
 
@@ -241,9 +242,13 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   }
 
   private int getBatteryLevel() {
-    int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-    int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-    return Math.round((level / (float) scale) * 100);
+    if (batteryStatus != null) {
+      int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+      int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+      return Math.round((level / (float) scale) * 100);
+    } else {
+      return UNAVAILABLE_BATTERY_LEVEL;
+    }
   }
 
   /**
