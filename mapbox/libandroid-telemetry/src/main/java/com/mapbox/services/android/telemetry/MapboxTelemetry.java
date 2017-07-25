@@ -50,7 +50,7 @@ import okhttp3.internal.Util;
  */
 public class MapboxTelemetry implements Callback, LocationEngineListener {
 
-  private static final String LOG_TAG = MapboxTelemetry.class.getSimpleName();
+  private static final String LOG_TAG = "MapboxTelemetry";
 
   private static MapboxTelemetry instance;
 
