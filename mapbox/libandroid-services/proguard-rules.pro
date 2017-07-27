@@ -33,6 +33,8 @@
 -keep class com.mapbox.services.api.distance.v1.models.** { *; }
 -keep class com.mapbox.services.api.geocoding.v5.models.** { *; }
 -keep class com.mapbox.services.api.mapmatching.v5.models.** { *; }
+-keep class com.mapbox.services.api.optimizedtrips.v1.models.** { *; }
+-keep class com.mapbox.services.api.directionsmatrix.v1.models.** { *; }
 -keep class com.mapbox.services.commons.geojson.** { *; }
 
 -dontwarn javax.annotation.**
