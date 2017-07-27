@@ -598,8 +598,13 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     withShutDown = false;
     events.removeAllElements();
     context.stopService(new Intent(context, TelemetryService.class));
-    locationEngine.removeLocationEngineListener(this);
-    locationEngine.removeLocationUpdates();
+    if (locationEngine == null) {
+      Log.e(LOG_TAG, String.format(
+          "Shutdown error: Location Engine instance wasn't set up (initialized: %b).", initialized));
+    } else {
+      locationEngine.removeLocationEngineListener(this);
+      locationEngine.removeLocationUpdates();
+    }
     if (timer != null) {
       timer.cancel();
       timer = null;
