@@ -23,8 +23,6 @@ import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.commons.models.Position;
 
-import java.util.Locale;
-
 public class GeocodingWidgetActivity extends AppCompatActivity implements LocationEngineListener {
 
   private static final String LOG_TAG = "GeocodingWidgetActivity";
