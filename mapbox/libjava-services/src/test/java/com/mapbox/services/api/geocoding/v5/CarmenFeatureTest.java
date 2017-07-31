@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -46,12 +47,18 @@ public class CarmenFeatureTest extends BaseTest {
     CarmenFeatureBuilder builder = new CarmenFeatureBuilder();
     builder.text(text)
       .placeName(placeName)
+      .language(Locale.ENGLISH.toString())
+      .matchingText(placeName)
+      .matchingPlaceName(placeName)
       .address(address)
       .id(id);
     CarmenFeature feature = builder.build();
 
     assertEquals(text, feature.getText());
     assertEquals(placeName, feature.getPlaceName());
+    assertEquals(placeName, feature.getMatchingPlaceName());
+    assertEquals(Locale.ENGLISH.toString(), feature.getLanguage());
+    assertEquals(placeName, feature.getMatchingText());
     assertEquals(bbox[0], feature.getBbox()[0], DELTA);
     assertEquals(bbox[1], feature.getBbox()[1], DELTA);
     assertEquals(bbox[2], feature.getBbox()[2], DELTA);
@@ -96,6 +103,9 @@ public class CarmenFeatureTest extends BaseTest {
     private CarmenFeature feature;
     private String text;
     private String placeName;
+    private String matchingPlaceName;
+    private String language;
+    private String matchingText;
     private double[] bbox = new double[] {1.2, 3.4, 5.6, 7.8};
     private String address;
     private double[] center = new double[] {1.2, 3.4};
@@ -118,6 +128,21 @@ public class CarmenFeatureTest extends BaseTest {
 
     public CarmenFeatureBuilder placeName(String placeName) {
       this.placeName = placeName;
+      return this;
+    }
+
+    public CarmenFeatureBuilder matchingPlaceName(String matchingPlaceName) {
+      this.matchingPlaceName = matchingPlaceName;
+      return this;
+    }
+
+    public CarmenFeatureBuilder matchingText(String matchingText) {
+      this.matchingText = matchingText;
+      return this;
+    }
+
+    public CarmenFeatureBuilder language(String language) {
+      this.language = language;
       return this;
     }
 
@@ -164,6 +189,9 @@ public class CarmenFeatureTest extends BaseTest {
     public CarmenFeature build() {
       feature.setText(text);
       feature.setPlaceName(placeName);
+      feature.setMatchingPlaceName(matchingPlaceName);
+      feature.setMatchingText(matchingText);
+      feature.setLanguage(language);
       feature.setBbox(bbox);
       feature.setAddress(address);
       feature.setCenter(center);

@@ -45,7 +45,6 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
     autocomplete.setAccessToken(Utils.getMapboxAccessToken(this));
     autocomplete.setType(GeocodingCriteria.TYPE_POI);
     autocomplete.setLimit(10);
-    autocomplete.setLanguages(Locale.JAPAN.toString());
     autocomplete.setOnFeatureListener(new GeocoderAutoCompleteView.OnFeatureListener() {
       @Override
       public void onFeatureClick(CarmenFeature feature) {
