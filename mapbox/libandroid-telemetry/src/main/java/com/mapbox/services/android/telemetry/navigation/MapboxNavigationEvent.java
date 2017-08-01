@@ -121,11 +121,17 @@ public class MapboxNavigationEvent {
     int distanceRemaining, int durationRemaining, String description, String userId, String feedbackId,
     String encodedSnapshot, boolean isSimulation, String originalRequestIdentifier,
     String requestIdentifier, String originalGeometry, int originalEstimatedDistance,
-    int originalEstimatedDuration, String audioOutput) {
+    int originalEstimatedDuration, String audioOutput, String upcomingInstruction, String upcomingType,
+    String upcomingModifier, String upcomingName, String previousInstruction, String previousType,
+    String previousModifier, String previousName, int distance, int duration, int stepDistanceRemaining,
+    int stepDurationRemaining) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
       lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount,
       isSimulation, originalRequestIdentifier, requestIdentifier, originalGeometry,
       originalEstimatedDistance, originalEstimatedDuration, audioOutput);
+    event.put(KEY_STEP, getStepMetadata(upcomingInstruction, upcomingType, upcomingModifier, upcomingName,
+      previousInstruction, previousType, previousModifier, previousName, distance, duration,
+      stepDistanceRemaining, stepDurationRemaining));
     event.put(KEY_EVENT, TYPE_FEEDBACK);
     event.put(KEY_DESCRIPTIONS, description);
     event.put(KEY_USER_ID, userId);
