@@ -2,6 +2,35 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.2.0
+
+- Adds ProGuard rules for Optimization and Directions Matrix API [#516](https://github.com/mapbox/mapbox-java/pull/516)
+- Adds support for multiple languages in geocoder auto complete widget: [#512}(https://github.com/mapbox/mapbox-java/pull/512)
+- Adds support for multiple languages in geocoder API: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- Reduced API access in `GeocoderAdapter.java` to non-public since user has no reason for using: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- Auto complete widget now extends to Support Library widget: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- `TYPE_DISTRICT` and `TYPE_LOCALITY` result filters added: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- Adds `place_type` support in Carman Feature: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- Adds `matching_text` support in Carman Feature: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- Adds `matching_place_name` support in Carman Feature: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- Adds `language` support in Carman Feature: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- Several Javadoc improvements: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- Updated fixtures and test: [#512](https://github.com/mapbox/mapbox-java/pull/512)
+- Adds exception and test for Turf methods which require at least 2 coordinates: [#513](https://github.com/mapbox/mapbox-java/pull/513)
+- Resolves Fatal Exception: java.lang.OutOfMemoryError with the TelemetryClient: [#467](https://github.com/mapbox/mapbox-java/issues/467)
+- Fixes Optimization API `getRadius()` method which wasn't being converted to a string: [#506](https://github.com/mapbox/mapbox-java/pull/506)
+- Fixes Optimization API `getBearing()` method which wasn't being converted to a string: [#506](https://github.com/mapbox/mapbox-java/pull/506)
+- Adds support for Optimization API language parameter: [#506](https://github.com/mapbox/mapbox-java/pull/506)
+- Adds support for Optimization API distributions parameter: [#506](https://github.com/mapbox/mapbox-java/pull/506)
+- Adds missing Optimization API `waypoint_index` inside the OptimizationWaypoint class: [#506](https://github.com/mapbox/mapbox-java/pull/506)
+- Deprecates Optimization API `annotation` in favor of the correct name `annotations`: [#506](https://github.com/mapbox/mapbox-java/pull/506)
+- Adds directions API support for languages [#504](https://github.com/mapbox/mapbox-java/pull/504)
+- Adds directions API support for congestions annotation: [#469](https://github.com/mapbox/mapbox-java/pull/469)
+- Adds `alternatives_count` to MapMatchingTraceoint class: [#507](https://github.com/mapbox/mapbox-java/pull/507)
+- Adds support for the language param in MapMatching API: [#507](https://github.com/mapbox/mapbox-java/pull/507)
+- Mock LocationEngine exposed in `libandroid-services`: [#476](https://github.com/mapbox/mapbox-java/pull/476)
+- Adds Convert distance methods in TurfHelper class: [#476](https://github.com/mapbox/mapbox-java/pull/481)
+
 ### v2.1.3
 
 * Downgrade LOST to v1.1.1 to address stability issues [#493](https://github.com/mapbox/mapbox-java/pull/493)
