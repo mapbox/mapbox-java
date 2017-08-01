@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 
 import com.mapbox.services.android.ui.R;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
@@ -25,7 +24,7 @@ import com.mapbox.services.commons.models.Position;
  * @see <a href="https://www.mapbox.com/android-sdk/examples/geocoding/">Mapbox example</a>
  * @since 1.0.0
  */
-public class GeocoderAutoCompleteView extends AutoCompleteTextView {
+public class GeocoderAutoCompleteView extends android.support.v7.widget.AppCompatAutoCompleteTextView {
 
   private static final int DEFAULT_NUMBER_OF_LINES = 1;
 
@@ -44,6 +43,7 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
     // Get attributes from attrs.xml
     TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.mas_geocoderWidget);
     imgClearButton = attributes.getDrawable(R.styleable.mas_geocoderWidget_mas_clearButtonDrawable);
+    attributes.recycle();
 
     // Set custom adapter
     adapter = new GeocoderAdapter(context);
@@ -233,9 +233,32 @@ public class GeocoderAutoCompleteView extends AutoCompleteTextView {
    *
    * @param language The locale in which results should be returned.
    * @since 2.0.0
+   * @deprecated use {@link GeocoderAutoCompleteView#setLanguages(String...)} instead
    */
+  @Deprecated
   public void setLanguage(String language) {
     adapter.setLanguage(language);
+  }
+
+  /**
+   * The locale in which results should be returned.
+   * <p>
+   * This property affects the language of returned results; generally speaking,
+   * it does not determine which results are found. If the Geocoding API does not
+   * recognize the language code, it may fall back to another language or the default
+   * language. Components other than the language code, such as the country and
+   * script codes, are ignored.
+   * <p>
+   * By default, this property is set to `null`, causing results to be in the default
+   * language.
+   * <p>
+   * This option is experimental.
+   *
+   * @param languages The locale in which results should be returned.
+   * @since 2.0.0
+   */
+  public void setLanguages(String... languages) {
+    adapter.setLanguage(languages);
   }
 
   /**

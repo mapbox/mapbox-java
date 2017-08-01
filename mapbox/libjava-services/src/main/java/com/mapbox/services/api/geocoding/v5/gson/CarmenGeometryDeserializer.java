@@ -44,5 +44,4 @@ public class CarmenGeometryDeserializer implements JsonDeserializer<Geometry> {
       throw new JsonParseException("Unexpected geometry found: " + geometryType);
     }
   }
-
 }

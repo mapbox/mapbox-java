@@ -1,6 +1,7 @@
 package com.mapbox.services.api.geocoding.v5;
 
 import com.google.gson.JsonObject;
+import com.mapbox.services.api.BaseTest;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.geocoding.v5.models.CarmenContext;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
@@ -15,9 +16,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,13 +29,11 @@ import retrofit2.Response;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class MapboxGeocodingTest {
+public class MapboxGeocodingTest extends BaseTest {
 
-  private static final double DELTA = 1E-10;
-
-  private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoding.json";
+  private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoding/geocoding.json";
   private static final String GEOCODING_COUNTRY_NOT_SUPPORTED =
-    "src/test/fixtures/geocoding_country_not_supported.json";
+    "src/test/fixtures/geocoding/geocoding_country_not_supported.json";
   private static final String ACCESS_TOKEN = "pk.XXX";
 
   private MockWebServer server;
@@ -58,7 +54,7 @@ public class MapboxGeocodingTest {
         }
 
         try {
-          String body = new String(Files.readAllBytes(Paths.get(resource)), Charset.forName("utf-8"));
+          String body = loadJsonFixture(resource);
           return new MockResponse().setBody(body);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
@@ -144,8 +140,8 @@ public class MapboxGeocodingTest {
 
     Point point = (Point) response.body().getFeatures().get(3).getGeometry();
     assertEquals(point.getType(), "Point");
-    assertEquals(point.getCoordinates().getLongitude(), -77.045, DELTA);
-    assertEquals(point.getCoordinates().getLatitude(), 38.8946, DELTA);
+    assertEquals(point.getCoordinates().getLongitude(), -90.313554, DELTA);
+    assertEquals(point.getCoordinates().getLatitude(), 38.681546, DELTA);
   }
 
   @Test
@@ -158,7 +154,7 @@ public class MapboxGeocodingTest {
     Response<GeocodingResponse> response = client.executeCall();
 
     List<CarmenContext> contexts = response.body().getFeatures().get(0).getContext();
-    assertEquals(contexts.get(4).getId(), "country.12862386939497690");
+    assertEquals(contexts.get(4).getId(), "country.3145");
     assertEquals(contexts.get(4).getText(), "United States");
     assertEquals(contexts.get(4).getShortCode(), "us");
   }
@@ -172,7 +168,7 @@ public class MapboxGeocodingTest {
       .build();
     Response<GeocodingResponse> response = client.executeCall();
 
-    CarmenContext context = response.body().getFeatures().get(0).getContext().get(1);
+    CarmenContext context = response.body().getFeatures().get(0).getContext().get(2);
     assertEquals(context.getWikidata(), "Q61");
   }
 
@@ -223,7 +219,7 @@ public class MapboxGeocodingTest {
   }
 
   @Test
-  public void testLanguage() throws IOException, ServicesException {
+  public void testSingleLanguage() throws IOException, ServicesException {
     MapboxGeocoding clientNoLanguage = new MapboxGeocoding.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
@@ -236,11 +232,24 @@ public class MapboxGeocodingTest {
     MapboxGeocoding clientLanguage = new MapboxGeocoding.Builder()
       .setAccessToken(ACCESS_TOKEN)
       .setLocation("1600 pennsylvania ave nw")
-      .setLanguage(Locale.UK.toString())
+      .setLanguages(Locale.UK.toString())
       .setBaseUrl(mockUrl.toString())
       .build();
 
     // setLanguage() will include the language query parameter
     assertTrue(clientLanguage.getCall().request().url().toString().contains("language=en_GB"));
+  }
+
+  @Test
+  public void testMultipleLanguage() throws IOException, ServicesException {
+    MapboxGeocoding clientLanguage = new MapboxGeocoding.Builder()
+      .setAccessToken(ACCESS_TOKEN)
+      .setLocation("1600 pennsylvania ave nw")
+      .setLanguages(Locale.UK.toString(), Locale.US.toString(), Locale.JAPAN.toString())
+      .setBaseUrl(mockUrl.toString())
+      .build();
+
+    // setLanguage() will include the languages query parameter
+    assertTrue(clientLanguage.getCall().request().url().toString().contains("language=en_GB,en_US,ja_JP"));
   }
 }

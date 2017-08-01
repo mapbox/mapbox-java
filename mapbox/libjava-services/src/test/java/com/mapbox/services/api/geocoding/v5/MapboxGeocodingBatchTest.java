@@ -1,5 +1,6 @@
 package com.mapbox.services.api.geocoding.v5;
 
+import com.mapbox.services.api.BaseTest;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 
@@ -10,9 +11,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import okhttp3.HttpUrl;
@@ -24,9 +22,9 @@ import retrofit2.Response;
 
 import static org.junit.Assert.assertEquals;
 
-public class MapboxGeocodingBatchTest {
+public class MapboxGeocodingBatchTest extends BaseTest {
 
-  private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoding_batch.json";
+  private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoding/geocoding_batch.json";
   private static final String ACCESS_TOKEN = "pk.XXX";
 
   private MockWebServer server;
@@ -44,7 +42,8 @@ public class MapboxGeocodingBatchTest {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         try {
-          String body = new String(Files.readAllBytes(Paths.get(GEOCODING_FIXTURE)), Charset.forName("utf-8"));
+
+          String body = loadJsonFixture(GEOCODING_FIXTURE);
           return new MockResponse().setBody(body);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);

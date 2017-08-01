@@ -43,11 +43,25 @@ public final class GeocodingCriteria {
   public static final String TYPE_POSTCODE = "postcode";
 
   /**
+   * Filter results by district.
+   *
+   * @since 2.2.0
+   */
+  public static final String TYPE_DISTRICT = "district";
+
+  /**
    * Filter results by place.
    *
    * @since 1.0.0
    */
   public static final String TYPE_PLACE = "place";
+
+  /**
+   * Filter results by locality.
+   *
+   * @since 2.2.0
+   */
+  public static final String TYPE_LOCALITY = "locality";
 
   /**
    * Filter results by neighborhood.

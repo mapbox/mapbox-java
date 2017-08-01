@@ -6,13 +6,12 @@ import com.mapbox.services.api.geocoding.v5.models.CarmenContext;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.commons.geojson.Geometry;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -21,8 +20,15 @@ import static org.junit.Assert.assertTrue;
 
 public class CarmenFeatureTest extends BaseTest {
 
-  private static final double DELTA = 1E-10;
-  private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoder_tofromjson.json";
+  private static final String GEOCODING_FIXTURE
+    = "src/test/fixtures/geocoding/geocoder_tofromjson.json";
+
+  private String json;
+
+  @Before
+  public void setUp() throws IOException {
+    json = loadJsonFixture(GEOCODING_FIXTURE);
+  }
 
   @Test
   public void checksBuilding() {
@@ -41,12 +47,18 @@ public class CarmenFeatureTest extends BaseTest {
     CarmenFeatureBuilder builder = new CarmenFeatureBuilder();
     builder.text(text)
       .placeName(placeName)
+      .language(Locale.ENGLISH.toString())
+      .matchingText(placeName)
+      .matchingPlaceName(placeName)
       .address(address)
       .id(id);
     CarmenFeature feature = builder.build();
 
     assertEquals(text, feature.getText());
     assertEquals(placeName, feature.getPlaceName());
+    assertEquals(placeName, feature.getMatchingPlaceName());
+    assertEquals(Locale.ENGLISH.toString(), feature.getLanguage());
+    assertEquals(placeName, feature.getMatchingText());
     assertEquals(bbox[0], feature.getBbox()[0], DELTA);
     assertEquals(bbox[1], feature.getBbox()[1], DELTA);
     assertEquals(bbox[2], feature.getBbox()[2], DELTA);
@@ -72,10 +84,7 @@ public class CarmenFeatureTest extends BaseTest {
       .address("Text field 3")
       .id("Text field 4");
     CarmenFeature expected = builder.build();
-    String body = new String(Files.readAllBytes(Paths.get(GEOCODING_FIXTURE)), Charset.forName("utf-8"));
-
-    CarmenFeature actual = CarmenFeature.fromJson(body);
-
+    CarmenFeature actual = CarmenFeature.fromJson(json);
     assertEquals(expected.getText(), actual.getText());
   }
 
@@ -87,14 +96,16 @@ public class CarmenFeatureTest extends BaseTest {
       .address("Text field 3")
       .id("Text field 4");
     CarmenFeature feature = builder.build();
-
-    compareJson(loadJsonFixture("", "geocoder_tofromjson.json"), feature.toJson());
+    compareJson(json, feature.toJson());
   }
 
   private class CarmenFeatureBuilder {
     private CarmenFeature feature;
     private String text;
     private String placeName;
+    private String matchingPlaceName;
+    private String language;
+    private String matchingText;
     private double[] bbox = new double[] {1.2, 3.4, 5.6, 7.8};
     private String address;
     private double[] center = new double[] {1.2, 3.4};
@@ -117,6 +128,21 @@ public class CarmenFeatureTest extends BaseTest {
 
     public CarmenFeatureBuilder placeName(String placeName) {
       this.placeName = placeName;
+      return this;
+    }
+
+    public CarmenFeatureBuilder matchingPlaceName(String matchingPlaceName) {
+      this.matchingPlaceName = matchingPlaceName;
+      return this;
+    }
+
+    public CarmenFeatureBuilder matchingText(String matchingText) {
+      this.matchingText = matchingText;
+      return this;
+    }
+
+    public CarmenFeatureBuilder language(String language) {
+      this.language = language;
       return this;
     }
 
@@ -163,6 +189,9 @@ public class CarmenFeatureTest extends BaseTest {
     public CarmenFeature build() {
       feature.setText(text);
       feature.setPlaceName(placeName);
+      feature.setMatchingPlaceName(matchingPlaceName);
+      feature.setMatchingText(matchingText);
+      feature.setLanguage(language);
       feature.setBbox(bbox);
       feature.setAddress(address);
       feature.setCenter(center);

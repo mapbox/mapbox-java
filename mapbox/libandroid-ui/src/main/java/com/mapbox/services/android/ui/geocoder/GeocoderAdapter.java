@@ -27,7 +27,7 @@ import retrofit2.Response;
  *
  * @since 1.0.0
  */
-public class GeocoderAdapter extends BaseAdapter implements Filterable {
+class GeocoderAdapter extends BaseAdapter implements Filterable {
 
   private final Context context;
   private String baseUrl;
@@ -39,14 +39,14 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
   private double[] bbox;
   private Position position;
   private int limit;
-  private String language;
-  private Call call;
+  private String[] languages;
+  private Call<GeocodingResponse> call;
 
   private GeocoderFilter geocoderFilter;
 
   private List<CarmenFeature> features;
 
-  public GeocoderAdapter(Context context) {
+  GeocoderAdapter(Context context) {
     this.context = context;
   }
 
@@ -60,7 +60,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @return the base url used as endpoint.
    * @since 2.0.0
    */
-  public String getBaseUrl() {
+  private String getBaseUrl() {
     return baseUrl;
   }
 
@@ -70,7 +70,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @param baseUrl base url used as end point
    * @since 2.0.0
    */
-  public void setBaseUrl(String baseUrl) {
+  void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;
   }
 
@@ -81,7 +81,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @see <a href="https://www.mapbox.com/help/define-access-token/">Mapbox access token</a>
    * @since 1.0.0
    */
-  public String getAccessToken() {
+  private String getAccessToken() {
     return accessToken;
   }
 
@@ -104,7 +104,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * country code
    * @since 1.3.0
    */
-  public String getCountry() {
+  private String getCountry() {
     return country;
   }
 
@@ -115,7 +115,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @param country String matching country code.
    * @since 1.3.0
    */
-  public void setCountry(String country) {
+  void setCountry(String country) {
     this.country = country;
   }
 
@@ -126,7 +126,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * country code inside a String array.
    * @since 2.0.0
    */
-  public String[] getCountries() {
+  private String[] getCountries() {
     return countries;
   }
 
@@ -138,7 +138,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @param countries String array containing the country codes you want to limit results to.
    * @since 2.0.0
    */
-  public void setCountries(String[] countries) {
+  void setCountries(String[] countries) {
     this.countries = countries;
   }
 
@@ -160,7 +160,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
    * @since 2.0.0
    */
-  public String[] getTypes() {
+  private String[] getTypes() {
     return types;
   }
 
@@ -184,7 +184,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
    * @since 2.0.0
    */
-  public void setTypes(String[] types) {
+  void setTypes(String[] types) {
     this.types = types;
   }
 
@@ -194,20 +194,8 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @return double array containing minX, minY, maxX, maxY
    * @since 1.3.0
    */
-  public double[] getBbox() {
+  private double[] getBbox() {
     return bbox;
-  }
-
-  /**
-   * Bounding box within which to limit results.
-   *
-   * @param northeast The top right hand corner of your bounding box when the map is pointed north.
-   * @param southwest The bottom left hand corner of your bounding box when the map is pointed north.
-   * @since 1.3.0
-   */
-  public void setBbox(Position northeast, Position southwest) {
-    setBbox(southwest.getLongitude(), southwest.getLatitude(),
-      northeast.getLongitude(), northeast.getLatitude());
   }
 
   /**
@@ -219,7 +207,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @param maxY Right of bounding box when map is pointed north.
    * @since 1.3.0
    */
-  public void setBbox(double minX, double minY, double maxX, double maxY) {
+  void setBbox(double minX, double minY, double maxX, double maxY) {
     if (bbox == null) {
       bbox = new double[4];
     }
@@ -236,7 +224,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
    * @since 1.0.0
    */
-  public Position getProximity() {
+  private Position getProximity() {
     return position;
   }
 
@@ -247,7 +235,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Geocoding API documentation</a>
    * @since 1.0.0
    */
-  public void setProximity(Position position) {
+  void setProximity(Position position) {
     this.position = position;
   }
 
@@ -257,7 +245,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @return integer value
    * @since 2.0.0
    */
-  public int getLimit() {
+  private int getLimit() {
     return limit;
   }
 
@@ -267,7 +255,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @param limit the integer value representing the amount of results desired.
    * @since 2.0.0
    */
-  public void setLimit(int limit) {
+  void setLimit(int limit) {
     this.limit = limit;
   }
 
@@ -275,8 +263,8 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * @return The locale in which results should be returned.
    * @since 2.0.0
    */
-  public String getLanguage() {
-    return language;
+  private String[] getLanguage() {
+    return languages;
   }
 
   /**
@@ -293,11 +281,11 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    * <p>
    * This option is experimental.
    *
-   * @param language The locale in which results should be returned.
+   * @param languages The locale in which results should be returned.
    * @since 2.0.0
    */
-  public void setLanguage(String language) {
-    this.language = language;
+  void setLanguage(String... languages) {
+    this.languages = languages;
   }
 
   /**
@@ -306,7 +294,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
    *
    * @since 2.0.0
    */
-  public void cancelApiCall() {
+  void cancelApiCall() {
     if (call != null) {
       call.cancel();
     }
@@ -408,11 +396,11 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
 
   private class GeocoderFilter extends Filter {
 
-    private final MapboxGeocoding.Builder builder;
+    private final MapboxGeocoding.Builder<MapboxGeocoding.Builder> builder;
 
-    public GeocoderFilter() {
+    GeocoderFilter() {
       super();
-      builder = new MapboxGeocoding.Builder();
+      builder = new MapboxGeocoding.Builder<>();
     }
 
     @Override
@@ -459,7 +447,7 @@ public class GeocoderAdapter extends BaseAdapter implements Filterable {
           builder.setLimit(limit);
         }
         if (getLanguage() != null) {
-          builder.setLanguage(language);
+          builder.setLanguages(languages);
         }
 
         call = builder.build().getCall();
