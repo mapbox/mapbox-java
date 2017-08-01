@@ -160,7 +160,7 @@ public class MapboxNavigationEvent {
       lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount,
       isSimulation, originalRequestIdentifier, requestIdentifier, originalGeometry,
       originalEstimatedDistance, originalEstimatedDuration, audioOutput);
-    event.putAll(getStepMetadata(upcomingInstruction, upcomingType, upcomingModifier, upcomingName,
+    event.put(KEY_STEP, getStepMetadata(upcomingInstruction, upcomingType, upcomingModifier, upcomingName,
       previousInstruction, previousType, previousModifier, previousName, distance, duration,
       stepDistanceRemaining, stepDurationRemaining));
     event.put(KEY_EVENT, TYPE_REROUTE);
