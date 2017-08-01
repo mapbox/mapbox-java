@@ -69,6 +69,18 @@ public class MapboxNavigationEvent {
   public static final String KEY_ARRIVAL_TIMESTAMP = "arrivalTimestamp";
   public static final String KEY_STEP = "step";
 
+  // Step metadata
+  public static final String KEY_UPCOMING_INSTRUCTION = "upcomingInstruction";
+  public static final String KEY_UPCOMING_MODIFIER = "upcomingType";
+  public static final String KEY_UPCOMING_NAME = "upcomingType";
+  public static final String KEY_PREVIOUS_INSTRUCTION = "upcomingType";
+  public static final String KEY_PREVIOUS_TYPE = "upcomingType";
+  public static final String KEY_PREVIOUS_MODIFIER = "upcomingType";
+  public static final String KEY_PREVIOUS_NAME = "upcomingType";
+  public static final String KEY_UPCOMING_TYPE = "upcomingType";
+  public static final String KEY_DURATION = "duration";
+  public static final String KEY_DISTANCE = "distance";
+
   /**
    * Navigation turnstile.
    */
@@ -141,11 +153,16 @@ public class MapboxNavigationEvent {
     int newDurationRemaining, int secondsSinceLastReroute, String feedbackId, String newGeometry,
     boolean isSimulation, String originalRequestIdentifier, String requestIdentifier,
     String originalGeometry, int originalEstimatedDistance, int originalEstimatedDuration,
-    String audioOutput) {
+    String audioOutput, String upcomingInstruction, String upcomingType, String upcomingModifier,
+    String upcomingName, String previousInstruction, String previousType, String previousModifier,
+    String previousName, int distance, int duration, int stepDistanceRemaining, int stepDurationRemaining) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
       lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount,
       isSimulation, originalRequestIdentifier, requestIdentifier, originalGeometry,
       originalEstimatedDistance, originalEstimatedDuration, audioOutput);
+    event.putAll(getStepMetadata(upcomingInstruction, upcomingType, upcomingModifier, upcomingName,
+      previousInstruction, previousType, previousModifier, previousName, distance, duration,
+      stepDistanceRemaining, stepDurationRemaining));
     event.put(KEY_EVENT, TYPE_REROUTE);
     event.put(KEY_FEEDBACK_ID, feedbackId);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
@@ -236,6 +253,27 @@ public class MapboxNavigationEvent {
     event.put(KEY_ORIGINAL_ESTIMATED_DISTANCE, originalEstimatedDistance);
     event.put(KEY_ORIGINAL_ESTIMATED_DURATION, originalEstimatedDuration);
     event.put(KEY_AUDIO_OUTPUT, audioOutput);
+    return event;
+  }
+
+  private static Hashtable<String, Object> getStepMetadata(
+    String upcomingInstruction, String upcomingType, String upcomingModifier, String upcomingName,
+    String previousInstruction, String previousType, String previousModifier, String previousName,
+    int distance, int duration, int distanceRemaining, int durationRemaining
+  ) {
+    Hashtable<String, Object> event = new Hashtable<>();
+    event.put(KEY_UPCOMING_INSTRUCTION, upcomingInstruction);
+    event.put(KEY_UPCOMING_TYPE, upcomingType);
+    event.put(KEY_UPCOMING_MODIFIER, upcomingModifier);
+    event.put(KEY_UPCOMING_NAME, upcomingName);
+    event.put(KEY_PREVIOUS_INSTRUCTION, previousInstruction);
+    event.put(KEY_PREVIOUS_TYPE, previousType);
+    event.put(KEY_PREVIOUS_MODIFIER, previousModifier);
+    event.put(KEY_PREVIOUS_NAME, previousName);
+    event.put(KEY_DISTANCE, distance);
+    event.put(KEY_DURATION, duration);
+    event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
+    event.put(KEY_DURATION_REMAINING, durationRemaining);
     return event;
   }
 }
