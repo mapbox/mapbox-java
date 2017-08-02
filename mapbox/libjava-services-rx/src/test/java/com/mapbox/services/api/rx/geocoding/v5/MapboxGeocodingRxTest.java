@@ -2,6 +2,7 @@ package com.mapbox.services.api.rx.geocoding.v5;
 
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.services.api.rx.BaseTest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -10,9 +11,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import io.reactivex.observers.TestObserver;
@@ -29,11 +27,9 @@ import static org.junit.Assert.assertNotNull;
  * Test Rx support on the Mapbox Geocoding API
  */
 
-public class MapboxGeocodingRxTest {
+public class MapboxGeocodingRxTest extends BaseTest {
 
-  private static final double DELTA = 1E-10;
-
-  private static final String GEOCODING_FIXTURE = "../libjava-services/src/test/fixtures/geocoding.json";
+  private static final String GEOCODING_FIXTURE = "../libjava-services/src/test/fixtures/geocoding/geocoding.json";
   private static final String ACCESS_TOKEN = "pk.XXX";
 
   private MockWebServer server;
@@ -48,7 +44,7 @@ public class MapboxGeocodingRxTest {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         try {
-          String body = new String(Files.readAllBytes(Paths.get(GEOCODING_FIXTURE)), Charset.forName("utf-8"));
+          String body = loadJsonFixture(GEOCODING_FIXTURE);
           return new MockResponse().setBody(body);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
