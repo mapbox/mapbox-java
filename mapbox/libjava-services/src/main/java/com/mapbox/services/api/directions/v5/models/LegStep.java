@@ -26,6 +26,7 @@ public class LegStep {
   private StepManeuver maneuver;
   private double weight;
   private List<StepIntersection> intersections;
+  private String exit;
 
   /**
    * Empty constructor
@@ -324,5 +325,20 @@ public class LegStep {
    */
   public void setPronunciation(String pronunciation) {
     this.pronunciation = pronunciation;
+  }
+
+  /**
+   * A String with the exit numbers or names of the way. Optionally included, if data is available
+   * @return String depicting exit
+   */
+  public String getExit() {
+    return exit;
+  }
+
+  /**
+   * A String with the exit numbers or names of the way. Optionally included, if data is available
+   */
+  public void setExit(String exit) {
+    this.exit = exit;
   }
 }

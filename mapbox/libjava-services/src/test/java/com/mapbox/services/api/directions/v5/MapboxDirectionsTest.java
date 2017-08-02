@@ -455,6 +455,29 @@ public class MapboxDirectionsTest {
   }
 
   @Test
+  public void testLegStepExit() throws ServicesException, IOException {
+    List<Position> positionsExit = new ArrayList<>();
+    positionsExit.add(Position.fromCoordinates(-77.04430818557739, 38.908650612656864));
+    positionsExit.add(Position.fromCoordinates(-77.04192638397217, 38.90963574367117));
+
+    MapboxDirections client = new MapboxDirections.Builder()
+            .setAccessToken("pk.XXX")
+            .setCoordinates(positionsExit)
+            .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+            .setBaseUrl(mockUrl.toString())
+            .build();
+    Response<DirectionsResponse> response = client.executeCall();
+
+    StepManeuver maneuver = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1).getManeuver();
+    assertEquals(maneuver.getExit(), Integer.valueOf(3));
+    LegStep step = response.body().getRoutes().get(0).getLegs().get(0).getSteps().get(1);
+    assertEquals(step.getRotaryName(), "Dupont Circle Northwest");
+    assertEquals(step.getExit(),"M Street");
+    assertEquals(step.getRotaryPronunciation(), null);
+    assertEquals(step.getPronunciation(), null);
+  }
+
+  @Test
   public void testStepIntersection() throws ServicesException, IOException {
     MapboxDirections client = new MapboxDirections.Builder()
       .setAccessToken("pk.XXX")

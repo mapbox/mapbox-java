@@ -190,7 +190,8 @@
               "duration": 150.6,
               "rotary_name": "Dupont Circle Northwest",
               "distance": 189.9,
-              "name": "P Street Northwest"
+              "name": "P Street Northwest",
+              "exit": "M Street"
             },
             {
               "intersections": [
