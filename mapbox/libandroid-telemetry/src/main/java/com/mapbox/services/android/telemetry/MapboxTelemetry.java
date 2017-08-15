@@ -130,6 +130,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     validateTelemetryServiceConfigured();
     setupHttpClient();
     checkStagingServerInformation();
+    setUserAgent();
     rotateSessionId();
     readDisplayMetrics();
     registerBatteryUpdates();
@@ -192,6 +193,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     try {
       String stagingURL = null;
       String stagingAccessToken = null;
+      boolean cnServer = false;
 
       // Try app metadata first
       ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(),
@@ -199,33 +201,41 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       if (appInfo != null && appInfo.metaData != null) {
         stagingURL = appInfo.metaData.getString(TelemetryConstants.KEY_META_DATA_STAGING_SERVER);
         stagingAccessToken = appInfo.metaData.getString(TelemetryConstants.KEY_META_DATA_STAGING_ACCESS_TOKEN);
+        cnServer = appInfo.metaData.getBoolean(TelemetryConstants.KEY_META_DATA_CN_SERVER);
       }
 
-      // Try shared preferences otherwise
-      if (TextUtils.isEmpty(stagingURL) || TextUtils.isEmpty(stagingAccessToken)) {
-        SharedPreferences prefs = TelemetryUtils.getSharedPreferences(context);
-        stagingURL = prefs.getString(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_STAGING_URL, null);
-        stagingAccessToken = prefs.getString(
-          TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_STAGING_ACCESS_TOKEN, null);
-      }
+      if (cnServer) {
+        // Enable CN endpoint
+        client.setEnableCnEndpoint();
+      } else {
+        // Try shared preferences otherwise
+        if (TextUtils.isEmpty(stagingURL) || TextUtils.isEmpty(stagingAccessToken)) {
+          SharedPreferences prefs = TelemetryUtils.getSharedPreferences(context);
+          stagingURL = prefs.getString(TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_STAGING_URL, null);
+          stagingAccessToken = prefs.getString(
+            TelemetryConstants.MAPBOX_SHARED_PREFERENCE_KEY_TELEMETRY_STAGING_ACCESS_TOKEN, null);
+        }
 
-      // Set new client information (if needed)
-      if (!TextUtils.isEmpty(stagingURL) && !TextUtils.isEmpty(stagingAccessToken)) {
-        Log.w(LOG_TAG, String.format("Using staging server '%s' with access token '%s'.",
-          stagingURL, stagingAccessToken));
-        client.setEventsEndpoint(stagingURL);
-        client.setAccessToken(stagingAccessToken);
-        client.setStagingEnvironment(true);
+        // Set new client information (if needed)
+        if (!TextUtils.isEmpty(stagingURL) && !TextUtils.isEmpty(stagingAccessToken)) {
+          Log.w(LOG_TAG, String.format("Using staging server '%s' with access token '%s'.",
+              stagingURL, stagingAccessToken));
+          client.setEventsEndpoint(stagingURL);
+          client.setAccessToken(stagingAccessToken);
+          client.setStagingEnvironment(true);
+        }
       }
-
-      // Append app identifier to user agent if present
-      String appIdentifier = TelemetryUtils.getApplicationIdentifier(context);
-      String fullUserAgent = TextUtils.isEmpty(appIdentifier) ? userAgent : Util.toHumanReadableAscii(
-        String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
-      client.setUserAgent(fullUserAgent);
     } catch (Exception exception) {
       Log.e(LOG_TAG, String.format("Failed to check for staging credentials: %s", exception.getMessage()));
     }
+  }
+
+  private void setUserAgent() {
+    // Append app identifier to user agent if present
+    String appIdentifier = TelemetryUtils.getApplicationIdentifier(context);
+    String fullUserAgent = TextUtils.isEmpty(appIdentifier) ? userAgent : Util.toHumanReadableAscii(
+        String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
+    client.setUserAgent(fullUserAgent);
   }
 
   /**
