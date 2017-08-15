@@ -22,6 +22,8 @@ public class TelemetryConstants {
 
   public static final int SESSION_ID_ROTATION_MS = 24 * 60 * 60 * 1_000; // 24 hours
 
+  public static final String KEY_META_DATA_CN_SERVER = "com.mapbox.CnEventsServer";
+
   /**
    * Key used to store staging data server url in AndroidManifest.xml
    */
