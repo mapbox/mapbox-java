@@ -37,7 +37,7 @@ dependencies {
 
     // Android Support libraries
     compile rootProject.ext.dep.supportAppcompat
-    compile rootProject.ext.dep.supportCompat
+//    compile rootProject.ext.dep.supportCompat
 
     // Timber for logging
     compile rootProject.ext.dep.timber
