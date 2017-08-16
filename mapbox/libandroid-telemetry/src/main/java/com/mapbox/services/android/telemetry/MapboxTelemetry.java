@@ -670,4 +670,23 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       timer = null;
     }
   }
+
+  /**
+   * Set the access token, for internal use only.
+   * <p>
+   * This is an experimental API. Experimental APIs are quickly evolving and
+   * might change or be removed in minor versions.
+   *
+   * @param accessToken the new access token
+   */
+  @Experimental
+  public void setAccessToken(@NonNull String accessToken) {
+    if (client == null || TextUtils.isEmpty(accessToken)) {
+      throw new TelemetryException(
+        "Please, make sure you have initialized MapboxTelemetry before resetting the access token and it's a valid one."
+          + " For more information, please visit https://www.mapbox.com/android-sdk.");
+    }
+    this.accessToken = accessToken;
+    client.setAccessToken(accessToken);
+  }
 }
