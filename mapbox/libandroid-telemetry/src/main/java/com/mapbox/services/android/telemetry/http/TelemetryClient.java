@@ -34,7 +34,9 @@ public class TelemetryClient {
 
   private String userAgent = null;
   private String eventsEndpoint = MapboxEvent.MAPBOX_EVENTS_BASE_URL;
+  private String eventsCnEndpoint = MapboxEvent.MAPBOX_EVENTS_CN_BASE_URL;
   private boolean stagingEnvironment = false;
+  private boolean enableCnEndpoint = false;
   private OkHttpClient client;
 
   public TelemetryClient(String accessToken) {
@@ -55,7 +57,7 @@ public class TelemetryClient {
   }
 
   public String getEventsEndpoint() {
-    return eventsEndpoint;
+    return isEnableCnEndpoint() ? eventsCnEndpoint : eventsEndpoint;
   }
 
   public void setEventsEndpoint(String eventsEndpoint) {
@@ -76,6 +78,14 @@ public class TelemetryClient {
 
   public void setStagingEnvironment(boolean stagingEnvironment) {
     this.stagingEnvironment = stagingEnvironment;
+  }
+
+  public boolean isEnableCnEndpoint() {
+    return enableCnEndpoint;
+  }
+
+  public void setEnableCnEndpoint() {
+    this.enableCnEndpoint = true;
   }
 
   /**
@@ -103,7 +113,11 @@ public class TelemetryClient {
         .add("events.mapbox.com", "sha256/Tb0uHZ/KQjWh8N9+CZFLc4zx36LONQ55l6laDi1qtT4=")
         .add("events.mapbox.com", "sha256/RRM1dGqnDFsCJXBTHky16vi1obOlCgFFn/yOhI/y+ho=")
         .add("events.mapbox.com", "sha256/WoiWRyIOVNa9ihaBciRSC7XHjliYS9VwUGOIud4PB18=")
-        .add("events.mapbox.com", "sha256/yGp2XoimPmIK24X3bNV1IaK+HqvbGEgqar5nauDdC5E=");
+        .add("events.mapbox.com", "sha256/yGp2XoimPmIK24X3bNV1IaK+HqvbGEgqar5nauDdC5E=")
+        // CN - DigiCert
+        .add("events.mapbox.cn", "sha256/gakY+fylqW6kp6piqnaQNLZFzT8HlhzP5lsGJk5WguE=")
+        .add("events.mapbox.cn", "sha256/5kJvNEMw0KjrCAu7eXY5HZdvyCS13BbA0VJG1RSP91w=")
+        .add("events.mapbox.cn", "sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=");
     }
 
     return certificatePinnerBuilder.build();

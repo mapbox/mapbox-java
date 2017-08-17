@@ -15,6 +15,7 @@ public class MapboxEvent implements Serializable {
 
   // Events and attributes for v2
   public static final String MAPBOX_EVENTS_BASE_URL = "https://events.mapbox.com";
+  public static final String MAPBOX_EVENTS_CN_BASE_URL = "https://events.mapbox.cn";
   public static final String SOURCE_MAPBOX = "mapbox";
 
   // Event types
