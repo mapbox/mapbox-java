@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Accept Android license
           command: |
-           echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.1"
+           echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;25.0.0"
       - run:
           name: Download Dependencies
           command: cd mapbox && ./gradlew androidDependencies
@@ -90,7 +90,7 @@ jobs:
       - run:
           name: Accept Android license
           command: |
-           echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.1"
+           echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;25.0.0"
       - run:
           name: Generate Maven credentials
           shell: /bin/bash -euo pipefail
