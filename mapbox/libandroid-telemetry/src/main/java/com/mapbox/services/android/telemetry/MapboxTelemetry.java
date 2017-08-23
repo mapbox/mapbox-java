@@ -159,7 +159,11 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     this.customTurnstileEvent = customTurnstileEvent;
   }
 
-  public void setSessionIdRotationTime(@IntRange(from=1,to=24) int sessionIdRotationTime) {
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public void setSessionIdRotationTime(@IntRange(from = 1, to = 24) int sessionIdRotationTime) {
     this.sessionIdRotationTime = sessionIdRotationTime; // in hours
   }
 
@@ -225,7 +229,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
         // Set new client information (if needed)
         if (!TextUtils.isEmpty(stagingURL) && !TextUtils.isEmpty(stagingAccessToken)) {
           Log.w(LOG_TAG, String.format("Using staging server '%s' with access token '%s'.",
-              stagingURL, stagingAccessToken));
+            stagingURL, stagingAccessToken));
           client.setEventsEndpoint(stagingURL);
           client.setAccessToken(stagingAccessToken);
           client.setStagingEnvironment(true);
@@ -240,7 +244,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     // Append app identifier to user agent if present
     String appIdentifier = TelemetryUtils.getApplicationIdentifier(context);
     String fullUserAgent = TextUtils.isEmpty(appIdentifier) ? userAgent : Util.toHumanReadableAscii(
-        String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
+      String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
     client.setUserAgent(fullUserAgent);
   }
 
@@ -666,7 +670,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     context.stopService(new Intent(context, TelemetryService.class));
     if (locationEngine == null) {
       Log.e(LOG_TAG, String.format(
-          "Shutdown error: Location Engine instance wasn't set up (initialized: %b).", initialized));
+        "Shutdown error: Location Engine instance wasn't set up (initialized: %b).", initialized));
     } else {
       locationEngine.removeLocationEngineListener(this);
       locationEngine.removeLocationUpdates();
