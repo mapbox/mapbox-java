@@ -1,27 +1,30 @@
 package com.mapbox.services.api.directions.v5;
 
+import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.services.api.MapboxBuilder;
+import com.mapbox.services.Constants;
 import com.mapbox.services.api.MapboxService;
-import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
+import com.mapbox.services.api.directions.v5.DirectionsCriteria.OverviewCriteria;
+import com.mapbox.services.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.services.api.directions.v5.gson.DirectionsAdapterFactory;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
-import com.mapbox.services.commons.geojson.Geometry;
-import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.utils.TextUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * The Directions API allows the calculation of routes between coordinates. The fastest route can be
@@ -39,17 +42,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * documentation</a>
  * @since 1.0.0
  */
-public class MapboxDirections extends MapboxService<DirectionsResponse> {
+@AutoValue
+public abstract class MapboxDirections extends MapboxService<DirectionsResponse> {
 
   protected Builder builder;
   private DirectionsService service;
   private Call<DirectionsResponse> call;
   private Gson gson;
 
-
-  protected MapboxDirections(Builder builder) {
-    this.builder = builder;
-  }
 
   protected Gson getGson() {
     // Gson instance with type adapters
@@ -69,7 +69,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
     // Retrofit instance
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(builder.getBaseUrl())
+      .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(getGson()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
@@ -89,20 +89,20 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     call = getService().getCall(
-      getHeaderUserAgent(builder.getClientAppName()),
-      builder.getUser(),
-      builder.getProfile(),
-      builder.getCoordinates(),
-      builder.getAccessToken(),
-      builder.isAlternatives(),
-      builder.getGeometries(),
-      builder.getOverview(),
-      builder.getRadiuses(),
-      builder.isSteps(),
-      builder.getBearings(),
-      builder.isContinueStraight(),
-      builder.getAnnotation(),
-      builder.getLanguage());
+      getHeaderUserAgent(clientAppName()),
+      user(),
+      profile(),
+      coordinates(),
+      accessToken(),
+      alternatives(),
+      geometries(),
+      overview(),
+      radiuses(),
+      steps(),
+      bearings(),
+      continueStraight(),
+      annotations(),
+      language());
 
     // Done
     return call;
@@ -152,390 +152,302 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     return getCall().clone();
   }
 
+  abstract String user();
+
+  abstract String profile();
+
+  abstract String coordinates();
+
+  abstract String accessToken();
+
+  abstract String baseUrl();
+
+  @Nullable
+  abstract Boolean alternatives();
+
+  @Nullable
+  abstract String geometries();
+
+  @Nullable
+  abstract String overview();
+
+  @Nullable
+  abstract String radiuses();
+
+  @Nullable
+  abstract String bearings();
+
+  @Nullable
+  abstract Boolean steps();
+
+  @Nullable
+  abstract Boolean continueStraight();
+
+  @Nullable
+  abstract String annotations();
+
+  @Nullable
+  abstract String language();
+
+  @Nullable
+  abstract String clientAppName();
+
+  public static Builder builder() {
+    return new AutoValue_MapboxDirections.Builder()
+      .baseUrl(Constants.BASE_API_URL)
+      .profile(DirectionsCriteria.PROFILE_DRIVING)
+      .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
+      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6);
+  }
+
   /**
-   * Directions v5 builder
+   * This builder is used to create a new request to the Mapbox Directions API. At a bare minimum,
+   * your request must include an access token, an origin, and a destination. All other fields can
+   * be left alone inorder to use the default behaviour of the API.
+   * <p>
+   * By default, the directions profile is set to driving (without traffic) but can be changed to
+   * reflect your users use-case.
+   * </p><p>
+   * Note to contributors: All optional booleans in this builder use the object {@code Boolean}
+   * rather than the primitive to allow for unset (null) values.
+   * </p>
    *
    * @since 1.0.0
    */
-  public abstract static class Builder<T extends Builder> extends MapboxBuilder {
+  @AutoValue.Builder
+  public abstract static class Builder {
 
-    // We use `Boolean` instead of `boolean` to allow unset (null) values.
-    private String user = null;
-    private String profile = null;
-    private List<Position> coordinates = null;
-    private String accessToken = null;
-    private Boolean alternatives = null;
-    private String geometries = null;
-    private String overview = null;
-    private double[] radiuses = null;
-    private double[][] bearings = null;
-    private Boolean steps = null;
-    private Boolean continueStraight = null;
-    private Position origin = null;
-    private Position destination = null;
-    private String[] annotation = null;
-    private String language = null;
+    List<Double[]> bearings = new ArrayList<>();
+    List<Point> coordinates = new ArrayList<>();
+    String[] annotations;
+    double[] radiuses;
+    Point destination;
+    Point origin;
 
     /**
-     * Constructor
+     * The username for the account that the directions engine runs on. In most cases, this should
+     * always remain the default value of {@link DirectionsCriteria#PROFILE_DEFAULT_USER}.
      *
+     * @param user a non-null string which will replace the default user used in the directions
+     *             request
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public Builder() {
-      // Set defaults
-      this.user = DirectionsCriteria.PROFILE_DEFAULT_USER;
-
-      // by default the geometry is polyline with precision 6.
-      this.geometries = DirectionsCriteria.GEOMETRY_POLYLINE6;
-    }
-
-    /*
-     * Setters
-     */
+    public abstract Builder user(@NonNull String user);
 
     /**
-     * The SDK currently only supports {@code Polyline} geometry (not GeoJSON) to simplify the response. You do have
-     * the option on whether the precision is 5 or 6 using either {@link DirectionsCriteria#GEOMETRY_POLYLINE} or
-     * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
+     * This selects which mode of transportation the user will be using while navigating from the
+     * origin to the final destination. The options include driving, driving considering traffic,
+     * walking, and cycling. Using each of these profiles will result in different routing biases.
      *
-     * @param geometries A {@code String} constant which equals either {@code "polyline"} or {@code "polyline6"}.
-     * @return Builder
-     * @since 2.0.0
-     */
-    public T setGeometry(String geometries) {
-      this.geometries = geometries;
-      return (T) this;
-    }
-
-    /**
-     * @param user User string
-     * @return Builder
+     * @param profile required to be one of the String values found in the {@link ProfileCriteria}
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public T setUser(String user) {
-      this.user = user;
-      return (T) this;
-    }
+    public abstract Builder profile(@NonNull @ProfileCriteria String profile);
 
     /**
-     * @param profile Profile string
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setProfile(String profile) {
-      this.profile = profile;
-      return (T) this;
-    }
-
-    /**
-     * Set the list of coordinates for the directions service. If you've previously set an
-     * origin with setOrigin() or a destination with setDestination(), those will be
-     * overridden.
+     * This sets the starting point on the map where the route will begin. It is one of the
+     * required parameters which must be set for a successful directions response.
      *
-     * @param coordinates List of {@link Position} giving origin and destination(s) coordinates.
-     * @return Builder
+     * @param origin a GeoJSON {@link Point} object representing the starting location for the route
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public T setCoordinates(List<Position> coordinates) {
-      this.coordinates = coordinates;
-      return (T) this;
-    }
-
-    /**
-     * Inserts the specified position at the beginning of the coordinates list. If you've
-     * set other coordinates previously with setCoordinates() those elements are kept
-     * and their index will be moved up by one (the coordinates are moved to the right).
-     *
-     * @param origin {@link Position} of route origin.
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setOrigin(Position origin) {
+    public Builder origin(@NonNull Point origin) {
       this.origin = origin;
-      return (T) this;
+      return this;
     }
 
     /**
-     * Appends the specified destination to the end of the coordinates list. If you've
-     * set other coordinates previously with setCoordinates() those elements are kept
-     * and the destination is added at the end of the list.
+     * This sets the ending point on the map where the route will end. It is one of the required
+     * parameters which must be set for a successful directions response.
      *
-     * @param destination {@link Position} of route destination.
-     * @return Builder
+     * @param destination a GeoJSON {@link Point} object representing the starting location for the
+     *                    route
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public T setDestination(Position destination) {
+    public Builder destination(@NonNull Point destination) {
       this.destination = destination;
-      return (T) this;
+      return this;
     }
 
     /**
-     * Required to call when building {@link Builder}.
+     * This can be used to set up to 23 additional in-between points which will act as pit-stops
+     * along the users route. Note that if you are using the
+     * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} that the max number of waypoints allowed
+     * in the request is currently limited to 1.
      *
-     * @param accessToken Mapbox access token, You must have a Mapbox account inorder to use
-     *                    this library.
-     * @return Builder
+     * @param waypoint a {@link Point} which represents the pit-stop or waypoint where you'd like
+     *                 one of the {@link com.mapbox.services.api.directions.v5.models.RouteLeg} to
+     *                 navigate the user to
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public Builder addWaypoint(@NonNull Point waypoint) {
+      coordinates.add(waypoint);
+      return this;
+    }
+
+    /**
+     * Optionally set whether to try to return alternative routes. An alternative is classified as a
+     * route that is significantly different then the fastest route, but also still reasonably fast.
+     * Not in all circumstances such a route exists. At the moment at most one alternative can be
+     * returned.
+     *
+     * @param alternatives true if you'd like to receive an alternative route, otherwise false or
+     *                     null to use the APIs default value
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    @Override
-    public T setAccessToken(String accessToken) {
-      this.accessToken = accessToken;
-      return (T) this;
-    }
+    public abstract Builder alternatives(@Nullable Boolean alternatives);
 
     /**
-     * Optionally, call if you'd like to receive alternative routes besides just one.
+     * alter the default geometry being returned for the directions route. A null value will reset
+     * this field to the APIs default value vs this SDKs default value of
+     * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
+     * <p>
+     * Note that while the API supports GeoJSON as an option for geometry, this SDK intentionally
+     * removes this as an option since an encoded string for the geometry significantly reduces
+     * bandwidth on mobile devices and speeds up response time.
+     * </p>
      *
-     * @param alternatives true if you'd like alternative routes, else false.
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setAlternatives(Boolean alternatives) {
-      this.alternatives = alternatives;
-      return (T) this;
-    }
-
-    /**
-     * Optionally, set whether you want the route geometry to be full, simplified, etc.
-     *
-     * @param overview String defining type of overview you'd like the API to give. Use one of
-     *                 the constants.
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setOverview(String overview) {
-      this.overview = overview;
-      return (T) this;
-    }
-
-    /**
-     * Optionally, Use to filter the road segment the waypoint will be placed on by direction and dictates the angle of
-     * approach. This option should always be used in conjunction with the
-     * {@link MapboxDirections.Builder#setRadiuses(double[])} parameter. The parameter takes two values per waypoint:
-     * the first is an angle clockwise from true north between 0 and 360. The second is the range of degrees the angle
-     * can deviate by. We recommend a value of 45 degrees or 90 degrees for the range, as bearing measurements tend to
-     * be inaccurate. This is useful for making sure we reroute vehicles on new routes that continue traveling in their
-     * current direction. A request that does this would provide bearing and radius values for the first waypoint and
-     * leave the remaining values empty. If provided, the list of bearings must be the same length as the list of
-     * waypoints, but you can skip a coordinate and show its position by passing in a double array with no values
-     * included like so: {@code new double[] {}}.
-     *
-     * @param bearings a double array with two values indicating the angle and the other value indicating the deviating
-     *                 range.
-     * @return Builder
+     * @param geometries null if you'd like the default geometry, else one of the options found in
+     *                   {@link GeometriesCriteria}.
+     * @return this builder for chaining options together
      * @since 2.0.0
      */
-    public T setBearings(double[]... bearings) {
-      this.bearings = bearings;
-      return (T) this;
-    }
+    public abstract Builder geometries(@Nullable @GeometriesCriteria String geometries);
 
     /**
-     * Optionally, set the maximum distance in meters that each coordinate is allowed to move when snapped to a nearby
-     * road segment. There must be as many radiuses as there are coordinates in the request. Values can be any number
-     * greater than 0 or they can be unlimited simply by passing {@link Double#POSITIVE_INFINITY}. If no routable road
-     * is found within the radius, a {@code NoSegment} error is returned.
+     * Type of returned overview geometry. Can be {@link DirectionsCriteria#OVERVIEW_FULL} (the most
+     * detailed geometry available), {@link DirectionsCriteria#OVERVIEW_SIMPLIFIED} (a simplified
+     * version of the full geometry), or {@link DirectionsCriteria#OVERVIEW_FALSE} (no overview
+     * geometry). The default is simplified. Passing in null will use the APIs default setting for
+     * the overview field.
      *
-     * @param radiuses double array containing the radiuses defined in unit meters.
-     * @return Builder
+     * @param Overview null or one of the options found in {@link OverviewCriteria}
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public T setRadiuses(double[] radiuses) {
-      this.radiuses = radiuses;
-      return (T) this;
-    }
+    public abstract Builder overview(@Nullable @OverviewCriteria String Overview);
 
     /**
-     * Optionally, call if you'd like to include step information within route.
+     * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
+     * set to either true or false to enable or disable respectively. null can also optionally be
+     * passed in to set the default behavior to match what the API does by default.
      *
-     * @param steps true if you'd like step information.
-     * @return Builder
+     * @param steps true if you'd like step information
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public T setSteps(Boolean steps) {
-      this.steps = steps;
-      return (T) this;
-    }
+    public abstract Builder steps(@Nullable Boolean steps);
 
     /**
-     * Toggle whether you want the route to always continue straight toward the next destination
-     * or allow for backtracking.
+     * Sets allowed direction of travel when departing intermediate waypoints. If true the route
+     * will continue in the same direction of travel. If false the route may continue in the
+     * opposite direction of travel. API defaults to true for
+     * {@link DirectionsCriteria#PROFILE_DRIVING} and false for
+     * {@link DirectionsCriteria#PROFILE_WALKING} and {@link DirectionsCriteria#PROFILE_CYCLING}.
      *
      * @param continueStraight boolean true if you want to always continue straight, else false.
-     * @return Builder
+     *                         Null can also be passed in here to use the APIs default option
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public T setContinueStraight(Boolean continueStraight) {
-      this.continueStraight = continueStraight;
-      return (T) this;
-    }
+    public abstract Builder continueStraight(@Nullable Boolean continueStraight);
 
     /**
-     * Whether or not to return additional metadata along the route. Possible values are:
-     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}, {@link DirectionsCriteria#ANNOTATION_DURATION},
-     * {@link DirectionsCriteria#ANNOTATION_DURATION} and {@link DirectionsCriteria#ANNOTATION_CONGESTION}. Several
-     * annotation can be used by separating them with {@code ,}.
+     * Set the instruction language for the directions request, the default is english. Only a
+     * select number of languages are currently supported, reference the table provided in the see
+     * link below.
      *
-     * @param annotation String referencing one of the annotation direction criteria's.
-     * @return Builder
-     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object documentation</a>
-     * @since 2.1.0
-     */
-    public T setAnnotation(String... annotation) {
-      this.annotation = annotation;
-      return (T) this;
-    }
-
-    /**
-     * Optionally set the language of returned turn-by-turn text instructions. The default is {@code en} for English.
-     *
-     * @param language The locale in which results should be returned.
-     * @return Builder
-     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported languages</a>
+     * @param language a Locale value representing the language you'd like the instructions to be
+     *                 written in when returned
+     * @return this builder for chaining options together
+     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
+     * Languages</a>
      * @since 2.2.0
      */
-    public T setLanguage(String language) {
-      this.language = language;
-      return (T) this;
-    }
-
-    /*
-     * Getters, they return the value in a format ready for the API to consume
-     */
-
-    /**
-     * @return the user as String
-     * @since 1.0.0
-     */
-    public String getUser() {
-      return user;
+    public Builder language(@Nullable Locale language) {
+      if (language != null) {
+        language(language.toString());
+      }
+      return this;
     }
 
     /**
-     * The current profile set for usage with the Directions API.
+     * Used internally for converting the locale object to a string.
+     */
+    abstract Builder language(String language);
+
+
+    public Builder radiuses(double... radiuses) {
+      this.radiuses = radiuses;
+      return this;
+    }
+
+    public Builder addBearing(@FloatRange(from = 0, to = 360) double angle,
+                              @FloatRange(from = 0, to = 360) double tolerance) {
+      bearings.add(new Double[] {angle, tolerance});
+      return this;
+    }
+
+    public abstract Builder accessToken(@NonNull String accessToken);
+
+    public abstract Builder baseUrl(String baseUrl);
+
+    /**
+     * Base package name or other simple string identifier. Used inside the calls user agent header.
      *
-     * @return {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING_TRAFFIC},
-     * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING},
-     * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_CYCLING},
-     * or {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_WALKING}
+     * @param clientAppName base package name or other simple string identifier
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public String getProfile() {
-      return profile;
+    public abstract Builder clientAppName(@NonNull String clientAppName);
+
+    abstract Builder radiuses(@Nullable String radiuses);
+
+    abstract Builder bearings(@Nullable String bearings);
+
+
+    abstract Builder coordinates(String coordinates);
+
+
+    abstract Builder annotations(String annotations);
+
+    public Builder annotations(String... annotations) {
+      this.annotations = annotations;
+      return this;
     }
 
-    /**
-     * The coordinates parameter denotes between which points routing happens. The coordinates
-     * must be in the format:
-     * <p>
-     * {longitude},{latitude};{longitude},{latitude}[;{longitude},{latitude} ...]
-     * <p>
-     * - Each coordinate is a pair of a longitude double and latitude double, which are separated by a ,
-     * - Coordinates are separated by a ; from each other
-     * - A query must have at least 2 coordinates and at most 25 coordinates (at most 3 when the profile is
-     * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#PROFILE_DRIVING_TRAFFIC})
-     *
-     * @return String containing coordinates formatted.
-     * @since 1.0.0
-     */
-    public String getCoordinates() {
-      List<String> coordinatesFormatted = new ArrayList<>();
-      // Insert origin at beginning of list if one is provided.
+
+    abstract MapboxDirections autoBuild(); // not public
+
+    public MapboxDirections build() {
       if (origin != null) {
-        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(origin.getLongitude()),
-          TextUtils.formatCoordinate(origin.getLatitude())));
+        coordinates.add(0, origin);
       }
-      if (coordinates != null) {
-        for (Position coordinate : coordinates) {
-          coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-            TextUtils.formatCoordinate(coordinate.getLongitude()),
-            TextUtils.formatCoordinate(coordinate.getLatitude())));
-        }
-      }
-      // Insert destination at end of list if one is provided.
       if (destination != null) {
-        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(destination.getLongitude()),
-          TextUtils.formatCoordinate(destination.getLatitude())));
+        coordinates.add(destination);
       }
 
-      return TextUtils.join(";", coordinatesFormatted.toArray());
+      coordinates(formatCoordinates());
+      bearings(formatBearing());
+      annotations(formatAnnotations());
+      radiuses(formatRadiuses());
+      return autoBuild();
     }
 
-    /**
-     * @return your Mapbox access token.
-     * @since 1.0.0
-     */
-    @Override
-    public String getAccessToken() {
-      return accessToken;
-    }
-
-    /**
-     * @return true if you {@link #setAlternatives(Boolean)} to true.
-     * @since 1.0.0
-     */
-    public Boolean isAlternatives() {
-      return alternatives;
-    }
-
-    /**
-     * @return {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#GEOMETRY_GEOJSON},
-     * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#GEOMETRY_POLYLINE},
-     * or {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#GEOMETRY_POLYLINE6}
-     * @since 1.0.0
-     */
-    public String getGeometries() {
-      return geometries;
-    }
-
-    /**
-     * @return The overview, full, simplied, etc.
-     * @since 1.0.0
-     */
-    public String getOverview() {
-      return overview;
-    }
-
-    /**
-     * @return The optional bearing values if given, otherwise null.
-     * @since 2.0.0
-     */
-    public String getBearings() {
-      if (bearings == null || bearings.length == 0) {
+    private String formatAnnotations() {
+      if (annotations == null || annotations.length == 0) {
         return null;
       }
-
-      String[] bearingFormatted = new String[bearings.length];
-      for (int i = 0; i < bearings.length; i++) {
-        if (bearings[i].length == 0) {
-          bearingFormatted[i] = "";
-        } else {
-          bearingFormatted[i] = String.format(Locale.US, "%s,%s",
-            TextUtils.formatCoordinate(bearings[i][0]),
-            TextUtils.formatCoordinate(bearings[i][1]));
-        }
-      }
-      return TextUtils.join(";", bearingFormatted);
+      return TextUtils.join(",", annotations);
     }
 
-    /**
-     * Radiuses indicate how far from a coordinate a routeable way is searched. They
-     * are indicated like this:
-     * <p>
-     * ?radiuses={radius};{radius}}[;{radius} ...].
-     * <p>
-     * If no routeble way can be found within the serach radius, a NoRoute error will be returned.
-     * - Radiuses are separated by a ,
-     * - Each radius must be of a value {@code float >= 0} in meters or unlimited (default)
-     * - There must be as many radiuses as there are coordinates
-     * - It is possible to not specify radiuses via ;;, which result in the same behaviour as setting unlimited
-     *
-     * @return String containing formatted radiuses.
-     * @since 1.0.0
-     */
-    public String getRadiuses() {
+    private String formatRadiuses() {
       if (radiuses == null || radiuses.length == 0) {
         return null;
       }
@@ -548,166 +460,36 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
           radiusesFormatted[i] = String.format(Locale.US, "%s", TextUtils.formatCoordinate(radiuses[i]));
         }
       }
-
       return TextUtils.join(";", radiusesFormatted);
     }
 
-    /**
-     * @return true if you requested step information in {@link #setSteps(Boolean)}.
-     * @since 1.0.0
-     */
-    public Boolean isSteps() {
-      return steps;
+    private String formatCoordinates() {
+      List<String> coordinatesFormatted = new ArrayList<>();
+      for (Point point : coordinates) {
+        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+          TextUtils.formatCoordinate(point.getCoordinates().getLongitude()),
+          TextUtils.formatCoordinate(point.getCoordinates().getLatitude())));
+      }
+
+      return TextUtils.join(";", coordinatesFormatted.toArray());
     }
 
-    /**
-     * Determine whether the route's been set to continue straight or not.
-     *
-     * @return true if continuing straight, otherwise false.
-     * @since 1.0.0
-     */
-    public Boolean isContinueStraight() {
-      return continueStraight;
-    }
-
-    /**
-     * returns one or a combination of {@link DirectionsCriteria#ANNOTATION_DISTANCE},
-     * {@link DirectionsCriteria#ANNOTATION_DURATION}, or {@link DirectionsCriteria#ANNOTATION_SPEED}.
-     *
-     * @return String with 1 or several annotations that have been set.
-     * @since 2.1.0
-     */
-    public String getAnnotation() {
-      if (annotation == null || annotation.length == 0) {
+    private String formatBearing() {
+      if (bearings.isEmpty()) {
         return null;
       }
-      return TextUtils.join(",", annotation);
-    }
 
-    /**
-     * @return The language the turn-by-turn directions will be in.
-     * @since 2.2.0
-     */
-    public String getLanguage() {
-      return language;
-    }
-
-    /**
-     * Base package name or other simple string identifier
-     *
-     * @param appName base package name or other simple string identifier
-     * @return Builder
-     * @since 1.3.0
-     */
-    public T setClientAppName(String appName) {
-      super.clientAppName = appName;
-      return (T) this;
-    }
-
-    /**
-     * Optionally change the APIs base URL to something other then the default Mapbox one.
-     *
-     * @param baseUrl base url used as end point
-     * @return Builder
-     * @since 1.3.0
-     */
-    public T setBaseUrl(String baseUrl) {
-      super.baseUrl = baseUrl;
-      return (T) this;
-    }
-
-    /**
-     * Build method
-     *
-     * @return MapboxDirections
-     * @throws ServicesException Generic Exception for all things directions.
-     * @since 1.0.0
-     */
-    @Override
-    public MapboxDirections build() throws ServicesException {
-      validateAccessToken(accessToken);
-
-      // Get the total number of coordinates being passed to API
-      int coordLength = 0;
-      if (coordinates != null) {
-        coordLength = coordinates.size();
-      }
-      if (origin != null) {
-        coordLength += 1;
-      }
-      if (destination != null) {
-        coordLength += 1;
-      }
-
-      if (profile == null) {
-        throw new ServicesException(
-          "A profile is required for the Directions API. Use one of the profiles found in the"
-            + "DirectionsCriteria.java file.");
-      }
-
-      if (coordLength < 2) {
-        throw new ServicesException(
-          "You should provide at least two coordinates (from/to).");
-      }
-
-      if (profile.equals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
-        && coordLength > 3) {
-        throw new ServicesException(
-          "Using the driving-traffic profile allows for maximum of 3 coordinates.");
-      }
-
-      if (coordLength > 25) {
-        throw new ServicesException(
-          "All profiles (except driving-traffic) allows for maximum of 25 coordinates.");
-      }
-
-      if (radiuses != null && radiuses.length != coordLength) {
-        throw new ServicesException(
-          "There must be as many radiuses as there are coordinates.");
-      }
-
-      if (radiuses != null) {
-        for (double radius : radiuses) {
-          if (radius < 0) {
-            throw new ServicesException(
-              "Radius values need to be greater than zero.");
-          }
+      String[] bearingFormatted = new String[bearings.size()];
+      for (int i = 0; i < bearings.size(); i++) {
+        if (bearings.get(i).length == 0) {
+          bearingFormatted[i] = "";
+        } else {
+          bearingFormatted[i] = String.format(Locale.US, "%s,%s",
+            TextUtils.formatCoordinate(bearings.get(i)[0]),
+            TextUtils.formatCoordinate(bearings.get(i)[1]));
         }
       }
-
-      if (bearings != null) {
-        for (double[] bearing : bearings) {
-          if (bearing.length != 2 && bearing.length != 0) {
-            throw new ServicesException(
-              "Requesting a route which includes bearings requires exactly 2 values in each double array.");
-          }
-        }
-      }
-
-      if (bearings != null && bearings.length != coordLength) {
-        throw new ServicesException(
-          "There must be as many bearings as there are coordinates.");
-      }
-
-      if (annotation != null) {
-        if (annotation.length > 3) {
-          throw new ServicesException(
-            "Annotation request can only contain one of the three DirectionsCriteria constants.");
-        }
-
-        // Check that user isn't using incorrect annotation request.
-        for (String annotationEntry : annotation) {
-          if (!annotationEntry.equals(DirectionsCriteria.ANNOTATION_DISTANCE)
-            && !annotationEntry.equals(DirectionsCriteria.ANNOTATION_DURATION)
-            && !annotationEntry.equals(DirectionsCriteria.ANNOTATION_SPEED)
-            && !annotationEntry.equals(DirectionsCriteria.ANNOTATION_CONGESTION)) {
-            throw new ServicesException(
-              "Annotation value must be one of the constant values found inside DirectionsCriteria");
-          }
-        }
-      }
-
-      return new MapboxDirections(this);
+      return TextUtils.join(";", bearingFormatted);
     }
   }
 }

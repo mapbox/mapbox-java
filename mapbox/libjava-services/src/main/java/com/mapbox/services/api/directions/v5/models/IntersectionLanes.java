@@ -17,7 +17,7 @@ import java.util.List;
 @AutoValue
 public abstract class IntersectionLanes implements Serializable {
 
-  public static AutoValue_IntersectionLanes.Builder builder() {
+  public static Builder builder() {
     return new AutoValue_IntersectionLanes.Builder();
   }
 

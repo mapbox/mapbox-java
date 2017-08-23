@@ -20,7 +20,7 @@ import java.util.List;
 @AutoValue
 public abstract class LegAnnotation implements Serializable {
 
-  public static AutoValue_LegAnnotation.Builder builder() {
+  public static Builder builder() {
     return new AutoValue_LegAnnotation.Builder();
   }
 

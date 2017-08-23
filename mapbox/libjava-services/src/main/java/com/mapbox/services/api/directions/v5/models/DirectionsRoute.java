@@ -16,7 +16,7 @@ import java.util.List;
 @AutoValue
 public abstract class DirectionsRoute implements Serializable {
 
-  public static AutoValue_DirectionsRoute.Builder builder() {
+  public static Builder builder() {
     return new AutoValue_DirectionsRoute.Builder();
   }
 

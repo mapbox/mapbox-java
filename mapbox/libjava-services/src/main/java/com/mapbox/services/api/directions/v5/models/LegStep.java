@@ -18,7 +18,7 @@ import java.util.List;
 @AutoValue
 public abstract class LegStep implements Serializable {
 
-  public static AutoValue_LegStep.Builder builder() {
+  public static Builder builder() {
     return new AutoValue_LegStep.Builder();
   }
 

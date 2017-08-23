@@ -18,7 +18,7 @@ import java.io.Serializable;
 @AutoValue
 public abstract class StepManeuver implements Serializable {
 
-  public static AutoValue_StepManeuver.Builder builder() {
+  public static Builder builder() {
     return new AutoValue_StepManeuver.Builder();
   }
 

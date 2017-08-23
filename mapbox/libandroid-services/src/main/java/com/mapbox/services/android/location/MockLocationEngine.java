@@ -301,7 +301,7 @@ public class MockLocationEngine extends LocationEngine {
    */
   private void calculateStepPoints() {
     LineString line = LineString.fromPolyline(
-      route.getLegs().get(currentLeg).getSteps().get(currentStep).getGeometry(), Constants.PRECISION_6);
+      route.legs().get(currentLeg).steps().get(currentStep).geometry(), Constants.PRECISION_6);
 
     increaseIndex();
 
@@ -312,9 +312,9 @@ public class MockLocationEngine extends LocationEngine {
   }
 
   private void increaseIndex() {
-    if (currentStep < route.getLegs().get(currentLeg).getSteps().size() - 1) {
+    if (currentStep < route.legs().get(currentLeg).steps().size() - 1) {
       currentStep++;
-    } else if (currentLeg < route.getLegs().size() - 1) {
+    } else if (currentLeg < route.legs().size() - 1) {
       currentLeg++;
       currentStep = 0;
     }

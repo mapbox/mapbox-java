@@ -5,25 +5,20 @@ import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionSerializer;
 import com.mapbox.services.commons.models.Position;
 
-/**
- * A Point is a type of {@link Geometry}.
- *
- * @see <a href='http://geojson.org/geojson-spec.html#point'>Official GeoJSON Point Specifications</a>
- * @since 1.0.0
- */
-public class Point implements Geometry<Position> {
+
+public class Point implements Geometry {
 
   private final String type = "Point";
   private Position coordinates;
+  private double longitude; // TODO make these final
+  private double latitude;
 
-  /**
-   * Private constructor.
-   *
-   * @param coordinates {@link Position} making up the Point.
-   * @since 1.0.0
-   */
   private Point(Position coordinates) {
     this.coordinates = coordinates;
+  }
+
+  public Point(double longitude, double latitude) {
+    coordinates = Position.fromCoordinates(longitude, latitude);
   }
 
   /**
@@ -49,9 +44,14 @@ public class Point implements Geometry<Position> {
   }
 
   @Override
-  public void setCoordinates(Position coordinates) {
-    this.coordinates = coordinates;
+  public void setCoordinates(Object coordinates) {
+
   }
+//
+//  @Override
+//  public void setCoordinates(Position coordinates) {
+//    this.coordinates = coordinates;
+//  }
 
   /**
    * Creates a {@link Point} from a given coordinate.

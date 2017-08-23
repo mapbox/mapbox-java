@@ -17,7 +17,7 @@ import java.util.List;
 @AutoValue
 public abstract class RouteLeg implements Serializable {
 
-  public static AutoValue_RouteLeg.Builder builder() {
+  public static Builder builder() {
     return new AutoValue_RouteLeg.Builder();
   }
 
@@ -62,6 +62,7 @@ public abstract class RouteLeg implements Serializable {
    * @return a {@link LegAnnotation} object
    * @since 2.1.0
    */
+  @Nullable
   public abstract LegAnnotation annotation();
 
 

@@ -22,7 +22,6 @@ import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.location.LocationEngineActivity;
 import com.mapbox.services.android.testapp.optimizedtrip.OptimizedTripActivity;
-
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageWithAnnotationsActivity;
 import com.mapbox.services.android.testapp.turf.TurfBearingActivity;

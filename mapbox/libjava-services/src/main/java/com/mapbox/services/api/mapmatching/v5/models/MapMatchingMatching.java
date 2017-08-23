@@ -5,7 +5,8 @@ import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 /**
  * A match object is a {@link DirectionsRoute} object with an additional confidence field.
  */
-public class MapMatchingMatching extends DirectionsRoute {
+//public class MapMatchingMatching extends DirectionsRoute {
+public class MapMatchingMatching {
 
   private double confidence;
 

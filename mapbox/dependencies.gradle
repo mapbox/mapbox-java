@@ -1,61 +1,69 @@
 ext {
-    // Last number is 0 for a SNAPSHOT, 1 for a release
-    MasVersionCode = 2 * 1000 + 1 * 100 + 0 * 10 + 0
-    MasVersionName = "2.1.0-SNAPSHOT"
+  // Last number is 0 for a SNAPSHOT, 1 for a release
+  MasVersionCode = 2 * 1000 + 1 * 100 + 0 * 10 + 0
+  MasVersionName = "3.0.0-beta.1"
 
-    minSdkVersion = 15
-    targetSdkVersion = 25
-    compileSdkVersion = 25
-    buildToolsVersion = "25.0.2"
+  minSdkVersion = 15
+  targetSdkVersion = 25
+  compileSdkVersion = 25
+  buildToolsVersion = "25.0.3"
+  supportLibVersion = "25.1.0"
 
-    dep = [
-            // Support
-            supportAppcompat     : 'com.android.support:appcompat-v7:25.1.0',
-            supportCompat        : 'com.android.support:support-compat:25.1.0',
-            supportDesign        : 'com.android.support:design:25.1.0',
-            supportRecyclerview  : 'com.android.support:recyclerview-v7:25.1.0',
-            supportCardView      : 'com.android.support:cardview-v7:25.1.0',
+  dep = [
+      // Support
+      supportAppcompat       : "com.android.support:appcompat-v7:$supportLibVersion",
+      supportCompat          : "com.android.support:support-compat:$supportLibVersion",
+      supportDesign          : "com.android.support:design:$supportLibVersion",
+      supportRecyclerview    : "com.android.support:recyclerview-v7:$supportLibVersion",
+      supportCardView        : "com.android.support:cardview-v7:$supportLibVersion",
+      supportAnnotations     : "com.android.support:support-annotations:$supportLibVersion",
 
-            // mapbox
-            mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.0-SNAPSHOT@aar',
+      // mapbox
+      mapbox                 : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.0-SNAPSHOT@aar',
 
-            // gson
-            gson                 : 'com.google.code.gson:gson:2.8.0',
+      // gson
+      gson                   : 'com.google.code.gson:gson:2.8.0',
 
-            // timber
-            timber               : 'com.jakewharton.timber:timber:4.5.1',
+      // timber
+      timber                 : 'com.jakewharton.timber:timber:4.5.1',
 
-            // retrofit
-            retrofit2Main        : 'com.squareup.retrofit2:retrofit:2.2.0',
-            retrofit2Gson        : 'com.squareup.retrofit2:converter-gson:2.2.0',
-            retrofit2Rx          : 'com.squareup.retrofit2:adapter-rxjava2:2.2.0',
+      // auto values
+      autoValues             : 'com.google.auto.value:auto-value:1.4.1',
+      autoValuesParcel       : 'com.ryanharter.auto.value:auto-value-parcel:0.2.5',
+      autoValuesParcelAdapter: 'com.ryanharter.auto.value:auto-value-parcel-adapter:0.2.5',
+      autoValuesGson         : 'com.ryanharter.auto.value:auto-value-gson:0.4.5',
 
-            // okhttp
-            okhttp3              : 'com.squareup.okhttp3:okhttp:3.6.0',
-            okhttp3Logging       : 'com.squareup.okhttp3:logging-interceptor:3.6.0',
-            okhttp3Mockwebserver : 'com.squareup.okhttp3:mockwebserver:3.6.0',
+      // retrofit
+      retrofit2Main          : 'com.squareup.retrofit2:retrofit:2.2.0',
+      retrofit2Gson          : 'com.squareup.retrofit2:converter-gson:2.2.0',
+      retrofit2Rx            : 'com.squareup.retrofit2:adapter-rxjava2:2.2.0',
 
-            // lost
-            lost                 : 'com.mapzen.android:lost:1.1.1',
+      // okhttp
+      okhttp3                : 'com.squareup.okhttp3:okhttp:3.6.0',
+      okhttp3Logging         : 'com.squareup.okhttp3:logging-interceptor:3.6.0',
+      okhttp3Mockwebserver   : 'com.squareup.okhttp3:mockwebserver:3.6.0',
 
-            // play services
-            gmsLocation          : 'com.google.android.gms:play-services-location:10.2.0',
+      // lost
+      lost                   : 'com.mapzen.android:lost:1.1.1',
 
-            // picasso
-            picasso              : 'com.squareup.picasso:picasso:2.5.2',
+      // play services
+      gmsLocation            : 'com.google.android.gms:play-services-location:10.2.0',
 
-            // rx android
-            rxandroid            : 'io.reactivex.rxjava2:rxandroid:2.0.1',
+      // picasso
+      picasso                : 'com.squareup.picasso:picasso:2.5.2',
 
-            // leak canary
-            leakcanaryDebug      : 'com.squareup.leakcanary:leakcanary-android:1.5',
-            leakcanaryRelease    : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5',
-            leakcanaryTest       : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5',
+      // rx android
+      rxandroid              : 'io.reactivex.rxjava2:rxandroid:2.0.1',
 
-            // testing
-            junit                : 'junit:junit:4.12',
-            mockito              : 'org.mockito:mockito-core:2.7.13',
-            hamcrestJunit        : 'org.hamcrest:hamcrest-junit:2.0.0.0',
-            supportEspresso      : 'com.android.support.test.espresso:espresso-core:2.2.2'
-    ]
+      // leak canary
+      leakcanaryDebug        : 'com.squareup.leakcanary:leakcanary-android:1.5',
+      leakcanaryRelease      : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5',
+      leakcanaryTest         : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5',
+
+      // testing
+      junit                  : 'junit:junit:4.12',
+      mockito                : 'org.mockito:mockito-core:2.7.13',
+      hamcrestJunit          : 'org.hamcrest:hamcrest-junit:2.0.0.0',
+      supportEspresso        : 'com.android.support.test.espresso:espresso-core:2.2.2'
+  ]
 }

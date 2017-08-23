@@ -1,5 +1,11 @@
 package com.mapbox.services.api.directions.v5;
 
+import android.support.annotation.StringDef;
+
+import java.lang.annotation.Retention;
+
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 /**
  * Constants used to customize the directions request.
  *
@@ -8,6 +14,15 @@ package com.mapbox.services.api.directions.v5;
 public class DirectionsCriteria {
 
   public static final String PROFILE_DEFAULT_USER = "mapbox";
+
+  @Retention(SOURCE)
+  @StringDef({
+    PROFILE_DRIVING_TRAFFIC,
+    PROFILE_DRIVING,
+    PROFILE_WALKING,
+    PROFILE_CYCLING
+  })
+  public @interface ProfileCriteria {}
 
   /**
    * For car and motorcycle routing. This profile factors in current and historic traffic
@@ -62,6 +77,13 @@ public class DirectionsCriteria {
    */
   private static final String GEOMETRY_GEOJSON = "geojson";
 
+  @Retention(SOURCE)
+  @StringDef({
+    GEOMETRY_POLYLINE,
+    GEOMETRY_POLYLINE6
+  })
+  public @interface GeometriesCriteria {}
+
   /**
    * A simplified version of the {@link #OVERVIEW_FULL} geometry. If not specified simplified is the default.
    *
@@ -82,6 +104,14 @@ public class DirectionsCriteria {
    * @since 1.0.0
    */
   public static final String OVERVIEW_FALSE = "false";
+
+  @Retention(SOURCE)
+  @StringDef({
+    OVERVIEW_FALSE,
+    OVERVIEW_FULL,
+    OVERVIEW_SIMPLIFIED
+  })
+  public @interface OverviewCriteria {}
 
   public static final String WEIGHT_NAME_ROUTABILITY = "routability";
 
