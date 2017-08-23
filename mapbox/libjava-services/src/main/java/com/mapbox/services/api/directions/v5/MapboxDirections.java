@@ -1,9 +1,14 @@
 package com.mapbox.services.api.directions.v5;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mapbox.services.api.MapboxBuilder;
 import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.directions.v5.gson.DirectionsAdapterFactory;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
+import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.models.Position;
 import com.mapbox.services.commons.utils.TextUtils;
 
@@ -19,20 +24,41 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * The Directions API allows the calculation of routes between coordinates. The fastest route
- * is returned with geometries, and turn-by-turn instructions. The Mapbox Directions API supports
- * routing for driving cars, riding bicycles and walking.
+ * The Directions API allows the calculation of routes between coordinates. The fastest route can be
+ * returned with geometries, turn-by-turn instructions, and much more. The Mapbox Directions API
+ * supports routing for driving cars (including live traffic), riding bicycles and walking.
+ * Requested routes can include as much as 25 coordinates anywhere on earth (except the traffic
+ * profile).
+ * <p>
+ * Requesting a route at a bare minimal must include, a Mapbox access token, destination, and an
+ * origin.
  *
+ * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/directions/">Android
+ * Directions documentation</a>
+ * @see <a href="https://www.mapbox.com/api-documentation/#directions">Directions API
+ * documentation</a>
  * @since 1.0.0
  */
 public class MapboxDirections extends MapboxService<DirectionsResponse> {
 
-  protected Builder builder = null;
-  private DirectionsService service = null;
-  private Call<DirectionsResponse> call = null;
+  protected Builder builder;
+  private DirectionsService service;
+  private Call<DirectionsResponse> call;
+  private Gson gson;
+
 
   protected MapboxDirections(Builder builder) {
     this.builder = builder;
+  }
+
+  protected Gson getGson() {
+    // Gson instance with type adapters
+    if (gson == null) {
+      gson = new GsonBuilder()
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+        .create();
+    }
+    return gson;
   }
 
   private DirectionsService getService() {
@@ -44,7 +70,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     // Retrofit instance
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(builder.getBaseUrl())
-      .addConverterFactory(GsonConverterFactory.create());
+      .addConverterFactory(GsonConverterFactory.create(getGson()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
     } else {
@@ -131,7 +157,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
    *
    * @since 1.0.0
    */
-  public static class Builder<T extends Builder> extends MapboxBuilder {
+  public abstract static class Builder<T extends Builder> extends MapboxBuilder {
 
     // We use `Boolean` instead of `boolean` to allow unset (null) values.
     private String user = null;

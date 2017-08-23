@@ -1,112 +1,71 @@
 package com.mapbox.services.api.directions.v5.models;
 
+import android.support.annotation.FloatRange;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.geojson.Point;
 
-import java.util.Arrays;
+import java.io.Serializable;
 
 /**
  * Gives maneuver information about one {@link LegStep}.
  *
  * @since 1.0.0
  */
-public class StepManeuver {
+@AutoValue
+public abstract class StepManeuver implements Serializable {
 
-  private double[] location;
+  public static AutoValue_StepManeuver.Builder builder() {
+    return new AutoValue_StepManeuver.Builder();
+  }
+
+  /**
+   * A GeoJSON Point representing this maneuver objects location on the map. The coordinates are
+   * snapped to the closest road or path position.
+   *
+   * @return a GeoJSON Point representing this maneuver objects location
+   * @since 3.0.0
+   */
+  public abstract double[] location();
+
+  /**
+   * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
+   * travel right before the maneuver.
+   *
+   * @return double with value from 0 to 360
+   * @since 1.0.0
+   */
+  @FloatRange(from = 0, to = 360)
   @SerializedName("bearing_before")
-  private double bearingBefore;
+  public abstract double bearingBefore();
+
+  /**
+   * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
+   * travel right after the maneuver.
+   *
+   * @return double with value from 0 to 360
+   * @since 1.0.0
+   */
+  @FloatRange(from = 0, to = 360)
   @SerializedName("bearing_after")
-  private double bearingAfter;
-  private String type;
-  private String modifier;
-  private String instruction;
-  private Integer exit;
+  public abstract double bearingAfter();
 
   /**
-   * Empty constructor.
+   * A human-readable instruction of how to execute the returned maneuver. This String is built
+   * using OSRM-Text-Instructions and can be further customized inside either the Mapbox Navigation
+   * SDK for Android or using the OSRM-Text-Instructions.java project in Project-OSRM.
    *
-   * @since 2.0.0
-   */
-  public StepManeuver() {
-  }
-
-  /**
-   * Constructor taking in a {@code type}, {@code modifier}, and an integer {@code exit} value.
-   *
-   * @param type     indicates the type of maneuver. It can be any of these listed:
-   * @param modifier indicates the mode of the maneuver.
-   * @param exit     integer indicating number of the exit to take.
-   * @since 2.0.0
-   */
-  public StepManeuver(String type, String modifier, Integer exit) {
-    this.type = type;
-    this.modifier = modifier;
-    this.exit = exit;
-  }
-
-  /**
-   * an array with two double values reresenting the maneuver locations coordinate.
-   *
-   * @return double array of [longitude, latitude] for the snapped coordinate.
+   * @return String with instruction
+   * @see <a href='https://github.com/mapbox/mapbox-navigation-android'>Navigation SDK</a>
+   * @see <a href='https://github.com/Project-OSRM/osrm-text-instructions.java'>
+   * OSRM-Text-Instructions.java</a>
    * @since 1.0.0
    */
-  public double[] getLocation() {
-    return location;
-  }
-
-  /**
-   * Sets double array of [longitude, latitude] for the snapped coordinate.
-   *
-   * @param location array with the order [longitude, latitude].
-   * @since 2.1.0
-   */
-  public void setLocation(double[] location) {
-    this.location = location;
-  }
-
-  /**
-   * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
-   * travel right before the maneuver.
-   *
-   * @return double with value from 0 to 360.
-   * @since 1.0.0
-   */
-  public double getBearingBefore() {
-    return bearingBefore;
-  }
-
-  /**
-   * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
-   * travel right before the maneuver.
-   *
-   * @param bearingBefore a double with value from 0 to 360 representing the bearing before the maneuver.
-   * @since 2.1.0
-   */
-  public void setBearingBefore(double bearingBefore) {
-    this.bearingBefore = bearingBefore;
-  }
-
-  /**
-   * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
-   * travel right after the maneuver.
-   *
-   * @return double with value from 0 to 360.
-   * @since 1.0.0
-   */
-  public double getBearingAfter() {
-    return bearingAfter;
-  }
-
-  /**
-   * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
-   * travel right after the maneuver.
-   *
-   * @param bearingAfter a double with value from 0 to 360 representing the bearing after the maneuver.
-   * @since 2.1.0
-   */
-  public void setBearingAfter(double bearingAfter) {
-    this.bearingAfter = bearingAfter;
-  }
+  @Nullable
+  public abstract String instruction();
 
   /**
    * This indicates the type of maneuver. It can be any of these listed:
@@ -117,135 +76,82 @@ public class StepManeuver {
    * <li>depart - indicates departure from a leg</li>
    * <li>arrive - indicates arrival to a destination of a leg</li>
    * <li>merge - merge onto a street</li>
-   * <li>ramp - take a ramp</li>
-   * <li>fork</li>
+   * <li>on ramp - take a ramp to enter a highway</li>
+   * <li>off ramp - take a ramp to exit a highway</li>
+   * <li>fork - take the left/right side of a fork</li>
    * <li>end of road - road ends in a T intersection</li>
    * <li>continue - continue on a street after a turn</li>
-   * <li>roundabout - traverse roundabout</li>
+   * <li>roundabout - traverse roundabout, has additional property {@link #exit()} in RouteStep
+   * containing the exit number. The modifier specifies the direction of entering the roundabout.
+   * </li>
+   * <li>rotary - a traffic circle. While very similar to a larger version of a roundabout, it does
+   * not necessarily follow roundabout rules for right of way. It can offer
+   * {@link LegStep#rotaryName()} and/or {@link LegStep#rotaryPronunciation()} parameters in
+   * addition to the {@link #exit()} property.</li>
+   * <li>roundabout turn - small roundabout that is treated as an intersection</li>
+   * <li>notification - change of driving conditions, e.g. change of mode from driving to ferry</li>
    * </ul>
    *
-   * @return String with type of maneuver.
+   * @return String with type of maneuver
    * @since 1.0.0
    */
-  public String getType() {
-    return type;
-  }
+  public abstract String type();
 
   /**
-   * This indicates the type of maneuver. See the full list of types in {@link StepManeuver#getType()}.
+   * This indicates the mode of the maneuver. If type is of turn, the modifier indicates the
+   * change in direction accomplished through the turn. If the type is of depart/arrive, the
+   * modifier indicates the position of waypoint from the current direction of travel.
    *
-   * @param type a String with type of maneuver.
-   * @since 2.1.0
+   * @return String with modifier
+   * @since 1.0.0
    */
-  public void setType(String type) {
-    this.type = type;
-  }
+  public abstract String modifier();
 
   /**
-   * An optional integer indicating number of the exit to take.
-   * If exit is undefined the destination is on the roundabout.
-   * The property exists for the following type properties:
+   * An optional integer indicating number of the exit to take. If exit is undefined the destination
+   * is on the roundabout. The property exists for the following type properties:
    * <p>
    * else - indicates the number of intersections passed until the turn.
    * roundabout - traverse roundabout
    * rotary - a traffic circle
+   * </p>
    *
-   * @return String of an integer indicating number of the exit to take.
+   * @return an integer indicating number of the exit to take
    * @since 2.0.0
    */
-  public Integer getExit() {
-    return exit;
+  @Nullable
+  public abstract Integer exit();
+
+  public static TypeAdapter<StepManeuver> typeAdapter(Gson gson) {
+    return new AutoValue_StepManeuver.GsonTypeAdapter(gson);
   }
 
-  /**
-   * An optional integer indicating number of the exit to take.
-   * If exit is undefined the destination is on the roundabout.
-   * The property exists for the following type properties:
-   * <p>
-   * else - indicates the number of intersections passed until the turn.
-   * roundabout - traverse roundabout
-   * rotary - a traffic circle
-   * <p>
-   *
-   * @param exit a String of an integer indicating number of the exit to take.
-   * @since 2.1.0
-   */
-  public void setExit(Integer exit) {
-    this.exit = exit;
-  }
+  // TODO ensure the location object becomes a point
 
-  /**
-   * This indicates the mode of the maneuver.  If type is of turn, the modifier indicates the
-   * change in direction accomplished through the turn. If the type is of depart/arrive, the
-   * modifier indicates the position of waypoint from the current direction of travel.
-   *
-   * @return String with modifier.
-   * @since 1.0.0
-   */
-  public String getModifier() {
-    return modifier;
-  }
+  @AutoValue.Builder
+  public abstract static class Builder {
 
+    private Point location;
 
-  /**
-   * This indicates the mode of the maneuver.  If type is of turn, the modifier indicates the
-   * change in direction accomplished through the turn. If the type is of depart/arrive, the
-   * modifier indicates the position of waypoint from the current direction of travel.
-   *
-   * @param modifier a String with the modifier.
-   * @since 2.1.0
-   */
-  public void setModifier(String modifier) {
-    this.modifier = modifier;
-  }
+//    public Builder location(double[] location) {
+//      this.location = Point.fromCoordinates(location);
+//      return this;
+//    }
+    public abstract Builder location(double[] location);
+//    abstract Builder location(Point location);
 
-  /**
-   * A human-readable instruction of how to execute the returned maneuver.
-   *
-   * @return String with instruction.
-   * @since 1.0.0
-   */
-  public String getInstruction() {
-    return instruction;
-  }
+    public abstract Builder bearingBefore(@FloatRange(from = 0, to = 360) double bearingBefore);
 
-  /**
-   * A human-readable instruction of how to execute the returned maneuver.
-   *
-   * @param instruction a String with instruction representing how to execute the maneuver.
-   * @since 2.1.0
-   */
-  public void setInstruction(String instruction) {
-    this.instruction = instruction;
-  }
+    public abstract Builder bearingAfter(@FloatRange(from = 0, to = 360) double bearingAfter);
 
-  /**
-   * Converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
-   * use this format instead of {@link #getLocation()} as it's easier to work with.
-   *
-   * @return {@link Position}.
-   * @since 1.0.0
-   */
-  public Position asPosition() {
-    return Position.fromCoordinates(location[0], location[1]);
-  }
+    public abstract Builder instruction(@Nullable String instruction);
 
-  /**
-   * Offers a convenient string with all the {@link StepManeuver} variables.
-   *
-   * @return String with all {@link StepManeuver} information within.
-   * @since 1.0.0
-   */
-  @Override
-  public String toString() {
-    return "StepManeuver{"
-      + "location=" + Arrays.toString(location)
-      + ", bearingBefore=" + bearingBefore
-      + ", bearingAfter=" + bearingAfter
-      + ", instruction='" + instruction + '\''
-      + ", type='" + type + '\''
-      + ", modifier='" + modifier + '\''
-      + ", exit=" + exit
-      + '}';
+    public abstract Builder type(String type);
+
+    public abstract Builder modifier(String modifier);
+
+    public abstract Builder exit(@Nullable Integer exit);
+
+    public abstract StepManeuver build();
   }
 }

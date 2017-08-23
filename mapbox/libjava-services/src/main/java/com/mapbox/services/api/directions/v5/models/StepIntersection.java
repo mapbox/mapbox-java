@@ -1,59 +1,37 @@
 package com.mapbox.services.api.directions.v5.models;
 
-import com.mapbox.services.commons.models.Position;
+import android.support.annotation.IntRange;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.mapbox.services.commons.geojson.Point;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Object representing an intersection along the step.
  *
  * @since 1.3.0
  */
-public class StepIntersection {
+@AutoValue
+public abstract class StepIntersection implements Serializable {
 
-  private double[] location;
-  private int[] bearings;
-  private boolean[] entry;
-  private int in;
-  private int out;
-  private IntersectionLanes[] lanes;
-
-  /**
-   * Empty constructor
-   *
-   * @since 2.0.0
-   */
-  public StepIntersection() {
+  public static AutoValue_StepIntersection.Builder builder() {
+    return new AutoValue_StepIntersection.Builder();
   }
 
   /**
-   * Constructor allowing the setting of the {@link IntersectionLanes}.
+   * A {@link Point} object representing the intersection location.
    *
-   * @param lanes an Array of {@link IntersectionLanes}.
-   * @since 2.0.0
+   * @return a [longitude, latitude] {@link Point} describing the location of the turn
+   * @since 3.0.0
    */
-  public StepIntersection(IntersectionLanes[] lanes) {
-    this.lanes = lanes;
-  }
+  public abstract double[] location();
 
-  /**
-   * A double array of length 2, first position being the longitude and the other being latitude.
-   *
-   * @return A [longitude, latitude] pair describing the location of the turn.
-   * @since 1.3.0
-   */
-  public double[] getLocation() {
-    return location;
-  }
-
-  /**
-   * A double array of length 2, first position being the longitude and the other being latitude.
-   *
-   * @param location array with the order [longitude, latitude].
-   * @since 2.1.0
-   */
-  public void setLocation(double[] location) {
-    this.location = location;
-  }
-
+  // TODO ensure the location object becomes a point
 
   /**
    * An integer array of bearing values available at the step intersection.
@@ -62,129 +40,114 @@ public class StepIntersection {
    * intersection. The bearings describe all available roads at the intersection.
    * @since 1.3.0
    */
-  public int[] getBearings() {
-    return bearings;
-  }
+  @SuppressWarnings("mutable")
+  @IntRange(from = 0, to = 360)
+  public abstract int[] bearings();
+  // TODO test integer range
 
   /**
-   * An integer array of bearing values available at the step intersection.
+   * An array of strings signifying the classes of the road exiting the intersection. Possible
+   * values:
+   * <ul>
+   * <li><strong>toll</strong>: the road continues on a toll road</li>
+   * <li><strong>ferry</strong>: the road continues on a ferry</li>
+   * <li><strong>restricted</strong>: the road continues on with access restrictions</li>
+   * <li><strong>motorway</strong>: the road continues on a motorway</li>
+   * </ul>
    *
-   * @param bearings an array of bearing values (for example [0,90,180,270]) that are available at the
-   *                 intersection. The bearings describe all available roads at the intersection.
-   * @since 2.1.0
+   * @return a {@code String[]} containing the classes of the road exiting the intersection
+   * @since 3.0.0
    */
-  public void setBearings(int[] bearings) {
-    this.bearings = bearings;
-  }
+  public abstract List<String> classes();
 
   /**
-   * An array of entry flags, corresponding in a 1:1 relationship to the bearings.
+   * An array of entry flags, corresponding in a 1:1 relationship to the bearings. A value of true
+   * indicates that the respective road could be entered on a valid route. false indicates that the
+   * turn onto the respective road would violate a restriction.
    *
-   * @return An array of entry flags, corresponding in a 1:1 relationship to the bearings. A value
-   * of true indicates that the respective road could be entered on a valid route. false
-   * indicates that the turn onto the respective road would violate a restriction.
+   * @return an array of entry flags, corresponding in a 1:1 relationship to the bearings
    * @since 1.3.0
    */
-  public boolean[] getEntry() {
-    return entry;
-  }
+  @SuppressWarnings("mutable")
+  public abstract boolean[] entry();
 
   /**
-   * An array of entry flags, corresponding in a 1:1 relationship to the bearings.
-   *
-   * @param entry an array of entry flags, corresponding in a 1:1 relationship to the bearings. A value
-   *              of true indicates that the respective road could be entered on a valid route. false
-   *              indicates that the turn onto the respective road would violate a restriction.
-   * @since 2.1.0
-   */
-  public void setEntry(boolean[] entry) {
-    this.entry = entry;
-  }
-
-  /**
-   * Index into bearings/entry array.
-   *
-   * @return Index into bearings/entry array. Used to calculate the bearing before the turn.
-   * Namely, the clockwise angle from true north to the direction of travel before the
-   * maneuver/passing the intersection. To get the bearing in the direction of driving,
-   * the bearing has to be rotated by a value of 180. The value is not supplied for departure
+   * Index into bearings/entry array. Used to calculate the bearing before the turn. Namely, the
+   * clockwise angle from true north to the direction of travel before the maneuver/passing the
+   * intersection. To get the bearing in the direction of driving, the bearing has to be rotated by
+   * a value of 180. The value is not supplied for departure
    * maneuvers.
+   *
+   * @return index into bearings/entry array
    * @since 1.3.0
    */
-  public int getIn() {
-    return in;
-  }
+  public abstract int in();
 
   /**
-   * Index into bearings/entry array.
+   * Index out of the bearings/entry array. Used to extract the bearing after the turn. Namely, The
+   * clockwise angle from true north to the direction of travel after the maneuver/passing the
+   * intersection. The value is not supplied for arrive maneuvers.
    *
-   * @param in index into bearings/entry array. Used to calculate the bearing before the turn.
-   *           Namely, the clockwise angle from true north to the direction of travel before the
-   *           maneuver/passing the intersection. To get the bearing in the direction of driving,
-   *           the bearing has to be rotated by a value of 180. The value is not supplied for departure
-   *           maneuvers.
-   * @since 2.1.0
-   */
-  public void setIn(int in) {
-    this.in = in;
-  }
-
-  /**
-   * Index out of the bearings/entry array.
-   *
-   * @return index out of the bearings/entry array. Used to extract the bearing after the turn.
-   * Namely, The clockwise angle from true north to the direction of travel after the
-   * maneuver/passing the intersection. The value is not supplied for arrive maneuvers.
+   * @return index out of the bearings/entry array
    * @since 1.3.0
    */
-  public int getOut() {
-    return out;
-  }
+  public abstract int out();
 
   /**
-   * Index out of the bearings/entry array.
+   * Array of lane objects that represent the available turn lanes at the intersection. If no lane
+   * information is available for an intersection, the lanes property will not be present. Lanes are
+   * provided in their order on the street, from left to right.
    *
-   * @param out index out of the bearings/entry array. Used to extract the bearing after the turn.
-   *            Namely, The clockwise angle from true north to the direction of travel after the
-   *            maneuver/passing the intersection. The value is not supplied for arrive maneuvers.
-   * @since 2.1.0
-   */
-  public void setOut(int out) {
-    this.out = out;
-  }
-
-  /**
-   * Converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
-   * use this format instead of {@link #getLocation()} as it's easier to work with.
-   *
-   * @return {@link Position}.
-   * @since 1.3.0
-   */
-  public Position asPosition() {
-    return Position.fromCoordinates(location[0], location[1]);
-  }
-
-  /**
-   * Array of lane objects that represent the available turn lanes at the intersection.
-   *
-   * @return array of lane objects that represent the available turn lanes at the intersection. If
-   * no lane information is available for an intersection, the lanes property will not be present.
-   * Lanes are provided in their order on the street, from left to right.
+   * @return array of lane objects that represent the available turn lanes at the intersection
    * @since 2.0.0
    */
-  public IntersectionLanes[] getLanes() {
-    return lanes;
+  public abstract List<IntersectionLanes> lanes();
+
+  public static TypeAdapter<StepIntersection> typeAdapter(Gson gson) {
+    return new AutoValue_StepIntersection.GsonTypeAdapter(gson);
   }
 
-  /**
-   * Array of lane objects that represent the available turn lanes at the intersection.
-   *
-   * @param lanes an array of lane objects that represent the available turn lanes at the intersection. If
-   *              no lane information is available for an intersection, the lanes property will not be present.
-   *              Lanes are provided in their order on the street, from left to right.
-   * @since 2.1.0
-   */
-  public void setLanes(IntersectionLanes[] lanes) {
-    this.lanes = lanes;
+  // TODO ensure the location object becomes a point
+
+  @AutoValue.Builder
+  public abstract static class Builder {
+
+    private Point location;
+    private List<String> classes = new ArrayList<>();
+    private List<IntersectionLanes> lanes = new ArrayList<>();
+
+    public abstract Builder bearings(@IntRange(from = 0, to = 360) int[] bearing);
+    // TODO test integer range
+
+    public Builder classes(String[] classes) {
+      this.classes.addAll(Arrays.asList(classes));
+      return this;
+    }
+
+    abstract Builder classes(List<String> classes);
+
+    public abstract Builder entry(boolean[] entry);
+
+    public abstract Builder in(int in);
+
+    public abstract Builder out(int out);
+
+    public Builder lanes(IntersectionLanes[] lanes) {
+      this.lanes.addAll(Arrays.asList(lanes));
+      return this;
+    }
+
+    abstract Builder lanes(List<IntersectionLanes> lanes);
+
+//    public Builder location(double[] location) {
+//      this.location = Point.fromCoordinates(location);
+//      return this;
+//    }
+
+    public abstract Builder location(double[] location);
+
+//    abstract Builder location(Point location);
+
+    public abstract StepIntersection build();
   }
 }
