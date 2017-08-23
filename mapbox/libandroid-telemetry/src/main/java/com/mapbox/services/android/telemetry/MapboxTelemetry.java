@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -72,6 +73,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private Boolean telemetryEnabled = null;
   protected CopyOnWriteArrayList<TelemetryListener> telemetryListeners;
   private Hashtable<String, Object> customTurnstileEvent = null;
+  private int sessionIdRotationTime = TelemetryConstants.DEFAULT_SESSION_ID_ROTATION_HOURS;
 
   /**
    * Private constructor for configuring the single instance per app.
@@ -155,6 +157,10 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
 
   public void setCustomTurnstileEvent(Hashtable<String, Object> customTurnstileEvent) {
     this.customTurnstileEvent = customTurnstileEvent;
+  }
+
+  public void setSessionIdRotationTime(@IntRange(from=1,to=24) int sessionIdRotationTime) {
+    this.sessionIdRotationTime = sessionIdRotationTime; // in hours
   }
 
   /**
@@ -244,7 +250,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private void rotateSessionId() {
     long timeSinceLastSet = System.currentTimeMillis() - mapboxSessionIdLastSet;
     if ((TextUtils.isEmpty(mapboxSessionId))
-      || (timeSinceLastSet > TelemetryConstants.SESSION_ID_ROTATION_MS)) {
+      || (timeSinceLastSet > sessionIdRotationTime * TelemetryConstants.ONE_HOUR_IN_MS)) {
       mapboxSessionId = TelemetryUtils.buildUUID();
       mapboxSessionIdLastSet = System.currentTimeMillis();
     }
