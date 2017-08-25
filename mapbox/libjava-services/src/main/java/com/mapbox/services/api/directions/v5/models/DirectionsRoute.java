@@ -53,11 +53,9 @@ public abstract class DirectionsRoute implements Serializable {
   public abstract double weight();
 
   /**
-   * The name of the weight profile used while calculating during extraction phase. In many cases,
-   * this will return
-   * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#WEIGHT_NAME_ROUTABILITY},
-   * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#WEIGHT_NAME_DURATION}, or
-   * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#WEIGHT_NAME_DISTANCE}.
+   * The name of the weight profile used while calculating during extraction phase. The default is
+   * {@code routability} which is duration based, with additional penalties for less desirable
+   * maneuvers.
    *
    * @return a String representing the weight profile used while calculating the route
    * @since 2.1.0

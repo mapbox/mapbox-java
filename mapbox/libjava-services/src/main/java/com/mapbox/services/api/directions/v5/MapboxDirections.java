@@ -3,11 +3,13 @@ package com.mapbox.services.api.directions.v5;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.Size;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mapbox.services.Constants;
 import com.mapbox.services.api.MapboxService;
+import com.mapbox.services.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.ProfileCriteria;
@@ -378,25 +380,77 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     }
 
     /**
-     * Used internally for converting the locale object to a string.
+     * Whether or not to return additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE},
+     * {@link DirectionsCriteria#ANNOTATION_DURATION},
+     * {@link DirectionsCriteria#ANNOTATION_DURATION} and
+     * {@link DirectionsCriteria#ANNOTATION_CONGESTION}. Several annotation can be used by
+     * separating them with {@code ,}.
+     *
+     * @param annotations string referencing one of the annotation direction criteria's. The strings
+     *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
+     *                    or null which will result in no annotations being used
+     * @return this builder for chaining options together
+     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
+     * documentation</a>
+     * @since 2.1.0
      */
-    abstract Builder language(String language);
-
-
-    public Builder radiuses(double... radiuses) {
-      this.radiuses = radiuses;
+    public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
+      this.annotations = annotations;
       return this;
     }
 
-    public Builder addBearing(@FloatRange(from = 0, to = 360) double angle,
-                              @FloatRange(from = 0, to = 360) double tolerance) {
+    /**
+     * Optionally, Use to filter the road segment the waypoint will be placed on by direction and
+     * dictates the angle of approach. This option should always be used in conjunction with the
+     * {@link #radiuses(double...)} parameter.
+     * <p>
+     * The parameter takes two values per waypoint: the first is an angle clockwise from true north
+     * between 0 and 360. The second is the range of degrees the angle can deviate by. We recommend
+     * a value of 45 degrees or 90 degrees for the range, as bearing measurements tend to be
+     * inaccurate. This is useful for making sure we reroute vehicles on new routes that continue
+     * traveling in their current direction. A request that does this would provide bearing and
+     * radius values for the first waypoint and leave the remaining values empty. If provided, the
+     * list of bearings must be the same length as the list of waypoints, but you can skip a
+     * coordinate and show its position by passing in null value for both the angle and tolerance
+     * values.
+     * </p><p>
+     * Each bearing value gets associated with the same order which coordinates are arranged in this
+     * builder. For example, the first bearing added in this builder will be associated with the
+     * origin {@code Point}, the nth bearing being associated with the nth waypoint added (if added)
+     * and the last bearing being added will be associated with the destination.
+     * </p>
+     *
+     * @param angle     double value used for setting the corresponding coordinate's angle of travel
+     *                  when determining the route
+     * @param tolerance the deviation the bearing angle can vary while determining the route,
+     *                  recommended to be either 45 or 90 degree tolerance
+     * @return this builder for chaining options together
+     * @since 2.0.0
+     */
+    public Builder addBearing(@Nullable @FloatRange(from = 0, to = 360) Double angle,
+                              @Nullable @FloatRange(from = 0, to = 360) Double tolerance) {
       bearings.add(new Double[] {angle, tolerance});
       return this;
     }
 
-    public abstract Builder accessToken(@NonNull String accessToken);
-
-    public abstract Builder baseUrl(String baseUrl);
+    /**
+     * Optionally, set the maximum distance in meters that each coordinate is allowed to move when
+     * snapped to a nearby road segment. There must be as many radiuses as there are coordinates in
+     * the request. Values can be any number greater than 0 or they can be unlimited simply by
+     * passing {@link Double#POSITIVE_INFINITY}.
+     * <p>
+     * If no routable road is found within the radius, a {@code NoSegment} error is returned.
+     * </p>
+     *
+     * @param radiuses double array containing the radiuses defined in unit meters.
+     * @return this builder for chaining options together
+     * @since 1.0.0
+     */
+    public Builder radiuses(@FloatRange(from = 0) double... radiuses) {
+      this.radiuses = radiuses;
+      return this;
+    }
 
     /**
      * Base package name or other simple string identifier. Used inside the calls user agent header.
@@ -407,21 +461,22 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      */
     public abstract Builder clientAppName(@NonNull String clientAppName);
 
+
+    public abstract Builder accessToken(@NonNull String accessToken);
+
+    public abstract Builder baseUrl(String baseUrl);
+
+    // Private methods for matching MapboxDirections methods.
+
+    abstract Builder language(@Nullable String language);
+
     abstract Builder radiuses(@Nullable String radiuses);
 
     abstract Builder bearings(@Nullable String bearings);
 
+    abstract Builder coordinates(@NonNull String coordinates);
 
-    abstract Builder coordinates(String coordinates);
-
-
-    abstract Builder annotations(String annotations);
-
-    public Builder annotations(String... annotations) {
-      this.annotations = annotations;
-      return this;
-    }
-
+    abstract Builder annotations(@Nullable String annotations);
 
     abstract MapboxDirections autoBuild(); // not public
 
