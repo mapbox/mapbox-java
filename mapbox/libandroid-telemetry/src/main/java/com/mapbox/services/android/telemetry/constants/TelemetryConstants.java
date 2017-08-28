@@ -20,7 +20,13 @@ public class TelemetryConstants {
   public static final long FLUSH_PERIOD_MS = 3 * 60 * 1_000; // 3 minutes
   public static final int FLUSH_EVENTS_CAP = 180; // 180 seconds or 180 events
 
-  public static final int SESSION_ID_ROTATION_MS = 24 * 60 * 60 * 1_000; // 24 hours
+  public static final int ONE_HOUR_IN_MS = 60 * 60 * 1_000;
+  public static final int DEFAULT_SESSION_ID_ROTATION_HOURS = 24;
+
+  /**
+   * Key used to store CN endpoint settings in AndroidManifest.xml
+   */
+  public static final String KEY_META_DATA_CN_SERVER = "com.mapbox.CnEventsServer";
 
   /**
    * Key used to store staging data server url in AndroidManifest.xml

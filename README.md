@@ -1,9 +1,9 @@
 [![](https://raw.githubusercontent.com/mapbox/mapbox-java/master/.github/splash-img.png)](https://www.mapbox.com/android-docs/mapbox-services/)
 
-[![Build Status](https://www.bitrise.io/app/a7eea7d04be1e2e5.svg?token=OruuJNhnjyeRnlBv0wXsFQ&branch=master)](https://www.bitrise.io/app/a7eea7d04be1e2e5) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services) [![CircleCI](https://circleci.com/gh/mapbox/mapbox-java.svg?style=svg)](https://circleci.com/gh/mapbox/mapbox-java)
 
 Mapbox Android Services contains directions, geocoding, and many more APIs to use inside your Android or Java application. This repository holds the source code for the project and is divided into several modules to make it easier for developers to only include the dependencies needed for their project.
-
+ 
 ## Getting Started
 
 If you are looking to include this inside your project, please take a look at [the detailed instructions](https://www.mapbox.com/android-docs/mapbox-services/) found in our docs. If you are interested in building from source, read the contributing guide inside this project.
