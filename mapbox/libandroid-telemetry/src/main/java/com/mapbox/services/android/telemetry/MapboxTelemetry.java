@@ -74,6 +74,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   protected CopyOnWriteArrayList<TelemetryListener> telemetryListeners;
   private Hashtable<String, Object> customTurnstileEvent = null;
   private int sessionIdRotationTime = TelemetryConstants.DEFAULT_SESSION_ID_ROTATION_HOURS;
+  private boolean debugLoggingEnabled = false;
 
   /**
    * Private constructor for configuring the single instance per app.
@@ -165,6 +166,25 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   @Experimental
   public void setSessionIdRotationTime(@IntRange(from = 1, to = 24) int sessionIdRotationTime) {
     this.sessionIdRotationTime = sessionIdRotationTime; // in hours
+  }
+
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public boolean isDebugLoggingEnabled() {
+    return debugLoggingEnabled;
+  }
+
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public void setDebugLoggingEnabled(boolean debugLoggingEnabled) {
+    this.debugLoggingEnabled = debugLoggingEnabled;
+    if (this.client != null) {
+      this.client.setDebugLoggingEnabled(debugLoggingEnabled);
+    }
   }
 
   /**

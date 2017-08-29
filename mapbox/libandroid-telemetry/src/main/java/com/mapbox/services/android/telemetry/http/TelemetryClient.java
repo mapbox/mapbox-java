@@ -37,6 +37,7 @@ public class TelemetryClient {
   private String eventsCnEndpoint = MapboxEvent.MAPBOX_EVENTS_CN_BASE_URL;
   private boolean stagingEnvironment = false;
   private boolean enableCnEndpoint = false;
+  private boolean debugLoggingEnabled = false;
   private OkHttpClient client;
 
   public TelemetryClient(String accessToken) {
@@ -86,6 +87,14 @@ public class TelemetryClient {
 
   public void setEnableCnEndpoint() {
     this.enableCnEndpoint = true;
+  }
+
+  public boolean isDebugLoggingEnabled() {
+    return debugLoggingEnabled;
+  }
+
+  public void setDebugLoggingEnabled(boolean debugLoggingEnabled) {
+    this.debugLoggingEnabled = debugLoggingEnabled;
   }
 
   /**
@@ -219,7 +228,7 @@ public class TelemetryClient {
     String url = getEventsEndpoint() + "/events/v2?access_token=" + getAccessToken();
 
     // Extra debug in staging mode
-    if (isStagingEnvironment()) {
+    if (isDebugLoggingEnabled()) {
       Log.d(LOG_TAG, String.format("Sending POST to %s with %d event(s) (user agent: %s) with payload: %s",
         url, events.size(), getUserAgent(), payload));
     }
