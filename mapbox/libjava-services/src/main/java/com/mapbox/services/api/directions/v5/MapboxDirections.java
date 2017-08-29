@@ -3,20 +3,19 @@ package com.mapbox.services.api.directions.v5;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.Size;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mapbox.services.Constants;
+import com.mapbox.services.api.MapboxAdapterFactory;
+import com.mapbox.services.api.MapboxCallHelper;
 import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.ProfileCriteria;
-import com.mapbox.services.api.directions.v5.gson.DirectionsAdapterFactory;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.utils.TextUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,7 +56,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     // Gson instance with type adapters
     if (gson == null) {
       gson = new GsonBuilder()
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+        .registerTypeAdapterFactory(MapboxAdapterFactory.create())
         .create();
     }
     return gson;
@@ -329,11 +328,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * geometry). The default is simplified. Passing in null will use the APIs default setting for
      * the overview field.
      *
-     * @param Overview null or one of the options found in {@link OverviewCriteria}
+     * @param overview null or one of the options found in {@link OverviewCriteria}
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder overview(@Nullable @OverviewCriteria String Overview);
+    public abstract Builder overview(@Nullable @OverviewCriteria String overview);
 
     /**
      * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
@@ -488,63 +487,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
         coordinates.add(destination);
       }
 
-      coordinates(formatCoordinates());
-      bearings(formatBearing());
-      annotations(formatAnnotations());
-      radiuses(formatRadiuses());
+      coordinates(MapboxCallHelper.formatCoordinates(coordinates));
+      bearings(MapboxCallHelper.formatBearing(bearings));
+      annotations(MapboxCallHelper.formatAnnotations(annotations));
+      radiuses(MapboxCallHelper.formatRadiuses(radiuses));
       return autoBuild();
-    }
-
-    private String formatAnnotations() {
-      if (annotations == null || annotations.length == 0) {
-        return null;
-      }
-      return TextUtils.join(",", annotations);
-    }
-
-    private String formatRadiuses() {
-      if (radiuses == null || radiuses.length == 0) {
-        return null;
-      }
-
-      String[] radiusesFormatted = new String[radiuses.length];
-      for (int i = 0; i < radiuses.length; i++) {
-        if (radiuses[i] == Double.POSITIVE_INFINITY) {
-          radiusesFormatted[i] = "unlimited";
-        } else {
-          radiusesFormatted[i] = String.format(Locale.US, "%s", TextUtils.formatCoordinate(radiuses[i]));
-        }
-      }
-      return TextUtils.join(";", radiusesFormatted);
-    }
-
-    private String formatCoordinates() {
-      List<String> coordinatesFormatted = new ArrayList<>();
-      for (Point point : coordinates) {
-        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(point.getCoordinates().getLongitude()),
-          TextUtils.formatCoordinate(point.getCoordinates().getLatitude())));
-      }
-
-      return TextUtils.join(";", coordinatesFormatted.toArray());
-    }
-
-    private String formatBearing() {
-      if (bearings.isEmpty()) {
-        return null;
-      }
-
-      String[] bearingFormatted = new String[bearings.size()];
-      for (int i = 0; i < bearings.size(); i++) {
-        if (bearings.get(i).length == 0) {
-          bearingFormatted[i] = "";
-        } else {
-          bearingFormatted[i] = String.format(Locale.US, "%s,%s",
-            TextUtils.formatCoordinate(bearings.get(i)[0]),
-            TextUtils.formatCoordinate(bearings.get(i)[1]));
-        }
-      }
-      return TextUtils.join(";", bearingFormatted);
     }
   }
 }

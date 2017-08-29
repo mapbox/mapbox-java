@@ -21,6 +21,10 @@ public class Point implements Geometry {
     coordinates = Position.fromCoordinates(longitude, latitude);
   }
 
+  public Point(double[] coordinates) {
+    this.coordinates = Position.fromCoordinates(coordinates[0], coordinates[1]);
+  }
+
   /**
    * Should always be "Point".
    *
