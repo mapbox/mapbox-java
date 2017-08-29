@@ -228,7 +228,7 @@ public class TelemetryClient {
     String url = getEventsEndpoint() + "/events/v2?access_token=" + getAccessToken();
 
     // Extra debug in staging mode
-    if (isDebugLoggingEnabled()) {
+    if (isDebugLoggingEnabled() || isStagingEnvironment()) {
       Log.d(LOG_TAG, String.format("Sending POST to %s with %d event(s) (user agent: %s) with payload: %s",
         url, events.size(), getUserAgent(), payload));
     }
