@@ -556,7 +556,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
 
       coordinates(MapboxCallHelper.formatCoordinates(coordinates));
       bearings(MapboxCallHelper.formatBearing(bearings));
-      annotations(MapboxCallHelper.formatAnnotations(annotations));
+      annotations(MapboxCallHelper.formatStringArray(annotations));
       radiuses(MapboxCallHelper.formatRadiuses(radiuses));
       distributions(MapboxCallHelper.formatDistributions(distributions));
 

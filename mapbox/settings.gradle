@@ -9,4 +9,5 @@ include ':libandroid-telemetry'
 include ':libandroid-services'
 include ':libandroid-ui'
 
+include ':cli'
 include ':app'

@@ -143,7 +143,7 @@
                 android:value=".MainActivity"/>
         </activity>
         <activity
-            android:name=".optimizedtrip.OptimizedTripActivity"
+            android:name=".optimizedtrip.BasicOptimizationActivity"
             android:label="@string/title_optimized_trip">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

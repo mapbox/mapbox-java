@@ -10,11 +10,20 @@ import java.util.Locale;
 
 public class MapboxCallHelper {
 
-  public static String formatAnnotations(String[] annotations) {
-    if (annotations == null || annotations.length == 0) {
+  public static String formatIntArray(int[] array) {
+    if (array == null || array.length == 0) {
       return null;
     }
-    return TextUtils.join(",", annotations);
+
+    String[] sourcesFormatted = new String[array.length];
+    return TextUtils.join(";", sourcesFormatted);
+  }
+
+  public static String formatStringArray(String[] array) {
+    if (array == null || array.length == 0) {
+      return null;
+    }
+    return TextUtils.join(",", array);
   }
 
   public static String formatRadiuses(double[] radiuses) {

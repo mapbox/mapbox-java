@@ -489,7 +489,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
       coordinates(MapboxCallHelper.formatCoordinates(coordinates));
       bearings(MapboxCallHelper.formatBearing(bearings));
-      annotations(MapboxCallHelper.formatAnnotations(annotations));
+      annotations(MapboxCallHelper.formatStringArray(annotations));
       radiuses(MapboxCallHelper.formatRadiuses(radiuses));
       return autoBuild();
     }

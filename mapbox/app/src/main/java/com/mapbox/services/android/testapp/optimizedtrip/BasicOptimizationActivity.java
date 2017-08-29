@@ -12,7 +12,6 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
-import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.optimization.v1.MapboxOptimization;
 import com.mapbox.services.api.optimization.v1.models.OptimizationResponse;
@@ -50,12 +49,12 @@ public class BasicOptimizationActivity extends AppCompatActivity implements OnMa
       .accessToken(Mapbox.getAccessToken())
       .source(DirectionsCriteria.SOURCE_FIRST)
       .destination(DirectionsCriteria.DESTINATION_LAST)
-      .addCoordinate(new Point(-77.03137, 38.91694))
-      .addCoordinate(new Point(-77.0159, 38.9496))
+      .coordinate(new Point(-77.03137, 38.91694))
+      .coordinate(new Point(-77.0159, 38.9496))
       .roundTrip(true)
-      .addDistribution(3, 1)
-      .addBearing(0d, 180d)
-      .addBearing(90d, 180d)
+      .distribution(3, 1)
+      .bearing(0d, 180d)
+      .bearing(90d, 180d)
       .overview(DirectionsCriteria.OVERVIEW_FULL);
 
     builder.build().enqueueCall(new Callback<OptimizationResponse>() {
