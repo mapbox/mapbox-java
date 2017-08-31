@@ -110,13 +110,13 @@ jobs:
       - deploy:
           name: Publish Java Services To Maven Central
           command: |
-            if [ "${CIRCLE_BRANCH}" == "release-223" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
             make publish-java ;
             fi
       - deploy:
           name: Publish Android Services To Maven Central
           command: |
-            if [ "${CIRCLE_BRANCH}" == "release-223" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
             make publish-android ;
             fi
       - store_artifacts:
