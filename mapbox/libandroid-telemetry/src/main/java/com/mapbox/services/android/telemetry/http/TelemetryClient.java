@@ -149,6 +149,10 @@ public class TelemetryClient {
     for (Hashtable<String, Object> evt : events) {
       JSONObject jsonObject = new JSONObject();
 
+      for (String key : evt.keySet()) {
+        jsonObject.putOpt(key, evt.get(key));
+      }
+
       // Build the JSON but only if there's a value for it in the evt
       jsonObject.putOpt(MapboxEvent.KEY_EVENT, evt.get(MapboxEvent.KEY_EVENT));
       jsonObject.putOpt(MapboxEvent.KEY_CREATED, evt.get(MapboxEvent.KEY_CREATED));
