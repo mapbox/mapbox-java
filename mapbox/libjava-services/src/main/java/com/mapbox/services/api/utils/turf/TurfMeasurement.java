@@ -1,17 +1,19 @@
 package com.mapbox.services.api.utils.turf;
 
+import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
+import com.mapbox.services.api.utils.turf.TurfConstants.TurfUnitCriteria;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.MultiLineString;
 import com.mapbox.services.commons.geojson.MultiPoint;
 import com.mapbox.services.commons.geojson.MultiPolygon;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.geojson.Polygon;
-import com.mapbox.services.commons.models.Position;
 
 import java.util.List;
 
 /**
- * Class contains an assortment of methods used to calculate measurments such as bearing,
+ * Class contains an assortment of methods used to calculate measurements such as bearing,
  * destination, midpoint, etc.
  *
  * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
@@ -20,59 +22,27 @@ import java.util.List;
 public class TurfMeasurement {
 
   /**
-   * Takes two positions and finds the geographic bearing between them.
+   * Takes two {@link Point}s and finds the geographic bearing between them.
    *
-   * @param p1 Starting {@link Position}.
-   * @param p2 Ending {@link Position}.
-   * @return bearing in decimal degrees.
+   * @param point1 first point used for calculating the bearing
+   * @param point2 second point used for calculating the bearing
+   * @return bearing in decimal degrees
    * @see <a href="http://turfjs.org/docs/#bearing">Turf Bearing documentation</a>
    * @since 1.3.0
    */
-  public static double bearing(Position p1, Position p2) {
-    return bearing(Point.fromCoordinates(p1), Point.fromCoordinates(p2));
-  }
-
-  /**
-   * Takes two points and finds the geographic bearing between them.
-   *
-   * @param p1 Starting {@link Point}.
-   * @param p2 Ending {@link Point}.
-   * @return bearing in decimal degrees.
-   * @see <a href="http://turfjs.org/docs/#bearing">Turf Bearing documentation</a>
-   * @since 1.2.0
-   */
-  public static double bearing(Point p1, Point p2) {
+  public static double bearing(@NonNull Point point1, @NonNull Point point2) {
     double degrees2radians = Math.PI / 180;
     double radians2degrees = 180 / Math.PI;
-    Position coordinates1 = p1.getCoordinates();
-    Position coordinates2 = p2.getCoordinates();
 
-    double lon1 = degrees2radians * coordinates1.getLongitude();
-    double lon2 = degrees2radians * coordinates2.getLongitude();
-    double lat1 = degrees2radians * coordinates1.getLatitude();
-    double lat2 = degrees2radians * coordinates2.getLatitude();
+    double lon1 = degrees2radians * point1.longitude();
+    double lon2 = degrees2radians * point2.longitude();
+    double lat1 = degrees2radians * point1.latitude();
+    double lat2 = degrees2radians * point2.latitude();
     double a = Math.sin(lon2 - lon1) * Math.cos(lat2);
-    double b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+    double b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
+      * Math.cos(lat2) * Math.cos(lon2 - lon1);
 
     return radians2degrees * Math.atan2(a, b);
-  }
-
-  /**
-   * Takes a Position and calculates the location of a destination point given a distance in
-   * degrees, radians, miles, or kilometers; and bearing in degrees. This uses the Haversine
-   * formula to account for global curvature.
-   *
-   * @param p1       Starting point.
-   * @param distance Distance from the starting point.
-   * @param bearing  Ranging from -180 to 180.
-   * @param units    Miles, kilometers, degrees, or radians (defaults kilometers).
-   * @return destination {@link Point}
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
-   * @see <a href="http://turfjs.org/docs/#destination">Turf Destination documetation</a>
-   * @since 1.3.0
-   */
-  public static Position destination(Position p1, double distance, double bearing, String units) throws TurfException {
-    return destination(Point.fromCoordinates(p1), distance, bearing, units).getCoordinates();
   }
 
   /**
@@ -80,21 +50,22 @@ public class TurfMeasurement {
    * degrees, radians, miles, or kilometers; and bearing in degrees. This uses the Haversine
    * formula to account for global curvature.
    *
-   * @param point1   Starting point.
-   * @param distance Distance from the starting point.
-   * @param bearing  Ranging from -180 to 180.
-   * @param units    Miles, kilometers, degrees, or radians (defaults kilometers).
-   * @return destination {@link Point}
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+   * @param point    starting point used for calculating the destination
+   * @param distance distance from the starting point
+   * @param bearing  ranging from -180 to 180 in decimal degrees
+   * @param units    one of the units found inside {@link TurfUnitCriteria}
+   * @return destination {@link Point} result where you specified
    * @see <a href="http://turfjs.org/docs/#destination">Turf Destination documetation</a>
    * @since 1.2.0
    */
-  public static Point destination(Point point1, double distance, double bearing, String units) throws TurfException {
+  @NonNull
+  public static Point destination(@NonNull Point point, @FloatRange(from = 0) double distance,
+                                  @FloatRange(from = -180, to = 180) double bearing,
+                                  @NonNull @TurfUnitCriteria String units) {
     double degrees2radians = Math.PI / 180;
     double radians2degrees = 180 / Math.PI;
-    Position coordinates1 = point1.getCoordinates();
-    double longitude1 = degrees2radians * coordinates1.getLongitude();
-    double latitude1 = degrees2radians * coordinates1.getLatitude();
+    double longitude1 = degrees2radians * point.longitude();
+    double latitude1 = degrees2radians * point.latitude();
     double bearingRad = degrees2radians * bearing;
 
     double radians = TurfHelpers.distanceToRadians(distance, units);
@@ -105,38 +76,21 @@ public class TurfMeasurement {
         * Math.sin(radians) * Math.cos(latitude1),
       Math.cos(radians) - Math.sin(latitude1) * Math.sin(latitude2));
 
-    return Point.fromCoordinates(
-      Position.fromCoordinates(radians2degrees * longitude2, radians2degrees * latitude2));
-  }
-
-  /**
-   * Calculates the distance between two positions in degress, radians, miles, or kilometers. This
-   * uses the Haversine formula to account for global curvature.
-   *
-   * @param point1 Origin position.
-   * @param point2 Destination position.
-   * @param units  Miles, kilometers, degrees, or radians (defaults kilometers).
-   * @return Distance between the two positions.
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
-   * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
-   * @since 1.3.0
-   */
-  public static double distance(Position point1, Position point2, String units) throws TurfException {
-    return distance(Point.fromCoordinates(point1), Point.fromCoordinates(point2), units);
+    return Point.fromLngLat(
+      radians2degrees * longitude2, radians2degrees * latitude2);
   }
 
   /**
    * Calculates the distance between two points in kilometers. This uses the Haversine formula to
    * account for global curvature.
    *
-   * @param point1 Origin point.
-   * @param point2 Destination point.
-   * @return Distance between the two points.
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+   * @param point1 first point used for calculating the bearing
+   * @param point2 second point used for calculating the bearing
+   * @return distance between the two points in kilometers
    * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
    * @since 1.2.0
    */
-  public static double distance(Point point1, Point point2) throws TurfException {
+  public static double distance(@NonNull Point point1, @NonNull Point point2) {
     return distance(point1, point2, TurfConstants.UNIT_DEFAULT);
   }
 
@@ -144,159 +98,132 @@ public class TurfMeasurement {
    * Calculates the distance between two points in degress, radians, miles, or kilometers. This
    * uses the Haversine formula to account for global curvature.
    *
-   * @param point1 Origin point.
-   * @param point2 Destination point.
-   * @param units  Can be degrees, radians, miles, or kilometers (defaults kilometers).
-   * @return Distance between the two points.
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+   * @param point1 first point used for calculating the bearing
+   * @param point2 second point used for calculating the bearing
+   * @param units  one of the units found inside {@link TurfUnitCriteria}
+   * @return distance between the two points in kilometers
    * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
    * @since 1.2.0
    */
-  public static double distance(Point point1, Point point2, String units) throws TurfException {
+  public static double distance(@NonNull Point point1, @NonNull Point point2,
+                                @NonNull @TurfUnitCriteria String units) {
     double degrees2radians = Math.PI / 180;
-    Position coordinates1 = point1.getCoordinates();
-    Position coordinates2 = point2.getCoordinates();
-    double dLat = degrees2radians * (coordinates2.getLatitude() - coordinates1.getLatitude());
-    double dLon = degrees2radians * (coordinates2.getLongitude() - coordinates1.getLongitude());
-    double lat1 = degrees2radians * coordinates1.getLatitude();
-    double lat2 = degrees2radians * coordinates2.getLatitude();
+    double dLat = degrees2radians * (point2.latitude() - point1.latitude());
+    double dLon = degrees2radians * (point2.longitude() - point1.longitude());
+    double lat1 = degrees2radians * point1.latitude();
+    double lat2 = degrees2radians * point2.latitude();
 
-    double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+    double a = Math.pow(Math.sin(dLat / 2), 2)
+      + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
 
-    return TurfHelpers.radiansToDistance(2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)), units);
+    return TurfHelpers.radiansToDistance(
+      2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)), units);
   }
 
   /**
-   * Takes a line and measures its length in the specified units.
+   * Takes a {@link LineString} and measures its length in the specified units.
    *
-   * @param lineString  Line to measure.
-   * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
-   * @return Length of the input line.
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+   * @param lineString geometry to measure
+   * @param units      one of the units found inside {@link TurfUnitCriteria}
+   * @return length of the input line in the units specified
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(LineString lineString, String units) throws TurfException {
-    List<Position> coordinates = lineString.getCoordinates();
+  public static double lineDistance(@NonNull LineString lineString,
+                                    @NonNull @TurfUnitCriteria String units) {
+    List<Point> coordinates = lineString.coordinates();
     return length(coordinates, units);
   }
 
   /**
-   * Takes a line and measures its length in the specified units.
+   * Takes a {@link MultiLineString} and measures its length in the specified units.
    *
-   * @param polygon  Line to measure.
-   * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
-   * @return Length of the input line.
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+   * @param multiLineString geometry to measure
+   * @param units           one of the units found inside {@link TurfUnitCriteria}
+   * @return length of the input lines combined, in the units specified
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(Polygon polygon, String units) throws TurfException {
-    double d;
-
-    List<List<Position>> coordinates = polygon.getCoordinates();
-    d = 0;
-    for (int i = 0; i < coordinates.size(); i++) {
-      d += length(coordinates.get(i), units);
+  public static double lineDistance(@NonNull MultiLineString multiLineString,
+                                    @NonNull @TurfUnitCriteria String units) {
+    double d = 0;
+    for (List<Point> points : multiLineString.coordinates()) {
+      d += length(points, units);
     }
     return d;
   }
 
   /**
-   * Takes a line and measures its length in the specified units.
+   * Takes a {@link Polygon} and measures its perimeter in the specified units. if the polygon
+   * contains holes, the perimeter will also be included.
    *
-   * @param multiLineString  Line to measure.
-   * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
-   * @return Length of the input line.
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+   * @param polygon geometry to measure
+   * @param units   one of the units found inside {@link TurfUnitCriteria}
+   * @return total perimeter of the input polygon in the units specified
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(MultiLineString multiLineString, String units) throws TurfException {
-    double d;
-
-    List<List<Position>> coordinates = multiLineString.getCoordinates();
-    d = 0;
-    for (int i = 0; i < coordinates.size(); i++) {
-      d += length(coordinates.get(i), units);
+  public static double lineDistance(@NonNull Polygon polygon,
+                                    @NonNull @TurfUnitCriteria String units) {
+    double d = 0;
+    for (List<Point> points : polygon.coordinates()) {
+      d += length(points, units);
     }
     return d;
   }
 
   /**
-   * Takes a line and measures its length in the specified units.
+   * Takes a {@link MultiPolygon} and measures each polygons perimeter in the specified units. if
+   * one of the polygons contains holes, the perimeter will also be included.
    *
-   * @param multiPolygon  Line to measure.
-   * @param units Can be degrees, radians, miles, or kilometers (defaults kilometers).
-   * @return Length of the input line.
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+   * @param multiPolygon geometry to measure
+   * @param units        one of the units found inside {@link TurfUnitCriteria}
+   * @return total perimeter of the input polygons combined, in the units specified
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(MultiPolygon multiPolygon, String units) throws TurfException {
-    double d;
-
-    List<List<List<Position>>> coordinates = multiPolygon.getCoordinates();
-    d = 0;
-    for (int i = 0; i < coordinates.size(); i++) {
-      for (int j = 0; j < coordinates.get(i).size(); j++) {
-        d += length(coordinates.get(i).get(j), units);
+  public static double lineDistance(@NonNull MultiPolygon multiPolygon,
+                                    @NonNull @TurfUnitCriteria String units) {
+    double d = 0;
+    List<List<List<Point>>> coordinates = multiPolygon.coordinates();
+    for (List<List<Point>> coordinate : coordinates) {
+      for (List<Point> aCoordinate : coordinate) {
+        d += length(aCoordinate, units);
       }
     }
     return d;
   }
 
-  private static double length(List<Position> coords, String units) throws TurfException {
-    double travelled = 0;
-    Point prevCoords = Point.fromCoordinates(coords.get(0));
-    Point curCoords = Point.fromCoordinates(coords.get(0));
-    Point temp;
-    for (int i = 1; i < coords.size(); i++) {
-      curCoords.setCoordinates(coords.get(i));
-      travelled += distance(prevCoords, curCoords, units);
-      temp = prevCoords;
-      prevCoords = curCoords;
-      curCoords = temp;
-    }
-    return travelled;
-  }
-
   /**
-   * Takes two {@link Position} and returns a position midway between them. The midpoint is
-   * calculated geodesically, meaning the curvature of the earth is taken into account.
-   *
-   * @param from First point.
-   * @param to   Second point.
-   * @return A {@link Position} midway between pt1 and pt2.
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
-   * @see <a href="http://turfjs.org/docs/#midpoint">Turf Midpoint documentation</a>
-   * @since 1.3.0
-   */
-  public static Position midpoint(Position from, Position to) throws TurfException {
-    Point midpointResult = midpoint(Point.fromCoordinates(from), Point.fromCoordinates(to));
-    return Position.fromCoordinates(midpointResult.getCoordinates().getLongitude(),
-      midpointResult.getCoordinates().getLatitude());
-  }
-
-  /**
-   * Takes two {@link Point} and returns a point midway between them. The midpoint is calculated
+   * Takes two {@link Point}s and returns a point midway between them. The midpoint is calculated
    * geodesically, meaning the curvature of the earth is taken into account.
    *
-   * @param from First point.
-   * @param to   Second point.
-   * @return A {@link Point} midway between pt1 and pt2.
-   * @throws TurfException TurfException Signals that a Turf exception of some sort has occurred.
+   * @param from first point used for calculating the midpoint
+   * @param to   second point used for calculating the midpoint
+   * @return a {@link Point} midway between point1 and point2
    * @see <a href="http://turfjs.org/docs/#midpoint">Turf Midpoint documentation</a>
    * @since 1.3.0
    */
-  public static Point midpoint(Point from, Point to) throws TurfException {
+  public static Point midpoint(@NonNull Point from, @NonNull Point to) {
     double dist = distance(from, to, TurfConstants.UNIT_MILES);
     double heading = bearing(from, to);
     return destination(from, dist / 2, heading, TurfConstants.UNIT_MILES);
   }
 
-  public static Point along(LineString line, double distance, String units) throws TurfException {
-    List<Position> coords = line.getCoordinates();
+
+  /**
+   * Takes a line and returns a point at a specified distance along the line.
+   *
+   * @param line     that the point should be placed upon
+   * @param distance along the linestring geometry which the point should be placed on
+   * @param units    one of the units found inside {@link TurfUnitCriteria}
+   * @return a {@link Point} which is on the linestring provided and at the distance from the origin
+   * of that line to the end of the distance
+   * @since 1.3.0
+   */
+  public static Point along(@NonNull LineString line, @FloatRange(from = 0) double distance,
+                            @NonNull @TurfUnitCriteria String units) {
+    List<Point> coords = line.coordinates();
 
     double travelled = 0;
     for (int i = 0; i < coords.size(); i++) {
@@ -305,96 +232,92 @@ public class TurfMeasurement {
       } else if (travelled >= distance) {
         double overshot = distance - travelled;
         if (overshot == 0) {
-          return Point.fromCoordinates(coords.get(i));
+          return coords.get(i);
         } else {
           double direction = bearing(coords.get(i), coords.get(i - 1)) - 180;
-          return Point.fromCoordinates(destination(coords.get(i), overshot, direction, units));
+          return destination(coords.get(i), overshot, direction, units);
         }
       } else {
         travelled += distance(coords.get(i), coords.get(i + 1), units);
       }
     }
 
-    return Point.fromCoordinates(coords.get(coords.size() - 1));
+    return coords.get(coords.size() - 1);
   }
-
-  /*
-   * Bounding box
-   */
 
   /**
    * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
    *
-   * @param point A {@link Point} object.
-   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @param point a {@link Point} object
+   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
    * @since 2.0.0
    */
-  public static double[] bbox(Point point) {
-    List<Position> resultCoords = TurfMeta.coordAll(point);
+  public static double[] bbox(@NonNull Point point) {
+    List<Point> resultCoords = TurfMeta.coordAll(point);
     return bboxCalculator(resultCoords);
   }
 
   /**
    * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
    *
-   * @param lineString A {@link LineString} object.
-   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @param lineString a {@link LineString} object
+   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
    * @since 2.0.0
    */
-  public static double[] bbox(LineString lineString) {
-    List<Position> resultCoords = TurfMeta.coordAll(lineString);
+  public static double[] bbox(@NonNull LineString lineString) {
+    List<Point> resultCoords = TurfMeta.coordAll(lineString);
     return bboxCalculator(resultCoords);
   }
 
   /**
    * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
    *
-   * @param multiPoint A {@link MultiPoint} object.
-   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @param multiPoint a {@link MultiPoint} object
+   * @return a double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
    * @since 2.0.0
    */
-  public static double[] bbox(MultiPoint multiPoint) {
-    List<Position> resultCoords = TurfMeta.coordAll(multiPoint);
+  public static double[] bbox(@NonNull MultiPoint multiPoint) {
+    List<Point> resultCoords = TurfMeta.coordAll(multiPoint);
     return bboxCalculator(resultCoords);
   }
 
   /**
    * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
    *
-   * @param polygon A {@link Polygon} object.
-   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @param polygon a {@link Polygon} object
+   * @return a double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
    * @since 2.0.0
    */
-  public static double[] bbox(Polygon polygon) {
-    List<Position> resultCoords = TurfMeta.coordAll(polygon, false);
+  public static double[] bbox(@NonNull Polygon polygon) {
+    List<Point> resultCoords = TurfMeta.coordAll(polygon, false);
     return bboxCalculator(resultCoords);
   }
 
   /**
    * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
    *
-   * @param multiLineString A {@link MultiLineString} object.
-   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @param multiLineString a {@link MultiLineString} object
+   * @return a double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
    * @since 2.0.0
    */
-  public static double[] bbox(MultiLineString multiLineString) {
-    List<Position> resultCoords = TurfMeta.coordAll(multiLineString);
+  public static double[] bbox(@NonNull MultiLineString multiLineString) {
+    List<Point> resultCoords = TurfMeta.coordAll(multiLineString);
     return bboxCalculator(resultCoords);
   }
 
   /**
    * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
    *
-   * @param multiPolygon A {@link MultiPolygon} object.
-   * @return A double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}.
+   * @param multiPolygon a {@link MultiPolygon} object
+   * @return a double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
    * @since 2.0.0
    */
   public static double[] bbox(MultiPolygon multiPolygon) {
-    List<Position> resultCoords = TurfMeta.coordAll(multiPolygon, false);
+    List<Point> resultCoords = TurfMeta.coordAll(multiPolygon, false);
     return bboxCalculator(resultCoords);
   }
 
-  private static double[] bboxCalculator(List<Position> resultCoords) {
+  private static double[] bboxCalculator(List<Point> resultCoords) {
     double[] bbox = new double[4];
 
     bbox[0] = Double.POSITIVE_INFINITY;
@@ -402,20 +325,34 @@ public class TurfMeasurement {
     bbox[2] = Double.NEGATIVE_INFINITY;
     bbox[3] = Double.NEGATIVE_INFINITY;
 
-    for (Position position : resultCoords) {
-      if (bbox[0] > position.getLongitude()) {
-        bbox[0] = position.getLongitude();
+    for (Point point : resultCoords) {
+      if (bbox[0] > point.longitude()) {
+        bbox[0] = point.longitude();
       }
-      if (bbox[1] > position.getLatitude()) {
-        bbox[1] = position.getLatitude();
+      if (bbox[1] > point.latitude()) {
+        bbox[1] = point.latitude();
       }
-      if (bbox[2] < position.getLongitude()) {
-        bbox[2] = position.getLongitude();
+      if (bbox[2] < point.longitude()) {
+        bbox[2] = point.longitude();
       }
-      if (bbox[3] < position.getLatitude()) {
-        bbox[3] = position.getLatitude();
+      if (bbox[3] < point.latitude()) {
+        bbox[3] = point.latitude();
       }
     }
     return bbox;
+  }
+
+  private static double length(List<Point> coords, String units) {
+    double travelled = 0;
+    Point prevCoords = coords.get(0);
+    Point curCoords = coords.get(0);
+    Point temp;
+    for (int i = 1; i < coords.size(); i++) {
+      travelled += distance(prevCoords, coords.get(i), units);
+      temp = prevCoords;
+      prevCoords = curCoords;
+      curCoords = temp;
+    }
+    return travelled;
   }
 }

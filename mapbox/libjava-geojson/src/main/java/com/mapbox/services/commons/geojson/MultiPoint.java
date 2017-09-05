@@ -1,104 +1,100 @@
 package com.mapbox.services.commons.geojson;
 
+import android.support.annotation.NonNull;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
 import com.mapbox.services.commons.geojson.custom.PositionSerializer;
 import com.mapbox.services.commons.models.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A MultiPoint is a type of {@link Geometry}.
+ * A MultiPoint represents two or more geographic points that share a relationship and is one of
+ * the seven geometries found in the GeoJSON spec.
+ * <p>
+ * This adheres to the RFC 7946 internet standard when serialized into JSON. When deserialized, this
+ * class becomes an immutable object which should be initiated using its static factory methods. The
+ * list of points must be equal to or greater than 2.
+ * </p><p>
+ * A sample GeoJSON MultiPoint's provided below (in it's serialized state).
+ * <pre>
+ * {
+ *   "type": "MultiPoint",
+ *   "coordinates": [
+ *     [100.0, 0.0],
+ *     [101.0, 1.0]
+ *   ]
+ * }
+ * </pre>
+ * Look over the {@link com.mapbox.services.commons.geojson.Point} documentation to get more
+ * information about formatting your list of point objects correctly.
  *
- * @see <a href='http://geojson.org/geojson-spec.html#multipoint'>Official GeoJSON MultiPoint Specifications</a>
  * @since 1.0.0
  */
-public class MultiPoint implements Geometry<List<Position>> {
+@AutoValue
+public abstract class MultiPoint implements Serializable {
 
-  private final String type = "MultiPoint";
-  private List<Position> coordinates;
+  private static final String type = "MultiPoint";
 
   /**
-   * Private constructor.
+   * Create a new instance of this class by defining a list of {@link Point}s which follow the
+   * correct specifications described in the Point documentation. Note that there should not be any
+   * duplicate points inside the list.
+   * <p>
+   * Note that if less than 2 points are passed in, a runtime exception will occur.
+   * </p>
    *
-   * @param coordinates List of {@link Position} making up the MultiPoint.
-   * @since 1.0.0
+   * @param points a list of {@link Point}s which make up the LineString geometry
+   * @return a new instance of this class defined by the values passed inside this static factory
+   * method
+   * @since 3.0.0
    */
-  private MultiPoint(List<Position> coordinates) {
-    this.coordinates = coordinates;
+  public static MultiPoint fromLngLats(@NonNull List<Point> points) {
+    if (points.size() < 2) {
+      throw new RuntimeException("A single point can be defined using the Point geometry.");
+    }
+    return new AutoValue_MultiPoint(points);
   }
 
   /**
-   * Should always be "MultiPoint".
+   * Create a new instance of this class by passing in a formatted valid JSON String. If you are
+   * creating a MultiPoint object from scratch it is better to use one of the other provided static
+   * factory methods such as {@link #fromLngLats(List)}. For a valid MultiPoint to exist, it must
+   * have at least 2 coordinate entries.
    *
-   * @return String "MultiPoint".
+   * @param json a formatted valid JSON string defining a GeoJSON MultiPoint
+   * @return a new instance of this class defined by the values passed inside this static factory
+   * method
    * @since 1.0.0
    */
-  @Override
-  public String getType() {
+  public static MultiPoint fromJson(String json) {
+    return new Gson().fromJson(json, MultiPoint.class);
+  }
+
+  public String type() {
     return type;
   }
 
   /**
-   * Get the list of {@link Position} making up the MultiPoint.
+   * provides the list of {@link Point}s that make up the MultiPoint geometry.
    *
-   * @return List of {@link Position}.
-   * @since 1.0.0
+   * @return a list of points
+   * @since 3.0.0
    */
-  @Override
-  public List<Position> getCoordinates() {
-    return coordinates;
-  }
-
-  @Override
-  public void setCoordinates(List<Position> coordinates) {
-    this.coordinates = coordinates;
-  }
+  public abstract List<Point> coordinates();
 
   /**
-   * Creates a {@link MultiPoint} from a list of coordinates.
+   * This takes the currently defined values found inside this instance and converts it to a GeoJSON
+   * string.
    *
-   * @param coordinates List of {@link Position} coordinates.
-   * @return {@link MultiPoint}.
+   * @return a JSON string which represents this MultiPoint geometry
    * @since 1.0.0
    */
-  public static MultiPoint fromCoordinates(List<Position> coordinates) {
-    return new MultiPoint(coordinates);
-  }
-
-  public static MultiPoint fromCoordinates(double[][] coordinates) {
-    ArrayList<Position> converted = new ArrayList<>(coordinates.length);
-    for (int i = 0; i < coordinates.length; i++) {
-      converted.add(Position.fromCoordinates(coordinates[i]));
-    }
-
-    return MultiPoint.fromCoordinates(converted);
-  }
-
-  /**
-   * Create a GeoJSON MultiPoint object from JSON.
-   *
-   * @param json String of JSON making up a MultiPoint.
-   * @return {@link MultiPoint} GeoJSON object.
-   * @since 1.0.0
-   */
-  public static MultiPoint fromJson(String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionDeserializer());
-    return gson.create().fromJson(json, MultiPoint.class);
-  }
-
-  /**
-   * Convert feature into JSON.
-   *
-   * @return String containing MultiPoint JSON.
-   * @since 1.0.0
-   */
-  @Override
   public String toJson() {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionSerializer());
-    return gson.create().toJson(this);
+    return new Gson().toJson(this);
   }
 }

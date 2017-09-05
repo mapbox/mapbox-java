@@ -1,157 +1,209 @@
 package com.mapbox.services.commons.geojson;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
-import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
-import com.mapbox.services.commons.geojson.custom.PositionSerializer;
-import com.mapbox.services.commons.models.Position;
+
+import java.io.Serializable;
 
 /**
- * A GeoJSON object with the type "Feature" is a feature object.
+ * This defines a GeoJSON Feature object which represents a spatially bound thing. Every Feature
+ * object is a GeoJSON object no matter where it occurs in a GeoJSON text. A Feature object will
+ * always have a "type" member with the value "Feature".
+ * <p>
+ * A Feature object has a member with the name "geometry". The value of the geometry member SHALL be
+ * either a Geometry object or, in the case that the Feature is unlocated, a JSON null value.
+ * <p>
+ * A Feature object has a member with the name "properties". The value of the properties member is
+ * an object (any JSON object or a JSON null value).
+ * <p>
+ * If a Feature has a commonly used identifier, that identifier SHOULD be included as a member of
+ * the Feature object through the {@link #id()} method, and the value of this member is either a
+ * JSON string or number.
+ * <p>
+ * An example of a serialized feature is given below:
+ * <pre>
+ * {
+ *   "type": "Feature",
+ *   "geometry": {
+ *     "type": "Point",
+ *     "coordinates": [102.0, 0.5]
+ *   },
+ *   "properties": {
+ *     "prop0": "value0"
+ *   }
+ * </pre>
  *
- * @see <a href='geojson.org/geojson-spec.html#feature-objects'>Official GeoJSON Feature Specifications</a>
  * @since 1.0.0
  */
-public class Feature implements GeoJSON {
+@AutoValue
+public abstract class Feature implements GeoJSON, Serializable {
 
-  private final String type = "Feature";
-  private Geometry geometry;
-  private JsonObject properties;
-  private String id;
+  private static final String type = "Feature";
 
   /**
-   * Private constructor.
+   * Create a new instance of this class by passing in a formatted valid JSON String. If you are
+   * creating a Feature object from scratch it is better to use one of the other provided static
+   * factory methods such as {@link #fromGeometry(Geometry)}.
    *
-   * @param geometry   {@link Geometry} object.
-   * @param properties of this feature as JSON.
-   * @param id         common identifier of this feature.
+   * @param json a formatted valid JSON string defining a GeoJSON Feature
+   * @return a new instance of this class defined by the values passed inside this static factory
+   * method
    * @since 1.0.0
    */
-  protected Feature(Geometry geometry, JsonObject properties, String id) {
-    this.geometry = geometry;
-    this.properties = properties;
-    this.id = id;
-  }
-
-  /**
-   * Should always be "Feature".
-   *
-   * @return String "Feature".
-   * @since 1.0.0
-   */
-  @Override
-  public String getType() {
-    return type;
-  }
-
-  /**
-   * Get the features {@link Geometry}.
-   *
-   * @return {@link Geometry} of the feature or null if not set.
-   * @since 1.0.0
-   */
-  public Geometry getGeometry() {
-    return geometry;
-  }
-
-  public void setGeometry(Geometry geometry) {
-    this.geometry = geometry;
-  }
-
-  /**
-   * Returns the optional properties of this feature as JSON.
-   *
-   * @return the properties of this feature
-   * @since 1.0.0
-   */
-  public JsonObject getProperties() {
-    if (properties == null) {
-      properties = new JsonObject();
-    }
-    return properties;
-  }
-
-  public void setProperties(JsonObject properties) {
-    this.properties = properties;
-  }
-
-  /**
-   * The optional, common identifier of this feature.
-   *
-   * @return The common identifier of this feature, if set.
-   * @since 1.0.0
-   */
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  /**
-   * Create a feature from geometry.
-   *
-   * @param geometry {@link Geometry} object.
-   * @return {@link Feature}
-   * @since 1.0.0
-   */
-  public static Feature fromGeometry(Geometry geometry) {
-    return new Feature(geometry, new JsonObject(), null);
-  }
-
-  /**
-   * Create a feature from geometry.
-   *
-   * @param geometry   {@link Geometry} object.
-   * @param properties of this feature as JSON.
-   * @return {@link Feature}
-   * @since 1.0.0
-   */
-  public static Feature fromGeometry(Geometry geometry, JsonObject properties) {
-    return new Feature(geometry, properties, null);
-  }
-
-  /**
-   * Create a feature from geometry.
-   *
-   * @param geometry   {@link Geometry} object.
-   * @param properties of this feature as JSON.
-   * @param id         common identifier of this feature.
-   * @return {@link Feature}
-   * @since 1.0.0
-   */
-  public static Feature fromGeometry(Geometry geometry, JsonObject properties, String id) {
-    return new Feature(geometry, properties, id);
-  }
-
-  /**
-   * Create a GeoJSON feature object from JSON.
-   *
-   * @param json String of JSON making up a feature.
-   * @return {@link Feature} GeoJSON object.
-   * @since 1.0.0
-   */
-  public static Feature fromJson(String json) {
+  public static Feature fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
     return gson.create().fromJson(json, Feature.class);
   }
 
   /**
-   * Convert feature into JSON.
+   * Create a new instance of this class by giving the feature a {@link Geometry}.
    *
-   * @return String containing feature JSON.
+   * @param geometry a single geometry which makes up this feature object
+   * @return a new instance of this class defined by the values passed inside this static factory
+   * method
+   * @since 1.0.0
+   */
+  public static Feature fromGeometry(@Nullable Geometry geometry) {
+    return fromGeometry(geometry, new JsonObject(), null, null);
+  }
+
+  /**
+   * Create a new instance of this class by giving the feature a {@link Geometry}. You can also pass
+   * in a double array defining a bounding box.
+   *
+   * @param geometry a single geometry which makes up this feature object
+   * @param bbox     optionally include a bbox definition as a double array
+   * @return a new instance of this class defined by the values passed inside this static factory
+   * method
+   * @since 1.0.0
+   */
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable double[] bbox) {
+    return fromGeometry(geometry, new JsonObject(), null, bbox);
+  }
+
+  /**
+   * Create a new instance of this class by giving the feature a {@link Geometry} and optionally a
+   * set of properties.
+   *
+   * @param geometry   a single geometry which makes up this feature object
+   * @param properties a {@link JsonObject} containing the feature properties
+   * @return a new instance of this class defined by the values passed inside this static factory
+   * method
+   * @since 1.0.0
+   */
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties) {
+    return fromGeometry(geometry, properties, null, null);
+  }
+
+  /**
+   * Create a new instance of this class by giving the feature a {@link Geometry}, optionally a
+   * set of properties, and optionally pass in a bbox.
+   *
+   * @param geometry   a single geometry which makes up this feature object
+   * @param properties a {@link JsonObject} containing the feature properties
+   * @return a new instance of this class defined by the values passed inside this static factory
+   * method
+   * @since 1.0.0
+   */
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
+                                     @Nullable double[] bbox) {
+    return fromGeometry(geometry, properties, null, bbox);
+  }
+
+  /**
+   * Create a new instance of this class by giving the feature a {@link Geometry}, optionally a
+   * set of properties, and a String which represents the objects id.
+   *
+   * @param geometry   a single geometry which makes up this feature object
+   * @param properties a {@link JsonObject} containing the feature properties
+   * @param id         common identifier of this feature
+   * @return {@link Feature}
+   * @since 1.0.0
+   */
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
+                                     @Nullable String id) {
+    return fromGeometry(geometry, properties, id, null);
+  }
+
+  /**
+   * Create a new instance of this class by giving the feature a {@link Geometry}, optionally a
+   * set of properties, and a String which represents the objects id.
+   *
+   * @param geometry   a single geometry which makes up this feature object
+   * @param properties a {@link JsonObject} containing the feature properties
+   * @param id         common identifier of this feature
+   * @return {@link Feature}
+   * @since 1.0.0
+   */
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
+                                     @Nullable String id, @Nullable double[] bbox) {
+    return new AutoValue_Feature(geometry, properties, id, bbox);
+  }
+
+  /**
+   * This describes the type of GeoJSON geometry this object is, thus this will always return
+   * {@link Feature}.
+   *
+   * @return a String which describes the type of geometry, for this object it will always return
+   * {@code Feature}
+   * @since 1.0.0
+   */
+  @NonNull
+  @Override
+  public String type() {
+    return type;
+  }
+
+  /**
+   * The geometry which makes up this feature. A Geometry object represents points, curves, and
+   * surfaces in coordinate space. One of the seven geometries provided inside this library can be
+   * passed in through one of the static factory methods.
+   *
+   * @return a single defined {@link Geometry} which makes this feature spatially aware
+   * @since 1.0.0
+   */
+  @Nullable
+  public abstract Geometry geometry();
+
+  /**
+   * This contains the JSON object which holds the feature properties. The value of the properties
+   * member is a {@link JsonObject} and might be empty if no properties are provided.
+   *
+   * @return a {@link JsonObject} which holds this features current properties
+   * @since 1.0.0
+   */
+  public abstract JsonObject properties();
+
+  /**
+   * A feature may have a commonly used identifier which is either a unique String or number.
+   *
+   * @return a String containing this features unique identification or null if one wasn't given
+   * during creation.
+   * @since 1.0.0
+   */
+  @Nullable
+  public abstract String id();
+
+  @Override
+  public abstract double[] bbox();
+
+  /**
+   * This takes the currently defined values found inside this instance and converts it to a GeoJSON
+   * string.
+   *
+   * @return a JSON string which represents this Feature
    * @since 1.0.0
    */
   @Override
   public String toJson() {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionSerializer());
-    return gson.create().toJson(this);
+    return new Gson().toJson(this);
   }
 
   /**
@@ -162,7 +214,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public void addStringProperty(String key, String value) {
-    getProperties().addProperty(key, value);
+    properties().addProperty(key, value);
   }
 
   /**
@@ -173,7 +225,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public void addNumberProperty(String key, Number value) {
-    getProperties().addProperty(key, value);
+    properties().addProperty(key, value);
   }
 
   /**
@@ -184,7 +236,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public void addBooleanProperty(String key, Boolean value) {
-    getProperties().addProperty(key, value);
+    properties().addProperty(key, value);
   }
 
   /**
@@ -195,7 +247,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public void addCharacterProperty(String key, Character value) {
-    getProperties().addProperty(key, value);
+    properties().addProperty(key, value);
   }
 
   /**
@@ -206,7 +258,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public void addProperty(String key, JsonElement value) {
-    getProperties().add(key, value);
+    properties().add(key, value);
   }
 
   /**
@@ -217,7 +269,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public String getStringProperty(String key) {
-    return getProperties().get(key).getAsString();
+    return properties().get(key).getAsString();
   }
 
   /**
@@ -228,7 +280,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public Number getNumberProperty(String key) {
-    return getProperties().get(key).getAsNumber();
+    return properties().get(key).getAsNumber();
   }
 
   /**
@@ -239,7 +291,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public Boolean getBooleanProperty(String key) {
-    return getProperties().get(key).getAsBoolean();
+    return properties().get(key).getAsBoolean();
   }
 
   /**
@@ -250,7 +302,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public Character getCharacterProperty(String key) {
-    return getProperties().get(key).getAsCharacter();
+    return properties().get(key).getAsCharacter();
   }
 
   /**
@@ -261,7 +313,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public JsonElement getProperty(String key) {
-    return getProperties().get(key);
+    return properties().get(key);
   }
 
   /**
@@ -272,7 +324,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public JsonElement removeProperty(String key) {
-    return getProperties().remove(key);
+    return properties().remove(key);
   }
 
   /**
@@ -283,7 +335,7 @@ public class Feature implements GeoJSON {
    * @since 1.0.0
    */
   public boolean hasProperty(String key) {
-    return getProperties().has(key);
+    return properties().has(key);
   }
 
   /**

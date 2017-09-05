@@ -47,8 +47,8 @@ public class MapboxCallHelper {
     List<String> coordinatesFormatted = new ArrayList<>();
     for (Point point : coordinates) {
       coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-        TextUtils.formatCoordinate(point.getCoordinates().getLongitude()),
-        TextUtils.formatCoordinate(point.getCoordinates().getLatitude())));
+        TextUtils.formatCoordinate(point.longitude()),
+        TextUtils.formatCoordinate(point.latitude())));
     }
 
     return TextUtils.join(";", coordinatesFormatted.toArray());

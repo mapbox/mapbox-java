@@ -1,5 +1,6 @@
 package com.mapbox.services.api.geocoding.v5.models;
 
+import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
@@ -21,37 +22,36 @@ import java.util.List;
  * @see <a href='geojson.org/geojson-spec.html#feature-objects'>Official GeoJSON Feature Specifications</a>
  * @since 1.0.0
  */
-public class CarmenFeature extends Feature {
+@AutoValue
+public abstract class CarmenFeature extends Feature {
 
-  private String text;
+
+
+  public abstract String text();
   @SerializedName("place_name")
-  private String placeName;
+  public abstract String placeName();
   @SerializedName("place_type")
-  private String[] placeType;
-  private double[] bbox;
-  private String address;
-  private double[] center;
-  private List<CarmenContext> context;
-  private double relevance;
+  public abstract String[] placeType();
+  public abstract double[] bbox();
+  public abstract String address();
+  public abstract double[] center();
+  public abstract List<CarmenContext> context();
+  public abstract double relevance();
   @SerializedName("matching_text")
-  private String matchingText;
+  public abstract String matchingText();
   @SerializedName("matching_place_name")
-  private String matchingPlaceName;
-  private String language;
+  public abstract String matchingPlaceName();
+  public abstract String language();
 
-  /**
-   * Empty constructor
-   */
-  public CarmenFeature() {
-    super(null, null, null);
-  }
 
-  /**
-   * Private constructor.
-   */
-  private CarmenFeature(Geometry geometry, JsonObject properties, String id) {
-    super(geometry, properties, id);
-  }
+
+
+
+
+
+
+
+
 
   /**
    * A string representing the feature in the requested language, if specified.

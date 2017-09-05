@@ -1,6 +1,6 @@
 package com.mapbox.services.api.rx.directionsmatrix.v1;
 
-import com.mapbox.services.api.directionsmatrix.v1.models.DirectionsMatrixResponse;
+import com.mapbox.services.api.matrix.v1.models.MatrixResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -33,7 +33,7 @@ public interface DirectionsMatrixServiceRx {
    * @since 2.1.0
    */
   @GET("directions-matrix/v1/{user}/{profile}/{coordinates}")
-  Observable<DirectionsMatrixResponse> getObservable(
+  Observable<MatrixResponse> getObservable(
     @Header("User-Agent") String userAgent,
     @Path("user") String user,
     @Path("profile") String profile,

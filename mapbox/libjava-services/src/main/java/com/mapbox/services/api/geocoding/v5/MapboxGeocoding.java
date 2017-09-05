@@ -1,144 +1,128 @@
 package com.mapbox.services.api.geocoding.v5;
 
-import com.google.gson.Gson;
+import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
-import com.mapbox.services.api.MapboxBuilder;
+import com.mapbox.services.Constants;
+import com.mapbox.services.api.MapboxAdapterFactory;
 import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.ServicesException;
+import com.mapbox.services.api.geocoding.v5.GeocodingCriteria.GeocodingModeCriteria;
+import com.mapbox.services.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
 import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.geojson.Geometry;
-import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.commons.utils.MapboxUtils;
 import com.mapbox.services.commons.utils.TextUtils;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 /**
- * The Mapbox geocoding client (v5).
+ * This class gives you access to both Mapbox forward and reverse geocoding.
+ * <p>
+ * Forward geocoding lets you convert location text into geographic coordinates, turning
+ * {@code 2 Lincoln Memorial Circle NW} into a {@link com.mapbox.services.commons.geojson.Point}
+ * with the coordinates {@code -77.050, 38.889}.
+ * <p>
+ * Reverse geocoding turns geographic coordinates into place names, turning {@code -77.050, 38.889}
+ * into {@code 2 Lincoln Memorial Circle NW}. These place names can vary from specific addresses to
+ * states and countries that contain the given coordinates.
+ * <p>
+ * TODO add docs about batch geocoding
  *
+ * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/geocoder/">Android
+ * Geocoding documentation</a>
  * @since 1.0.0
  */
-public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
+@AutoValue
+public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
-  protected Builder builder = null;
-  private GeocodingService service = null;
-  private Call<GeocodingResponse> call = null;
-  private Call<List<GeocodingResponse>> batchCall = null;
-  private Gson gson;
+  private Call<List<GeocodingResponse>> batchCall;
+  private Call<GeocodingResponse> call;
+  private GeocodingService service;
+  protected Builder builder;
 
-  /**
-   * Public constructor.
-   *
-   * @param builder {@link Builder} object.
-   * @since 1.0.0
-   */
-  protected MapboxGeocoding(Builder builder) {
-    this.builder = builder;
-  }
 
-  protected Gson getGson() {
-    // Gson instance with type adapters
-    if (gson == null) {
-      gson = new GsonBuilder()
-        .registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer())
-        .create();
-    }
-    return gson;
-  }
-
-  /**
-   * Used internally.
-   *
-   * @return Geocoding service.
-   * @since 1.0.0
-   */
-  public GeocodingService getService() {
+  private GeocodingService getService() {
     // No need to recreate it
     if (service != null) {
       return service;
     }
 
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(builder.getBaseUrl())
-      .addConverterFactory(GsonConverterFactory.create(getGson()));
+      .baseUrl(baseUrl())
+      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
+        .registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer())
+        .registerTypeAdapterFactory(MapboxAdapterFactory.create())
+        .create()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
     } else {
       retrofitBuilder.client(getOkHttpClient());
     }
-
     service = retrofitBuilder.build().create(GeocodingService.class);
     return service;
   }
 
-  /**
-   * Used internally.
-   *
-   * @return call
-   * @since 1.0.0
-   */
-  public Call<GeocodingResponse> getCall() {
+  private Call<GeocodingResponse> getCall() {
     // No need to recreate it
     if (call != null) {
       return call;
     }
 
-    if (builder.getQuery().contains(";")) {
+    if (mode().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
       throw new IllegalArgumentException("Use getBatchCall() for batch calls.");
     }
 
     call = getService().getCall(
-      getHeaderUserAgent(builder.getClientAppName()),
-      builder.getMode(),
-      builder.getQuery(),
-      builder.getAccessToken(),
-      builder.getCountry(),
-      builder.getProximity(),
-      builder.getGeocodingTypes(),
-      builder.getAutocomplete(),
-      builder.getBbox(),
-      builder.getLimit(),
-      builder.getLanguages());
+      getHeaderUserAgent(clientAppName()),
+      mode(),
+      query(),
+      accessToken(),
+      country(),
+      proximity(),
+      geocodingTypes(),
+      autocomplete(),
+      bbox(),
+      limit(),
+      languages());
 
     return call;
   }
 
-  /**
-   * Used internally.
-   *
-   * @return batch call
-   * @since 2.0.0
-   */
-  public Call<List<GeocodingResponse>> getBatchCall() {
+  private Call<List<GeocodingResponse>> getBatchCall() {
     // No need to recreate it
     if (batchCall != null) {
       return batchCall;
     }
 
-    if (!builder.getQuery().contains(";")) {
+    if (mode().contains(GeocodingCriteria.MODE_PLACES)) {
       throw new IllegalArgumentException("Use getCall() for non-batch calls.");
     }
 
     batchCall = getService().getBatchCall(
-      getHeaderUserAgent(builder.getClientAppName()),
-      builder.getMode(),
-      builder.getQuery(),
-      builder.getAccessToken(),
-      builder.getCountry(),
-      builder.getProximity(),
-      builder.getGeocodingTypes(),
-      builder.getAutocomplete(),
-      builder.getBbox(),
-      builder.getLimit(),
-      builder.getLanguages());
+      getHeaderUserAgent(clientAppName()),
+      mode(),
+      query(),
+      accessToken(),
+      country(),
+      proximity(),
+      geocodingTypes(),
+      autocomplete(),
+      bbox(),
+      limit(),
+      languages());
 
     return batchCall;
   }
@@ -227,395 +211,300 @@ public class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     return getBatchCall().clone();
   }
 
+  @NonNull
+  abstract String query();
+
+  @NonNull
+  abstract String mode();
+
+  @NonNull
+  abstract String accessToken();
+
+  @Nullable
+  abstract String country();
+
+  @Nullable
+  abstract String proximity();
+
+  @Nullable
+  abstract String geocodingTypes();
+
+  @Nullable
+  abstract Boolean autocomplete();
+
+  @Nullable
+  abstract String bbox();
+
+  @Nullable
+  abstract String limit();
+
+  @Nullable
+  abstract String languages();
+
+  @Nullable
+  abstract String clientAppName();
+
+  @NonNull
+  abstract String baseUrl();
+
+
   /**
-   * Builds your geocoder query by adding parameters.
+   * Build a new {@link MapboxGeocoding} object with the initial values set for
+   * {@link #baseUrl()} and {@link #mode()}.
+   *
+   * @return a {@link Builder} object for creating this object
+   * @since 3.0.0
+   */
+  public static Builder builder() {
+    return new AutoValue_MapboxGeocoding.Builder()
+      .baseUrl(Constants.BASE_API_URL)
+      .mode(GeocodingCriteria.MODE_PLACES);
+  }
+
+  /**
+   * Geocoding v5 builder
    *
    * @since 1.0.0
    */
-  public static class Builder<T extends Builder> extends MapboxBuilder {
+  @AutoValue.Builder
+  public abstract static class Builder {
 
-    // Required
-    private String accessToken;
-    private String query;
-    private String mode;
+    public Builder query(@NonNull Point point) {
+      query(String.format(Locale.US, "%s,%s",
+        TextUtils.formatCoordinate(point.longitude()),
+        TextUtils.formatCoordinate(point.latitude())));
+      return this;
+    }
 
-    // Optional (Retrofit will omit these from the request if they remain null)
-    private String country = null;
-    private String proximity = null;
-    private String geocodingTypes = null;
-    private Boolean autocomplete = null;
-    private String bbox = null;
-    private String limit = null;
-    private String[] languages = null;
+    public abstract Builder query(@NonNull String query);
 
     /**
-     * Constructor
+     * This sets the kind of geocoding result you desire, either ephemeral geocoding or batch
+     * geocoding.
+     * <p>
+     * Note tht batch geocoding's only available to users under a enterprise plan and will return an
+     * error code rather than a successful result.
+     * </p><p>
+     * Options avaliable to pass in include, {@link GeocodingCriteria#MODE_PLACES} for a ephemeral
+     * geocoding result (default) or {@link GeocodingCriteria#MODE_PLACES_PERMANENT} for enterprise
+     * batch geocoding.
+     * </p>
      *
+     * @param mode mapbox.places or mapbox.places-permanent for enterprise/batch geocoding
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public Builder() {
-      // Defaults
-      mode = GeocodingCriteria.MODE_PLACES;
+    public abstract Builder mode(@NonNull @GeocodingModeCriteria String mode);
+
+    /**
+     * Bias local results base on a provided {@link Point}. This oftentimes increases accuracy in
+     * the returned results.
+     *
+     * @param proximity a point defining the proximity you'd like to bias the results around
+     * @return this builder for chaining options together
+     * @see 1.0.0
+     */
+    public abstract Builder proximity(@NonNull Point proximity);
+
+    /**
+     * This optionally can be set to filter the results returned back after making your forward or
+     * reverse geocoding request. A null value can't be passed in and only values defined in
+     * {@link GeocodingTypeCriteria} are allowed.
+     * <p>
+     * Note that {@link GeocodingCriteria#TYPE_POI_LANDMARK} returns a subset of the results
+     * returned by {@link GeocodingCriteria#TYPE_POI}. More than one type can be specified.
+     * </p>
+     *
+     * @param geocodingTypes optionally filter the result types by one or more defined types inside
+     *                       the {@link GeocodingTypeCriteria}
+     * @return this builder for chaining options together
+     * @since 1.0.0
+     */
+    public abstract Builder geocodingTypes(
+      @NonNull @GeocodingTypeCriteria String... geocodingTypes);
+
+
+    public abstract Builder country(Locale country);
+
+    public abstract Builder country(String country);
+
+    /**
+     * This controls whether autocomplete results are included. Autocomplete results can partially
+     * match the query: for example, searching for {@code washingto} could include washington even
+     * though only the prefix matches. Autocomplete is useful for offering fast, type-ahead results
+     * in user interfaces.
+     * <p>
+     * If your queries represent complete addresses or place names, you can disable this behavior
+     * and exclude partial matches by setting this to false, the defaults true.
+     *
+     * @param autocomplete optionally set whether to allow returned results to attempt prediction of
+     *                     the full words prior to the user completing the search terms
+     * @return this builder for chaining options together
+     * @since 1.0.0
+     */
+    public abstract Builder autocomplete(Boolean autocomplete);
+
+    /**
+     * Limit the results to a defined bounding box. Unlike {@link #proximity()}, this will strictly
+     * limit results to within the bounding box only. If simple biasing is desired rather than a
+     * strict region, use proximity instead.
+     *
+     * @param northeast the northeast corner of the bounding box as a {@link Point}
+     * @param southwest the southwest corner of the bounding box as a {@link Point}
+     * @return this builder for chaining options together
+     * @since 1.0.0
+     */
+    public Builder bbox(Point northeast, Point southwest) {
+      bbox(southwest.longitude(), southwest.latitude(),
+        northeast.longitude(), northeast.latitude());
+      return this;
     }
 
     /**
-     * Required to call when building {@link MapboxGeocoding.Builder}
+     * Limit the results to a defined bounding box. Unlike {@link #proximity()}, this will strictly
+     * limit results to within the bounding box only. If simple biasing is desired rather than a
+     * strict region, use proximity instead.
      *
-     * @param accessToken Mapbox access token, you must have a Mapbox account in order to use
-     *                    this library.
-     * @return Builder
+     * @param minX the minX of bounding box when maps facing north
+     * @param minY the minY of bounding box when maps facing north
+     * @param maxX the maxX of bounding box when maps facing north
+     * @param maxY the maxY of bounding box when maps facing north
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    @Override
-    public T setAccessToken(String accessToken) {
-      this.accessToken = accessToken;
-      return (T) this;
-    }
-
-    /**
-     * The location equals the query.
-     *
-     * @param location query
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setLocation(String location) {
-      query = location;
-      return (T) this;
-    }
-
-    /**
-     * @param position {@link Position}
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setCoordinates(Position position) {
-      if (position == null) {
-        return (T) this;
-      }
-
-      query = String.format(Locale.US, "%s,%s",
-        TextUtils.formatCoordinate(position.getLongitude()),
-        TextUtils.formatCoordinate(position.getLatitude()));
-      return (T) this;
-    }
-
-    /**
-     * mapbox.places or mapbox.places-permanent for enterprise/batch geocoding.
-     *
-     * @param mode mapbox.places or mapbox.places-permanent for enterprise/batch geocoding.
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setMode(String mode) {
-      this.mode = mode;
-      return (T) this;
-    }
-
-    /**
-     * Country which you want the results to show up in.
-     *
-     * @param country ISO 3166 alpha 2 country code
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setCountry(String country) {
-      this.country = country;
-      return (T) this;
-    }
-
-    /**
-     * Countries which you want the results to show up in.
-     *
-     * @param countries ISO 3166 alpha 2 country codes, separated by commas.
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setCountries(String[] countries) {
-      this.country = TextUtils.join(",", countries);
-      return (T) this;
-    }
-
-    /**
-     * Location around which to bias results.
-     *
-     * @param position A {@link Position}.
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setProximity(Position position) {
-      if (position == null) {
-        return (T) this;
-      }
-      proximity = String.format(Locale.US, "%s,%s",
-        TextUtils.formatCoordinate(position.getLongitude()),
-        TextUtils.formatCoordinate(position.getLatitude()));
-      return (T) this;
-    }
-
-    /**
-     * Filter results by one or more type. Options are country, region, postcode, place,
-     * locality, neighborhood, address, poi, poi.landmark. Multiple options can be comma-separated.
-     *
-     * @param geocodingType String filtering the geocoder result types.
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setGeocodingType(String geocodingType) {
-      this.geocodingTypes = geocodingType;
-      return (T) this;
-    }
-
-    /**
-     * Filter results by one or more type. Options are country, region, postcode, place,
-     * locality, neighborhood, address, poi, poi.landmark. Multiple options can be comma-separated.
-     *
-     * @param geocodingType String array filtering the geocoder result types.
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setGeocodingTypes(String[] geocodingType) {
-      this.geocodingTypes = TextUtils.join(",", geocodingType);
-      return (T) this;
-    }
-
-    /**
-     * Whether or not to return autocomplete results.
-     *
-     * @param autocomplete true, if you want autocomplete results, else false. (Defaults true)
-     * @return Builder
-     * @since 1.0.0
-     */
-    public T setAutocomplete(boolean autocomplete) {
-      this.autocomplete = autocomplete;
-      return (T) this;
-    }
-
-    /**
-     * Bounding box within which to limit results.
-     *
-     * @param northeast The northeast corner of the bounding box as {@link Position}.
-     * @param southwest The southwest corner of the bounding box as {@link Position}.
-     * @return Builder
-     * @throws ServicesException Generic Exception for all things geocoding.
-     * @since 1.0.0
-     */
-    public T setBbox(Position northeast, Position southwest) throws ServicesException {
-      return setBbox(southwest.getLongitude(), southwest.getLatitude(),
-        northeast.getLongitude(), northeast.getLatitude());
-    }
-
-    /**
-     * Bounding box within which to limit results.
-     *
-     * @param minX The minX of bounding box when maps facing north.
-     * @param minY The minY of bounding box when maps facing north.
-     * @param maxX The maxX of bounding box when maps facing north.
-     * @param maxY The maxY of bounding box when maps facing north.
-     * @return Builder
-     * @throws ServicesException Generic Exception for all things geocoding.
-     * @since 1.0.0
-     */
-    public T setBbox(double minX, double minY, double maxX, double maxY) throws ServicesException {
-      if (minX == 0 && minY == 0 && maxX == 0 && maxY == 0) {
-        throw new ServicesException("You provided an empty bounding box");
-      }
-
-      this.bbox = String.format(Locale.US, "%s,%s,%s,%s",
+    public Builder bbox(@FloatRange(from = -180, to = 180) double minX,
+                        @FloatRange(from = -90, to = 90) double minY,
+                        @FloatRange(from = -180, to = 180) double maxX,
+                        @FloatRange(from = -90, to = 90) double maxY) {
+      bbox(String.format(Locale.US, "%s,%s,%s,%s",
         TextUtils.formatCoordinate(minX),
         TextUtils.formatCoordinate(minY),
         TextUtils.formatCoordinate(maxX),
-        TextUtils.formatCoordinate(maxY));
-      return (T) this;
+        TextUtils.formatCoordinate(maxY))
+      );
+      return this;
     }
 
     /**
-     * Limit the number of results returned. The default is 5 for forward geocoding and 1 for
-     * reverse geocoding.
+     * Limit the results to a defined bounding box. Unlike {@link #proximity()}, this will strictly
+     * limit results to within the bounding box only. If simple biasing is desired rather than a
+     * strict region, use proximity instead.
      *
-     * @param limit the integer value representing the amount of results desired.
-     * @return Builder
+     * @param bbox a String defining the bounding box for biasing results ordered in
+     *             {@code minX,minY,maxX,maxY}
+     * @return this builder for chaining options together
+     * @since 1.0.0
+     */
+    public abstract Builder bbox(@NonNull String bbox);
+
+    /**
+     * This optionally specifies the maximum number of results to return. For forward geocoding, the
+     * default is 5 and the maximum is 10. For reverse geocoding, the default is 1 and the maximum
+     * is 5. If a limit other than 1 is used for reverse geocoding, a single types option must also
+     * be specified.
+     *
+     * @param limit the number of returned results
+     * @return this builder for chaining options together
      * @since 2.0.0
      */
-    public T setLimit(int limit) {
-      if (limit == 0) {
-        return (T) this;
-      }
-      this.limit = String.format(Locale.US, "%d", limit);
-      return (T) this;
-    }
+    public abstract Builder limit(@IntRange(from = 1, to = 10) int limit);
 
     /**
-     * @return your Mapbox access token.
-     * @since 1.0.0
-     */
-    @Override
-    public String getAccessToken() {
-      return accessToken;
-    }
-
-    /**
-     * @return your geocoder query.
-     * @since 1.0.0
-     */
-    public String getQuery() {
-      return query;
-    }
-
-    /**
-     * @return mapbox.places or  mapbox.places-permanent for enterprise/batch geocoding.
-     * @since 1.0.0
-     */
-    public String getMode() {
-      return mode;
-    }
-
-    /**
-     * @return ISO 3166 alpha 2 country codes, separated by commas
-     * @since 1.0.0
-     */
-    public String getCountry() {
-      return country;
-    }
-
-    /**
-     * Location around which you biased the results.
+     * This optionally specifies the desired response language for user queries. For forward
+     * geocodes, results that match the requested language are favored over results in other
+     * languages. If more than one language tag is supplied, text in all requested languages will be
+     * returned. For forward geocodes with more than one language tag, only the first language will
+     * be used to weight results.
+     * <p>
+     * Any valid IETF language tag can be submitted, and a best effort will be made to return
+     * results in the requested language or languages, falling back first to similar and then to
+     * common languages in the event that text is not available in the requested language. In the
+     * event a fallback language is used, the language field will have a different value than the
+     * one requested.
+     * <p>
+     * Translation availability varies by language and region, for a full list of supported regions,
+     * see the link provided below.
      *
-     * @return String with the format longitude, latitude.
-     * @since 1.0.0
-     */
-    public String getProximity() {
-      return proximity;
-    }
-
-    /**
-     * If you filtered your results by one or more types you can get what those filters are by
-     * using this method.
-     *
-     * @return String with list of filters you used.
-     * @since 1.0.0
-     */
-    public String getGeocodingTypes() {
-      return geocodingTypes;
-    }
-
-    /**
-     * @return true if autocomplete results, else false.
-     * @since 1.0.0
-     */
-    public Boolean getAutocomplete() {
-      return autocomplete;
-    }
-
-    /**
-     * @return Bounding box within which the results are limited
-     * @since 1.0.0
-     */
-    public String getBbox() {
-      return bbox;
-    }
-
-    /**
-     * @return the integer value representing the amount of results desired.
+     * @param languages one or more locale's specifying the language you'd like results to support
+     * @return this builder for chaining options together
+     * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Supported languages
+     * </a>
      * @since 2.0.0
      */
-    public String getLimit() {
-      return limit;
+    public Builder languages(Locale... languages) {
+      languages(TextUtils.join(",", languages));
+      return this;
     }
 
     /**
-     * @return The locale in which results should be returned.
+     * This optionally specifies the desired response language for user queries. For forward
+     * geocodes, results that match the requested language are favored over results in other
+     * languages. If more than one language tag is supplied, text in all requested languages will be
+     * returned. For forward geocodes with more than one language tag, only the first language will
+     * be used to weight results.
+     * <p>
+     * Any valid IETF language tag can be submitted, and a best effort will be made to return
+     * results in the requested language or languages, falling back first to similar and then to
+     * common languages in the event that text is not available in the requested language. In the
+     * event a fallback language is used, the language field will have a different value than the
+     * one requested.
+     * <p>
+     * Translation availability varies by language and region, for a full list of supported regions,
+     * see the link provided below.
+     *
+     * @param languages a String specifying the language or languages you'd like results to support
+     * @return this builder for chaining options together
+     * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Supported languages
+     * </a>
      * @since 2.0.0
      */
-    public String getLanguages() {
-      if (languages == null || languages.length == 0) {
-        return null;
-      } else if (languages.length == 1) {
-        return languages[0];
-      }
-
-      return TextUtils.join(",", languages);
-    }
+    public abstract Builder languages(String languages);
 
     /**
-     * The locale in which results should be returned.
-     * <p>
-     * This property affects the languages of returned results; generally speaking,
-     * it does not determine which results are found. If the Geocoding API does not
-     * recognize the languages code, it may fall back to another languages or the default
-     * languages. Components other than the languages code, such as the country and
-     * script codes, are ignored.
-     * <p>
-     * By default, this property is set to `null`, causing results to be in the default
-     * languages.
-     * <p>
-     * This option is experimental.
+     * Required to call when this is being built. If no access token provided,
+     * {@link ServicesException} will be thrown.
      *
-     * @param language The locale in which results should be returned.
-     * @return the current MapboxBuilder instance
-     * @since 2.0.0
-     * @deprecated use {@link MapboxGeocoding.Builder#setLanguages(String...)} instead
-     * which allows for multiple languages
+     * @param accessToken Mapbox access token, You must have a Mapbox account inorder to use
+     *                    the Geocoding API
+     * @return this builder for chaining options together
+     * @since 1.0.0
      */
-    @Deprecated
-    public T setLanguage(String language) {
-      languages = new String[1];
-      this.languages[0] = language;
-      return (T) this;
-    }
+    public abstract Builder accessToken(@NonNull String accessToken);
 
     /**
-     * The locale in which results should be returned.
-     * <p>
-     * This property affects the languages of returned results; generally speaking,
-     * it does not determine which results are found. If the Geocoding API does not
-     * recognize the languages code, it may fall back to another languages or the default
-     * languages. Components other than the languages code, such as the country and
-     * script codes, are ignored. This API allows for multiple values.
-     * <p>
-     * By default, this property is set to `null`, causing results to be in the default
-     * languages.
-     * <p>
-     * This option is experimental.
+     * Base package name or other simple string identifier. Used inside the calls user agent header.
      *
-     * @param language The locale in which results should be returned.
-     * @return the current MapboxBuilder instance
-     * @since 2.2.0
+     * @param clientAppName base package name or other simple string identifier
+     * @return this builder for chaining options together
+     * @since 1.0.0
      */
-    public T setLanguages(String... language) {
-      this.languages = language;
-      return (T) this;
-    }
-
-    public T setClientAppName(String appName) {
-      super.clientAppName = appName;
-      return (T) this;
-    }
+    public abstract Builder clientAppName(@NonNull String clientAppName);
 
     /**
-     * Set the base url of the API.
+     * Optionally change the APIs base URL to something other then the default Mapbox one.
      *
      * @param baseUrl base url used as end point
-     * @return the current MapboxBuilder instance
-     * @since 2.0.0
-     */
-    @Override
-    public T setBaseUrl(String baseUrl) {
-      super.baseUrl = baseUrl;
-      return (T) this;
-    }
-
-    /**
-     * Build method
-     *
-     * @return MapboxGeocoding
-     * @throws ServicesException Generic Exception for all things geocoding.
+     * @return this builder for chaining options together
      * @since 1.0.0
      */
-    @Override
-    public MapboxGeocoding build() throws ServicesException {
-      validateAccessToken(accessToken);
-      return new MapboxGeocoding(this);
+    public abstract Builder baseUrl(@NonNull String baseUrl);
+
+    abstract MapboxGeocoding autoBuild();
+
+    public MapboxGeocoding build() {
+
+
+      // TODO format geocoding types
+      // TODO proximity
+      // TODO countries TextUtils.join(",", countries);
+
+      // Generate build so that we can check that values are valid.
+      MapboxGeocoding geocoding = autoBuild();
+
+      if (!MapboxUtils.isAccessTokenValid(geocoding.accessToken())) {
+        throw new ServicesException("Using Mapbox Services requires setting a valid access token.");
+      }
+      return geocoding;
     }
   }
 }

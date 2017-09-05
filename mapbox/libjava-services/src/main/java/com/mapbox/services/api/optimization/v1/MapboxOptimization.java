@@ -58,7 +58,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
   /**
    * Execute the call
    *
-   * @return The Directions Matrix v1 response
+   * @return The Directions Optimization v1 response
    * @throws IOException Signals that an I/O exception of some sort has occurred.
    * @since 2.1.0
    */
@@ -217,7 +217,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
   }
 
   /**
-   * Optimized Trips v1 builder
+   * Optimization v1 builder
    *
    * @since 2.1.0
    */
@@ -462,7 +462,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      */
     public Builder language(@Nullable Locale language) {
       if (language != null) {
-        language(language.toString());
+        language(language.getLanguage());
       }
       return this;
     }
@@ -543,10 +543,9 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * creates a new {@link MapboxOptimization} object with the values provided.
      *
      * @return a new instance of Mapbox Optimization
-     * @throws ServicesException when a provided parameter is detected to be incorrect
      * @since 2.1.0
      */
-    public MapboxOptimization build() throws ServicesException {
+    public MapboxOptimization build() {
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException("At least two coordinates must be provided with your API"
           + "request.");

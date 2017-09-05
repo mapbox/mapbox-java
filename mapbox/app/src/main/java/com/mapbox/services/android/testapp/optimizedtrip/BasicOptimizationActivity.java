@@ -3,6 +3,7 @@ package com.mapbox.services.android.testapp.optimizedtrip;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -10,14 +11,15 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.services.Constants;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
 import com.mapbox.services.api.optimization.v1.MapboxOptimization;
 import com.mapbox.services.api.optimization.v1.models.OptimizationResponse;
-import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,15 +30,16 @@ public class BasicOptimizationActivity extends AppCompatActivity implements OnMa
   private static final String LINE_SOURCE = "line-source";
   private static final String LINE_LAYER = "line-layer";
 
+  @BindView(R.id.mapView)
+  MapView mapView;
+
   private MapboxMap mapboxMap;
-  private MapView mapView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_basic_optimization);
-
-    mapView = (MapView) findViewById(R.id.mapView);
+    ButterKnife.bind(this);
     mapView.onCreate(savedInstanceState);
     mapView.getMapAsync(this);
   }
@@ -49,8 +52,8 @@ public class BasicOptimizationActivity extends AppCompatActivity implements OnMa
       .accessToken(Mapbox.getAccessToken())
       .source(DirectionsCriteria.SOURCE_FIRST)
       .destination(DirectionsCriteria.DESTINATION_LAST)
-      .coordinate(new Point(-77.03137, 38.91694))
-      .coordinate(new Point(-77.0159, 38.9496))
+      .coordinate(Point.fromLngLat(-77.03137, 38.91694))
+      .coordinate(Point.fromLngLat(-77.0159, 38.9496))
       .roundTrip(true)
       .distribution(3, 1)
       .bearing(0d, 180d)
@@ -77,8 +80,8 @@ public class BasicOptimizationActivity extends AppCompatActivity implements OnMa
 
   private void drawLine(String geometry) {
 
-    LineString linestring = LineString.fromPolyline(geometry, Constants.PRECISION_6);
-    GeoJsonSource source = new GeoJsonSource(LINE_SOURCE, Feature.fromGeometry(linestring));
+    LineString linestring = LineString.fromPolyline(geometry, 6);
+    GeoJsonSource source = new GeoJsonSource(LINE_SOURCE, linestring);
     mapboxMap.addSource(source);
 
     LineLayer layer = new LineLayer(LINE_LAYER, LINE_SOURCE).withProperties(

@@ -37,7 +37,7 @@ public class GeometryCollection implements GeoJSON {
    * @since 1.0.0
    */
   @Override
-  public String getType() {
+  public String type() {
     return type;
   }
 

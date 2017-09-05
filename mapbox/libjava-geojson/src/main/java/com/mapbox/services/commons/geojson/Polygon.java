@@ -1,108 +1,89 @@
 package com.mapbox.services.commons.geojson;
 
-import com.google.gson.GsonBuilder;
-import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
-import com.mapbox.services.commons.geojson.custom.PositionSerializer;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
 import com.mapbox.services.commons.models.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-/**
- * A Polygon is a type of {@link Geometry}.
- *
- * @see <a href='http://geojson.org/geojson-spec.html#polygon'>Official GeoJSON Polygon Specifications</a>
- * @since 1.0.0
- */
-public class Polygon implements Geometry<List<List<Position>>> {
+
+@AutoValue
+public abstract class Polygon implements Serializable {
 
   private final String type = "Polygon";
-  private List<List<Position>> coordinates;
 
-  /**
-   * Private constructor.
-   *
-   * @param coordinates List of {@link Position} making up the Polygon.
-   * @since 1.0.0
-   */
-  private Polygon(List<List<Position>> coordinates) {
-    this.coordinates = coordinates;
+  public static Polygon fromJson(@NonNull String json) {
+    return new Gson().fromJson(json, Polygon.class);
   }
 
-  /**
-   * Should always be "Polygon".
-   *
-   * @return String "Polygon".
-   * @since 1.0.0
-   */
-  @Override
-  public String getType() {
-    return type;
+  public static Polygon fromOuterInner(@NonNull LineString outer, @Nullable LineString... inner) {
+    isLinearRing(outer);
+    // If inner rings are set to null, return early.
+    if (inner == null) {
+      return new AutoValue_Polygon(outer, null);
+    }
+    for (LineString lineString : inner) {
+      isLinearRing(lineString);
+    }
+    return new AutoValue_Polygon(outer, Arrays.asList(inner));
   }
 
-  /**
-   * Get the list of {@link Position} making up the Polygon.
-   *
-   * @return List of {@link Position}.
-   * @since 1.0.0
-   */
-  @Override
-  public List<List<Position>> getCoordinates() {
+  public static Polygon fromLngLats(@NonNull List<List<Point>> coordinates) {
+    LineString outer = LineString.fromLngLats(coordinates.get(0));
+    if (coordinates.size() < 1) {
+      // No inner coordinates provided, returning early.
+      return new AutoValue_Polygon(outer, null);
+    }
+    List<LineString> inner = new ArrayList<>();
+    // Start at index 1 since the 0 index is our outer linestring.
+    for (List<Point> points : coordinates.subList(1, coordinates.size())) {
+      inner.add(LineString.fromLngLats(points));
+    }
+    return new AutoValue_Polygon(outer, inner);
+  }
+
+  @NonNull
+  public abstract LineString outer();
+
+  @Nullable
+  public abstract List<LineString> inner();
+
+  @NonNull
+  public List<List<Point>> coordinates() {
+    List<List<Point>> coordinates = new ArrayList<>();
+    coordinates.add(outer().coordinates());
+
+    if (inner() != null) {
+      for (LineString lineString : inner()) {
+        coordinates.add(lineString.coordinates());
+      }
+    }
     return coordinates;
   }
 
-  @Override
-  public void setCoordinates(List<List<Position>> coordinates) {
-    this.coordinates = coordinates;
+  public String type() {
+    return type;
   }
 
-  /**
-   * Creates a {@link Polygon} from a list of coordinates.
-   *
-   * @param coordinates List of {@link Position} coordinates.
-   * @return {@link Polygon}.
-   * @since 1.0.0
-   */
-  public static Polygon fromCoordinates(List<List<Position>> coordinates) {
-    return new Polygon(coordinates);
-  }
-
-  public static Polygon fromCoordinates(double[][][] coordinates) {
-    List<List<Position>> converted = new ArrayList<>(coordinates.length);
-    for (int i = 0; i < coordinates.length; i++) {
-      List<Position> innerList = new ArrayList<>(coordinates[i].length);
-      for (int j = 0; j < coordinates[i].length; j++) {
-        innerList.add(Position.fromCoordinates(coordinates[i][j]));
-      }
-      converted.add(innerList);
-    }
-
-    return fromCoordinates(converted);
-  }
-
-  /**
-   * Create a GeoJSON Polygon object from JSON.
-   *
-   * @param json String of JSON making up a Polygon.
-   * @return {@link Polygon} GeoJSON object.
-   * @since 1.0.0
-   */
-  public static Polygon fromJson(String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionDeserializer());
-    return gson.create().fromJson(json, Polygon.class);
-  }
-
-  /**
-   * Convert feature into JSON.
-   *
-   * @return String containing Polygon JSON.
-   * @since 1.0.0
-   */
-  @Override
   public String toJson() {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionSerializer());
-    return gson.create().toJson(this);
+    return new Gson().toJson(this);
+  }
+
+
+
+  private static boolean isLinearRing(LineString lineString) {
+    if (lineString.coordinates().size() < 4) {
+      throw new RuntimeException("LinearRings need to be made up of 4 or more coordinates.");
+    }
+    if (!(lineString.coordinates().get(0).equals(
+      lineString.coordinates().get(lineString.coordinates().size() - 1)))) {
+      throw new RuntimeException("LinearRings require first and last coordinate to be identical");
+    }
+    return true;
   }
 }

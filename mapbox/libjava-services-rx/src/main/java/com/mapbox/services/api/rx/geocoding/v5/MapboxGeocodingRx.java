@@ -8,7 +8,6 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -18,94 +17,94 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  * @since 2.0.0
  */
-public class MapboxGeocodingRx extends MapboxGeocoding {
-
-  private GeocodingServiceRx serviceRx = null;
-  private Observable<GeocodingResponse> observable = null;
-  private Observable<List<GeocodingResponse>> batchObservable = null;
-
-  public MapboxGeocodingRx(Builder builder) {
-    super(builder);
-  }
-
-  private GeocodingServiceRx getServiceRx() {
-    // No need to recreate it
-    if (serviceRx != null) {
-      return serviceRx;
-    }
-
-    // Retrofit instance
-    Retrofit retrofit = new Retrofit.Builder()
-      .client(getOkHttpClient())
-      .baseUrl(builder.getBaseUrl())
-      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-      .addConverterFactory(GsonConverterFactory.create(getGson()))
-      .build();
-
-    // Geocoding service
-    serviceRx = retrofit.create(GeocodingServiceRx.class);
-    return serviceRx;
-  }
-
-  public Observable<GeocodingResponse> getObservable() {
-    // No need to recreate it
-    if (observable != null) {
-      return observable;
-    }
-
-    if (builder.getQuery().contains(";")) {
-      throw new IllegalArgumentException("Use getBatchObservable() for batch calls.");
-    }
-
-    observable = getServiceRx().getObservable(
-      getHeaderUserAgent(builder.getClientAppName()),
-      builder.getMode(),
-      builder.getQuery(),
-      builder.getAccessToken(),
-      builder.getCountry(),
-      builder.getProximity(),
-      builder.getGeocodingTypes(),
-      builder.getAutocomplete(),
-      builder.getBbox(),
-      builder.getLimit(),
-      builder.getLanguages());
-
-    // Done
-    return observable;
-  }
-
-  public Observable<List<GeocodingResponse>> getBatchObservable() {
-    // No need to recreate it
-    if (batchObservable != null) {
-      return batchObservable;
-    }
-
-    if (!builder.getQuery().contains(";")) {
-      throw new IllegalArgumentException("Use getObservable() for non-batch calls.");
-    }
-
-    batchObservable = getServiceRx().getBatchObservable(
-      getHeaderUserAgent(builder.getClientAppName()),
-      builder.getMode(),
-      builder.getQuery(),
-      builder.getAccessToken(),
-      builder.getCountry(),
-      builder.getProximity(),
-      builder.getGeocodingTypes(),
-      builder.getAutocomplete(),
-      builder.getBbox(),
-      builder.getLimit(),
-      builder.getLanguages());
-
-    // Done
-    return batchObservable;
-  }
-
-  public static class Builder extends MapboxGeocoding.Builder<Builder> {
-    @Override
-    public MapboxGeocodingRx build() throws ServicesException {
-      super.build();
-      return new MapboxGeocodingRx(this);
-    }
-  }
-}
+public class MapboxGeocodingRx {}//extends MapboxGeocoding {
+//
+//  private GeocodingServiceRx serviceRx = null;
+//  private Observable<GeocodingResponse> observable = null;
+//  private Observable<List<GeocodingResponse>> batchObservable = null;
+//
+//  public MapboxGeocodingRx(Builder builder) {
+//    super(builder);
+//  }
+//
+//  private GeocodingServiceRx getServiceRx() {
+//    // No need to recreate it
+//    if (serviceRx != null) {
+//      return serviceRx;
+//    }
+//
+//    // Retrofit instance
+//    Retrofit retrofit = new Retrofit.Builder()
+//      .client(getOkHttpClient())
+//      .baseUrl(builder.getBaseUrl())
+//      .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//      .addConverterFactory(GsonConverterFactory.create(getGson()))
+//      .build();
+//
+//    // Geocoding service
+//    serviceRx = retrofit.create(GeocodingServiceRx.class);
+//    return serviceRx;
+//  }
+//
+//  public Observable<GeocodingResponse> getObservable() {
+//    // No need to recreate it
+//    if (observable != null) {
+//      return observable;
+//    }
+//
+//    if (builder.getQuery().contains(";")) {
+//      throw new IllegalArgumentException("Use getBatchObservable() for batch calls.");
+//    }
+//
+//    observable = getServiceRx().getObservable(
+//      getHeaderUserAgent(builder.getClientAppName()),
+//      builder.getMode(),
+//      builder.getQuery(),
+//      builder.getAccessToken(),
+//      builder.getCountry(),
+//      builder.getProximity(),
+//      builder.getGeocodingTypes(),
+//      builder.getAutocomplete(),
+//      builder.getBbox(),
+//      builder.getLimit(),
+//      builder.getLanguages());
+//
+//    // Done
+//    return observable;
+//  }
+//
+//  public Observable<List<GeocodingResponse>> getBatchObservable() {
+//    // No need to recreate it
+//    if (batchObservable != null) {
+//      return batchObservable;
+//    }
+//
+//    if (!builder.getQuery().contains(";")) {
+//      throw new IllegalArgumentException("Use getObservable() for non-batch calls.");
+//    }
+//
+//    batchObservable = getServiceRx().getBatchObservable(
+//      getHeaderUserAgent(builder.getClientAppName()),
+//      builder.getMode(),
+//      builder.getQuery(),
+//      builder.getAccessToken(),
+//      builder.getCountry(),
+//      builder.getProximity(),
+//      builder.getGeocodingTypes(),
+//      builder.getAutocomplete(),
+//      builder.getBbox(),
+//      builder.getLimit(),
+//      builder.getLanguages());
+//
+//    // Done
+//    return batchObservable;
+//  }
+//
+//  public static class Builder extends MapboxGeocoding.Builder<Builder> {
+//    @Override
+//    public MapboxGeocodingRx build() throws ServicesException {
+//      super.build();
+//      return new MapboxGeocodingRx(this);
+//    }
+//  }
+//}

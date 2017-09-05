@@ -66,7 +66,7 @@ public abstract class MapMatchingTracepoint implements Serializable {
    */
   @NonNull
   public Point location() {
-    return Point.fromCoordinates(rawLocation());
+    return Point.fromLngLat(rawLocation()[0], rawLocation()[1]);
   }
 
   /**

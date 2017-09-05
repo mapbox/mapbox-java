@@ -1,67 +1,61 @@
 package com.mapbox.services.commons.geojson;
 
-import com.mapbox.services.commons.models.Position;
-
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 public class PointTest extends BaseTest {
 
   private static final String SAMPLE_POINT_FIXTURE = "src/test/fixtures/sample-point.json";
 
   @Test
-  public void fromJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_POINT_FIXTURE)), Charset.forName("utf-8"));
-    Point geo = Point.fromJson(geojson);
-    assertEquals(geo.getType(), "Point");
-    assertEquals(geo.getCoordinates().getLongitude(), 100.0, 0.0);
-    assertEquals(geo.getCoordinates().getLatitude(), 0.0, 0.0);
-    assertFalse(geo.getCoordinates().hasAltitude());
+  public void sanityTest() throws Exception {
+    Point point = Point.fromLngLat(1.0, 1.0);
+    assertNotNull(point);
+  }
+
+  @Test
+  public void fromJson_doesDeserializeCorrectly() throws IOException {
+    String geoJson = loadJsonFixture(SAMPLE_POINT_FIXTURE);
+    Point point = Point.fromJson(geoJson);
+    assertEquals(point.type(), "Point");
+    assertEquals(point.longitude(), 100.0, 0.0);
+    assertEquals(point.latitude(), 0.0, 0.0);
+    assertFalse(point.hasAltitude());
   }
 
   @Test
   public void toJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_POINT_FIXTURE)), Charset.forName("utf-8"));
-    Point geo = Point.fromJson(geojson);
-    compareJson(geojson, geo.toJson());
+    String geoJson = loadJsonFixture(SAMPLE_POINT_FIXTURE);
+    Point point = Point.fromJson(geoJson);
+    compareJson(geoJson, point.toJson());
   }
 
   @Test
   public void checksEqualityFromCoordinates() {
-    Point point = Point.fromCoordinates(new double[] {100.0, 0.0});
-
+    Point point = Point.fromLngLat(100.0, 0.0);
     String pointCoordinates = obtainLiteralCoordinatesFrom(point);
-
     assertEquals("Point: \n"
       + "Position [longitude=100.0, latitude=0.0, altitude=NaN]\n", pointCoordinates);
   }
 
   @Test
   public void checksJsonEqualityFromCoordinates() {
-    Point point = Point.fromCoordinates(new double[] {100.0, 0.0});
-
+    Point point = Point.fromLngLat(100.0, 0.0);
     String pointJsonCoordinates = point.toJson();
-
     compareJson("{ \"type\": \"Point\", \"coordinates\": [100.0, 0.0] }", pointJsonCoordinates);
   }
 
   private String obtainLiteralCoordinatesFrom(Point point) {
-    Position thePoint = point.getCoordinates();
     StringBuilder literalCoordinates = new StringBuilder();
     literalCoordinates.append("Point: \n");
-
-    literalCoordinates.append(thePoint.toString());
+    literalCoordinates.append(point.toString());
     literalCoordinates.append("\n");
-
     return literalCoordinates.toString();
   }
-
 }
 

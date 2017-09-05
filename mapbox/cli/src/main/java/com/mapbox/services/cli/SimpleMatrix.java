@@ -14,10 +14,10 @@ public class SimpleMatrix {
   public static void main(String[] args) {
 
     MapboxMatrix matrix = MapboxMatrix.builder()
-      .coordinate(new Point(-77.03649, 38.89766)) // White house
-      .coordinate(new Point(-77.00910, 38.88981)) // Capitol
-      .coordinate(new Point(-77.04222, 38.84931)) // DCA
-      .coordinate(new Point(-77.04330, 38.90962)) // Dupont Circle
+      .coordinate(Point.fromLngLat(-77.03649, 38.89766)) // White house
+      .coordinate(Point.fromLngLat(-77.00910, 38.88981)) // Capitol
+      .coordinate(Point.fromLngLat(-77.04222, 38.84931)) // DCA
+      .coordinate(Point.fromLngLat(-77.04330, 38.90962)) // Dupont Circle
       .accessToken("")
       .build();
 

@@ -373,7 +373,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      */
     public Builder language(@Nullable Locale language) {
       if (language != null) {
-        language(language.toString());
+        language(language.getLanguage());
       }
       return this;
     }

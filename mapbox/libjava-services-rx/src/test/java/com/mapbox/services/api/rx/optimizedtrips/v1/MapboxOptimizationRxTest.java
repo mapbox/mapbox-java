@@ -2,7 +2,7 @@ package com.mapbox.services.api.rx.optimizedtrips.v1;
 
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria;
-import com.mapbox.services.api.optimizedtrips.v1.models.OptimizedTripsResponse;
+import com.mapbox.services.api.optimizedtrips.v1.models.OptimizationResponse;
 import com.mapbox.services.commons.models.Position;
 
 import org.hamcrest.junit.ExpectedException;
@@ -27,7 +27,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 
 import static org.junit.Assert.assertEquals;
 
-public class MapboxOptimizedTripsRxTest {
+public class MapboxOptimizationRxTest {
 
   public static final String OPTIMIZED_TRIP_FIXTURE = "../libjava-services/src/test/fixtures/optimized_trip.json";
 
@@ -83,7 +83,7 @@ public class MapboxOptimizedTripsRxTest {
       .setBaseUrl(mockUrl.toString())
       .build();
 
-    TestObserver<OptimizedTripsResponse> testObserver = new TestObserver<>();
+    TestObserver<OptimizationResponse> testObserver = new TestObserver<>();
     client.getObservable().subscribe(testObserver);
 
     testObserver.assertComplete();
@@ -93,7 +93,7 @@ public class MapboxOptimizedTripsRxTest {
     List<List<Object>> events = testObserver.getEvents();
     assertEquals(1, events.get(0).size());
 
-    OptimizedTripsResponse response = (OptimizedTripsResponse) events.get(0).get(0);
+    OptimizationResponse response = (OptimizationResponse) events.get(0).get(0);
     assertEquals(response.getCode(), DirectionsCriteria.RESPONSE_OK);
   }
 }
