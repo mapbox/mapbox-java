@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.mapbox.services.android.telemetry.MapboxEvent;
 import com.mapbox.services.android.telemetry.constants.GeoConstants;
+import com.mapbox.services.android.telemetry.navigation.MapboxNavigationEvent;
 import com.mapbox.services.android.telemetry.utils.MathUtils;
 
 import org.json.JSONArray;
@@ -149,9 +150,83 @@ public class TelemetryClient {
     for (Hashtable<String, Object> evt : events) {
       JSONObject jsonObject = new JSONObject();
 
-      for (String key : evt.keySet()) {
-        jsonObject.putOpt(key, evt.get(key));
-      }
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_SDK_IDENTIFIER, evt.get(MapboxNavigationEvent.KEY_SDK_IDENTIFIER));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_SDK_VERSION, evt.get(MapboxNavigationEvent.KEY_SDK_VERSION));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_EVENT_VERSION, evt.get(MapboxNavigationEvent.KEY_EVENT_VERSION));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_SESSION_IDENTIFIER,
+        evt.get(MapboxNavigationEvent.KEY_SESSION_IDENTIFIER));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_ORIGINAL_REQUEST_IDENTIFIER,
+        evt.get(MapboxNavigationEvent.KEY_ORIGINAL_REQUEST_IDENTIFIER));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_REQUEST_IDENTIFIER,
+        evt.get(MapboxNavigationEvent.KEY_REQUEST_IDENTIFIER));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_LAT, evt.get(MapboxNavigationEvent.KEY_LAT));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_LNG, evt.get(MapboxNavigationEvent.KEY_LNG));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_ORIGINAL_GEOMETRY,
+        evt.get(MapboxNavigationEvent.KEY_ORIGINAL_GEOMETRY));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_ORIGINAL_ESTIMATED_DISTANCE,
+        evt.get(MapboxNavigationEvent.KEY_ORIGINAL_ESTIMATED_DISTANCE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_ORIGINAL_ESTIMATED_DURATION,
+        evt.get(MapboxNavigationEvent.KEY_ORIGINAL_ESTIMATED_DURATION));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_AUDIO_TYPE, evt.get(MapboxNavigationEvent.KEY_AUDIO_TYPE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_GEOMETRY, evt.get(MapboxNavigationEvent.KEY_GEOMETRY));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_CREATED, evt.get(MapboxNavigationEvent.KEY_CREATED));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_PROFILE, evt.get(MapboxNavigationEvent.KEY_PROFILE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_SIMULATION, evt.get(MapboxNavigationEvent.KEY_SIMULATION));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_ESTIMATED_DISTANCE,
+        evt.get(MapboxNavigationEvent.KEY_ESTIMATED_DISTANCE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_ESTIMATED_DURATION,
+        evt.get(MapboxNavigationEvent.KEY_ESTIMATED_DURATION));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_REROUTE_COUNT, evt.get(MapboxNavigationEvent.KEY_REROUTE_COUNT));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_VOLUME_LEVEL, evt.get(MapboxNavigationEvent.KEY_VOLUME_LEVEL));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS,
+        evt.get(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN,
+        evt.get(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_CONNECTIVITY, evt.get(MapboxNavigationEvent.KEY_CONNECTIVITY));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_FEEDBACK_TYPE, evt.get(MapboxNavigationEvent.KEY_FEEDBACK_TYPE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_DESCRIPTIONS, evt.get(MapboxNavigationEvent.KEY_DESCRIPTIONS));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_LOCATIONS_BEFORE,
+        evt.get(MapboxNavigationEvent.KEY_LOCATIONS_BEFORE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_LOCATIONS_AFTER, evt.get(MapboxNavigationEvent.KEY_LOCATIONS_AFTER));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_USER_ID, evt.get(MapboxNavigationEvent.KEY_USER_ID));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_FEEDBACK_ID, evt.get(MapboxNavigationEvent.KEY_FEEDBACK_ID));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_SCREENSHOT, evt.get(MapboxNavigationEvent.KEY_SCREENSHOT));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_NEW_DISTANCE_REMAINING,
+        evt.get(MapboxNavigationEvent.KEY_NEW_DISTANCE_REMAINING));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_NEW_DURATION_REMAINING,
+        evt.get(MapboxNavigationEvent.KEY_NEW_DURATION_REMAINING));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_NEW_GEOMETRY, evt.get(MapboxNavigationEvent.KEY_NEW_GEOMETRY));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_START_TIMESTAMP, evt.get(MapboxNavigationEvent.KEY_START_TIMESTAMP));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_DISTANCE_COMPLETED,
+        evt.get(MapboxNavigationEvent.KEY_DISTANCE_COMPLETED));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_DISTANCE_REMAINING,
+        evt.get(MapboxNavigationEvent.KEY_DISTANCE_REMAINING));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_DURATION_REMAINING,
+        evt.get(MapboxNavigationEvent.KEY_DURATION_REMAINING));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_SECONDS_SINCE_LAST_REROUTE,
+        evt.get(MapboxNavigationEvent.KEY_SECONDS_SINCE_LAST_REROUTE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_ARRIVAL_TIMESTAMP,
+        evt.get(MapboxNavigationEvent.KEY_ARRIVAL_TIMESTAMP));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_STEP, evt.get(MapboxNavigationEvent.KEY_STEP));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_STEP_COUNT, evt.get(MapboxNavigationEvent.KEY_STEP_COUNT));
+
+      // Step metadata
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_UPCOMING_INSTRUCTION,
+        evt.get(MapboxNavigationEvent.KEY_UPCOMING_INSTRUCTION));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_UPCOMING_MODIFIER,
+        evt.get(MapboxNavigationEvent.KEY_UPCOMING_MODIFIER));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_UPCOMING_NAME, evt.get(MapboxNavigationEvent.KEY_UPCOMING_NAME));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_PREVIOUS_INSTRUCTION,
+        evt.get(MapboxNavigationEvent.KEY_PREVIOUS_INSTRUCTION));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_PREVIOUS_TYPE, evt.get(MapboxNavigationEvent.KEY_PREVIOUS_TYPE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_PREVIOUS_MODIFIER,
+        evt.get(MapboxNavigationEvent.KEY_PREVIOUS_MODIFIER));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_PREVIOUS_NAME, evt.get(MapboxNavigationEvent.KEY_PREVIOUS_NAME));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_UPCOMING_TYPE, evt.get(MapboxNavigationEvent.KEY_UPCOMING_TYPE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_DURATION, evt.get(MapboxNavigationEvent.KEY_DURATION));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_DISTANCE, evt.get(MapboxNavigationEvent.KEY_DISTANCE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_ORIGINAL_STEP_COUNT,
+        evt.get(MapboxNavigationEvent.KEY_ORIGINAL_STEP_COUNT));
 
       // Build the JSON but only if there's a value for it in the evt
       jsonObject.putOpt(MapboxEvent.KEY_EVENT, evt.get(MapboxEvent.KEY_EVENT));
