@@ -2,6 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.2.3
+
+- Introduce setDebugLoggingEnabled API [#549](https://github.com/mapbox/mapbox-java/pull/549)
+
 ### v2.2.2
 
 - Adds setter for session rotation time [#544](https://github.com/mapbox/mapbox-java/pull/544)
