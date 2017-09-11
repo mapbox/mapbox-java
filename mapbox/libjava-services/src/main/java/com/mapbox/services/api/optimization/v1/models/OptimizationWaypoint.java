@@ -60,7 +60,7 @@ public abstract class OptimizationWaypoint implements Serializable {
   /**
    * A {@link Point} representing this waypoint location.
    *
-   * @return GeoJSON Point representing this waypoint location
+   * @return GeoJson Point representing this waypoint location
    * @since 3.0.0
    */
   @NonNull
@@ -137,7 +137,7 @@ public abstract class OptimizationWaypoint implements Serializable {
      *
      * @param rawLocation a double array with a length of two, index 0 being the longitude and
      *                    index 1 being latitude.
-     * @return a double array used for creating the public {@link Point} object
+
      * @since 3.0.0
      */
     public abstract Builder rawLocation(double[] rawLocation);

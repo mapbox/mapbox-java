@@ -1,6 +1,7 @@
 buildscript {
   repositories {
     maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://plugins.gradle.org/m2/" }
     maven { url 'https://maven.google.com' }
     jcenter()
   }
@@ -8,6 +9,7 @@ buildscript {
   dependencies {
     classpath 'com.android.tools.build:gradle:2.3.3'
     classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.7.3'
+    classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.8'
   }
 }
 
@@ -27,3 +29,4 @@ task clean(type: Delete) {
 }
 
 apply from: rootProject.file('dependencies.gradle')
+apply plugin: 'net.ltgt.errorprone'

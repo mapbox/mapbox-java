@@ -1,106 +1,139 @@
 package com.mapbox.services.commons.geojson;
 
-import com.mapbox.services.commons.models.Position;
-
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class MultiPolygonTest extends BaseTest {
+  private static final String SAMPLE_MULTIPOLYGON = "sample-multipolygon.json";
 
-  private static final String SAMPLE_MULTIPOLYGON_FIXTURE = "src/test/fixtures/sample-multipolygon.json";
+  @Test
+  public void sanity() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    points.add(Point.fromLngLat(3.0, 4.0));
+    points.add(Point.fromLngLat(1.0, 2.0));
+    LineString outer = LineString.fromLngLats(points);
+    List<Polygon> polygons = new ArrayList<>();
+    polygons.add(Polygon.fromOuterInner(outer));
+    polygons.add(Polygon.fromOuterInner(outer));
+    MultiPolygon multiPolygon = MultiPolygon.fromPolygons(polygons);
+    assertNotNull(multiPolygon);
+  }
+
+  @Test
+  public void bbox_nullWhenNotSet() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    points.add(Point.fromLngLat(3.0, 4.0));
+    points.add(Point.fromLngLat(1.0, 2.0));
+    LineString outer = LineString.fromLngLats(points);
+    List<Polygon> polygons = new ArrayList<>();
+    polygons.add(Polygon.fromOuterInner(outer));
+    polygons.add(Polygon.fromOuterInner(outer));
+    MultiPolygon multiPolygon = MultiPolygon.fromPolygons(polygons);
+    assertNull(multiPolygon.bbox());
+  }
+
+  @Test
+  public void bbox_doesNotSerializeWhenNotPresent() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    points.add(Point.fromLngLat(3.0, 4.0));
+    points.add(Point.fromLngLat(1.0, 2.0));
+    LineString outer = LineString.fromLngLats(points);
+    List<Polygon> polygons = new ArrayList<>();
+    polygons.add(Polygon.fromOuterInner(outer));
+    polygons.add(Polygon.fromOuterInner(outer));
+    MultiPolygon multiPolygon = MultiPolygon.fromPolygons(polygons);
+    compareJson(multiPolygon.toJson(),
+      "{\"type\":\"MultiPolygon\","
+        + "\"coordinates\":[[[[1,2],[2,3],[3,4],[1,2]]],[[[1,2],[2,3],[3,4],[1,2]]]]}");
+  }
+
+  @Test
+  public void bbox_returnsCorrectBbox() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    points.add(Point.fromLngLat(3.0, 4.0));
+    points.add(Point.fromLngLat(1.0, 2.0));
+    LineString outer = LineString.fromLngLats(points);
+
+    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    List<Polygon> polygons = new ArrayList<>();
+    polygons.add(Polygon.fromOuterInner(outer));
+    polygons.add(Polygon.fromOuterInner(outer));
+    MultiPolygon multiPolygon = MultiPolygon.fromPolygons(polygons, bbox);
+    assertNotNull(multiPolygon.bbox());
+    assertEquals(4, multiPolygon.bbox().length);
+    assertEquals(1.0, multiPolygon.bbox()[0], DELTA);
+    assertEquals(2.0, multiPolygon.bbox()[1], DELTA);
+    assertEquals(3.0, multiPolygon.bbox()[2], DELTA);
+    assertEquals(4.0, multiPolygon.bbox()[3], DELTA);
+  }
+
+  @Test
+  public void bbox_doesSerializeWhenPresent() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    points.add(Point.fromLngLat(3.0, 4.0));
+    points.add(Point.fromLngLat(1.0, 2.0));
+    LineString outer = LineString.fromLngLats(points);
+
+    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    List<Polygon> polygons = new ArrayList<>();
+    polygons.add(Polygon.fromOuterInner(outer));
+    polygons.add(Polygon.fromOuterInner(outer));
+    MultiPolygon multiPolygon = MultiPolygon.fromPolygons(polygons, bbox);
+    compareJson(multiPolygon.toJson(),
+      "{\"type\":\"MultiPolygon\",\"bbox\":[1.0,2.0,3.0,4.0],"
+        + "\"coordinates\":[[[[1,2],[2,3],[3,4],[1,2]]],[[[1,2],[2,3],[3,4],[1,2]]]]}");
+  }
+
+  @Test
+  public void testSerializable() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    points.add(Point.fromLngLat(3.0, 4.0));
+    points.add(Point.fromLngLat(1.0, 2.0));
+    LineString outer = LineString.fromLngLats(points);
+
+    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    List<Polygon> polygons = new ArrayList<>();
+    polygons.add(Polygon.fromOuterInner(outer));
+    polygons.add(Polygon.fromOuterInner(outer));
+    MultiPolygon multiPolygon = MultiPolygon.fromPolygons(polygons, bbox);
+    byte[] bytes = serialize(multiPolygon);
+    assertEquals(multiPolygon, deserialize(bytes, MultiPolygon.class));
+  }
 
   @Test
   public void fromJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_MULTIPOLYGON_FIXTURE)), Charset.forName("utf-8"));
-    MultiPolygon geo = MultiPolygon.fromJson(geojson);
-    assertEquals(geo.getType(), "MultiPolygon");
-    assertEquals(geo.getCoordinates().get(0).get(0).get(0).getLongitude(), 102.0, 0.0);
-    assertEquals(geo.getCoordinates().get(0).get(0).get(0).getLatitude(), 2.0, 0.0);
-    assertFalse(geo.getCoordinates().get(0).get(0).get(0).hasAltitude());
+    final String json = loadJsonFixture(SAMPLE_MULTIPOLYGON);
+    MultiPolygon geo = MultiPolygon.fromJson(json);
+    assertEquals(geo.type(), "MultiPolygon");
+    assertEquals(geo.coordinates().get(0).get(0).get(0).longitude(), 102.0, DELTA);
+    assertEquals(geo.coordinates().get(0).get(0).get(0).latitude(), 2.0, DELTA);
+    assertFalse(geo.coordinates().get(0).get(0).get(0).hasAltitude());
   }
 
   @Test
   public void toJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_MULTIPOLYGON_FIXTURE)), Charset.forName("utf-8"));
-    MultiPolygon geo = MultiPolygon.fromJson(geojson);
-    compareJson(geojson, geo.toJson());
+    final String json = loadJsonFixture(SAMPLE_MULTIPOLYGON);
+    MultiPolygon geo = MultiPolygon.fromJson(json);
+    compareJson(json, geo.toJson());
   }
-
-  @Test
-  public void checksEqualityFromCoordinates() {
-    MultiPolygon multiPolygon = MultiPolygon.fromCoordinates(new double[][][][] {
-      {{{102.0, 2.0}, {103.0, 2.0}, {103.0, 3.0}, {102.0, 3.0}, {102.0, 2.0}}},
-      {{{100.0, 0.0}, {101.0, 0.0}, {101.0, 1.0}, {100.0, 1.0}, {100.0, 0.0}},
-        {{100.2, 0.2}, {100.8, 0.2}, {100.8, 0.8}, {100.2, 0.8}, {100.2, 0.2}}}
-    });
-
-    String multiPolygonCoordinates = obtainLiteralCoordinatesFrom(multiPolygon);
-
-    assertEquals("Polygons: \n"
-      + "Polygon: \n"
-      + "Lines: \n"
-      + "Position [longitude=102.0, latitude=2.0, altitude=NaN]\n"
-      + "Position [longitude=103.0, latitude=2.0, altitude=NaN]\n"
-      + "Position [longitude=103.0, latitude=3.0, altitude=NaN]\n"
-      + "Position [longitude=102.0, latitude=3.0, altitude=NaN]\n"
-      + "Position [longitude=102.0, latitude=2.0, altitude=NaN]\n"
-      + "Polygon: \n"
-      + "Lines: \n"
-      + "Position [longitude=100.0, latitude=0.0, altitude=NaN]\n"
-      + "Position [longitude=101.0, latitude=0.0, altitude=NaN]\n"
-      + "Position [longitude=101.0, latitude=1.0, altitude=NaN]\n"
-      + "Position [longitude=100.0, latitude=1.0, altitude=NaN]\n"
-      + "Position [longitude=100.0, latitude=0.0, altitude=NaN]\n"
-      + "Lines: \n"
-      + "Position [longitude=100.2, latitude=0.2, altitude=NaN]\n"
-      + "Position [longitude=100.8, latitude=0.2, altitude=NaN]\n"
-      + "Position [longitude=100.8, latitude=0.8, altitude=NaN]\n"
-      + "Position [longitude=100.2, latitude=0.8, altitude=NaN]\n"
-      + "Position [longitude=100.2, latitude=0.2, altitude=NaN]\n", multiPolygonCoordinates);
-  }
-
-  @Test
-  public void checksJsonEqualityFromCoordinates() {
-    MultiPolygon multiPolygon = MultiPolygon.fromCoordinates(new double[][][][] {
-      {{{102.0, 2.0}, {103.0, 2.0}, {103.0, 3.0}, {102.0, 3.0}, {102.0, 2.0}}},
-      {{{100.0, 0.0}, {101.0, 0.0}, {101.0, 1.0}, {100.0, 1.0}, {100.0, 0.0}},
-        {{100.2, 0.2}, {100.8, 0.2}, {100.8, 0.8}, {100.2, 0.8}, {100.2, 0.2}}}
-    });
-
-    String multiPolygonJsonCoordinates = multiPolygon.toJson();
-
-    compareJson("{ \"type\": \"MultiPolygon\",\n"
-      + "\"coordinates\": [\n"
-      + "[[[102.0, 2.0], [103.0, 2.0], [103.0, 3.0], [102.0, 3.0], [102.0, 2.0]]],\n"
-      + "[[[100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]],\n"
-      + "[[100.2, 0.2], [100.8, 0.2], [100.8, 0.8], [100.2, 0.8], [100.2, 0.2]]]\n"
-      + "]\n"
-      + "}", multiPolygonJsonCoordinates);
-  }
-
-  private String obtainLiteralCoordinatesFrom(MultiPolygon multiPolygon) {
-    List<List<List<Position>>> multiPolygonCoordinates = multiPolygon.getCoordinates();
-    StringBuilder literalCoordinates = new StringBuilder();
-    literalCoordinates.append("Polygons: \n");
-    for (List<List<Position>> polygon : multiPolygonCoordinates) {
-      literalCoordinates.append("Polygon: \n");
-      for (List<Position> lines : polygon) {
-        literalCoordinates.append("Lines: \n");
-        for (Position point : lines) {
-          literalCoordinates.append(point.toString());
-          literalCoordinates.append("\n");
-        }
-      }
-    }
-    return literalCoordinates.toString();
-  }
-
 }

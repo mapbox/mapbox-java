@@ -1,7 +1,7 @@
 package com.mapbox.services.api.directions.v5;
 
+import com.mapbox.services.api.directions.v5.MapboxDirections.Builder;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -16,32 +16,31 @@ import retrofit2.http.Query;
 public interface DirectionsService {
 
   /**
-   * Call-based interface
+   * Constructs the html call using the information passed in through the {@link Builder}.
    *
-   * @param userAgent        The user.
-   * @param user             The user.
-   * @param profile          The profile directions should use.
-   * @param coordinates      The coordinates the route should follow.
-   * @param accessToken      Mapbox access token.
-   * @param alternatives     Define whether you want to recieve more then one route.
-   * @param geometries       Route geometry.
-   * @param overview         Route full, simplified, etc.
-   * @param radiuses         start at the most efficient point within the radius.
-   * @param steps            Define if you'd like the route steps.
-   * @param bearings         Used to filter the road segment the waypoint will be placed on by direction and dictates
-   *                         the angle of approach
-   * @param continueStraight Define whether the route should continue straight even if the route
-   *                         will be slower.  @return A retrofit Call object
-   * @param annotations      An annotations object that contains additional details about each line segment along the
-   *                         route geometry. Each entry in an annotations field corresponds to a coordinate along the
-   *                         route geometry.
-   * @param language         Language of returned turn-by-turn text instructions.
-   * @return The {@link DirectionsResponse} in a Call wrapper.
+   * @param userAgent        the user
+   * @param user             the user
+   * @param profile          the profile directions should use
+   * @param coordinates      the coordinates the route should follow
+   * @param accessToken      Mapbox access token
+   * @param alternatives     define whether you want to receive more then one route
+   * @param geometries       route geometry
+   * @param overview         route full, simplified, etc.
+   * @param radiuses         start at the most efficient point within the radius
+   * @param steps            define if you'd like the route steps
+   * @param bearings         used to filter the road segment the waypoint will be placed on by
+   *                         direction and dictates the angle of approach
+   * @param continueStraight define whether the route should continue straight even if the route
+   *                         will be slower
+   * @param annotations      an annotations object that contains additional details about each line
+   *                         segment along the route geometry. Each entry in an annotations field
+   *                         corresponds to a coordinate along the route geometry
+   * @param language         language of returned turn-by-turn text instructions
+   * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */
   @GET("directions/v5/{user}/{profile}/{coordinates}")
   Call<DirectionsResponse> getCall(
-    // NOTE: DirectionsServiceRx should be updated as well
     @Header("User-Agent") String userAgent,
     @Path("user") String user,
     @Path("profile") String profile,

@@ -136,7 +136,7 @@ public class Tidy {
 //  /**
 //   * Method that performs the tidying of geojson route passed in. It uses the parameters set when
 //   * constructing the {@link Tidy} object or the values set using their respected setters. The
-//   * result returned will be a GeoJSON FeatureCollection with similar coordinates removed.
+//   * result returned will be a GeoJson FeatureCollection with similar coordinates removed.
 //   *
 //   * @param geojson {@link FeatureCollection} representing your route that you'd like to tidy up
 //   *                and remove similar unnecessary coordinates from.

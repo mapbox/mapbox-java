@@ -58,8 +58,8 @@ public class OptimizationResponseTest extends BaseTest {
   @Test
   public void optimizationResponse_doesDeserializeFromJsonProperly() throws Exception {
     MapboxOptimization client = MapboxOptimization.builder()
-      .coordinate(new Point(1.0, 1.0))
-      .coordinate(new Point(2.0, 2.0))
+      .coordinate(Point.fromLngLat(1.0, 1.0))
+      .coordinate(Point.fromLngLat(2.0, 2.0))
       .accessToken("pk.XXX")
       .baseUrl(mockUrl.toString())
       .build();
@@ -84,8 +84,8 @@ public class OptimizationResponseTest extends BaseTest {
   @Test
   public void testSerializable() throws IOException, ClassNotFoundException {
     MapboxOptimization client = MapboxOptimization.builder()
-      .coordinate(new Point(1.0, 1.0))
-      .coordinate(new Point(2.0, 2.0))
+      .coordinate(Point.fromLngLat(1.0, 1.0))
+      .coordinate(Point.fromLngLat(2.0, 2.0))
       .baseUrl(mockUrl.toString())
       .accessToken("pk.XXX")
       .build();

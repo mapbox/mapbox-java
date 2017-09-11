@@ -1,52 +1,116 @@
 package com.mapbox.services.commons.geojson;
 
 import com.google.gson.JsonObject;
-import com.mapbox.services.commons.models.Position;
-
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class FeatureTest extends BaseTest {
 
-  private static final String SAMPLE_FEATURE_FIXTURE = "src/test/fixtures/sample-feature.json";
+  private static final String SAMPLE_FEATURE = "sample-feature.json";
+
+  @Test
+  public void sanity() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    Feature feature = Feature.fromGeometry(lineString);
+    assertNotNull(feature);
+  }
+
+  @Test
+  public void bbox_nullWhenNotSet() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    Feature feature = Feature.fromGeometry(lineString);
+    assertNull(feature.bbox());
+  }
+
+  @Test
+  public void bbox_doesNotSerializeWhenNotPresent() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    Feature feature = Feature.fromGeometry(lineString);
+    compareJson(feature.toJson(),
+      "{\"type\":\"Feature\",\"geometry\":{\"type\":"
+        + "\"LineString\",\"coordinates\":[[1,2],[2,3]]},\"properties\":{}}");
+  }
+
+  @Test
+  public void bbox_returnsCorrectBbox() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    Feature feature = Feature.fromGeometry(lineString, bbox);
+    assertNotNull(feature.bbox());
+    assertEquals(1.0, feature.bbox().west(), DELTA);
+    assertEquals(2.0, feature.bbox().south(), DELTA);
+    assertEquals(3.0, feature.bbox().east(), DELTA);
+    assertEquals(4.0, feature.bbox().north(), DELTA);
+  }
+
+  @Test
+  public void bbox_doesSerializeWhenPresent() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    Feature feature = Feature.fromGeometry(lineString, bbox);
+    compareJson(feature.toJson(),
+      "{\"type\":\"Feature\",\"bbox\":[1.0,2.0,3.0,4.0],\"geometry\":"
+        + "{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]},\"properties\":{}}");
+  }
 
   @Test
   public void fromJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_FEATURE_FIXTURE)), Charset.forName("utf-8"));
-    Feature geo = Feature.fromJson(geojson);
-    assertEquals(geo.getType(), "Feature");
-    assertEquals(geo.getGeometry().getType(), "Point");
-    assertEquals(geo.getProperties().get("name").getAsString(), "Dinagat Islands");
+    final String json = loadJsonFixture(SAMPLE_FEATURE);
+    Feature geo = Feature.fromJson(json);
+    assertEquals(geo.type(), "Feature");
+    assertEquals(geo.geometry().type(), "Point");
+    assertEquals(geo.properties().get("name").getAsString(), "Dinagat Islands");
   }
 
   @Test
   public void toJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_FEATURE_FIXTURE)), Charset.forName("utf-8"));
-    Feature geo = Feature.fromJson(geojson);
-    compareJson(geojson, geo.toJson());
+    final String json = loadJsonFixture(SAMPLE_FEATURE);
+    Feature geo = Feature.fromJson(json);
+    compareJson(json, geo.toJson());
   }
 
   @Test
   public void testNullProperties() {
-    List<Position> coordinates = Arrays.asList(Position.fromCoordinates(0.1, 2.3), Position.fromCoordinates(4.5, 6.7));
-    LineString line = LineString.fromCoordinates(coordinates);
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(0.1, 2.3));
+    coordinates.add(Point.fromLngLat(4.5, 6.7));
+    LineString line = LineString.fromLngLats(coordinates);
     Feature feature = Feature.fromGeometry(line);
     assertTrue(feature.toJson().contains("\"properties\":{}"));
   }
 
   @Test
   public void testNonNullProperties() {
-    List<Position> coordinates = Arrays.asList(Position.fromCoordinates(0.1, 2.3), Position.fromCoordinates(4.5, 6.7));
-    LineString line = LineString.fromCoordinates(coordinates);
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(0.1, 2.3));
+    coordinates.add(Point.fromLngLat(4.5, 6.7));
+    LineString line = LineString.fromLngLats(coordinates);
     JsonObject properties = new JsonObject();
     properties.addProperty("key", "value");
     Feature feature = Feature.fromGeometry(line, properties);

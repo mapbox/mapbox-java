@@ -1,5 +1,6 @@
 package com.mapbox.services.api.geocoding.v5;
 
+import com.mapbox.services.api.geocoding.v5.MapboxGeocoding.Builder;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import retrofit2.http.Query;
 public interface GeocodingService {
 
   /**
-   * Call-based interface
+   * Constructs the html call using the information passed in through the {@link Builder}.
    *
    * @param userAgent    The user
    * @param mode         mapbox.places or mapbox.places-permanent for enterprise geocoding.
@@ -37,7 +38,6 @@ public interface GeocodingService {
    */
   @GET("/geocoding/v5/{mode}/{query}.json")
   Call<GeocodingResponse> getCall(
-    // NOTE: GeocodingServiceRx should be updated as well
     @Header("User-Agent") String userAgent,
     @Path("mode") String mode,
     @Path("query") String query,
@@ -51,7 +51,7 @@ public interface GeocodingService {
     @Query("language") String language);
 
   /**
-   * Call-based interface
+   * Constructs the html call using the information passed in through the {@link Builder}.
    *
    * @param userAgent    The user
    * @param mode         mapbox.places-permanent for batch geocoding.
@@ -70,7 +70,6 @@ public interface GeocodingService {
    */
   @GET("/geocoding/v5/{mode}/{query}.json")
   Call<List<GeocodingResponse>> getBatchCall(
-    // NOTE: GeocodingServiceRx should be updated as well
     @Header("User-Agent") String userAgent,
     @Path("mode") String mode,
     @Path("query") String query,

@@ -42,7 +42,7 @@ import java.util.Locale;
  * TODO add docs about batch geocoding
  *
  * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/geocoder/">Android
- * Geocoding documentation</a>
+ *   Geocoding documentation</a>
  * @since 1.0.0
  */
 @AutoValue
@@ -52,7 +52,6 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   private Call<GeocodingResponse> call;
   private GeocodingService service;
   protected Builder builder;
-
 
   private GeocodingService getService() {
     // No need to recreate it
@@ -428,7 +427,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @param languages one or more locale's specifying the language you'd like results to support
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Supported languages
-     * </a>
+     *   </a>
      * @since 2.0.0
      */
     public Builder languages(Locale... languages) {
@@ -455,7 +454,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @param languages a String specifying the language or languages you'd like results to support
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Supported languages
-     * </a>
+     *   </a>
      * @since 2.0.0
      */
     public abstract Builder languages(String languages);

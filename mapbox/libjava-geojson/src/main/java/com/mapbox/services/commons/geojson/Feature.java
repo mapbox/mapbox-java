@@ -7,14 +7,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.TypeAdapter;
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
+import com.mapbox.services.commons.geojson.custom.BoundingBoxDeserializer;
+import com.mapbox.services.commons.geojson.custom.BoundingBoxSerializer;
 import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
-
-import java.io.Serializable;
+import com.mapbox.services.commons.geojson.custom.MapboxAdapterFactory;
+import com.mapbox.services.commons.geojson.custom.PointDeserializer;
+import com.mapbox.services.commons.geojson.custom.PointSerializer;
 
 /**
- * This defines a GeoJSON Feature object which represents a spatially bound thing. Every Feature
- * object is a GeoJSON object no matter where it occurs in a GeoJSON text. A Feature object will
- * always have a "type" member with the value "Feature".
+ * This defines a GeoJson Feature object which represents a spatially bound thing. Every Feature
+ * object is a GeoJson object no matter where it occurs in a GeoJson text. A Feature object will
+ * always have a "TYPE" member with the value "Feature".
  * <p>
  * A Feature object has a member with the name "geometry". The value of the geometry member SHALL be
  * either a Geometry object or, in the case that the Feature is unlocated, a JSON null value.
@@ -29,9 +34,9 @@ import java.io.Serializable;
  * An example of a serialized feature is given below:
  * <pre>
  * {
- *   "type": "Feature",
+ *   "TYPE": "Feature",
  *   "geometry": {
- *     "type": "Point",
+ *     "TYPE": "Point",
  *     "coordinates": [102.0, 0.5]
  *   },
  *   "properties": {
@@ -42,23 +47,26 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class Feature implements GeoJSON, Serializable {
+public abstract class Feature implements GeoJson {
 
-  private static final String type = "Feature";
+  private static final String TYPE = "Feature";
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
    * creating a Feature object from scratch it is better to use one of the other provided static
    * factory methods such as {@link #fromGeometry(Geometry)}.
    *
-   * @param json a formatted valid JSON string defining a GeoJSON Feature
+   * @param json a formatted valid JSON string defining a GeoJson Feature
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 1.0.0
    */
   public static Feature fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
     return gson.create().fromJson(json, Feature.class);
   }
 
@@ -67,11 +75,11 @@ public abstract class Feature implements GeoJSON, Serializable {
    *
    * @param geometry a single geometry which makes up this feature object
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 1.0.0
    */
   public static Feature fromGeometry(@Nullable Geometry geometry) {
-    return fromGeometry(geometry, new JsonObject(), null, null);
+    return new AutoValue_Feature(TYPE, null, null, geometry, new JsonObject());
   }
 
   /**
@@ -81,11 +89,11 @@ public abstract class Feature implements GeoJSON, Serializable {
    * @param geometry a single geometry which makes up this feature object
    * @param bbox     optionally include a bbox definition as a double array
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 1.0.0
    */
-  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable double[] bbox) {
-    return fromGeometry(geometry, new JsonObject(), null, bbox);
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable BoundingBox bbox) {
+    return new AutoValue_Feature(TYPE, bbox, null, geometry, new JsonObject());
   }
 
   /**
@@ -95,11 +103,11 @@ public abstract class Feature implements GeoJSON, Serializable {
    * @param geometry   a single geometry which makes up this feature object
    * @param properties a {@link JsonObject} containing the feature properties
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 1.0.0
    */
-  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties) {
-    return fromGeometry(geometry, properties, null, null);
+  public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties) {
+    return new AutoValue_Feature(TYPE, null, null, geometry, properties);
   }
 
   /**
@@ -107,14 +115,15 @@ public abstract class Feature implements GeoJSON, Serializable {
    * set of properties, and optionally pass in a bbox.
    *
    * @param geometry   a single geometry which makes up this feature object
+   * @param bbox       optionally include a bbox definition as a double array
    * @param properties a {@link JsonObject} containing the feature properties
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 1.0.0
    */
-  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
-                                     @Nullable double[] bbox) {
-    return fromGeometry(geometry, properties, null, bbox);
+  public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
+                                     @Nullable BoundingBox bbox) {
+    return new AutoValue_Feature(TYPE, bbox, null, geometry, properties);
   }
 
   /**
@@ -127,9 +136,9 @@ public abstract class Feature implements GeoJSON, Serializable {
    * @return {@link Feature}
    * @since 1.0.0
    */
-  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
+  public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
                                      @Nullable String id) {
-    return fromGeometry(geometry, properties, id, null);
+    return new AutoValue_Feature(TYPE, null, id, geometry, properties);
   }
 
   /**
@@ -138,28 +147,51 @@ public abstract class Feature implements GeoJSON, Serializable {
    *
    * @param geometry   a single geometry which makes up this feature object
    * @param properties a {@link JsonObject} containing the feature properties
+   * @param bbox       optionally include a bbox definition as a double array
    * @param id         common identifier of this feature
    * @return {@link Feature}
    * @since 1.0.0
    */
-  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
-                                     @Nullable String id, @Nullable double[] bbox) {
-    return new AutoValue_Feature(geometry, properties, id, bbox);
+  public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
+                                     @Nullable String id, @Nullable BoundingBox bbox) {
+    return new AutoValue_Feature(TYPE, bbox, id, geometry, properties);
   }
 
   /**
-   * This describes the type of GeoJSON geometry this object is, thus this will always return
+   * This describes the TYPE of GeoJson geometry this object is, thus this will always return
    * {@link Feature}.
    *
-   * @return a String which describes the type of geometry, for this object it will always return
-   * {@code Feature}
+   * @return a String which describes the TYPE of geometry, for this object it will always return
+   *   {@code Feature}
    * @since 1.0.0
    */
   @NonNull
   @Override
-  public String type() {
-    return type;
-  }
+  public abstract String type();
+
+  /**
+   * A Feature Collection might have a member named {@code bbox} to include information on the
+   * coordinate range for it's {@link Feature}s. The value of the bbox member MUST be a list of
+   * size 2*n where n is the number of dimensions represented in the contained feature geometries,
+   * with all axes of the most southwesterly point followed by all axes of the more northeasterly
+   * point. The axes order of a bbox follows the axes order of geometries.
+   *
+   * @return a list of double coordinate values describing a bounding box
+   * @since 3.0.0
+   */
+  @Nullable
+  @Override
+  public abstract BoundingBox bbox();
+
+  /**
+   * A feature may have a commonly used identifier which is either a unique String or number.
+   *
+   * @return a String containing this features unique identification or null if one wasn't given
+   *   during creation.
+   * @since 1.0.0
+   */
+  @Nullable
+  public abstract String id();
 
   /**
    * The geometry which makes up this feature. A Geometry object represents points, curves, and
@@ -179,23 +211,11 @@ public abstract class Feature implements GeoJSON, Serializable {
    * @return a {@link JsonObject} which holds this features current properties
    * @since 1.0.0
    */
+  @NonNull
   public abstract JsonObject properties();
 
   /**
-   * A feature may have a commonly used identifier which is either a unique String or number.
-   *
-   * @return a String containing this features unique identification or null if one wasn't given
-   * during creation.
-   * @since 1.0.0
-   */
-  @Nullable
-  public abstract String id();
-
-  @Override
-  public abstract double[] bbox();
-
-  /**
-   * This takes the currently defined values found inside this instance and converts it to a GeoJSON
+   * This takes the currently defined values found inside this instance and converts it to a GeoJson
    * string.
    *
    * @return a JSON string which represents this Feature
@@ -203,7 +223,21 @@ public abstract class Feature implements GeoJSON, Serializable {
    */
   @Override
   public String toJson() {
-    return new Gson().toJson(this);
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointSerializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    return gson.create().toJson(this);
+  }
+
+  /**
+   * Gson TYPE adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the TYPE adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<Feature> typeAdapter(Gson gson) {
+    return new AutoValue_Feature.GsonTypeAdapter(gson);
   }
 
   /**
@@ -317,7 +351,7 @@ public abstract class Feature implements GeoJSON, Serializable {
   }
 
   /**
-   * Removes the property from the object properties
+   * Removes the property from the object properties.
    *
    * @param key name of the member
    * @return Removed {@code property} from the key string passed in through the parameter.

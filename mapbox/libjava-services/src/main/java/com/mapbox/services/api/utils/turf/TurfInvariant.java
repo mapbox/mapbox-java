@@ -2,7 +2,7 @@ package com.mapbox.services.api.utils.turf;
 
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
-import com.mapbox.services.commons.geojson.GeoJSON;
+import com.mapbox.services.commons.geojson.GeoJson;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.utils.TextUtils;
 
@@ -32,16 +32,16 @@ public class TurfInvariant {
   }
 
   /**
-   * Enforce expectations about types of GeoJSON objects for Turf.
+   * Enforce expectations about types of GeoJson objects for Turf.
    *
-   * @param value any GeoJSON object
-   * @param type  expected GeoJSON type
+   * @param value any GeoJson object
+   * @param type  expected GeoJson type
    * @param name  name of calling function
    * @throws TurfException signals that a Turf exception of some sort has occurred
    * @see <a href="http://turfjs.org/docs/#geojsontype">Turf geojsonType documentation</a>
    * @since 1.2.0
    */
-  public static void geojsonType(GeoJSON value, String type, String name) throws TurfException {
+  public static void geojsonType(GeoJson value, String type, String name) throws TurfException {
     if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)) {
       throw new TurfException("Type and name required");
     }
@@ -56,7 +56,7 @@ public class TurfInvariant {
    * {@link Feature#type()} to judge geometry types.
    *
    * @param feature with an expected geometry type
-   * @param type    type expected GeoJSON type
+   * @param type    type expected GeoJson type
    * @param name    name of calling function
    * @throws TurfException signals that a Turf exception of some sort has occurred
    * @see <a href="http://turfjs.org/docs/#featureof">Turf featureOf documentation</a>
@@ -80,7 +80,7 @@ public class TurfInvariant {
    * this uses {@link Feature#type()}} to judge geometry types.
    *
    * @param featureCollection for which features will be judged
-   * @param type              expected GeoJSON type
+   * @param type              expected GeoJson type
    * @param name              name of calling function
    * @throws TurfException signals that a Turf exception of some sort has occurred
    * @see <a href="http://turfjs.org/docs/#collectionof">Turf collectionOf documentation</a>

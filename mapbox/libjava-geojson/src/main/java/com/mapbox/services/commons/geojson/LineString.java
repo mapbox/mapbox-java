@@ -4,6 +4,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
+import com.mapbox.services.commons.geojson.custom.BoundingBoxDeserializer;
+import com.mapbox.services.commons.geojson.custom.BoundingBoxSerializer;
+import com.mapbox.services.commons.geojson.custom.MapboxAdapterFactory;
+import com.mapbox.services.commons.geojson.custom.PointDeserializer;
+import com.mapbox.services.commons.geojson.custom.PointSerializer;
 import com.mapbox.services.commons.geojson.utils.PolylineUtils;
 
 import java.io.Serializable;
@@ -11,7 +19,7 @@ import java.util.List;
 
 /**
  * A linestring represents two or more geographic points that share a relationship and is one of the
- * seven geometries found in the GeoJSON spec.
+ * seven geometries found in the GeoJson spec.
  * <p>
  * This adheres to the RFC 7946 internet standard when serialized into JSON. When deserialized, this
  * class becomes an immutable object which should be initiated using its static factory methods.
@@ -27,10 +35,10 @@ import java.util.List;
  * For example, a line extending from 45 degrees N, 170 degrees E across the antimeridian to 45
  * degrees N, 170 degrees W should be cut in two and represented as a MultiLineString.
  * </p><p>
- * A sample GeoJSON LineString's provided below (in it's serialized state).
+ * A sample GeoJson LineString's provided below (in it's serialized state).
  * <pre>
  * {
- *   "type": "LineString",
+ *   "TYPE": "LineString",
  *   "coordinates": [
  *     [100.0, 0.0],
  *     [101.0, 1.0]
@@ -43,37 +51,44 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class LineString implements Geometry, Serializable {
+public abstract class LineString implements Geometry<List<Point>>, Serializable {
 
-  private static final String type = "LineString";
+  private static final String TYPE = "LineString";
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
    * creating a LineString object from scratch it is better to use one of the other provided static
-   * factory methods such as {@link #fromLngLats(List, double[])}. For a valid lineString to exist,
-   * it must have at least 2 coordinate entries. The LineString should also have non-zero distance
-   * and zero area.
+   * factory methods such as {@link #fromLngLats(List)}. For a valid lineString to exist, it must
+   * have at least 2 coordinate entries. The LineString should also have non-zero distance and zero
+   * area.
    *
-   * @param json a formatted valid JSON string defining a GeoJSON LineString
+   * @param json a formatted valid JSON string defining a GeoJson LineString
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 1.0.0
    */
   public static LineString fromJson(String json) {
-    return new Gson().fromJson(json, LineString.class);
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+    return gson.create().fromJson(json, LineString.class);
   }
 
   /**
    * Create a new instance of this class by defining a {@link MultiPoint} object and passing. The
-   * multipoint object should comply with the GeoJSON specifications described in the documentation.
+   * multipoint object should comply with the GeoJson specifications described in the documentation.
    *
    * @param multiPoint which will make up the LineString geometry
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull MultiPoint multiPoint) {
-    return fromLngLats(multiPoint, null);
+    if (multiPoint.coordinates() == null || multiPoint.coordinates().size() < 2) {
+      throw new RuntimeException("A LineString requires at least 2 coordinates.");
+    }
+    return new AutoValue_LineString(TYPE, null, multiPoint.coordinates());
   }
 
   /**
@@ -87,11 +102,11 @@ public abstract class LineString implements Geometry, Serializable {
    *
    * @param points a list of {@link Point}s which make up the LineString geometry
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull List<Point> points) {
-    return fromLngLats(points, null);
+    return new AutoValue_LineString(TYPE, null, points);
   }
 
   /**
@@ -106,31 +121,31 @@ public abstract class LineString implements Geometry, Serializable {
    * @param points a list of {@link Point}s which make up the LineString geometry
    * @param bbox   optionally include a bbox definition as a double array
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 3.0.0
    */
-  public static LineString fromLngLats(@NonNull List<Point> points, @Nullable double[] bbox) {
+  public static LineString fromLngLats(@NonNull List<Point> points, @Nullable BoundingBox bbox) {
     if (points.size() < 2) {
       throw new RuntimeException("LineString must be made up of 2 or more points.");
     }
-    return new AutoValue_LineString(points, bbox);
+    return new AutoValue_LineString(TYPE, bbox, points);
   }
 
   /**
    * Create a new instance of this class by defining a {@link MultiPoint} object and passing. The
-   * multipoint object should comply with the GeoJSON specifications described in the documentation.
+   * multipoint object should comply with the GeoJson specifications described in the documentation.
    *
    * @param multiPoint which will make up the LineString geometry
    * @param bbox       optionally include a bbox definition as a double array
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 3.0.0
    */
-  public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable double[] bbox) {
+  public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
     if (multiPoint.coordinates().size() < 2) {
       throw new RuntimeException("LineString must be made up of 2 or more points.");
     }
-    return new AutoValue_LineString(multiPoint.coordinates(), bbox);
+    return new AutoValue_LineString(TYPE, bbox, multiPoint.coordinates());
   }
 
   /**
@@ -144,7 +159,7 @@ public abstract class LineString implements Geometry, Serializable {
    * @param precision The encoded precision which must match the same precision used when the string
    *                  was first encoded
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 1.0.0
    */
   public static LineString fromPolyline(@NonNull String polyline, int precision) {
@@ -152,50 +167,53 @@ public abstract class LineString implements Geometry, Serializable {
   }
 
   /**
+   * This describes the TYPE of GeoJson geometry this object is, thus this will always return
+   * {@link LineString}.
+   *
+   * @return a String which describes the TYPE of geometry, for this object it will always return
+   *   {@code LineString}
+   * @since 1.0.0
+   */
+  @NonNull
+  @Override
+  public abstract String type();
+
+  /**
+   * A Feature Collection might have a member named {@code bbox} to include information on the
+   * coordinate range for it's {@link Feature}s. The value of the bbox member MUST be a list of
+   * size 2*n where n is the number of dimensions represented in the contained feature geometries,
+   * with all axes of the most southwesterly point followed by all axes of the more northeasterly
+   * point. The axes order of a bbox follows the axes order of geometries.
+   *
+   * @return a list of double coordinate values describing a bounding box
+   * @since 3.0.0
+   */
+  @Nullable
+  @Override
+  public abstract BoundingBox bbox();
+
+  /**
    * Provides the list of {@link Point}s that make up the LineString geometry.
    *
    * @return a list of points
    * @since 3.0.0
    */
+  @NonNull
+  @Override
   public abstract List<Point> coordinates();
 
   /**
-   * This describes the type of GeoJSON geometry this object is, thus this will always return
-   * {@link LineString}.
-   *
-   * @return a String which describes the type of geometry, for this object it will always return
-   * {@code LineString}
-   * @since 1.0.0
-   */
-  @NonNull
-  @Override
-  public String type() {
-    return type;
-  }
-
-  /**
-   * There potentially could be a bbox member inside the geometry GeoJSON, this method will return
-   * a double array which defines this object. The value of the bbox member MUST be an array of
-   * length 2*n where n is the number of dimensions represented in the contained geometries, with
-   * all axes of the most southwesterly point followed by all axes of the more northeasterly point.
-   * The axes order of a bbox follows the axes order of geometries.
-   *
-   * @return a double array defining the bounding box in this order
-   * {@code [west, south, east, north]}
-   * @since 3.0.0
-   */
-  @Nullable
-  public abstract double[] bbox();
-
-  /**
-   * This takes the currently defined values found inside this instance and converts it to a GeoJSON
+   * This takes the currently defined values found inside this instance and converts it to a GeoJson
    * string.
    *
    * @return a JSON string which represents this LineString geometry
    * @since 1.0.0
    */
   public String toJson() {
-    return new Gson().toJson(this);
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointSerializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    return gson.create().toJson(this);
   }
 
   /**
@@ -209,5 +227,16 @@ public abstract class LineString implements Geometry, Serializable {
    */
   public String toPolyline(int precision) {
     return PolylineUtils.encode(coordinates(), precision);
+  }
+
+  /**
+   * Gson TYPE adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the TYPE adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<LineString> typeAdapter(Gson gson) {
+    return new AutoValue_LineString.GsonTypeAdapter(gson);
   }
 }

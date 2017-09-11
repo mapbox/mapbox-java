@@ -17,23 +17,23 @@ import java.util.Map;
  */
 public class TurfHelpers {
 
-  private static final Map<String, Double> factors;
+  private static final Map<String, Double> FACTORS;
 
   static {
-    factors = new HashMap<>();
-    factors.put(TurfConstants.UNIT_MILES, 3960d);
-    factors.put(TurfConstants.UNIT_NAUTICAL_MILES, 3441.145d);
-    factors.put(TurfConstants.UNIT_DEGREES, 57.2957795d);
-    factors.put(TurfConstants.UNIT_RADIANS, 1d);
-    factors.put(TurfConstants.UNIT_INCHES, 250905600d);
-    factors.put(TurfConstants.UNIT_YARDS, 6969600d);
-    factors.put(TurfConstants.UNIT_METERS, 6373000d);
-    factors.put(TurfConstants.UNIT_CENTIMETERS, 6.373e+8d);
-    factors.put(TurfConstants.UNIT_KILOMETERS, 6373d);
-    factors.put(TurfConstants.UNIT_FEET, 20908792.65d);
-    factors.put(TurfConstants.UNIT_CENTIMETRES, 6.373e+8d);
-    factors.put(TurfConstants.UNIT_METRES, 6373000d);
-    factors.put(TurfConstants.UNIT_KILOMETRES, 6373d);
+    FACTORS = new HashMap<>();
+    FACTORS.put(TurfConstants.UNIT_MILES, 3960d);
+    FACTORS.put(TurfConstants.UNIT_NAUTICAL_MILES, 3441.145d);
+    FACTORS.put(TurfConstants.UNIT_DEGREES, 57.2957795d);
+    FACTORS.put(TurfConstants.UNIT_RADIANS, 1d);
+    FACTORS.put(TurfConstants.UNIT_INCHES, 250905600d);
+    FACTORS.put(TurfConstants.UNIT_YARDS, 6969600d);
+    FACTORS.put(TurfConstants.UNIT_METERS, 6373000d);
+    FACTORS.put(TurfConstants.UNIT_CENTIMETERS, 6.373e+8d);
+    FACTORS.put(TurfConstants.UNIT_KILOMETERS, 6373d);
+    FACTORS.put(TurfConstants.UNIT_FEET, 20908792.65d);
+    FACTORS.put(TurfConstants.UNIT_CENTIMETRES, 6.373e+8d);
+    FACTORS.put(TurfConstants.UNIT_METRES, 6373000d);
+    FACTORS.put(TurfConstants.UNIT_KILOMETRES, 6373d);
   }
 
   /**
@@ -58,7 +58,7 @@ public class TurfHelpers {
    * @since 1.2.0
    */
   public static double radiansToDistance(double radians, @NonNull @TurfUnitCriteria String units) {
-    return radians * factors.get(units);
+    return radians * FACTORS.get(units);
   }
 
   /**
@@ -84,7 +84,7 @@ public class TurfHelpers {
    * @since 1.2.0
    */
   public static double distanceToRadians(double distance, @NonNull @TurfUnitCriteria String units) {
-    return distance / factors.get(units);
+    return distance / FACTORS.get(units);
   }
 
   /**

@@ -9,9 +9,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +28,6 @@ public class BaseTest {
     Scanner s = new Scanner(inputStream).useDelimiter("\\A");
     return s.hasNext() ? s.next() : "";
   }
-
 
   public static <T extends Serializable> byte[] serialize(T obj)
     throws IOException {

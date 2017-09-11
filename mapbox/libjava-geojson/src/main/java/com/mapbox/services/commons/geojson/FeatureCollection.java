@@ -5,14 +5,20 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
+import com.mapbox.services.commons.geojson.custom.BoundingBoxDeserializer;
+import com.mapbox.services.commons.geojson.custom.BoundingBoxSerializer;
 import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
+import com.mapbox.services.commons.geojson.custom.MapboxAdapterFactory;
+import com.mapbox.services.commons.geojson.custom.PointDeserializer;
+import com.mapbox.services.commons.geojson.custom.PointSerializer;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * This represents a GeoJSON Feature Collection which holds a list of {@link Feature} objects (when
+ * This represents a GeoJson Feature Collection which holds a list of {@link Feature} objects (when
  * serialized the feature list becomes a JSON array).
  * <p>
  * Note that the feature list could potentially be empty. Features within the list must follow the
@@ -21,7 +27,7 @@ import java.util.List;
  * An example of a Feature Collections given below:
  * <pre>
  * {
- *   "type": "FeatureCollection",
+ *   "TYPE": "FeatureCollection",
  *   "bbox": [100.0, 0.0, -100.0, 105.0, 1.0, 0.0],
  *   "features": [
  *     //...
@@ -32,80 +38,147 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class FeatureCollection implements GeoJSON, Serializable {
+public abstract class FeatureCollection implements GeoJson {
 
-  private static final String type = "FeatureCollection";
+  private static final String TYPE = "FeatureCollection";
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
    * creating a FeatureCollection object from scratch it is better to use one of the other provided
    * static factory methods such as {@link #fromFeatures(List)}.
    *
-   * @param json a formatted valid JSON string defining a GeoJSON Feature Collection
+   * @param json a formatted valid JSON string defining a GeoJson Feature Collection
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 1.0.0
    */
-  public static FeatureCollection fromJson(String json) {
+  public static FeatureCollection fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
     return gson.create().fromJson(json, FeatureCollection.class);
   }
 
   /**
    * Create a new instance of this class by giving the feature collection an array of
-   * {@link Feature}s. The array of features itself isn't null but it can empty and have a length of
-   * 0.
+   * {@link Feature}s. The array of features itself isn't null but it can be empty and have a length
+   * of 0.
    *
    * @param features an array of features
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 1.0.0
    */
   public static FeatureCollection fromFeatures(@NonNull Feature[] features) {
-    return fromFeatures(Arrays.asList(features), null);
+    return new AutoValue_FeatureCollection(TYPE, null, Arrays.asList(features));
+  }
+
+  /**
+   * Create a new instance of this class by giving the feature collection a list of
+   * {@link Feature}s. The list of features itself isn't null but it can empty and have a size of 0.
+   *
+   * @param features a list of features
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 1.0.0
+   */
+  public static FeatureCollection fromFeatures(@NonNull List<Feature> features) {
+    return new AutoValue_FeatureCollection(TYPE, null, features);
   }
 
   /**
    * Create a new instance of this class by giving the feature collection an array of
-   * {@link Feature}s. The array of features itself isn't null but it can empty and have a length of
-   * 0.
+   * {@link Feature}s. The array of features itself isn't null but it can be empty and have a length
+   * of 0.
    *
    * @param features an array of features
    * @param bbox     optionally include a bbox definition as a double array
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *   method
    * @since 3.0.0
    */
   public static FeatureCollection fromFeatures(@NonNull Feature[] features,
-                                               @Nullable double[] bbox) {
-    return fromFeatures(Arrays.asList(features), bbox);
+                                               @Nullable BoundingBox bbox) {
+    return new AutoValue_FeatureCollection(TYPE, bbox, Arrays.asList(features));
   }
 
-
-  public static FeatureCollection fromFeatures(@NonNull List<Feature> features) {
-    return fromFeatures(features, null);
-  }
-
+  /**
+   * Create a new instance of this class by giving the feature collection a list of
+   * {@link Feature}s. The list of features itself isn't null but it can be empty and have a size of
+   * 0.
+   *
+   * @param features a list of features
+   * @param bbox     optionally include a bbox definition as a double array
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
   public static FeatureCollection fromFeatures(@NonNull List<Feature> features,
-                                               @Nullable double[] bbox) {
-    return new AutoValue_FeatureCollection(features, bbox);
+                                               @Nullable BoundingBox bbox) {
+    return new AutoValue_FeatureCollection(TYPE, bbox, features);
   }
 
-
-  public abstract List<Feature> features();
-
+  /**
+   * This describes the TYPE of GeoJson this object is, thus this will always return
+   * {@link FeatureCollection}.
+   *
+   * @return a String which describes the TYPE of GeoJson, for this object it will always return
+   *   {@code FeatureCollection}
+   * @since 1.0.0
+   */
   @NonNull
   @Override
-  public String type() {
-    return type;
-  }
+  public abstract String type();
 
+  /**
+   * A Feature Collection might have a member named {@code bbox} to include information on the
+   * coordinate range for it's {@link Feature}s. The value of the bbox member MUST be a list of
+   * size 2*n where n is the number of dimensions represented in the contained feature geometries,
+   * with all axes of the most southwesterly point followed by all axes of the more northeasterly
+   * point. The axes order of a bbox follows the axes order of geometries.
+   *
+   * @return a list of double coordinate values describing a bounding box
+   * @since 3.0.0
+   */
   @Nullable
   @Override
-  public abstract double[] bbox();
+  public abstract BoundingBox bbox();
 
+  /**
+   * This provides the list of feature making up this Feature Collection. Note that if the
+   * FeatureCollection was created through {@link #fromJson(String)} this list could be null.
+   * Otherwise, the list can't be null but the size of the list can equal 0.
+   *
+   * @return a list of {@link Feature}s which make up this Feature Collection
+   * @since 1.0.0
+   */
+  @Nullable
+  public abstract List<Feature> features();
+
+  /**
+   * This takes the currently defined values found inside this instance and converts it to a GeoJson
+   * string.
+   *
+   * @return a JSON string which represents this Feature Collection
+   * @since 1.0.0
+   */
   public String toJson() {
-    return new Gson().toJson(this);
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointSerializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    return gson.create().toJson(this);
+  }
+
+  /**
+   * Gson TYPE adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the TYPE adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<FeatureCollection> typeAdapter(Gson gson) {
+    return new AutoValue_FeatureCollection.GsonTypeAdapter(gson);
   }
 }

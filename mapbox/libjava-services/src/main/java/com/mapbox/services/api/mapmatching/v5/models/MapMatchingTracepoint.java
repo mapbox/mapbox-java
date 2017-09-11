@@ -61,7 +61,7 @@ public abstract class MapMatchingTracepoint implements Serializable {
   /**
    * A {@link Point} representing this waypoint location.
    *
-   * @return GeoJSON Point representing this waypoint location
+   * @return GeoJson Point representing this waypoint location
    * @since 3.0.0
    */
   @NonNull

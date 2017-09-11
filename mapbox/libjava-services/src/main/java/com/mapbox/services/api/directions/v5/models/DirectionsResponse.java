@@ -1,26 +1,30 @@
 package com.mapbox.services.api.directions.v5.models;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import android.support.annotation.NonNull;
-
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * This is the root Mapbox directions API response. Inside this class are several nested classes
+ * This is the root Mapbox Directions API response. Inside this class are several nested classes
  * chained together to make up a similar structure to the original APIs JSON response.
  *
- * @see <a href="https://www.mapbox.com/api-documentation/#directions-response-object">Direction
- * Response Object</a>
+ * @see <a href="https://www.mapbox.com/api-documentation/#directions-response-object">Direction Response Object</a>
  * @since 1.0.0
  */
 @AutoValue
 public abstract class DirectionsResponse implements Serializable {
 
+  /**
+   * Create a new instance of this class by using the {@link Builder} class.
+   *
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
+   */
   public static Builder builder() {
     return new AutoValue_DirectionsResponse.Builder();
   }
@@ -43,8 +47,6 @@ public abstract class DirectionsResponse implements Serializable {
    */
   @NonNull
   public abstract String code();
-
-  // TODO test that waypoints appear in correct order in list, see javadoc below
 
   /**
    * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
@@ -69,19 +71,66 @@ public abstract class DirectionsResponse implements Serializable {
   @Nullable
   public abstract List<DirectionsRoute> routes();
 
+  /**
+   * Gson type adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the type adapter for this class
+   * @since 3.0.0
+   */
   public static TypeAdapter<DirectionsResponse> typeAdapter(Gson gson) {
     return new AutoValue_DirectionsResponse.GsonTypeAdapter(gson);
   }
 
+  /**
+   * This builder can be used to set the values describing the {@link DirectionsResponse}.
+   *
+   * @since 3.0.0
+   */
   @AutoValue.Builder
   public abstract static class Builder {
 
+    /**
+     * String indicating the state of the response. This is a separate code than the HTTP status
+     * code. On normal valid responses, the value will be Ok. For a full list of possible responses,
+     * see {@link DirectionsResponse#code()}.
+     *
+     * @param code a string with one of the given values described in the list above
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder code(@NonNull String code);
 
+    /**
+     * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
+     * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
+     * the input coordinates.
+     *
+     * @param waypoints list of {@link DirectionsWaypoint} objects ordered from start of route till
+     *                  the end
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder waypoints(@Nullable List<DirectionsWaypoint> waypoints);
 
+    /**
+     * List containing all the different route options. It's ordered by descending recommendation
+     * rank. In other words, object 0 in the List is the highest recommended route. if you don't
+     * setAlternatives to true (default is false) in your builder this should always be a List of
+     * size 1. At most this will return 2 {@link DirectionsRoute} objects.
+     *
+     * @param routes list of {@link DirectionsRoute} objects
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder routes(@Nullable List<DirectionsRoute> routes);
 
+    /**
+     * Build a new {@link DirectionsResponse} object.
+     *
+     * @return a new {@link DirectionsResponse} using the provided values in this builder
+     * @since 3.0.0
+     */
     public abstract DirectionsResponse build();
   }
 }

@@ -38,11 +38,10 @@ public class GeometryDeserializer implements JsonDeserializer<Geometry> {
     try {
       // Use the current context to deserialize it
       Type classType = Class.forName("com.mapbox.services.commons.geojson." + geometryType);
-      return context.deserialize(json, classType);
+        return context.deserialize(json, classType);
     } catch (ClassNotFoundException classNotFoundException) {
       // Unknown geometry
       throw new JsonParseException(classNotFoundException);
     }
   }
-
 }

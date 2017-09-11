@@ -330,7 +330,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * this field to the APIs default value vs this SDKs default value of
      * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
      * <p>
-     * Note that while the API supports GeoJSON as an option for geometry, this SDK intentionally
+     * Note that while the API supports GeoJson as an option for geometry, this SDK intentionally
      * removes this as an option since an encoded string for the geometry significantly reduces
      * bandwidth on mobile devices and speeds up response time.
      * </p>
