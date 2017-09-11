@@ -5,14 +5,13 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 
-import com.mapbox.services.Constants;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.services.api.utils.turf.TurfConstants;
 import com.mapbox.services.api.utils.turf.TurfMeasurement;
 import com.mapbox.services.commons.geojson.LineString;
-import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.geojson.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,7 @@ public class MockLocationEngine extends LocationEngine {
   private int speed;
   private int delay;
 
-  private List<Position> positions = new ArrayList<>();
+  private List<Point> points = new ArrayList<>();
   private Runnable runnable;
   private Handler handler;
 
@@ -140,9 +139,9 @@ public class MockLocationEngine extends LocationEngine {
     }
   }
 
-  public void setLastLocation(Position currentPosition) {
-    lastLocation.setLongitude(currentPosition.getLongitude());
-    lastLocation.setLatitude(currentPosition.getLatitude());
+  public void setLastLocation(Point currentPoint) {
+    lastLocation.setLongitude(currentPoint.longitude());
+    lastLocation.setLatitude(currentPoint.latitude());
   }
 
   public boolean isNoisyGps() {
@@ -200,8 +199,8 @@ public class MockLocationEngine extends LocationEngine {
 
     // Chop the line in small pieces
     for (double i = 0; i < distanceKm; i += distance) {
-      Position position = TurfMeasurement.along(lineString, i, TurfConstants.UNIT_KILOMETERS).getCoordinates();
-      positions.add(position);
+      Point point = TurfMeasurement.along(lineString, i, TurfConstants.UNIT_KILOMETERS);
+      points.add(point);
     }
   }
 
@@ -214,16 +213,16 @@ public class MockLocationEngine extends LocationEngine {
   private void addNoiseToRoute(double distance) {
 
     // End point will always match the given route (no noise will be added)
-    for (int i = 0; i < positions.size() - 1; i++) {
+    for (int i = 0; i < points.size() - 1; i++) {
 
-      double bearing = TurfMeasurement.bearing(positions.get(i), positions.get(i + 1));
+      double bearing = TurfMeasurement.bearing(points.get(i), points.get(i + 1));
       Random random = new Random();
       bearing = random.nextInt(15 - -15) + bearing;
 
-      Position position = TurfMeasurement.destination(
-        positions.get(i), distance, bearing, TurfConstants.UNIT_KILOMETERS
+      Point point = TurfMeasurement.destination(
+        points.get(i), distance, bearing, TurfConstants.UNIT_KILOMETERS
       );
-      positions.set(i, position);
+      points.set(i, point);
     }
   }
 
@@ -240,24 +239,24 @@ public class MockLocationEngine extends LocationEngine {
     return speed * time;
   }
 
-  public void moveToLocation(Position position) {
-    List<Position> positionList = new ArrayList<>();
-    positionList.add(Position.fromLngLat(lastLocation.getLongitude(), lastLocation.getLatitude()));
-    positionList.add(position);
+  public void moveToLocation(Point point) {
+    List<Point> positionList = new ArrayList<>();
+    positionList.add(Point.fromLngLat(lastLocation.getLongitude(), lastLocation.getLatitude()));
+    positionList.add(point);
 
     if (handler != null && runnable != null) {
       handler.removeCallbacks(runnable);
     }
     // Reset all variables
     handler = new Handler();
-    positions = new ArrayList<>();
+    points = new ArrayList<>();
     currentLeg = 0;
     currentStep = 0;
 
     // Calculate the distance which will always be consistent throughout the route.
     distance = calculateDistancePerSec();
 
-    LineString route = LineString.fromCoordinates(positionList);
+    LineString route = LineString.fromLngLats(positionList);
 
     sliceRoute(route, distance);
     if (noisyGps) {
@@ -281,7 +280,7 @@ public class MockLocationEngine extends LocationEngine {
     }
     // Reset all variables
     handler = new Handler();
-    positions = new ArrayList<>();
+    points = new ArrayList<>();
     currentLeg = 0;
     currentStep = 0;
 
@@ -301,7 +300,7 @@ public class MockLocationEngine extends LocationEngine {
    */
   private void calculateStepPoints() {
     LineString line = LineString.fromPolyline(
-      route.legs().get(currentLeg).steps().get(currentStep).geometry(), Constants.PRECISION_6);
+      route.legs().get(currentLeg).steps().get(currentStep).geometry(), 6);
 
     increaseIndex();
 
@@ -323,21 +322,21 @@ public class MockLocationEngine extends LocationEngine {
   /**
    * Here we build the new mock {@link Location} object and fill in as much information we can calculate.
    *
-   * @param position taken from the positions list, converts this to a {@link Location}.
+   * @param point taken from the positions list, converts this to a {@link Location}.
    * @return a {@link Location} object with as much information filled in as possible.
    * @since 2.2.0
    */
-  private Location mockLocation(Position position) {
+  private Location mockLocation(Point point) {
     lastLocation = new Location(MockLocationEngine.class.getName());
-    lastLocation.setLatitude(position.getLatitude());
-    lastLocation.setLongitude(position.getLongitude());
+    lastLocation.setLatitude(point.latitude());
+    lastLocation.setLongitude(point.longitude());
 
     // Need to convert speed to meters/second as specified in Android's Location object documentation.
     float speedInMeterPerSec = (float) (((speed * 1.609344) * 1000) / (60 * 60));
     lastLocation.setSpeed(speedInMeterPerSec);
 
-    if (positions.size() >= 2) {
-      double bearing = TurfMeasurement.bearing(position, positions.get(1));
+    if (points.size() >= 2) {
+      double bearing = TurfMeasurement.bearing(point, points.get(1));
       Timber.v("Bearing value %f", bearing);
       lastLocation.setBearing((float) bearing);
     }
@@ -359,17 +358,17 @@ public class MockLocationEngine extends LocationEngine {
     public void run() {
       // Calculate the next steps points if the list becomes empty
       // so that the mock location continues along the route
-      if (positions.size() <= 0) {
+      if (points.size() <= 0) {
         calculateStepPoints();
       }
 
-      if (positions.size() > 0) {
+      if (points.size() > 0) {
         // Notify of an update
-        Location location = mockLocation(positions.get(0));
+        Location location = mockLocation(points.get(0));
         for (LocationEngineListener listener : locationListeners) {
           listener.onLocationChanged(location);
         }
-        positions.remove(0);
+        points.remove(0);
       } else {
         Location location = getLastLocation();
         for (LocationEngineListener listener : locationListeners) {

@@ -151,7 +151,7 @@ public final class DirectionsCriteria {
   public static final String ANNOTATION_SPEED = "speed";
 
   /**
-   * The congestion, provided as a String, between each pair of coordinates
+   * The congestion, provided as a String, between each pair of coordinates.
    *
    * @since 2.2.0
    */

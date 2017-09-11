@@ -137,7 +137,7 @@ public class TurfInsideActivity extends AppCompatActivity {
       ArrayList<LatLng> points = new ArrayList<>();
 
       try {
-        // Load GeoJSON file
+        // Load GeoJson file
         InputStream inputStream = getAssets().open("los_angeles_airport.geojson");
         BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
         StringBuilder sb = new StringBuilder();
@@ -156,7 +156,7 @@ public class TurfInsideActivity extends AppCompatActivity {
         if (geometry != null) {
           String type = geometry.getString("type");
 
-          // Our GeoJSON only has one feature: a line string
+          // Our GeoJson only has one feature: a line string
           if (!TextUtils.isEmpty(type) && type.equalsIgnoreCase("LineString")) {
 
             // Get the Coordinates
@@ -169,7 +169,7 @@ public class TurfInsideActivity extends AppCompatActivity {
           }
         }
       } catch (Exception exception) {
-        Log.e(TAG, "Exception Loading GeoJSON: " + exception.toString());
+        Log.e(TAG, "Exception Loading GeoJson: " + exception.toString());
       }
 
       return points;

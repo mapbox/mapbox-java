@@ -56,6 +56,9 @@ dependencies {
   releaseCompile rootProject.ext.dep.leakcanaryRelease
   testCompile rootProject.ext.dep.leakcanaryTest
 
+  compile rootProject.ext.dep.butterKnife
+  annotationProcessor rootProject.ext.dep.butterKnifeCompiler
+
   // Google Play Services
   compile rootProject.ext.dep.gmsLocation
 
@@ -70,6 +73,9 @@ dependencies {
   androidTestCompile(rootProject.ext.dep.supportEspresso, {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
+  compile 'com.android.support.constraint:constraint-layout:1.0.2'
+  compile project(path: ':libjava-geojson')
+  compile 'com.squareup.retrofit2:retrofit:2.2.0'
 }
 
 apply from: 'gradle-dexcount.gradle'

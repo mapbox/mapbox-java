@@ -119,7 +119,7 @@ mapmatching-fixtures:
 optimized-trips-fixtures:
 	# request an optimized car trip with no additional options
 	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/optimized_trip.json
+		-o mapbox/libjava-services/src/test/fixtures/optimization.json
 
 	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/cycling/-122.42,37.78;-122.45,37.91;-122.48,37.73?steps=true&language=sv&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o mapbox/libjava-services/src/test/fixtures/optimized_trip_steps.json

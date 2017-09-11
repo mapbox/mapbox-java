@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'net.ltgt.errorprone'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    errorprone "com.google.errorprone:error_prone_core:2.0.21"
+    compile project(':libjava-geojson')
+//    compile project(':libjava-services')
+//    compile project(':libjava-services-rx')
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:all'
+}

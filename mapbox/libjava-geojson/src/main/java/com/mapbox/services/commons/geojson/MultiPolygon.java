@@ -1,112 +1,110 @@
 package com.mapbox.services.commons.geojson;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
-import com.mapbox.services.commons.geojson.custom.PositionSerializer;
-import com.mapbox.services.commons.models.Position;
+import com.google.gson.TypeAdapter;
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
+import com.mapbox.services.commons.geojson.custom.MapboxAdapterFactory;
+import com.mapbox.services.commons.geojson.custom.PointDeserializer;
+import com.mapbox.services.commons.geojson.custom.PointSerializer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A MultiPolygon is a type of {@link Geometry}.
+ * A MultiPolygon is a TYPE of {@link Geometry}.
  *
- * @see <a href='http://geojson.org/geojson-spec.html#multipolygon'>Official GeoJSON MultiPolygon Specifications</a>
+ * @see <a href='http://geojson.org/geojson-spec.html#multipolygon'>Official GeoJson MultiPolygon Specifications</a>
  * @since 1.0.0
  */
-public class MultiPolygon implements Geometry<List<List<List<Position>>>> {
+@AutoValue
+public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>, Serializable {
 
-  private final String type = "MultiPolygon";
-  private List<List<List<Position>>> coordinates;
+  private static final String TYPE = "MultiPolygon";
 
-  /**
-   * Private constructor.
-   *
-   * @param coordinates List of {@link Position} making up the MultiPolygon.
-   * @since 1.0.0
-   */
-  private MultiPolygon(List<List<List<Position>>> coordinates) {
-    this.coordinates = coordinates;
-  }
-
-  /**
-   * Should always be "MultiPolygon".
-   *
-   * @return String "MultiPolygon".
-   * @since 1.0.0
-   */
-  @Override
-  public String getType() {
-    return type;
-  }
-
-  /**
-   * Get the list of {@link Position} making up the MultiPolygon.
-   *
-   * @return List of {@link Position}.
-   * @since 1.0.0
-   */
-  @Override
-  public List<List<List<Position>>> getCoordinates() {
-    return coordinates;
-  }
-
-  @Override
-  public void setCoordinates(List<List<List<Position>>> coordinates) {
-    this.coordinates = coordinates;
-  }
-
-  /**
-   * Creates a {@link MultiPolygon} from a list of coordinates.
-   *
-   * @param coordinates List of {@link Position} coordinates.
-   * @return {@link MultiPolygon}.
-   * @since 1.0.0
-   */
-  public static MultiPolygon fromCoordinates(List<List<List<Position>>> coordinates) {
-    return new MultiPolygon(coordinates);
-  }
-
-  public static MultiPolygon fromCoordinates(double[][][][] coordinates) {
-    List<List<List<Position>>> converted = new ArrayList<>(coordinates.length);
-    for (int i = 0; i < coordinates.length; i++) {
-      List<List<Position>> innerOneList = new ArrayList<>(coordinates[i].length);
-      for (int j = 0; j < coordinates[i].length; j++) {
-        List<Position> innerTwoList = new ArrayList<>(coordinates[i][j].length);
-        for (int k = 0; k < coordinates[i][j].length; k++) {
-          innerTwoList.add(Position.fromCoordinates(coordinates[i][j][k]));
-        }
-        innerOneList.add(innerTwoList);
-      }
-      converted.add(innerOneList);
-    }
-
-    return fromCoordinates(converted);
-  }
-
-  /**
-   * Create a GeoJSON MultiPolygon object from JSON.
-   *
-   * @param json String of JSON making up a MultiPolygon.
-   * @return {@link MultiPolygon} GeoJSON object.
-   * @since 1.0.0
-   */
   public static MultiPolygon fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionDeserializer());
+    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
     return gson.create().fromJson(json, MultiPolygon.class);
   }
 
+  public static MultiPolygon fromPolygons(@NonNull List<Polygon> polygons) {
+    List<List<List<Point>>> coordinates = new ArrayList<>();
+    for (Polygon polygon : polygons) {
+      coordinates.add(polygon.coordinates());
+    }
+    return new AutoValue_MultiPolygon(TYPE, null, coordinates);
+  }
+
+  public static MultiPolygon fromPolygons(@NonNull List<Polygon> polygons,
+                                          @Nullable BoundingBox bbox) {
+    List<List<List<Point>>> coordinates = new ArrayList<>();
+    for (Polygon polygon : polygons) {
+      coordinates.add(polygon.coordinates());
+    }
+    return new AutoValue_MultiPolygon(TYPE, bbox, coordinates);
+  }
+
+  public static MultiPolygon fromLngLats(@NonNull List<List<List<Point>>> coordinates) {
+    return new AutoValue_MultiPolygon(TYPE, null, coordinates);
+  }
+
+  public static MultiPolygon fromLngLats(@NonNull List<List<List<Point>>> coordinates,
+                                         @Nullable BoundingBox bbox) {
+
+    return new AutoValue_MultiPolygon(TYPE, bbox, coordinates);
+  }
+
+  public List<Polygon> polygons() {
+    List<Polygon> polygons = new ArrayList<>();
+    for (List<List<Point>> points : coordinates()) {
+      polygons.add(Polygon.fromLngLats(points));
+    }
+    return polygons;
+  }
+
+  @NonNull
+  @Override
+  public abstract String type();
+
   /**
-   * Convert feature into JSON.
+   * A Feature Collection might have a member named {@code bbox} to include information on the
+   * coordinate range for it's {@link Feature}s. The value of the bbox member MUST be a list of
+   * size 2*n where n is the number of dimensions represented in the contained feature geometries,
+   * with all axes of the most southwesterly point followed by all axes of the more northeasterly
+   * point. The axes order of a bbox follows the axes order of geometries.
    *
-   * @return String containing MultiPolygon JSON.
-   * @since 1.0.0
+   * @return a list of double coordinate values describing a bounding box
+   * @since 3.0.0
    */
+  @Nullable
+  @Override
+  public abstract BoundingBox bbox();
+
+  @NonNull
+  @Override
+  public abstract List<List<List<Point>>> coordinates();
+
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionSerializer());
+    gson.registerTypeAdapter(Point.class, new PointSerializer());
     return gson.create().toJson(this);
+  }
+
+  /**
+   * Gson TYPE adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the TYPE adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<MultiPolygon> typeAdapter(Gson gson) {
+    return new AutoValue_MultiPolygon.GsonTypeAdapter(gson);
   }
 }

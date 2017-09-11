@@ -17,6 +17,7 @@ import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 import com.mapbox.services.android.testapp.R;
+import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
 import timber.log.Timber;
@@ -76,8 +77,8 @@ public class LocationEngineActivity extends AppCompatActivity
     if (engineName.equals(locationEngines[1])) {
       // Mock
       locationEngine = new MockLocationEngine();
-      ((MockLocationEngine) locationEngine).setLastLocation(Position.fromLngLat(-87.62877, 41.87827));
-      ((MockLocationEngine) locationEngine).moveToLocation(Position.fromLngLat(-87.6633, 41.8850));
+      ((MockLocationEngine) locationEngine).setLastLocation(Point.fromLngLat(-87.62877, 41.87827));
+      ((MockLocationEngine) locationEngine).moveToLocation(Point.fromLngLat(-87.6633, 41.8850));
     } else if (engineName.equals(locationEngines[2])) {
       // Android
       locationEngine = AndroidLocationEngine.getLocationEngine(this);

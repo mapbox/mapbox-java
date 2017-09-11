@@ -3,20 +3,21 @@ package com.mapbox.services.api.directions.v5;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.Size;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mapbox.services.Constants;
+import com.mapbox.services.api.MapboxAdapterFactory;
+import com.mapbox.services.api.MapboxCallHelper;
 import com.mapbox.services.api.MapboxService;
+import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.services.api.directions.v5.DirectionsCriteria.ProfileCriteria;
-import com.mapbox.services.api.directions.v5.gson.DirectionsAdapterFactory;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.utils.TextUtils;
+import com.mapbox.services.commons.utils.MapboxUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,9 +40,9 @@ import java.util.Locale;
  * origin.
  *
  * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/directions/">Android
- * Directions documentation</a>
+ *   Directions documentation</a>
  * @see <a href="https://www.mapbox.com/api-documentation/#directions">Directions API
- * documentation</a>
+ *   documentation</a>
  * @since 1.0.0
  */
 @AutoValue
@@ -57,7 +58,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     // Gson instance with type adapters
     if (gson == null) {
       gson = new GsonBuilder()
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+        .registerTypeAdapterFactory(MapboxAdapterFactory.create())
         .create();
     }
     return gson;
@@ -111,9 +112,10 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   }
 
   /**
-   * Execute the call
+   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
+   * Directions API.
    *
-   * @return The Directions v5 response
+   * @return the Directions v5 response once the call completes successfully
    * @throws IOException Signals that an I/O exception of some sort has occurred.
    * @since 1.0.0
    */
@@ -123,9 +125,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   }
 
   /**
-   * Execute the call
+   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
+   * to the Directions API. Use this method to make a directions request on the Main Thread.
    *
-   * @param callback A Retrofit callback.
+   * @param callback a {@link Callback} which is used once the {@link DirectionsResponse} is
+   *                 created.
    * @since 1.0.0
    */
   @Override
@@ -134,7 +138,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   }
 
   /**
-   * Cancel the call
+   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
+   * the user dismisses the calling activity or no longer needs the returned results.
    *
    * @since 1.0.0
    */
@@ -144,7 +149,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   }
 
   /**
-   * clone the call
+   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
    *
    * @return cloned call
    * @since 1.0.0
@@ -194,6 +199,13 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   @Nullable
   abstract String clientAppName();
 
+  /**
+   * Build a new {@link MapboxDirections} object with the initial values set for
+   * {@link #baseUrl()}, {@link #profile()}, {@link #user()}, and {@link #geometries()}.
+   *
+   * @return a {@link Builder} object for creating this object
+   * @since 3.0.0
+   */
   public static Builder builder() {
     return new AutoValue_MapboxDirections.Builder()
       .baseUrl(Constants.BASE_API_URL)
@@ -252,7 +264,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * This sets the starting point on the map where the route will begin. It is one of the
      * required parameters which must be set for a successful directions response.
      *
-     * @param origin a GeoJSON {@link Point} object representing the starting location for the route
+     * @param origin a GeoJson {@link Point} object representing the starting location for the route
      * @return this builder for chaining options together
      * @since 1.0.0
      */
@@ -265,7 +277,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * This sets the ending point on the map where the route will end. It is one of the required
      * parameters which must be set for a successful directions response.
      *
-     * @param destination a GeoJSON {@link Point} object representing the starting location for the
+     * @param destination a GeoJson {@link Point} object representing the starting location for the
      *                    route
      * @return this builder for chaining options together
      * @since 1.0.0
@@ -310,7 +322,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * this field to the APIs default value vs this SDKs default value of
      * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
      * <p>
-     * Note that while the API supports GeoJSON as an option for geometry, this SDK intentionally
+     * Note that while the API supports GeoJson as an option for geometry, this SDK intentionally
      * removes this as an option since an encoded string for the geometry significantly reduces
      * bandwidth on mobile devices and speeds up response time.
      * </p>
@@ -329,11 +341,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * geometry). The default is simplified. Passing in null will use the APIs default setting for
      * the overview field.
      *
-     * @param Overview null or one of the options found in {@link OverviewCriteria}
+     * @param overview null or one of the options found in {@link OverviewCriteria}
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder overview(@Nullable @OverviewCriteria String Overview);
+    public abstract Builder overview(@Nullable @OverviewCriteria String overview);
 
     /**
      * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
@@ -369,15 +381,17 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     * Languages</a>
+     *   Languages</a>
      * @since 2.2.0
      */
     public Builder language(@Nullable Locale language) {
       if (language != null) {
-        language(language.toString());
+        language(language.getLanguage());
       }
       return this;
     }
+
+    abstract Builder language(@Nullable String language);
 
     /**
      * Whether or not to return additional metadata along the route. Possible values are:
@@ -392,13 +406,24 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
-     * documentation</a>
+     *   documentation</a>
      * @since 2.1.0
      */
     public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
       this.annotations = annotations;
       return this;
     }
+
+    /**
+     * Whether or not to return additional metadata along the route. See
+     * {@link #annotations(String...)} for a full list of possible annotation values. If more than
+     * one annotations desired, separate the annotations inside the string with commas.
+     *
+     * @param annotations string referencing one of the annotation direction criteria's
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder annotations(@Nullable String annotations);
 
     /**
      * Optionally, Use to filter the road segment the waypoint will be placed on by direction and
@@ -434,6 +459,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       return this;
     }
 
+    abstract Builder bearings(@Nullable String bearings);
+
     /**
      * Optionally, set the maximum distance in meters that each coordinate is allowed to move when
      * snapped to a nearby road segment. There must be as many radiuses as there are coordinates in
@@ -452,6 +479,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       return this;
     }
 
+    abstract Builder radiuses(@Nullable String radiuses);
+
     /**
      * Base package name or other simple string identifier. Used inside the calls user agent header.
      *
@@ -461,25 +490,38 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      */
     public abstract Builder clientAppName(@NonNull String clientAppName);
 
-
+    /**
+     * Required to call when this is being built. If no access token provided,
+     * {@link ServicesException} will be thrown.
+     *
+     * @param accessToken Mapbox access token, You must have a Mapbox account inorder to use
+     *                    the Optimization API
+     * @return this builder for chaining options together
+     * @since 2.1.0
+     */
     public abstract Builder accessToken(@NonNull String accessToken);
 
+    /**
+     * Optionally change the APIs base URL to something other then the default Mapbox one.
+     *
+     * @param baseUrl base url used as end point
+     * @return this builder for chaining options together
+     * @since 2.1.0
+     */
     public abstract Builder baseUrl(String baseUrl);
-
-    // Private methods for matching MapboxDirections methods.
-
-    abstract Builder language(@Nullable String language);
-
-    abstract Builder radiuses(@Nullable String radiuses);
-
-    abstract Builder bearings(@Nullable String bearings);
 
     abstract Builder coordinates(@NonNull String coordinates);
 
-    abstract Builder annotations(@Nullable String annotations);
-
     abstract MapboxDirections autoBuild(); // not public
 
+    /**
+     * This uses the provided parameters set using the {@link Builder} and first checks that all
+     * values are valid, formats the values as strings for easier consumption by the API, and lastly
+     * creates a new {@link MapboxDirections} object with the values provided.
+     *
+     * @return a new instance of Mapbox Optimization
+     * @since 2.1.0
+     */
     public MapboxDirections build() {
       if (origin != null) {
         coordinates.add(0, origin);
@@ -488,63 +530,17 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
         coordinates.add(destination);
       }
 
-      coordinates(formatCoordinates());
-      bearings(formatBearing());
-      annotations(formatAnnotations());
-      radiuses(formatRadiuses());
-      return autoBuild();
-    }
+      coordinates(MapboxCallHelper.formatCoordinates(coordinates));
+      bearings(MapboxCallHelper.formatBearing(bearings));
+      annotations(MapboxCallHelper.formatStringArray(annotations));
+      radiuses(MapboxCallHelper.formatRadiuses(radiuses));
 
-    private String formatAnnotations() {
-      if (annotations == null || annotations.length == 0) {
-        return null;
+      MapboxDirections directions = autoBuild();
+
+      if (!MapboxUtils.isAccessTokenValid(directions.accessToken())) {
+        throw new ServicesException("Using Mapbox Services requires setting a valid access token.");
       }
-      return TextUtils.join(",", annotations);
-    }
-
-    private String formatRadiuses() {
-      if (radiuses == null || radiuses.length == 0) {
-        return null;
-      }
-
-      String[] radiusesFormatted = new String[radiuses.length];
-      for (int i = 0; i < radiuses.length; i++) {
-        if (radiuses[i] == Double.POSITIVE_INFINITY) {
-          radiusesFormatted[i] = "unlimited";
-        } else {
-          radiusesFormatted[i] = String.format(Locale.US, "%s", TextUtils.formatCoordinate(radiuses[i]));
-        }
-      }
-      return TextUtils.join(";", radiusesFormatted);
-    }
-
-    private String formatCoordinates() {
-      List<String> coordinatesFormatted = new ArrayList<>();
-      for (Point point : coordinates) {
-        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(point.getCoordinates().getLongitude()),
-          TextUtils.formatCoordinate(point.getCoordinates().getLatitude())));
-      }
-
-      return TextUtils.join(";", coordinatesFormatted.toArray());
-    }
-
-    private String formatBearing() {
-      if (bearings.isEmpty()) {
-        return null;
-      }
-
-      String[] bearingFormatted = new String[bearings.size()];
-      for (int i = 0; i < bearings.size(); i++) {
-        if (bearings.get(i).length == 0) {
-          bearingFormatted[i] = "";
-        } else {
-          bearingFormatted[i] = String.format(Locale.US, "%s,%s",
-            TextUtils.formatCoordinate(bearings.get(i)[0]),
-            TextUtils.formatCoordinate(bearings.get(i)[1]));
-        }
-      }
-      return TextUtils.join(";", bearingFormatted);
+      return directions;
     }
   }
 }

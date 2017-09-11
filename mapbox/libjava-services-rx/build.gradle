@@ -7,8 +7,15 @@ dependencies {
     // Rx support depends on non-Rx services
     compile project(':libjava-services')
 
+    // Annotations
+    compileOnly rootProject.ext.dep.supportAnnotations
+
+    // AutoValues
+    compileOnly rootProject.ext.dep.autoValues
+    compileOnly rootProject.ext.dep.autoValuesGson
+
     // Rx extensions
-    compile rootProject.ext.dep.retrofit2Rx
+    compile rootProject.ext.dep.rxJava
 
     // Testing
     testCompile rootProject.ext.dep.okhttp3Mockwebserver
