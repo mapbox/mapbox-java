@@ -42,7 +42,7 @@ public class TurfJoins {
    * @param point        which you'd like to check if inside the polygon
    * @param multiPolygon which you'd like to check if the points inside
    * @return true if the Point is inside the MultiPolygon; false if the Point is not inside the
-   * MultiPolygon
+   *   MultiPolygon
    * @see <a href="http://turfjs.org/docs/#inside">Turf Inside documentation</a>
    * @since 1.3.0
    */
@@ -81,11 +81,11 @@ public class TurfJoins {
    */
   public static FeatureCollection within(FeatureCollection points, FeatureCollection polygons) {
     ArrayList<Feature> features = new ArrayList<>();
-    for (int i = 0; i < polygons.getFeatures().size(); i++) {
-      for (int j = 0; j < points.getFeatures().size(); j++) {
-        Point point = (Point) points.getFeatures().get(j).getGeometry();
+    for (int i = 0; i < polygons.features().size(); i++) {
+      for (int j = 0; j < points.features().size(); j++) {
+        Point point = (Point) points.features().get(j).geometry();
         boolean isInside
-          = TurfJoins.inside(point, (Polygon) polygons.getFeatures().get(i).getGeometry());
+          = TurfJoins.inside(point, (Polygon) polygons.features().get(i).geometry());
         if (isInside) {
           features.add(Feature.fromGeometry(point));
         }

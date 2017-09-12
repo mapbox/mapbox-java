@@ -25,6 +25,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -127,9 +129,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   }
 
   /**
-   * Execute the call
+   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
+   * Geocoding API.
    *
-   * @return The Geocoding v5 response
+   * @return the Geocoding v5 response once the call completes successfully
    * @throws IOException Signals that an I/O exception of some sort has occurred.
    * @since 1.0.0
    */
@@ -139,20 +142,22 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   }
 
   /**
-   * Execute the batch call
+   * Wrapper method for Retrofits {@link Call#execute()} call returning a batch response specific to
+   * the Geocoding API.
    *
-   * @return The Geocoding v5 response
+   * @return the Geocoding v5 batch response once the call completes successfully
    * @throws IOException Signals that an I/O exception of some sort has occurred.
-   * @since 2.0.0
+   * @since 1.0.0
    */
   public Response<List<GeocodingResponse>> executeBatchCall() throws IOException {
     return getBatchCall().execute();
   }
 
   /**
-   * Execute the call
+   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
+   * to the Geocoding API. Use this method to make a geocoding request on the Main Thread.
    *
-   * @param callback A Retrofit callback.
+   * @param callback a {@link Callback} which is used once the {@link GeocodingResponse} is created.
    * @since 1.0.0
    */
   @Override
@@ -161,17 +166,20 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   }
 
   /**
-   * Execute the batch call
+   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a batch response
+   * specific to the Geocoding batch API. Use this method to make a geocoding request on the Main
+   * Thread.
    *
-   * @param callback A Retrofit callback.
-   * @since 2.0.0
+   * @param callback a {@link Callback} which is used once the {@link GeocodingResponse} is created.
+   * @since 1.0.0
    */
   public void enqueueBatchCall(Callback<List<GeocodingResponse>> callback) {
     getBatchCall().enqueue(callback);
   }
 
   /**
-   * Cancel the call
+   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
+   * the user dismisses the calling activity or no longer needs the returned results.
    *
    * @since 1.0.0
    */
@@ -181,16 +189,17 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   }
 
   /**
-   * Cancel the batch call
+   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
+   * the user dismisses the calling activity or no longer needs the returned results.
    *
-   * @since 2.0.0
+   * @since 1.0.0
    */
   public void cancelBatchCall() {
     getBatchCall().cancel();
   }
 
   /**
-   * clone the call
+   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
    *
    * @return cloned call
    * @since 1.0.0
@@ -201,10 +210,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   }
 
   /**
-   * clone the batch call
+   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
    *
    * @return cloned call
-   * @since 2.0.0
+   * @since 1.0.0
    */
   public Call<List<GeocodingResponse>> cloneBatchCall() {
     return getBatchCall().clone();
@@ -261,12 +270,23 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   }
 
   /**
-   * Geocoding v5 builder
+   * This builder is used to create a new request to the Mapbox Geocoding API. At a bare minimum,
+   * your request must include an access token and a query of some kind. All other fields can
+   * be left alone inorder to use the default behaviour of the API.
+   * <p>
+   * By default, the geocoding mode is set to places but can be changed to batch if you have an
+   * enterprise Mapbox plan.
+   * </p><p>
+   * Note to contributors: All optional booleans in this builder use the object {@code Boolean}
+   * rather than the primitive to allow for unset (null) values.
+   * </p>
    *
    * @since 1.0.0
    */
   @AutoValue.Builder
   public abstract static class Builder {
+
+    List<String> countries = new ArrayList<>();
 
     public Builder query(@NonNull Point point) {
       query(String.format(Locale.US, "%s,%s",
@@ -303,7 +323,13 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return this builder for chaining options together
      * @see 1.0.0
      */
-    public abstract Builder proximity(@NonNull Point proximity);
+    public Builder proximity(@NonNull Point proximity) {
+      proximity(String.format(Locale.US, "%s,%s",
+        TextUtils.formatCoordinate(proximity.longitude()), proximity.latitude()));
+      return this;
+    }
+
+    abstract Builder proximity(String proximity);
 
     /**
      * This optionally can be set to filter the results returned back after making your forward or
@@ -319,12 +345,47 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder geocodingTypes(
-      @NonNull @GeocodingTypeCriteria String... geocodingTypes);
+    public Builder geocodingTypes(@NonNull @GeocodingTypeCriteria String... geocodingTypes) {
+      geocodingTypes(TextUtils.join(",", geocodingTypes));
+      return this;
+    }
 
+    abstract Builder geocodingTypes(String geocodingTypes);
 
-    public abstract Builder country(Locale country);
+    /**
+     * Add a single country locale to restrict the results. This method can be called as many times
+     * as needed inorder to add multiple countries.
+     *
+     * @param country limit geocoding results to one
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public Builder country(Locale country) {
+      countries.add(country.getCountry());
+      return this;
+    }
 
+    /**
+     * Limit results to one or more countries. Options are ISO 3166 alpha 2 country codes separated
+     * by commas.
+     *
+     * @param country limit geocoding results to one
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public Builder country(String... country) {
+      countries.addAll(Arrays.asList(country));
+      return this;
+    }
+
+    /**
+     * Limit results to one or more countries. Options are ISO 3166 alpha 2 country codes separated
+     * by commas.
+     *
+     * @param country limit geocoding results to one
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder country(String country);
 
     /**
@@ -406,7 +467,12 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return this builder for chaining options together
      * @since 2.0.0
      */
-    public abstract Builder limit(@IntRange(from = 1, to = 10) int limit);
+    public Builder limit(@IntRange(from = 1, to = 10) int limit) {
+      limit(String.valueOf(limit));
+      return this;
+    }
+
+    abstract Builder limit(String limit);
 
     /**
      * This optionally specifies the desired response language for user queries. For forward
@@ -491,7 +557,6 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     abstract MapboxGeocoding autoBuild();
 
     public MapboxGeocoding build() {
-
 
       // TODO format geocoding types
       // TODO proximity

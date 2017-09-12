@@ -40,7 +40,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class CarmenFeature implements Geometry, Serializable {
+public abstract class CarmenFeature implements Serializable {
 
   private static final String TYPE = "Feature";
 
@@ -81,21 +81,19 @@ public abstract class CarmenFeature implements Geometry, Serializable {
    * @since 1.0.0
    */
   @NonNull
-  @Override
   public abstract String type();
 
   /**
-   * A Feature Collection might have a member named {@code bbox} to include information on the
-   * coordinate range for it's {@link Feature}s. The value of the bbox member MUST be a list of
+   * A {@link CarmenFeature} might have a member named {@code bbox} to include information on the
+   * coordinate range for it's {@link Geometry}. The value of the bbox member MUST be a list of
    * size 2*n where n is the number of dimensions represented in the contained feature geometries,
    * with all axes of the most southwesterly point followed by all axes of the more northeasterly
    * point. The axes order of a bbox follows the axes order of geometries.
    *
-   * @return a list of double coordinate values describing a bounding box
+   * @return a {@link BoundingBox} object containing the information
    * @since 3.0.0
    */
   @Nullable
-  @Override
   public abstract BoundingBox bbox();
 
   /**

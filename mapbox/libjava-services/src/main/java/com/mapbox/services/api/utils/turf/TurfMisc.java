@@ -51,12 +51,12 @@ public class TurfMisc {
       ends.add(startVertex);
     }
     List<Point> points = new ArrayList<>();
-    points.add((Point) ends.get(0).getGeometry());
+    points.add((Point) ends.get(0).geometry());
     for (int i = (int) ends.get(0).getNumberProperty("index") + 1;
          i < (int) ends.get(1).getNumberProperty("index") + 1; i++) {
       points.add(coords.get(i));
     }
-    points.add((Point) ends.get(1).getGeometry());
+    points.add((Point) ends.get(1).geometry());
     return LineString.fromLngLats(points);
   }
 
@@ -79,17 +79,17 @@ public class TurfMisc {
       Feature stop = Feature.fromGeometry(coords.get(i + 1));
       //start
       start.addNumberProperty("dist", TurfMeasurement.distance(
-        pt, (Point) start.getGeometry(), TurfConstants.UNIT_MILES));
+        pt, (Point) start.geometry(), TurfConstants.UNIT_MILES));
       //stop
       stop.addNumberProperty("dist", TurfMeasurement.distance(
-        pt, (Point) stop.getGeometry(), TurfConstants.UNIT_MILES));
+        pt, (Point) stop.geometry(), TurfConstants.UNIT_MILES));
       //perpendicular
       double heightDistance = Math.max(
-        start.getProperties().get("dist").getAsDouble(),
-        stop.getProperties().get("dist").getAsDouble()
+        start.properties().get("dist").getAsDouble(),
+        stop.properties().get("dist").getAsDouble()
       );
-      double direction = TurfMeasurement.bearing((Point) start.getGeometry(),
-        (Point) stop.getGeometry());
+      double direction = TurfMeasurement.bearing((Point) start.geometry(),
+        (Point) stop.geometry());
       Feature perpendicularPt1 = Feature.fromGeometry(
         TurfMeasurement.destination(pt, heightDistance, direction + 90,
           TurfConstants.UNIT_MILES));
@@ -97,14 +97,14 @@ public class TurfMisc {
         TurfMeasurement.destination(pt, heightDistance, direction - 90,
           TurfConstants.UNIT_MILES));
       LineIntersectsResult intersect = lineIntersects(
-        ((Point) perpendicularPt1.getGeometry()).longitude(),
-        ((Point) perpendicularPt1.getGeometry()).latitude(),
-        ((Point) perpendicularPt2.getGeometry()).longitude(),
-        ((Point) perpendicularPt2.getGeometry()).latitude(),
-        ((Point) start.getGeometry()).longitude(),
-        ((Point) start.getGeometry()).latitude(),
-        ((Point) stop.getGeometry()).longitude(),
-        ((Point) stop.getGeometry()).latitude()
+        ((Point) perpendicularPt1.geometry()).longitude(),
+        ((Point) perpendicularPt1.geometry()).latitude(),
+        ((Point) perpendicularPt2.geometry()).longitude(),
+        ((Point) perpendicularPt2.geometry()).latitude(),
+        ((Point) start.geometry()).longitude(),
+        ((Point) start.geometry()).latitude(),
+        ((Point) stop.geometry()).longitude(),
+        ((Point) stop.geometry()).latitude()
       );
 
       Feature intersectPt = null;
@@ -112,7 +112,7 @@ public class TurfMisc {
         intersectPt = Feature.fromGeometry(
           Point.fromLngLat(intersect.getX(), intersect.getY()));
         intersectPt.addNumberProperty("dist", TurfMeasurement.distance(pt,
-          (Point) intersectPt.getGeometry(), TurfConstants.UNIT_MILES));
+          (Point) intersectPt.geometry(), TurfConstants.UNIT_MILES));
       }
 
       if ((double) start.getNumberProperty("dist")

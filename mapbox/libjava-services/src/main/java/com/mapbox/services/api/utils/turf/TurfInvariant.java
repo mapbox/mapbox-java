@@ -25,8 +25,8 @@ public class TurfInvariant {
    * @since 1.2.0
    */
   public static Point getCoord(Feature obj) throws TurfException {
-    if (obj.getGeometry().getClass().equals(Point.class)) {
-      return (Point) obj.getGeometry();
+    if (obj.geometry().getClass().equals(Point.class)) {
+      return (Point) obj.geometry();
     }
     throw new TurfException("A feature with a Point geometry is required.");
   }
@@ -66,12 +66,12 @@ public class TurfInvariant {
     if (TextUtils.isEmpty(name)) {
       throw new TurfException(".featureOf() requires a name");
     }
-    if (feature == null || !feature.type().equals("Feature") || feature.getGeometry() == null) {
+    if (feature == null || !feature.type().equals("Feature") || feature.geometry() == null) {
       throw new TurfException("Invalid input to " + name + ", Feature with geometry required");
     }
-    if (feature.getGeometry() == null || !feature.getGeometry().type().equals(type)) {
+    if (feature.geometry() == null || !feature.geometry().type().equals(type)) {
       throw new TurfException("Invalid input to " + name + ": must be a " + type
-        + ", given " + feature.getGeometry().type());
+        + ", given " + feature.geometry().type());
     }
   }
 
@@ -92,16 +92,16 @@ public class TurfInvariant {
       throw new TurfException("collectionOf() requires a name");
     }
     if (featureCollection == null || !featureCollection.type().equals("FeatureCollection")
-      || featureCollection.getFeatures() == null) {
+      || featureCollection.features() == null) {
       throw new TurfException("Invalid input to " + name + ", FeatureCollection required");
     }
-    for (Feature feature : featureCollection.getFeatures()) {
-      if (feature == null || !feature.type().equals("Feature") || feature.getGeometry() == null) {
+    for (Feature feature : featureCollection.features()) {
+      if (feature == null || !feature.type().equals("Feature") || feature.geometry() == null) {
         throw new TurfException("Invalid input to " + name + ", Feature with geometry required");
       }
-      if (feature.getGeometry() == null || !feature.getGeometry().type().equals(type)) {
+      if (feature.geometry() == null || !feature.geometry().type().equals(type)) {
         throw new TurfException("Invalid input to " + name + ": must be a " + type
-          + ", given " + feature.getGeometry().type());
+          + ", given " + feature.geometry().type());
       }
     }
   }

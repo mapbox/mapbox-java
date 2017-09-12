@@ -28,7 +28,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class GeocodingResponse implements Geometry, Serializable {
+public abstract class GeocodingResponse implements Serializable {
 
   private static final String TYPE = "FeatureCollection";
 
@@ -68,6 +68,19 @@ public abstract class GeocodingResponse implements Geometry, Serializable {
    * @since 1.0.0
    */
   public abstract String type();
+
+  /**
+   * A Geocoding Response might have a member named {@code bbox} to include information on the
+   * coordinate range for it's {@link CarmenFeature}s. The value of the bbox member MUST be a list
+   * of size 2*n where n is the number of dimensions represented in the contained feature
+   * geometries, with all axes of the most southwesterly point followed by all axes of the more
+   * northeasterly point. The axes order of a bbox follows the axes order of geometries.
+   *
+   * @return a list of double coordinate values describing a bounding box
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract BoundingBox bbox();
 
   /**
    * A list of space and punctuation-separated strings from the original query.
@@ -142,6 +155,20 @@ public abstract class GeocodingResponse implements Geometry, Serializable {
      * @since 3.0.0
      */
     abstract Builder type(@NonNull String type);
+
+    /**
+     * A Geocoding Response might have a member named {@code bbox} to include information on the
+     * coordinate range for it's {@link CarmenFeature}s. The value of the bbox member MUST be a list
+     * of size 2*n where n is the number of dimensions represented in the contained feature
+     * geometries, with all axes of the most southwesterly point followed by all axes of the more
+     * northeasterly point. The axes order of a bbox follows the axes order of geometries.
+     *
+     * @param bbox a list of double coordinate values describing a bounding box
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    @Nullable
+    public abstract Builder bbox(@Nullable BoundingBox bbox);
 
     /**
      * A list of space and punctuation-separated strings from the original query.
