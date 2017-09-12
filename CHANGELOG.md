@@ -2,6 +2,18 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.2.3
+
+- Introduce setDebugLoggingEnabled API [#549](https://github.com/mapbox/mapbox-java/pull/549)
+
+### v2.2.2
+
+- Adds setter for session rotation time [#544](https://github.com/mapbox/mapbox-java/pull/544)
+
+### v2.2.1
+
+- Updates release script for CircleCI [#541](https://github.com/mapbox/mapbox-java/pull/541)
+
 ### v2.2.0
 
 - Adds ProGuard rules for Optimization and Directions Matrix API [#516](https://github.com/mapbox/mapbox-java/pull/516)
