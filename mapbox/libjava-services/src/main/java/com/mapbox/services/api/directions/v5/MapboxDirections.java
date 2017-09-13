@@ -76,7 +76,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       builder.getBearings(),
       builder.isContinueStraight(),
       builder.getAnnotation(),
-      builder.getLanguage());
+      builder.getLanguage(),
+      builder.isRoundaboutExits());
 
     // Done
     return call;
@@ -149,6 +150,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     private Position destination = null;
     private String[] annotation = null;
     private String language = null;
+    private Boolean roundaboutExits = null;
 
     /**
      * Constructor
@@ -373,6 +375,17 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       return (T) this;
     }
 
+    /**
+     * Optionally, call if you'd like to specify if exit on a roundabout is allowed.
+     *
+     * @param roundaboutExits true if exit on a roundabout is allowed.
+     * @return Builder
+     * @since 2.2.4
+     */
+    public T setRoundaboutExits(Boolean roundaboutExits) {
+      this.roundaboutExits = roundaboutExits;
+      return (T) this;
+    }
     /*
      * Getters, they return the value in a format ready for the API to consume
      */
@@ -588,6 +601,14 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     public T setBaseUrl(String baseUrl) {
       super.baseUrl = baseUrl;
       return (T) this;
+    }
+
+    /**
+     * @return true it is possible to exit on the roundabout {@link #setRoundaboutExits(Boolean)}.
+     * @since 2.2.4
+     */
+    public Boolean isRoundaboutExits() {
+      return roundaboutExits;
     }
 
     /**
