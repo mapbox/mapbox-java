@@ -6,6 +6,8 @@ import android.support.annotation.IntRange;
 import android.support.annotation.RequiresPermission;
 import android.support.annotation.Size;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -270,4 +272,46 @@ public abstract class LocationEngine {
     return provider1.equals(provider2);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof LocationEngine)) return false;
+
+    LocationEngine that = (LocationEngine) o;
+
+    if (getPriority() != that.getPriority() ||
+            getInterval() != that.getInterval() ||
+            Float.compare(getFastestInterval(), that.getFastestInterval()) != 0 ||
+            getSmallestDisplacement() != that.getSmallestDisplacement()) {
+      return false;
+    }
+
+    // TODO: Subclasses HAVE to override and return false if super.equals is false
+    return locationListeners != null ? locationListeners.equals(that.locationListeners) : that.locationListeners == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = this.getClass().getSimpleName().hashCode();
+    result = 31 * result + getPriority();
+    result = 31 * result + getInterval();
+    result = 31 * result + getFastestInterval();
+    result = 31 * result + (int)getSmallestDisplacement();
+    result = 31 * result + (locationListeners != null ? locationListeners.hashCode() : 0);
+
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "LocationEngine type=" + getClass().getSimpleName() +
+            " {" +
+            "priority=" + priority +
+            ", interval=" + interval +
+            ", fastestInterval=" + fastestInterval +
+            ", smallestDisplacement=" + smallestDisplacement +
+            ", locationListeners=" + locationListeners +
+            '}';
+  }
 }
