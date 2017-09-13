@@ -14,6 +14,7 @@ import com.mapbox.services.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.services.api.matrix.v1.models.MatrixResponse;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.utils.MapboxUtils;
+import com.mapbox.services.commons.utils.TextUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -184,8 +185,8 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
   public abstract static class Builder {
 
     private List<Point> coordinates = new ArrayList<>();
-    private int[] destinations;
-    private int[] sources;
+    private Integer[] destinations;
+    private Integer[] sources;
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -259,7 +260,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public Builder destinations(@Nullable int... destinations) {
+    public Builder destinations(@Nullable Integer... destinations) {
       this.destinations = destinations;
       return this;
     }
@@ -274,7 +275,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
      * @return Builder
      * @since 2.1.0
      */
-    public Builder sources(@Nullable int... sources) {
+    public Builder sources(@Nullable Integer... sources) {
       this.sources = sources;
       return this;
     }
@@ -311,8 +312,9 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
       }
 
       coordinates(MapboxCallHelper.formatCoordinates(coordinates));
-      sources(MapboxCallHelper.formatIntArray(sources));
-      destinations(MapboxCallHelper.formatIntArray(destinations));
+
+      sources(TextUtils.join(";", sources));
+      destinations(TextUtils.join(";", destinations));
 
       // Generate build so that we can check that values are valid.
       MapboxMatrix matrix = autoBuild();

@@ -1,5 +1,6 @@
 package com.mapbox.services.commons.geojson;
 
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -70,17 +71,16 @@ public class MultiPolygonTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     List<Polygon> polygons = new ArrayList<>();
     polygons.add(Polygon.fromOuterInner(outer));
     polygons.add(Polygon.fromOuterInner(outer));
     MultiPolygon multiPolygon = MultiPolygon.fromPolygons(polygons, bbox);
     assertNotNull(multiPolygon.bbox());
-    assertEquals(4, multiPolygon.bbox().length);
-    assertEquals(1.0, multiPolygon.bbox()[0], DELTA);
-    assertEquals(2.0, multiPolygon.bbox()[1], DELTA);
-    assertEquals(3.0, multiPolygon.bbox()[2], DELTA);
-    assertEquals(4.0, multiPolygon.bbox()[3], DELTA);
+    assertEquals(1.0, multiPolygon.bbox().west(), DELTA);
+    assertEquals(2.0, multiPolygon.bbox().south(), DELTA);
+    assertEquals(3.0, multiPolygon.bbox().east(), DELTA);
+    assertEquals(4.0, multiPolygon.bbox().north(), DELTA);
   }
 
   @Test
@@ -92,7 +92,7 @@ public class MultiPolygonTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     List<Polygon> polygons = new ArrayList<>();
     polygons.add(Polygon.fromOuterInner(outer));
     polygons.add(Polygon.fromOuterInner(outer));
@@ -111,7 +111,7 @@ public class MultiPolygonTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     List<Polygon> polygons = new ArrayList<>();
     polygons.add(Polygon.fromOuterInner(outer));
     polygons.add(Polygon.fromOuterInner(outer));

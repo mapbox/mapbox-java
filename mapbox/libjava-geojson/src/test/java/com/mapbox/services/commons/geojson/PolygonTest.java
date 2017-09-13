@@ -1,5 +1,6 @@
 package com.mapbox.services.commons.geojson;
 
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -71,17 +72,16 @@ public class PolygonTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     List<LineString> inner = new ArrayList<>();
     inner.add(LineString.fromLngLats(points));
     inner.add(LineString.fromLngLats(points));
     Polygon polygon = Polygon.fromOuterInner(outer, bbox, inner);
     assertNotNull(polygon.bbox());
-    assertEquals(4, polygon.bbox().length);
-    assertEquals(1.0, polygon.bbox()[0], DELTA);
-    assertEquals(2.0, polygon.bbox()[1], DELTA);
-    assertEquals(3.0, polygon.bbox()[2], DELTA);
-    assertEquals(4.0, polygon.bbox()[3], DELTA);
+    assertEquals(1.0, polygon.bbox().west(), DELTA);
+    assertEquals(2.0, polygon.bbox().south(), DELTA);
+    assertEquals(3.0, polygon.bbox().east(), DELTA);
+    assertEquals(4.0, polygon.bbox().north(), DELTA);
   }
 
   @Test
@@ -93,7 +93,7 @@ public class PolygonTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     List<LineString> inner = new ArrayList<>();
     inner.add(LineString.fromLngLats(points));
     inner.add(LineString.fromLngLats(points));
@@ -112,7 +112,7 @@ public class PolygonTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     List<LineString> inner = new ArrayList<>();
     inner.add(LineString.fromLngLats(points));
     inner.add(LineString.fromLngLats(points));

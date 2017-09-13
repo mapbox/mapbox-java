@@ -1,14 +1,23 @@
 apply plugin: 'checkstyle'
 
 checkstyle {
-  toolVersion = "8.2.0"
-  configFile = "../../checkstyle.xml" as File
+  toolVersion = "7.1.1" // 7.3
+  configFile = "../../config/checkstyle/checkstyle.xml" as File
+}
+
+dependencies {
+  checkstyle files("$project.rootDir/config/checkstyle/checkstyle.jar")
+  checkstyle 'com.puppycrawl.tools:checkstyle:8.2'
+}
+
+repositories {
+  maven {url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"}
 }
 
 task checkstyle(type: Checkstyle) {
   description 'Checks if the code adheres to coding standards'
   group 'verification'
-  configFile file("../../checkstyle.xml")
+  configFile file("$project.rootDir/config/checkstyle/checkstyle.xml")
   source 'src'
   include '**/*.java'
   exclude '**/gen/**'

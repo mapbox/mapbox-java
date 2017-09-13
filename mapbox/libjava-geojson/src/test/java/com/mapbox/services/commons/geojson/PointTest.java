@@ -1,5 +1,6 @@
 package com.mapbox.services.commons.geojson;
 
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -71,14 +72,13 @@ public class PointTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 1.0));
     points.add(Point.fromLngLat(2.0, 2.0));
     points.add(Point.fromLngLat(3.0, 3.0));
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
     assertNotNull(lineString.bbox());
-    assertEquals(4, lineString.bbox().length);
-    assertEquals(1.0, lineString.bbox()[0], DELTA);
-    assertEquals(2.0, lineString.bbox()[1], DELTA);
-    assertEquals(3.0, lineString.bbox()[2], DELTA);
-    assertEquals(4.0, lineString.bbox()[3], DELTA);
+    assertEquals(1.0, lineString.bbox().west(), DELTA);
+    assertEquals(2.0, lineString.bbox().south(), DELTA);
+    assertEquals(3.0, lineString.bbox().east(), DELTA);
+    assertEquals(4.0, lineString.bbox().north(), DELTA);
   }
 
   @Test
@@ -87,7 +87,7 @@ public class PointTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 1.0));
     points.add(Point.fromLngLat(2.0, 2.0));
     points.add(Point.fromLngLat(3.0, 3.0));
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
     compareJson(lineString.toJson(),
       "{\"coordinates\":[[1,1],[2,2],[3,3]]," +
@@ -100,7 +100,7 @@ public class PointTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 1.0));
     points.add(Point.fromLngLat(2.0, 2.0));
     points.add(Point.fromLngLat(3.0, 3.0));
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
     byte[] bytes = serialize(lineString);
     assertEquals(lineString, deserialize(bytes, LineString.class));
@@ -114,9 +114,9 @@ public class PointTest extends BaseTest {
     assertEquals(geo.longitude(), 100.0, DELTA);
     assertEquals(geo.latitude(), 0.0, DELTA);
     assertEquals(geo.altitude(), Double.NaN, DELTA);
-    assertEquals(geo.coordinates()[0], 100.0, DELTA);
-    assertEquals(geo.coordinates()[1], 0.0, DELTA);
-    assertEquals(geo.coordinates().length, 2);
+    assertEquals(geo.coordinates().get(0), 100.0, DELTA);
+    assertEquals(geo.coordinates().get(1), 0.0, DELTA);
+    assertEquals(geo.coordinates().size(), 2);
     assertFalse(geo.hasAltitude());
   }
 

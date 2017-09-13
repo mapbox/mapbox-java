@@ -9,16 +9,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
-import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.geojson.custom.BoundingBox;
+import com.mapbox.services.commons.geojson.custom.BoundingBoxDeserializer;
 import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
+import com.mapbox.services.commons.geojson.custom.MapboxAdapterFactory;
 import com.mapbox.services.commons.geojson.custom.PointDeserializer;
-import com.mapbox.services.commons.models.Position;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,7 +25,7 @@ import java.util.List;
  * to use. It extends the {@link Feature} object in GeoJSON and adds several additional attribute
  * which further describe the geocoding result.
  * <p>
- * A Geocoding id is a String in the form {@code{type}.{id}} where {@code {type}} is the lowest
+ * A Geocoding id is a String in the form {@code {type}.{id}} where {@code {type}} is the lowest
  * hierarchy feature in the  place_type field. The  {id} suffix of the feature id is unstable and
  * may change within versions.
  * <p>
@@ -40,7 +39,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class CarmenFeature implements Serializable {
+public abstract class CarmenFeature {
 
   private static final String TYPE = "Feature";
 
@@ -62,13 +61,15 @@ public abstract class CarmenFeature implements Serializable {
    * @return this class using the defined information in the provided JSON string
    * @since 2.0.0
    */
-  public static CarmenFeature fromJson(String json) {
+  public static CarmenFeature fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PointDeserializer());
+    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer());
     return gson.create().fromJson(json, CarmenFeature.class);
   }
+
 
   // Feature specific attributes
 
@@ -182,7 +183,18 @@ public abstract class CarmenFeature implements Serializable {
    * @since 1.0.0
    */
   @Nullable
-  public abstract Point center();
+  public Point center() {
+    if (rawCenter() != null) {
+      if (rawCenter().length == 2) {
+        return Point.fromLngLat(rawCenter()[0], rawCenter()[1]);
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  @SerializedName("center")
+  abstract double[] rawCenter();
 
   /**
    * A list representing the hierarchy of encompassing parent features. This is where you can find
@@ -203,7 +215,8 @@ public abstract class CarmenFeature implements Serializable {
    * @return the relevant score between 0 and 1
    * @since 1.0.0
    */
-  public abstract double relevance();
+  @Nullable
+  public abstract Double relevance();
 
   /**
    * A string analogous to the {@link #text()} field that more closely matches the query than
@@ -365,7 +378,7 @@ public abstract class CarmenFeature implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder center(@Nullable Point center);
+    public abstract Builder rawCenter(@Nullable double[] center);
 
     /**
      * A list representing the hierarchy of encompassing parent features. This is where you can find
@@ -387,7 +400,7 @@ public abstract class CarmenFeature implements Serializable {
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder relevance(double relevance);
+    public abstract Builder relevance(@Nullable Double relevance);
 
     /**
      * A string analogous to the {@link #text()} field that more closely matches the query than

@@ -18,6 +18,7 @@ import com.mapbox.services.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.utils.MapboxUtils;
+import com.mapbox.services.commons.utils.TextUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -102,11 +103,12 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   }
 
   /**
-   * Execute the call
+   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
+   * Map Matching API.
    *
-   * @return The map matching v5 response
-   * @throws IOException Signals that an I/O exception of some sort has occurred.
-   * @since 2.0.0
+   * @return the Map Matching v5 response once the call completes successfully
+   * @throws IOException Signals that an I/O exception of some sort has occurred
+   * @since 1.0.0
    */
   @Override
   public Response<MapMatchingResponse> executeCall() throws IOException {
@@ -114,10 +116,12 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   }
 
   /**
-   * Execute the call
+   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
+   * to the Map Matching API. Use this method to make a directions request on the Main Thread.
    *
-   * @param callback A Retrofit callback.
-   * @since 2.0.0
+   * @param callback a {@link Callback} which is used once the {@link MapMatchingResponse} is
+   *                 created.
+   * @since 1.0.0
    */
   @Override
   public void enqueueCall(Callback<MapMatchingResponse> callback) {
@@ -125,9 +129,10 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   }
 
   /**
-   * Cancel the call
+   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
+   * the user dismisses the calling activity or no longer needs the returned results.
    *
-   * @since 2.0.0
+   * @since 1.0.0
    */
   @Override
   public void cancelCall() {
@@ -135,10 +140,10 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   }
 
   /**
-   * clone the call
+   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
    *
    * @return cloned call
-   * @since 2.0.0
+   * @since 1.0.0
    */
   @Override
   public Call<MapMatchingResponse> cloneCall() {
@@ -148,7 +153,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   @Nullable
   abstract String clientAppName();
 
-  @NonNull
+  @Nullable
   abstract String accessToken();
 
   @Nullable
@@ -188,8 +193,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   abstract String baseUrl();
 
   /**
-   * Build a new {@link MapboxMapMatching} object with the initial values set for {@link #baseUrl()},
-   * {@link #profile()}, {@link #geometries()}, and {@link #user()}.
+   * Build a new {@link MapboxMapMatching} object with the initial values set for
+   * {@link #baseUrl()}, {@link #profile()}, {@link #geometries()}, and {@link #user()}.
    *
    * @return a {@link Builder} object for creating this object
    * @since 3.0.0
@@ -213,7 +218,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     private List<Point> coordinates = new ArrayList<>();
     private String[] annotations;
     private String[] timestamps;
-    private double[] radiuses;
+    private Double[] radiuses;
 
     /**
      * Required to call when this is being built. If no access token provided,
@@ -289,7 +294,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public Builder radiuses(@Nullable @FloatRange(from = 0) double... radiuses) {
+    public Builder radiuses(@Nullable @FloatRange(from = 0) Double... radiuses) {
       this.radiuses = radiuses;
       return this;
     }
@@ -459,7 +464,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     public MapboxMapMatching build() {
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException("At least two coordinates must be provided with your API"
-          + "request.");
+          + " request.");
       }
 
       if (coordinates.size() > 100) {
@@ -477,8 +482,9 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
       }
 
       coordinates(MapboxCallHelper.formatCoordinates(coordinates));
-      timestamps(MapboxCallHelper.formatStringArray(timestamps));
-      annotations(MapboxCallHelper.formatStringArray(annotations));
+      timestamps(TextUtils.join(",", timestamps));
+      annotations(TextUtils.join(",", annotations));
+      radiuses(TextUtils.join(",", radiuses));
 
       // Generate build so that we can check that values are valid.
       MapboxMapMatching mapMatching = autoBuild();

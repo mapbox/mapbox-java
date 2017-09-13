@@ -1,6 +1,7 @@
 package com.mapbox.services.api.mapmatching.v5.models;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -19,8 +20,7 @@ import java.io.Serializable;
 public abstract class MapMatchingTracepoint implements Serializable {
 
   /**
-   * This method returns a new instance of the {@link Builder} class which provides a way to create
-   * a new instance of this class.
+   * Create a new instance of this class by using the {@link Builder} class.
    *
    * @return this classes {@link Builder} for creating a new instance
    * @since 3.0.0
@@ -35,8 +35,9 @@ public abstract class MapMatchingTracepoint implements Serializable {
    * @return index value
    * @since 2.2.0
    */
+  @Nullable
   @SerializedName("matchings_index")
-  public abstract int matchingsIndex();
+  public abstract Integer matchingsIndex();
 
   /**
    * Number of probable alternative matchings for this trace point. A value of zero indicates that
@@ -46,8 +47,9 @@ public abstract class MapMatchingTracepoint implements Serializable {
    * @return an integer representing the alternatives count
    * @since 2.2.0
    */
+  @Nullable
   @SerializedName("alternatives_count")
-  public abstract int alternativesCount();
+  public abstract Integer alternativesCount();
 
   /**
    * Index of the waypoint inside the matched route.
@@ -55,8 +57,9 @@ public abstract class MapMatchingTracepoint implements Serializable {
    * @return index value
    * @since 2.2.0
    */
+  @Nullable
   @SerializedName("waypoint_index")
-  public abstract int waypointIndex();
+  public abstract Integer waypointIndex();
 
   /**
    * A {@link Point} representing this waypoint location.
@@ -119,28 +122,31 @@ public abstract class MapMatchingTracepoint implements Serializable {
     /**
      * Index to the match object in matchings the sub-trace was matched to.
      *
-     * @return index value
+     * @param matchingsIndex index value
+     * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder matchingsIndex(int matchingsIndex);
+    public abstract Builder matchingsIndex(@Nullable Integer matchingsIndex);
 
     /**
      * Number of probable alternative matchings for this trace point. A value of zero indicates that
      * this point was matched unambiguously. Split the trace at these points for incremental map
      * matching.
      *
-     * @return an integer representing the alternatives count
+     * @param alternativesCount an integer representing the alternatives count
+     * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder alternativesCount(int alternativesCount);
+    public abstract Builder alternativesCount(@Nullable Integer alternativesCount);
 
     /**
      * Index of the waypoint inside the matched route.
      *
-     * @return index value
+     * @param waypointIndex  index value
+     * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder waypointIndex(int waypointIndex);
+    public abstract Builder waypointIndex(@Nullable Integer waypointIndex);
 
     /**
      * Build a new {@link MapMatchingTracepoint} object.

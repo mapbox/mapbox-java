@@ -1,5 +1,6 @@
 package com.mapbox.services.commons.geojson;
 
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -52,14 +53,13 @@ public class MultiPointTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     MultiPoint multiPoint = MultiPoint.fromLngLats(points, bbox);
     assertNotNull(multiPoint.bbox());
-    assertEquals(4, multiPoint.bbox().length);
-    assertEquals(1.0, multiPoint.bbox()[0], DELTA);
-    assertEquals(2.0, multiPoint.bbox()[1], DELTA);
-    assertEquals(3.0, multiPoint.bbox()[2], DELTA);
-    assertEquals(4.0, multiPoint.bbox()[3], DELTA);
+    assertEquals(1.0, multiPoint.bbox().west(), DELTA);
+    assertEquals(2.0, multiPoint.bbox().south(), DELTA);
+    assertEquals(3.0, multiPoint.bbox().east(), DELTA);
+    assertEquals(4.0, multiPoint.bbox().north(), DELTA);
   }
 
   @Test
@@ -68,7 +68,7 @@ public class MultiPointTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     MultiPoint multiPoint = MultiPoint.fromLngLats(points, bbox);
     compareJson(multiPoint.toJson(),
       "{\"coordinates\":[[1,2],[2,3]],\"type\":\"MultiPoint\",\"bbox\":[1.0,2.0,3.0,4.0]}");
@@ -80,7 +80,7 @@ public class MultiPointTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     MultiPoint multiPoint = MultiPoint.fromLngLats(points, bbox);
     byte[] bytes = serialize(multiPoint);
     assertEquals(multiPoint, deserialize(bytes, MultiPoint.class));

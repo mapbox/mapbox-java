@@ -1,5 +1,6 @@
 package com.mapbox.services.commons.geojson;
 
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -68,14 +69,13 @@ public class GeometryCollectionTest extends BaseTest {
     geometries.add(points.get(0));
     geometries.add(lineString);
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     GeometryCollection geometryCollection = GeometryCollection.fromGeometries(geometries, bbox);
     assertNotNull(geometryCollection.bbox());
-    assertEquals(4, geometryCollection.bbox().length);
-    assertEquals(1.0, geometryCollection.bbox()[0], DELTA);
-    assertEquals(2.0, geometryCollection.bbox()[1], DELTA);
-    assertEquals(3.0, geometryCollection.bbox()[2], DELTA);
-    assertEquals(4.0, geometryCollection.bbox()[3], DELTA);
+    assertEquals(1.0, geometryCollection.bbox().west(), DELTA);
+    assertEquals(2.0, geometryCollection.bbox().south(), DELTA);
+    assertEquals(3.0, geometryCollection.bbox().east(), DELTA);
+    assertEquals(4.0, geometryCollection.bbox().north(), DELTA);
   }
 
   @Test
@@ -88,7 +88,7 @@ public class GeometryCollectionTest extends BaseTest {
     geometries.add(points.get(0));
     geometries.add(lineString);
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     GeometryCollection geometryCollection = GeometryCollection.fromGeometries(geometries, bbox);
     compareJson(geometryCollection.toJson(),
       "{\"type\":\"GeometryCollection\",\"bbox\":[1.0,2.0,3.0,4.0],"
@@ -106,7 +106,7 @@ public class GeometryCollectionTest extends BaseTest {
     geometries.add(points.get(0));
     geometries.add(lineString);
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     GeometryCollection geometryCollection = GeometryCollection.fromGeometries(geometries, bbox);
     byte[] bytes = serialize(geometryCollection);
     assertEquals(geometryCollection, deserialize(bytes, GeometryCollection.class));

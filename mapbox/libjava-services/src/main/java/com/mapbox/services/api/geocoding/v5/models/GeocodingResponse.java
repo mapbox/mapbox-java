@@ -17,7 +17,6 @@ import com.mapbox.services.commons.geojson.custom.MapboxAdapterFactory;
 import com.mapbox.services.commons.geojson.custom.PointDeserializer;
 import com.mapbox.services.commons.geojson.custom.PointSerializer;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -28,7 +27,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class GeocodingResponse implements Serializable {
+public abstract class GeocodingResponse {
 
   private static final String TYPE = "FeatureCollection";
 
@@ -53,10 +52,10 @@ public abstract class GeocodingResponse implements Serializable {
    */
   public static GeocodingResponse fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
     return gson.create().fromJson(json, GeocodingResponse.class);
   }
 

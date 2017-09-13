@@ -1,5 +1,6 @@
 package com.mapbox.services.commons.geojson;
 
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,25 +16,25 @@ public class LineStringTest extends BaseTest {
 
   private static final String SAMPLE_LINESTRING_FIXTURE = "sample-linestring.json";
 
-    @Test
-    public void sanity() throws Exception {
-      List<Point> points = new ArrayList<>();
-      points.add(Point.fromLngLat(1.0, 1.0));
-      points.add(Point.fromLngLat(2.0, 2.0));
-      points.add(Point.fromLngLat(3.0, 3.0));
-      LineString lineString = LineString.fromLngLats(points);
-      assertNotNull(lineString);
-    }
+  @Test
+  public void sanity() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    assertNotNull(lineString);
+  }
 
-    @Test
-    public void bbox_nullWhenNotSet() throws Exception {
-      List<Point> points = new ArrayList<>();
-      points.add(Point.fromLngLat(1.0, 1.0));
-      points.add(Point.fromLngLat(2.0, 2.0));
-      points.add(Point.fromLngLat(3.0, 3.0));
-      LineString lineString = LineString.fromLngLats(points);
-      assertNull(lineString.bbox());
-    }
+  @Test
+  public void bbox_nullWhenNotSet() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    assertNull(lineString.bbox());
+  }
 
   @Test
   public void bbox_doesNotSerializeWhenNotPresent() throws Exception {
@@ -47,20 +48,19 @@ public class LineStringTest extends BaseTest {
   }
 
   @Test
-    public void bbox_returnsCorrectBbox() throws Exception {
-      List<Point> points = new ArrayList<>();
-      points.add(Point.fromLngLat(1.0, 1.0));
-      points.add(Point.fromLngLat(2.0, 2.0));
-      points.add(Point.fromLngLat(3.0, 3.0));
-      double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
-      LineString lineString = LineString.fromLngLats(points, bbox);
-      assertNotNull(lineString.bbox());
-      assertEquals(4, lineString.bbox().length);
-      assertEquals(1.0, lineString.bbox()[0], DELTA);
-      assertEquals(2.0, lineString.bbox()[1], DELTA);
-      assertEquals(3.0, lineString.bbox()[2], DELTA);
-      assertEquals(4.0, lineString.bbox()[3], DELTA);
-    }
+  public void bbox_returnsCorrectBbox() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    LineString lineString = LineString.fromLngLats(points, bbox);
+    assertNotNull(lineString.bbox());
+    assertEquals(1.0, lineString.bbox().west(), DELTA);
+    assertEquals(2.0, lineString.bbox().south(), DELTA);
+    assertEquals(3.0, lineString.bbox().east(), DELTA);
+    assertEquals(4.0, lineString.bbox().north(), DELTA);
+  }
 
   @Test
   public void bbox_doesSerializeWhenPresent() throws Exception {
@@ -68,29 +68,28 @@ public class LineStringTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 1.0));
     points.add(Point.fromLngLat(2.0, 2.0));
     points.add(Point.fromLngLat(3.0, 3.0));
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
     compareJson(lineString.toJson(),
       "{\"coordinates\":[[1,1],[2,2],[3,3]]," +
         "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}");
   }
 
-    @Test
-    public void testSerializable() throws Exception {
-      List<Point> points = new ArrayList<>();
-      points.add(Point.fromLngLat(1.0, 1.0));
-      points.add(Point.fromLngLat(2.0, 2.0));
-      points.add(Point.fromLngLat(3.0, 3.0));
-      double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
-      LineString lineString = LineString.fromLngLats(points, bbox);
-      byte[] bytes = serialize(lineString);
-      assertEquals(lineString, deserialize(bytes, LineString.class));
-    }
+  @Test
+  public void testSerializable() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    LineString lineString = LineString.fromLngLats(points, bbox);
+    byte[] bytes = serialize(lineString);
+    assertEquals(lineString, deserialize(bytes, LineString.class));
+  }
 
   @Test
   public void fromJson() throws IOException {
     final String json = loadJsonFixture(SAMPLE_LINESTRING_FIXTURE);
-    System.out.println(json);
     LineString geo = LineString.fromJson(json);
     assertEquals(geo.type(), "LineString");
     assertEquals(geo.coordinates().get(0).longitude(), 100.0, 0.0);

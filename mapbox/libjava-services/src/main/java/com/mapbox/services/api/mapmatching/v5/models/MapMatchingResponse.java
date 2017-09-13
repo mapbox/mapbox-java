@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Mapbox map matching API response and convenience getter methods for optional properties
+ * Mapbox map matching API response and convenience getter methods for optional properties.
  *
  * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
  * @since 2.0.0
@@ -19,8 +19,7 @@ import java.util.List;
 public abstract class MapMatchingResponse implements Serializable {
 
   /**
-   * This method returns a new instance of the {@link Builder} class which provides a way to create
-   * a new instance of this class.
+   * Create a new instance of this class by using the {@link Builder} class.
    *
    * @return this classes {@link Builder} for creating a new instance
    * @since 3.0.0
@@ -95,8 +94,9 @@ public abstract class MapMatchingResponse implements Serializable {
      * or {@code mapbox.cycling}.</li>
      * </ul>
      *
-     * @return string containing the code
-     * @since 2.0.0
+     * @param code string containing the code
+     * @return this builder for chaining options together
+     * @since 3.0.0
      */
     public abstract Builder code(@NonNull String code);
 
@@ -104,8 +104,9 @@ public abstract class MapMatchingResponse implements Serializable {
      * List of {@link MapMatchingMatching} objects, essentially a DirectionsWaypoint object with the
      * addition of a confidence value.
      *
-     * @return a list made up of {@link MapMatchingMatching} objects
-     * @since 2.0.0
+     * @param matchings a list made up of {@link MapMatchingMatching} objects
+     * @return this builder for chaining options together
+     * @since 3.0.0
      */
     public abstract Builder matchings(@Nullable List<MapMatchingMatching> matchings);
 
@@ -118,7 +119,7 @@ public abstract class MapMatchingResponse implements Serializable {
      *
      * @param tracepoints tracepoints list
      * @return this builder for chaining options together
-     * @since 2.0.0
+     * @since 3.0.0
      */
     public abstract Builder tracepoints(@Nullable List<MapMatchingTracepoint> tracepoints);
 

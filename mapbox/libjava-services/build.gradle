@@ -28,3 +28,9 @@ dependencies {
 apply from: 'gradle-javadoc.gradle'
 apply from: '../gradle-mvn-push-java.gradle'
 apply from: '../gradle-checkstyle.gradle'
+
+task copyTestResources(type: Copy) {
+  from "${projectDir}/src/test/resources"
+  into "${buildDir}/classes/test"
+}
+processTestResources.dependsOn copyTestResources

@@ -19,7 +19,12 @@ import java.io.Serializable;
 @AutoValue
 public abstract class CarmenContext implements Serializable {
 
-
+  /**
+   * Create a new instance of this class by using the {@link Builder} class.
+   *
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
+   */
   public static Builder builder() {
     return new AutoValue_CarmenContext.Builder();
   }
@@ -31,6 +36,7 @@ public abstract class CarmenContext implements Serializable {
    * @return string containing the ID
    * @since 1.0.0
    */
+  @Nullable
   public abstract String id();
 
   /**
@@ -39,6 +45,7 @@ public abstract class CarmenContext implements Serializable {
    * @return text representing the feature (e.g. "Austin")
    * @since 1.0.0
    */
+  @Nullable
   public abstract String text();
 
   /**
@@ -47,6 +54,7 @@ public abstract class CarmenContext implements Serializable {
    * @return a String containing the country or region code
    * @since 1.0.0
    */
+  @Nullable
   @SerializedName("short_code")
   public abstract String shortCode();
 
@@ -57,6 +65,7 @@ public abstract class CarmenContext implements Serializable {
    *   specific feature
    * @since 1.2.0
    */
+  @Nullable
   public abstract String wikidata();
 
   /**
@@ -65,6 +74,7 @@ public abstract class CarmenContext implements Serializable {
    * @return comma-separated list of categories applicable to a poi
    * @since 1.0.0
    */
+  @Nullable
   public abstract String category();
 
   /**
@@ -75,6 +85,7 @@ public abstract class CarmenContext implements Serializable {
    * @return string containing the recommended Maki icon
    * @since 1.2.0
    */
+  @Nullable
   public abstract String maki();
 
   /**

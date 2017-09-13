@@ -1,5 +1,6 @@
 package com.mapbox.services.commons.geojson;
 
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -61,17 +62,16 @@ public class MultiLineStringTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     List<LineString> lineStrings = new ArrayList<>();
     lineStrings.add(LineString.fromLngLats(points));
     lineStrings.add(LineString.fromLngLats(points));
     MultiLineString multiLineString = MultiLineString.fromLineStrings(lineStrings, bbox);
     assertNotNull(multiLineString.bbox());
-    assertEquals(4, multiLineString.bbox().length);
-    assertEquals(1.0, multiLineString.bbox()[0], DELTA);
-    assertEquals(2.0, multiLineString.bbox()[1], DELTA);
-    assertEquals(3.0, multiLineString.bbox()[2], DELTA);
-    assertEquals(4.0, multiLineString.bbox()[3], DELTA);
+    assertEquals(1.0, multiLineString.bbox().west(), DELTA);
+    assertEquals(2.0, multiLineString.bbox().south(), DELTA);
+    assertEquals(3.0, multiLineString.bbox().east(), DELTA);
+    assertEquals(4.0, multiLineString.bbox().north(), DELTA);
   }
 
   @Test
@@ -80,7 +80,7 @@ public class MultiLineStringTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     List<LineString> lineStrings = new ArrayList<>();
     lineStrings.add(LineString.fromLngLats(points));
     lineStrings.add(LineString.fromLngLats(points));
@@ -96,7 +96,7 @@ public class MultiLineStringTest extends BaseTest {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     List<LineString> lineStrings = new ArrayList<>();
     lineStrings.add(LineString.fromLngLats(points));
     lineStrings.add(LineString.fromLngLats(points));

@@ -12,10 +12,13 @@ import com.mapbox.services.api.MapboxService;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria.GeocodingModeCriteria;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
-import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.geojson.Geometry;
 import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
+import com.mapbox.services.commons.geojson.custom.BoundingBoxDeserializer;
+import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
+import com.mapbox.services.commons.geojson.custom.PointDeserializer;
 import com.mapbox.services.commons.utils.MapboxUtils;
 import com.mapbox.services.commons.utils.TextUtils;
 import retrofit2.Call;
@@ -41,7 +44,18 @@ import java.util.Locale;
  * into {@code 2 Lincoln Memorial Circle NW}. These place names can vary from specific addresses to
  * states and countries that contain the given coordinates.
  * <p>
- * TODO add docs about batch geocoding
+ * <h4>Batch Geocoding</h4>
+ * This feature is limited to enterprise customers only and the {@link #mode()} must be set to
+ * {@link GeocodingCriteria#MODE_PLACES_PERMANENT}.
+ * <p>
+ * Batch requests have the same parameters as normal requests, but can include more than one query
+ * by using {@link MapboxGeocoding.Builder#query(String)} and separating queries with the {@code ;}
+ * character.
+ * <p>
+ * With the {@link GeocodingCriteria#MODE_PLACES_PERMANENT} mode, you can make up to 50 forward or
+ * reverse geocoding queries in a single request. The response is a list of individual
+ * {@link GeocodingResponse}s. Each query in a batch request counts individually against your
+ * account's rate limits.
  *
  * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/geocoder/">Android
  *   Geocoding documentation</a>
@@ -64,8 +78,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer())
         .registerTypeAdapterFactory(MapboxAdapterFactory.create())
+        .registerTypeAdapter(Point.class, new PointDeserializer())
+        .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
+        .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
         .create()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
@@ -108,8 +124,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       return batchCall;
     }
 
-    if (mode().contains(GeocodingCriteria.MODE_PLACES)) {
-      throw new IllegalArgumentException("Use getCall() for non-batch calls.");
+    if (mode().equals(GeocodingCriteria.MODE_PLACES)) {
+      throw new ServicesException("Use getCall() for non-batch calls.");
     }
 
     batchCall = getService().getBatchCall(
@@ -225,8 +241,11 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   @NonNull
   abstract String mode();
 
-  @NonNull
+  @Nullable
   abstract String accessToken();
+
+  @NonNull
+  abstract String baseUrl();
 
   @Nullable
   abstract String country();
@@ -251,9 +270,6 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
   @Nullable
   abstract String clientAppName();
-
-  @NonNull
-  abstract String baseUrl();
 
 
   /**
@@ -288,6 +304,16 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
     List<String> countries = new ArrayList<>();
 
+    /**
+     * Perform a reverse geocode on the provided {@link Point}. Only one point can be passed in as
+     * the query and isn't guaranteed to return a result. If you are an enterprise customer and
+     * wanting to do a batch reverse Geocode, you can use the {@link #query(String)} method
+     * separating them with a semicolon.
+     *
+     * @param point a GeoJSON point which matches to coordinate you'd like to reverse geocode
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public Builder query(@NonNull Point point) {
       query(String.format(Locale.US, "%s,%s",
         TextUtils.formatCoordinate(point.longitude()),
@@ -295,6 +321,15 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       return this;
     }
 
+    /**
+     * This method can be used for performing a forward geocode on a string representing a address
+     * or POI. If you are an enterprise customer and wish to perform a batch geocode, separate your
+     * queries with a semicolon.
+     *
+     * @param query a String containing the text you'd like to forward geocode
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder query(@NonNull String query);
 
     /**
@@ -414,7 +449,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public Builder bbox(Point northeast, Point southwest) {
+    public Builder bbox(Point southwest, Point northeast) {
       bbox(southwest.longitude(), southwest.latitude(),
         northeast.longitude(), northeast.latitude());
       return this;
@@ -497,7 +532,11 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      * @since 2.0.0
      */
     public Builder languages(Locale... languages) {
-      languages(TextUtils.join(",", languages));
+      String[] languageStrings = new String[languages.length];
+      for (int i = 0; i < languages.length; i++) {
+        languageStrings[i] = languages[i].getLanguage();
+      }
+      languages(TextUtils.join(",", languageStrings));
       return this;
     }
 
@@ -556,11 +595,17 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
     abstract MapboxGeocoding autoBuild();
 
+    /**
+     * Build a new {@link MapboxGeocoding} object.
+     *
+     * @return a new {@link MapboxGeocoding} using the provided values in this builder
+     * @since 3.0.0
+     */
     public MapboxGeocoding build() {
 
-      // TODO format geocoding types
-      // TODO proximity
-      // TODO countries TextUtils.join(",", countries);
+      if (countries.size() > 0) {
+        country(TextUtils.join(",", countries.toArray()));
+      }
 
       // Generate build so that we can check that values are valid.
       MapboxGeocoding geocoding = autoBuild();
@@ -568,6 +613,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       if (!MapboxUtils.isAccessTokenValid(geocoding.accessToken())) {
         throw new ServicesException("Using Mapbox Services requires setting a valid access token.");
       }
+      if (geocoding.query().isEmpty()) {
+        throw new ServicesException("A query with at least one character or digit is required.");
+      }
+
       return geocoding;
     }
   }

@@ -1,14 +1,10 @@
 package com.mapbox.services.api.geocoding.v5.gson;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mapbox.services.commons.geojson.Geometry;
-import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.models.Position;
 
 import java.lang.reflect.Type;
 
@@ -20,6 +16,13 @@ import java.lang.reflect.Type;
 public class CarmenGeometryDeserializer implements JsonDeserializer<Geometry> {
   @Override
   public Geometry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+
+
+      System.out.println(json.getAsJsonObject().get("center"));
+
+
+
+
     return null;
   }
 

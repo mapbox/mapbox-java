@@ -18,6 +18,7 @@ import com.mapbox.services.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.utils.MapboxUtils;
+import com.mapbox.services.commons.utils.TextUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -116,7 +117,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    * Directions API.
    *
    * @return the Directions v5 response once the call completes successfully
-   * @throws IOException Signals that an I/O exception of some sort has occurred.
+   * @throws IOException Signals that an I/O exception of some sort has occurred
    * @since 1.0.0
    */
   @Override
@@ -531,9 +532,9 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       }
 
       coordinates(MapboxCallHelper.formatCoordinates(coordinates));
-      bearings(MapboxCallHelper.formatBearing(bearings));
-      annotations(MapboxCallHelper.formatStringArray(annotations));
-      radiuses(MapboxCallHelper.formatRadiuses(radiuses));
+      bearings(TextUtils.formatBearing(bearings));
+      annotations(TextUtils.join(",", annotations));
+      radiuses(TextUtils.formatRadiuses(radiuses));
 
       MapboxDirections directions = autoBuild();
 

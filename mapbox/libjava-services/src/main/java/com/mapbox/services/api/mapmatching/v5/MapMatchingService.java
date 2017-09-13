@@ -1,5 +1,6 @@
 package com.mapbox.services.api.mapmatching.v5;
 
+import com.mapbox.services.api.mapmatching.v5.MapboxMapMatching.Builder;
 import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
 
 import retrofit2.Call;
@@ -16,7 +17,7 @@ import retrofit2.http.Query;
 public interface MapMatchingService {
 
   /**
-   * Call-based interface
+   * Constructs the html call using the information passed in through the {@link Builder}.
    *
    * @param userAgent   user agent
    * @param user        user

@@ -1,5 +1,6 @@
 package com.mapbox.services.commons.geojson;
 
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -57,14 +58,13 @@ public class FeatureCollectionTest extends BaseTest {
     List<Feature> features = new ArrayList<>();
     features.add(Feature.fromGeometry(null));
     features.add(Feature.fromGeometry(null));
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     FeatureCollection featureCollection = FeatureCollection.fromFeatures(features, bbox);
     assertNotNull(featureCollection.bbox());
-    assertEquals(4, featureCollection.bbox().length);
-    assertEquals(1.0, featureCollection.bbox()[0], DELTA);
-    assertEquals(2.0, featureCollection.bbox()[1], DELTA);
-    assertEquals(3.0, featureCollection.bbox()[2], DELTA);
-    assertEquals(4.0, featureCollection.bbox()[3], DELTA);
+    assertEquals(1.0, featureCollection.bbox().west(), DELTA);
+    assertEquals(2.0, featureCollection.bbox().south(), DELTA);
+    assertEquals(3.0, featureCollection.bbox().east(), DELTA);
+    assertEquals(4.0, featureCollection.bbox().north(), DELTA);
   }
 
   @Test
@@ -78,7 +78,7 @@ public class FeatureCollectionTest extends BaseTest {
     List<Feature> features = new ArrayList<>();
     features.add(feature);
     features.add(feature);
-    double[] bbox = new double[] {1.0, 2.0, 3.0, 4.0};
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     FeatureCollection featureCollection = FeatureCollection.fromFeatures(features, bbox);
     compareJson(featureCollection.toJson(),
       "{\"type\":\"FeatureCollection\",\"bbox\":[1.0,2.0,3.0,4.0],"

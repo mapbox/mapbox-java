@@ -20,6 +20,7 @@ import com.mapbox.services.api.directions.v5.DirectionsCriteria.SourceCriteria;
 import com.mapbox.services.api.optimization.v1.models.OptimizationResponse;
 import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.utils.MapboxUtils;
+import com.mapbox.services.commons.utils.TextUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,7 +45,7 @@ import java.util.Locale;
  * coordinates, the results will be optimized approximations.
  *
  * @see <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">Traveling Salesperson
- * Problem</a>
+ *   Problem</a>
  * @see <a href="https://www.mapbox.com/api-documentation/#optimized-trips">API documentation</a>
  * @since 2.1.0
  */
@@ -299,7 +300,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * @param roundTrip true if you'd like the route to return to the origin, else false
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-an-optimization">Possible
-     * roundtrip combinations</a>
+     *   roundtrip combinations</a>
      * @since 2.1.0
      */
     public abstract Builder roundTrip(@Nullable Boolean roundTrip);
@@ -405,7 +406,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * @since 2.1.0
      */
     public Builder bearing(@Nullable @FloatRange(from = 0, to = 360) Double angle,
-                              @Nullable @FloatRange(from = 0, to = 360) Double tolerance) {
+                           @Nullable @FloatRange(from = 0, to = 360) Double tolerance) {
       bearings.add(new Double[] {angle, tolerance});
       return this;
     }
@@ -437,7 +438,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
-     * documentation</a>
+     *   documentation</a>
      * @since 2.1.0
      */
     public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
@@ -457,7 +458,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     * Languages</a>
+     *   Languages</a>
      * @since 3.0.0
      */
     public Builder language(@Nullable Locale language) {
@@ -477,7 +478,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     * Languages</a>
+     *   Languages</a>
      * @since 2.2.0
      */
     public abstract Builder language(@Nullable String language);
@@ -554,10 +555,10 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
       }
 
       coordinates(MapboxCallHelper.formatCoordinates(coordinates));
-      bearings(MapboxCallHelper.formatBearing(bearings));
-      annotations(MapboxCallHelper.formatStringArray(annotations));
-      radiuses(MapboxCallHelper.formatRadiuses(radiuses));
-      distributions(MapboxCallHelper.formatDistributions(distributions));
+      bearings(TextUtils.formatBearing(bearings));
+      annotations(TextUtils.join(",", annotations));
+      radiuses(TextUtils.formatRadiuses(radiuses));
+      distributions(TextUtils.formatDistributions(distributions));
 
       // Generate build so that we can check that values are valid.
       MapboxOptimization optimization = autoBuild();

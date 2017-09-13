@@ -12,7 +12,7 @@ dependencies {
 
     errorprone "com.google.errorprone:error_prone_core:2.0.21"
     compile project(':libjava-geojson')
-//    compile project(':libjava-services')
+    compile project(':libjava-services')
 //    compile project(':libjava-services-rx')
 }
 
