@@ -36,6 +36,7 @@ public interface DirectionsService {
    *                         route geometry. Each entry in an annotations field corresponds to a coordinate along the
    *                         route geometry.
    * @param language         Language of returned turn-by-turn text instructions.
+   * @param roundaboutExits  Define if exit on roundabout is allowed.
    * @return The {@link DirectionsResponse} in a Call wrapper.
    * @since 1.0.0
    */
@@ -55,6 +56,7 @@ public interface DirectionsService {
     @Query("bearings") String bearings,
     @Query("continue_straight") Boolean continueStraight,
     @Query("annotations") String annotations,
-    @Query("language") String language
+    @Query("language") String language,
+    @Query("roundabout_exits") Boolean roundaboutExits
   );
 }
