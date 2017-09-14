@@ -25,4 +25,4 @@ Using the MAS testapp will require a valid [Mapbox access token](https://www.map
 
 ## 3: Begin developing
 
-We recommend using [Android Studio](https://developer.android.com/studio/index.html) to work on the code base. Please import `mapbox-java/mapbox` as the project root folder.
+We recommend using [Android Studio](https://developer.android.com/studio/index.html) to work on the code base.

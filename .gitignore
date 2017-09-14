@@ -1,28 +1,9 @@
-# Gradle files
-.gradle/
-
-# IntelliJ files
-.idea/
 *.iml
-
-# Build files
-build/
-*.so
-*.apk
-BuildConfig.java
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
 .DS_Store
-
-# Local settings
-local.properties
-
-# Capture files
-captures/
-
-# Token file
-libandroid/app/src/main/res/values/developer-config.xml
-
-# Do not track signing file
-secring.gpg
-
-# Documentation files
-node_modules/
+/build
+/captures
+.externalNativeBuild

@@ -39,4 +39,4 @@ Check the [Android Test App](https://github.com/mapbox/mapbox-java/tree/master/m
 
 ## Contributing
 
-All libraries are contained within the `mapbox` folder. Please import `mapbox-java/mapbox` as the project root folder using Android Studio or IntelliJ IDEA. Read [the contribution guide](https://github.com/mapbox/mapbox-java/blob/master/CONTRIBUTING.md) to get setup properly.
+All libraries are contained within the `mapbox` folder. You can import the project using Android Studio or IntelliJ IDEA. Read [the contribution guide](https://github.com/mapbox/mapbox-java/blob/master/CONTRIBUTING.md) to get setup properly.
