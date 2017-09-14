@@ -6,63 +6,44 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class PointTest extends BaseTest {
+public class LineStringTest extends BaseTest {
 
-  private static final String SAMPLE_POINT = "sample-point.json";
+  private static final String SAMPLE_LINESTRING_FIXTURE = "sample-linestring.json";
 
   @Test
   public void sanity() throws Exception {
-    Point point = Point.fromLngLat(1.0, 2.0);
-    assertNotNull(point);
-  }
-
-  @Test
-  public void hasAltitude_returnsFalseWhenAltitudeNotPresent() throws Exception {
-    Point point = Point.fromLngLat(1.0, 2.0);
-    assertFalse(point.hasAltitude());
-  }
-
-  @Test
-  public void hasAltitude_returnsTrueWhenAltitudeIsPresent() throws Exception {
-    Point point = Point.fromLngLat(1.0, 2.0, 5.0);
-    assertTrue(point.hasAltitude());
-  }
-
-  @Test
-  public void altitude_doesReturnCorrectValue() throws Exception {
-    Point point = Point.fromLngLat(1.0, 2.0, 5.0);
-    assertEquals(5, point.altitude(), DELTA);
-  }
-
-  @Test
-  public void longitude_doesReturnCorrectValue() throws Exception {
-    Point point = Point.fromLngLat(1.0, 2.0, 5.0);
-    assertEquals(1, point.longitude(), DELTA);
-  }
-
-  @Test
-  public void latitude_doesReturnCorrectValue() throws Exception {
-    Point point = Point.fromLngLat(1.0, 2.0, 5.0);
-    assertEquals(2, point.latitude(), DELTA);
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    assertNotNull(lineString);
   }
 
   @Test
   public void bbox_nullWhenNotSet() throws Exception {
-    Point point = Point.fromLngLat(1.0, 2.0);
-    assertNull(point.bbox());
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    assertNull(lineString.bbox());
   }
 
   @Test
   public void bbox_doesNotSerializeWhenNotPresent() throws Exception {
-    Point point = Point.fromLngLat(1.0, 2.0);
-    compareJson(point.toJson(),
-      "{\"type\":\"Point\",\"coordinates\":[1.0, 2.0]}");
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    compareJson(lineString.toJson(),
+      "{\"coordinates\":[[1,1],[2,2],[3,3]],\"type\":\"LineString\"}");
   }
 
   @Test
@@ -107,22 +88,18 @@ public class PointTest extends BaseTest {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_POINT);
-    Point geo = Point.fromJson(json);
-    assertEquals(geo.type(), "Point");
-    assertEquals(geo.longitude(), 100.0, DELTA);
-    assertEquals(geo.latitude(), 0.0, DELTA);
-    assertEquals(geo.altitude(), Double.NaN, DELTA);
-    assertEquals(geo.coordinates().get(0), 100.0, DELTA);
-    assertEquals(geo.coordinates().get(1), 0.0, DELTA);
-    assertEquals(geo.coordinates().size(), 2);
-    assertFalse(geo.hasAltitude());
+    final String json = loadJsonFixture(SAMPLE_LINESTRING_FIXTURE);
+    LineString geo = LineString.fromJson(json);
+    assertEquals(geo.type(), "LineString");
+    assertEquals(geo.coordinates().get(0).longitude(), 100.0, 0.0);
+    assertEquals(geo.coordinates().get(0).latitude(), 0.0, 0.0);
+    assertFalse(geo.coordinates().get(0).hasAltitude());
   }
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_POINT);
-    Point geo = Point.fromJson(json);
+    final String json = loadJsonFixture(SAMPLE_LINESTRING_FIXTURE);
+    LineString geo = LineString.fromJson(json);
     compareJson(json, geo.toJson());
   }
 }

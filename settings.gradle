@@ -1,1 +1,1 @@
-include ':app', ':services-geojson'
+include ':app', ':services-geojson', ':services-directions', ':services'

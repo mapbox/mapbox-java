@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mapbox-java.iml" filepath="$PROJECT_DIR$/mapbox-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services/services.iml" filepath="$PROJECT_DIR$/services/services.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services-directions/services-directions.iml" filepath="$PROJECT_DIR$/services-directions/services-directions.iml" />
       <module fileurl="file://$PROJECT_DIR$/services-geojson/services-geojson.iml" filepath="$PROJECT_DIR$/services-geojson/services-geojson.iml" />
     </modules>
   </component>
