@@ -4,20 +4,33 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 dependencies {
-    // Mapbox Java Services requires GeoJSON support
-    compile project(':libjava-geojson')
+  // Mapbox Java Services requires GeoJSON support
+  compile project(':libjava-geojson')
 
-    // Retrofit
-    compile rootProject.ext.dep.retrofit2Main
-    compile rootProject.ext.dep.retrofit2Gson
-    compile rootProject.ext.dep.okhttp3Logging
+  // Annotations
+  compileOnly rootProject.ext.dep.supportAnnotations
 
-    // Testing
-    testCompile rootProject.ext.dep.okhttp3Mockwebserver
-    testCompile rootProject.ext.dep.junit
-    testCompile rootProject.ext.dep.hamcrestJunit
+  // AutoValues
+  compileOnly rootProject.ext.dep.autoValues
+  compileOnly rootProject.ext.dep.autoValuesGson
+
+  // Retrofit
+  compile rootProject.ext.dep.retrofit2Main
+  compile rootProject.ext.dep.retrofit2Gson
+  compile rootProject.ext.dep.okhttp3Logging
+
+  // Testing
+  testCompile rootProject.ext.dep.okhttp3Mockwebserver
+  testCompile rootProject.ext.dep.junit
+  testCompile rootProject.ext.dep.hamcrestJunit
 }
 
 apply from: 'gradle-javadoc.gradle'
 apply from: '../gradle-mvn-push-java.gradle'
 apply from: '../gradle-checkstyle.gradle'
+
+task copyTestResources(type: Copy) {
+  from "${projectDir}/src/test/resources"
+  into "${buildDir}/classes/test"
+}
+processTestResources.dependsOn copyTestResources

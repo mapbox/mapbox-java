@@ -1,0 +1,183 @@
+package com.mapbox.services.api.matrix.v1.models;
+
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.mapbox.services.api.directions.v5.models.DirectionsWaypoint;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * This contains the Matrix API response information which can be used to display the results.
+ *
+ * @since 2.1.0
+ */
+@AutoValue
+public abstract class MatrixResponse implements Serializable {
+
+  /**
+   * This method returns a new instance of the {@link Builder} class which provides a way to create
+   * a new instance of this class.
+   *
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
+   */
+  public static Builder builder() {
+    return new AutoValue_MatrixResponse.Builder();
+  }
+
+  /**
+   * String indicating the state of the response. This is a separate code than the HTTP status code.
+   * On normal valid responses, the value will be {@code Ok}.
+   * <p>
+   * On error, the server responds with different HTTP status codes. For responses with HTTP status
+   * codes lower than 500, the JSON response body includes the code property, which may be used by
+   * client programs to manage control flow. The response body may also include a message property,
+   * with a human-readable explanation of the error. If a server error occurs, the HTTP status code
+   * will be 500 or higher and the response will not include a code property.
+   * </p><p>
+   * Note that in cases where no route is found between a source and destination, no error will be
+   * returned, but instead the respective value in the durations matrix will be null.
+   * </p>
+   *
+   * @return "Ok", "NoRoute", "ProfileNotFound", or "InvalidInput"
+   * @since 2.1.0
+   */
+  @NonNull
+  public abstract String code();
+
+  /**
+   * List of {@link DirectionsWaypoint} objects. Each waypoint is an input coordinate snapped to the
+   * road and path network. The waypoints appear in the list in the order of the input coordinates,
+   * or in the order as specified in the destinations query parameter.
+   *
+   * @return list object with each item being a {@link DirectionsWaypoint}
+   * @since 2.1.0
+   */
+  @Nullable
+  public abstract List<DirectionsWaypoint> destinations();
+
+  /**
+   * List of {@link DirectionsWaypoint} objects. Each waypoints is an input coordinate snapped to
+   * the road and path network. The waypoints appear in the list in the order of the input
+   * coordinates, or in the order as specified in the sources query parameter.
+   *
+   * @return list object with each item being a {@link DirectionsWaypoint}
+   * @since 2.1.0
+   */
+  @Nullable
+  public abstract List<DirectionsWaypoint> sources();
+
+  // TODO fix javadoc here
+
+  /**
+   * Durations as array of arrays representing the matrix in row-major order. durations[i][j] gives
+   * the travel time from the i-th source to the j-th destination. All values are in seconds. The
+   * duration between the same coordinate is always 0. If a duration can not be found, the result is
+   * null.
+   *
+   * @return an array of array with each entry being a duration value given in seconds.
+   * @since 2.1.0
+   */
+  @Nullable
+  public abstract List<Double[]> durations();
+
+  /**
+   * Gson type adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the type adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<MatrixResponse> typeAdapter(Gson gson) {
+    return new AutoValue_MatrixResponse.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * This builder can be used to set the values describing the {@link MatrixResponse}.
+   *
+   * @since 3.0.0
+   */
+  @AutoValue.Builder
+  public abstract static class Builder {
+
+    private Double[][] durations;
+
+    /**
+     * String indicating the state of the response. This is a separate code than the HTTP status
+     * code. On normal valid responses, the value will be {@code Ok}.
+     * <p>
+     * On error, the server responds with different HTTP status codes. For responses with HTTP
+     * status codes lower than 500, the JSON response body includes the code property, which may be
+     * used by client programs to manage control flow. The response body may also include a message
+     * property, with a human-readable explanation of the error. If a server error occurs, the HTTP
+     * status code will be 500 or higher and the response will not include a code property.
+     * </p><p>
+     * Note that in cases where no route is found between a source and destination, no error will be
+     * returned, but instead the respective value in the durations matrix will be null.
+     * </p>
+     *
+     * @param code "Ok", "NoRoute", "ProfileNotFound", or "InvalidInput"
+     * @return this builder for chaining options together
+     * @since 2.1.0
+     */
+    public abstract Builder code(@NonNull String code);
+
+    /**
+     * List of {@link DirectionsWaypoint} objects. Each waypoint is an input coordinate snapped to
+     * the road and path network. The waypoints appear in the list in the order of the input
+     * coordinates, or in the order as specified in the destinations query parameter.
+     *
+     * @param destinations list object with each item being a {@link DirectionsWaypoint}
+     * @return this builder for chaining options together
+     * @since 2.1.0
+     */
+    public abstract Builder destinations(@Nullable List<DirectionsWaypoint> destinations);
+
+    /**
+     * List of {@link DirectionsWaypoint} objects. Each waypoints is an input coordinate snapped to
+     * the road and path network. The waypoints appear in the list in the order of the input
+     * coordinates, or in the order as specified in the sources query parameter.
+     *
+     * @param sources list object with each item being a {@link DirectionsWaypoint}
+     * @return this builder for chaining options together
+     * @since 2.1.0
+     */
+    public abstract Builder sources(@Nullable List<DirectionsWaypoint> sources);
+
+    /**
+     * Durations as array of arrays representing the matrix in row-major order. durations[i][j]
+     * gives the travel time from the i-th source to the j-th destination. All values are in
+     * seconds. The duration between the same coordinate is always 0. If a duration can not be
+     * found, the result is null.
+     *
+     * @param durations an array of array with each entry being a duration value given in seconds.
+     * @return this builder for chaining options together
+     * @since 2.1.0
+     */
+    public Builder durations(@Nullable Double[][] durations) {
+      this.durations = durations;
+      return this;
+    }
+
+    abstract Builder durations(@Nullable List<Double[]> durations);
+
+    abstract MatrixResponse autoBuild();
+
+    /**
+     * Build a new {@link MatrixResponse} object.
+     *
+     * @return a new {@link MatrixResponse} using the provided values in this builder
+     * @since 3.0.0
+     */
+    public MatrixResponse build() {
+      durations(Arrays.asList(durations));
+      return autoBuild();
+    }
+  }
+}

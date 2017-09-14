@@ -1,108 +1,103 @@
 package com.mapbox.services.commons.geojson;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
-import com.mapbox.services.commons.geojson.custom.PositionSerializer;
-import com.mapbox.services.commons.models.Position;
+import com.google.gson.TypeAdapter;
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
+import com.mapbox.services.commons.geojson.custom.MapboxAdapterFactory;
+import com.mapbox.services.commons.geojson.custom.PointDeserializer;
+import com.mapbox.services.commons.geojson.custom.PointSerializer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A MultiLineString is a type of {@link Geometry}.
- *
- * @see <a href='http://geojson.org/geojson-spec.html#multilinestring'>Official GeoJSON MultiLineString Specifications</a>
- * @since 1.0.0
- */
-public class MultiLineString implements Geometry<List<List<Position>>> {
+@AutoValue
+public abstract class MultiLineString implements Geometry<List<List<Point>>>, Serializable {
 
-  private final String type = "MultiLineString";
-  private List<List<Position>> coordinates;
+  private static final String TYPE = "MultiLineString";
 
-  /**
-   * Private constructor.
-   *
-   * @param coordinates List of {@link Position} making up the MultiLineString.
-   * @since 1.0.0
-   */
-  private MultiLineString(List<List<Position>> coordinates) {
-    this.coordinates = coordinates;
-  }
-
-  /**
-   * Should always be "MultiLineString".
-   *
-   * @return String "MultiLineString".
-   * @since 1.0.0
-   */
-  @Override
-  public String getType() {
-    return type;
-  }
-
-  /**
-   * Get the list of {@link Position} making up the MultiLineString.
-   *
-   * @return List of {@link Position}.
-   * @since 1.0.0
-   */
-  @Override
-  public List<List<Position>> getCoordinates() {
-    return coordinates;
-  }
-
-  @Override
-  public void setCoordinates(List<List<Position>> coordinates) {
-    this.coordinates = coordinates;
-  }
-
-  /**
-   * Creates a {@link MultiLineString} from a list of coordinates.
-   *
-   * @param coordinates List of {@link Position} coordinates.
-   * @return {@link MultiLineString}.
-   * @since 1.0.0
-   */
-  public static MultiLineString fromCoordinates(List<List<Position>> coordinates) {
-    return new MultiLineString(coordinates);
-  }
-
-  public static MultiLineString fromCoordinates(double[][][] coordinates) {
-    List<List<Position>> converted = new ArrayList<>(coordinates.length);
-    for (int i = 0; i < coordinates.length; i++) {
-      List<Position> innerList = new ArrayList<>(coordinates[i].length);
-      for (int j = 0; j < coordinates[i].length; j++) {
-        innerList.add(Position.fromCoordinates(coordinates[i][j]));
-      }
-      converted.add(innerList);
-    }
-
-    return fromCoordinates(converted);
-  }
-
-  /**
-   * Create a GeoJSON MultiLineString object from JSON.
-   *
-   * @param json String of JSON making up a MultiLineString.
-   * @return {@link MultiLineString} GeoJSON object.
-   * @since 1.0.0
-   */
-  public static MultiLineString fromJson(String json) {
+  public static MultiLineString fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionDeserializer());
+    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
     return gson.create().fromJson(json, MultiLineString.class);
   }
 
-  /**
-   * Convert feature into JSON.
-   *
-   * @return String containing MultiLineString JSON.
-   * @since 1.0.0
-   */
+  public static MultiLineString fromLineStrings(@NonNull List<LineString> lineStrings) {
+    List<List<Point>> coordinates = new ArrayList<>();
+    for (LineString lineString : lineStrings) {
+      coordinates.add(lineString.coordinates());
+    }
+    return new AutoValue_MultiLineString(TYPE, null, coordinates);
+  }
+
+  public static MultiLineString fromLineStrings(@NonNull List<LineString> lineStrings,
+                                                @Nullable BoundingBox bbox) {
+    List<List<Point>> coordinates = new ArrayList<>();
+    for (LineString lineString : lineStrings) {
+      coordinates.add(lineString.coordinates());
+    }
+    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
+  }
+
+  public static MultiLineString fromLngLats(@NonNull List<List<Point>> coordinates) {
+    return new AutoValue_MultiLineString(TYPE, null, coordinates);
+  }
+
+  public static MultiLineString fromLngLats(@NonNull List<List<Point>> coordinates,
+                                            @Nullable BoundingBox bbox) {
+    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
+  }
+
+  @NonNull
   @Override
+  public abstract String type();
+
+  /**
+   * A Feature Collection might have a member named {@code bbox} to include information on the
+   * coordinate range for it's {@link Feature}s. The value of the bbox member MUST be a list of
+   * size 2*n where n is the number of dimensions represented in the contained feature geometries,
+   * with all axes of the most southwesterly point followed by all axes of the more northeasterly
+   * point. The axes order of a bbox follows the axes order of geometries.
+   *
+   * @return a list of double coordinate values describing a bounding box
+   * @since 3.0.0
+   */
+  @Nullable
+  @Override
+  public abstract BoundingBox bbox();
+
+  @NonNull
+  @Override
+  public abstract List<List<Point>> coordinates();
+
+  public List<LineString> lineStrings() {
+    List<LineString> lineStrings = new ArrayList<>();
+    for (List<Point> points : coordinates()) {
+      lineStrings.add(LineString.fromLngLats(points));
+    }
+    return lineStrings;
+  }
+
+
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionSerializer());
+    gson.registerTypeAdapter(Point.class, new PointSerializer());
     return gson.create().toJson(this);
+  }
+
+  /**
+   * Gson TYPE adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the TYPE adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<MultiLineString> typeAdapter(Gson gson) {
+    return new AutoValue_MultiLineString.GsonTypeAdapter(gson);
   }
 }

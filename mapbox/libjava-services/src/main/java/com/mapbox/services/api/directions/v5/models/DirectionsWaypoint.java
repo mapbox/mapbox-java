@@ -1,73 +1,109 @@
 package com.mapbox.services.api.directions.v5.models;
 
-import com.mapbox.services.commons.models.Position;
+import android.support.annotation.NonNull;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
+import com.mapbox.services.commons.geojson.Point;
+
+import java.io.Serializable;
 
 /**
  * An input coordinate snapped to the roads network.
  *
  * @since 1.0.0
  */
-public class DirectionsWaypoint {
-
-  private String name;
-  private double[] location;
+@AutoValue
+public abstract class DirectionsWaypoint implements Serializable {
 
   /**
-   * Empty constructor
+   * Create a new instance of this class by using the {@link Builder} class.
    *
-   * @since 2.0.0
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
    */
-  public DirectionsWaypoint() {
+  public static Builder builder() {
+    return new AutoValue_DirectionsWaypoint.Builder();
   }
 
   /**
    * Provides the way name which the waypoint's coordinate is snapped to.
    *
-   * @return String with the name of the way the coordinate snapped to.
+   * @return string with the name of the way the coordinate snapped to
    * @since 1.0.0
    */
-  public String getName() {
-    return name;
+  public abstract String name();
+
+  /**
+   * A {@link Point} representing this waypoint location.
+   *
+   * @return GeoJson Point representing this waypoint location
+   * @since 3.0.0
+   */
+  @NonNull
+  public Point location() {
+    return Point.fromLngLat(rawLocation()[0], rawLocation()[1]);
   }
 
   /**
-   * Provide a way name which the waypoint's coordinate is snapped to.
+   * A {@link Point} representing this waypoint location.
    *
-   * @param name a String with the name of the way the coordinate snapped to.
-   * @since 2.1.0
+   * @return GeoJson Point representing this waypoint location
+   * @since 3.0.0
    */
-  public void setName(String name) {
-    this.name = name;
+  @SerializedName("location")
+  @SuppressWarnings("mutable")
+  abstract double[] rawLocation();
+
+  /**
+   * Gson type adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the type adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<DirectionsWaypoint> typeAdapter(Gson gson) {
+    return new AutoValue_DirectionsWaypoint.GsonTypeAdapter(gson);
   }
 
   /**
-   * an array with two double values representing the maneuver locations coordinate.
+   * This builder can be used to set the values describing the {@link DirectionsWaypoint}.
    *
-   * @return double array of [longitude, latitude] for the snapped coordinate.
-   * @since 1.0.0
+   * @since 3.0.0
    */
-  public double[] getLocation() {
-    return location;
-  }
+  @AutoValue.Builder
+  public abstract static class Builder {
 
-  /**
-   * Sets double array of [longitude, latitude] for the snapped coordinate.
-   *
-   * @param location array with the order [longitude, latitude].
-   * @since 2.1.0
-   */
-  public void setLocation(double[] location) {
-    this.location = location;
-  }
+    /**
+     * Provides the way name which the waypoint's coordinate is snapped to.
+     *
+     * @param name string with the name of the way the coordinate snapped to
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder name(String name);
 
-  /**
-   * Converts double array {@link #getLocation()} to a {@link Position}. You'll typically want to
-   * use this format instead of {@link #getLocation()} as it's easier to work with.
-   *
-   * @return {@link Position}.
-   * @since 1.0.0
-   */
-  public Position asPosition() {
-    return Position.fromCoordinates(location[0], location[1]);
+    /**
+     * The rawLocation as a double array. Once the {@link DirectionsWaypoint} objects created,
+     * this raw location gets converted into a {@link Point} object and is public exposed as such.
+     * The double array should have a length of two, index 0 being the longitude and index 1 being
+     * latitude.
+     *
+     * @param rawLocation a double array with a length of two, index 0 being the longitude and
+     *                    index 1 being latitude.
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder rawLocation(double[] rawLocation);
+
+    /**
+     * Build a new {@link DirectionsWaypoint} object.
+     *
+     * @return a new {@link DirectionsWaypoint} using the provided values in this builder
+     * @since 3.0.0
+     */
+    public abstract DirectionsWaypoint build();
+
   }
 }

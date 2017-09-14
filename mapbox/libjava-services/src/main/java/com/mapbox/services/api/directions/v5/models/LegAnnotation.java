@@ -1,101 +1,136 @@
 package com.mapbox.services.api.directions.v5.models;
 
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+
+import java.io.Serializable;
+import java.util.List;
+
 /**
- * An annotations object that contains additional details about each line segment along the route geometry. Each entry
- * in an annotations field corresponds to a coordinate along the route geometry.
+ * An annotations object that contains additional details about each line segment along the route
+ * geometry. Each entry in an annotations field corresponds to a coordinate along the route
+ * geometry.
  *
  * @since 2.1.0
  */
-public class LegAnnotation {
+@AutoValue
+public abstract class LegAnnotation implements Serializable {
 
-  private double[] distance;
-  private double[] duration;
-  private double[] speed;
-  private String[] congestion;
-
-  public LegAnnotation() {
+  /**
+   * Create a new instance of this class by using the {@link Builder} class.
+   *
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
+   */
+  public static Builder builder() {
+    return new AutoValue_LegAnnotation.Builder();
   }
 
   /**
    * The distance, in meters, between each pair of coordinates.
    *
-   * @return a double array with each entry being a distance value between two of the routeLeg geometry coordinates.
+   * @return a list with each entry being a distance value between two of the routeLeg geometry
+   *   coordinates
    * @since 2.1.0
    */
-  public double[] getDistance() {
-    return distance;
-  }
-
-  /**
-   * Set the duration, in seconds, between each pair of coordinates.
-   *
-   * @param distance a double array with each entry being a duration value between two of the routeLeg geometry
-   *                 coordinates.
-   * @since 2.2.0
-   */
-  public void setDistance(double[] distance) {
-    this.distance = distance;
-  }
-
-  /**
-   * The duration, in seconds, between each pair of coordinates.
-   *
-   * @return a double array with each entry being a duration value between two of the routeLeg geometry coordinates.
-   * @since 2.1.0
-   */
-  public double[] getDuration() {
-    return duration;
-  }
-
-  /**
-   * Set the duration, in seconds, between each pair of coordinates.
-   *
-   * @param duration a double array with each entry being a duration value between two of the routeLeg geometry
-   *                 coordinates.
-   * @since 2.2.0
-   */
-  public void setDuration(double[] duration) {
-    this.duration = duration;
-  }
+  @Nullable
+  public abstract List<Double> distance();
 
   /**
    * The speed, in meters per second, between each pair of coordinates.
    *
-   * @return a double array with each entry being a speed value between two of the routeLeg geometry coordinates.
+   * @return a list with each entry being a speed value between two of the routeLeg geometry
+   *   coordinates
    * @since 2.1.0
    */
-  public double[] getSpeed() {
-    return speed;
-  }
+  public abstract List<Double> duration();
 
   /**
-   * Set the speed, in meters per second, between each pair of coordinates.
+   * The speed, in meters per second, between each pair of coordinates.
    *
-   * @param speed a double array with each entry being a speed value between two of the routeLeg geometry coordinates.
-   * @since 2.2.0
+   * @return a list with each entry being a speed value between two of the routeLeg geometry
+   *   coordinates
+   * @since 2.1.0
    */
-  public void setSpeed(double[] speed) {
-    this.speed = speed;
-  }
+  @Nullable
+  public abstract List<Double> speed();
 
   /**
    * The congestion between each pair of coordinates.
    *
-   * @return a String array with each entry being a congestion value between two of the routeLeg geometry coordinates.
+   * @return a list of Strings with each entry being a congestion value between two of the routeLeg
+   *   geometry coordinates
    * @since 2.2.0
    */
-  public String[] getCongestion() {
-    return congestion;
+  public abstract List<String> congestion();
+
+  /**
+   * Gson type adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the type adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<LegAnnotation> typeAdapter(Gson gson) {
+    return new AutoValue_LegAnnotation.GsonTypeAdapter(gson);
   }
 
   /**
-   * Set the congestion between each pair of coordinates.
+   * This builder can be used to set the values describing the {@link LegAnnotation}.
    *
-   * @param congestion a String array with each entry being a congestion value between two of the routeLeg geometry
-   *                   coordinates.
-   * @since 2.2.0
+   * @since 3.0.0
    */
-  public void setCongestion(String[] congestion) {
-    this.congestion = congestion;
+  @AutoValue.Builder
+  public abstract static class Builder {
+
+    /**
+     * The distance, in meters, between each pair of coordinates.
+     *
+     * @param distance a list with each entry being a distance value between two of the routeLeg
+     *                 geometry coordinates
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder distance(@Nullable List<Double> distance);
+
+    /**
+     * The speed, in meters per second, between each pair of coordinates.
+     *
+     * @param duration a list with each entry being a speed value between two of the routeLeg
+     *                 geometry coordinates
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder duration(@Nullable List<Double> duration);
+
+    /**
+     * The speed, in meters per second, between each pair of coordinates.
+     *
+     * @param speed a list with each entry being a speed value between two of the routeLeg geometry
+     *              coordinates
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder speed(@Nullable List<Double> speed);
+
+    /**
+     * The congestion between each pair of coordinates.
+     *
+     * @param congestion a list of Strings with each entry being a congestion value between two of
+     *                   the routeLeg geometry coordinates
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder congestion(@Nullable List<String> congestion);
+
+    /**
+     * Build a new {@link LegAnnotation} object.
+     *
+     * @return a new {@link LegAnnotation} using the provided values in this builder
+     * @since 3.0.0
+     */
+    public abstract LegAnnotation build();
   }
 }

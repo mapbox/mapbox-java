@@ -43,26 +43,41 @@
     <string name="title_connectivity">Connectivity state</string>
 
     <!-- Descriptions -->
-    <string name="description_location">Shows how to obtain location from different engines.</string>
+    <string name="description_location">Shows how to obtain location from different engines.
+    </string>
     <string name="description_directions_v5">Show you how to get where you\'re going.</string>
     <string name="description_directions_icons">Icons that can used for navigation.</string>
-    <string name="description_reverse_geocoding">Pick a point on the map and receive a geocoded result.</string>
-    <string name="description_geocoding_widget">An easy to incorporate geocoding search bar.</string>
-    <string name="description_geocoding_service">Gets your current location and returns information using geocoder.</string>
+    <string name="description_reverse_geocoding">Pick a point on the map and receive a geocoded
+        result.
+    </string>
+    <string name="description_geocoding_widget">An easy to incorporate geocoding search bar.
+    </string>
+    <string name="description_geocoding_service">Gets your current location and returns information
+        using geocoder.
+    </string>
     <string name="description_maki_icons">List of the Maki icons.</string>
-    <string name="description_static_image">Use the static map API and display in an image view.</string>
-    <string name="description_static_image_with_annotations">Use the static map API with Annotations and display in an image view.</string>
-    <string name="description_simplify_polyline">Take a polyline and simplify it\'s geometry.</string>
-    <string name="description_map_matching">Use the map matching API to match a route to a road.</string>
+    <string name="description_static_image">Use the static map API and display in an image view.
+    </string>
+    <string name="description_static_image_with_annotations">Use the static map API with Annotations
+        and display in an image view.
+    </string>
+    <string name="description_simplify_polyline">Take a polyline and simplify it\'s geometry.
+    </string>
+    <string name="description_map_matching">Use the map matching API to match a route to a road.
+    </string>
     <string name="description_turf_bearing">Use Turf to get the bearing.</string>
     <string name="description_turf_destination">Use Turf to get a destination point.</string>
     <string name="description_turf_distance">Use Turf to calculate a distance.</string>
-    <string name="description_turf_line_slice">Use Turf to slice a line into a smaller section.</string>
-    <string name="description_turf_inside">Use Turf to determine if something is within a polygon.</string>
+    <string name="description_turf_line_slice">Use Turf to slice a line into a smaller section.
+    </string>
+    <string name="description_turf_inside">Use Turf to determine if something is within a polygon.
+    </string>
     <string name="description_turf_midpoint">Use Turf to get a midpoint.</string>
     <string name="description_connectivity">Keep track of the connectivity status.</string>
     <string name="title_optimized_trip">Optimized Trip</string>
-    <string name="description_optimized_trip">Use the optimized trip API to solve the traveling salesperson problem</string>
+    <string name="description_optimized_trip">Use the optimized trip API to solve the traveling
+        salesperson problem
+    </string>
 
 
     <string-array name="turf_calculation_items">
@@ -92,5 +107,5 @@
         <item>Lost</item>
         <item>Google Play Services</item>
     </string-array>
-
+    <string name="title_activity_antimeridian">AntimeridianActivity</string>
 </resources>

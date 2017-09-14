@@ -87,7 +87,7 @@ public class StaticImageWithAnnotationsActivity extends AppCompatActivity {
       .setLat(51.5062)
       .setLon(-0.0756)
       .setZoom(14)
-      .setGeoJson(Feature.fromGeometry(Point.fromCoordinates(Position.fromCoordinates(-0.0756, 51.5062))))
+      .setGeoJson(Feature.fromGeometry(Point.fromLngLat(-0.0756, 51.5062)))
       .setWidth(320)
       .setHeight(320)
       .setRetina(true)

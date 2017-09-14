@@ -1,5 +1,10 @@
 package com.mapbox.services.api.geocoding.v5;
 
+import android.support.annotation.StringDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Constants that should be used when requesting geocoding.
  *
@@ -15,11 +20,24 @@ public final class GeocodingCriteria {
   public static final String MODE_PLACES = "mapbox.places";
 
   /**
-   * Geocoding mode for for enterprise/batch geocoding.
+   * Geocoding mode for enterprise/batch geocoding.
    *
    * @since 1.0.0
    */
   public static final String MODE_PLACES_PERMANENT = "mapbox.places-permanent";
+
+  /**
+   * Retention policy for the various geocoding modes.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    MODE_PLACES,
+    MODE_PLACES_PERMANENT
+  })
+  public @interface GeocodingModeCriteria {
+  }
 
   /**
    * Filter results by country.
@@ -84,11 +102,31 @@ public final class GeocodingCriteria {
    */
   public static final String TYPE_POI = "poi";
 
-
   /**
    * Filter results by POI landmark subtype.
    *
    * @since 1.3.2
    */
   public static final String TYPE_POI_LANDMARK = "poi.landmark";
+
+  /**
+   * Retention policy for the various filter result types.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    TYPE_COUNTRY,
+    TYPE_REGION,
+    TYPE_POSTCODE,
+    TYPE_DISTRICT,
+    TYPE_PLACE,
+    TYPE_LOCALITY,
+    TYPE_NEIGHBORHOOD,
+    TYPE_ADDRESS,
+    TYPE_POI,
+    TYPE_POI_LANDMARK
+  })
+  public @interface GeocodingTypeCriteria {
+  }
 }

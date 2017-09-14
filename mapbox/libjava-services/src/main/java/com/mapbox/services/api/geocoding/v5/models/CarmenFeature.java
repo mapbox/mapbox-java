@@ -1,57 +1,134 @@
 package com.mapbox.services.api.geocoding.v5.models;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.services.api.geocoding.v5.gson.CarmenGeometryDeserializer;
+import com.mapbox.services.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.Geometry;
+import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
+import com.mapbox.services.commons.geojson.custom.BoundingBoxDeserializer;
 import com.mapbox.services.commons.geojson.custom.GeometryDeserializer;
-import com.mapbox.services.commons.geojson.custom.PositionDeserializer;
-import com.mapbox.services.commons.models.Position;
+import com.mapbox.services.commons.geojson.custom.MapboxAdapterFactory;
+import com.mapbox.services.commons.geojson.custom.PointDeserializer;
 
 import java.util.List;
 
 /**
  * The Features key in the geocoding API response contains the majority of information you'll want
- * to use.
+ * to use. It extends the {@link Feature} object in GeoJSON and adds several additional attribute
+ * which further describe the geocoding result.
+ * <p>
+ * A Geocoding id is a String in the form {@code {type}.{id}} where {@code {type}} is the lowest
+ * hierarchy feature in the  place_type field. The  {id} suffix of the feature id is unstable and
+ * may change within versions.
+ * <p>
+ * Note: this class doesn't actually extend Feature due to the inherit rule in AutoValue (see link
+ * below).
  *
  * @see <a href="https://github.com/mapbox/carmen/blob/master/carmen-geojson.md">Carmen Geojson information</a>
  * @see <a href="https://www.mapbox.com/api-documentation/#geocoding">Mapbox geocoder documentation</a>
- * @see <a href='geojson.org/geojson-spec.html#feature-objects'>Official GeoJSON Feature Specifications</a>
+ * @see <a href='geojson.org/geojson-spec.html#feature-objects'>Official GeoJson Feature Specifications</a>
+ * @see <a href="https://github.com/google/auto/blob/master/value/userguide/howto.md#inherit">AutoValue inherit rule</a>
  * @since 1.0.0
  */
-public class CarmenFeature extends Feature {
+@AutoValue
+public abstract class CarmenFeature {
 
-  private String text;
-  @SerializedName("place_name")
-  private String placeName;
-  @SerializedName("place_type")
-  private String[] placeType;
-  private double[] bbox;
-  private String address;
-  private double[] center;
-  private List<CarmenContext> context;
-  private double relevance;
-  @SerializedName("matching_text")
-  private String matchingText;
-  @SerializedName("matching_place_name")
-  private String matchingPlaceName;
-  private String language;
+  private static final String TYPE = "Feature";
 
   /**
-   * Empty constructor
+   * Create a new instance of this class by using the {@link Builder} class.
+   *
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
    */
-  public CarmenFeature() {
-    super(null, null, null);
+  public static Builder builder() {
+    return new AutoValue_CarmenFeature.Builder()
+      .type(TYPE);
   }
 
   /**
-   * Private constructor.
+   * Create a CarmenFeature object from JSON.
+   *
+   * @param json string of JSON making up a carmen feature
+   * @return this class using the defined information in the provided JSON string
+   * @since 2.0.0
    */
-  private CarmenFeature(Geometry geometry, JsonObject properties, String id) {
-    super(geometry, properties, id);
+  public static CarmenFeature fromJson(@NonNull String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    return gson.create().fromJson(json, CarmenFeature.class);
   }
+
+
+  // Feature specific attributes
+
+  /**
+   * This describes the TYPE of GeoJson geometry this object is, thus this will always return
+   * {@link Feature}.
+   *
+   * @return a String which describes the TYPE of geometry, for this object it will always return
+   *   {@code Feature}
+   * @since 1.0.0
+   */
+  @NonNull
+  public abstract String type();
+
+  /**
+   * A {@link CarmenFeature} might have a member named {@code bbox} to include information on the
+   * coordinate range for it's {@link Geometry}. The value of the bbox member MUST be a list of
+   * size 2*n where n is the number of dimensions represented in the contained feature geometries,
+   * with all axes of the most southwesterly point followed by all axes of the more northeasterly
+   * point. The axes order of a bbox follows the axes order of geometries.
+   *
+   * @return a {@link BoundingBox} object containing the information
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract BoundingBox bbox();
+
+  /**
+   * A feature may have a commonly used identifier which is either a unique String or number.
+   *
+   * @return a String containing this features unique identification or null if one wasn't given
+   *   during creation.
+   * @since 1.0.0
+   */
+  @Nullable
+  public abstract String id();
+
+  /**
+   * The geometry which makes up this feature. A Geometry object represents points, curves, and
+   * surfaces in coordinate space. One of the seven geometries provided inside this library can be
+   * passed in through one of the static factory methods.
+   *
+   * @return a single defined {@link Geometry} which makes this feature spatially aware
+   * @since 1.0.0
+   */
+  @Nullable
+  public abstract Geometry geometry();
+
+  /**
+   * This contains the JSON object which holds the feature properties. The value of the properties
+   * member is a {@link JsonObject} and might be empty if no properties are provided.
+   *
+   * @return a {@link JsonObject} which holds this features current properties
+   * @since 1.0.0
+   */
+  @NonNull
+  public abstract JsonObject properties();
+
+  // CarmenFeature specific attributes
 
   /**
    * A string representing the feature in the requested language, if specified.
@@ -59,145 +136,112 @@ public class CarmenFeature extends Feature {
    * @return text representing the feature (e.g. "Austin")
    * @since 1.0.0
    */
-  public String getText() {
-    return text;
-  }
+  @Nullable
+  public abstract String text();
 
   /**
-   * Set a string representing the feature in the requested language, if specified.
+   * A string representing the feature in the requested language, if specified, and its full result
+   * hierarchy.
    *
-   * @param text text representing the feature (e.g. "Austin")
-   * @since 2.0.0
-   */
-  public void setText(String text) {
-    this.text = text;
-  }
-
-  /**
-   * A string representing the feature in the requested language, if specified, and its full result hierarchy.
-   *
-   * @return Human-readable text representing the full result hierarchy (e.g. "Austin, Texas, United States").
+   * @return human-readable text representing the full result hierarchy (e.g. "Austin, Texas,
+   *   United States")
    * @since 1.0.0
    */
-  public String getPlaceName() {
-    return placeName;
-  }
+  @Nullable
+  @SerializedName("place_name")
+  public abstract String placeName();
 
   /**
-   * Set a string representing the feature in the requested language, if specified, and its full result hierarchy.
+   * A list of feature types describing the feature. Options are one of the following types defined
+   * in the {@link GeocodingTypeCriteria}. Most features have only one type, but if the feature has
+   * multiple types, (for example, Vatican City is a country, region, and place), all applicable
+   * types will be provided in the list.
    *
-   * @param placeName human-readable text representing the full result hierarchy
-   * @since 2.0.0
-   */
-  public void setPlaceName(String placeName) {
-    this.placeName = placeName;
-  }
-
-  /**
-   * An array bounding box in the form {@code [minX, minY, maxX, maxY]}.
-   *
-   * @return Array bounding box of the form [minx, miny, maxx, maxy].
+   * @return a list containing the place type
    * @since 1.0.0
    */
-  public double[] getBbox() {
-    return bbox;
-  }
+  @Nullable
+  @SerializedName("place_type")
+  public abstract List<String> placeType();
 
   /**
-   * Set an array bounding box in the form {@code [minX, minY, maxX, maxY]}.
+   * A string of the house number for the returned {@code address} feature. Note that unlike the
+   * address property for {@code poi} features, this property is outside the  properties object.
    *
-   * @param bbox array bounding box of the form [minx, miny, maxx, maxy]
-   * @since 2.0.0
-   */
-  public void setBbox(double[] bbox) {
-    this.bbox = bbox;
-  }
-
-  /**
-   * A string of the house number for the returned {@code address} feature. Note that unlike the address property for
-   * {@code poi} features, this property is outside the  properties object.
-   *
-   * @return Where applicable. While the string content isn't guaranteed, in many cases, this will be the house number.
-   * If the response doesn't contain an address this will be null.
+   * @return while the string content isn't guaranteed, and might return null, in many cases, this
+   *   will be the house number
    * @since 1.0.0
    */
-  public String getAddress() {
-    return address;
-  }
+  @Nullable
+  public abstract String address();
 
   /**
-   * Set a string of the house number for the returned {@code address} feature.
+   * A {@link Point} object which represents the center point inside the {@link #bbox()} if one is
+   * provided.
    *
-   * @param address Where applicable. While the string content isn't guaranteed, in many cases, this will be the house
-   *                number. If the response doesn't contain an address this will be null.
-   * @since 2.0.0
-   */
-  public void setAddress(String address) {
-    this.address = address;
-  }
-
-  /**
-   * An array in the form [longitude, latitude] at the center of the specified {@code bbox}.
-   *
-   * @return Array of the form [lon, lat].
+   * @return a GeoJson {@link Point} which defines the center location of this feature
    * @since 1.0.0
    */
-  public double[] getCenter() {
-    return center;
+  @Nullable
+  public Point center() {
+    if (rawCenter() != null) {
+      if (rawCenter().length == 2) {
+        return Point.fromLngLat(rawCenter()[0], rawCenter()[1]);
+      }
+    }
+    return null;
   }
 
-  /**
-   * Set an array in the form [longitude, latitude] at the center of the specified {@code bbox}.
-   *
-   * @param center array of the form [lon, lat]
-   * @since 2.0.0
-   */
-  public void setCenter(double[] center) {
-    this.center = center;
-  }
+  @Nullable
+  @SerializedName("center")
+  abstract double[] rawCenter();
 
   /**
-   * An array representing the hierarchy of encompassing parent features. Each parent feature may include address,
-   * category, tel, maki, landmark, wikidata, or short code.
+   * A list representing the hierarchy of encompassing parent features. This is where you can find
+   * telephone, address, and other information pertaining to this feature.
    *
-   * @return Array representing a hierarchy of parents. Each parent includes id, text keys.
+   * @return a list made up of {@link CarmenContext} which might contain additional information
+   *   about this specific feature
    * @since 1.0.0
    */
-  public List<CarmenContext> getContext() {
-    return context;
-  }
+  @Nullable
+  public abstract List<CarmenContext> context();
 
   /**
-   * Set an array representing the hierarchy of encompassing parent features. Each parent feature may include address,
-   * category, tel, maki, landmark, wikidata, or short code.
+   * A numerical score from 0 (least relevant) to 0.99 (most relevant) measuring how well each
+   * returned feature matches the query. You can use this property to remove results which don't
+   * fully match the query.
    *
-   * @param context Array representing a hierarchy of parents. Each parent includes id, text keys.
-   * @since 2.0.0
-   */
-  public void setContext(List<CarmenContext> context) {
-    this.context = context;
-  }
-
-  /**
-   * You can use the relevance property to remove rough results if you require a response that
-   * matches your whole query.
-   *
-   * @return double value between 0 and 1.
+   * @return the relevant score between 0 and 1
    * @since 1.0.0
    */
-  public double getRelevance() {
-    return relevance;
-  }
+  @Nullable
+  public abstract Double relevance();
 
   /**
-   * Set the relevance property to remove rough results if you require a response that matches your whole query.
+   * A string analogous to the {@link #text()} field that more closely matches the query than
+   * results in the specified language. For example, querying "Köln, Germany" with language set to
+   * English might return a feature with the {@link #text()} "Cologne" and this would be "Köln".
    *
-   * @param relevance double value between 0 and 1
-   * @since 2.0.0
+   * @return a string containing the matching text
+   * @since 2.2.0
    */
-  public void setRelevance(double relevance) {
-    this.relevance = relevance;
-  }
+  @Nullable
+  @SerializedName("matching_text")
+  public abstract String matchingText();
+
+  /**
+   * A string analogous to the {@link #placeName()} field that more closely matches the query than
+   * results in the specified language. For example, querying "Köln, Germany" with language set to
+   * English might return a feature with the {@link #placeName()} "Cologne, Germany" and this would
+   * return "Köln, North Rhine-Westphalia, Germany".
+   *
+   * @return a string containing the matching place name
+   * @since 2.2.0
+   */
+  @Nullable
+  @SerializedName("matching_place_name")
+  public abstract String matchingPlaceName();
 
   /**
    * A string of the IETF language tag of the query's primary language.
@@ -206,125 +250,197 @@ public class CarmenFeature extends Feature {
    * @see <a href="https://en.wikipedia.org/wiki/IETF_language_tag">IETF language tag Wikipedia page</a>
    * @since 2.2.0
    */
-  public String getLanguage() {
-    return language;
+  @Nullable
+  public abstract String language();
+
+  /**
+   * Gson type adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the type adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<CarmenFeature> typeAdapter(Gson gson) {
+    return new AutoValue_CarmenFeature.GsonTypeAdapter(gson);
   }
 
   /**
-   * Set a string of the language tag of the query;s primary language.
+   * This builder can be used to set the values describing the {@link CarmenFeature}.
    *
-   * @param language locale object converted to a string
-   * @since 2.2.0
+   * @since 3.0.0
    */
-  public void setLanguage(String language) {
-    this.language = language;
-  }
+  @AutoValue.Builder
+  public abstract static class Builder {
 
-  /**
-   * A string analogous to the {@link CarmenFeature#getPlaceName()} field that more closely matches the query than
-   * results in the specified language. For example, querying "Köln, Germany" with language set to English might
-   * return a feature with the  {@code placeName} "Cologne, Germany" and a matching_place_name of
-   * "Köln, North Rhine-Westphalia, Germany".
-   *
-   * @return a string containing the matching place name
-   * @since 2.2.0
-   */
-  public String getMatchingPlaceName() {
-    return matchingPlaceName;
-  }
+    /**
+     * This describes the TYPE of GeoJson geometry this object is, thus this will always return
+     * {@link Feature}. Note that this isn't public since it should always be set to "Feature"
+     *
+     * @param type a String which describes the TYPE of geometry, for this object it will always
+     *             return {@code Feature}
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    abstract Builder type(@NonNull String type);
 
-  /**
-   * Set a string analogous to the {@link CarmenFeature#getPlaceName()} field that more closely matches the query than
-   * results in the specified language.
-   *
-   * @param matchingPlaceName a string containing the matching place name
-   * @since 2.2.0
-   */
-  public void setMatchingPlaceName(String matchingPlaceName) {
-    this.matchingPlaceName = matchingPlaceName;
-  }
+    /**
+     * A Feature might have a member named {@code bbox} to include information on the coordinate
+     * range for it's {@link Feature}s. The value of the bbox member MUST be a list of size 2*n
+     * where n is the number of dimensions represented in the contained feature geometries, with all
+     * axes of the most southwesterly point followed by all axes of the more northeasterly point.
+     * The axes order of a bbox follows the axes order of geometries.
+     *
+     * @param bbox a list of double coordinate values describing a bounding box
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder bbox(@Nullable BoundingBox bbox);
 
-  /**
-   * A string analogous to the {@code text} field that more closely matches the query than results in the specified
-   * language. For example, querying "Köln, Germany" with language set to English might return a feature with the
-   * {@code text} "Cologne" and the {@code matching_text} "Köln".
-   *
-   * @return a string containing the matching text
-   * @since 2.2.0
-   */
-  public String getMatchingText() {
-    return matchingText;
-  }
+    /**
+     * A feature may have a commonly used identifier which is either a unique String or number.
+     *
+     * @param id a String containing this features unique identification or null if one wasn't given
+     *           during creation.
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder id(@Nullable String id);
 
-  /**
-   * A string analogous to the {@code text} field that more closely matches the query than results in the specified
-   * language
-   *
-   * @param matchingText a string containing the matching text
-   * @since 2.2.0
-   */
-  public void setMatchingText(String matchingText) {
-    this.matchingText = matchingText;
-  }
+    /**
+     * The geometry which makes up this feature. A Geometry object represents points, curves, and
+     * surfaces in coordinate space. One of the seven geometries provided inside this library can be
+     * passed in through one of the static factory methods.
+     *
+     * @param geometry a single defined {@link Geometry} which makes this feature spatially aware
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder geometry(@Nullable Geometry geometry);
 
-  /**
-   * An array of feature types describing the feature. Options are country, region, postcode, district, place,
-   * locality, neighborhood, address, poi, and poi.landmark. Most features have only one type, but if the feature has
-   * multiple types, (for example, Vatican City is a country, region, and place), all applicable types will be listed
-   * in the array.
-   *
-   * @return a {@code String} array containing the place types
-   * @since 2.2.0
-   */
-  public String[] getPlaceType() {
-    return placeType;
-  }
+    /**
+     * This contains the JSON object which holds the feature properties. The value of the properties
+     * member is a {@link JsonObject} and might be empty if no properties are provided.
+     *
+     * @param properties a {@link JsonObject} which holds this features current properties
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder properties(@NonNull JsonObject properties);
 
-  /**
-   * An array of feature types describing the feature.
-   *
-   * @param placeType a {@code String} array containing the place types
-   * @since 2.2.0
-   */
-  public void setPlaceType(String[] placeType) {
-    this.placeType = placeType;
-  }
+    /**
+     * A string representing the feature in the requested language.
+     *
+     * @param text text representing the feature (e.g. "Austin")
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder text(@Nullable String text);
 
+    /**
+     * A string representing the feature in the requested language, if specified, and its full
+     * result hierarchy.
+     *
+     * @param placeName human-readable text representing the full result hierarchy (e.g. "Austin,
+     *                  Texas, United States")
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder placeName(@Nullable String placeName);
 
-  /**
-   * Create a CarmenFeature object from JSON.
-   *
-   * @param json String of JSON making up a carmen feature.
-   * @return Carmen Feature
-   * @since 2.0.0
-   */
-  public static CarmenFeature fromJson(String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Position.class, new PositionDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new CarmenGeometryDeserializer());
-    return gson.create().fromJson(json, CarmenFeature.class);
-  }
+    /**
+     * A list of feature types describing the feature. Options are one of the following types
+     * defined in the {@link GeocodingTypeCriteria}. Most features have only one type, but if the
+     * feature has multiple types, (for example, Vatican City is a country, region, and place), all
+     * applicable types will be provided in the list.
+     *
+     * @param placeType a list containing the place type
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder placeType(@Nullable List<String> placeType);
 
-  /**
-   * Util to transform center into a Position object
-   *
-   * @return a {@link Position} representing the center.
-   * @since 1.0.0
-   */
-  public Position asPosition() {
-    return Position.fromCoordinates(center[0], center[1]);
-  }
+    /**
+     * A string of the house number for the returned {@code address} feature. Note that unlike the
+     * address property for {@code poi} features, this property is outside the  properties object.
+     *
+     * @param address while the string content isn't guaranteed, and might return null, in many
+     *                cases, this will be the house number
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder address(@Nullable String address);
 
-  /**
-   * Human-readable text representing the full result hierarchy
-   * (e.g. "Austin, Texas, United States").
-   *
-   * @return String with human-readable text.
-   * @since 1.0.0
-   */
-  @Override
-  public String toString() {
-    return getPlaceName();
+    /**
+     * A {@link Point} object which represents the center point inside the {@link #bbox()} if one is
+     * provided.
+     *
+     * @param center a GeoJson {@link Point} which defines the center location of this feature
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder rawCenter(@Nullable double[] center);
+
+    /**
+     * A list representing the hierarchy of encompassing parent features. This is where you can find
+     * telephone, address, and other information pertaining to this feature.
+     *
+     * @param contexts a list made up of {@link CarmenContext} which might contain additional
+     *                 information about this specific feature
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder context(@Nullable List<CarmenContext> contexts);
+
+    /**
+     * A numerical score from 0 (least relevant) to 0.99 (most relevant) measuring how well each
+     * returned feature matches the query. You can use this property to remove results which don't
+     * fully match the query.
+     *
+     * @param relevance the relevant score between 0 and 1
+     * @return this builder for chaining options together
+     * @since 1.0.0
+     */
+    public abstract Builder relevance(@Nullable Double relevance);
+
+    /**
+     * A string analogous to the {@link #text()} field that more closely matches the query than
+     * results in the specified language. For example, querying "Köln, Germany" with language set to
+     * English might return a feature with the {@link #text()} "Cologne" and this would be "Köln".
+     *
+     * @param matchingText a string containing the matching text
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder matchingText(@Nullable String matchingText);
+
+    /**
+     * A string analogous to the {@link #placeName()} field that more closely matches the query than
+     * results in the specified language. For example, querying "Köln, Germany" with language set to
+     * English might return a feature with the {@link #placeName()} "Cologne, Germany" and this
+     * would return "Köln, North Rhine-Westphalia, Germany".
+     *
+     * @param matchingPlaceName a string containing the matching place name
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder matchingPlaceName(@Nullable String matchingPlaceName);
+
+    /**
+     * A string of the IETF language tag of the query's primary language.
+     *
+     * @param language string containing the query's primary language
+     * @return this builder for chaining options together
+     * @see <a href="https://en.wikipedia.org/wiki/IETF_language_tag">IETF language tag Wikipedia page</a>
+     * @since 2.2.0
+     */
+    public abstract Builder language(@Nullable String language);
+
+    /**
+     * Build a new {@link CarmenFeature} object.
+     *
+     * @return a new {@link CarmenFeature} using the provided values in this builder
+     * @since 3.0.0
+     */
+    public abstract CarmenFeature build();
   }
 }

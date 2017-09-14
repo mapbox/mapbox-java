@@ -1,10 +1,10 @@
 package com.mapbox.services.api.utils.turf;
 
+import android.support.annotation.NonNull;
 import com.mapbox.services.api.utils.turf.models.LineIntersectsResult;
 import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.LineString;
 import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.models.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,39 +21,20 @@ public class TurfMisc {
    * Takes a line, a start {@link Point}, and a stop point and returns the line in between those
    * points.
    *
-   * @param startPt Starting point.
-   * @param stopPt  Stopping point.
-   * @param line    Line to slice.
-   * @return Sliced line.
-   * @throws TurfException signals that a Turf exception of some sort has occurred.
+   * @param startPt used for calculating the lineSlice
+   * @param stopPt  used for calculating the lineSlice
+   * @param line    geometry that should be sliced
+   * @return a sliced {@link LineString}
    * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
    * @since 1.2.0
    */
-  public static LineString lineSlice(Point startPt, Point stopPt, Feature line) throws TurfException {
-    if (!line.getGeometry().getType().equals("LineString")) {
-      throw new TurfException("input must be a LineString Feature or Geometry");
-    }
-
-    return lineSlice(startPt, stopPt, (LineString) line.getGeometry());
-  }
-
-  /**
-   * Takes a line, a start {@link Point}, and a stop point and returns the line in between those
-   * points.
-   *
-   * @param startPt Starting point.
-   * @param stopPt  Stopping point.
-   * @param line    Line to slice.
-   * @return Sliced line.
-   * @throws TurfException signals that a Turf exception of some sort has occurred.
-   * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
-   * @since 1.2.0
-   */
-  public static LineString lineSlice(Point startPt, Point stopPt, LineString line) throws TurfException {
-    List<Position> coords = line.getCoordinates();
+  public static LineString lineSlice(@NonNull Point startPt, @NonNull Point stopPt,
+                                     @NonNull LineString line) {
+    List<Point> coords = line.coordinates();
 
     if (coords.size() < 2) {
-      throw new TurfException("Turf lineSlice requires a LineString made up of at least 2 coordinates.");
+      throw new TurfException("Turf lineSlice requires a LineString made up of at least 2"
+        + "coordinates.");
     } else if (startPt.equals(stopPt)) {
       throw new TurfException("Start and stop points in Turf lineSlice cannot equal each other.");
     }
@@ -61,26 +42,22 @@ public class TurfMisc {
     Feature startVertex = pointOnLine(startPt, coords);
     Feature stopVertex = pointOnLine(stopPt, coords);
     List<Feature> ends = new ArrayList<>();
-    if ((int) startVertex.getNumberProperty("index") <= (int) stopVertex.getNumberProperty("index")) {
+    if ((int) startVertex.getNumberProperty("index")
+      <= (int) stopVertex.getNumberProperty("index")) {
       ends.add(startVertex);
       ends.add(stopVertex);
     } else {
       ends.add(stopVertex);
       ends.add(startVertex);
     }
-    List<Position> positions = new ArrayList<>();
-    positions.add(((Point) ends.get(0).getGeometry()).getCoordinates());
-    LineString clipLine = LineString.fromCoordinates(positions);
+    List<Point> points = new ArrayList<>();
+    points.add((Point) ends.get(0).geometry());
     for (int i = (int) ends.get(0).getNumberProperty("index") + 1;
          i < (int) ends.get(1).getNumberProperty("index") + 1; i++) {
-      List<Position> coordinates = clipLine.getCoordinates();
-      coordinates.add(coords.get(i));
-      clipLine.setCoordinates(coordinates);
+      points.add(coords.get(i));
     }
-    List<Position> coordinates = clipLine.getCoordinates();
-    coordinates.add(((Point) ends.get(1).getGeometry()).getCoordinates());
-    clipLine.setCoordinates(coordinates);
-    return clipLine;
+    points.add((Point) ends.get(1).geometry());
+    return LineString.fromLngLats(points);
   }
 
   /**
@@ -90,62 +67,67 @@ public class TurfMisc {
    * @param pt     point to snap from
    * @param coords line to snap to
    * @return closest point on the line to point
-   * @throws TurfException signals that a Turf exception of some sort has occurred.
    * @since 1.3.0
    */
-  public static Feature pointOnLine(Point pt, List<Position> coords) throws TurfException {
-    String units = TurfConstants.UNIT_MILES;
-
+  public static Feature pointOnLine(@NonNull Point pt, @NonNull List<Point> coords) {
     Feature closestPt = Feature.fromGeometry(
-      Point.fromCoordinates(
-        Position.fromCoordinates(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)));
+      Point.fromLngLat(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
     closestPt.addNumberProperty("dist", Double.POSITIVE_INFINITY);
 
     for (int i = 0; i < coords.size() - 1; i++) {
-      Feature start = Feature.fromGeometry(Point.fromCoordinates(coords.get(i)));
-      Feature stop = Feature.fromGeometry(Point.fromCoordinates(coords.get(i + 1)));
+      Feature start = Feature.fromGeometry(coords.get(i));
+      Feature stop = Feature.fromGeometry(coords.get(i + 1));
       //start
-      start.addNumberProperty("dist", TurfMeasurement.distance(pt, (Point) start.getGeometry(), units));
+      start.addNumberProperty("dist", TurfMeasurement.distance(
+        pt, (Point) start.geometry(), TurfConstants.UNIT_MILES));
       //stop
-      stop.addNumberProperty("dist", TurfMeasurement.distance(pt, (Point) stop.getGeometry(), units));
+      stop.addNumberProperty("dist", TurfMeasurement.distance(
+        pt, (Point) stop.geometry(), TurfConstants.UNIT_MILES));
       //perpendicular
       double heightDistance = Math.max(
-        start.getProperties().get("dist").getAsDouble(),
-        stop.getProperties().get("dist").getAsDouble()
+        start.properties().get("dist").getAsDouble(),
+        stop.properties().get("dist").getAsDouble()
       );
-      double direction = TurfMeasurement.bearing((Point) start.getGeometry(), (Point) stop.getGeometry());
+      double direction = TurfMeasurement.bearing((Point) start.geometry(),
+        (Point) stop.geometry());
       Feature perpendicularPt1 = Feature.fromGeometry(
-        TurfMeasurement.destination(pt, heightDistance, direction + 90, units));
+        TurfMeasurement.destination(pt, heightDistance, direction + 90,
+          TurfConstants.UNIT_MILES));
       Feature perpendicularPt2 = Feature.fromGeometry(
-        TurfMeasurement.destination(pt, heightDistance, direction - 90, units));
+        TurfMeasurement.destination(pt, heightDistance, direction - 90,
+          TurfConstants.UNIT_MILES));
       LineIntersectsResult intersect = lineIntersects(
-        ((Point) perpendicularPt1.getGeometry()).getCoordinates().getLongitude(),
-        ((Point) perpendicularPt1.getGeometry()).getCoordinates().getLatitude(),
-        ((Point) perpendicularPt2.getGeometry()).getCoordinates().getLongitude(),
-        ((Point) perpendicularPt2.getGeometry()).getCoordinates().getLatitude(),
-        ((Point) start.getGeometry()).getCoordinates().getLongitude(),
-        ((Point) start.getGeometry()).getCoordinates().getLatitude(),
-        ((Point) stop.getGeometry()).getCoordinates().getLongitude(),
-        ((Point) stop.getGeometry()).getCoordinates().getLatitude()
+        ((Point) perpendicularPt1.geometry()).longitude(),
+        ((Point) perpendicularPt1.geometry()).latitude(),
+        ((Point) perpendicularPt2.geometry()).longitude(),
+        ((Point) perpendicularPt2.geometry()).latitude(),
+        ((Point) start.geometry()).longitude(),
+        ((Point) start.geometry()).latitude(),
+        ((Point) stop.geometry()).longitude(),
+        ((Point) stop.geometry()).latitude()
       );
 
       Feature intersectPt = null;
       if (intersect != null) {
         intersectPt = Feature.fromGeometry(
-          Point.fromCoordinates(Position.fromCoordinates(intersect.getX(), intersect.getY())));
-        intersectPt.addNumberProperty("dist", TurfMeasurement.distance(pt, (Point) intersectPt.getGeometry(), units));
+          Point.fromLngLat(intersect.getX(), intersect.getY()));
+        intersectPt.addNumberProperty("dist", TurfMeasurement.distance(pt,
+          (Point) intersectPt.geometry(), TurfConstants.UNIT_MILES));
       }
 
-      if ((double) start.getNumberProperty("dist") < (double) closestPt.getNumberProperty("dist")) {
+      if ((double) start.getNumberProperty("dist")
+        < (double) closestPt.getNumberProperty("dist")) {
         closestPt = start;
         closestPt.addNumberProperty("index", i);
       }
-      if ((double) stop.getNumberProperty("dist") < (double) closestPt.getNumberProperty("dist")) {
+      if ((double) stop.getNumberProperty("dist")
+        < (double) closestPt.getNumberProperty("dist")) {
         closestPt = stop;
         closestPt.addNumberProperty("index", i);
       }
       if (intersectPt != null
-        && (double) intersectPt.getNumberProperty("dist") < (double) closestPt.getNumberProperty("dist")) {
+        && (double) intersectPt.getNumberProperty("dist")
+        < (double) closestPt.getNumberProperty("dist")) {
         closestPt = intersectPt;
         closestPt.addNumberProperty("index", i);
       }

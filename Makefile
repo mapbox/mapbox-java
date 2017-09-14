@@ -68,61 +68,69 @@ dex-count:
 directions-matrix-fixtures:
 	# request a symmetric 3x3 matrix for cars
 	curl "https://api.mapbox.com/directions-matrix/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/directions_matrix_3x3.json
+		-o mapbox/libjava-services/src/test/resources/directions_matrix_3x3.json
 
 	# request an asymmetric 2x3 matrix for bicycles
 	curl "https://api.mapbox.com/directions-matrix/v1/mapbox/cycling/-122.42,37.78;-122.45,37.91;-122.48,37.73?sources=0;2&destinations=all&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/directions_matrix_2x3.json.json
+		-o mapbox/libjava-services/src/test/resources/directions_matrix_2x3.json.json
 
 geocoding-fixtures:
 	# Geocoding: 1600 Pennsylvania Ave NW
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/1600+pennsylvania+ave+nw.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/geocoding.json
+		-o mapbox/libjava-services/src/test/resources/geocoding/geocoding.json
+
+	# Geocoding: response with a bounding box
+	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/texas.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o mapbox/libjava-services/src/test/resources/geocoding/bbox_geocoding_result.json
+
+	# Geocoding: response with a bounding box
+	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/texas.json?langauge=fr&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o mapbox/libjava-services/src/test/resources/geocoding/language_geocoding_result.json
 
 	# Reverse geocoding: -77.0366, 38.8971
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/-77.0366,38.8971.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/geocoding_reverse.json
+		-o mapbox/libjava-services/src/test/resources/geocoding/geocoding_reverse.json
 
 	# Not supported country
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/1600+pennsylvania+ave+nw.json?country=aq&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/geocoding_country_not_supported.json
+		-o mapbox/libjava-services/src/test/resources/geocoding/geocoding_country_not_supported.json
 
 geocoding-batch-fixtures:
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/20001;20009;22209.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/geocoding_batch.json
+		-o mapbox/libjava-services/src/test/resources/geocoding/geocoding_batch.json
 
 directions-fixtures:
 	# Directions: polyline geometry with precision 5
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.416667,37.783333;-121.900000,37.333333?geometries=polyline&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/directions_v5.json
+		-o mapbox/libjava-services/src/test/resources/directions_v5.json
 
 	# Directions: request annotations
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.416667,37.783333;-121.900000,37.333333?geometries=polyline&language=sv&steps=true&annotations=distance,duration,speed&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/directions_annotations_v5.json
+		-o mapbox/libjava-services/src/test/resources/directions_annotations_v5.json
 
 	# Directions: polyline geometry with precision 6
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.416667,37.783333;-121.900000,37.333333?geometries=polyline6&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/directions_v5_precision_6.json
+		-o mapbox/libjava-services/src/test/resources/directions_v5_precision_6.json
 
 	# Directions: route with a rotary
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-77.04430818557739,38.908650612656864;-77.04192638397217,38.90963574367117?geometries=polyline&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/directions_v5_fixtures_rotary.json
+		-o mapbox/libjava-services/src/test/resources/directions_v5_fixtures_rotary.json
 
 	# Directions: route with traffic
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/-122.416667,37.783333;-121.900000,37.333333?geometries=polyline&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/directions_v5_traffic.json
+		-o mapbox/libjava-services/src/test/resources/directions_v5_traffic.json
 
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/mapmatching_v5_polyline.json
+		-o mapbox/libjava-services/src/test/resources/map_matching/map_matching_v5_polyline.json
 
 optimized-trips-fixtures:
 	# request an optimized car trip with no additional options
 	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/optimized_trip.json
+		-o mapbox/libjava-services/src/test/resources/optimization.json
 
 	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/cycling/-122.42,37.78;-122.45,37.91;-122.48,37.73?steps=true&language=sv&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/optimized_trip_steps.json
+		-o mapbox/libjava-services/src/test/resources/optimized_trip_steps.json
 
 	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219;13.418555,52.523215?roundtrip=true&distributions=3,1&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o mapbox/libjava-services/src/test/fixtures/optimized_trip_distributions.json
+		-o mapbox/libjava-services/src/test/resources/optimized_trip_distributions.json

@@ -21,8 +21,7 @@ import com.mapbox.services.android.testapp.geocoding.GeocodingReverseActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingServiceActivity;
 import com.mapbox.services.android.testapp.geocoding.GeocodingWidgetActivity;
 import com.mapbox.services.android.testapp.location.LocationEngineActivity;
-import com.mapbox.services.android.testapp.optimizedtrip.OptimizedTripActivity;
-
+import com.mapbox.services.android.testapp.optimizedtrip.BasicOptimizationActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageActivity;
 import com.mapbox.services.android.testapp.staticimage.StaticImageWithAnnotationsActivity;
 import com.mapbox.services.android.testapp.turf.TurfBearingActivity;
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
       new SampleItem(
         getString(R.string.title_optimized_trip),
         getString(R.string.description_optimized_trip),
-        OptimizedTripActivity.class),
+        BasicOptimizationActivity.class),
       new SampleItem(
         getString(R.string.title_location),
         getString(R.string.description_location),

@@ -1,75 +1,108 @@
 package com.mapbox.services.commons.geojson;
 
-import com.mapbox.services.commons.models.Position;
-
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class MultiPointTest extends BaseTest {
 
-  private static final String SAMPLE_MULTIPOINT_FIXTURE = "src/test/fixtures/sample-multipoint.json";
+  private static final String SAMPLE_MULTIPOINT = "sample-multipoint.json";
+
+  @Test
+  public void sanity() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+
+    MultiPoint multiPoint = MultiPoint.fromLngLats(points);
+    assertNotNull(multiPoint);
+  }
+
+  @Test
+  public void bbox_nullWhenNotSet() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+
+    MultiPoint multiPoint = MultiPoint.fromLngLats(points);
+    assertNull(multiPoint.bbox());
+  }
+
+  @Test
+  public void bbox_doesNotSerializeWhenNotPresent() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+
+    MultiPoint multiPoint = MultiPoint.fromLngLats(points);
+    compareJson(multiPoint.toJson(),
+      "{\"coordinates\":[[1,2],[2,3]],\"type\":\"MultiPoint\"}");
+  }
+
+  @Test
+  public void bbox_returnsCorrectBbox() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    MultiPoint multiPoint = MultiPoint.fromLngLats(points, bbox);
+    assertNotNull(multiPoint.bbox());
+    assertEquals(1.0, multiPoint.bbox().west(), DELTA);
+    assertEquals(2.0, multiPoint.bbox().south(), DELTA);
+    assertEquals(3.0, multiPoint.bbox().east(), DELTA);
+    assertEquals(4.0, multiPoint.bbox().north(), DELTA);
+  }
+
+  @Test
+  public void bbox_doesSerializeWhenPresent() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    MultiPoint multiPoint = MultiPoint.fromLngLats(points, bbox);
+    compareJson(multiPoint.toJson(),
+      "{\"coordinates\":[[1,2],[2,3]],\"type\":\"MultiPoint\",\"bbox\":[1.0,2.0,3.0,4.0]}");
+  }
+
+  @Test
+  public void testSerializable() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    MultiPoint multiPoint = MultiPoint.fromLngLats(points, bbox);
+    byte[] bytes = serialize(multiPoint);
+    assertEquals(multiPoint, deserialize(bytes, MultiPoint.class));
+  }
 
   @Test
   public void fromJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_MULTIPOINT_FIXTURE)), Charset.forName("utf-8"));
-    MultiPoint geo = MultiPoint.fromJson(geojson);
-    assertEquals(geo.getType(), "MultiPoint");
-    assertEquals(geo.getCoordinates().get(0).getLongitude(), 100.0, 0.0);
-    assertEquals(geo.getCoordinates().get(0).getLatitude(), 0.0, 0.0);
-    assertFalse(geo.getCoordinates().get(0).hasAltitude());
+    final String json = loadJsonFixture(SAMPLE_MULTIPOINT);
+    MultiPoint geo = MultiPoint.fromJson(json);
+    assertEquals(geo.type(), "MultiPoint");
+    assertEquals(geo.coordinates().get(0).longitude(), 100.0, DELTA);
+    assertEquals(geo.coordinates().get(0).latitude(), 0.0, DELTA);
+    assertEquals(geo.coordinates().get(1).longitude(), 101.0, DELTA);
+    assertEquals(geo.coordinates().get(1).latitude(), 1.0, DELTA);
+    assertFalse(geo.coordinates().get(0).hasAltitude());
+    assertEquals(Double.NaN, geo.coordinates().get(0).altitude(), DELTA);
   }
 
   @Test
   public void toJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_MULTIPOINT_FIXTURE)), Charset.forName("utf-8"));
-    MultiPoint geo = MultiPoint.fromJson(geojson);
-    compareJson(geojson, geo.toJson());
+    final String json = loadJsonFixture(SAMPLE_MULTIPOINT);
+    MultiPoint geo = MultiPoint.fromJson(json);
+    compareJson(json, geo.toJson());
   }
-
-  @Test
-  public void checksEqualityFromCoordinates() {
-    MultiPoint multiPoint = MultiPoint.fromCoordinates(new double[][] {
-      {100.0, 0.0}, {101.0, 1.0}
-    });
-
-    String multiPointCoordinates = obtainLiteralCoordinatesFrom(multiPoint);
-
-    assertEquals("Points: \n"
-        + "Position [longitude=100.0, latitude=0.0, altitude=NaN]\n"
-        + "Position [longitude=101.0, latitude=1.0, altitude=NaN]\n",
-      multiPointCoordinates);
-  }
-
-  @Test
-  public void checksJsonEqualityFromCoordinates() {
-    MultiPoint multiPoint = MultiPoint.fromCoordinates(new double[][] {
-      {100.0, 0.0}, {101.0, 1.0}
-    });
-
-    String multiPointJsonCoordinates = multiPoint.toJson();
-
-    compareJson("{ \"type\": \"MultiPoint\",\n"
-      + "\"coordinates\": [ [100.0, 0.0], [101.0, 1.0] ]\n"
-      + "}", multiPointJsonCoordinates);
-  }
-
-  private String obtainLiteralCoordinatesFrom(MultiPoint multiPoint) {
-    List<Position> multiPointCoordinates = multiPoint.getCoordinates();
-    StringBuilder literalCoordinates = new StringBuilder();
-    literalCoordinates.append("Points: \n");
-    for (Position point : multiPointCoordinates) {
-      literalCoordinates.append(point.toString());
-      literalCoordinates.append("\n");
-    }
-    return literalCoordinates.toString();
-  }
-
 }

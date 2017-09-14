@@ -1,106 +1,136 @@
 package com.mapbox.services.api.directions.v5.models;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * The response to a directions request.
+ * This is the root Mapbox Directions API response. Inside this class are several nested classes
+ * chained together to make up a similar structure to the original APIs JSON response.
  *
+ * @see <a href="https://www.mapbox.com/api-documentation/#directions-response-object">Direction Response Object</a>
  * @since 1.0.0
  */
-public class DirectionsResponse {
-
-  private String code;
-  private List<DirectionsRoute> routes;
-  private List<DirectionsWaypoint> waypoints;
+@AutoValue
+public abstract class DirectionsResponse implements Serializable {
 
   /**
-   * Empty constructor
+   * Create a new instance of this class by using the {@link Builder} class.
    *
-   * @since 2.1.0
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
    */
-  public DirectionsResponse() {
+  public static Builder builder() {
+    return new AutoValue_DirectionsResponse.Builder();
   }
 
   /**
-   * Constructor taking in both a list of {@link DirectionsRoute} and a list of {@link DirectionsWaypoint}s.
+   * String indicating the state of the response. This is a separate code than the HTTP status code.
+   * On normal valid responses, the value will be Ok. The possible responses are listed below:
+   * <ul>
+   * <li><strong>Ok</strong>:200 Normal success case</li>
+   * <li><strong>NoRoute</strong>: 200 There was no route found for the given coordinates. Check
+   * for impossible routes (e.g. routes over oceans without ferry connections).</li>
+   * <li><strong>NoSegment</strong>: 200 No road segment could be matched for coordinates. Check for
+   * coordinates too far away from a road.</li>
+   * <li><strong>ProfileNotFound</strong>: 404 Use a valid profile as described above</li>
+   * <li><strong>InvalidInput</strong>: 422</li>
+   * </ul>
    *
-   * @param routes    list of routes you can pass in while building this object.
-   * @param waypoints list of waypoints you can pass in while building this object. Ideally these should match what was
-   *                  used to crate the route.
-   * @since 2.0.0
-   */
-  public DirectionsResponse(List<DirectionsRoute> routes, List<DirectionsWaypoint> waypoints) {
-    this.routes = routes;
-    this.waypoints = waypoints;
-  }
-
-  /**
-   * String indicating the state of the response. This is a separate code than the HTTP
-   * status code.
-   *
-   * @return "Ok", "NoRoute", "ProfileNotFound", or "InvalidInput".
+   * @return a string with one of the given values described in the list above
    * @since 1.0.0
    */
-  public String getCode() {
-    return code;
-  }
+  @NonNull
+  public abstract String code();
 
   /**
-   * String indicating the state of the response. This is a separate code than the HTTP
-   * status code.
+   * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
+   * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
+   * the input coordinates.
    *
-   * @param code "Ok", "NoRoute", "ProfileNotFound", or "InvalidInput".
-   * @since 2.1.0
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * List with Waypoints of locations snapped to the road and path network and appear in the List
-   * in the order of the input coordinates.
-   *
-   * @return List of {@link DirectionsWaypoint} objects.
+   * @return list of {@link DirectionsWaypoint} objects ordered from start of route till the end
    * @since 1.0.0
    */
-  public List<DirectionsWaypoint> getWaypoints() {
-    return waypoints;
-  }
-
-  /**
-   * List with Waypoints of locations snapped to the road and path network and should appear in the List
-   * in the order of the input coordinates.
-   *
-   * @param waypoints List of {@link DirectionsWaypoint} objects.
-   * @since 2.1.0
-   */
-  public void setWaypoints(List<DirectionsWaypoint> waypoints) {
-    this.waypoints = waypoints;
-  }
+  @Nullable
+  public abstract List<DirectionsWaypoint> waypoints();
 
   /**
    * List containing all the different route options. It's ordered by descending recommendation
    * rank. In other words, object 0 in the List is the highest recommended route. if you don't
    * setAlternatives to true (default is false) in your builder this should always be a List of
-   * size 1.
+   * size 1. At most this will return 2 {@link DirectionsRoute} objects.
    *
-   * @return List of {@link DirectionsRoute} objects.
+   * @return list of {@link DirectionsRoute} objects
    * @since 1.0.0
    */
-  public List<DirectionsRoute> getRoutes() {
-    return routes;
+  @Nullable
+  public abstract List<DirectionsRoute> routes();
+
+  /**
+   * Gson type adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the type adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<DirectionsResponse> typeAdapter(Gson gson) {
+    return new AutoValue_DirectionsResponse.GsonTypeAdapter(gson);
   }
 
   /**
-   * List containing all the different route options. It should be ordered by descending recommendation
-   * rank. In other words, object 0 in the List is the highest recommended route. if you don't
-   * setAlternatives to true (default is false) in your builder this should always be a List of
-   * size 1.
+   * This builder can be used to set the values describing the {@link DirectionsResponse}.
    *
-   * @param routes List of {@link DirectionsRoute} objects.
-   * @since 2.1.0
+   * @since 3.0.0
    */
-  public void setRoutes(List<DirectionsRoute> routes) {
-    this.routes = routes;
+  @AutoValue.Builder
+  public abstract static class Builder {
+
+    /**
+     * String indicating the state of the response. This is a separate code than the HTTP status
+     * code. On normal valid responses, the value will be Ok. For a full list of possible responses,
+     * see {@link DirectionsResponse#code()}.
+     *
+     * @param code a string with one of the given values described in the list above
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder code(@NonNull String code);
+
+    /**
+     * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
+     * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
+     * the input coordinates.
+     *
+     * @param waypoints list of {@link DirectionsWaypoint} objects ordered from start of route till
+     *                  the end
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder waypoints(@Nullable List<DirectionsWaypoint> waypoints);
+
+    /**
+     * List containing all the different route options. It's ordered by descending recommendation
+     * rank. In other words, object 0 in the List is the highest recommended route. if you don't
+     * setAlternatives to true (default is false) in your builder this should always be a List of
+     * size 1. At most this will return 2 {@link DirectionsRoute} objects.
+     *
+     * @param routes list of {@link DirectionsRoute} objects
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder routes(@Nullable List<DirectionsRoute> routes);
+
+    /**
+     * Build a new {@link DirectionsResponse} object.
+     *
+     * @return a new {@link DirectionsResponse} using the provided values in this builder
+     * @since 3.0.0
+     */
+    public abstract DirectionsResponse build();
   }
 }

@@ -1,75 +1,81 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
 
-    defaultConfig {
-        applicationId "com.mapbox.services.android.testapp"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.MasVersionCode
-        versionName rootProject.ext.MasVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  defaultConfig {
+    applicationId "com.mapbox.services.android.testapp"
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.targetSdkVersion
+    versionCode rootProject.ext.MasVersionCode
+    versionName rootProject.ext.MasVersionName
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_7
+    targetCompatibility JavaVersion.VERSION_1_7
+  }
+
+  buildTypes {
+    debug {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+    release {
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-
-    buildTypes {
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  }
 }
 
 dependencies {
-    // The Test App depends in Mapbox Android UI, which includes all modules
-    compile project(':libandroid-ui')
+  // The Test App depends in Mapbox Android UI, which includes all modules
+  compile project(':libandroid-ui')
 
-    // Rx extensions
-    compile project(':libjava-services-rx')
+  // Rx extensions
+  compile project(':libjava-services-rx')
 
-    // Android Support libraries
-    compile rootProject.ext.dep.supportAppcompat
-    compile rootProject.ext.dep.supportDesign
-    compile rootProject.ext.dep.supportRecyclerview
-    compile rootProject.ext.dep.supportCardView
+  // Android Support libraries
+  compile rootProject.ext.dep.supportAppcompat
+  compile rootProject.ext.dep.supportDesign
+  compile rootProject.ext.dep.supportRecyclerview
+  compile rootProject.ext.dep.supportCardView
 
-    // Mapbox SDK
-    compile(rootProject.ext.dep.mapbox) {
-        transitive = true
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-java-geojson'
-        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
-    }
+  // Mapbox SDK
+  compile(rootProject.ext.dep.mapbox) {
+    transitive = true
+    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-java-geojson'
+    exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
+  }
 
-    // Leak Canary
-    debugCompile rootProject.ext.dep.leakcanaryDebug
-    releaseCompile rootProject.ext.dep.leakcanaryRelease
-    testCompile rootProject.ext.dep.leakcanaryTest
+  // Leak Canary
+  debugCompile rootProject.ext.dep.leakcanaryDebug
+  releaseCompile rootProject.ext.dep.leakcanaryRelease
+  testCompile rootProject.ext.dep.leakcanaryTest
 
-    // Google Play Services
-    compile rootProject.ext.dep.gmsLocation
+  compile rootProject.ext.dep.butterKnife
+  annotationProcessor rootProject.ext.dep.butterKnifeCompiler
 
-    // Picasso (Static Image)
-    compile rootProject.ext.dep.picasso
+  // Google Play Services
+  compile rootProject.ext.dep.gmsLocation
 
-    // RxAndroid
-    compile rootProject.ext.dep.rxandroid
+  // Picasso (Static Image)
+  compile rootProject.ext.dep.picasso
 
-    // Testing
-    testCompile rootProject.ext.dep.junit
-    androidTestCompile(rootProject.ext.dep.supportEspresso, {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+  // RxAndroid
+  compile rootProject.ext.dep.rxandroid
+
+  // Testing
+  testCompile rootProject.ext.dep.junit
+  androidTestCompile(rootProject.ext.dep.supportEspresso, {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+  compile 'com.android.support.constraint:constraint-layout:1.0.2'
+  compile project(path: ':libjava-geojson')
+  compile 'com.squareup.retrofit2:retrofit:2.2.0'
 }
 
 apply from: 'gradle-dexcount.gradle'

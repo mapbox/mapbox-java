@@ -1,67 +1,129 @@
 package com.mapbox.services.commons.geojson;
 
-import com.mapbox.services.commons.models.Position;
-
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class PointTest extends BaseTest {
 
-  private static final String SAMPLE_POINT_FIXTURE = "src/test/fixtures/sample-point.json";
+  private static final String SAMPLE_POINT = "sample-point.json";
+
+  @Test
+  public void sanity() throws Exception {
+    Point point = Point.fromLngLat(1.0, 2.0);
+    assertNotNull(point);
+  }
+
+  @Test
+  public void hasAltitude_returnsFalseWhenAltitudeNotPresent() throws Exception {
+    Point point = Point.fromLngLat(1.0, 2.0);
+    assertFalse(point.hasAltitude());
+  }
+
+  @Test
+  public void hasAltitude_returnsTrueWhenAltitudeIsPresent() throws Exception {
+    Point point = Point.fromLngLat(1.0, 2.0, 5.0);
+    assertTrue(point.hasAltitude());
+  }
+
+  @Test
+  public void altitude_doesReturnCorrectValue() throws Exception {
+    Point point = Point.fromLngLat(1.0, 2.0, 5.0);
+    assertEquals(5, point.altitude(), DELTA);
+  }
+
+  @Test
+  public void longitude_doesReturnCorrectValue() throws Exception {
+    Point point = Point.fromLngLat(1.0, 2.0, 5.0);
+    assertEquals(1, point.longitude(), DELTA);
+  }
+
+  @Test
+  public void latitude_doesReturnCorrectValue() throws Exception {
+    Point point = Point.fromLngLat(1.0, 2.0, 5.0);
+    assertEquals(2, point.latitude(), DELTA);
+  }
+
+  @Test
+  public void bbox_nullWhenNotSet() throws Exception {
+    Point point = Point.fromLngLat(1.0, 2.0);
+    assertNull(point.bbox());
+  }
+
+  @Test
+  public void bbox_doesNotSerializeWhenNotPresent() throws Exception {
+    Point point = Point.fromLngLat(1.0, 2.0);
+    compareJson(point.toJson(),
+      "{\"type\":\"Point\",\"coordinates\":[1.0, 2.0]}");
+  }
+
+  @Test
+  public void bbox_returnsCorrectBbox() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    LineString lineString = LineString.fromLngLats(points, bbox);
+    assertNotNull(lineString.bbox());
+    assertEquals(1.0, lineString.bbox().west(), DELTA);
+    assertEquals(2.0, lineString.bbox().south(), DELTA);
+    assertEquals(3.0, lineString.bbox().east(), DELTA);
+    assertEquals(4.0, lineString.bbox().north(), DELTA);
+  }
+
+  @Test
+  public void bbox_doesSerializeWhenPresent() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    LineString lineString = LineString.fromLngLats(points, bbox);
+    compareJson(lineString.toJson(),
+      "{\"coordinates\":[[1,1],[2,2],[3,3]]," +
+        "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}");
+  }
+
+  @Test
+  public void testSerializable() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    LineString lineString = LineString.fromLngLats(points, bbox);
+    byte[] bytes = serialize(lineString);
+    assertEquals(lineString, deserialize(bytes, LineString.class));
+  }
 
   @Test
   public void fromJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_POINT_FIXTURE)), Charset.forName("utf-8"));
-    Point geo = Point.fromJson(geojson);
-    assertEquals(geo.getType(), "Point");
-    assertEquals(geo.getCoordinates().getLongitude(), 100.0, 0.0);
-    assertEquals(geo.getCoordinates().getLatitude(), 0.0, 0.0);
-    assertFalse(geo.getCoordinates().hasAltitude());
+    final String json = loadJsonFixture(SAMPLE_POINT);
+    Point geo = Point.fromJson(json);
+    assertEquals(geo.type(), "Point");
+    assertEquals(geo.longitude(), 100.0, DELTA);
+    assertEquals(geo.latitude(), 0.0, DELTA);
+    assertEquals(geo.altitude(), Double.NaN, DELTA);
+    assertEquals(geo.coordinates().get(0), 100.0, DELTA);
+    assertEquals(geo.coordinates().get(1), 0.0, DELTA);
+    assertEquals(geo.coordinates().size(), 2);
+    assertFalse(geo.hasAltitude());
   }
 
   @Test
   public void toJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(Paths.get(SAMPLE_POINT_FIXTURE)), Charset.forName("utf-8"));
-    Point geo = Point.fromJson(geojson);
-    compareJson(geojson, geo.toJson());
+    final String json = loadJsonFixture(SAMPLE_POINT);
+    Point geo = Point.fromJson(json);
+    compareJson(json, geo.toJson());
   }
-
-  @Test
-  public void checksEqualityFromCoordinates() {
-    Point point = Point.fromCoordinates(new double[] {100.0, 0.0});
-
-    String pointCoordinates = obtainLiteralCoordinatesFrom(point);
-
-    assertEquals("Point: \n"
-      + "Position [longitude=100.0, latitude=0.0, altitude=NaN]\n", pointCoordinates);
-  }
-
-  @Test
-  public void checksJsonEqualityFromCoordinates() {
-    Point point = Point.fromCoordinates(new double[] {100.0, 0.0});
-
-    String pointJsonCoordinates = point.toJson();
-
-    compareJson("{ \"type\": \"Point\", \"coordinates\": [100.0, 0.0] }", pointJsonCoordinates);
-  }
-
-  private String obtainLiteralCoordinatesFrom(Point point) {
-    Position thePoint = point.getCoordinates();
-    StringBuilder literalCoordinates = new StringBuilder();
-    literalCoordinates.append("Point: \n");
-
-    literalCoordinates.append(thePoint.toString());
-    literalCoordinates.append("\n");
-
-    return literalCoordinates.toString();
-  }
-
 }
-

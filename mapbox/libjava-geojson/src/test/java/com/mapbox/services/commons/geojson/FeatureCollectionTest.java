@@ -1,39 +1,112 @@
 package com.mapbox.services.commons.geojson;
 
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class FeatureCollectionTest extends BaseTest {
 
-  private static final String SAMPLE_FEATURECOLLECTION_FIXTURE =
-    "src/test/fixtures/sample-featurecollection.json";
+  private static final String SAMPLE_FEATURECOLLECTION = "sample-featurecollection.json";
+
+  @Test
+  public void sanity() throws Exception {
+    List<Feature> features = new ArrayList<>();
+    features.add(Feature.fromGeometry(null));
+    features.add(Feature.fromGeometry(null));
+    FeatureCollection featureCollection = FeatureCollection.fromFeatures(features);
+    assertNotNull(featureCollection);
+  }
+
+  @Test
+  public void bbox_nullWhenNotSet() throws Exception {
+    List<Feature> features = new ArrayList<>();
+    features.add(Feature.fromGeometry(null));
+    features.add(Feature.fromGeometry(null));
+    FeatureCollection featureCollection = FeatureCollection.fromFeatures(features);
+    assertNull(featureCollection.bbox());
+  }
+
+  @Test
+  public void bbox_doesNotSerializeWhenNotPresent() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    Feature feature = Feature.fromGeometry(lineString);
+
+    List<Feature> features = new ArrayList<>();
+    features.add(feature);
+    features.add(feature);
+    FeatureCollection featureCollection = FeatureCollection.fromFeatures(features);
+    compareJson(featureCollection.toJson(),
+      "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\","
+        + "\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]},"
+        + "\"properties\":{}},{\"type\":\"Feature\","
+        + "\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]},"
+        + "\"properties\":{}}]}");
+  }
+
+  @Test
+  public void bbox_returnsCorrectBbox() throws Exception {
+    List<Feature> features = new ArrayList<>();
+    features.add(Feature.fromGeometry(null));
+    features.add(Feature.fromGeometry(null));
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    FeatureCollection featureCollection = FeatureCollection.fromFeatures(features, bbox);
+    assertNotNull(featureCollection.bbox());
+    assertEquals(1.0, featureCollection.bbox().west(), DELTA);
+    assertEquals(2.0, featureCollection.bbox().south(), DELTA);
+    assertEquals(3.0, featureCollection.bbox().east(), DELTA);
+    assertEquals(4.0, featureCollection.bbox().north(), DELTA);
+  }
+
+  @Test
+  public void bbox_doesSerializeWhenPresent() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    Feature feature = Feature.fromGeometry(lineString);
+
+    List<Feature> features = new ArrayList<>();
+    features.add(feature);
+    features.add(feature);
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    FeatureCollection featureCollection = FeatureCollection.fromFeatures(features, bbox);
+    compareJson(featureCollection.toJson(),
+      "{\"type\":\"FeatureCollection\",\"bbox\":[1.0,2.0,3.0,4.0],"
+        + "\"features\":[{\"type\":\"Feature\","
+        + "\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]},\"properties\":{}},"
+        + "{\"type\":\"Feature\","
+        + "\"geometry\":{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]},\"properties\":{}}"
+        + "]}");
+  }
 
   @Test
   public void fromJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(
-      Paths.get(SAMPLE_FEATURECOLLECTION_FIXTURE)), Charset.forName("utf-8"));
-    FeatureCollection geo = FeatureCollection.fromJson(geojson);
-    assertEquals(geo.getType(), "FeatureCollection");
-    assertEquals(geo.getFeatures().size(), 3);
-    assertEquals(geo.getFeatures().get(0).getType(), "Feature");
-    assertEquals(geo.getFeatures().get(0).getGeometry().getType(), "Point");
-    assertEquals(geo.getFeatures().get(1).getType(), "Feature");
-    assertEquals(geo.getFeatures().get(1).getGeometry().getType(), "LineString");
-    assertEquals(geo.getFeatures().get(2).getType(), "Feature");
-    assertEquals(geo.getFeatures().get(2).getGeometry().getType(), "Polygon");
+    final String json = loadJsonFixture(SAMPLE_FEATURECOLLECTION);
+    FeatureCollection geo = FeatureCollection.fromJson(json);
+    assertEquals(geo.type(), "FeatureCollection");
+    assertEquals(geo.features().size(), 3);
+    assertEquals(geo.features().get(0).type(), "Feature");
+    assertEquals(geo.features().get(0).geometry().type(), "Point");
+    assertEquals(geo.features().get(1).type(), "Feature");
+    assertEquals(geo.features().get(1).geometry().type(), "LineString");
+    assertEquals(geo.features().get(2).type(), "Feature");
+    assertEquals(geo.features().get(2).geometry().type(), "Polygon");
   }
 
   @Test
   public void toJson() throws IOException {
-    String geojson = new String(Files.readAllBytes(
-      Paths.get(SAMPLE_FEATURECOLLECTION_FIXTURE)), Charset.forName("utf-8"));
-    FeatureCollection geo = FeatureCollection.fromJson(geojson);
-    compareJson(geojson, geo.toJson());
+    final String json = loadJsonFixture(SAMPLE_FEATURECOLLECTION);
+    FeatureCollection geo = FeatureCollection.fromJson(json);
+    compareJson(json, geo.toJson());
   }
 }

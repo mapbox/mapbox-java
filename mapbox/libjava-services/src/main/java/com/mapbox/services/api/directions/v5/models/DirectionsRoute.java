@@ -1,7 +1,12 @@
 package com.mapbox.services.api.directions.v5.models;
 
+import android.support.annotation.Nullable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,142 +14,151 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-public class DirectionsRoute {
+@AutoValue
+public abstract class DirectionsRoute implements Serializable {
 
-  private double distance;
-  private double duration;
-  private String geometry;
-  private double weight;
-  @SerializedName("weight_name")
-  private String weightName;
-  private List<RouteLeg> legs;
-
-  public DirectionsRoute() {
+  /**
+   * Create a new instance of this class by using the {@link Builder} class.
+   *
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
+   */
+  public static Builder builder() {
+    return new AutoValue_DirectionsRoute.Builder();
   }
 
   /**
    * The distance traveled from origin to destination.
    *
-   * @return a double number with unit meters.
+   * @return a double number with unit meters
    * @since 1.0.0
    */
-  public double getDistance() {
-    return distance;
-  }
-
-  /**
-   * The distance traveled from origin to destination.
-   *
-   * @param distance a double number with unit meters.
-   * @since 2.1.0
-   */
-  public void setDistance(double distance) {
-    this.distance = distance;
-  }
-
-  /**
-   * The name of the weight profile used while calculating during extraction phase. In many cases, this will return
-   * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#WEIGHT_NAME_ROUTABILITY},
-   * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#WEIGHT_NAME_DURATION}, or
-   * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#WEIGHT_NAME_DISTANCE}.
-   *
-   * @return a String representing the weight profile used while calculating the route.
-   * @since 2.1.0
-   */
-  public String getWeightName() {
-    return weightName;
-  }
-
-  /**
-   * The name of the weight profile used while calculating during extraction phase. In many cases, this would be
-   * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#WEIGHT_NAME_ROUTABILITY},
-   * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#WEIGHT_NAME_DURATION}, or
-   * {@link com.mapbox.services.api.directions.v5.DirectionsCriteria#WEIGHT_NAME_DISTANCE}.
-   *
-   * @param weightName a String representing the weight profile used while calculating the route.
-   * @since 2.1.0
-   */
-  public void setWeightName(String weightName) {
-    this.weightName = weightName;
-  }
-
-  /**
-   * The calculated weight of the route.
-   *
-   * @return the weight value provided from the API as a {@code double} value.
-   * @since 2.1.0
-   */
-  public double getWeight() {
-    return weight;
-  }
-
-  /**
-   * The calculated weight of the route.
-   *
-   * @param weight the weight value as a {@code double} value.
-   * @since 2.1.0
-   */
-  public void setWeight(double weight) {
-    this.weight = weight;
-  }
+  public abstract double distance();
 
   /**
    * The estimated travel time from origin to destination.
    *
-   * @return a double number with unit seconds.
+   * @return a double number with unit seconds
    * @since 1.0.0
    */
-  public double getDuration() {
-    return duration;
-  }
-
-  /**
-   * The estimated travel time from origin to destination.
-   *
-   * @param duration a double number with unit seconds.
-   * @since 2.1.0
-   */
-  public void setDuration(double duration) {
-    this.duration = duration;
-  }
+  public abstract double duration();
 
   /**
    * Gives the geometry of the route. Commonly used to draw the route on the map view.
    *
-   * @return An encoded polyline string.
+   * @return an encoded polyline string
    * @since 1.0.0
    */
-  public String getGeometry() {
-    return geometry;
-  }
+  public abstract String geometry();
 
   /**
-   * Sets the geometry of the route. Commonly used to draw the route on the map view.
+   * The calculated weight of the route.
    *
-   * @param geometry an encoded polyline string.
+   * @return the weight value provided from the API as a {@code double} value
    * @since 2.1.0
    */
-  public void setGeometry(String geometry) {
-    this.geometry = geometry;
-  }
+  public abstract double weight();
 
   /**
-   * A Leg is a route between only two waypoints
+   * The name of the weight profile used while calculating during extraction phase. The default is
+   * {@code routability} which is duration based, with additional penalties for less desirable
+   * maneuvers.
    *
-   * @return List of {@link RouteLeg} objects.
+   * @return a String representing the weight profile used while calculating the route
+   * @since 2.1.0
+   */
+  @SerializedName("weight_name")
+  public abstract String weightName();
+
+  /**
+   * A Leg is a route between only two waypoints.
+   *
+   * @return list of {@link RouteLeg} objects
    * @since 1.0.0
    */
-  public List<RouteLeg> getLegs() {
-    return legs;
+  public abstract List<RouteLeg> legs();
+
+  /**
+   * Gson type adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the type adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<DirectionsRoute> typeAdapter(Gson gson) {
+    return new AutoValue_DirectionsRoute.GsonTypeAdapter(gson);
   }
 
   /**
-   * A Leg is a route between only two waypoints
+   * This builder can be used to set the values describing the {@link DirectionsRoute}.
    *
-   * @param legs list of {@link RouteLeg} objects.
-   * @since 2.1.0
+   * @since 3.0.0
    */
-  public void setLegs(List<RouteLeg> legs) {
-    this.legs = legs;
+  @AutoValue.Builder
+  public abstract static class Builder {
+
+    /**
+     * The distance traveled from origin to destination.
+     *
+     * @param distance a double number with unit meters
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder distance(double distance);
+
+    /**
+     * The estimated travel time from origin to destination.
+     *
+     * @param duration a double number with unit seconds
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder duration(double duration);
+
+    /**
+     * Gives the geometry of the route. Commonly used to draw the route on the map view.
+     *
+     * @param geometry an encoded polyline string
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder geometry(@Nullable String geometry);
+
+    /**
+     * The calculated weight of the route.
+     *
+     * @param weight the weight value provided from the API as a {@code double} value
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder weight(double weight);
+
+    /**
+     * The name of the weight profile used while calculating during extraction phase. The default is
+     * {@code routability} which is duration based, with additional penalties for less desirable
+     * maneuvers.
+     *
+     * @param weightName a String representing the weight profile used while calculating the route
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder weightName(String weightName);
+
+    /**
+     * A Leg is a route between only two waypoints.
+     *
+     * @param legs list of {@link RouteLeg} objects
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder legs(List<RouteLeg> legs);
+
+    /**
+     * Build a new {@link DirectionsRoute} object.
+     *
+     * @return a new {@link DirectionsRoute} using the provided values in this builder
+     * @since 3.0.0
+     */
+    public abstract DirectionsRoute build();
   }
 }

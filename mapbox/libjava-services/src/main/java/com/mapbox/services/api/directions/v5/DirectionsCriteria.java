@@ -1,12 +1,22 @@
 package com.mapbox.services.api.directions.v5;
 
+import android.support.annotation.StringDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
- * Constants used to customize the directions request.
+ * Constants and properties used to customize the directions request.
  *
  * @since 1.0.0
  */
-public class DirectionsCriteria {
+public final class DirectionsCriteria {
 
+  /**
+   * Mapbox default username.
+   *
+   * @since 1.0.0
+   */
   public static final String PROFILE_DEFAULT_USER = "mapbox";
 
   /**
@@ -42,6 +52,21 @@ public class DirectionsCriteria {
   public static final String PROFILE_CYCLING = "cycling";
 
   /**
+   * Retention policy for the various direction profiles.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    PROFILE_DRIVING_TRAFFIC,
+    PROFILE_DRIVING,
+    PROFILE_WALKING,
+    PROFILE_CYCLING
+  })
+  public @interface ProfileCriteria {
+  }
+
+  /**
    * Format to return route geometry will be an encoded polyline.
    *
    * @since 1.0.0
@@ -56,14 +81,21 @@ public class DirectionsCriteria {
   public static final String GEOMETRY_POLYLINE6 = "polyline6";
 
   /**
-   * Format to return route geometry will be geojson. Note that this isn't supported by the SDK.
+   * Retention policy for the various direction geometries.
    *
-   * @since 1.0.0
+   * @since 3.0.0
    */
-  private static final String GEOMETRY_GEOJSON = "geojson";
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    GEOMETRY_POLYLINE,
+    GEOMETRY_POLYLINE6
+  })
+  public @interface GeometriesCriteria {
+  }
 
   /**
-   * A simplified version of the {@link #OVERVIEW_FULL} geometry. If not specified simplified is the default.
+   * A simplified version of the {@link #OVERVIEW_FULL} geometry. If not specified simplified is
+   * the default.
    *
    * @since 1.0.0
    */
@@ -83,11 +115,19 @@ public class DirectionsCriteria {
    */
   public static final String OVERVIEW_FALSE = "false";
 
-  public static final String WEIGHT_NAME_ROUTABILITY = "routability";
-
-  public static final String WEIGHT_NAME_DISTANCE = "distance";
-  public static final String WEIGHT_NAME_DURATION = "duration";
-
+  /**
+   * Retention policy for the various direction overviews.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    OVERVIEW_FALSE,
+    OVERVIEW_FULL,
+    OVERVIEW_SIMPLIFIED
+  })
+  public @interface OverviewCriteria {
+  }
 
   /**
    * The duration, in seconds, between each pair of coordinates.
@@ -111,43 +151,82 @@ public class DirectionsCriteria {
   public static final String ANNOTATION_SPEED = "speed";
 
   /**
-   * The congestion, provided as a String, between each pair of coordinates
+   * The congestion, provided as a String, between each pair of coordinates.
    *
    * @since 2.2.0
    */
   public static final String ANNOTATION_CONGESTION = "congestion";
 
   /**
-   * Server responds with no errors.
+   * Retention policy for the various direction annotations.
    *
-   * @since 1.0.0
+   * @since 3.0.0
    */
-  public static final String RESPONSE_OK = "Ok";
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    ANNOTATION_CONGESTION,
+    ANNOTATION_DISTANCE,
+    ANNOTATION_DURATION,
+    ANNOTATION_SPEED
+  })
+  public @interface AnnotationCriteria {
+  }
 
+  /**
+   * Returned route starts at the first provided coordinate in the list. Used specifically for the
+   * Optimization API.
+   *
+   * @since 2.1.0
+   */
   public static final String SOURCE_FIRST = "first";
+
+  /**
+   * Returned route starts at any of the provided coordinate in the list. Used specifically for the
+   * Optimization API.
+   *
+   * @since 2.1.0
+   */
   public static final String SOURCE_ANY = "any";
-  public static final String SOURCE_LAST = "last";
-
 
   /**
-   * There was no route found for the given query.
+   * Retention policy for the source parameter in the Optimization API.
    *
-   * @since 1.0.0
+   * @since 3.0.0
    */
-  public static final String RESPONSE_NO_ROUTE = "NoRoute";
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    SOURCE_ANY,
+    SOURCE_FIRST,
+  })
+  public @interface SourceCriteria {
+  }
 
   /**
-   * Use a valid profile as described above.
+   * Returned route ends at any of the provided coordinate in the list. Used specifically for the
+   * Optimization API.
    *
-   * @since 1.0.0
+   * @since 3.0.0
    */
-  public static final String RESPONSE_PROFILE_NOT_FOUND = "ProfileNotFound";
+  public static final String DESTINATION_ANY = "any";
 
   /**
-   * The given request was not valid.
+   * Returned route ends at the last provided coordinate in the list. Used specifically for the
+   * Optimization API.
    *
-   * @since 1.0.0
+   * @since 3.0.0
    */
-  public static final String RESPONSE_INVALID_INPUT = "InvalidInput";
+  public static final String DESTINATION_LAST = "last";
 
+  /**
+   * Retention policy for the destination parameter in the Optimization API.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    DESTINATION_ANY,
+    DESTINATION_LAST,
+  })
+  public @interface DestinationCriteria {
+  }
 }

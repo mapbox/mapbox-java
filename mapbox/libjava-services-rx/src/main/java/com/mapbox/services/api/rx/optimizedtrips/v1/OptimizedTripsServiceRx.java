@@ -1,6 +1,6 @@
 package com.mapbox.services.api.rx.optimizedtrips.v1;
 
-import com.mapbox.services.api.optimizedtrips.v1.models.OptimizedTripsResponse;
+import com.mapbox.services.api.optimization.v1.models.OptimizationResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -41,7 +41,7 @@ public interface OptimizedTripsServiceRx {
    * @since 2.1.0
    */
   @GET("optimized-trips/v1/{user}/{profile}/{coordinates}")
-  Observable<OptimizedTripsResponse> getObservable(
+  Observable<OptimizationResponse> getObservable(
     @Header("User-Agent") String userAgent,
     @Path("user") String user,
     @Path("profile") String profile,

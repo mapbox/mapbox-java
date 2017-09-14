@@ -2,205 +2,321 @@ package com.mapbox.services.api.geocoding.v5;
 
 import com.google.gson.JsonObject;
 import com.mapbox.services.api.BaseTest;
-import com.mapbox.services.api.geocoding.v5.models.CarmenContext;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
-import com.mapbox.services.commons.geojson.Geometry;
-
+import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.services.commons.geojson.Point;
+import com.mapbox.services.commons.geojson.custom.BoundingBox;
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.hamcrest.junit.ExpectedException;
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class CarmenFeatureTest extends BaseTest {
 
-  private static final String GEOCODING_FIXTURE
-    = "src/test/fixtures/geocoding/geocoder_tofromjson.json";
+  private static final String ACCESS_TOKEN = "pk.XXX";
 
-  private String json;
+  private static final String GEOCODING_FIXTURE = "geocoding/geocoding.json";
+  private static final String GEOCODING_BATCH_FIXTURE = "geocoding/geocoding_batch.json";
+  private static final String REVERSE_GEOCODE_FIXTURE = "geocoding/geocoding_reverse.json";
+  private static final String GEOCODE_WITH_BBOX_FIXTURE = "geocoding/bbox_geocoding_result.json";
+  private static final String GEOCODE_LANGUAGE_FIXTURE = "geocoding/language_geocoding_result.json";
+
+  private MockWebServer server;
+  private HttpUrl mockUrl;
 
   @Before
-  public void setUp() throws IOException {
-    json = loadJsonFixture(GEOCODING_FIXTURE);
+  public void setUp() throws Exception {
+    server = new MockWebServer();
+    server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
+      @Override
+      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+        try {
+          String response;
+          if (request.getPath().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
+            response = loadJsonFixture(GEOCODING_BATCH_FIXTURE);
+          } else if (request.getPath().contains("-77.0366,38.8971")) {
+            response = loadJsonFixture(REVERSE_GEOCODE_FIXTURE);
+          } else if (request.getPath().contains("texas")) {
+            response = loadJsonFixture(GEOCODE_WITH_BBOX_FIXTURE);
+          } else if (request.getPath().contains("language")) {
+            response = loadJsonFixture(GEOCODE_LANGUAGE_FIXTURE);
+          } else {
+            response = loadJsonFixture(GEOCODING_FIXTURE);
+          }
+          return new MockResponse().setBody(response);
+        } catch (IOException ioException) {
+          throw new RuntimeException(ioException);
+        }
+      }
+    });
+    server.start();
+    mockUrl = server.url("");
+  }
+
+  @After
+  public void tearDown() throws IOException {
+    server.shutdown();
+  }
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
+  @Test
+  public void sanity() throws Exception {
+    CarmenFeature carmenFeature = CarmenFeature.builder()
+      .properties(new JsonObject())
+      .address("1234")
+      .build();
+    assertNotNull(carmenFeature);
+    assertTrue(carmenFeature.address().equals("1234"));
   }
 
   @Test
-  public void checksBuilding() {
-    String text = "Text field 1";
-    String placeName = "Text field 2";
-    double[] bbox = new double[] {1.2, 3.4, 5.6, 7.8};
-    String address = "Text field 3";
-    double[] center = new double[] {1.2, 3.4};
-    double relevance = 1.2;
+  public void center_returnsPointRepresentingCenter() throws Exception {
+    Point centerPoint = Point.fromLngLat(-77.036491, 38.897291);
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query(Point.fromLngLat(-77.0366, 38.8971))
+      .baseUrl(mockUrl.toString())
+      .build();
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertTrue(response.body().features().get(0).center().equals(centerPoint));
+  }
+
+  @Test
+  public void type_returnsFeatureString() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertTrue(response.body().features().get(0).type().equals("Feature"));
+  }
+
+  @Test
+  public void bbox_returnsGeoJsonBoundingBoxObject() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("texas")
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertNotNull(response.body().features().get(0).bbox());
+  }
+
+  @Test
+  public void id_doesReturnCorrectId() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query(Point.fromLngLat(-77.0366, 38.8971))
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertTrue(response.body().features().get(0).id().equals("poi.7298394581225630"));
+  }
+
+  @Test
+  public void geometry_returnsPointGeometry() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query(Point.fromLngLat(-77.0366, 38.8971))
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    Assert.assertNotNull(response.body().features().get(0).geometry());
+    assertTrue(response.body().features().get(0).geometry() instanceof Point);
+    assertEquals(-77.036491,
+      ((Point) response.body().features().get(0).geometry()).longitude(), DELTA);
+    assertEquals(38.897291,
+      ((Point) response.body().features().get(0).geometry()).latitude(), DELTA);
+  }
+
+  @Test
+  public void properties_isJsonObject() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query(Point.fromLngLat(-77.0366, 38.8971))
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    Assert.assertNotNull(response.body().features().get(0).properties());
+    assertTrue(response.body().features().get(0).properties().get("address")
+      .getAsString().equals("1600 Pennsylvania Ave NW"));
+    assertTrue(response.body().features().get(0).properties().get("category")
+      .getAsString().equals("restaurant"));
+    assertTrue(response.body().features().get(0).properties().get("landmark")
+      .getAsBoolean());
+    assertTrue(response.body().features().get(0).properties().get("maki")
+      .getAsString().equals("restaurant"));
+  }
+
+  @Test
+  public void text_returnsCorrectString() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("texas")
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertTrue(response.body().features().get(0).text().equals("Texas"));
+  }
+
+  @Test
+  public void placeName_returnsCorrectString() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query(Point.fromLngLat(-77.0366, 38.8971))
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertTrue(response.body().features().get(0).placeName().equals("Harry S. Truman Bowling Alley,"
+      + " 1600 Pennsylvania Ave NW, Washington, District of Columbia 20006, United States"));
+  }
+
+  @Test
+  public void placeType_returnsCorrectString() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query(Point.fromLngLat(-77.0366, 38.8971))
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(1, response.body().features().get(0).placeType().size());
+    assertTrue(response.body().features().get(0).placeType().get(0).equals("poi"));
+  }
+
+  @Test
+  public void address_returnsCorrectString() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertTrue(response.body().features().get(0).address().equals("1600"));
+  }
+
+  @Test
+  public void context_returnsListOfContext() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(5, response.body().features().get(0).context().size());
+  }
+
+  @Test
+  public void relevance_returnsAccurateValue() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(1.0, response.body().features().get(0).relevance(), DELTA);
+  }
+
+  @Test
+  public void matchingText_returnsCorrectString() throws Exception {
+    // TODO complete test with fixture
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    System.out.println(response.body().features().get(0).matchingText());
+  }
+
+  @Test
+  public void matchingPlaceName_returnsCorrectString() throws Exception {
+    // TODO complete test with fixture
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    System.out.println(response.body().features().get(0).matchingPlaceName());
+  }
+
+  @Test
+  public void language_returnCorrectString() throws Exception {
+    // TODO complete test for language
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("foobar")
+      .baseUrl(mockUrl.toString())
+      .languages(Locale.FRANCE)
+      .build();
+    System.out.println(mapboxGeocoding.cloneCall().request().url());
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    System.out.println(response.body().features().get(0).language());
+  }
+
+  @Test
+  public void carmenFeatureBuilder_sanity() throws Exception {
     JsonObject properties = new JsonObject();
-    String property = "foo1";
-    String value = "bar";
-    String anotherProperty = "foo2";
-    properties.addProperty(property, value);
-    String id = "Text field 4";
-    CarmenFeatureBuilder builder = new CarmenFeatureBuilder();
-    builder.text(text)
-      .placeName(placeName)
-      .language(Locale.ENGLISH.toString())
-      .matchingText(placeName)
-      .matchingPlaceName(placeName)
-      .address(address)
-      .id(id);
-    CarmenFeature feature = builder.build();
+    properties.addProperty("key", "value");
+    Point geometry = Point.fromLngLat(2.0, 2.0);
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
 
-    assertEquals(text, feature.getText());
-    assertEquals(placeName, feature.getPlaceName());
-    assertEquals(placeName, feature.getMatchingPlaceName());
-    assertEquals(Locale.ENGLISH.toString(), feature.getLanguage());
-    assertEquals(placeName, feature.getMatchingText());
-    assertEquals(bbox[0], feature.getBbox()[0], DELTA);
-    assertEquals(bbox[1], feature.getBbox()[1], DELTA);
-    assertEquals(bbox[2], feature.getBbox()[2], DELTA);
-    assertEquals(bbox[3], feature.getBbox()[3], DELTA);
-    assertEquals(address, feature.getAddress());
-    assertEquals(center[0], feature.getCenter()[0], DELTA);
-    assertEquals(center[1], feature.getCenter()[1], DELTA);
-    assertNull(feature.getContext());
-    assertEquals(relevance, feature.getRelevance(), DELTA);
-    assertNull(feature.getGeometry());
-    assertEquals(properties, feature.getProperties());
-    assertEquals(value, feature.getStringProperty(property));
-    assertTrue(feature.hasNonNullValueForProperty(property));
-    assertFalse(feature.hasNonNullValueForProperty(anotherProperty));
-    assertEquals(id, feature.getId());
+    CarmenFeature carmenFeature = CarmenFeature.builder()
+      .address("1000")
+      .bbox(bbox)
+      .context(null)
+      .geometry(geometry)
+      .id("poi.123456789")
+      .language("fr")
+      .matchingPlaceName("matchingPlaceName")
+      .matchingText("matchingText")
+      .placeName("placeName")
+      .placeType(null)
+      .properties(properties)
+      .relevance(0.5)
+      .text("text")
+      .build();
+
+    assertTrue(carmenFeature.address().equals("1000"));
+    assertTrue(carmenFeature.bbox().equals(bbox));
+    assertNull(carmenFeature.context());
+    assertTrue(carmenFeature.geometry().equals(geometry));
+    assertTrue(carmenFeature.id().equals("poi.123456789"));
+    assertTrue(carmenFeature.language().equals("fr"));
+    assertTrue(carmenFeature.matchingPlaceName().equals("matchingPlaceName"));
+    assertTrue(carmenFeature.matchingText().equals("matchingText"));
+    assertTrue(carmenFeature.placeName().equals("placeName"));
+    assertNull(carmenFeature.placeType());
+    assertTrue(carmenFeature.properties().get("key").getAsString().equals("value"));
+    assertEquals(0.5, carmenFeature.relevance(), DELTA);
+    assertTrue(carmenFeature.text().equals("text"));
   }
 
-  @Test
-  public void checksFromJson() throws IOException {
-    CarmenFeatureBuilder builder = new CarmenFeatureBuilder();
-    builder.text("Text field 1")
-      .placeName("Text field 2")
-      .address("Text field 3")
-      .id("Text field 4");
-    CarmenFeature expected = builder.build();
-    CarmenFeature actual = CarmenFeature.fromJson(json);
-    assertEquals(expected.getText(), actual.getText());
-  }
+  // TODO fix to and from JSON
+//  @Test
+//  public void toJson_convertsCarmenFeatureToJsonCorrectly() throws Exception {
+//    CarmenFeature carmenFeature = CarmenFeature.fromJson(GEOCODING_FIXTURE);
+//    System.out.println(carmenFeature);
+//  }
 
-  @Test
-  public void checksToJson() throws IOException {
-    CarmenFeatureBuilder builder = new CarmenFeatureBuilder();
-    builder.text("Text field 1")
-      .placeName("Text field 2")
-      .address("Text field 3")
-      .id("Text field 4");
-    CarmenFeature feature = builder.build();
-    compareJson(json, feature.toJson());
-  }
 
-  private class CarmenFeatureBuilder {
-    private CarmenFeature feature;
-    private String text;
-    private String placeName;
-    private String matchingPlaceName;
-    private String language;
-    private String matchingText;
-    private double[] bbox = new double[] {1.2, 3.4, 5.6, 7.8};
-    private String address;
-    private double[] center = new double[] {1.2, 3.4};
-    private List<CarmenContext> context = null;
-    private double relevance = 1.2;
-    private Geometry geometry = null;
-    private JsonObject properties;
-    private String id;
-
-    public CarmenFeatureBuilder() {
-      feature = new CarmenFeature();
-      properties = new JsonObject();
-      properties.addProperty("foo1", "bar");
-    }
-
-    public CarmenFeatureBuilder text(String text) {
-      this.text = text;
-      return this;
-    }
-
-    public CarmenFeatureBuilder placeName(String placeName) {
-      this.placeName = placeName;
-      return this;
-    }
-
-    public CarmenFeatureBuilder matchingPlaceName(String matchingPlaceName) {
-      this.matchingPlaceName = matchingPlaceName;
-      return this;
-    }
-
-    public CarmenFeatureBuilder matchingText(String matchingText) {
-      this.matchingText = matchingText;
-      return this;
-    }
-
-    public CarmenFeatureBuilder language(String language) {
-      this.language = language;
-      return this;
-    }
-
-    public CarmenFeatureBuilder bbox(double[] bbox) {
-      this.bbox = bbox;
-      return this;
-    }
-
-    public CarmenFeatureBuilder address(String address) {
-      this.address = address;
-      return this;
-    }
-
-    public CarmenFeatureBuilder center(double[] center) {
-      this.center = center;
-      return this;
-    }
-
-    public CarmenFeatureBuilder context(List<CarmenContext> context) {
-      this.context = context;
-      return this;
-    }
-
-    public CarmenFeatureBuilder relevance(double relevance) {
-      this.relevance = relevance;
-      return this;
-    }
-
-    public CarmenFeatureBuilder geometry(Geometry geometry) {
-      this.geometry = geometry;
-      return this;
-    }
-
-    public CarmenFeatureBuilder properties(JsonObject properties) {
-      this.properties = properties;
-      return this;
-    }
-
-    public CarmenFeatureBuilder id(String id) {
-      this.id = id;
-      return this;
-    }
-
-    public CarmenFeature build() {
-      feature.setText(text);
-      feature.setPlaceName(placeName);
-      feature.setMatchingPlaceName(matchingPlaceName);
-      feature.setMatchingText(matchingText);
-      feature.setLanguage(language);
-      feature.setBbox(bbox);
-      feature.setAddress(address);
-      feature.setCenter(center);
-      feature.setContext(context);
-      feature.setRelevance(relevance);
-      feature.setGeometry(geometry);
-      feature.setProperties(properties);
-      feature.setId(id);
-      return feature;
-    }
-  }
 }

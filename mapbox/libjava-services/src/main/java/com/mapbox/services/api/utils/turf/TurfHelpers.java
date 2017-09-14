@@ -1,131 +1,123 @@
 package com.mapbox.services.api.utils.turf;
 
+import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import com.mapbox.services.api.utils.turf.TurfConstants.TurfUnitCriteria;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This {@code TurfHelpers} class is made up of methods that take in an object, convert it, and then
- * return the object in the desired units or object.
+ * This class is made up of methods that take in an object, convert it, and then return the object
+ * in the desired units or object.
  *
  * @see <a href="http://turfjs.org/docs/">Turfjs documentation</a>
  * @since 1.2.0
  */
 public class TurfHelpers {
 
-  private static final Map<String, Double> factors;
+  private static final Map<String, Double> FACTORS;
 
   static {
-    factors = new HashMap<>();
-    factors.put(TurfConstants.UNIT_MILES, 3960d);
-    factors.put(TurfConstants.UNIT_NAUTICAL_MILES, 3441.145d);
-    factors.put(TurfConstants.UNIT_DEGREES, 57.2957795d);
-    factors.put(TurfConstants.UNIT_RADIANS, 1d);
-    factors.put(TurfConstants.UNIT_INCHES, 250905600d);
-    factors.put(TurfConstants.UNIT_YARDS, 6969600d);
-    factors.put(TurfConstants.UNIT_METERS, 6373000d);
-    factors.put(TurfConstants.UNIT_CENTIMETERS, 6.373e+8d);
-    factors.put(TurfConstants.UNIT_KILOMETERS, 6373d);
-    factors.put(TurfConstants.UNIT_FEET, 20908792.65d);
-
-    // Also supported
-    factors.put("centimetres", 6.373e+8d);
-    factors.put("metres", 6373000d);
-    factors.put("kilometres", 6373d);
+    FACTORS = new HashMap<>();
+    FACTORS.put(TurfConstants.UNIT_MILES, 3960d);
+    FACTORS.put(TurfConstants.UNIT_NAUTICAL_MILES, 3441.145d);
+    FACTORS.put(TurfConstants.UNIT_DEGREES, 57.2957795d);
+    FACTORS.put(TurfConstants.UNIT_RADIANS, 1d);
+    FACTORS.put(TurfConstants.UNIT_INCHES, 250905600d);
+    FACTORS.put(TurfConstants.UNIT_YARDS, 6969600d);
+    FACTORS.put(TurfConstants.UNIT_METERS, 6373000d);
+    FACTORS.put(TurfConstants.UNIT_CENTIMETERS, 6.373e+8d);
+    FACTORS.put(TurfConstants.UNIT_KILOMETERS, 6373d);
+    FACTORS.put(TurfConstants.UNIT_FEET, 20908792.65d);
+    FACTORS.put(TurfConstants.UNIT_CENTIMETRES, 6.373e+8d);
+    FACTORS.put(TurfConstants.UNIT_METRES, 6373000d);
+    FACTORS.put(TurfConstants.UNIT_KILOMETRES, 6373d);
   }
 
   /**
-   * Convert radians to distance. The units used here equals the default.
+   * Convert a distance measurement (assuming a spherical Earth) from radians to a more friendly
+   * unit. The units used here equals the default.
    *
-   * @param radians Double representing a radian value.
-   * @return Converted radian to distance value.
-   * @throws TurfException Signals that a Turf exception of some sort has occurred.
+   * @param radians a double using unit radian
+   * @return converted radian to distance value
    * @since 1.2.0
    */
-  public static double radiansToDistance(double radians) throws TurfException {
+  public static double radiansToDistance(double radians) {
     return radiansToDistance(radians, TurfConstants.UNIT_DEFAULT);
   }
 
   /**
-   * Convert radians to distance.
+   * Convert a distance measurement (assuming a spherical Earth) from radians to a more friendly
+   * unit.
    *
-   * @param radians Double representing a radian value.
-   * @param units   Pass in the units you'd like to use.
-   * @return Converted radian to distance value.
-   * @throws TurfException Signals that a Turf exception of some sort has occurred.
+   * @param radians a double using unit radian
+   * @param units   pass in one of the units defined in {@link TurfUnitCriteria}
+   * @return converted radian to distance value
    * @since 1.2.0
    */
-  public static double radiansToDistance(double radians, String units) throws TurfException {
-    Double factor = factors.get(units);
-    if (factor == null) {
-      throw new TurfException("Invalid unit.");
-    }
-
-    return radians * factor;
+  public static double radiansToDistance(double radians, @NonNull @TurfUnitCriteria String units) {
+    return radians * FACTORS.get(units);
   }
 
   /**
-   * Convert distance to radians. The units used here equals the default.
+   * Convert a distance measurement (assuming a spherical Earth) from a real-world unit into
+   * radians.
    *
-   * @param distance Double representing a distance value.
-   * @return Converted distance to radians value.
-   * @throws TurfException Signals that a Turf exception of some sort has occurred.
+   * @param distance double representing a distance value assuming the distance units is in
+   *                 kilometers
+   * @return converted distance to radians value
    * @since 1.2.0
    */
-  public static double distanceToRadians(double distance) throws TurfException {
+  public static double distanceToRadians(double distance) {
     return distanceToRadians(distance, TurfConstants.UNIT_DEFAULT);
   }
 
   /**
-   * Convert distance to radians.
+   * Convert a distance measurement (assuming a spherical Earth) from a real-world unit into
+   * radians.
    *
-   * @param distance Double representing a distance value.
-   * @param units    Pass in the units you'd like to use.
-   * @return Converted distance to radians value.
-   * @throws TurfException Signals that a Turf exception of some sort has occurred.
+   * @param distance double representing a distance value
+   * @param units    pass in one of the units defined in {@link TurfUnitCriteria}
+   * @return converted distance to radians value
    * @since 1.2.0
    */
-  public static double distanceToRadians(double distance, String units) throws TurfException {
-    Double factor = factors.get(units);
-    if (factor == null) {
-      throw new TurfException("Invalid unit.");
-    }
-    return distance / factor;
+  public static double distanceToRadians(double distance, @NonNull @TurfUnitCriteria String units) {
+    return distance / FACTORS.get(units);
   }
 
   /**
-   * Converts a distance to the requested unit.
-   * Valid units: miles, nauticalmiles, inches, yards, meters, metres, kilometers, centimeters, feet
+   * Converts a distance to the default units. Use
+   * {@link TurfHelpers#convertDistance(double, String, String)} to specify a unit to convert to.
    *
-   * @param distance     the distance to be converted
-   * @param originalUnit of the distance
-   * @return the converted distance
+   * @param distance     double representing a distance value
+   * @param originalUnit of the distance, must be one of the units defined in
+   *                     {@link TurfUnitCriteria}
+   * @return converted distance in the default unit
    * @since 2.2.0
    */
-  public static double convertDistance(double distance, String originalUnit) {
+  public static double convertDistance(@FloatRange(from = 0) double distance,
+                                       @NonNull @TurfUnitCriteria String originalUnit) {
     return convertDistance(distance, originalUnit, TurfConstants.UNIT_DEFAULT);
   }
 
   /**
-   * Converts a distance to the requested unit.
-   * Valid units: miles, nauticalmiles, inches, yards, meters, metres, kilometers, centimeters, feet
+   * Converts a distance to a different unit specified.
    *
    * @param distance     the distance to be converted
-   * @param originalUnit of the distance
-   * @param finalUnit    returned unit, {@link TurfConstants#UNIT_DEFAULT} if not specified.
+   * @param originalUnit of the distance, must be one of the units defined in
+   *                     {@link TurfUnitCriteria}
+   * @param finalUnit    returned unit, {@link TurfConstants#UNIT_DEFAULT} if not specified
    * @return the converted distance
    * @since 2.2.0
    */
-  public static double convertDistance(double distance, String originalUnit, String finalUnit) {
-    Double factor = factors.get(originalUnit);
-    if (factor == null) {
-      throw new TurfException("Invalid unit.");
-    } else if (!(distance >= 0)) {
-      throw new TurfException("Distance must be a positive number.");
-    }
+  public static double convertDistance(@FloatRange(from = 0) double distance,
+                                       @NonNull @TurfUnitCriteria String originalUnit,
+                                       @Nullable @TurfUnitCriteria String finalUnit) {
     if (finalUnit == null) {
       finalUnit = TurfConstants.UNIT_DEFAULT;
     }
-
     return radiansToDistance(distanceToRadians(distance, originalUnit), finalUnit);
   }
 }

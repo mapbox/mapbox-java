@@ -17,9 +17,11 @@ import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.services.commons.geojson.Point;
 import com.mapbox.services.commons.models.Position;
 
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -108,12 +110,12 @@ public class GeocodingReverseActivity extends AppCompatActivity {
    * Forward geocoding
    */
 
-  private void geocode(LatLng point) {
-    Position position = Position.fromCoordinates(point.getLongitude(), point.getLatitude());
-    MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken(Utils.getMapboxAccessToken(this))
-      .setCoordinates(position)
-      .setGeocodingType(GeocodingCriteria.TYPE_POI)
+  private void geocode(LatLng latLng) {
+    Point point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+    MapboxGeocoding client = MapboxGeocoding.builder()
+      .accessToken(Utils.getMapboxAccessToken(this))
+      .query(point)
+      .geocodingTypes(GeocodingCriteria.TYPE_POI)
       .build();
 
     client.enqueueCall(new Callback<GeocodingResponse>() {
@@ -121,6 +123,11 @@ public class GeocodingReverseActivity extends AppCompatActivity {
       public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
         List<CarmenFeature> results = response.body().getFeatures();
         if (results.size() > 0) {
+
+          response.body().getFeatures().get(0)
+
+
+
           String placeName = results.get(0).getPlaceName();
           setSuccess(placeName);
         } else {

@@ -1,68 +1,59 @@
 package com.mapbox.services.api.geocoding.v5;
 
-import com.google.gson.JsonObject;
 import com.mapbox.services.api.BaseTest;
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.geocoding.v5.models.CarmenContext;
-import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.services.commons.geojson.Point;
-import com.mapbox.services.commons.models.Position;
-
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.hamcrest.junit.ExpectedException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.Dispatcher;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
-import retrofit2.Response;
-
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class MapboxGeocodingTest extends BaseTest {
 
-  private static final String GEOCODING_FIXTURE = "src/test/fixtures/geocoding/geocoding.json";
-  private static final String GEOCODING_COUNTRY_NOT_SUPPORTED =
-    "src/test/fixtures/geocoding/geocoding_country_not_supported.json";
   private static final String ACCESS_TOKEN = "pk.XXX";
+
+  private static final String GEOCODING_FIXTURE = "geocoding/geocoding.json";
+  private static final String GEOCODING_BATCH_FIXTURE = "geocoding/geocoding_batch.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
 
   @Before
-  public void setUp() throws IOException {
+  public void setUp() throws Exception {
     server = new MockWebServer();
-
-    server.setDispatcher(new Dispatcher() {
-
+    server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-        // Change the resource path if we are checking country not supported
-        String resource = GEOCODING_FIXTURE;
-        if (request.getPath().contains("country=aq")) {
-          resource = GEOCODING_COUNTRY_NOT_SUPPORTED;
-        }
-
         try {
-          String body = loadJsonFixture(resource);
-          return new MockResponse().setBody(body);
+          String response;
+          if (request.getPath().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
+            response = loadJsonFixture(GEOCODING_BATCH_FIXTURE);
+          } else {
+            response = loadJsonFixture(GEOCODING_FIXTURE);
+          }
+          return new MockResponse().setBody(response);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
         }
       }
     });
     server.start();
-
     mockUrl = server.url("");
   }
 
@@ -75,181 +66,195 @@ public class MapboxGeocodingTest extends BaseTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
-  public void testSanity() throws ServicesException, IOException {
-    MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBaseUrl(mockUrl.toString())
+  public void sanity() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
       .build();
-    Response<GeocodingResponse> response = client.executeCall();
-    assertEquals(response.code(), 200);
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(200, response.code());
   }
 
   @Test
-  public void testBody() throws ServicesException, IOException {
-    MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBaseUrl(mockUrl.toString())
+  public void sanity_batchGeocodeRequest() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .mode(GeocodingCriteria.MODE_PLACES_PERMANENT)
+      .accessToken(ACCESS_TOKEN)
+      .query("20001;20009;22209")
+      .baseUrl(mockUrl.toString())
       .build();
-    Response<GeocodingResponse> response = client.executeCall();
-
-    GeocodingResponse body = response.body();
-    assertEquals(body.getType(), "FeatureCollection");
-
-    assertEquals(body.getQuery().get(0), "1600");
-    assertEquals(body.getQuery().get(1), "pennsylvania");
-    assertEquals(body.getQuery().get(2), "ave");
-    assertEquals(body.getQuery().get(3), "nw");
-
-    assertEquals(body.getFeatures().size(), 5);
-    assertTrue(body.getAttribution().startsWith("NOTICE"));
+    assertNotNull(mapboxGeocoding);
+    Response<List<GeocodingResponse>> response = mapboxGeocoding.executeBatchCall();
+    assertEquals(200, response.code());
   }
 
   @Test
-  public void testFeature() throws ServicesException, IOException {
-    MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBaseUrl(mockUrl.toString())
+  public void executeBatchCall_exceptionThrownWhenModeNotSetCorrectly() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Use getCall() for non-batch calls."));
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
       .build();
-    Response<GeocodingResponse> response = client.executeCall();
-
-    CarmenFeature feature = response.body().getFeatures().get(0);
-    assertEquals(feature.getId(), "address.3982178573139850");
-    assertEquals(feature.getType(), "Feature");
-    assertEquals(feature.getText(), "Pennsylvania Ave NW");
-    assertEquals(feature.getPlaceName(), "1600 Pennsylvania Ave NW, Washington, District of Columbia 20006, "
-      + "United States");
-    assertEquals(feature.getRelevance(), 0.99, DELTA);
-    assertEquals(feature.getProperties(), new JsonObject());
-    assertEquals(feature.asPosition().getLongitude(), -77.036543, DELTA);
-    assertEquals(feature.asPosition().getLatitude(), 38.897702, DELTA);
-    assertEquals(feature.getAddress(), "1600");
-    assertEquals(feature.getContext().size(), 5);
+    mapboxGeocoding.executeBatchCall();
   }
 
   @Test
-  public void testGeometry() throws ServicesException, IOException {
-    MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBaseUrl(mockUrl.toString())
+  public void build_accessTokenNotValidException() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Using Mapbox Services requires setting a valid access token."));
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
       .build();
-    Response<GeocodingResponse> response = client.executeCall();
-
-    Point point = (Point) response.body().getFeatures().get(3).getGeometry();
-    assertEquals(point.getType(), "Point");
-    assertEquals(point.getCoordinates().getLongitude(), -90.313554, DELTA);
-    assertEquals(point.getCoordinates().getLatitude(), 38.681546, DELTA);
+    mapboxGeocoding.executeCall();
   }
 
   @Test
-  public void testContext() throws ServicesException, IOException {
-    MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBaseUrl(mockUrl.toString())
+  public void build_emptyQueryNotAllowedException() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("A query with at least one character or digit is required."));
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("")
+      .baseUrl(mockUrl.toString())
       .build();
-    Response<GeocodingResponse> response = client.executeCall();
-
-    List<CarmenContext> contexts = response.body().getFeatures().get(0).getContext();
-    assertEquals(contexts.get(4).getId(), "country.3145");
-    assertEquals(contexts.get(4).getText(), "United States");
-    assertEquals(contexts.get(4).getShortCode(), "us");
+    mapboxGeocoding.executeCall();
   }
 
   @Test
-  public void testWikidata() throws ServicesException, IOException {
-    MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBaseUrl(mockUrl.toString())
+  public void query_acceptsPointsCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query(Point.fromLngLat(-77.03655, 38.89770))
+      .baseUrl(mockUrl.toString())
       .build();
-    Response<GeocodingResponse> response = client.executeCall();
-
-    CarmenContext context = response.body().getFeatures().get(0).getContext().get(2);
-    assertEquals(context.getWikidata(), "Q61");
+    assertTrue(mapboxGeocoding.query().equals("-77.03655,38.8977"));
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(200, response.code());
   }
 
   @Test
-  public void testUserAgent() throws ServicesException, IOException {
-    MapboxGeocoding service = new MapboxGeocoding.Builder()
-      .setClientAppName("APP")
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBaseUrl(mockUrl.toString())
+  public void baseUrl_doesChangeTheRequestUrl() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl("https://foobar.com")
+      .query(Point.fromLngLat(-77.03655, 38.89770))
       .build();
-    assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .startsWith("https://foobar.com"));
   }
 
   @Test
-  public void testCountryNotSupported() throws ServicesException, IOException {
-    MapboxGeocoding client = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setCountry("aq")
-      .setLocation("1600 pennsylvania ave nw")
-      .setBaseUrl(mockUrl.toString())
+  public void country_localeCountryConvertsCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .country(Locale.US)
+      .query(Point.fromLngLat(-77.03655, 38.89770))
       .build();
-    Response<GeocodingResponse> response = client.executeCall();
-
-    assertEquals(0, response.body().getFeatures().size());
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("country=US"));
   }
 
   @Test
-  public void testBbox() throws IOException, ServicesException {
-    MapboxGeocoding clientNeSw = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBbox(Position.fromCoordinates(-77.0035, 38.9115), Position.fromCoordinates(-77.0702, 38.8561))
-      .setBaseUrl(mockUrl.toString())
+  public void country_localeCountryHandlesMultipleCountriesCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .country(Locale.US)
+      .country(Locale.CANADA)
+      .query(Point.fromLngLat(-77.03655, 38.89770))
       .build();
-
-    MapboxGeocoding clientMinMax = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBbox(-77.0035, 38.9115, -77.0702, 38.8561)
-      .setBaseUrl(mockUrl.toString())
-      .build();
-
-    assertTrue(
-      clientNeSw.executeCall().raw().request().url().toString().contains("bbox=-77.0702,38.8561,-77.0035,38.9115"));
-    assertTrue(
-      clientMinMax.executeCall().raw().request().url().toString().contains("bbox=-77.0035,38.9115,-77.0702,38.8561"));
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("country=US,CA"));
   }
 
   @Test
-  public void testSingleLanguage() throws IOException, ServicesException {
-    MapboxGeocoding clientNoLanguage = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setBaseUrl(mockUrl.toString())
+  public void proximity_doesGetAddedToUrlCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .query("1600 pennsylvania ave nw")
+      .proximity(Point.fromLngLat(-77.03655, 38.89770))
       .build();
-
-    // By default no language is included
-    assertTrue(!clientNoLanguage.getCall().request().url().toString().contains("language=en_GB"));
-
-    MapboxGeocoding clientLanguage = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setLanguages(Locale.UK.toString())
-      .setBaseUrl(mockUrl.toString())
-      .build();
-
-    // setLanguage() will include the language query parameter
-    assertTrue(clientLanguage.getCall().request().url().toString().contains("language=en_GB"));
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("proximity=-77.03655,38.8977"));
   }
 
   @Test
-  public void testMultipleLanguage() throws IOException, ServicesException {
-    MapboxGeocoding clientLanguage = new MapboxGeocoding.Builder()
-      .setAccessToken(ACCESS_TOKEN)
-      .setLocation("1600 pennsylvania ave nw")
-      .setLanguages(Locale.UK.toString(), Locale.US.toString(), Locale.JAPAN.toString())
-      .setBaseUrl(mockUrl.toString())
+  public void geocodingTypes_getsAddedToUrlCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .geocodingTypes(GeocodingCriteria.TYPE_COUNTRY, GeocodingCriteria.TYPE_DISTRICT)
+      .query("1600 pennsylvania ave nw")
       .build();
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("types=country,district"));
+  }
 
-    // setLanguage() will include the languages query parameter
-    assertTrue(clientLanguage.getCall().request().url().toString().contains("language=en_GB,en_US,ja_JP"));
+  @Test
+  public void autocomplete_getsAddedToUrlCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .autocomplete(true)
+      .query("1600 pennsylvania ave nw")
+      .build();
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("autocomplete=true"));
+  }
+
+  @Test
+  public void bbox_getsFormattedCorrectlyForUrl() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .bbox(
+        Point.fromLngLat(-77.083056, 38.908611),
+        Point.fromLngLat(-76.997778, 38.959167)
+      )
+      .query("1600 pennsylvania ave nw")
+      .build();
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("bbox=-77.083056,38.908611,-76.997778,38.959167"));
+  }
+
+  @Test
+  public void limit_getsAddedToUrlCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .limit(2)
+      .query("1600 pennsylvania ave nw")
+      .build();
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("limit=2"));
+  }
+
+  @Test
+  public void language_getsConvertedToUrlCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .languages(Locale.ENGLISH, Locale.FRANCE)
+      .query("1600 pennsylvania ave nw")
+      .build();
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("language=en,fr"));
+  }
+
+  @Test
+  public void clientAppName_hasAppInString() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .clientAppName("APP")
+      .languages(Locale.ENGLISH, Locale.FRANCE)
+      .query("1600 pennsylvania ave nw")
+      .build();
+    assertTrue(mapboxGeocoding.cloneCall().request().header("User-Agent").contains("APP"));
   }
 }

@@ -1,7 +1,6 @@
 package com.mapbox.services.api.rx.mapmatching.v5;
 
 import com.mapbox.services.api.ServicesException;
-import com.mapbox.services.api.mapmatching.v5.MapMatchingCriteria;
 import com.mapbox.services.api.mapmatching.v5.models.MapMatchingResponse;
 import com.mapbox.services.api.rx.BaseTest;
 import com.mapbox.services.commons.models.Position;
