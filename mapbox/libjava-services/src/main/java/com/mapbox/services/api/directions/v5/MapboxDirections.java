@@ -77,7 +77,7 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
       builder.isContinueStraight(),
       builder.getAnnotation(),
       builder.getLanguage(),
-      builder.isRoundaboutExits());
+      builder.allowsRoundaboutExits());
 
     // Done
     return call;
@@ -376,7 +376,8 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     /**
-     * Optionally, call if you'd like to specify if exit on a roundabout is allowed.
+     * Optionally, set this to true if you want to enable instructions while exiting roundabouts
+     * and rotaries.
      *
      * @param roundaboutExits true if exit on a roundabout is allowed.
      * @return Builder
@@ -604,10 +605,11 @@ public class MapboxDirections extends MapboxService<DirectionsResponse> {
     }
 
     /**
-     * @return true it is possible to exit on the roundabout {@link #setRoundaboutExits(Boolean)}.
+     * @return return true if you enabled additional instructions while exiting rotaries and
+     * roundabouts. See {@link #setRoundaboutExits(Boolean)}.
      * @since 2.2.4
      */
-    public Boolean isRoundaboutExits() {
+    public Boolean allowsRoundaboutExits() {
       return roundaboutExits;
     }
 
