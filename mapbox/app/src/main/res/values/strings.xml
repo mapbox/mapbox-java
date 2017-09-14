@@ -3,7 +3,7 @@
     <string name="app_name">Mapbox Android Services</string>
     <string name="action_settings">Settings</string>
 
-    <string name="default_style">mapbox://styles/mapbox/streets-v9</string>
+    <string name="default_style" translatable="false">mapbox://styles/mapbox/streets-v9</string>
 
     <string name="category">category</string>
     <string name="category_directions">Directions</string>
