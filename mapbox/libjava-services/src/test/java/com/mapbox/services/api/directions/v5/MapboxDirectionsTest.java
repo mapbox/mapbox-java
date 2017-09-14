@@ -1,6 +1,5 @@
 package com.mapbox.services.api.directions.v5;
 
-import com.google.gson.Gson;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
