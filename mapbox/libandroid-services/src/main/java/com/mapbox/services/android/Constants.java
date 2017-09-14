@@ -30,6 +30,8 @@ public class Constants {
   @Experimental public static final String STEP_MANEUVER_TYPE_ROUNDABOUT = "roundabout";
   @Experimental public static final String STEP_MANEUVER_TYPE_ROTARY = "rotary";
   @Experimental public static final String STEP_MANEUVER_TYPE_ROUNDABOUT_TURN = "roundabout turn";
+  @Experimental public static final String STEP_MANEUVER_TYPE_EXIT_ROUNDABOUT = "exit roundabout";
+  @Experimental public static final String STEP_MANEUVER_TYPE_EXIT_ROTARY = "exit rotary";
   @Experimental public static final String STEP_MANEUVER_TYPE_NOTIFICATION = "notification";
 }
 
