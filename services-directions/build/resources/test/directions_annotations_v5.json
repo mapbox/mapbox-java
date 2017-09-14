@@ -1,0 +1,5480 @@
+{
+  "waypoints": [
+    {
+      "location": [
+        -122.416686,
+        37.783425
+      ],
+      "name": "Eddy Street"
+    },
+    {
+      "location": [
+        -121.90034,
+        37.333317
+      ],
+      "name": "North Autumn Street"
+    }
+  ],
+  "routes": [
+    {
+      "legs": [
+        {
+          "steps": [
+            {
+              "intersections": [
+                {
+                  "out": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    -122.416686,
+                    37.783425
+                  ],
+                  "bearings": [
+                    81
+                  ]
+                }
+              ],
+              "geometry": "mqreFhodjVQ}C",
+              "duration": 23.5,
+              "distance": 69.7,
+              "name": "Eddy Street",
+              "weight": 42.7,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 81,
+                "location": [
+                  -122.416686,
+                  37.783425
+                ],
+                "type": "depart",
+                "bearing_before": 0,
+                "modifier": "right",
+                "instruction": "Kör åt öster på Eddy Street"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "out": 1,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.415903,
+                    37.783524
+                  ],
+                  "bearings": [
+                    75,
+                    165,
+                    255,
+                    345
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.415716,
+                    37.782593
+                  ],
+                  "bearings": [
+                    75,
+                    165,
+                    255,
+                    345
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "entry": [
+                    true,
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.415527,
+                    37.78166
+                  ],
+                  "bearings": [
+                    75,
+                    165,
+                    255,
+                    345
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.415339,
+                    37.780726
+                  ],
+                  "bearings": [
+                    75,
+                    165,
+                    255,
+                    345
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.415152,
+                    37.779796
+                  ],
+                  "bearings": [
+                    165,
+                    255,
+                    345
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.414921,
+                    37.778867
+                  ],
+                  "bearings": [
+                    135,
+                    270,
+                    330
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.414826,
+                    37.778777
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225,
+                    315
+                  ]
+                }
+              ],
+              "geometry": "_rreFjjdjVxDc@xDe@|C_@ZExC_@^E^E~BYXMBCLMJM",
+              "duration": 88.00000000000001,
+              "distance": 546.9,
+              "name": "Hyde Street",
+              "weight": 170,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 170,
+                "location": [
+                  -122.415903,
+                  37.783524
+                ],
+                "type": "turn",
+                "bearing_before": 80,
+                "modifier": "right",
+                "instruction": "Sväng höger in på Hyde Street"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.414764,
+                    37.778721
+                  ],
+                  "bearings": [
+                    135,
+                    315
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "entry": [
+                    false,
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.414715,
+                    37.778681
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225,
+                    315
+                  ]
+                }
+              ],
+              "geometry": "_tqeFfcdjVFGl@{@h@s@xByC`@i@",
+              "duration": 31.6,
+              "distance": 198.4,
+              "name": "8th Street",
+              "weight": 57.1,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 135,
+                "location": [
+                  -122.414764,
+                  37.778721
+                ],
+                "type": "new name",
+                "bearing_before": 137,
+                "modifier": "straight",
+                "instruction": "Fortsätt rakt fram på 8th Street"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "out": 2,
+                  "in": 3,
+                  "lanes": [
+                    {
+                      "valid": false,
+                      "indications": [
+                        "none"
+                      ]
+                    },
+                    {
+                      "valid": false,
+                      "indications": [
+                        "none"
+                      ]
+                    },
+                    {
+                      "valid": false,
+                      "indications": [
+                        "none"
+                      ]
+                    },
+                    {
+                      "valid": true,
+                      "indications": [
+                        "right"
+                      ]
+                    }
+                  ],
+                  "entry": [
+                    true,
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.413175,
+                    37.777455
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225,
+                    315
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -122.414121,
+                    37.776706
+                  ],
+                  "bearings": [
+                    45,
+                    225,
+                    315
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "lanes": [
+                    {
+                      "valid": true,
+                      "indications": [
+                        "none"
+                      ]
+                    },
+                    {
+                      "valid": true,
+                      "indications": [
+                        "none"
+                      ]
+                    },
+                    {
+                      "valid": false,
+                      "indications": [
+                        "right"
+                      ]
+                    }
+                  ],
+                  "entry": [
+                    false,
+                    false,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -122.414717,
+                    37.776233
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225,
+                    315
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -122.415147,
+                    37.775893
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    false,
+                    true
+                  ],
+                  "location": [
+                    -122.415511,
+                    37.775604
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225
+                  ]
+                }
+              ],
+              "geometry": "clqeFjycjVtCzDv@dAf@p@bAtAx@fA~@pA",
+              "duration": 53.2,
+              "distance": 342,
+              "name": "Mission Street",
+              "weight": 97.30000000000001,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 223,
+                "location": [
+                  -122.413175,
+                  37.777455
+                ],
+                "type": "turn",
+                "bearing_before": 135,
+                "modifier": "right",
+                "instruction": "Sväng höger in på Mission Street"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.415923,
+                    37.775278
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.415384,
+                    37.774853
+                  ],
+                  "bearings": [
+                    135,
+                    225,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.414921,
+                    37.774485
+                  ],
+                  "bearings": [
+                    135,
+                    225,
+                    315
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.414368,
+                    37.774043
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225,
+                    315
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "entry": [
+                    true,
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.412834,
+                    37.77282
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225,
+                    315
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 2,
+                  "entry": [
+                    false,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.411897,
+                    37.772073
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    315
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.411287,
+                    37.771587
+                  ],
+                  "bearings": [
+                    45,
+                    135,
+                    225,
+                    315
+                  ]
+                }
+              ],
+              "geometry": "o~peFnjdjVtAkBfA{AxAmB~AyBrCyDtCyD~AyB|@kAr@_AfCcD",
+              "duration": 96.8,
+              "distance": 771.4,
+              "name": "10th Street",
+              "weight": 185.29999999999998,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 133,
+                "location": [
+                  -122.415923,
+                  37.775278
+                ],
+                "type": "turn",
+                "bearing_before": 223,
+                "modifier": "left",
+                "instruction": "Sväng vänster in på 10th Street"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "out": 1,
+                  "in": 4,
+                  "lanes": [
+                    {
+                      "valid": false,
+                      "indications": [
+                        "left"
+                      ]
+                    },
+                    {
+                      "valid": true,
+                      "indications": [
+                        "left",
+                        "slight left"
+                      ]
+                    },
+                    {
+                      "valid": true,
+                      "indications": [
+                        "slight left"
+                      ]
+                    },
+                    {
+                      "valid": true,
+                      "indications": [
+                        "straight",
+                        "slight left"
+                      ]
+                    },
+                    {
+                      "valid": false,
+                      "indications": [
+                        "straight"
+                      ]
+                    }
+                  ],
+                  "entry": [
+                    true,
+                    true,
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.409767,
+                    37.770337
+                  ],
+                  "bearings": [
+                    45,
+                    90,
+                    135,
+                    225,
+                    315
+                  ]
+                }
+              ],
+              "geometry": "s_peF`dcjVBk@Hy@F[H]J]L[NYp@kAfAoBd@w@tAsBdBkC\\a@PQTQTMXKNEPE\\GJ?",
+              "maneuver": {
+                "bearing_after": 95,
+                "location": [
+                  -122.409767,
+                  37.770337
+                ],
+                "type": "on ramp",
+                "bearing_before": 135,
+                "modifier": "slight left",
+                "instruction": "Ta påfartsrampen till vänster mot US 101"
+              },
+              "duration": 46.5,
+              "distance": 531.5,
+              "destinations": "US 101",
+              "name": "",
+              "weight": 93.5,
+              "mode": "driving"
+            },
+            {
+              "intersections": [
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.405473,
+                    37.767261
+                  ],
+                  "bearings": [
+                    174,
+                    353,
+                    358
+                  ]
+                }
+              ],
+              "maneuver": {
+                "bearing_after": 172,
+                "location": [
+                  -122.405473,
+                  37.767261
+                ],
+                "type": "merge",
+                "bearing_before": 177,
+                "modifier": "slight right",
+                "instruction": "Körfältsbyte åt höger in på Central Freeway (US 101)"
+              },
+              "duration": 6.8,
+              "distance": 136.5,
+              "name": "Central Freeway (US 101)",
+              "geometry": "kloeFdibjVtBOj@GnAU",
+              "ref": "US 101",
+              "weight": 13.6,
+              "mode": "driving"
+            },
+            {
+              "intersections": [
+                {
+                  "out": 1,
+                  "in": 2,
+                  "entry": [
+                    false,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.405244,
+                    37.766048
+                  ],
+                  "bearings": [
+                    0,
+                    180,
+                    345
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -122.402999,
+                    37.752554
+                  ],
+                  "bearings": [
+                    0,
+                    180,
+                    195
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 1,
+                  "entry": [
+                    false,
+                    false,
+                    true
+                  ],
+                  "location": [
+                    -122.404558,
+                    37.746941
+                  ],
+                  "bearings": [
+                    0,
+                    15,
+                    195
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -122.408143,
+                    37.739469
+                  ],
+                  "bearings": [
+                    5,
+                    180,
+                    187
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.406401,
+                    37.734438
+                  ],
+                  "bearings": [
+                    155,
+                    332,
+                    335
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.405674,
+                    37.733191
+                  ],
+                  "bearings": [
+                    150,
+                    180,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.403995,
+                    37.730114
+                  ],
+                  "bearings": [
+                    165,
+                    330,
+                    345
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.402483,
+                    37.726603
+                  ],
+                  "bearings": [
+                    163,
+                    341,
+                    346
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.401701,
+                    37.724557
+                  ],
+                  "bearings": [
+                    163,
+                    168,
+                    343
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.400278,
+                    37.720955
+                  ],
+                  "bearings": [
+                    165,
+                    180,
+                    345
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.397974,
+                    37.714805
+                  ],
+                  "bearings": [
+                    150,
+                    315,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.39554,
+                    37.710237
+                  ],
+                  "bearings": [
+                    165,
+                    180,
+                    345
+                  ]
+                }
+              ],
+              "maneuver": {
+                "bearing_after": 174,
+                "location": [
+                  -122.405244,
+                  37.766048
+                ],
+                "type": "merge",
+                "bearing_before": 167,
+                "modifier": "slight left",
+                "instruction": "Körfältsbyte åt vänster in på James Lick Freeway (US 101)"
+              },
+              "duration": 287.70000000000005,
+              "distance": 6830.6,
+              "name": "James Lick Freeway (US 101)",
+              "geometry": "ydoeFvgbjVhGWd@C^?f@@d@@f@Dd@Fb@Ff@J`@Ld@P`@Pb@R`@T~Az@\\P^P^L^J^H^D^D^@`@@`@C`@Cb@Gb@Ib@O^O`@S^U`@Y^_@\\]Zc@Zc@Xc@p@eAV_@Xa@V[V[XUXWZSZQ`@S`@M^Kb@Ib@Gf@Ed@Cd@CbLg@r@Ct@Ap@An@@r@Dp@Ft@Hj@Jj@JzFnA`IdB~FnAtH`Bp@Nt@Rn@Vl@Xn@\\j@^l@b@nElDVRVPn@b@p@^n@Zp@Xt@Vn@Px@Nr@Lv@Jv@FfAFr@Br@At@Ar@Ct@El@Ir@Kr@Mt@Qp@Ql@Sj@Sn@Wt@]b@SlAm@tDiBtAq@bD_BtC}Az@c@|@a@jAg@x@]dAa@bBo@f@QrAg@jAa@lA]nEyA^K~EaBjFyAjDaArBm@rAa@dHyBdBe@zBk@v@Sx@Q|Du@lCc@f@KvGmAl@Mp@Op@Sn@UfAc@r@]n@]n@c@p@g@r@g@rDwCl@a@j@]j@[j@[l@Yh@Up@Ul@Sp@Op@On@KfAObBWnC_@nBWfBUTE",
+              "ref": "US 101",
+              "weight": 575.4000000000001,
+              "mode": "driving"
+            },
+            {
+              "intersections": [
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.395121,
+                    37.708328
+                  ],
+                  "bearings": [
+                    165,
+                    345
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.393825,
+                    37.702429
+                  ],
+                  "bearings": [
+                    170,
+                    347,
+                    350
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.391826,
+                    37.693636
+                  ],
+                  "bearings": [
+                    165,
+                    180,
+                    345
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.3906,
+                    37.688244
+                  ],
+                  "bearings": [
+                    170,
+                    345,
+                    350
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -122.392891,
+                    37.669787
+                  ],
+                  "bearings": [
+                    30,
+                    210,
+                    225
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -122.395051,
+                    37.667539
+                  ],
+                  "bearings": [
+                    30,
+                    210,
+                    225
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 1,
+                  "entry": [
+                    false,
+                    false,
+                    true
+                  ],
+                  "location": [
+                    -122.39982,
+                    37.663398
+                  ],
+                  "bearings": [
+                    46,
+                    51,
+                    231
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 1,
+                  "entry": [
+                    false,
+                    false,
+                    true
+                  ],
+                  "location": [
+                    -122.403926,
+                    37.660623
+                  ],
+                  "bearings": [
+                    30,
+                    45,
+                    225
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -122.405731,
+                    37.65805
+                  ],
+                  "bearings": [
+                    15,
+                    195,
+                    210
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.406979,
+                    37.651445
+                  ],
+                  "bearings": [
+                    176,
+                    181,
+                    356
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.406419,
+                    37.64457
+                  ],
+                  "bearings": [
+                    0,
+                    180,
+                    345
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -122.406082,
+                    37.641332
+                  ],
+                  "bearings": [
+                    0,
+                    165,
+                    195
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.405024,
+                    37.63824
+                  ],
+                  "bearings": [
+                    150,
+                    165,
+                    345
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 2,
+                  "entry": [
+                    false,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.402719,
+                    37.630324
+                  ],
+                  "bearings": [
+                    0,
+                    180,
+                    345
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.401464,
+                    37.62492
+                  ],
+                  "bearings": [
+                    166,
+                    341,
+                    345
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.398689,
+                    37.616736
+                  ],
+                  "bearings": [
+                    164,
+                    342,
+                    345
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.394473,
+                    37.611514
+                  ],
+                  "bearings": [
+                    135,
+                    300,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.391675,
+                    37.609715
+                  ],
+                  "bearings": [
+                    128,
+                    308,
+                    309
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.384799,
+                    37.605291
+                  ],
+                  "bearings": [
+                    129,
+                    134,
+                    309
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.378646,
+                    37.601292
+                  ],
+                  "bearings": [
+                    135,
+                    300,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.376557,
+                    37.599922
+                  ],
+                  "bearings": [
+                    135,
+                    300,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.364079,
+                    37.591793
+                  ],
+                  "bearings": [
+                    130,
+                    136,
+                    309
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.357438,
+                    37.587965
+                  ],
+                  "bearings": [
+                    105,
+                    285,
+                    300
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.325833,
+                    37.581641
+                  ],
+                  "bearings": [
+                    135,
+                    150,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.322934,
+                    37.578971
+                  ],
+                  "bearings": [
+                    139,
+                    314,
+                    319
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.316743,
+                    37.573261
+                  ],
+                  "bearings": [
+                    135,
+                    150,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.310821,
+                    37.567812
+                  ],
+                  "bearings": [
+                    139,
+                    316,
+                    319
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.302578,
+                    37.560185
+                  ],
+                  "bearings": [
+                    135,
+                    150,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.293655,
+                    37.550567
+                  ],
+                  "bearings": [
+                    150,
+                    315,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.293005,
+                    37.549875
+                  ],
+                  "bearings": [
+                    150,
+                    315,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.292169,
+                    37.548986
+                  ],
+                  "bearings": [
+                    150,
+                    315,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.291949,
+                    37.548743
+                  ],
+                  "bearings": [
+                    144,
+                    149,
+                    324
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.286169,
+                    37.542512
+                  ],
+                  "bearings": [
+                    150,
+                    315,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.283856,
+                    37.53998
+                  ],
+                  "bearings": [
+                    150,
+                    315,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.273979,
+                    37.529546
+                  ],
+                  "bearings": [
+                    135,
+                    150,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.262626,
+                    37.51954
+                  ],
+                  "bearings": [
+                    138,
+                    313,
+                    318
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.260906,
+                    37.518025
+                  ],
+                  "bearings": [
+                    138,
+                    141,
+                    318
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.247718,
+                    37.506343
+                  ],
+                  "bearings": [
+                    138,
+                    314,
+                    318
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.242977,
+                    37.502159
+                  ],
+                  "bearings": [
+                    138,
+                    315,
+                    318
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.239937,
+                    37.499488
+                  ],
+                  "bearings": [
+                    137,
+                    142,
+                    317
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.231907,
+                    37.495907
+                  ],
+                  "bearings": [
+                    110,
+                    284,
+                    290
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.228972,
+                    37.495072
+                  ],
+                  "bearings": [
+                    110,
+                    283,
+                    290
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.218915,
+                    37.491223
+                  ],
+                  "bearings": [
+                    120,
+                    135,
+                    300
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.205884,
+                    37.487457
+                  ],
+                  "bearings": [
+                    105,
+                    270,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.185632,
+                    37.484733
+                  ],
+                  "bearings": [
+                    106,
+                    110,
+                    286
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.179679,
+                    37.482856
+                  ],
+                  "bearings": [
+                    120,
+                    285,
+                    300
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.177095,
+                    37.481497
+                  ],
+                  "bearings": [
+                    126,
+                    302,
+                    307
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.158395,
+                    37.470605
+                  ],
+                  "bearings": [
+                    120,
+                    135,
+                    300
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 3,
+                  "entry": [
+                    true,
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.155045,
+                    37.468654
+                  ],
+                  "bearings": [
+                    126,
+                    137,
+                    297,
+                    306
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.152581,
+                    37.467179
+                  ],
+                  "bearings": [
+                    126,
+                    305,
+                    307
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.144516,
+                    37.462442
+                  ],
+                  "bearings": [
+                    120,
+                    135,
+                    300
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.136462,
+                    37.457738
+                  ],
+                  "bearings": [
+                    126,
+                    304,
+                    306
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.12693,
+                    37.452112
+                  ],
+                  "bearings": [
+                    131,
+                    141,
+                    309
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.118132,
+                    37.444081
+                  ],
+                  "bearings": [
+                    140,
+                    317,
+                    320
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.103307,
+                    37.429953
+                  ],
+                  "bearings": [
+                    135,
+                    150,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.101751,
+                    37.428459
+                  ],
+                  "bearings": [
+                    135,
+                    150,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.092643,
+                    37.42097
+                  ],
+                  "bearings": [
+                    135,
+                    300,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.09244,
+                    37.420823
+                  ],
+                  "bearings": [
+                    135,
+                    150,
+                    315
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.089184,
+                    37.418478
+                  ],
+                  "bearings": [
+                    133,
+                    309,
+                    312
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.081848,
+                    37.413404
+                  ],
+                  "bearings": [
+                    122,
+                    293,
+                    304
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.081263,
+                    37.413111
+                  ],
+                  "bearings": [
+                    120,
+                    135,
+                    300
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.078361,
+                    37.411892
+                  ],
+                  "bearings": [
+                    105,
+                    120,
+                    300
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.076323,
+                    37.411054
+                  ],
+                  "bearings": [
+                    118,
+                    124,
+                    297
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.067607,
+                    37.407809
+                  ],
+                  "bearings": [
+                    106,
+                    282,
+                    286
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.067189,
+                    37.407713
+                  ],
+                  "bearings": [
+                    105,
+                    110,
+                    286
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.062594,
+                    37.406712
+                  ],
+                  "bearings": [
+                    105,
+                    281,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.056615,
+                    37.405407
+                  ],
+                  "bearings": [
+                    105,
+                    120,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.047017,
+                    37.403049
+                  ],
+                  "bearings": [
+                    105,
+                    280,
+                    286
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.036066,
+                    37.400658
+                  ],
+                  "bearings": [
+                    105,
+                    120,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 3,
+                  "entry": [
+                    true,
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.031971,
+                    37.399731
+                  ],
+                  "bearings": [
+                    105,
+                    109,
+                    282,
+                    286
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.027075,
+                    37.398693
+                  ],
+                  "bearings": [
+                    105,
+                    279,
+                    286
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.024811,
+                    37.398202
+                  ],
+                  "bearings": [
+                    105,
+                    280,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.017288,
+                    37.396552
+                  ],
+                  "bearings": [
+                    105,
+                    111,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.012976,
+                    37.395607
+                  ],
+                  "bearings": [
+                    105,
+                    270,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.012709,
+                    37.395542
+                  ],
+                  "bearings": [
+                    105,
+                    120,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -122.008838,
+                    37.394702
+                  ],
+                  "bearings": [
+                    107,
+                    280,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -122.000135,
+                    37.392318
+                  ],
+                  "bearings": [
+                    105,
+                    120,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.994151,
+                    37.390522
+                  ],
+                  "bearings": [
+                    111,
+                    284,
+                    291
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.991164,
+                    37.389654
+                  ],
+                  "bearings": [
+                    110,
+                    282,
+                    290
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.983628,
+                    37.387548
+                  ],
+                  "bearings": [
+                    105,
+                    120,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.974838,
+                    37.385032
+                  ],
+                  "bearings": [
+                    110,
+                    287,
+                    290
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.972437,
+                    37.384341
+                  ],
+                  "bearings": [
+                    105,
+                    270,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.968441,
+                    37.383197
+                  ],
+                  "bearings": [
+                    105,
+                    135,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.957291,
+                    37.380021
+                  ],
+                  "bearings": [
+                    110,
+                    284,
+                    290
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.945834,
+                    37.377446
+                  ],
+                  "bearings": [
+                    105,
+                    120,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.941787,
+                    37.376663
+                  ],
+                  "bearings": [
+                    105,
+                    270,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.941568,
+                    37.376623
+                  ],
+                  "bearings": [
+                    105,
+                    120,
+                    285
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.938604,
+                    37.376047
+                  ],
+                  "bearings": [
+                    105,
+                    270,
+                    285
+                  ]
+                }
+              ],
+              "maneuver": {
+                "bearing_after": 170,
+                "location": [
+                  -122.395121,
+                  37.708328
+                ],
+                "type": "new name",
+                "bearing_before": 168,
+                "modifier": "straight",
+                "instruction": "Fortsätt rakt fram på Bayshore Freeway (US 101)"
+              },
+              "duration": 2298.2000000000007,
+              "distance": 61959,
+              "name": "Bayshore Freeway (US 101)",
+              "geometry": "a|ceFnh`jVdEi@`IcArSsC|u@oKv`@uFze@{GhC_@pDk@pASnAQfAMjAIx@C~@?z@?`AB`AF`AL~@Nv@L|@TdAZ`A\\v@X|@Zx@\\|@\\x@\\LFvBbA`Af@l@\\n@\\j@\\l@^j@^l@`@j@`@j@b@h@`@l@d@h@b@h@d@h@d@p@l@`MnLdD~ChBdBf@f@f@d@f@h@f@h@j@n@b@h@d@l@d@n@`@j@b@n@`@n@`@p@b@r@^p@`@t@hJrP^r@d@t@d@n@d@p@n@t@h@j@l@j@r@j@j@b@l@`@j@Zn@\\n@Xp@X|An@vF~Bp@Vr@Vr@Rr@Pt@Nv@Nn@Hr@Fn@Fr@Dp@@p@@v@?r@At@CtESnAEfGW~@CrDO`AE`X}@bNk@bDWf@EpAQ~AYtAY~@WhA]rAe@zAk@~GyClAc@`A[bA]z@Ux@U~@S`AS~@ObAM`AMbAI`BKzDUzGg@nG]pAKvAQzASfASjAWtEeAnCs@f@EvAYjQkEfGyAzOuDbCi@VIfAYpAc@vAk@pAm@vAw@jAu@rAcAjAcAbA{@hAkA~@gAbAoAzB}CdJmPdHuMzAcC|CgFtI}OxJiQdLcSpGaLvCgF`FuInDkGvTk`@zCwFlAwBlCyEnKcRz@_Bx@{Ax@cBt@gBl@gBl@kBh@oBbAeF^oCXiCNeBLsBH_CB}B@{BHmJXg]NcTPsTRmUDeDH{BJqATiBZeBb@gBh@eBp@_Br@qAv@kAx@aAlCyChNuOtOcQ|OiQvQkSzEmFdZq\\`SuTnScUhBsBxA_B\\a@fAgAhAcApAkA~GwFbByAvCmChD_DdB{AlBkBjDgDvAqA|AwAbLeKhCaCpDgDp@k@hP_OlEcEbCyB`JeIhBcBn@k@p@m@xDeDrBiBfLiKzUcT|@y@`KcJdA_AbAaAlAkAdAgA~@cAbAiA~@gApCeDbQsStPaSdJuK~IkKnB}B|DyEfGgHpA_BtBcCjHsIlByBdIqJvIeK|DqEzQiTnFoGvFyGzIiKfGgHvCmDtBiCv@aAv@aAr@eAr@kAl@iAl@oAN[JUTi@j@_Bb@qA`@qA^{AZwAZwAzCiPfDkQv@gEZcB\\gBXqAXoAXmAd@iB\\sAb@{A`@wAb@wAd@sAd@yAfI}U|CcJd@wAd@wAb@wA`@yARu@Lc@Nm@Nk@^{AXqAZwA\\cBRcAX_BV{AV_BT_BT}ARaBP_BP_BNaBLaBh@gIzJ__BLaBJgBLaBLaBNaBN_BP_BRaBR}ATaBRwAV}AV}AX_BX{AZ{AZ}A\\{A^{A^yA^wAb@yAb@wAf@uAf@uAh@sAj@sAl@oAl@oALOjTgd@~CuGdK}SdXwi@hCgFfK}SpGyMRShSya@hHqNpIiQ|NcZzA}C|]us@Xm@v@yAt@sA~@}Af@u@t@gAv@eAx@aAz@aAdSgTbIqInH_IzDeEfRgS`@a@rQoR`]q^X[rKeL|BeCjDqDdKyKnAsAnAuAjAsAfAsAnA_BhA}AxAwBxA}BpM}R\\g@tGcK|DgGtKkP~HyLd@s@^m@^s@p@kAn@oAl@qAj@oAf@sAPa@|@mCtDuLfDwK`CyHtHwVV_AXcAVaATaATaATgAN{@PaANaAPiARsAh@kE|CkUbCaR~BgQ^gC`@kCd@iCrB{Kl@qD^aC\\eCZ}BrBmOtJot@n@}Ev@_GxDsXnDcY^mC`BeMhI_n@zD}YLu@fDeWdAaH|C{PvFmZhBqJ`BwHzCcO^mB~@wElAoGn@gDbAoFxA_ItEiW|Iie@xCsOhC_NrEaVN}@pFmYrF{YtCkOjB{JfA{GpBqOpBmPhB{O|CgXFk@pBqQzEg`@j@uDDW",
+              "ref": "US 101",
+              "weight": 4596.500000000001,
+              "mode": "driving"
+            },
+            {
+              "intersections": [
+                {
+                  "out": 1,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.932246,
+                    37.374701
+                  ],
+                  "bearings": [
+                    105,
+                    120,
+                    285
+                  ]
+                }
+              ],
+              "geometry": "{vbcFp{egVh@cBl@_ETkA~@mEh@eBZq@Zi@~@kAj@k@j@_@VMVK^M\\IzCw@pA_@p@U`Aa@ZO",
+              "maneuver": {
+                "bearing_after": 116,
+                "location": [
+                  -121.932246,
+                  37.374701
+                ],
+                "type": "off ramp",
+                "bearing_before": 106,
+                "modifier": "slight right",
+                "instruction": "Ta avfartsrampen till höger mot CA 87 South"
+              },
+              "duration": 67.8,
+              "distance": 771.7,
+              "destinations": "CA 87 South",
+              "name": "",
+              "weight": 135.6,
+              "mode": "driving"
+            },
+            {
+              "intersections": [
+                {
+                  "out": 0,
+                  "in": 2,
+                  "lanes": [
+                    {
+                      "valid": true,
+                      "indications": [
+                        "straight"
+                      ]
+                    },
+                    {
+                      "valid": true,
+                      "indications": [
+                        "straight"
+                      ]
+                    }
+                  ],
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.926597,
+                    37.37012
+                  ],
+                  "bearings": [
+                    150,
+                    300,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.923722,
+                    37.367884
+                  ],
+                  "bearings": [
+                    128,
+                    138,
+                    308
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.915678,
+                    37.359877
+                  ],
+                  "bearings": [
+                    150,
+                    315,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.913941,
+                    37.357568
+                  ],
+                  "bearings": [
+                    150,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.913136,
+                    37.356488
+                  ],
+                  "bearings": [
+                    150,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.908322,
+                    37.349121
+                  ],
+                  "bearings": [
+                    135,
+                    150,
+                    330
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.901664,
+                    37.343143
+                  ],
+                  "bearings": [
+                    150,
+                    330,
+                    345
+                  ]
+                }
+              ],
+              "maneuver": {
+                "bearing_after": 150,
+                "location": [
+                  -121.926597,
+                  37.37012
+                ],
+                "type": "new name",
+                "bearing_before": 156,
+                "modifier": "straight",
+                "instruction": "Fortsätt rakt fram på Guadalupe Freeway (CA 87)"
+              },
+              "duration": 155.29999999999998,
+              "distance": 4074.4,
+              "name": "Guadalupe Freeway (CA 87)",
+              "geometry": "gzacFfxdgVp@c@d@_@Z[f@g@`@i@j@y@NYf@{@jAyBpAcCpFmKr@qAv@mA|@oA~@mAhAoAbAcAtAkAxAgAnAy@tUyOlM{IvE_DpGkE|ByA~CkBxBeAzCuAhIqDl@Yl@]t@e@r@g@jB}AlB_Cd@s@b@s@d@{@b@_A`@eA`AeCbA_Cv@uAx@kAp@}@p@y@r@q@r@o@f@_@f@]`@Uf@[|@c@dBq@dCaA~As@`Ag@`@UdGsD",
+              "ref": "CA 87",
+              "weight": 311,
+              "mode": "driving"
+            },
+            {
+              "intersections": [
+                {
+                  "out": 1,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.900192,
+                    37.340845
+                  ],
+                  "bearings": [
+                    150,
+                    165,
+                    330
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "lanes": [
+                    {
+                      "valid": true,
+                      "indications": [
+                        "left"
+                      ]
+                    },
+                    {
+                      "valid": true,
+                      "indications": [
+                        "straight",
+                        "left"
+                      ]
+                    },
+                    {
+                      "valid": false,
+                      "indications": [
+                        "right"
+                      ]
+                    }
+                  ],
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.898785,
+                    37.336552
+                  ],
+                  "bearings": [
+                    60,
+                    150,
+                    240,
+                    345
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 3,
+                  "lanes": [
+                    {
+                      "valid": false,
+                      "indications": [
+                        "left"
+                      ]
+                    },
+                    {
+                      "valid": true,
+                      "indications": [
+                        "straight",
+                        "left"
+                      ]
+                    },
+                    {
+                      "valid": false,
+                      "indications": [
+                        "right"
+                      ]
+                    }
+                  ],
+                  "entry": [
+                    true,
+                    true,
+                    false,
+                    false
+                  ],
+                  "location": [
+                    -121.898691,
+                    37.336402
+                  ],
+                  "bearings": [
+                    60,
+                    150,
+                    240,
+                    330
+                  ]
+                }
+              ],
+              "geometry": "ic|bFds_gV^C|CmBl@[bDyAVKZI^Gh@?`@Br@NPBf@HXBT?^EXId@QVKTI\\SRIhDgCRU",
+              "maneuver": {
+                "bearing_after": 171,
+                "location": [
+                  -121.900192,
+                  37.340845
+                ],
+                "type": "off ramp",
+                "bearing_before": 150,
+                "modifier": "slight right",
+                "instruction": "Ta avfartsrampen till höger mot Julian Street"
+              },
+              "duration": 71.9,
+              "distance": 666.4,
+              "destinations": "Julian Street, Saint James Street",
+              "name": "",
+              "weight": 137.2,
+              "mode": "driving"
+            },
+            {
+              "intersections": [
+                {
+                  "out": 1,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "location": [
+                    -121.897852,
+                    37.335352
+                  ],
+                  "bearings": [
+                    105,
+                    240,
+                    315
+                  ]
+                }
+              ],
+              "geometry": "}`{bFpd_gVfAlCPd@Vr@DLb@lALb@`AdCJV",
+              "duration": 42.1,
+              "distance": 267.1,
+              "name": "West Saint John Street",
+              "weight": 82.2,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 236,
+                "location": [
+                  -121.897852,
+                  37.335352
+                ],
+                "type": "turn",
+                "bearing_before": 136,
+                "modifier": "right",
+                "instruction": "Sväng höger in på West Saint John Street"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    true
+                  ],
+                  "location": [
+                    -121.900438,
+                    37.334113
+                  ],
+                  "bearings": [
+                    60,
+                    165,
+                    240,
+                    315
+                  ]
+                }
+              ],
+              "geometry": "eyzbFvt_gVVCVGlBG",
+              "duration": 13.4,
+              "distance": 89.1,
+              "name": "North Autumn Street",
+              "weight": 26.8,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 171,
+                "location": [
+                  -121.900438,
+                  37.334113
+                ],
+                "type": "turn",
+                "bearing_before": 237,
+                "modifier": "left",
+                "instruction": "Sväng vänster in på North Autumn Street"
+              }
+            },
+            {
+              "intersections": [
+                {
+                  "in": 0,
+                  "entry": [
+                    true
+                  ],
+                  "location": [
+                    -121.90034,
+                    37.333317
+                  ],
+                  "bearings": [
+                    357
+                  ]
+                }
+              ],
+              "geometry": "gtzbFbt_gV",
+              "duration": 0,
+              "distance": 0,
+              "name": "North Autumn Street",
+              "weight": 0,
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 0,
+                "location": [
+                  -121.90034,
+                  37.333317
+                ],
+                "type": "arrive",
+                "bearing_before": 177,
+                "modifier": "left",
+                "instruction": "Du är framme vid din destination, till vänster"
+              }
+            }
+          ],
+          "weight": 6524.2,
+          "distance": 77254.7,
+          "annotation": {
+            "distance": [
+              69.70537923213486,
+              104.84833953323255,
+              105.09573021346283,
+              89.08338378548599,
+              16.108374415821498,
+              86.61157562440906,
+              18.12704718088672,
+              17.234451453603246,
+              72.41204077927787,
+              16.055976959142722,
+              2.821299680812637,
+              10.233342278019185,
+              8.27673363953818,
+              6.192735017096593,
+              36.39820811903295,
+              32.58378910381712,
+              95.56000294561619,
+              27.616039530026676,
+              117.715264751562,
+              43.76295156173965,
+              30.488246979729617,
+              53.471538211972515,
+              45.35776891830969,
+              51.251707132918746,
+              66.9331708737475,
+              57.72591261839857,
+              69.14191600033729,
+              75.59927699731753,
+              115.95449195416666,
+              117.00316360696885,
+              76.14672479759217,
+              47.81610361112862,
+              40.747077529085345,
+              104.28833385320196,
+              19.632602823890906,
+              25.348752044222532,
+              13.549653687232896,
+              14.686960720792477,
+              14.46767028426086,
+              14.030939805274384,
+              14.494457457442556,
+              43.60018420282399,
+              63.26104183375371,
+              32.795866168899934,
+              69.633612544351,
+              84.12041112442505,
+              21.728554399808587,
+              13.327438448967968,
+              14.572625082227182,
+              13.994618119718336,
+              15.30869637363809,
+              9.519127186845768,
+              9.63989285943878,
+              17.612940209886798,
+              6.133222765513815,
+              66.11001422090504,
+              24.980015296638587,
+              45.45626466734878,
+              147.90820915134822,
+              20.952098237271084,
+              17.90765016956524,
+              22.581678073735432,
+              21.507155872469454,
+              21.828417146066705,
+              21.162120697843466,
+              21.3150167049477,
+              22.148104614280467,
+              20.732995331715806,
+              21.728002104448304,
+              21.010116020063965,
+              21.505757994017046,
+              21.166459827589975,
+              59.66742221788963,
+              18.253166761188993,
+              19.916947590607,
+              17.992029721450155,
+              18.825358060603726,
+              18.634846864287653,
+              18.21651372828177,
+              17.94246218620391,
+              18.171634656454508,
+              18.79806737851007,
+              18.493693677465725,
+              19.035833392269854,
+              20.233302429500814,
+              20.211096782079235,
+              21.02464557983548,
+              19.61456283386838,
+              21.367894209727943,
+              20.05991371888043,
+              21.762103959415004,
+              22.472274051659,
+              21.314485661500292,
+              22.695648388882397,
+              21.719200250887265,
+              21.84846199635964,
+              41.68356699945666,
+              18.960719795544815,
+              20.5312082862437,
+              18.196549324775454,
+              18.282026787199612,
+              17.527379550176274,
+              17.311634375289298,
+              18.103391659446846,
+              18.08282895415822,
+              20.703417731749642,
+              19.576754117387004,
+              19.202663190206025,
+              20.044456418745074,
+              20.283403245753174,
+              21.8489850775018,
+              21.78323125803814,
+              20.970370541662053,
+              234.79764739811066,
+              28.533759437581605,
+              29.61558855228398,
+              27.811580891545013,
+              27.060162955710553,
+              29.33502112481976,
+              27.917857135146658,
+              30.404268498216158,
+              24.960460654224253,
+              24.675372316724278,
+              144.98963048881149,
+              184.17585095864263,
+              146.69394672570718,
+              177.74965189824866,
+              28.7488218843248,
+              31.020291791967438,
+              28.692975813425935,
+              28.122504165825525,
+              29.737592325033376,
+              28.84137743592464,
+              29.849097696581836,
+              138.65450840310842,
+              16.498965107928893,
+              15.041761580861422,
+              30.62991355499242,
+              31.006617736836763,
+              29.98647950273115,
+              29.76004798217344,
+              32.51085753625139,
+              27.34204145808372,
+              33.3673784692527,
+              29.567000138979978,
+              31.31076897672229,
+              31.261771623788885,
+              40.32227882328596,
+              28.60802006530758,
+              29.25463265931765,
+              29.605017701435017,
+              29.655281977845625,
+              29.82234058253395,
+              25.776540633364284,
+              29.177655591624436,
+              30.383670348726326,
+              30.322479719722974,
+              28.722028467766712,
+              27.473151856442115,
+              26.67582061683936,
+              28.5313984539998,
+              32.05442277978288,
+              22.719589885419296,
+              47.48745307032223,
+              111.39116470720664,
+              52.21052937189767,
+              100.52328811756519,
+              93.0405060032993,
+              36.91327770937314,
+              37.41472857462885,
+              45.951932439089376,
+              35.74081758413204,
+              40.73772038109883,
+              59.82897054854893,
+              23.41997331597369,
+              50.57146039099143,
+              44.90939322702158,
+              44.438476165406314,
+              123.05532043545871,
+              18.374912197234494,
+              131.22822332261006,
+              137.5089177398259,
+              100.23180127768876,
+              66.89444259036044,
+              49.131890343721636,
+              172.66815108681055,
+              58.497266133975444,
+              72.61293910574076,
+              31.731928680074507,
+              33.147830098915584,
+              108.44284231148728,
+              80.35776308373953,
+              23.11026055364477,
+              158.87170917157505,
+              27.03107013199434,
+              28.234901184891555,
+              29.776473014317023,
+              28.52927192289828,
+              42.342113318537685,
+              32.2496057755649,
+              29.679070375868193,
+              30.825926737710986,
+              33.23742814943943,
+              33.47244323848913,
+              120.42352177228136,
+              29.301881344228317,
+              27.900230208081933,
+              28.189609792185845,
+              27.35611182699958,
+              27.1684976511622,
+              25.48914654815493,
+              30.27786834669983,
+              26.726281785839745,
+              28.971724975573782,
+              27.80125912263239,
+              26.959323956208006,
+              41.6249160167386,
+              56.448674728021956,
+              81.420631044107,
+              62.751695024403716,
+              59.1395621009665,
+              12.196669743554397,
+              111.83710924835894,
+              181.4418334750391,
+              372.6989249871674,
+              993.7098384357145,
+              609.3625163720782,
+              703.7317719728558,
+              77.83035511934726,
+              100.72510354365862,
+              46.696602311198106,
+              45.23967175994426,
+              40.69360194011951,
+              42.50376443297884,
+              31.739073511264316,
+              35.5993825199473,
+              33.93133062495083,
+              36.29438016323498,
+              37.22244190000341,
+              37.024630511566336,
+              35.68598024344163,
+              32.670736490776356,
+              34.862416882145,
+              40.88706124102812,
+              39.456285546080444,
+              33.29886801738088,
+              36.528014481976136,
+              34.56162895211892,
+              37.11455394784426,
+              35.06004625825955,
+              8.645400223439486,
+              72.64200699777201,
+              40.94801784297252,
+              29.027793979806347,
+              28.907458622871843,
+              28.937558121027372,
+              28.589213444723494,
+              28.655557989855147,
+              29.72776838427081,
+              27.884973554926805,
+              29.339229708795088,
+              28.44704960452874,
+              29.48353022952208,
+              28.318099706327473,
+              29.36604462952942,
+              28.69073012060418,
+              34.57006196643764,
+              314.13899754400205,
+              116.01254628869026,
+              74.10368322688213,
+              28.506880879849202,
+              28.26235020015188,
+              27.87708507777984,
+              29.408325412289102,
+              32.131760731017685,
+              27.617293879643007,
+              28.865236003699327,
+              30.184028490592375,
+              27.47672026238537,
+              28.420034836290668,
+              28.906655492573865,
+              28.94581297904607,
+              30.115992435858132,
+              28.65572067161937,
+              30.170908653723576,
+              319.3808548261065,
+              29.137556095636405,
+              31.73489875803539,
+              29.73574691609497,
+              30.934749697359546,
+              34.96752742579589,
+              31.394093314808345,
+              31.89394302659534,
+              34.16326798952964,
+              29.4824720726947,
+              29.796924763665142,
+              27.362503073119353,
+              29.76709573514995,
+              29.21699691936213,
+              29.62860985204775,
+              56.555631295583396,
+              148.58482156485871,
+              30.455609024254535,
+              29.936785957015704,
+              30.440302687947863,
+              30.698662970781015,
+              30.0683092722253,
+              31.817778138209306,
+              27.179139883212372,
+              29.531640901290096,
+              27.19331366085922,
+              28.920579782890925,
+              27.39353435030663,
+              28.26520092118512,
+              30.69858510139944,
+              28.94510484322695,
+              30.421039839503955,
+              118.96070216388118,
+              45.36801204022733,
+              146.9456570758959,
+              35.00590392425969,
+              100.33906921492196,
+              36.793421815928305,
+              447.19068811860063,
+              269.5187019500957,
+              91.91628691832645,
+              22.213769669730148,
+              47.06876415425251,
+              53.913146291587424,
+              49.45705166532325,
+              36.75858333643907,
+              44.12357037060992,
+              49.39937824344185,
+              54.305011718068265,
+              174.24055079340914,
+              46.17192800065369,
+              38.33840232783328,
+              40.07048619727921,
+              35.37416913231263,
+              33.031275793122695,
+              36.73049581903356,
+              37.902675526228606,
+              36.30046925069609,
+              38.29536402788709,
+              37.03864647638877,
+              37.993623285573875,
+              55.105849989139486,
+              104.8659096490065,
+              158.48851956277056,
+              152.3179594311205,
+              46.11901849248499,
+              48.82278268748364,
+              52.57209781858625,
+              40.34425872714982,
+              44.45265839324057,
+              122.75210214441518,
+              83.34082019997201,
+              22.049980332343505,
+              49.889975797327224,
+              339.6863628550588,
+              151.73189686915904,
+              311.23552193270774,
+              75.53520302767794,
+              14.48192983358158,
+              41.8275737372266,
+              47.421875223308334,
+              52.32815273513783,
+              50.243163918029836,
+              54.4681903603963,
+              49.56907621449392,
+              54.788092611757634,
+              52.179594298674346,
+              45.572234197462826,
+              52.96667881760822,
+              48.63324503653857,
+              51.470160084053326,
+              97.23136221815547,
+              317.51783539885173,
+              262.8682961689395,
+              78.21532819932658,
+              134.71230217456127,
+              304.8685830780959,
+              332.88185890673344,
+              368.4199615012395,
+              238.97322855010572,
+              132.65057676798162,
+              196.16433249956643,
+              153.6514702628696,
+              609.131687799482,
+              139.74116928816295,
+              67.83676366813346,
+              124.49373122681293,
+              349.59756013388954,
+              54.09086413756898,
+              51.74234254560892,
+              54.46453472560093,
+              54.67216424595344,
+              52.77439711269679,
+              54.18906385091794,
+              54.84398420944293,
+              108.23272384640964,
+              65.33839537809608,
+              62.459686562590875,
+              46.27677500786698,
+              51.88415560600177,
+              56.59450082417144,
+              55.338572099571856,
+              54.216717536631,
+              161.98149344276595,
+              426.47714794363503,
+              297.894289703079,
+              305.37897027164956,
+              316.53491958192006,
+              73.11221697603851,
+              55.26292682789636,
+              36.55473013327958,
+              48.346832809586026,
+              47.511704483246355,
+              50.176249176673856,
+              50.94375037572033,
+              50.541378284852485,
+              46.28414923393829,
+              45.362079766429574,
+              43.14134331090656,
+              104.63761246132105,
+              359.66420952368725,
+              391.7819422787575,
+              397.1766388256538,
+              440.19719791253306,
+              161.25789861368844,
+              638.6700129110952,
+              470.12293324095384,
+              480.79297989925135,
+              78.03536999364584,
+              65.52094978470228,
+              22.58777524732255,
+              50.14932767394299,
+              51.302553727355814,
+              56.909240617762954,
+              193.2994282560819,
+              68.30525286451352,
+              105.75736528679232,
+              118.22615700438072,
+              69.06506243703866,
+              77.99317941491972,
+              120.486297281828,
+              61.089442181716336,
+              64.83941889588264,
+              290.75237915178116,
+              95.96656005175322,
+              123.33739184383947,
+              33.26996737558961,
+              382.06750714614054,
+              143.52419286236267,
+              91.49761297404585,
+              243.25136438725997,
+              73.85414344981942,
+              33.440502466798876,
+              33.92858817603359,
+              126.8072112379901,
+              79.71733174005935,
+              292.83852021430636,
+              504.75710530637156,
+              42.632799800970965,
+              266.12417753660844,
+              48.04677011290889,
+              47.454070458685145,
+              54.718319332520196,
+              50.55193162801758,
+              46.629197869556855,
+              49.695547662039786,
+              48.1238117412574,
+              109.1162306131214,
+              434.54506009104836,
+              423.41684365928126,
+              267.1218148164764,
+              262.99317717136876,
+              83.02854925189843,
+              143.72990962141847,
+              195.67221421616347,
+              62.65013678968465,
+              87.43418023580168,
+              224.30762299362732,
+              81.68665394197632,
+              243.81689296141835,
+              257.3152933490495,
+              139.96654969362962,
+              451.3268368736912,
+              179.42514533331536,
+              185.93273221886574,
+              260.39791692650806,
+              195.81212374013992,
+              115.09891599029469,
+              89.3775582576929,
+              42.70167407972556,
+              42.29836090927183,
+              42.53939113244422,
+              43.86758475554716,
+              41.6161932158442,
+              43.64766569715293,
+              14.636360816358208,
+              12.415807177605435,
+              22.20591435793155,
+              49.25470786305309,
+              41.25016902645787,
+              40.75526014011344,
+              43.94026024361856,
+              42.28504179914743,
+              41.42562620019829,
+              259.73370335561106,
+              275.15316809470465,
+              93.88913860765884,
+              46.54150457862581,
+              48.94884784625499,
+              39.1285470503,
+              38.472947705133656,
+              36.5940087614523,
+              51.93354706112654,
+              40.290786095157316,
+              44.9719717859117,
+              43.64287476295927,
+              43.42537693150827,
+              42.310118369460966,
+              45.719266195571386,
+              371.64306926278846,
+              180.09077178597013,
+              43.9771449796963,
+              43.81786004632195,
+              43.95249630800523,
+              43.86180360177869,
+              26.24980191083175,
+              17.49988386773166,
+              23.080009314914307,
+              20.86396376831662,
+              44.69432482606699,
+              38.804332976479834,
+              41.5507429155391,
+              47.38485558257238,
+              32.415944362455186,
+              44.094614544681725,
+              43.02150192287832,
+              44.38223451505274,
+              43.87097803547724,
+              43.658321353164204,
+              44.084658129282175,
+              43.83206864364127,
+              43.577359719391495,
+              44.087624726095854,
+              43.89078587972953,
+              146.35175011736266,
+              1372.1329695216311,
+              44.1246286205539,
+              46.86206366196733,
+              43.58592771827037,
+              43.594812850177654,
+              44.3901337756345,
+              43.57885891599203,
+              43.55683494620822,
+              44.03794285985274,
+              43.601683767865914,
+              44.28960113577392,
+              40.56549967166608,
+              43.82871550166234,
+              43.72919408252902,
+              44.02443623417255,
+              43.74004233915587,
+              43.77404448268379,
+              43.72842629969739,
+              44.05770191738723,
+              44.15242679413242,
+              43.48746370513485,
+              43.225520034696665,
+              44.04259802728631,
+              44.00249644357344,
+              43.85643273818931,
+              43.668355671347,
+              44.232588449215974,
+              43.64531740194186,
+              44.24503933122119,
+              43.37980980361186,
+              11.243933667574254,
+              648.6325240335742,
+              151.89524599894267,
+              366.6527787050709,
+              751.4415293704736,
+              128.9295482127896,
+              366.8056279094344,
+              258.7159305666664,
+              14.109645231009578,
+              610.332579355511,
+              275.4353325642393,
+              319.4618004488633,
+              476.87407210371333,
+              86.49316180406454,
+              925.7550847782331,
+              25.05973634951156,
+              50.4872321305563,
+              47.510535434752185,
+              54.90324119382573,
+              32.230363735206765,
+              44.254638704574475,
+              43.89198126534049,
+              43.8253168583044,
+              43.81647404548342,
+              468.3362097068592,
+              233.70385697595395,
+              220.07589280803967,
+              136.68794071728672,
+              446.3770160668608,
+              23.82304830832629,
+              430.7712720418151,
+              696.6976874216591,
+              19.706280490484026,
+              291.3097989735322,
+              91.5764144979861,
+              124.06587925191572,
+              282.14147206167667,
+              58.72363227533027,
+              58.38337143940145,
+              55.70397691223441,
+              55.13692569254708,
+              60.811534495566356,
+              59.28725585068358,
+              72.73342310612338,
+              74.93932057063822,
+              382.2118199426143,
+              24.26703791737039,
+              231.505437591081,
+              156.77096730726979,
+              333.57385537245017,
+              264.4819939576866,
+              30.55802418727961,
+              27.489470228782157,
+              29.127093909657404,
+              43.72163018371143,
+              44.22372318053014,
+              44.05586172904159,
+              43.0236767957843,
+              43.233661452026624,
+              17.866015126989797,
+              71.80930366496466,
+              218.222307380434,
+              202.74505561087193,
+              156.67551212177207,
+              377.5875893562841,
+              31.66416824215581,
+              32.54015900188906,
+              32.94014077267405,
+              31.130429759357124,
+              31.327458285878564,
+              34.53417934249268,
+              27.853733515386534,
+              31.077046810874094,
+              30.12759862285624,
+              34.51566922100687,
+              38.44321590210667,
+              92.89636793346727,
+              328.0688729157218,
+              279.9260797905011,
+              267.91312323418066,
+              62.227418931374686,
+              64.21847091744222,
+              64.4146390637272,
+              193.68754407548346,
+              82.17406117458336,
+              60.29370181315734,
+              61.3644319965058,
+              57.831013236841784,
+              241.79011189467667,
+              783.9283010467352,
+              101.79331168654285,
+              117.76433253433117,
+              376.2362566824064,
+              382.5522304187027,
+              65.20660479964073,
+              207.3711095320355,
+              689.6221868649385,
+              395.25907809536216,
+              24.67630499357882,
+              354.593159144797,
+              134.22716771702835,
+              266.69311542707436,
+              412.65952699611324,
+              173.07654191818162,
+              148.5312387697223,
+              243.6932922893126,
+              51.827706702506546,
+              102.24317800434066,
+              127.0039481269286,
+              78.99994156293198,
+              113.07090467194016,
+              150.15171522483755,
+              363.76654491247564,
+              575.7773727907802,
+              249.91747424992178,
+              225.6853293652351,
+              346.5263653692803,
+              28.86327729262184,
+              397.1101858013257,
+              403.67430383440677,
+              246.0718991771879,
+              178.8462873634989,
+              131.60374490419355,
+              242.5360340011723,
+              254.15907819127793,
+              245.8957875817015,
+              368.150937556265,
+              19.861539695679195,
+              269.7009589904212,
+              485.77232429062923,
+              84.1469797128759,
+              11.726342154263891,
+              49.46697638330907,
+              88.77584314130068,
+              36.02399671030639,
+              98.04348116141703,
+              50.69275332407043,
+              26.798007621048644,
+              23.805291965962383,
+              49.76815226751364,
+              30.894982089265202,
+              28.307153575549577,
+              14.586341644474485,
+              13.715411594979052,
+              19.261958682329272,
+              17.139551163801574,
+              90.05006821987982,
+              47.74832156011246,
+              29.94844391748409,
+              39.182311566096814,
+              17.508241377612414,
+              32.52087307091813,
+              24.961162602584974,
+              19.58441898669368,
+              28.518635921900174,
+              26.354477214048174,
+              35.912551115592194,
+              14.879690741840832,
+              34.1961851830425,
+              68.9274921896577,
+              73.01734534872104,
+              222.52064714978587,
+              45.5368781245268,
+              46.368535750877186,
+              49.91026580851938,
+              49.689783701217095,
+              54.12171707159866,
+              48.634160678169,
+              57.918961149617076,
+              59.50057532162776,
+              50.804758663295,
+              469.2524113529525,
+              299.231766380484,
+              139.6248510363633,
+              176.45164409777146,
+              80.5025798498335,
+              100.82648123597775,
+              75.25249577537797,
+              94.0035373165972,
+              200.57238736937555,
+              27.94428270556072,
+              28.595415604894214,
+              34.7451172267505,
+              33.85483834914056,
+              72.5403326999719,
+              83.60170776888972,
+              31.834039258395137,
+              29.781344134901662,
+              33.70838763040092,
+              34.87016901180913,
+              36.05784949917818,
+              69.62747966117267,
+              68.3111330331286,
+              49.48913096098619,
+              46.35939678327981,
+              39.345911160333124,
+              37.46772205137854,
+              36.670331620193366,
+              35.94583435172875,
+              26.45844818360496,
+              24.90878153961532,
+              21.484617271385016,
+              25.90316046446129,
+              37.59946201075362,
+              61.3147904139702,
+              79.32881542268146,
+              58.88146129329119,
+              40.404294601145416,
+              21.722853475326552,
+              166.00895314942701,
+              17.845425376285167,
+              100.35793887105854,
+              27.543251049722787,
+              100.39540551515181,
+              14.121312081080877,
+              16.48505028748779,
+              17.938751421871455,
+              22.807564209593476,
+              18.705897846991718,
+              30.054766142325576,
+              10.728452675451635,
+              22.239096283390676,
+              14.137023433315042,
+              12.571371612194055,
+              17.539805654858686,
+              15.020756371694475,
+              23.634468504641912,
+              13.917316886897808,
+              12.894454474712658,
+              18.640214676803172,
+              12.823575779103399,
+              111.57531678737855,
+              14.422632514226994,
+              74.27651579982977,
+              19.673557366916764,
+              26.984029579777733,
+              6.537812802345149,
+              40.13102556853206,
+              17.1389265770638,
+              70.28557827109971,
+              12.05968561003842,
+              13.585919157732143,
+              14.135131493845881,
+              61.39814906012028
+            ],
+            "speed": [
+              3,
+              5.9,
+              6.7,
+              6.6,
+              6.7,
+              6.7,
+              6.7,
+              6.6,
+              6.6,
+              6.7,
+              7.1,
+              2.9,
+              2.6,
+              2.2,
+              7.7,
+              7.8,
+              7.8,
+              3.6,
+              7.8,
+              7.8,
+              5.2,
+              7.7,
+              7.8,
+              3.7,
+              8.7,
+              8.7,
+              7,
+              8.7,
+              7.6,
+              8.7,
+              7.1,
+              8.7,
+              8.7,
+              7.3,
+              11.5,
+              11.5,
+              11.3,
+              11.3,
+              11.1,
+              11.7,
+              11.1,
+              11.5,
+              11.3,
+              11.3,
+              11.4,
+              11.4,
+              11.4,
+              11.1,
+              11.2,
+              11.7,
+              11.8,
+              11.9,
+              12,
+              11.7,
+              12.3,
+              20,
+              20.8,
+              19.8,
+              20,
+              21,
+              19.9,
+              20.5,
+              19.6,
+              19.8,
+              19.2,
+              19.4,
+              20.1,
+              20.7,
+              19.8,
+              21,
+              19.6,
+              19.2,
+              19.9,
+              20.3,
+              19.9,
+              20,
+              20.9,
+              20.7,
+              20.2,
+              19.9,
+              20.2,
+              20.9,
+              20.5,
+              21.2,
+              20.2,
+              20.2,
+              21,
+              19.6,
+              19.4,
+              20.1,
+              19.8,
+              20.4,
+              19.4,
+              20.6,
+              19.7,
+              19.9,
+              19.8,
+              21.1,
+              20.5,
+              20.2,
+              20.3,
+              19.5,
+              19.2,
+              20.1,
+              20.1,
+              20.7,
+              19.6,
+              19.2,
+              20,
+              20.3,
+              19.9,
+              19.8,
+              21,
+              20.1,
+              20.4,
+              19.7,
+              19.9,
+              20.8,
+              19.6,
+              19.9,
+              20.3,
+              20.8,
+              20.6,
+              20.1,
+              27.9,
+              20.1,
+              20.2,
+              20.5,
+              20.7,
+              20.5,
+              20.1,
+              19.8,
+              20.6,
+              19.9,
+              20.1,
+              20.6,
+              21.5,
+              20.4,
+              20.7,
+              20,
+              19.8,
+              20.3,
+              19.5,
+              19.6,
+              19.7,
+              19.6,
+              19.5,
+              26.9,
+              26,
+              26.6,
+              26.9,
+              27,
+              27.1,
+              25.8,
+              26.5,
+              25.3,
+              25.3,
+              26.1,
+              25,
+              26.7,
+              25.9,
+              26.7,
+              25.2,
+              26.4,
+              25.9,
+              26.1,
+              26.5,
+              28.2,
+              28.4,
+              28.8,
+              27,
+              27.5,
+              27.2,
+              27.2,
+              29.3,
+              28.1,
+              28.1,
+              27.8,
+              28,
+              26.2,
+              27.9,
+              27.5,
+              27.8,
+              27.9,
+              27.3,
+              27.8,
+              27.9,
+              27.9,
+              28.8,
+              27.6,
+              27.8,
+              27.7,
+              28.9,
+              27.9,
+              27,
+              28.2,
+              27.1,
+              28.5,
+              28.2,
+              26.9,
+              27,
+              28,
+              27.7,
+              27.9,
+              28,
+              26.6,
+              27.9,
+              28.2,
+              27.4,
+              27.2,
+              28.3,
+              27.5,
+              26.7,
+              29,
+              27.8,
+              27,
+              27.7,
+              28.2,
+              28.1,
+              27.3,
+              28.2,
+              30.5,
+              28,
+              27.9,
+              27.8,
+              27.8,
+              27.8,
+              27.8,
+              27.8,
+              28,
+              27.5,
+              28.3,
+              27.1,
+              28.3,
+              28.9,
+              27.4,
+              28.3,
+              27.9,
+              28.6,
+              28.5,
+              27.5,
+              27.2,
+              26.8,
+              27.3,
+              28.2,
+              27.7,
+              28.1,
+              28.8,
+              28.5,
+              27,
+              28.8,
+              27.9,
+              27.3,
+              29,
+              28.9,
+              28.9,
+              28.6,
+              28.7,
+              27,
+              27.9,
+              26.7,
+              28.4,
+              26.8,
+              28.3,
+              26.7,
+              28.7,
+              28.8,
+              27.8,
+              27.6,
+              27.4,
+              28.5,
+              28.3,
+              27.9,
+              26.7,
+              26.8,
+              27.6,
+              28.9,
+              27.4,
+              27.5,
+              28.4,
+              28.9,
+              28.9,
+              27.4,
+              28.7,
+              27.4,
+              27.8,
+              29.1,
+              28.8,
+              27,
+              28.1,
+              26.9,
+              28.5,
+              29,
+              28.5,
+              26.8,
+              27.1,
+              27.4,
+              27.1,
+              26.6,
+              26.9,
+              28.3,
+              28,
+              27.7,
+              27.2,
+              27.7,
+              27.9,
+              27.3,
+              28.9,
+              27.2,
+              26.8,
+              27.2,
+              28.9,
+              27.4,
+              28.3,
+              27.9,
+              28.9,
+              27.7,
+              27.7,
+              28.4,
+              27.7,
+              26.9,
+              27.9,
+              28.3,
+              27.8,
+              27.8,
+              27.9,
+              27.8,
+              27.7,
+              28.4,
+              27.5,
+              28.3,
+              27.6,
+              27.4,
+              27.2,
+              27.7,
+              27.2,
+              27.4,
+              28.6,
+              27.2,
+              27.5,
+              28.3,
+              27.1,
+              27.9,
+              27.4,
+              28.5,
+              27.1,
+              27.6,
+              27.6,
+              27.8,
+              27.7,
+              27.1,
+              27.1,
+              27.7,
+              26.9,
+              27.8,
+              27.9,
+              27.8,
+              27.6,
+              27.7,
+              27.8,
+              27.6,
+              27.8,
+              28,
+              29,
+              27.9,
+              27.9,
+              27.5,
+              27.9,
+              27.2,
+              27.5,
+              27.4,
+              27.5,
+              28.5,
+              27.9,
+              27,
+              27.1,
+              27.8,
+              27.9,
+              27.7,
+              27.9,
+              28.1,
+              27.7,
+              27.7,
+              27.7,
+              27.8,
+              27.6,
+              27.6,
+              27.9,
+              27.8,
+              27.9,
+              28.3,
+              27.7,
+              27.7,
+              28.5,
+              27.2,
+              27.2,
+              27.3,
+              27.8,
+              27.1,
+              27.4,
+              27.8,
+              27.2,
+              28.4,
+              27.2,
+              27.3,
+              28.3,
+              27.7,
+              27.1,
+              27.9,
+              27.7,
+              27.8,
+              27.8,
+              27.8,
+              28.1,
+              27.6,
+              28.1,
+              28.4,
+              27.9,
+              27.9,
+              28.3,
+              28.1,
+              27.2,
+              28.4,
+              27,
+              27.5,
+              27.9,
+              27.8,
+              27.8,
+              27.9,
+              27.8,
+              27.8,
+              27.8,
+              27.8,
+              27.9,
+              27.3,
+              28.2,
+              27.9,
+              28.5,
+              28.5,
+              27.6,
+              27.3,
+              27.8,
+              27.5,
+              27.6,
+              27.9,
+              28,
+              27.8,
+              28.2,
+              27.7,
+              27.4,
+              28,
+              27.7,
+              27.7,
+              27.6,
+              27.7,
+              27.6,
+              27.4,
+              27.9,
+              28.3,
+              27.6,
+              27.5,
+              27.9,
+              27.7,
+              28.4,
+              27.7,
+              28.3,
+              27.9,
+              27.4,
+              28.1,
+              27.4,
+              27.6,
+              28.3,
+              28,
+              27.9,
+              27.9,
+              27.8,
+              27.7,
+              27.7,
+              27.6,
+              28,
+              27.2,
+              28.2,
+              27.7,
+              28.2,
+              27.7,
+              27.7,
+              28,
+              27.9,
+              27.6,
+              27.8,
+              27.7,
+              28,
+              28.1,
+              27.9,
+              28.5,
+              28.2,
+              28.4,
+              27.4,
+              27.7,
+              27.3,
+              29.3,
+              31,
+              27.8,
+              27.4,
+              27.5,
+              27.2,
+              27.5,
+              28.2,
+              27.6,
+              27.6,
+              27.8,
+              27.6,
+              27.4,
+              27.2,
+              26.1,
+              25.6,
+              26.1,
+              26,
+              26.9,
+              26.5,
+              25.7,
+              25.5,
+              26.4,
+              26.9,
+              26.2,
+              26.1,
+              25.9,
+              25.8,
+              25.9,
+              25.8,
+              26.2,
+              25,
+              25.6,
+              26.1,
+              26.3,
+              25.9,
+              26,
+              26.3,
+              27,
+              25.9,
+              26.9,
+              26.1,
+              25.8,
+              25.7,
+              25.9,
+              25.8,
+              25.6,
+              25.9,
+              25.8,
+              26.1,
+              26.1,
+              26,
+              26,
+              25.6,
+              25.6,
+              26.1,
+              25.6,
+              25.6,
+              25.9,
+              25.6,
+              26.1,
+              25.4,
+              25.8,
+              25.7,
+              25.9,
+              25.7,
+              25.7,
+              25.7,
+              25.9,
+              26,
+              25.6,
+              25.4,
+              25.9,
+              25.9,
+              25.8,
+              25.7,
+              26,
+              25.7,
+              26,
+              25.5,
+              28.1,
+              26.2,
+              26.2,
+              26.2,
+              26.2,
+              26.3,
+              26.2,
+              26.1,
+              28.2,
+              26.2,
+              26.2,
+              26.2,
+              26.2,
+              26.2,
+              26.2,
+              25.1,
+              26.6,
+              26.4,
+              26.1,
+              26.9,
+              26,
+              25.8,
+              25.8,
+              25.8,
+              26.2,
+              26.3,
+              26.2,
+              26.3,
+              26.1,
+              26.5,
+              26.1,
+              26.2,
+              24.6,
+              26.2,
+              26.2,
+              26.4,
+              26.1,
+              26.7,
+              26.5,
+              26.5,
+              26.3,
+              26.4,
+              25.8,
+              26,
+              25.8,
+              26.2,
+              27,
+              26,
+              26.1,
+              26.1,
+              26.2,
+              25.5,
+              25,
+              26.5,
+              25.7,
+              26,
+              25.9,
+              26.9,
+              25.4,
+              25.5,
+              26.6,
+              26.3,
+              26,
+              26.1,
+              26.2,
+              26.4,
+              27.1,
+              25.3,
+              25.9,
+              26.1,
+              26.6,
+              25.3,
+              25.9,
+              25.1,
+              26.6,
+              25.6,
+              25.8,
+              26.2,
+              26.2,
+              26.3,
+              25.9,
+              25.7,
+              25.8,
+              26.2,
+              26.5,
+              26.2,
+              26.7,
+              26.3,
+              26.3,
+              26.1,
+              26.1,
+              26.2,
+              26.1,
+              26.2,
+              26.1,
+              26.2,
+              26.1,
+              26.2,
+              27.4,
+              26.1,
+              26.3,
+              26.1,
+              26.1,
+              26.2,
+              26.1,
+              26.2,
+              25.9,
+              26.2,
+              25.9,
+              26.3,
+              26.3,
+              26.3,
+              26.2,
+              26.2,
+              26,
+              26.2,
+              26.1,
+              26.2,
+              26.1,
+              26.2,
+              26.2,
+              26.3,
+              26.3,
+              26.1,
+              26.2,
+              26.2,
+              26.1,
+              24.8,
+              26.2,
+              26.1,
+              26.3,
+              29.3,
+              11.5,
+              11.4,
+              11.3,
+              11.4,
+              11.3,
+              11.2,
+              11.3,
+              11.3,
+              11.4,
+              11.3,
+              11.2,
+              11.4,
+              11.3,
+              11.4,
+              11.4,
+              11.4,
+              11.5,
+              11.5,
+              11.7,
+              27.1,
+              25,
+              28,
+              25.9,
+              26.4,
+              25.7,
+              24.8,
+              26.3,
+              26.5,
+              26.1,
+              26.2,
+              26.8,
+              25.8,
+              26.3,
+              26.2,
+              25.8,
+              25.6,
+              26.3,
+              25.9,
+              26.7,
+              26.2,
+              26.2,
+              27.9,
+              26.3,
+              26,
+              25.9,
+              25.9,
+              26.1,
+              26,
+              25.4,
+              26,
+              26.7,
+              26,
+              25.9,
+              26.1,
+              26.5,
+              27.1,
+              25.9,
+              26.8,
+              25.8,
+              25.8,
+              26.3,
+              26,
+              25.8,
+              26.2,
+              26.8,
+              26.2,
+              25.7,
+              26.5,
+              24.9,
+              26.9,
+              25.9,
+              26.9,
+              26.7,
+              26.4,
+              25.6,
+              26.9,
+              27.2,
+              26.4,
+              11.2,
+              11.4,
+              11.5,
+              11.4,
+              11.8,
+              11.8,
+              11.2,
+              11.4,
+              11.7,
+              11.6,
+              11.9,
+              11.1,
+              11.8,
+              11.4,
+              11.7,
+              11.6,
+              11.3,
+              11.6,
+              4.2,
+              4.2,
+              8,
+              7.8,
+              2.8,
+              6.7,
+              6.6,
+              6.7,
+              6.5,
+              6.7,
+              6.6,
+              6.7,
+              3.1,
+              6.8,
+              6.7,
+              6.6
+            ],
+            "duration": [
+              23.5,
+              17.7,
+              15.8,
+              13.4,
+              2.4,
+              13,
+              2.7,
+              2.6,
+              10.9,
+              2.4,
+              0.4,
+              3.5,
+              3.2,
+              2.8,
+              4.7,
+              4.2,
+              12.3,
+              7.6,
+              15.1,
+              5.6,
+              5.9,
+              6.9,
+              5.8,
+              13.9,
+              7.7,
+              6.6,
+              9.9,
+              8.7,
+              15.3,
+              13.4,
+              10.7,
+              5.5,
+              4.7,
+              14.3,
+              1.7,
+              2.2,
+              1.2,
+              1.3,
+              1.3,
+              1.2,
+              1.3,
+              3.8,
+              5.6,
+              2.9,
+              6.1,
+              7.4,
+              1.9,
+              1.2,
+              1.3,
+              1.2,
+              1.3,
+              0.8,
+              0.8,
+              1.5,
+              0.5,
+              3.3,
+              1.2,
+              2.3,
+              7.4,
+              1,
+              0.9,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1,
+              1.1,
+              1,
+              1.1,
+              1.1,
+              3,
+              0.9,
+              1,
+              0.9,
+              0.9,
+              0.9,
+              0.9,
+              0.9,
+              0.9,
+              0.9,
+              0.9,
+              0.9,
+              1,
+              1,
+              1,
+              1,
+              1.1,
+              1,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              2.1,
+              0.9,
+              1,
+              0.9,
+              0.9,
+              0.9,
+              0.9,
+              0.9,
+              0.9,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1.1,
+              1.1,
+              1,
+              11.7,
+              1.4,
+              1.5,
+              1.4,
+              1.3,
+              1.5,
+              1.4,
+              1.5,
+              1.2,
+              1.2,
+              7.2,
+              6.6,
+              7.3,
+              8.8,
+              1.4,
+              1.5,
+              1.4,
+              1.4,
+              1.5,
+              1.4,
+              1.5,
+              6.9,
+              0.8,
+              0.7,
+              1.5,
+              1.5,
+              1.5,
+              1.5,
+              1.6,
+              1.4,
+              1.7,
+              1.5,
+              1.6,
+              1.6,
+              1.5,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1,
+              1.1,
+              1.2,
+              1.2,
+              1.1,
+              1.1,
+              1,
+              1.1,
+              1.2,
+              0.9,
+              1.8,
+              4.3,
+              2,
+              3.8,
+              3.3,
+              1.3,
+              1.3,
+              1.7,
+              1.3,
+              1.5,
+              2.2,
+              0.8,
+              1.8,
+              1.6,
+              1.6,
+              4.4,
+              0.7,
+              4.7,
+              5,
+              3.6,
+              2.4,
+              1.8,
+              6.2,
+              2.1,
+              2.6,
+              1.1,
+              1.2,
+              3.9,
+              2.9,
+              0.8,
+              5.7,
+              1,
+              1,
+              1.1,
+              1,
+              1.5,
+              1.2,
+              1.1,
+              1.1,
+              1.2,
+              1.2,
+              4.3,
+              1.1,
+              1,
+              1,
+              1,
+              1,
+              0.9,
+              1.1,
+              1,
+              1,
+              1,
+              1,
+              1.5,
+              2,
+              2.9,
+              2.3,
+              2.1,
+              0.4,
+              4,
+              6.5,
+              13.4,
+              35.8,
+              21.9,
+              25.3,
+              2.8,
+              3.6,
+              1.7,
+              1.6,
+              1.5,
+              1.5,
+              1.1,
+              1.3,
+              1.2,
+              1.3,
+              1.3,
+              1.3,
+              1.3,
+              1.2,
+              1.3,
+              1.5,
+              1.4,
+              1.2,
+              1.3,
+              1.2,
+              1.3,
+              1.3,
+              0.3,
+              2.6,
+              1.5,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1.1,
+              1,
+              1.1,
+              1,
+              1.1,
+              1,
+              1.1,
+              1,
+              1.2,
+              11.3,
+              4.2,
+              2.7,
+              1,
+              1,
+              1,
+              1.1,
+              1.2,
+              1,
+              1,
+              1.1,
+              1,
+              1,
+              1,
+              1,
+              1.1,
+              1,
+              1.1,
+              11.5,
+              1,
+              1.1,
+              1.1,
+              1.1,
+              1.3,
+              1.1,
+              1.1,
+              1.2,
+              1.1,
+              1.1,
+              1,
+              1.1,
+              1.1,
+              1.1,
+              2,
+              5.3,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1.1,
+              1,
+              1.1,
+              1,
+              1,
+              1,
+              1,
+              1.1,
+              1,
+              1.1,
+              4.3,
+              1.6,
+              5.3,
+              1.3,
+              3.6,
+              1.3,
+              16.1,
+              9.7,
+              3.3,
+              0.8,
+              1.7,
+              1.9,
+              1.8,
+              1.3,
+              1.6,
+              1.8,
+              2,
+              6.3,
+              1.7,
+              1.4,
+              1.4,
+              1.3,
+              1.2,
+              1.3,
+              1.4,
+              1.3,
+              1.4,
+              1.3,
+              1.4,
+              2,
+              3.8,
+              5.7,
+              5.5,
+              1.7,
+              1.8,
+              1.9,
+              1.5,
+              1.6,
+              4.4,
+              3,
+              0.8,
+              1.8,
+              12.2,
+              5.5,
+              11.2,
+              2.7,
+              0.5,
+              1.5,
+              1.7,
+              1.9,
+              1.8,
+              2,
+              1.8,
+              2,
+              1.9,
+              1.6,
+              1.9,
+              1.8,
+              1.9,
+              3.5,
+              11.4,
+              9.5,
+              2.8,
+              4.8,
+              11,
+              12,
+              13.3,
+              8.6,
+              4.8,
+              7.1,
+              5.5,
+              21.9,
+              5,
+              2.4,
+              4.5,
+              12.6,
+              1.9,
+              1.9,
+              2,
+              2,
+              1.9,
+              2,
+              2,
+              3.9,
+              2.4,
+              2.2,
+              1.7,
+              1.9,
+              2,
+              2,
+              2,
+              5.8,
+              15.4,
+              10.7,
+              11,
+              11.4,
+              2.6,
+              2,
+              1.3,
+              1.7,
+              1.7,
+              1.8,
+              1.8,
+              1.8,
+              1.7,
+              1.6,
+              1.6,
+              3.8,
+              12.9,
+              14.1,
+              14.3,
+              15.8,
+              5.8,
+              23,
+              16.9,
+              17.3,
+              2.8,
+              2.4,
+              0.8,
+              1.8,
+              1.8,
+              2,
+              7,
+              2.5,
+              3.8,
+              4.3,
+              2.5,
+              2.8,
+              4.3,
+              2.2,
+              2.3,
+              10.5,
+              3.5,
+              4.4,
+              1.2,
+              13.8,
+              5.2,
+              3.3,
+              8.8,
+              2.7,
+              1.2,
+              1.2,
+              4.6,
+              2.9,
+              10.5,
+              18.2,
+              1.5,
+              9.6,
+              1.7,
+              1.7,
+              2,
+              1.8,
+              1.7,
+              1.8,
+              1.7,
+              3.9,
+              15.6,
+              15.2,
+              9.6,
+              9.5,
+              3,
+              5.2,
+              7,
+              2.3,
+              3.1,
+              8.1,
+              2.9,
+              8.8,
+              9.3,
+              5,
+              16.2,
+              6.5,
+              6.7,
+              9.4,
+              7,
+              4.1,
+              3.2,
+              1.5,
+              1.5,
+              1.5,
+              1.6,
+              1.5,
+              1.6,
+              0.5,
+              0.4,
+              0.8,
+              1.8,
+              1.5,
+              1.5,
+              1.6,
+              1.5,
+              1.5,
+              9.4,
+              9.9,
+              3.4,
+              1.7,
+              1.8,
+              1.5,
+              1.5,
+              1.4,
+              2,
+              1.5,
+              1.7,
+              1.7,
+              1.7,
+              1.6,
+              1.7,
+              14.2,
+              6.9,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1,
+              0.7,
+              0.9,
+              0.8,
+              1.7,
+              1.5,
+              1.6,
+              1.8,
+              1.2,
+              1.7,
+              1.6,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              5.6,
+              52.5,
+              1.7,
+              1.8,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.6,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              0.4,
+              24.8,
+              5.8,
+              14,
+              28.7,
+              4.9,
+              14,
+              9.9,
+              0.5,
+              23.3,
+              10.5,
+              12.2,
+              18.2,
+              3.3,
+              35.4,
+              1,
+              1.9,
+              1.8,
+              2.1,
+              1.2,
+              1.7,
+              1.7,
+              1.7,
+              1.7,
+              17.9,
+              8.9,
+              8.4,
+              5.2,
+              17.1,
+              0.9,
+              16.5,
+              26.6,
+              0.8,
+              11.1,
+              3.5,
+              4.7,
+              10.8,
+              2.2,
+              2.2,
+              2.1,
+              2.1,
+              2.3,
+              2.3,
+              2.8,
+              2.9,
+              14.6,
+              0.9,
+              8.9,
+              6,
+              12.8,
+              10.1,
+              1.2,
+              1.1,
+              1.1,
+              1.7,
+              1.7,
+              1.7,
+              1.6,
+              1.7,
+              0.7,
+              2.7,
+              8.3,
+              7.8,
+              6,
+              14.4,
+              1.2,
+              1.2,
+              1.3,
+              1.2,
+              1.2,
+              1.3,
+              1.1,
+              1.2,
+              1.2,
+              1.3,
+              1.5,
+              3.6,
+              12.5,
+              10.7,
+              10.2,
+              2.4,
+              2.5,
+              2.5,
+              7.4,
+              3.1,
+              2.3,
+              2.3,
+              2.2,
+              9.2,
+              30,
+              3.9,
+              4.5,
+              14.4,
+              14.6,
+              2.5,
+              7.9,
+              26.4,
+              15.1,
+              0.9,
+              13.6,
+              5.1,
+              10.2,
+              15.8,
+              6.6,
+              5.7,
+              9.3,
+              2,
+              3.9,
+              4.9,
+              3,
+              4.3,
+              5.7,
+              13.9,
+              22,
+              9.6,
+              8.6,
+              13.3,
+              1.1,
+              15.2,
+              15.4,
+              9.4,
+              6.8,
+              5,
+              9.3,
+              9.7,
+              9.4,
+              14.1,
+              0.8,
+              10.3,
+              18.6,
+              3.2,
+              0.4,
+              4.3,
+              7.8,
+              3.2,
+              8.6,
+              4.5,
+              2.4,
+              2.1,
+              4.4,
+              2.7,
+              2.5,
+              1.3,
+              1.2,
+              1.7,
+              1.5,
+              7.9,
+              4.2,
+              2.6,
+              3.4,
+              1.5,
+              1.2,
+              1,
+              0.7,
+              1.1,
+              1,
+              1.4,
+              0.6,
+              1.3,
+              2.6,
+              2.8,
+              8.5,
+              1.7,
+              1.8,
+              1.9,
+              1.9,
+              2.1,
+              1.9,
+              2.2,
+              2.3,
+              1.9,
+              17.9,
+              11.4,
+              5,
+              6.7,
+              3.1,
+              3.9,
+              2.9,
+              3.6,
+              7.7,
+              1.1,
+              1.1,
+              1.3,
+              1.3,
+              2.8,
+              3.2,
+              1.2,
+              1.1,
+              1.3,
+              1.3,
+              1.4,
+              2.7,
+              2.6,
+              1.9,
+              1.8,
+              1.5,
+              1.4,
+              1.4,
+              1.4,
+              1,
+              1,
+              0.8,
+              1,
+              1.4,
+              2.3,
+              3,
+              2.3,
+              1.5,
+              0.8,
+              6.3,
+              1.6,
+              8.8,
+              2.4,
+              8.8,
+              1.2,
+              1.4,
+              1.6,
+              2,
+              1.6,
+              2.6,
+              0.9,
+              2,
+              1.2,
+              1.1,
+              1.5,
+              1.3,
+              2.1,
+              1.2,
+              3.1,
+              4.4,
+              1.6,
+              14.3,
+              5.2,
+              11.1,
+              3,
+              4,
+              1,
+              6,
+              2.6,
+              10.5,
+              3.9,
+              2,
+              2.1,
+              9.3
+            ]
+          },
+          "summary": "Bayshore Freeway, Bayshore Freeway",
+          "duration": 3282.8
+        }
+      ],
+      "weight_name": "routability",
+      "geometry": "mqreFhodjV|q@yCxo@a`Av}AsNnwAv^jqJoyBbyClsB~cGsfAxvCkjFpPcnDjaPg_QnbBwtJ~yDa~HlmDuyD|~AebDd{E_wZzqDwbD~gAqM",
+      "weight": 6524.2,
+      "distance": 77254.7,
+      "duration": 3282.8
+    }
+  ],
+  "code": "Ok"
+}

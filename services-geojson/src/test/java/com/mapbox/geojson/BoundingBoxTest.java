@@ -1,5 +1,7 @@
 package com.mapbox.geojson;
 
+import com.mapbox.services.BaseTest;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

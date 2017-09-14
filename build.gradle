@@ -11,7 +11,7 @@ buildscript {
 
 allprojects {
   apply from: "${rootDir}/gradle/dependencies.gradle"
-  apply from: "${rootDir}/gradle/codeQuality.gradle"
+  apply from: "${rootDir}/gradle/code-quality.gradle"
   repositories {
     google()
     jcenter()

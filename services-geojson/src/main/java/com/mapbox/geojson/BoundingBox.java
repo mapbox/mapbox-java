@@ -2,6 +2,7 @@ package com.mapbox.geojson;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;

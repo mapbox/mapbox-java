@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE module PUBLIC
-          "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
-          "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+    "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
   <module name = "Checker">
     <property name="fileExtensions" value="java, properties, xml"/>
@@ -47,7 +47,7 @@
       <module name="SuppressionCommentFilter" />
 
       <!-- needed for switching the checks on and off-->
-      <module name="FileContentsHolder" />
+      <!--<module name="FileContentsHolder" />-->
 
       <!-- Require package names to be all lower-case -->
       <module name="PackageName">
@@ -349,9 +349,7 @@
         </module>
 
         <!-- Checks for the placement of left curly braces ('{') for code blocks. -->
-        <module name="LeftCurly">
-            <property name="maxLineLength" value="120"/>
-        </module>
+        <module name="LeftCurly"/>
 
         <!-- Checks the placement of right curly braces ('}') for if-else,
         try-catch-finally blocks, while-loops, for-loops, method definitions,

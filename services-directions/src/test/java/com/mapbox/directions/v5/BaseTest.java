@@ -1,4 +1,4 @@
-package com.mapbox.geojson;
+package com.mapbox.directions.v5;
 
 import com.google.gson.JsonParser;
 
@@ -15,7 +15,8 @@ import static org.junit.Assert.assertEquals;
 
 public class BaseTest {
 
-  protected static final double DELTA = 1E-10;
+  public static final double DELTA = 1E-10;
+  public static final String ACCESS_TOKEN = "pk.XXX";
 
   public void compareJson(String json1, String json2) {
     JsonParser parser = new JsonParser();

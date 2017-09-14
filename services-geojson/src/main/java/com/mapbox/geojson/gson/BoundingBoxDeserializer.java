@@ -37,8 +37,6 @@ public class BoundingBoxDeserializer implements JsonDeserializer<BoundingBox> {
 
     JsonArray rawCoordinates = json.getAsJsonArray();
 
-    // TODO one point might have altitude while the other doesn't
-    // Has altitude
     if (rawCoordinates.size() > 4) {
       return BoundingBox.fromCoordinates(
         rawCoordinates.get(0).getAsDouble(),

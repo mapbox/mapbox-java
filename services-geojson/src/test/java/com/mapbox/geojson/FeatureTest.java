@@ -1,6 +1,7 @@
 package com.mapbox.geojson;
 
 import com.google.gson.JsonObject;
+import com.mapbox.services.BaseTest;
 
 import org.junit.Test;
 
