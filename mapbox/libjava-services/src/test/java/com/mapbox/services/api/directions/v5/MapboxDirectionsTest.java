@@ -45,7 +45,8 @@ public class MapboxDirectionsTest {
   private static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
   private static final String DIRECTIONS_ROTARY_FIXTURE = "src/test/fixtures/directions_v5_fixtures_rotary.json";
   private static final String DIRECTIONS_V5_ANNOTATIONS_FIXTURE = "src/test/fixtures/directions_annotations_v5.json";
-  private static final String DIRECTIONS_V5_ROUNDABOUTS_FIXTURE = "src/test/fixtures/directions_v5_roundabout_exits.json";
+  private static final String DIRECTIONS_V5_ROUNDABOUTS_FIXTURE =
+      "src/test/fixtures/directions_v5_roundabout_exits.json";
 
   private static final double DELTA = 1E-10;
 
