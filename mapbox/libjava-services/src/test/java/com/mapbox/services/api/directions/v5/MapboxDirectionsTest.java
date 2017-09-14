@@ -1,5 +1,6 @@
 package com.mapbox.services.api.directions.v5;
 
+import com.google.gson.Gson;
 import com.mapbox.services.api.ServicesException;
 import com.mapbox.services.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.services.api.directions.v5.models.DirectionsRoute;
@@ -45,6 +46,7 @@ public class MapboxDirectionsTest {
   private static final String DIRECTIONS_TRAFFIC_FIXTURE = "src/test/fixtures/directions_v5_traffic.json";
   private static final String DIRECTIONS_ROTARY_FIXTURE = "src/test/fixtures/directions_v5_fixtures_rotary.json";
   private static final String DIRECTIONS_V5_ANNOTATIONS_FIXTURE = "src/test/fixtures/directions_annotations_v5.json";
+  private static final String DIRECTIONS_V5_ROUNDABOUTS_FIXTURE = "src/test/fixtures/directions_v5_roundabout_exits.json";
 
   private static final double DELTA = 1E-10;
 
@@ -75,6 +77,9 @@ public class MapboxDirectionsTest {
         }
         if (request.getPath().contains("annotations")) {
           resource = DIRECTIONS_V5_ANNOTATIONS_FIXTURE;
+        }
+        if (request.getPath().contains("roundabout_exits")) {
+          resource = DIRECTIONS_V5_ROUNDABOUTS_FIXTURE;
         }
 
         try {
@@ -661,5 +666,20 @@ public class MapboxDirectionsTest {
     Response<DirectionsResponse> response = client.executeCall();
     assertTrue(response.body().getRoutes().get(0).getLegs().get(0)
       .getSteps().get(0).getManeuver().getInstruction().contains("Kör åt öster på Eddy Street"));
+  }
+
+  @Test
+  public void testRoundaboutExitsResponse() throws IOException {
+    MapboxDirections client = new MapboxDirections.Builder()
+        .setAccessToken("pk.XXX")
+        .setCoordinates(positions)
+        .setProfile(DirectionsCriteria.PROFILE_DRIVING)
+        .setBaseUrl(mockUrl.toString())
+        .setRoundaboutExits(true)
+        .build();
+
+    Response<DirectionsResponse> response = client.executeCall();
+    assertEquals(response.body().getRoutes().get(0).getLegs().get(0)
+      .getSteps().get(2).getManeuver().getType(), "exit roundabout");
   }
 }
