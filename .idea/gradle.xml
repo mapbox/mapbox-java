@@ -11,7 +11,11 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/services" />
             <option value="$PROJECT_DIR$/services-directions" />
+            <option value="$PROJECT_DIR$/services-geocoding" />
             <option value="$PROJECT_DIR$/services-geojson" />
+            <option value="$PROJECT_DIR$/services-matrix" />
+            <option value="$PROJECT_DIR$/services-optimization" />
+            <option value="$PROJECT_DIR$/services-turf" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

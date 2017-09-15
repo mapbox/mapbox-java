@@ -1,0 +1,66 @@
+{
+  "durations": [
+    [
+      0,
+      1888.3,
+      1336
+    ],
+    [
+      1921.5,
+      0,
+      2124.4
+    ],
+    [
+      1317,
+      2181.2,
+      0
+    ]
+  ],
+  "destinations": [
+    {
+      "name": "McAllister Street",
+      "location": [
+        -122.420019,
+        37.780091
+      ]
+    },
+    {
+      "name": "Playa Verde",
+      "location": [
+        -122.461997,
+        37.89621
+      ]
+    },
+    {
+      "name": "",
+      "location": [
+        -122.480005,
+        37.730039
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "name": "McAllister Street",
+      "location": [
+        -122.420019,
+        37.780091
+      ]
+    },
+    {
+      "name": "Playa Verde",
+      "location": [
+        -122.461997,
+        37.89621
+      ]
+    },
+    {
+      "name": "",
+      "location": [
+        -122.480005,
+        37.730039
+      ]
+    }
+  ],
+  "code": "Ok"
+}

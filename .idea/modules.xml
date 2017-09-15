@@ -6,7 +6,11 @@
       <module fileurl="file://$PROJECT_DIR$/mapbox-java.iml" filepath="$PROJECT_DIR$/mapbox-java.iml" />
       <module fileurl="file://$PROJECT_DIR$/services/services.iml" filepath="$PROJECT_DIR$/services/services.iml" />
       <module fileurl="file://$PROJECT_DIR$/services-directions/services-directions.iml" filepath="$PROJECT_DIR$/services-directions/services-directions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services-geocoding/services-geocoding.iml" filepath="$PROJECT_DIR$/services-geocoding/services-geocoding.iml" />
       <module fileurl="file://$PROJECT_DIR$/services-geojson/services-geojson.iml" filepath="$PROJECT_DIR$/services-geojson/services-geojson.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services-matrix/services-matrix.iml" filepath="$PROJECT_DIR$/services-matrix/services-matrix.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services-optimization/services-optimization.iml" filepath="$PROJECT_DIR$/services-optimization/services-optimization.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services-turf/services-turf.iml" filepath="$PROJECT_DIR$/services-turf/services-turf.iml" />
     </modules>
   </component>
 </project>

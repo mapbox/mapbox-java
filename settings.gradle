@@ -1,1 +1,1 @@
-include ':app', ':services-geojson', ':services-directions', ':services'
+include ':app', ':services-geojson', ':services-directions', ':services', ':services-geocoding', ':services-turf', ':services-optimization', ':services-matrix'

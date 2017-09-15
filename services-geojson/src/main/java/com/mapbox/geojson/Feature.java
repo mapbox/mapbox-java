@@ -211,7 +211,7 @@ public abstract class Feature implements GeoJson {
    * @return a {@link JsonObject} which holds this features current properties
    * @since 1.0.0
    */
-  @NonNull
+  @Nullable
   public abstract JsonObject properties();
 
   /**
