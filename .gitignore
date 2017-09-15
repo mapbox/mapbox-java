@@ -1,5 +1,12 @@
+
+# Gradle
 .gradle
 /local.properties
+
+# IntelliJ
+out/
+
+
 /build
 build/
 /captures
@@ -14,3 +21,4 @@ obj
 
 #MacOS
 .DS_Store
+
