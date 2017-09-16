@@ -5,8 +5,17 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.0.0-beta5'
+    classpath 'com.android.tools.build:gradle:2.3.3'
   }
+}
+
+plugins {
+  id 'com.gradle.build-scan' version '1.9'
+}
+
+buildScan {
+  licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+  licenseAgree = 'yes'
 }
 
 allprojects {

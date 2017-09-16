@@ -39,22 +39,22 @@ public abstract class DirectionsResponse implements Serializable {
     return new AutoValue_DirectionsResponse.Builder();
   }
 
-//  /**
-//   * Create a new instance of this class by passing in a formatted valid JSON String.
-//   *
-//   * @param json a formatted valid JSON string defining a GeoJson Directions Response
-//   * @return a new instance of this class defined by the values passed inside this static factory
-//   *   method
-//   * @since 1.0.0
-//   */
-//  public static DirectionsResponse fromJson(String json) {
-//    GsonBuilder gson = new GsonBuilder();
-//    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-//    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-//    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-//    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
-//    return gson.create().fromJson(json, DirectionsResponse.class);
-//  }
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a GeoJson Directions Response
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 1.0.0
+   */
+  public static DirectionsResponse fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    return gson.create().fromJson(json, DirectionsResponse.class);
+  }
 
   /**
    * String indicating the state of the response. This is a separate code than the HTTP status code.
@@ -75,42 +75,42 @@ public abstract class DirectionsResponse implements Serializable {
   @NonNull
   public abstract String code();
 
-//  /**
-//   * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
-//   * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
-//   * the input coordinates.
-//   *
-//   * @return list of {@link DirectionsWaypoint} objects ordered from start of route till the end
-//   * @since 1.0.0
-//   */
-//  @Nullable
-//  public abstract List<DirectionsWaypoint> waypoints();
-//
-//  /**
-//   * List containing all the different route options. It's ordered by descending recommendation
-//   * rank. In other words, object 0 in the List is the highest recommended route. if you don't
-//   * setAlternatives to true (default is false) in your builder this should always be a List of
-//   * size 1. At most this will return 2 {@link DirectionsRoute} objects.
-//   *
-//   * @return list of {@link DirectionsRoute} objects
-//   * @since 1.0.0
-//   */
-//  @Nullable
-//  public abstract List<DirectionsRoute> routes();
+  /**
+   * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
+   * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
+   * the input coordinates.
+   *
+   * @return list of {@link DirectionsWaypoint} objects ordered from start of route till the end
+   * @since 1.0.0
+   */
+  @Nullable
+  public abstract List<DirectionsWaypoint> waypoints();
 
-//  /**
-//   * This takes the currently defined values found inside this instance and converts it to a GeoJson
-//   * string.
-//   *
-//   * @return a JSON string which represents this Geocoding Response
-//   * @since 1.0.0
-//   */
-//  public String toJson() {
-//    GsonBuilder gson = new GsonBuilder();
-//    gson.registerTypeAdapter(Point.class, new PointSerializer());
-//    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-//    return gson.create().toJson(this);
-//  }
+  /**
+   * List containing all the different route options. It's ordered by descending recommendation
+   * rank. In other words, object 0 in the List is the highest recommended route. if you don't
+   * setAlternatives to true (default is false) in your builder this should always be a List of
+   * size 1. At most this will return 2 {@link DirectionsRoute} objects.
+   *
+   * @return list of {@link DirectionsRoute} objects
+   * @since 1.0.0
+   */
+  @Nullable
+  public abstract List<DirectionsRoute> routes();
+
+  /**
+   * This takes the currently defined values found inside this instance and converts it to a GeoJson
+   * string.
+   *
+   * @return a JSON string which represents this Geocoding Response
+   * @since 1.0.0
+   */
+  public String toJson() {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointSerializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    return gson.create().toJson(this);
+  }
 
   /**
    * Gson type adapter for parsing Gson to this class.
@@ -142,29 +142,29 @@ public abstract class DirectionsResponse implements Serializable {
      */
     public abstract Builder code(@NonNull String code);
 
-//    /**
-//     * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
-//     * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
-//     * the input coordinates.
-//     *
-//     * @param waypoints list of {@link DirectionsWaypoint} objects ordered from start of route till
-//     *                  the end
-//     * @return this builder for chaining options together
-//     * @since 3.0.0
-//     */
-//    public abstract Builder waypoints(@Nullable List<DirectionsWaypoint> waypoints);
-//
-//    /**
-//     * List containing all the different route options. It's ordered by descending recommendation
-//     * rank. In other words, object 0 in the List is the highest recommended route. if you don't
-//     * setAlternatives to true (default is false) in your builder this should always be a List of
-//     * size 1. At most this will return 2 {@link DirectionsRoute} objects.
-//     *
-//     * @param routes list of {@link DirectionsRoute} objects
-//     * @return this builder for chaining options together
-//     * @since 3.0.0
-//     */
-//    public abstract Builder routes(@Nullable List<DirectionsRoute> routes);
+    /**
+     * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
+     * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
+     * the input coordinates.
+     *
+     * @param waypoints list of {@link DirectionsWaypoint} objects ordered from start of route till
+     *                  the end
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder waypoints(@Nullable List<DirectionsWaypoint> waypoints);
+
+    /**
+     * List containing all the different route options. It's ordered by descending recommendation
+     * rank. In other words, object 0 in the List is the highest recommended route. if you don't
+     * setAlternatives to true (default is false) in your builder this should always be a List of
+     * size 1. At most this will return 2 {@link DirectionsRoute} objects.
+     *
+     * @param routes list of {@link DirectionsRoute} objects
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder routes(@Nullable List<DirectionsRoute> routes);
 
     /**
      * Build a new {@link DirectionsResponse} object.

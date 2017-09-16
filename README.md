@@ -1,9 +1,23 @@
-[![](https://raw.githubusercontent.com/mapbox/mapbox-java/master/.github/splash-img.png)](https://www.mapbox.com/android-docs/mapbox-services/)
+<h1 align="center">
+  <br>
+  <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/"><img src="https://github.com/mapbox/mapbox-java/blob/mb-java-3.0.0/.github/mbxservice-logo.png" alt="Mapbox Service" width="400"></a>
+</h1>
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services) [![CircleCI](https://circleci.com/gh/mapbox/mapbox-java.svg?style=svg)](https://circleci.com/gh/mapbox/mapbox-java)
+<h4 align="center">Build powerful Java apps using Mapbox's tools and services</h4>
+
+<p align="center">
+  <a href="https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services">
+    <img src="https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services/badge.svg"
+         alt="Maven Central">
+  </a>
+  <a href="https://circleci.com/gh/mapbox/mapbox-java">
+    <img src="https://circleci.com/gh/mapbox/mapbox-java.svg?style=shield&circle-token=:circle-token">
+  </a>
+</p>
+<br>
 
 Mapbox Android Services contains directions, geocoding, and many more APIs to use inside your Android or Java application. This repository holds the source code for the project and is divided into several modules to make it easier for developers to only include the dependencies needed for their project.
- 
+
 ## Getting Started
 
 If you are looking to include this inside your project, please take a look at [the detailed instructions](https://www.mapbox.com/android-docs/mapbox-services/) found in our docs. If you are interested in building from source, read the contributing guide inside this project.

@@ -32,4 +32,5 @@ public class Constants {
    */
   public static final String BASE_API_URL = "https://api.mapbox.com";
 
+  public static final String MAPBOX_USER = "mapbox";
 }

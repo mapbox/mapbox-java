@@ -1,0 +1,30 @@
+apply plugin: 'java-library'
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+dependencies {
+
+  compile project(":services-geojson")
+  compile project(":services-directions")
+
+  // Retrofit
+  compile dependenciesList.retrofit
+  compile dependenciesList.retrofit2Gson
+
+  // OkHttp
+  compile dependenciesList.okhttp3Logging
+
+  // Annotations
+  compileOnly dependenciesList.supportAnnotation
+
+  // AutoValue
+  compileOnly dependenciesList.autoValue
+  compileOnly dependenciesList.autoValueGson
+
+  // Test Dependencies
+  testCompile dependenciesList.junit
+  testCompile dependenciesList.hamcrestJunit
+  testCompile dependenciesList.okhttp3Mockwebserver
+}
+

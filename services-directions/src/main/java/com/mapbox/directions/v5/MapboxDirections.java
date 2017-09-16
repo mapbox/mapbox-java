@@ -339,7 +339,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * @return this builder for chaining options together
      * @since 2.0.0
      */
-    public abstract Builder geometries(@Nullable @GeometriesCriteria String geometries);
+    public abstract Builder geometries(@GeometriesCriteria String geometries);
 
     /**
      * Type of returned overview geometry. Can be {@link DirectionsCriteria#OVERVIEW_FULL} (the most
