@@ -1,6 +1,6 @@
 package com.mapbox.matrix.v1;
 
-import com.mapbox.services.Constants;
+import com.mapbox.services.constants.Constants;
 
 import java.io.IOException;
 import java.util.Locale;

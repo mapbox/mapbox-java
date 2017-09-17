@@ -71,7 +71,7 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 1.0.0
    */
   public static FeatureCollection fromFeatures(@NonNull Feature[] features) {
-    return new AutoValue_FeatureCollection(TYPE, null, Arrays.asList(features));
+    return new AutoValue_FeatureCollection(null, Arrays.asList(features));
   }
 
   /**
@@ -84,7 +84,7 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 1.0.0
    */
   public static FeatureCollection fromFeatures(@NonNull List<Feature> features) {
-    return new AutoValue_FeatureCollection(TYPE, null, features);
+    return new AutoValue_FeatureCollection(null, features);
   }
 
   /**
@@ -100,7 +100,7 @@ public abstract class FeatureCollection implements GeoJson {
    */
   public static FeatureCollection fromFeatures(@NonNull Feature[] features,
                                                @Nullable BoundingBox bbox) {
-    return new AutoValue_FeatureCollection(TYPE, bbox, Arrays.asList(features));
+    return new AutoValue_FeatureCollection(bbox, Arrays.asList(features));
   }
 
   /**
@@ -116,7 +116,7 @@ public abstract class FeatureCollection implements GeoJson {
    */
   public static FeatureCollection fromFeatures(@NonNull List<Feature> features,
                                                @Nullable BoundingBox bbox) {
-    return new AutoValue_FeatureCollection(TYPE, bbox, features);
+    return new AutoValue_FeatureCollection(bbox, features);
   }
 
   /**
@@ -129,7 +129,9 @@ public abstract class FeatureCollection implements GeoJson {
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return TYPE;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -163,6 +165,7 @@ public abstract class FeatureCollection implements GeoJson {
    * @return a JSON string which represents this Feature Collection
    * @since 1.0.0
    */
+  @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());

@@ -91,7 +91,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    * @since 1.0.0
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries) {
-    return new AutoValue_GeometryCollection(TYPE, null, geometries);
+    return new AutoValue_GeometryCollection(null, geometries);
   }
 
   /**
@@ -105,7 +105,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries,
                                                   @Nullable BoundingBox bbox) {
-    return new AutoValue_GeometryCollection(TYPE, bbox, geometries);
+    return new AutoValue_GeometryCollection(bbox, geometries);
   }
 
   /**
@@ -118,7 +118,9 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return TYPE;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the

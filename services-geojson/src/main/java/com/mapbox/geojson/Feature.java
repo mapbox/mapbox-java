@@ -79,7 +79,7 @@ public abstract class Feature implements GeoJson {
    * @since 1.0.0
    */
   public static Feature fromGeometry(@Nullable Geometry geometry) {
-    return new AutoValue_Feature(TYPE, null, null, geometry, new JsonObject());
+    return new AutoValue_Feature(null, null, geometry, new JsonObject());
   }
 
   /**
@@ -93,7 +93,7 @@ public abstract class Feature implements GeoJson {
    * @since 1.0.0
    */
   public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable BoundingBox bbox) {
-    return new AutoValue_Feature(TYPE, bbox, null, geometry, new JsonObject());
+    return new AutoValue_Feature(bbox, null, geometry, new JsonObject());
   }
 
   /**
@@ -107,7 +107,7 @@ public abstract class Feature implements GeoJson {
    * @since 1.0.0
    */
   public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties) {
-    return new AutoValue_Feature(TYPE, null, null, geometry, properties);
+    return new AutoValue_Feature(null, null, geometry, properties);
   }
 
   /**
@@ -123,7 +123,7 @@ public abstract class Feature implements GeoJson {
    */
   public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
                                      @Nullable BoundingBox bbox) {
-    return new AutoValue_Feature(TYPE, bbox, null, geometry, properties);
+    return new AutoValue_Feature(bbox, null, geometry, properties);
   }
 
   /**
@@ -138,7 +138,7 @@ public abstract class Feature implements GeoJson {
    */
   public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
                                      @Nullable String id) {
-    return new AutoValue_Feature(TYPE, null, id, geometry, properties);
+    return new AutoValue_Feature(null, id, geometry, properties);
   }
 
   /**
@@ -154,7 +154,7 @@ public abstract class Feature implements GeoJson {
    */
   public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
                                      @Nullable String id, @Nullable BoundingBox bbox) {
-    return new AutoValue_Feature(TYPE, bbox, id, geometry, properties);
+    return new AutoValue_Feature(bbox, id, geometry, properties);
   }
 
   /**
@@ -167,7 +167,9 @@ public abstract class Feature implements GeoJson {
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return TYPE;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the

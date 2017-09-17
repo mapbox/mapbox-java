@@ -7,6 +7,7 @@ import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
+import com.mapbox.services.BaseTest;
 
 import org.junit.Rule;
 import org.junit.Test;

@@ -82,7 +82,7 @@ public class DirectionsResponseTest extends BaseTest {
       .code("100")
       .build();
     assertNotNull(response);
-  }
+ }
 
   @Test
   public void code_returnsAccurateCode() throws Exception {
@@ -94,6 +94,5 @@ public class DirectionsResponseTest extends BaseTest {
       .build();
     Response<DirectionsResponse> response = mapboxDirections.executeCall();
     assertTrue(response.body().code().equals("Ok"));
-
   }
 }

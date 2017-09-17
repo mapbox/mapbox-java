@@ -1,3 +1,4 @@
-include ':app', ':services-geojson', ':services-directions', ':services', ':services-geocoding', ':services-turf', ':services-optimization', ':services-matrix', ':services-matching', ':services-staticmap'
+include ':services', ':services-geojson', ':services-directions', ':services-geocoding', ':services-turf', ':services-optimization', ':services-matrix', ':services-matching', ':services-staticmap'
 include 'samples'
+include 'examples'
 

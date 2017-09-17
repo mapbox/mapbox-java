@@ -68,7 +68,7 @@ public abstract class MultiPoint implements Geometry<List<Point>>, Serializable 
    * @since 3.0.0
    */
   public static MultiPoint fromLngLats(@NonNull List<Point> points) {
-    return new AutoValue_MultiPoint(TYPE, null, points);
+    return new AutoValue_MultiPoint(null, points);
   }
 
   /**
@@ -84,7 +84,7 @@ public abstract class MultiPoint implements Geometry<List<Point>>, Serializable 
    * @since 3.0.0
    */
   public static MultiPoint fromLngLats(@NonNull List<Point> points, @Nullable BoundingBox bbox) {
-    return new AutoValue_MultiPoint(TYPE, bbox, points);
+    return new AutoValue_MultiPoint(bbox, points);
   }
 
   /**
@@ -97,7 +97,9 @@ public abstract class MultiPoint implements Geometry<List<Point>>, Serializable 
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return TYPE;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -130,6 +132,7 @@ public abstract class MultiPoint implements Geometry<List<Point>>, Serializable 
    * @return a JSON string which represents this MultiPoint geometry
    * @since 1.0.0
    */
+  @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());

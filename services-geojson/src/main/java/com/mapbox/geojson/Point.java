@@ -1,5 +1,10 @@
 package com.mapbox.geojson;
 
+import static com.mapbox.services.constants.Constants.MAX_LATITUDE;
+import static com.mapbox.services.constants.Constants.MAX_LONGITUDE;
+import static com.mapbox.services.constants.Constants.MIN_LATITUDE;
+import static com.mapbox.services.constants.Constants.MIN_LONGITUDE;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,11 +15,6 @@ import com.google.gson.TypeAdapter;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.geojson.gson.PointSerializer;
-
-import static com.mapbox.services.Constants.MAX_LATITUDE;
-import static com.mapbox.services.Constants.MAX_LONGITUDE;
-import static com.mapbox.services.Constants.MIN_LATITUDE;
-import static com.mapbox.services.Constants.MIN_LONGITUDE;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public abstract class Point implements Geometry, Serializable {
     List<Double> coordinates = new ArrayList<>();
     coordinates.add(longitude);
     coordinates.add(latitude);
-    return new AutoValue_Point(TYPE, null, coordinates);
+    return new AutoValue_Point(null, coordinates);
   }
 
   /**
@@ -120,7 +120,7 @@ public abstract class Point implements Geometry, Serializable {
     List<Double> coordinates = new ArrayList<>();
     coordinates.add(longitude);
     coordinates.add(latitude);
-    return new AutoValue_Point(TYPE, bbox, coordinates);
+    return new AutoValue_Point(bbox, coordinates);
   }
 
   /**
@@ -147,7 +147,7 @@ public abstract class Point implements Geometry, Serializable {
     coordinates.add(longitude);
     coordinates.add(latitude);
     coordinates.add(altitude);
-    return new AutoValue_Point(TYPE, null, coordinates);
+    return new AutoValue_Point(null, coordinates);
   }
 
   /**
@@ -175,7 +175,7 @@ public abstract class Point implements Geometry, Serializable {
     coordinates.add(longitude);
     coordinates.add(latitude);
     coordinates.add(altitude);
-    return new AutoValue_Point(TYPE, bbox, coordinates);
+    return new AutoValue_Point(bbox, coordinates);
   }
 
   /**
@@ -242,7 +242,9 @@ public abstract class Point implements Geometry, Serializable {
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return TYPE;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -277,6 +279,7 @@ public abstract class Point implements Geometry, Serializable {
    * @return a JSON string which represents this Point geometry
    * @since 1.0.0
    */
+  @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());

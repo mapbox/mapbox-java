@@ -1,5 +1,8 @@
 package com.mapbox.directions.v5.models;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import com.mapbox.directions.v5.BaseTest;
 import com.mapbox.directions.v5.MapboxDirections;
 import com.mapbox.geojson.Point;
@@ -17,9 +20,6 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class DirectionsWaypointTest extends BaseTest {
 
@@ -97,8 +97,8 @@ public class DirectionsWaypointTest extends BaseTest {
   @Test
   public void name_doesReturnCorrectInformationAfterRequest() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
-      .destination(Point.fromLngLat(-122.416667,37.783333))
-      .origin(Point.fromLngLat(-121.900000,37.333333))
+      .destination(Point.fromLngLat(-122.416667, 37.783333))
+      .origin(Point.fromLngLat(-121.900000, 37.333333))
       .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
       .build();

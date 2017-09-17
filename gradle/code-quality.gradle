@@ -1,5 +1,15 @@
+apply plugin: 'com.github.spotbugs'
+apply plugin: 'org.sonarqube'
+apply plugin: "com.github.kt3k.coveralls"
 apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
+apply plugin: 'java'
 apply plugin: 'pmd'
+
+configurations {
+  checkstyleConfig
+}
+
 
 checkstyle {
   configFile = rootProject.file('config/checkstyle/checkstyle.xml')
@@ -11,6 +21,34 @@ checkstyle {
   showViolations = true
 }
 
+
+spotbugs {
+  effort = 'max'
+  excludeFilter = file("${rootDir}/config/findbugs/exclude.xml")
+}
+
+pmd {
+  ruleSets = ["basic", "braces"]
+  toolVersion = pluginVersion.pmd
+}
+
+
+
+jacocoTestReport {
+  group = 'Coverage reports'
+  description = 'Generates a test coverage report for a project'
+
+  reports {
+    xml.enabled = true
+    html.enabled = true
+  }
+}
+
+
+
+
+
+
 pmd {
   ignoreFailures = true
   sourceSets = [sourceSets.main]
@@ -19,4 +57,41 @@ pmd {
       "basic",
       "braces"
   ]
+}
+
+jacoco {
+  toolVersion = pluginVersion.jacoco
+}
+
+
+
+
+
+tasks.withType(Checkstyle) {
+  enabled = System.properties.containsKey('checkstyle')
+  group = 'Checkstyle'
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
+}
+
+afterEvaluate {
+  tasks.findAll { it.name.startsWith('findbugs') }.each {
+    it.enabled = System.properties.containsKey('findbugs')
+    it.group = 'FindBugs'
+    it.reports {
+      xml.enabled = false
+      html.enabled = true
+    }
+  }
+}
+
+tasks.withType(Pmd) {
+  enabled = System.properties.containsKey('pmd')
+  group = 'PMD'
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
 }

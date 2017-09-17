@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.mapbox.geojson.GeoJson;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.Constants;
+import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
@@ -46,22 +46,29 @@ public abstract class MapboxStaticMap {
   @NonNull
   abstract String styleId();
 
-  abstract boolean logo();
+  @Nullable
+  abstract Boolean logo();
 
-  abstract boolean attribution();
+  @Nullable
+  abstract Boolean attribution();
 
+  @Nullable
   abstract Boolean retina();
 
   @Nullable
   abstract Point cameraPoint();
 
-  abstract double cameraZoom();
+  @Nullable
+  abstract Double cameraZoom();
 
-  abstract double cameraBearing();
+  @Nullable
+  abstract Double cameraBearing();
 
-  abstract double cameraPitch();
+  @Nullable
+  abstract Double cameraPitch();
 
-  abstract boolean cameraAuto();
+  @Nullable
+  abstract Boolean cameraAuto();
 
   @Nullable
   abstract String beforeLayer();

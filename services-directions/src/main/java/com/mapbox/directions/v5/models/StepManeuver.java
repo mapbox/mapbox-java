@@ -3,7 +3,6 @@ package com.mapbox.directions.v5.models;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -49,7 +48,6 @@ public abstract class StepManeuver implements Serializable {
    * @since 3.0.0
    */
   @SerializedName("location")
-  @SuppressWarnings("mutable")
   abstract double[] rawLocation();
 
   /**
@@ -82,7 +80,7 @@ public abstract class StepManeuver implements Serializable {
    * @return String with instruction
    * @see <a href='https://github.com/mapbox/mapbox-navigation-android'>Navigation SDK</a>
    * @see <a href='https://github.com/Project-OSRM/osrm-text-instructions.java'>
-   * OSRM-Text-Instructions.java</a>
+   *   OSRM-Text-Instructions.java</a>
    * @since 1.0.0
    */
   @Nullable
@@ -184,7 +182,8 @@ public abstract class StepManeuver implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder bearingBefore(@Nullable @FloatRange(from = 0, to = 360) Double bearingBefore);
+    public abstract Builder bearingBefore(
+      @Nullable @FloatRange(from = 0, to = 360) Double bearingBefore);
 
     /**
      * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
@@ -194,7 +193,8 @@ public abstract class StepManeuver implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder bearingAfter(@Nullable @FloatRange(from = 0, to = 360) Double bearingAfter);
+    public abstract Builder bearingAfter(
+      @Nullable @FloatRange(from = 0, to = 360) Double bearingAfter);
 
     /**
      * A human-readable instruction of how to execute the returned maneuver. This String is built

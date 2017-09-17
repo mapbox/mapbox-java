@@ -106,8 +106,6 @@ public abstract class MatrixResponse implements Serializable {
   @AutoValue.Builder
   public abstract static class Builder {
 
-    private Double[][] durations;
-
     /**
      * String indicating the state of the response. This is a separate code than the HTTP status
      * code. On normal valid responses, the value will be {@code Ok}.
@@ -160,14 +158,7 @@ public abstract class MatrixResponse implements Serializable {
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public Builder durations(@Nullable Double[][] durations) {
-      this.durations = durations;
-      return this;
-    }
-
-    abstract Builder durations(@Nullable List<Double[]> durations);
-
-    abstract MatrixResponse autoBuild();
+    public abstract Builder durations(@Nullable List<Double[]> durations);
 
     /**
      * Build a new {@link MatrixResponse} object.
@@ -175,9 +166,6 @@ public abstract class MatrixResponse implements Serializable {
      * @return a new {@link MatrixResponse} using the provided values in this builder
      * @since 3.0.0
      */
-    public MatrixResponse build() {
-      durations(Arrays.asList(durations));
-      return autoBuild();
-    }
+    public abstract MatrixResponse build();
   }
 }

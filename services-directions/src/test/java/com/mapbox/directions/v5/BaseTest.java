@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
 public class BaseTest {
@@ -26,7 +27,7 @@ public class BaseTest {
   protected String loadJsonFixture(String filename) throws IOException {
     ClassLoader classLoader = getClass().getClassLoader();
     InputStream inputStream = classLoader.getResourceAsStream(filename);
-    Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+    Scanner s = new Scanner(inputStream, UTF_8.name()).useDelimiter("\\A");
     return s.hasNext() ? s.next() : "";
   }
 

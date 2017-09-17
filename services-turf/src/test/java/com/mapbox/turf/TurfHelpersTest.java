@@ -1,5 +1,7 @@
 package com.mapbox.turf;
 
+import com.mapbox.services.BaseTest;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -7,7 +9,6 @@ import org.junit.rules.ExpectedException;
 import static com.mapbox.turf.TurfConstants.UNIT_KILOMETERS;
 import static com.mapbox.turf.TurfConstants.UNIT_MILES;
 import static com.mapbox.turf.TurfConstants.UNIT_RADIANS;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertEquals;
 
 public class TurfHelpersTest extends BaseTest {

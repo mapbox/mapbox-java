@@ -5,6 +5,7 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
+import com.mapbox.services.BaseTest;
 
 import org.junit.Test;
 

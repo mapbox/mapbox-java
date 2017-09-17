@@ -13,6 +13,7 @@ import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
+import com.mapbox.geojson.utils.PolylineUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -88,7 +89,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
     if (multiPoint.coordinates() == null || multiPoint.coordinates().size() < 2) {
       throw new GeoJsonException("A LineString requires at least 2 coordinates.");
     }
-    return new AutoValue_LineString(TYPE, null, multiPoint.coordinates());
+    return new AutoValue_LineString(null, multiPoint.coordinates());
   }
 
   /**
@@ -106,7 +107,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull List<Point> points) {
-    return new AutoValue_LineString(TYPE, null, points);
+    return new AutoValue_LineString(null, points);
   }
 
   /**
@@ -128,7 +129,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
     if (points.size() < 2) {
       throw new GeoJsonException("LineString must be made up of 2 or more points.");
     }
-    return new AutoValue_LineString(TYPE, bbox, points);
+    return new AutoValue_LineString(bbox, points);
   }
 
   /**
@@ -145,7 +146,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
     if (multiPoint.coordinates().size() < 2) {
       throw new GeoJsonException("LineString must be made up of 2 or more points.");
     }
-    return new AutoValue_LineString(TYPE, bbox, multiPoint.coordinates());
+    return new AutoValue_LineString(bbox, multiPoint.coordinates());
   }
 
   /**
@@ -162,9 +163,9 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    *   method
    * @since 1.0.0
    */
-//  public static LineString fromPolyline(@NonNull String polyline, int precision) {
-//    return LineString.fromLngLats(PolylineUtils.decode(polyline, precision), null);
-//  }
+  public static LineString fromPolyline(@NonNull String polyline, int precision) {
+    return LineString.fromLngLats(PolylineUtils.decode(polyline, precision), null);
+  }
 
   /**
    * This describes the TYPE of GeoJson geometry this object is, thus this will always return
@@ -176,7 +177,9 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return TYPE;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -209,6 +212,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    * @return a JSON string which represents this LineString geometry
    * @since 1.0.0
    */
+  @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
@@ -225,9 +229,9 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    * @return a string describing the geometry of this LineString
    * @since 1.0.0
    */
-//  public String toPolyline(int precision) {
-//    return PolylineUtils.encode(coordinates(), precision);
-//  }
+  public String toPolyline(int precision) {
+    return PolylineUtils.encode(coordinates(), precision);
+  }
 
   /**
    * Gson TYPE adapter for parsing Gson to this class.

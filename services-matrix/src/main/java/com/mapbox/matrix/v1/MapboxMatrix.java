@@ -10,7 +10,7 @@ import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.matrix.v1.models.MatrixResponse;
-import com.mapbox.services.Constants;
+import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;

@@ -1,4 +1,6 @@
 /**
- * Contains the Mapbox Java Services classes.
+ * Contains classes with utilities useful throughout the project.
+ *
+ * @since 1.0.0
  */
-package com.mapbox.services.commons.utils;
+package com.mapbox.services.utils;

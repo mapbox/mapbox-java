@@ -58,7 +58,6 @@ public class MapboxDirectionsTest extends BaseTest {
         if (request.getPath().contains("annotations")) {
           resource = DIRECTIONS_V5_ANNOTATIONS_FIXTURE;
         }
-
         try {
           String body = loadJsonFixture(resource);
           return new MockResponse().setBody(body);
@@ -339,7 +338,7 @@ public class MapboxDirectionsTest extends BaseTest {
     MapboxDirections client = MapboxDirections.builder()
       .accessToken(ACCESS_TOKEN)
       .origin(Point.fromLngLat(1.0, 2.0))
-      .destination(Point.fromLngLat(5.0,6.0))
+      .destination(Point.fromLngLat(5.0, 6.0))
       .baseUrl(mockUrl.toString())
       .build();
 
@@ -348,7 +347,7 @@ public class MapboxDirectionsTest extends BaseTest {
     client.setCallFactory(null);
     Response<DirectionsResponse> response = client.executeCall();
     assertEquals(response.code(), 200);
-    assertEquals(response.body().code(), "ok");
+    assertEquals(response.body().code(), "Ok");
   }
 
 

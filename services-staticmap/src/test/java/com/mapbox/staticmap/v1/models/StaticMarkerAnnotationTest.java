@@ -1,8 +1,6 @@
 package com.mapbox.staticmap.v1.models;
 
 import com.mapbox.geojson.Point;
-import com.mapbox.services.Constants;
-import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.staticmap.v1.StaticMapCriteria;
 import org.hamcrest.junit.ExpectedException;
 import org.junit.Rule;

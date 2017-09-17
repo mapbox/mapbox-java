@@ -31,7 +31,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_MultiLineString(TYPE, null, coordinates);
+    return new AutoValue_MultiLineString(null, coordinates);
   }
 
   public static MultiLineString fromLineStrings(@NonNull List<LineString> lineStrings,
@@ -40,21 +40,23 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
+    return new AutoValue_MultiLineString(bbox, coordinates);
   }
 
   public static MultiLineString fromLngLats(@NonNull List<List<Point>> coordinates) {
-    return new AutoValue_MultiLineString(TYPE, null, coordinates);
+    return new AutoValue_MultiLineString(null, coordinates);
   }
 
   public static MultiLineString fromLngLats(@NonNull List<List<Point>> coordinates,
                                             @Nullable BoundingBox bbox) {
-    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
+    return new AutoValue_MultiLineString(bbox, coordinates);
   }
 
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return TYPE;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -82,7 +84,14 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
     return lineStrings;
   }
 
-
+  /**
+   * This takes the currently defined values found inside this instance and converts it to a GeoJson
+   * string.
+   *
+   * @return a JSON string which represents this MultiLineString geometry
+   * @since 1.0.0
+   */
+  @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());

@@ -1,8 +1,5 @@
 apply plugin: 'java-library'
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
-
 dependencies {
 
     compile project(":services-geojson")
@@ -15,16 +12,11 @@ dependencies {
     // OkHttp
     compile dependenciesList.okhttp3Logging
 
-    // Annotations
-    compileOnly dependenciesList.supportAnnotation
-
     // AutoValue
     compileOnly dependenciesList.autoValue
     compileOnly dependenciesList.autoValueGson
 
     // Test Dependencies
-    testCompile dependenciesList.junit
-    testCompile dependenciesList.hamcrestJunit
     testCompile dependenciesList.okhttp3Mockwebserver
 }
 

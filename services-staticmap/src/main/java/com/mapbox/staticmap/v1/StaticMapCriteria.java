@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 
-public class StaticMapCriteria {
+public final class StaticMapCriteria {
 
   private StaticMapCriteria() {
     // Empty private constructor since only static methods are found inside class.

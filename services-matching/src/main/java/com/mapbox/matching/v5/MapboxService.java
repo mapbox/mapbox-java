@@ -1,6 +1,6 @@
 package com.mapbox.matching.v5;
 
-import com.mapbox.services.Constants;
+import com.mapbox.services.constants.Constants;
 
 import java.io.IOException;
 import java.util.Locale;

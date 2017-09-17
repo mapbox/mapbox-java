@@ -31,16 +31,16 @@ public class TurfInvariant {
     throw new TurfException("A feature with a Point geometry is required.");
   }
 
-    /**
-     * Enforce expectations about types of GeoJson objects for Turf.
-     *
-     * @param value any GeoJson object
-     * @param type  expected GeoJson type
-     * @param name  name of calling function
-     * @throws TurfException signals that a Turf exception of some sort has occurred
-     * @see <a href="http://turfjs.org/docs/#geojsontype">Turf geojsonType documentation</a>
-     * @since 1.2.0
-     */
+  /**
+   * Enforce expectations about types of GeoJson objects for Turf.
+   *
+   * @param value any GeoJson object
+   * @param type  expected GeoJson type
+   * @param name  name of calling function
+   * @throws TurfException signals that a Turf exception of some sort has occurred
+   * @see <a href="http://turfjs.org/docs/#geojsontype">Turf geojsonType documentation</a>
+   * @since 1.2.0
+   */
   public static void geojsonType(GeoJson value, String type, String name) throws TurfException {
     if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)) {
       throw new TurfException("Type and name required");
@@ -62,7 +62,7 @@ public class TurfInvariant {
    * @see <a href="http://turfjs.org/docs/#featureof">Turf featureOf documentation</a>
    * @since 1.2.0
    */
-  public static void featureOf(Feature feature, String type, String name) throws TurfException {
+  public static void featureOf(Feature feature, String type, String name) {
     if (TextUtils.isEmpty(name)) {
       throw new TurfException(".featureOf() requires a name");
     }

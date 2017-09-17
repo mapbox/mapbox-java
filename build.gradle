@@ -1,32 +1,82 @@
+apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'findbugs'
+apply plugin: 'jacoco'
+
 buildscript {
+  apply from: "${rootDir}/gradle/dependencies.gradle"
 
   repositories {
-    google()
+    maven { url 'https://plugins.gradle.org/m2' }
+    maven { url "https://maven.google.com" }
+    mavenCentral()
     jcenter()
   }
+
   dependencies {
+
+    dependencies.create("com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}") {
+      transitive = false
+    }
+
+    //nexus: "com.bmuschko:gradle-nexus-plugin:${pluginVersions.nexus}",
+    classpath pluginDependencies.spotbugs
+    classpath pluginDependencies.sonarqube
     classpath 'com.android.tools.build:gradle:2.3.3'
+    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:${pluginVersion.coveralls}"
+    classpath "net.ltgt.gradle:gradle-errorprone-plugin:${pluginVersion.errorprone}"
   }
 }
 
-plugins {
-  id 'com.gradle.build-scan' version '1.9'
-}
-
-buildScan {
-  licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-  licenseAgree = 'yes'
+task testReport(type: TestReport, group: 'Build') {
+  description = 'Generates an aggregate test report'
+  destinationDir = file("${buildDir}/reports/allTests")
 }
 
 allprojects {
-  apply from: "${rootDir}/gradle/dependencies.gradle"
-  apply from: "${rootDir}/gradle/code-quality.gradle"
   repositories {
-    google()
+    maven { url 'https://plugins.gradle.org/m2' }
+    maven { url "https://maven.google.com" }
+    mavenCentral()
     jcenter()
   }
 }
 
-task clean(type: Delete) {
-  delete rootProject.buildDir
+subprojects {
+  apply from: "${rootDir}/gradle/dependencies.gradle"
+  apply from: "${rootDir}/gradle/code-quality.gradle"
+  apply plugin: 'java'
+  apply plugin: 'idea'
+  apply plugin: 'net.ltgt.errorprone'
+
+  // Fixes issue with test resources not being found inside Intellij
+  idea {
+    module {
+      testOutputDir = file('build/resources/test')
+    }
+  }
+
+  sonarqube {
+    properties {
+      property "sonar.java.binaries", "build/intermediates/classes/debug"
+      property "sonar.jacoco.reportPath","build/outputs/code-coverage/connected/coverage.ec"
+    }
+  }
+
+  sourceCompatibility = "1.7"
+  targetCompatibility = "1.7"
+
+  dependencies {
+
+    errorprone dependenciesList.errorprone
+
+    // Test Dependencies
+    testCompile dependenciesList.junit
+    testCompile dependenciesList.hamcrestJunit
+  }
 }
+
+task copyTestResources(type: Copy) {
+  from "${projectDir}/src/test/resources"
+  into "${buildDir}/classes/test"
+}
+

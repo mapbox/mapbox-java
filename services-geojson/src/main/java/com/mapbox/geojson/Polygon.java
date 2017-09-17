@@ -90,7 +90,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    * @since 3.0.0
    */
   public static Polygon fromLngLats(@NonNull List<List<Point>> coordinates) {
-    return new AutoValue_Polygon(TYPE, null, coordinates);
+    return new AutoValue_Polygon(null, coordinates);
   }
 
   /**
@@ -106,7 +106,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   public static Polygon fromLngLats(@NonNull List<List<Point>> coordinates,
                                     @Nullable BoundingBox bbox) {
-    return new AutoValue_Polygon(TYPE, bbox, coordinates);
+    return new AutoValue_Polygon(bbox, coordinates);
   }
 
   /**
@@ -127,7 +127,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
       }
       converted.add(innerList);
     }
-    return new AutoValue_Polygon(TYPE, null, converted);
+    return new AutoValue_Polygon(null, converted);
   }
 
   /**
@@ -149,13 +149,13 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null) {
-      return new AutoValue_Polygon(TYPE, null, coordinates);
+      return new AutoValue_Polygon(null, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(TYPE, null, coordinates);
+    return new AutoValue_Polygon(null, coordinates);
   }
 
   /**
@@ -179,13 +179,13 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null) {
-      return new AutoValue_Polygon(TYPE, bbox, coordinates);
+      return new AutoValue_Polygon(bbox, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(TYPE, bbox, coordinates);
+    return new AutoValue_Polygon(bbox, coordinates);
   }
 
   /**
@@ -210,13 +210,13 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null || inner.size() < 1) {
-      return new AutoValue_Polygon(TYPE, null, coordinates);
+      return new AutoValue_Polygon(null, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(TYPE, null, coordinates);
+    return new AutoValue_Polygon(null, coordinates);
   }
 
   /**
@@ -242,13 +242,13 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null) {
-      return new AutoValue_Polygon(TYPE, bbox, coordinates);
+      return new AutoValue_Polygon(bbox, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(TYPE, bbox, coordinates);
+    return new AutoValue_Polygon(bbox, coordinates);
   }
 
   /**
@@ -258,7 +258,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    * @return a {@link LineString} defining the outer perimeter of this polygon
    * @since 3.0.0
    */
-  @NonNull
+  @Nullable
   public LineString outer() {
     return LineString.fromLngLats(coordinates().get(0));
   }
@@ -290,7 +290,9 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return TYPE;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -314,7 +316,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    * @return a list of points
    * @since 3.0.0
    */
-  @NonNull
+  @Nullable
   @Override
   public abstract List<List<Point>> coordinates();
 

@@ -1,18 +1,8 @@
 apply plugin: 'java-library'
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
-
 dependencies {
 
-  // Gson
-  compile dependenciesList.gson
-
-  // Annotations
-  compileOnly dependenciesList.supportAnnotation
-
-
-  // Test Dependencies
-  testCompile dependenciesList.junit
+    // Gson
+    compile dependenciesList.gson
 }
 

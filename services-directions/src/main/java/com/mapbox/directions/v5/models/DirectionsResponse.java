@@ -2,6 +2,7 @@ package com.mapbox.directions.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,23 +38,6 @@ public abstract class DirectionsResponse implements Serializable {
    */
   public static Builder builder() {
     return new AutoValue_DirectionsResponse.Builder();
-  }
-
-  /**
-   * Create a new instance of this class by passing in a formatted valid JSON String.
-   *
-   * @param json a formatted valid JSON string defining a GeoJson Directions Response
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @since 1.0.0
-   */
-  public static DirectionsResponse fromJson(String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
-    return gson.create().fromJson(json, DirectionsResponse.class);
   }
 
   /**
@@ -98,19 +82,8 @@ public abstract class DirectionsResponse implements Serializable {
   @Nullable
   public abstract List<DirectionsRoute> routes();
 
-  /**
-   * This takes the currently defined values found inside this instance and converts it to a GeoJson
-   * string.
-   *
-   * @return a JSON string which represents this Geocoding Response
-   * @since 1.0.0
-   */
-  public String toJson() {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    return gson.create().toJson(this);
-  }
+  @Nullable
+  public abstract String uuid();
 
   /**
    * Gson type adapter for parsing Gson to this class.
@@ -165,6 +138,8 @@ public abstract class DirectionsResponse implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder routes(@Nullable List<DirectionsRoute> routes);
+
+    public abstract Builder uuid(@Nullable String uuid);
 
     /**
      * Build a new {@link DirectionsResponse} object.

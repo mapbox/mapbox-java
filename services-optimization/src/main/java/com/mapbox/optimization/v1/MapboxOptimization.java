@@ -15,7 +15,7 @@ import com.mapbox.optimization.v1.OptimizationCriteria.OverviewCriteria;
 import com.mapbox.optimization.v1.OptimizationCriteria.ProfileCriteria;
 import com.mapbox.optimization.v1.OptimizationCriteria.SourceCriteria;
 import com.mapbox.optimization.v1.models.OptimizationResponse;
-import com.mapbox.services.Constants;
+import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;

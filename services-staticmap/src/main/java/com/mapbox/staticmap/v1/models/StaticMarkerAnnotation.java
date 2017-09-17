@@ -142,7 +142,7 @@ public abstract class StaticMarkerAnnotation {
      * creates a new {@link StaticMarkerAnnotation} object which can be passed into the
      * {@link MapboxStaticMap} request.
      *
-     * @return a new instance of Mapbox Optimization
+     * @return a new instance of StaticMarkerAnnotation
      * @since 2.1.0
      */
     public StaticMarkerAnnotation build() {
