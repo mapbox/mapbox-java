@@ -12,6 +12,10 @@ import java.lang.annotation.RetentionPolicy;
  */
 public final class OptimizationCriteria {
 
+  private OptimizationCriteria() {
+    // Empty private constructor since only static methods are found inside class.
+  }
+
   /**
    * Mapbox default username.
    *

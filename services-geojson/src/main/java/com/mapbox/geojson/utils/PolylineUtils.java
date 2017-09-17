@@ -241,7 +241,7 @@ public class PolylineUtils {
       }
     }
 
-    if (prevPoint != point) {
+    if (!prevPoint.equals(point)) {
       newPoints.add(point);
     }
 

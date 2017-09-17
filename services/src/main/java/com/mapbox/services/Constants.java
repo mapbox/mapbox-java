@@ -7,7 +7,13 @@ import java.util.Locale;
  *
  * @since 3.0.0
  */
-public class Constants {
+public final class Constants {
+
+  // Empty constructor prevents users from initializing this class
+  protected Constants() {
+
+  }
+
 
   public static final double MIN_LONGITUDE = -180;
 

@@ -123,7 +123,7 @@ public abstract class BoundingBox implements Serializable {
    * @return the most westerly coordinate inside this bounding box
    * @since 3.0.0
    */
-  public double west() {
+  public final double west() {
     return southwest().longitude();
   }
 
@@ -134,7 +134,7 @@ public abstract class BoundingBox implements Serializable {
    * @return the most southerly coordinate inside this bounding box
    * @since 3.0.0
    */
-  public double south() {
+  public final double south() {
     return southwest().latitude();
   }
 
@@ -145,7 +145,7 @@ public abstract class BoundingBox implements Serializable {
    * @return the most easterly coordinate inside this bounding box
    * @since 3.0.0
    */
-  public double east() {
+  public final double east() {
     return northeast().longitude();
   }
 
@@ -156,7 +156,7 @@ public abstract class BoundingBox implements Serializable {
    * @return the most westerly coordinate inside this bounding box
    * @since 3.0.0
    */
-  public double north() {
+  public final double north() {
     return northeast().latitude();
   }
 
@@ -167,7 +167,7 @@ public abstract class BoundingBox implements Serializable {
    * @return a JSON string which represents this Bounding box
    * @since 3.0.0
    */
-  public String toJson() {
+  public final String toJson() {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointSerializer());

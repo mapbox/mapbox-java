@@ -21,5 +21,7 @@ public class DirectionsSample {
 
     Response<DirectionsResponse> response = mapboxDirections.executeCall();
     System.out.println(response.body().routes());
+
+
   }
 }

@@ -1,6 +1,7 @@
 package com.mapbox.turf;
 
 import android.support.annotation.NonNull;
+
 import com.mapbox.turf.models.LineIntersectsResult;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
@@ -130,7 +131,7 @@ public class TurfMisc {
       Feature intersectPt = null;
       if (intersect != null) {
         intersectPt = Feature.fromGeometry(
-          Point.fromLngLat(intersect.getX(), intersect.getY()));
+          Point.fromLngLat(intersect.horizontalIntersection(), intersect.verticalIntersection()));
         intersectPt.addNumberProperty("dist", TurfMeasurement.distance(pt,
           (Point) intersectPt.geometry(), TurfConstants.UNIT_MILES));
       }
@@ -168,12 +169,12 @@ public class TurfMisc {
     double b;
     double numerator1;
     double numerator2;
-    LineIntersectsResult result = new LineIntersectsResult();
+    LineIntersectsResult result = LineIntersectsResult.builder().build();
 
     denominator = ((line2EndY - line2StartY) * (line1EndX - line1StartX))
       - ((line2EndX - line2StartX) * (line1EndY - line1StartY));
     if (denominator == 0) {
-      if (result.getX() != null && result.getY() != null) {
+      if (result.horizontalIntersection() != null && result.verticalIntersection() != null) {
         return result;
       } else {
         return null;
@@ -187,19 +188,21 @@ public class TurfMisc {
     b = numerator2 / denominator;
 
     // if we cast these lines infinitely in both directions, they intersect here:
-    result.setX(line1StartX + (a * (line1EndX - line1StartX)));
-    result.setY(line1StartY + (a * (line1EndY - line1StartY)));
+    result = result.toBuilder().horizontalIntersection(line1StartX
+      + (a * (line1EndX - line1StartX))).build();
+    result = result.toBuilder().verticalIntersection(line1StartY
+      + (a * (line1EndY - line1StartY))).build();
 
     // if line1 is a segment and line2 is infinite, they intersect if:
     if (a > 0 && a < 1) {
-      result.setOnLine1(true);
+      result = result.toBuilder().onLine1(true).build();
     }
     // if line2 is a segment and line1 is infinite, they intersect if:
     if (b > 0 && b < 1) {
-      result.setOnLine2(true);
+      result = result.toBuilder().onLine2(true).build();
     }
     // if line1 and line2 are segments, they intersect if both of the above are true
-    if (result.isOnLine1() && result.isOnLine2()) {
+    if (result.onLine1() && result.onLine2()) {
       return result;
     } else {
       return null;

@@ -2,10 +2,12 @@ package com.mapbox.geojson;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
@@ -84,7 +86,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    */
   public static LineString fromLngLats(@NonNull MultiPoint multiPoint) {
     if (multiPoint.coordinates() == null || multiPoint.coordinates().size() < 2) {
-      throw new RuntimeException("A LineString requires at least 2 coordinates.");
+      throw new GeoJsonException("A LineString requires at least 2 coordinates.");
     }
     return new AutoValue_LineString(TYPE, null, multiPoint.coordinates());
   }
@@ -124,7 +126,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    */
   public static LineString fromLngLats(@NonNull List<Point> points, @Nullable BoundingBox bbox) {
     if (points.size() < 2) {
-      throw new RuntimeException("LineString must be made up of 2 or more points.");
+      throw new GeoJsonException("LineString must be made up of 2 or more points.");
     }
     return new AutoValue_LineString(TYPE, bbox, points);
   }
@@ -141,7 +143,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    */
   public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
     if (multiPoint.coordinates().size() < 2) {
-      throw new RuntimeException("LineString must be made up of 2 or more points.");
+      throw new GeoJsonException("LineString must be made up of 2 or more points.");
     }
     return new AutoValue_LineString(TYPE, bbox, multiPoint.coordinates());
   }

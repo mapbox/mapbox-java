@@ -1,5 +1,7 @@
 package com.mapbox.turf.models;
 
+import com.google.auto.value.AutoValue;
+
 /**
  * if the lines intersect, the result contains the x and y of the intersection (treating the lines
  * as infinite) and booleans for whether line segment 1 or line segment 2 contain the point
@@ -7,100 +9,94 @@ package com.mapbox.turf.models;
  * @see <a href="http://jsfiddle.net/justin_c_rounds/Gd2S2/light/">Good example of how this class works written in JavaScript</a>
  * @since 1.2.0
  */
-public class LineIntersectsResult {
+@AutoValue
+public abstract class LineIntersectsResult {
 
-  private Double x;
-  private Double y;
-  private boolean onLine1 = false;
-  private boolean onLine2 = false;
-
-  /**
-   * Public constructor
-   *
-   * @since 1.2.0
-   */
-  public LineIntersectsResult() {
+  public static Builder builder() {
+    return new AutoValue_LineIntersectsResult.Builder();
   }
 
   /**
-   * If the lines intersect, use this method to get the intersecting points {@code X} value
+   * If the lines intersect, use this method to get the intersecting point {@code X} value
    *
-   * @return The {@code X} value where the lines intersect.
+   * @return the {@code X} value where the lines intersect
    * @since 1.2.0
    */
-  public Double getX() {
-    return x;
-  }
+  public abstract Double horizontalIntersection();
 
   /**
-   * Set the points {@code X} value where the two lines should intersect.
+   * If the lines intersect, use this method to get the intersecting point {@code Y} value
    *
-   * @param x Double value representing the intersecting {@code X} coordinate.
+   * @return the {@code Y} value where the lines intersect
    * @since 1.2.0
    */
-  public void setX(Double x) {
-    this.x = x;
-  }
-
-  /**
-   * If the lines intersect, use this method to get the intersecting points {@code Y} value
-   *
-   * @return The {@code Y} value where the lines intersect.
-   * @since 1.2.0
-   */
-  public Double getY() {
-    return y;
-  }
-
-  /**
-   * Set the points {@code Y} value where the two lines should intersect.
-   *
-   * @param y Double value representing the intersecting {@code Y} coordinate.
-   * @since 1.2.0
-   */
-  public void setY(Double y) {
-    this.y = y;
-  }
+  public abstract Double verticalIntersection();
 
   /**
    * Determine if the intersecting point lands on line 1 or not.
    *
-   * @return True if the intersecting point is located on line 1, otherwise false.
+   * @return true if the intersecting point is located on line 1, otherwise false
    * @since 1.2.0
    */
-  public boolean isOnLine1() {
-    return onLine1;
-  }
-
-  /**
-   * Set whether the intersecting point should land on line 1.
-   *
-   * @param onLine1 True if you want the intersecting point to lie on line 1, otherwise pass in
-   *                false.
-   * @since 1.2.0
-   */
-  public void setOnLine1(boolean onLine1) {
-    this.onLine1 = onLine1;
-  }
+  public abstract boolean onLine1();
 
   /**
    * Determine if the intersecting point lands on line 2 or not.
    *
-   * @return True if the intersecting point is located on line 2, otherwise false.
+   * @return true if the intersecting point is located on line 2, otherwise false
    * @since 1.2.0
    */
-  public boolean isOnLine2() {
-    return onLine2;
-  }
+  public abstract boolean onLine2();
 
   /**
-   * Set whether the intersecting point should land on line 2.
+   * Convert current instance values into another Builder to quickly change one or more values.
    *
-   * @param onLine2 True if you want the intersecting point to lie on line 2, otherwise pass in
-   *                false.
-   * @since 1.2.0
+   * @return a new instance of {@link LineIntersectsResult} using the newly defined values
+   * @since 3.0.0
    */
-  public void setOnLine2(boolean onLine2) {
-    this.onLine2 = onLine2;
+  public abstract Builder toBuilder();
+
+  @AutoValue.Builder
+  public abstract static class Builder {
+
+    /**
+     * If the lines intersect, use this method to get the intersecting point {@code X} value
+     *
+     * @return the {@code X} value where the lines intersect
+     * @since 3.0.0
+     */
+    public abstract Builder horizontalIntersection(Double horizontalIntersection);
+
+    /**
+     * If the lines intersect, use this method to get the intersecting point {@code Y} value
+     *
+     * @return the {@code Y} value where the lines intersect
+     * @since 3.0.0
+     */
+    public abstract Builder verticalIntersection(Double verticalIntersection);
+
+    /**
+     * Determine if the intersecting point lands on line 1 or not.
+     *
+     * @return true if the intersecting point is located on line 1, otherwise false
+     * @since 3.0.0
+     */
+    public abstract Builder onLine1(boolean onLine1);
+
+    /**
+     * Determine if the intersecting point lands on line 2 or not.
+     *
+     * @return true if the intersecting point is located on line 2, otherwise false
+     * @since 3.0.0
+     */
+    public abstract Builder onLine2(boolean onLine2);
+
+    /**
+     * Builds a new instance of a {@link LineIntersectsResult} class.
+     *
+     * @return a new instance of {@link LineIntersectsResult}
+     * @since 3.0.0
+     */
+    public abstract LineIntersectsResult build();
   }
 }

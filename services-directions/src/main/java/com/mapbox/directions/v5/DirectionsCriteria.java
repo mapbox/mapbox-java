@@ -12,6 +12,10 @@ import java.lang.annotation.RetentionPolicy;
  */
 public final class DirectionsCriteria {
 
+  private DirectionsCriteria() {
+    //not called
+  }
+
   /**
    * Mapbox default username.
    *

@@ -3,10 +3,12 @@ package com.mapbox.geojson;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
@@ -349,11 +351,11 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   private static boolean isLinearRing(LineString lineString) {
     if (lineString.coordinates().size() < 4) {
-      throw new RuntimeException("LinearRings need to be made up of 4 or more coordinates.");
+      throw new GeoJsonException("LinearRings need to be made up of 4 or more coordinates.");
     }
     if (!(lineString.coordinates().get(0).equals(
       lineString.coordinates().get(lineString.coordinates().size() - 1)))) {
-      throw new RuntimeException("LinearRings require first and last coordinate to be identical");
+      throw new GeoJsonException("LinearRings require first and last coordinate to be identical");
     }
     return true;
   }

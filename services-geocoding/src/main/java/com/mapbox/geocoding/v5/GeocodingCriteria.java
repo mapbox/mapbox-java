@@ -12,6 +12,10 @@ import java.lang.annotation.RetentionPolicy;
  */
 public final class GeocodingCriteria {
 
+  private GeocodingCriteria() {
+    // Empty private constructor
+  }
+
   /**
    * Default geocoding mode.
    *

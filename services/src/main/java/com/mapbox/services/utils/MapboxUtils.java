@@ -7,6 +7,10 @@ package com.mapbox.services.utils;
  */
 public class MapboxUtils {
 
+  private MapboxUtils() {
+    // Empty private constructor since only static methods are found inside class.
+  }
+
   /**
    * Checks that the provided access token is not empty or null, and that it starts with
    * the right prefixes. Note that this method does not check Mapbox servers to verify that

@@ -46,7 +46,7 @@
     <!--#################################################################-->
 
     <!-- allow the dev to switch the checker OFF in a single file or a method -->
-    <module name="SuppressionCommentFilter"/>
+    <!-- <module name="SuppressionCommentFilter"/> -->
 
     <!-- needed for switching the checks on and off-->
     <!--<module name="FileContentsHolder" />-->
