@@ -35,7 +35,9 @@ import com.mapbox.services.android.telemetry.utils.TelemetryUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -75,6 +77,15 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private Hashtable<String, Object> customTurnstileEvent = null;
   private int sessionIdRotationTime = TelemetryConstants.DEFAULT_SESSION_ID_ROTATION_HOURS;
   private boolean debugLoggingEnabled = false;
+  private static final List<String> VALID_USER_AGENTS = new ArrayList<String>() {
+    {
+      add("MapboxEventsAndroid/");
+      add("MapboxTelemetryAndroid/");
+      add("MapboxEventsUnityAndroid/");
+      add("mapbox-navigation-android/");
+      add("mapbox-navigation-ui-android/");
+    }
+  };
 
   /**
    * Private constructor for configuring the single instance per app.
@@ -187,6 +198,17 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     }
   }
 
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public void newUserAgent(String userAgent) {
+    if (isUserAgentValid(userAgent)) {
+      this.userAgent = userAgent;
+      setUserAgent();
+    }
+  }
+
   /**
    * Checks that TelemetryService has been configured by developer
    */
@@ -266,6 +288,17 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     String fullUserAgent = TextUtils.isEmpty(appIdentifier) ? userAgent : Util.toHumanReadableAscii(
       String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
     client.setUserAgent(fullUserAgent);
+  }
+
+  private boolean isUserAgentValid(String userAgent) {
+    if (!TextUtils.isEmpty(userAgent)) {
+      for (String userAgentPrefix : VALID_USER_AGENTS) {
+        if (userAgent.startsWith(userAgentPrefix)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**
