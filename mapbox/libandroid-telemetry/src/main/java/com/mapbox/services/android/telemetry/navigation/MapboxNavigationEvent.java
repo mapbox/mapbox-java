@@ -5,6 +5,8 @@ import android.location.Location;
 import com.mapbox.services.android.telemetry.constants.TelemetryConstants;
 import com.mapbox.services.android.telemetry.utils.TelemetryUtils;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -226,7 +228,8 @@ public class MapboxNavigationEvent {
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
     event.put(KEY_DURATION_REMAINING, durationRemaining);
-    event.put(KEY_ARRIVAL_TIMESTAMP, arrivalTimestamp);
+    // arrivalTimestamp may be null
+    addArrivalTimestamp(event, arrivalTimestamp);
     return event;
   }
 
@@ -258,13 +261,31 @@ public class MapboxNavigationEvent {
     event.put(KEY_ORIGINAL_STEP_COUNT, originalStepCount);
     event.put(KEY_REROUTE_COUNT, rerouteCount);
     event.put(KEY_SIMULATION, isSimulation);
-    event.put(KEY_ORIGINAL_REQUEST_IDENTIFIER, originalRequestIdentifier);
-    event.put(KEY_REQUEST_IDENTIFIER, requestIdentifier);
+    // originalRequestIdentifier may be "null"
+    addPairIntoEventIfNeeded(event, KEY_ORIGINAL_REQUEST_IDENTIFIER, originalRequestIdentifier);
+    // requestIdentifier may be "null"
+    addPairIntoEventIfNeeded(event, KEY_REQUEST_IDENTIFIER, requestIdentifier);
     event.put(KEY_ORIGINAL_GEOMETRY, originalGeometry);
     event.put(KEY_ORIGINAL_ESTIMATED_DISTANCE, originalEstimatedDistance);
     event.put(KEY_ORIGINAL_ESTIMATED_DURATION, originalEstimatedDuration);
-    event.put(KEY_AUDIO_TYPE, audioType);
+    // audioType may be "null"
+    addPairIntoEventIfNeeded(event, KEY_AUDIO_TYPE, audioType);
     return event;
+  }
+
+  private static void addArrivalTimestamp(Hashtable<String, Object> event, Date arrivalTimestamp) {
+    if (arrivalTimestamp == null) {
+      event.put(KEY_ARRIVAL_TIMESTAMP, JSONObject.NULL);
+    } else {
+      event.put(KEY_ARRIVAL_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(arrivalTimestamp));
+    }
+  }
+
+  private static void addPairIntoEventIfNeeded(Hashtable<String, Object> event, String key, String value) {
+    // See NavigationMetricsWrapper.java in https://github.com/mapbox/mapbox-navigation-android
+    if (value == null || value.equalsIgnoreCase("null")) {
+      event.put(key, JSONObject.NULL);
+    }
   }
 
   private static Hashtable<String, Object> getStepMetadata(
