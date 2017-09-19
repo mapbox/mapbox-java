@@ -258,13 +258,23 @@ public class MapboxNavigationEvent {
     event.put(KEY_ORIGINAL_STEP_COUNT, originalStepCount);
     event.put(KEY_REROUTE_COUNT, rerouteCount);
     event.put(KEY_SIMULATION, isSimulation);
-    event.put(KEY_ORIGINAL_REQUEST_IDENTIFIER, originalRequestIdentifier);
-    event.put(KEY_REQUEST_IDENTIFIER, requestIdentifier);
+    // originalRequestIdentifier may be "null"
+    addPairIntoEventIfNeeded(event, KEY_ORIGINAL_REQUEST_IDENTIFIER, originalRequestIdentifier);
+    // requestIdentifier may be "null"
+    addPairIntoEventIfNeeded(event, KEY_REQUEST_IDENTIFIER, requestIdentifier);
     event.put(KEY_ORIGINAL_GEOMETRY, originalGeometry);
     event.put(KEY_ORIGINAL_ESTIMATED_DISTANCE, originalEstimatedDistance);
     event.put(KEY_ORIGINAL_ESTIMATED_DURATION, originalEstimatedDuration);
-    event.put(KEY_AUDIO_TYPE, audioType);
+    // audioType may be "null"
+    addPairIntoEventIfNeeded(event, KEY_AUDIO_TYPE, audioType);
     return event;
+  }
+
+  private static void addPairIntoEventIfNeeded(Hashtable<String, Object> event, String key, String value) {
+    // See NavigationMetricsWrapper.java in https://github.com/mapbox/mapbox-navigation-android
+    if (!value.equalsIgnoreCase("null")) {
+      event.put(key, value);
+    }
   }
 
   private static Hashtable<String, Object> getStepMetadata(
