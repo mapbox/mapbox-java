@@ -31,6 +31,7 @@ public class MapboxEvent implements Serializable {
   public static final String KEY_USER_ID = "userId";
   public static final String KEY_ENABLED_TELEMETRY = "enabled.telemetry";
   public static final String KEY_MODEL = "model";
+  public static final String KEY_DEVICE = "device";
   public static final String KEY_OPERATING_SYSTEM = "operatingSystem";
   public static final String KEY_RESOLUTION = "resolution";
   public static final String KEY_ACCESSIBILITY_FONT_SCALE = "accessibilityFontScale";

@@ -583,45 +583,33 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
       eventWithAttributes.put(MapboxEvent.KEY_CELLULAR_NETWORK_TYPE, TelemetryUtils.getCellularNetworkType(context));
       eventWithAttributes.put(MapboxEvent.KEY_WIFI, TelemetryUtils.getConnectedToWifi(context));
       putEventOnQueue(eventWithAttributes);
-    } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_DEPART)) {
-      // User started a route
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_CONNECTIVITY, TelemetryUtils.getCellularNetworkType(context));
-      putEventOnQueue(eventWithAttributes);
-    } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_FEEDBACK)) {
-      // User feedback/reroute event
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_CONNECTIVITY, TelemetryUtils.getCellularNetworkType(context));
-      putEventOnQueue(eventWithAttributes);
-    } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_ARRIVE)) {
-      // User arrived
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_CONNECTIVITY, TelemetryUtils.getCellularNetworkType(context));
-      putEventOnQueue(eventWithAttributes);
-    } else if (eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_CANCEL)) {
-      // User canceled navigation
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
-      eventWithAttributes.put(MapboxNavigationEvent.KEY_CONNECTIVITY, TelemetryUtils.getCellularNetworkType(context));
+    } else if (isANavigationEvent(eventType)) {
+      addGeneralNavigationMetadataTo(eventWithAttributes);
       putEventOnQueue(eventWithAttributes);
     } else {
       Log.w(LOG_TAG, String.format("Unknown event type provided: %s.", eventType));
     }
+  }
+
+  private boolean isANavigationEvent(String eventType) {
+    boolean isDepart = eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_DEPART);
+    boolean isFeedback = eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_FEEDBACK);
+    boolean isArrived = eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_ARRIVE);
+    boolean isCanceled = eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_CANCEL);
+
+    boolean isANavigationEvent = isDepart || isFeedback || isArrived || isCanceled;
+
+    return isANavigationEvent;
+  }
+
+  private void addGeneralNavigationMetadataTo(Hashtable<String, Object> eventWithAttributes) {
+    eventWithAttributes.put(MapboxEvent.KEY_DEVICE, Build.MODEL);
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_LEVEL, getBatteryLevel());
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_CONNECTIVITY, TelemetryUtils.getCellularNetworkType(context));
   }
 
   /**
