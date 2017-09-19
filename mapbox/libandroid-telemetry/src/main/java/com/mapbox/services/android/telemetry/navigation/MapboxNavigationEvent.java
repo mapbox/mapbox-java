@@ -226,7 +226,7 @@ public class MapboxNavigationEvent {
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
     event.put(KEY_DURATION_REMAINING, durationRemaining);
-    event.put(KEY_ARRIVAL_TIMESTAMP, arrivalTimestamp);
+    event.put(KEY_ARRIVAL_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(arrivalTimestamp));
     return event;
   }
 
