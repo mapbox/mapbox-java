@@ -5,6 +5,8 @@ import android.location.Location;
 import com.mapbox.services.android.telemetry.constants.TelemetryConstants;
 import com.mapbox.services.android.telemetry.utils.TelemetryUtils;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -226,7 +228,8 @@ public class MapboxNavigationEvent {
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
     event.put(KEY_DURATION_REMAINING, durationRemaining);
-    event.put(KEY_ARRIVAL_TIMESTAMP, arrivalTimestamp);
+    // arrivalTimestamp may be null
+    addArrivalTimestamp(event, arrivalTimestamp);
     return event;
   }
 
@@ -270,10 +273,18 @@ public class MapboxNavigationEvent {
     return event;
   }
 
+  private static void addArrivalTimestamp(Hashtable<String, Object> event, Date arrivalTimestamp) {
+    if (arrivalTimestamp == null) {
+      event.put(KEY_ARRIVAL_TIMESTAMP, JSONObject.NULL);
+    } else {
+      event.put(KEY_ARRIVAL_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(arrivalTimestamp));
+    }
+  }
+
   private static void addPairIntoEventIfNeeded(Hashtable<String, Object> event, String key, String value) {
     // See NavigationMetricsWrapper.java in https://github.com/mapbox/mapbox-navigation-android
-    if (!value.equalsIgnoreCase("null")) {
-      event.put(key, value);
+    if (value == null || value.equalsIgnoreCase("null")) {
+      event.put(key, JSONObject.NULL);
     }
   }
 
