@@ -15,7 +15,7 @@ import java.util.Hashtable;
  */
 public class MapboxNavigationEvent {
 
-  private static final int EVENT_VERSION = 1;
+  private static final int EVENT_VERSION = 3;
 
   // Event types
   public static final String TYPE_TURNSTILE = "navigation.turnstile";
