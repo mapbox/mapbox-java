@@ -8,7 +8,12 @@ import static com.mapbox.services.constants.Constants.MIN_LONGITUDE;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.annotations.Expose;
+import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.geojson.gson.PointSerializer;
 
@@ -168,8 +173,7 @@ public abstract class BoundingBox implements Serializable {
    */
   public final String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
+    gson.excludeFieldsWithoutExposeAnnotation();
     return gson.create().toJson(this);
   }
 }

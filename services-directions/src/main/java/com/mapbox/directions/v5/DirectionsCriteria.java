@@ -12,6 +12,10 @@ import java.lang.annotation.RetentionPolicy;
  */
 public final class DirectionsCriteria {
 
+  private DirectionsCriteria() {
+    //not called
+  }
+
   /**
    * Mapbox default username.
    *
@@ -170,9 +174,5 @@ public final class DirectionsCriteria {
     ANNOTATION_SPEED
   })
   public @interface AnnotationCriteria {
-  }
-
-  private DirectionsCriteria() {
-    //not called
   }
 }

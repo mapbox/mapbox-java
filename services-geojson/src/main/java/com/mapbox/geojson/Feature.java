@@ -9,6 +9,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeometryDeserializer;
@@ -49,6 +51,8 @@ import com.mapbox.geojson.gson.PointSerializer;
 @AutoValue
 public abstract class Feature implements GeoJson {
 
+  @Expose
+  @SerializedName("type")
   private static final String TYPE = "Feature";
 
   /**
@@ -228,6 +232,7 @@ public abstract class Feature implements GeoJson {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
     return gson.create().toJson(this);
   }
 

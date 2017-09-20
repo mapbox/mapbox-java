@@ -6,6 +6,8 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeometryDeserializer;
@@ -39,6 +41,8 @@ import java.util.List;
 @AutoValue
 public abstract class FeatureCollection implements GeoJson {
 
+  @Expose
+  @SerializedName("type")
   private static final String TYPE = "FeatureCollection";
 
   /**
@@ -120,7 +124,7 @@ public abstract class FeatureCollection implements GeoJson {
   }
 
   /**
-   * This describes the TYPE of GeoJson this object is, thus this will always return
+   * This describes the type of GeoJson this object is, thus this will always return
    * {@link FeatureCollection}.
    *
    * @return a String which describes the TYPE of GeoJson, for this object it will always return
@@ -170,11 +174,12 @@ public abstract class FeatureCollection implements GeoJson {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
     return gson.create().toJson(this);
   }
 
   /**
-   * Gson TYPE adapter for parsing Gson to this class.
+   * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
    * @return the TYPE adapter for this class

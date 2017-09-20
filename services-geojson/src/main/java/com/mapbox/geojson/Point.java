@@ -12,7 +12,10 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
+import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.geojson.gson.PointSerializer;
 
@@ -54,6 +57,8 @@ import java.util.List;
 @AutoValue
 public abstract class Point implements Geometry, Serializable {
 
+  @Expose
+  @SerializedName("type")
   private static final String TYPE = "Point";
 
   /**
@@ -282,9 +287,9 @@ public abstract class Point implements Geometry, Serializable {
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
     return gson.create().toJson(this);
   }
 

@@ -36,10 +36,10 @@ public class PointSerializer implements JsonSerializer<Point> {
   public JsonElement serialize(Point src, Type typeOfSrc, JsonSerializationContext context) {
     JsonArray rawCoordinates = new JsonArray();
 
-    BigDecimal lat = new BigDecimal(src.latitude());
+    BigDecimal lat = BigDecimal.valueOf(src.latitude());
     lat = lat.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros();
 
-    BigDecimal lon = new BigDecimal(src.longitude());
+    BigDecimal lon = BigDecimal.valueOf(src.longitude());
     lon = lon.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros();
 
     rawCoordinates.add(new JsonPrimitive(lon));
