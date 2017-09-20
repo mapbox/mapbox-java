@@ -106,12 +106,13 @@ public class MapboxNavigationEvent {
     int rerouteCount, boolean isSimulation, String originalRequestIdentifier,
     String requestIdentifier, String originalGeometry, int originalEstimatedDistance,
     int originalEstimatedDuration, String audioType, int stepCount, int originalStepCount,
-    int distanceCompleted, int distanceRemaining, int durationRemaining) {
+    int distanceCompleted, int distanceRemaining, int durationRemaining, Date startTimestamp) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
       lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount,
       isSimulation, originalRequestIdentifier, requestIdentifier, originalGeometry,
       originalEstimatedDistance, originalEstimatedDuration, audioType, stepCount, originalStepCount);
     event.put(KEY_EVENT, TYPE_DEPART);
+    event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
     event.put(KEY_DURATION_REMAINING, durationRemaining);
@@ -198,10 +199,10 @@ public class MapboxNavigationEvent {
   public static Hashtable<String, Object> buildArriveEvent(
     String sdKIdentifier, String sdkVersion, String sessionIdentifier, double lat, double lng,
     String geometry, String profile, int estimatedDistance, int estimatedDuration,
-    int rerouteCount, Date startTimestamp, int distanceCompleted, boolean isSimulation,
-    String originalRequestIdentifier, String requestIdentifier, String originalGeometry,
-    int originalEstimatedDistance, int originalEstimatedDuration, String audioType, int stepCount,
-    int originalStepCount) {
+    int rerouteCount, Date startTimestamp, int distanceCompleted, int distanceRemaining,
+    int durationRemaining, boolean isSimulation, String originalRequestIdentifier,
+    String requestIdentifier, String originalGeometry, int originalEstimatedDistance,
+    int originalEstimatedDuration, String audioType, int stepCount, int originalStepCount) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
       lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount,
       isSimulation, originalRequestIdentifier, requestIdentifier, originalGeometry,
@@ -209,6 +210,8 @@ public class MapboxNavigationEvent {
     event.put(KEY_EVENT, TYPE_ARRIVE);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
+    event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
+    event.put(KEY_DURATION_REMAINING, durationRemaining);
     return event;
   }
 
