@@ -105,12 +105,16 @@ public class MapboxNavigationEvent {
     String geometry, String profile, int estimatedDistance, int estimatedDuration,
     int rerouteCount, boolean isSimulation, String originalRequestIdentifier,
     String requestIdentifier, String originalGeometry, int originalEstimatedDistance,
-    int originalEstimatedDuration, String audioType, int stepCount, int originalStepCount) {
+    int originalEstimatedDuration, String audioType, int stepCount, int originalStepCount,
+    int distanceCompleted, int distanceRemaining, int durationRemaining) {
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
       lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount,
       isSimulation, originalRequestIdentifier, requestIdentifier, originalGeometry,
       originalEstimatedDistance, originalEstimatedDuration, audioType, stepCount, originalStepCount);
     event.put(KEY_EVENT, TYPE_DEPART);
+    event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
+    event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
+    event.put(KEY_DURATION_REMAINING, durationRemaining);
     return event;
   }
 
