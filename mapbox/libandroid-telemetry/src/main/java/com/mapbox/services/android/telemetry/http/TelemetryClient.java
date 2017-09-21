@@ -177,6 +177,7 @@ public class TelemetryClient {
       jsonObject.putOpt(MapboxNavigationEvent.KEY_ESTIMATED_DURATION,
         evt.get(MapboxNavigationEvent.KEY_ESTIMATED_DURATION));
       jsonObject.putOpt(MapboxNavigationEvent.KEY_REROUTE_COUNT, evt.get(MapboxNavigationEvent.KEY_REROUTE_COUNT));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_DEVICE, evt.get(MapboxNavigationEvent.KEY_DEVICE));
       jsonObject.putOpt(MapboxNavigationEvent.KEY_VOLUME_LEVEL, evt.get(MapboxNavigationEvent.KEY_VOLUME_LEVEL));
       jsonObject.putOpt(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS,
         evt.get(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS));

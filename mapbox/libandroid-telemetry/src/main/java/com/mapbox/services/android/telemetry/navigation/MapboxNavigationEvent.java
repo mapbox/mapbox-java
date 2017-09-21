@@ -47,6 +47,7 @@ public class MapboxNavigationEvent {
   public static final String KEY_ESTIMATED_DISTANCE = "estimatedDistance";
   public static final String KEY_ESTIMATED_DURATION = "estimatedDuration";
   public static final String KEY_REROUTE_COUNT = "rerouteCount";
+  public static final String KEY_DEVICE = "device";
   public static final String KEY_VOLUME_LEVEL = "volumeLevel";
   public static final String KEY_SCREEN_BRIGHTNESS = "screenBrightness";
   public static final String KEY_APPLICATION_STATE = "applicationState";
