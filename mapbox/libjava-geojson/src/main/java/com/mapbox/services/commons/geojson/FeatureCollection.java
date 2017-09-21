@@ -47,8 +47,43 @@ public class FeatureCollection extends BaseFeatureCollection {
     return new FeatureCollection(features);
   }
 
+  /**
+   * Create a {@link FeatureCollection} from an array of features.
+   *
+   * @param features Array of {@link Feature}
+   * @return new {@link FeatureCollection}
+   * @since 1.0.0
+   */
   public static FeatureCollection fromFeatures(Feature[] features) {
     return new FeatureCollection(Arrays.asList(features));
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+
+    FeatureCollection that = (FeatureCollection) o;
+
+    return features != null ? features.equals(that.features) : that.features == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + (features != null ? features.hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return this.toJson();
+  }
 }

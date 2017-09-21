@@ -115,9 +115,6 @@ public class Point implements Geometry<Position> {
 
   @Override
   public String toString() {
-    return "Point{"
-      + "type='" + type + '\''
-      + ", coordinates=" + coordinates
-      + '}';
+    return this.toJson();
   }
 }

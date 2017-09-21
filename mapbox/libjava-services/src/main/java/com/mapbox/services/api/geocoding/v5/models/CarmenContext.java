@@ -77,4 +77,56 @@ public class CarmenContext {
   public String getMaki() {
     return maki;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    CarmenContext that = (CarmenContext) o;
+
+    if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) {
+      return false;
+    }
+    if (getText() != null ? !getText().equals(that.getText()) : that.getText() != null) {
+      return false;
+    }
+    if (getShortCode() != null ? !getShortCode().equals(that.getShortCode()) : that.getShortCode() != null) {
+      return false;
+    }
+    if (getWikidata() != null ? !getWikidata().equals(that.getWikidata()) : that.getWikidata() != null) {
+      return false;
+    }
+    if (getCategory() != null ? !getCategory().equals(that.getCategory()) : that.getCategory() != null) {
+      return false;
+    }
+    return getMaki() != null ? getMaki().equals(that.getMaki()) : that.getMaki() == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = getId() != null ? getId().hashCode() : 0;
+    result = 31 * result + (getText() != null ? getText().hashCode() : 0);
+    result = 31 * result + (getShortCode() != null ? getShortCode().hashCode() : 0);
+    result = 31 * result + (getWikidata() != null ? getWikidata().hashCode() : 0);
+    result = 31 * result + (getCategory() != null ? getCategory().hashCode() : 0);
+    result = 31 * result + (getMaki() != null ? getMaki().hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "CarmenContext{"
+      + "id='" + id + '\''
+      + ", text='" + text + '\''
+      + ", shortCode='" + shortCode + '\''
+      + ", wikidata='" + wikidata + '\''
+      + ", category='" + category + '\''
+      + ", maki='" + maki + '\''
+      + '}';
+  }
 }

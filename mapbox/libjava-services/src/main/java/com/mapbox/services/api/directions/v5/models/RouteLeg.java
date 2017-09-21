@@ -123,4 +123,54 @@ public class RouteLeg {
   public void setAnnotation(LegAnnotation annotation) {
     this.annotation = annotation;
   }
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    RouteLeg routeLeg = (RouteLeg) o;
+
+    if (Double.compare(routeLeg.getDistance(), getDistance()) != 0) {
+      return false;
+    }
+    if (Double.compare(routeLeg.getDuration(), getDuration()) != 0) {
+      return false;
+    }
+    if (getSummary() != null ? !getSummary().equals(routeLeg.getSummary()) : routeLeg.getSummary() != null) {
+      return false;
+    }
+    if (getSteps() != null ? !getSteps().equals(routeLeg.getSteps()) : routeLeg.getSteps() != null) {
+      return false;
+    }
+    return getAnnotation() != null
+      ? getAnnotation().equals(routeLeg.getAnnotation()) : routeLeg.getAnnotation() == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + Double.valueOf(getDistance()).hashCode();
+    result = 31 * result + Double.valueOf(getDuration()).hashCode();
+    result = 31 * result + (getSummary() != null ? getSummary().hashCode() : 0);
+    result = 31 * result + (getSteps() != null ? getSteps().hashCode() : 0);
+    result = 31 * result + (getAnnotation() != null ? getAnnotation().hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "RouteLeg{"
+      + "distance=" + distance
+      + ", duration=" + duration
+      + ", summary='" + summary + '\''
+      + ", steps=" + steps
+      + ", annotation=" + annotation
+      + '}';
+  }
 }

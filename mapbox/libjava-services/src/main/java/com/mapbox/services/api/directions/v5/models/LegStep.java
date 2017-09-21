@@ -325,4 +325,100 @@ public class LegStep {
   public void setPronunciation(String pronunciation) {
     this.pronunciation = pronunciation;
   }
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    LegStep legStep = (LegStep) o;
+
+    if (Double.compare(legStep.getDistance(), getDistance()) != 0) {
+      return false;
+    }
+    if (Double.compare(legStep.getDuration(), getDuration()) != 0) {
+      return false;
+    }
+    if (Double.compare(legStep.getWeight(), getWeight()) != 0) {
+      return false;
+    }
+    if (getGeometry() != null ? !getGeometry().equals(legStep.getGeometry()) : legStep.getGeometry() != null) {
+      return false;
+    }
+    if (getName() != null ? !getName().equals(legStep.getName()) : legStep.getName() != null) {
+      return false;
+    }
+    if (getRef() != null ? !getRef().equals(legStep.getRef()) : legStep.getRef() != null) {
+      return false;
+    }
+    if (getDestinations() != null
+      ? !getDestinations().equals(legStep.getDestinations()) : legStep.getDestinations() != null) {
+      return false;
+    }
+    if (getMode() != null
+      ? !getMode().equals(legStep.getMode()) : legStep.getMode() != null) {
+      return false;
+    }
+    if (getPronunciation() != null
+      ? !getPronunciation().equals(legStep.getPronunciation()) : legStep.getPronunciation() != null) {
+      return false;
+    }
+    if (getRotaryName() != null
+      ? !getRotaryName().equals(legStep.getRotaryName()) : legStep.getRotaryName() != null) {
+      return false;
+    }
+    if (getRotaryPronunciation() != null
+      ? !getRotaryPronunciation().equals(legStep.getRotaryPronunciation()) : legStep.getRotaryPronunciation() != null) {
+      return false;
+    }
+    if (getManeuver() != null
+      ? !getManeuver().equals(legStep.getManeuver()) : legStep.getManeuver() != null) {
+      return false;
+    }
+    return getIntersections() != null
+      ? getIntersections().equals(legStep.getIntersections()) : legStep.getIntersections() == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + Double.valueOf(getDistance()).hashCode();
+    result = 31 * result + Double.valueOf(getDuration()).hashCode();
+    result = 31 * result + (getGeometry() != null ? getGeometry().hashCode() : 0);
+    result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+    result = 31 * result + (getRef() != null ? getRef().hashCode() : 0);
+    result = 31 * result + (getDestinations() != null ? getDestinations().hashCode() : 0);
+    result = 31 * result + (getMode() != null ? getMode().hashCode() : 0);
+    result = 31 * result + (getPronunciation() != null ? getPronunciation().hashCode() : 0);
+    result = 31 * result + (getRotaryName() != null ? getRotaryName().hashCode() : 0);
+    result = 31 * result + (getRotaryPronunciation() != null ? getRotaryPronunciation().hashCode() : 0);
+    result = 31 * result + (getManeuver() != null ? getManeuver().hashCode() : 0);
+    result = 31 * result + Double.valueOf(getWeight()).hashCode();
+    result = 31 * result + (getIntersections() != null ? getIntersections().hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "LegStep{"
+      + "distance=" + distance
+      + ", duration=" + duration
+      + ", geometry='" + geometry + '\''
+      + ", name='" + name + '\''
+      + ", ref='" + ref + '\''
+      + ", destinations='" + destinations + '\''
+      + ", mode='" + mode + '\''
+      + ", pronunciation='" + pronunciation + '\''
+      + ", rotaryName='" + rotaryName + '\''
+      + ", rotaryPronunciation='" + rotaryPronunciation + '\''
+      + ", maneuver=" + maneuver
+      + ", weight=" + weight
+      + ", intersections=" + intersections
+      + '}';
+  }
 }

@@ -88,4 +88,33 @@ public class GeometryCollection implements GeoJSON {
     gson.registerTypeAdapter(Position.class, new PositionSerializer());
     return gson.create().toJson(this);
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    GeometryCollection that = (GeometryCollection) o;
+
+    if (!type.equals(that.type)) {
+      return false;
+    }
+    return geometries != null ? geometries.equals(that.geometries) : that.geometries == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = type.hashCode();
+    result = 31 * result + (geometries != null ? geometries.hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return this.toJson();
+  }
 }

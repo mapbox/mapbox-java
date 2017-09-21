@@ -1,5 +1,7 @@
 package com.mapbox.services.api.directions.v5.models;
 
+import java.util.Arrays;
+
 /**
  * An annotations object that contains additional details about each line segment along the route geometry. Each entry
  * in an annotations field corresponds to a coordinate along the route geometry.
@@ -97,5 +99,48 @@ public class LegAnnotation {
    */
   public void setCongestion(String[] congestion) {
     this.congestion = congestion;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    LegAnnotation that = (LegAnnotation) o;
+
+    if (!Arrays.equals(getDistance(), that.getDistance())) {
+      return false;
+    }
+    if (!Arrays.equals(getDuration(), that.getDuration())) {
+      return false;
+    }
+    if (!Arrays.equals(getSpeed(), that.getSpeed())) {
+      return false;
+    }
+    return Arrays.equals(getCongestion(), that.getCongestion());
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + Arrays.hashCode(getDistance());
+    result = 31 * result + Arrays.hashCode(getDuration());
+    result = 31 * result + Arrays.hashCode(getSpeed());
+    result = 31 * result + Arrays.hashCode(getCongestion());
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "LegAnnotation{"
+      + "distance=" + Arrays.toString(distance)
+      + ", duration=" + Arrays.toString(duration)
+      + ", speed=" + Arrays.toString(speed)
+      + ", congestion=" + Arrays.toString(congestion)
+      + '}';
   }
 }

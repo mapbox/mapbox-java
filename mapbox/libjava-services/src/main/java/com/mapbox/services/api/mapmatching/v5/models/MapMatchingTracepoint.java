@@ -66,6 +66,7 @@ public class MapMatchingTracepoint extends DirectionsWaypoint {
     this.waypointIndex = waypointIndex;
   }
 
+
   /**
    * Number of probable alternative matchings for this trace point. A value of zero indicates that this point was
    * matched unambiguously. Split the trace at these points for incremental map matching.
@@ -86,5 +87,46 @@ public class MapMatchingTracepoint extends DirectionsWaypoint {
    */
   public void setAlternativesCount(int alternativesCount) {
     this.alternativesCount = alternativesCount;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+
+    MapMatchingTracepoint that = (MapMatchingTracepoint) o;
+
+    if (getMatchingsIndex() != that.getMatchingsIndex()) {
+      return false;
+    }
+    if (getAlternativesCount() != that.getAlternativesCount()) {
+      return false;
+    }
+    return getWaypointIndex() == that.getWaypointIndex();
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + getMatchingsIndex();
+    result = 31 * result + getWaypointIndex();
+    result = 31 * result + getAlternativesCount();
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "MapMatchingTracepoint{"
+      + "matchingsIndex=" + matchingsIndex
+      + ", waypointIndex=" + waypointIndex
+      + ", alternativesCount=" + alternativesCount
+      + '}';
   }
 }

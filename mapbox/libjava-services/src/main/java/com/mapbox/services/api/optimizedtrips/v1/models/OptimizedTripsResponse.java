@@ -111,4 +111,43 @@ public class OptimizedTripsResponse {
   public void setTrips(List<DirectionsRoute> trips) {
     this.trips = trips;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    OptimizedTripsResponse that = (OptimizedTripsResponse) o;
+
+    if (getCode() != null ? !getCode().equals(that.getCode()) : that.getCode() != null) {
+      return false;
+    }
+    if (getWaypoints() != null ? !getWaypoints().equals(that.getWaypoints()) : that.getWaypoints() != null) {
+      return false;
+    }
+    return getTrips() != null ? getTrips().equals(that.getTrips()) : that.getTrips() == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (getCode() != null ? getCode().hashCode() : 0);
+    result = 31 * result + (getWaypoints() != null ? getWaypoints().hashCode() : 0);
+    result = 31 * result + (getTrips() != null ? getTrips().hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "OptimizedTripsResponse{"
+      + "code='" + code + '\''
+      + ", waypoints=" + waypoints
+      + ", trips=" + trips
+      + '}';
+  }
 }

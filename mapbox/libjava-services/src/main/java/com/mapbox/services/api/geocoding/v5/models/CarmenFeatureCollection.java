@@ -93,4 +93,42 @@ public class CarmenFeatureCollection extends BaseFeatureCollection {
     return new CarmenFeatureCollection(features);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    CarmenFeatureCollection that = (CarmenFeatureCollection) o;
+
+    if (getQuery() != null ? !getQuery().equals(that.getQuery()) : that.getQuery() != null) {
+      return false;
+    }
+    if (getAttribution() != null ? !getAttribution().equals(that.getAttribution()) : that.getAttribution() != null) {
+      return false;
+    }
+    return getFeatures() != null ? getFeatures().equals(that.getFeatures()) : that.getFeatures() == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (getQuery() != null ? getQuery().hashCode() : 0);
+    result = 31 * result + (getAttribution() != null ? getAttribution().hashCode() : 0);
+    result = 31 * result + (getFeatures() != null ? getFeatures().hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "CarmenFeatureCollection{"
+      + "query=" + query
+      + ", attribution='" + attribution + '\''
+      + ", features=" + features
+      + '}';
+  }
 }

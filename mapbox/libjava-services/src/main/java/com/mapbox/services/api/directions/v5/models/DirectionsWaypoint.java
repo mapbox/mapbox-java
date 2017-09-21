@@ -2,6 +2,8 @@ package com.mapbox.services.api.directions.v5.models;
 
 import com.mapbox.services.commons.models.Position;
 
+import java.util.Arrays;
+
 /**
  * An input coordinate snapped to the roads network.
  *
@@ -69,5 +71,39 @@ public class DirectionsWaypoint {
    */
   public Position asPosition() {
     return Position.fromCoordinates(location[0], location[1]);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    DirectionsWaypoint that = (DirectionsWaypoint) o;
+
+    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
+      return false;
+    }
+    return Arrays.equals(getLocation(), that.getLocation());
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+    result = 31 * result + Arrays.hashCode(getLocation());
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "DirectionsWaypoint{"
+      + "name='" + name + '\''
+      + ", location=" + Arrays.toString(location)
+      + '}';
   }
 }

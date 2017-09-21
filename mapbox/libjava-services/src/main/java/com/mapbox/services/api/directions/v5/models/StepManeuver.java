@@ -230,21 +230,61 @@ public class StepManeuver {
     return Position.fromCoordinates(location[0], location[1]);
   }
 
-  /**
-   * Offers a convenient string with all the {@link StepManeuver} variables.
-   *
-   * @return String with all {@link StepManeuver} information within.
-   * @since 1.0.0
-   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    StepManeuver that = (StepManeuver) o;
+
+    if (Double.compare(that.getBearingBefore(), getBearingBefore()) != 0) {
+      return false;
+    }
+    if (Double.compare(that.getBearingAfter(), getBearingAfter()) != 0) {
+      return false;
+    }
+    if (!Arrays.equals(getLocation(), that.getLocation())) {
+      return false;
+    }
+    if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
+      return false;
+    }
+    if (getModifier() != null ? !getModifier().equals(that.getModifier()) : that.getModifier() != null) {
+      return false;
+    }
+    if (getInstruction() != null ? !getInstruction().equals(that.getInstruction()) : that.getInstruction() != null) {
+      return false;
+    }
+    return getExit() != null ? getExit().equals(that.getExit()) : that.getExit() == null;
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 17;
+    result = 31 * result + Arrays.hashCode(getLocation());
+    result = 31 * result + Double.valueOf(getBearingBefore()).hashCode();
+    result = 31 * result + Double.valueOf(getBearingAfter()).hashCode();
+    result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+    result = 31 * result + (getModifier() != null ? getModifier().hashCode() : 0);
+    result = 31 * result + (getInstruction() != null ? getInstruction().hashCode() : 0);
+    result = 31 * result + (getExit() != null ? getExit().hashCode() : 0);
+    return result;
+  }
+
   @Override
   public String toString() {
     return "StepManeuver{"
       + "location=" + Arrays.toString(location)
       + ", bearingBefore=" + bearingBefore
       + ", bearingAfter=" + bearingAfter
-      + ", instruction='" + instruction + '\''
       + ", type='" + type + '\''
       + ", modifier='" + modifier + '\''
+      + ", instruction='" + instruction + '\''
       + ", exit=" + exit
       + '}';
   }

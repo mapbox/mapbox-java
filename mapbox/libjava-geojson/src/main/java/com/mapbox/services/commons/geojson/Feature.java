@@ -296,4 +296,41 @@ public class Feature implements GeoJSON {
   public boolean hasNonNullValueForProperty(String key) {
     return hasProperty(key) && !getProperty(key).isJsonNull();
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Feature feature = (Feature) o;
+
+    if (!type.equals(feature.type)) {
+      return false;
+    }
+    if (geometry != null ? !geometry.equals(feature.geometry) : feature.geometry != null) {
+      return false;
+    }
+    if (properties != null ? !properties.equals(feature.properties) : feature.properties != null) {
+      return false;
+    }
+    return id != null ? id.equals(feature.id) : feature.id == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = type.hashCode();
+    result = 31 * result + (geometry != null ? geometry.hashCode() : 0);
+    result = 31 * result + (properties != null ? properties.hashCode() : 0);
+    result = 31 * result + (id != null ? id.hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return this.toJson();
+  }
 }
