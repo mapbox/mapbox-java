@@ -142,8 +142,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     this.userAgent = userAgent;
     this.sdkIdentifier = sdkIdentifier;
     this.sdkVersion = sdkVersion;
-    if (this.context == null || TextUtils.isEmpty(this.accessToken) || TextUtils.isEmpty(this.userAgent) ||
-      TextUtils.isEmpty(this.sdkIdentifier)|| TextUtils.isEmpty(this.sdkVersion)) {
+    if (this.context == null || TextUtils.isEmpty(this.accessToken) || TextUtils.isEmpty(this.userAgent)
+      || TextUtils.isEmpty(this.sdkIdentifier) || TextUtils.isEmpty(this.sdkVersion)) {
       throw new TelemetryException(
         "Please, make sure you provide a valid context, access token, and user agent. "
           + "For more information, please visit https://www.mapbox.com/android-sdk.");
@@ -660,8 +660,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate(null));
     event.put(MapboxEvent.KEY_USER_ID, mapboxVendorId);
     event.put(MapboxEvent.KEY_ENABLED_TELEMETRY, isTelemetryEnabled());
-    event.put(MapboxEvent.KEY_SDKIDENTIFIER, sdkIdentifier);
-    event.put(MapboxEvent.KEY_SDKVERSION, sdkVersion);
+    event.put(MapboxEvent.KEY_SDK_IDENTIFIER, sdkIdentifier);
+    event.put(MapboxEvent.KEY_SDK_VERSION, sdkVersion);
 
     events.add(event);
     flushEventsQueueImmediately(true);
