@@ -77,6 +77,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private Hashtable<String, Object> customTurnstileEvent = null;
   private int sessionIdRotationTime = TelemetryConstants.DEFAULT_SESSION_ID_ROTATION_HOURS;
   private boolean debugLoggingEnabled = false;
+  private String sdkIdentifier = null;
+  private String sdkVersion = null;
   private static final List<String> VALID_USER_AGENTS = new ArrayList<String>() {
     {
       add("MapboxEventsAndroid/");
@@ -112,11 +114,14 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * @param context        The context associated with the application
    * @param accessToken    The accessToken associated with the application
    * @param locationEngine Initialize telemetry with a custom location engine
+   * @param sdkIdentifier Identifier used to distinguish events between the Maps, Navigation, and Unity SDKs
+   * @param sdkVersion    Current version number for the Maps/Navigation/Unity SDK
    */
   public void initialize(@NonNull Context context, @NonNull String accessToken,
-                         @NonNull String userAgent, @NonNull LocationEngine locationEngine) {
+                         @NonNull String userAgent, @NonNull String sdkIdentifier, @NonNull String sdkVersion,
+                         @NonNull LocationEngine locationEngine) {
     this.locationEngine = locationEngine;
-    initialize(context, accessToken, userAgent);
+    initialize(context, accessToken, userAgent, sdkIdentifier, sdkVersion);
   }
 
   /**
@@ -125,7 +130,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * @param context     The context associated with the application
    * @param accessToken The accessToken associated with the application
    */
-  public void initialize(@NonNull Context context, @NonNull String accessToken, @NonNull String userAgent) {
+  public void initialize(@NonNull Context context, @NonNull String accessToken, @NonNull String userAgent,
+                         @NonNull String sdkIdentifier, @NonNull String sdkVersion) {
     if (initialized) {
       return;
     }
@@ -134,7 +140,10 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     this.context = context.getApplicationContext();
     this.accessToken = accessToken;
     this.userAgent = userAgent;
-    if (this.context == null || TextUtils.isEmpty(this.accessToken) || TextUtils.isEmpty(this.userAgent)) {
+    this.sdkIdentifier = sdkIdentifier;
+    this.sdkVersion = sdkVersion;
+    if (this.context == null || TextUtils.isEmpty(this.accessToken) || TextUtils.isEmpty(this.userAgent) ||
+      TextUtils.isEmpty(this.sdkIdentifier)|| TextUtils.isEmpty(this.sdkVersion)) {
       throw new TelemetryException(
         "Please, make sure you provide a valid context, access token, and user agent. "
           + "For more information, please visit https://www.mapbox.com/android-sdk.");
@@ -651,6 +660,8 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate(null));
     event.put(MapboxEvent.KEY_USER_ID, mapboxVendorId);
     event.put(MapboxEvent.KEY_ENABLED_TELEMETRY, isTelemetryEnabled());
+    event.put(MapboxEvent.KEY_SDKIDENTIFIER, sdkIdentifier);
+    event.put(MapboxEvent.KEY_SDKVERSION, sdkVersion);
 
     events.add(event);
     flushEventsQueueImmediately(true);
