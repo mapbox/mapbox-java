@@ -120,6 +120,8 @@ public class TurfMiscTest extends BaseTest {
     Point start = Point.fromLngLat(-121.25447809696198, 38.70582415504791);
     Point stop = Point.fromLngLat(-121.25447809696198, 38.70634324369764);
 
+    System.out.println(loadJsonFixture(LINE_SLICE_VERTICAL));
+
     Feature vertical = Feature.fromJson(loadJsonFixture(LINE_SLICE_VERTICAL));
 
     LineString sliced = TurfMisc.lineSlice(start, stop, vertical);

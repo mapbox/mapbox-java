@@ -26,20 +26,21 @@ import retrofit2.Response;
 
 public class OptimizationResponseTest extends BaseTest {
 
+  private static final String OPTIMIZATION_FIXTURE = "optimization.json";
+
   private MockWebServer server;
   private JsonObject object;
   private HttpUrl mockUrl;
 
   @Before
   public void setUp() throws Exception {
-    final String json = loadJsonFixture("optimization.json");
+    final String json = loadJsonFixture(OPTIMIZATION_FIXTURE);
     object = new JsonParser().parse(json).getAsJsonObject();
 
     server = new MockWebServer();
     server.setDispatcher(new Dispatcher() {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-
         try {
           String body = loadJsonFixture(json);
           return new MockResponse().setBody(body);

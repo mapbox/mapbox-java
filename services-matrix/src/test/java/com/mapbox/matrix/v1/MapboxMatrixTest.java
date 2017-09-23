@@ -17,9 +17,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import okhttp3.HttpUrl;
@@ -31,11 +28,8 @@ import retrofit2.Response;
 
 public class MapboxMatrixTest extends BaseTest {
 
-  private static final String DIRECTIONS_MATRIX_3X3_FIXTURE
-    = "src/test/fixtures/directions_matrix_3x3.json";
-  private static final String DIRECTIONS_MATRIX_2x3_FIXTURE
-    = "src/test/fixtures/directions_matrix_2x3.json";
-  private static final String ACCESS_TOKEN = "pk.XXX";
+  private static final String DIRECTIONS_MATRIX_3X3_FIXTURE = "directions_matrix_3x3.json";
+  private static final String DIRECTIONS_MATRIX_2x3_FIXTURE = "directions_matrix_2x3.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -54,10 +48,8 @@ public class MapboxMatrixTest extends BaseTest {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         try {
-          String body = new String(
-            Files.readAllBytes(Paths.get(DIRECTIONS_MATRIX_3X3_FIXTURE)), Charset.forName("utf-8")
-          );
-          return new MockResponse().setBody(body);
+          String response = loadJsonFixture(DIRECTIONS_MATRIX_3X3_FIXTURE);
+          return new MockResponse().setBody(response);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
         }
@@ -101,13 +93,18 @@ public class MapboxMatrixTest extends BaseTest {
   public void requiredAccessToken() throws ServicesException {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(startsWith("Using Mapbox Services requires setting a valid access token"));
-    MapboxMatrix.builder().accessToken("").baseUrl("").build();
+    MapboxMatrix.builder()
+      .accessToken("")
+      .baseUrl(mockUrl.toString())
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .build();
   }
 
   @Test
   public void validCoordinates() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("You should provide at least two coordinates (from/to)."));
+    thrown.expectMessage(startsWith("At least two coordinates must be provided with your APIrequest."));
     MapboxMatrix.builder()
       .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
@@ -124,7 +121,7 @@ public class MapboxMatrixTest extends BaseTest {
     }
 
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("All profiles allow for a maximum of 25 coordinates."));
+    thrown.expectMessage(startsWith("Maximum of 25 coordinates are allowed for this API."));
     MapboxMatrix.builder()
       .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
@@ -147,8 +144,7 @@ public class MapboxMatrixTest extends BaseTest {
   @Test
   public void testResponse() throws ServicesException, IOException {
     MapboxMatrix client = MapboxMatrix.builder()
-      .clientAppName("APP")
-      .accessToken("pk.XXX")
+      .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinates(positions)
       .baseUrl(mockUrl.toString())

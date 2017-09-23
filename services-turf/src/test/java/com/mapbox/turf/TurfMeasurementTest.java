@@ -114,6 +114,7 @@ public class TurfMeasurementTest extends BaseTest {
   @Test
   public void testLineDistancePolygon() throws IOException, TurfException {
     Feature feature = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_POLYGON));
+    System.out.println(feature.toJson());
     assertEquals(Math.round(1000 * TurfMeasurement.lineDistance((Polygon) feature.geometry(),
       TurfConstants.UNIT_KILOMETERS)), 5599);
   }

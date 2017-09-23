@@ -16,3 +16,7 @@ dependencies {
   testCompile dependenciesList.junit
 }
 
+
+sonarqube {
+  skipProject = true
+}

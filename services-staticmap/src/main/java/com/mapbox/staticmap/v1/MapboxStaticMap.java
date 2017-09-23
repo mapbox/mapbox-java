@@ -4,7 +4,9 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
+import com.google.common.primitives.Booleans;
 import com.mapbox.geojson.GeoJson;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.constants.Constants;
@@ -13,6 +15,7 @@ import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
 import com.mapbox.staticmap.v1.models.StaticMarkerAnnotation;
 import com.mapbox.staticmap.v1.models.StaticPolylineAnnotation;
+
 import okhttp3.HttpUrl;
 
 import java.util.ArrayList;
@@ -46,38 +49,29 @@ public abstract class MapboxStaticMap {
   @NonNull
   abstract String styleId();
 
-  @Nullable
-  abstract Boolean logo();
+  abstract boolean logo();
 
-  @Nullable
-  abstract Boolean attribution();
+  abstract boolean attribution();
 
-  @Nullable
-  abstract Boolean retina();
+  abstract boolean retina();
 
-  @Nullable
+  @NonNull
   abstract Point cameraPoint();
 
-  @Nullable
-  abstract Double cameraZoom();
+  abstract double cameraZoom();
 
-  @Nullable
-  abstract Double cameraBearing();
+  abstract double cameraBearing();
 
-  @Nullable
-  abstract Double cameraPitch();
+  abstract double cameraPitch();
 
-  @Nullable
-  abstract Boolean cameraAuto();
+  abstract boolean cameraAuto();
 
   @Nullable
   abstract String beforeLayer();
 
-  @Nullable
-  abstract Integer width();
+  abstract int width();
 
-  @Nullable
-  abstract Integer height();
+  abstract int height();
 
   @Nullable
   abstract GeoJson geoJson();
@@ -106,10 +100,34 @@ public abstract class MapboxStaticMap {
       .addPathSegment("static")
       .addQueryParameter("access_token", accessToken());
 
+    int annotationSize = annotationSize();
+    String[] overlayString = new String[annotationSize];
+    if (staticMarkerAnnotations() != null) {
+      for (StaticMarkerAnnotation marker : staticMarkerAnnotations()) {
+        overlayString[staticMarkerAnnotations().indexOf(marker)] = marker.url();
+      }
+
+      urlBuilder.addPathSegment(TextUtils.join(",", overlayString));
+    }
+
+
+
+
+
+
+    // TODO handle adding overlays like markers and polylines
+
+
+
+
+
+
+
+
     urlBuilder.addPathSegment(cameraAuto() ? StaticMapCriteria.CAMERA_AUTO
       : generateLocationPathSegment());
 
-    // TODO handle adding overlays like markers and polylines
+
 
     if (beforeLayer() != null) {
       urlBuilder.addQueryParameter(StaticMapCriteria.BEFORE_LAYER, beforeLayer());
@@ -124,6 +142,18 @@ public abstract class MapboxStaticMap {
     // Has to be last segment in URL
     urlBuilder.addPathSegment(generateSizePathSegment());
     return urlBuilder.build();
+
+  }
+
+  private int annotationSize() {
+    int size = 0;
+    if (staticMarkerAnnotations() != null) {
+      size = staticMarkerAnnotations().size();
+    }
+    if (staticPolylineAnnotations() != null) {
+      size = staticPolylineAnnotations().size();
+    }
+    return size;
   }
 
   private String generateLocationPathSegment() {
@@ -158,7 +188,18 @@ public abstract class MapboxStaticMap {
       .styleId(StaticMapCriteria.STREET_STYLE)
       .baseUrl(Constants.BASE_API_URL)
       .user(Constants.MAPBOX_USER)
+      .cameraPoint(Point.fromLngLat(0d,0d))
+      .cameraAuto(false)
       .attribution(true)
+      .width(250)
+      .logo(true)
+      .attribution(true)
+      .retina(true)
+      .height(250)
+      .cameraZoom(0)
+      .cameraPitch(0)
+      .cameraBearing(0)
+      .precision(0)
       .retina(false);
   }
 
@@ -273,7 +314,7 @@ public abstract class MapboxStaticMap {
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder cameraBearing(double cameraBearing);
+    public abstract Builder cameraBearing(@FloatRange(from = 0, to = 360) double cameraBearing);
 
     /**
      * Optionally, pitch tilts the map, producing a perspective effect. Defaults is 0.
@@ -313,7 +354,7 @@ public abstract class MapboxStaticMap {
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder width(@IntRange(from = 1, to = 1280) @Nullable Integer width);
+    public abstract Builder width(@IntRange(from = 1, to = 1280) int width);
 
     /**
      * Height of the image.
@@ -322,7 +363,7 @@ public abstract class MapboxStaticMap {
      * @return Builder
      * @since 1.0.0
      */
-    public abstract Builder height(@IntRange(from = 1, to = 1280) @Nullable Integer height);
+    public abstract Builder height(@IntRange(from = 1, to = 1280) int height);
 
     /**
      * GeoJSON object which represents a specific annotation which will be placed on the static map.
@@ -372,7 +413,11 @@ public abstract class MapboxStaticMap {
     public MapboxStaticMap build() {
       MapboxStaticMap staticMap = autoBuild();
 
-      MapboxUtils.isAccessTokenValid(staticMap.accessToken());
+      if (!MapboxUtils.isAccessTokenValid(staticMap.accessToken())) {
+        throw new ServicesException("Using Mapbox Services requires setting a valid access"
+          + " token.");
+      }
+
 
       if (staticMap.styleId() == null || staticMap.styleId().isEmpty()) {
         throw new ServicesException("You need to set a map style.");

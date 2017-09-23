@@ -1,5 +1,4 @@
-package com.mapbox.matrix.v1.models;
-
+package com.mapbox.matrix.v1;
 
 import com.google.gson.TypeAdapterFactory;
 import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;

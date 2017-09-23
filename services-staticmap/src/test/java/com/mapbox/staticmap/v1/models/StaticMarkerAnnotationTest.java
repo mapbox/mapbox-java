@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.awt.Color;
+
 public class StaticMarkerAnnotationTest {
 
   @Rule
@@ -16,16 +18,49 @@ public class StaticMarkerAnnotationTest {
   @Test
   public void sanity() throws Exception {
     StaticMarkerAnnotation staticMarkerAnnotation = StaticMarkerAnnotation.builder()
-      .markerPoint(Point.fromLngLat(1.0, 2.0))
+      .lnglat(Point .fromLngLat(1.0,2.0))
       .name(StaticMapCriteria.MEDIUM_PIN)
       .build();
-
-    assertTrue(staticMarkerAnnotation.formattedMarkerUrl().contains("pin-s(1.000000,2.000000)"));
+    assertTrue(staticMarkerAnnotation.url().contains("pin-m(1.000000,2.000000)"));
   }
 
+  @Test
+  public void url_withOnlyLabelFormattedCorrectly() throws Exception {
+    StaticMarkerAnnotation staticMarkerAnnotation = StaticMarkerAnnotation.builder()
+      .lnglat(Point .fromLngLat(1.0,2.0))
+      .name(StaticMapCriteria.MEDIUM_PIN)
+      .label("abc")
+      .build();
+    assertTrue(staticMarkerAnnotation.url().contains("pin-m-abc(1.000000,2.000000)"));
+  }
 
+  @Test
+  public void url_withLabelAndColorFormattedCorrectly() throws Exception {
+    StaticMarkerAnnotation staticMarkerAnnotation = StaticMarkerAnnotation.builder()
+      .lnglat(Point .fromLngLat(1.0,2.0))
+      .name(StaticMapCriteria.MEDIUM_PIN)
+      .label("abc")
+      .color(Color.BLUE)
+      .build();
+    assertTrue(staticMarkerAnnotation.url().contains("pin-m-abc+0000ff(1.000000,2.000000)"));
+  }
 
-//
+  @Test
+  public void url_withColorOnlyFormattedCorrectly() throws Exception {
+    StaticMarkerAnnotation staticMarkerAnnotation = StaticMarkerAnnotation.builder()
+      .lnglat(Point .fromLngLat(1.0,2.0))
+      .name(StaticMapCriteria.MEDIUM_PIN)
+      .color(Color.BLUE)
+      .build();
+    assertTrue(staticMarkerAnnotation.url().contains("pin-m-0000ff(1.000000,2.000000)"));
+  }
+
+  @Test
+  public void build_throwsExceptionWhenNoCoordinateIsGiven() throws Exception {
+
+  }
+
+  //
 //
 //  @Test(expected = ServicesException.class)
 //  public void requiresOneAlphabetCharLabelIfPresent() throws ServicesException {

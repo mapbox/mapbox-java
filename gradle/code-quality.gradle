@@ -48,7 +48,13 @@ jacocoTestReport {
 }
 
 
-
+sonarqube {
+  properties {
+//    property "sonar.projectName", "Java :: Simple Project :: SonarQube Scanner for Gradle"
+    property "sonar.projectKey", "mapbox-java:services"
+    property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+  }
+}
 
 
 

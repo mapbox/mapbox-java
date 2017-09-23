@@ -8,8 +8,6 @@ import com.google.gson.GsonBuilder;
 import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
-import com.mapbox.matrix.v1.models.MatrixAdapterFactory;
 import com.mapbox.matrix.v1.models.MatrixResponse;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;

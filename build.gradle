@@ -55,13 +55,6 @@ subprojects {
     }
   }
 
-  sonarqube {
-    properties {
-      property "sonar.java.binaries", "build/intermediates/classes/debug"
-      property "sonar.jacoco.reportPath","build/outputs/code-coverage/connected/coverage.ec"
-    }
-  }
-
   sourceCompatibility = "1.7"
   targetCompatibility = "1.7"
 

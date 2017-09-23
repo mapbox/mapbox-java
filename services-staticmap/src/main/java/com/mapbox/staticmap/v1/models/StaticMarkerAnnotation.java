@@ -1,13 +1,22 @@
 package com.mapbox.staticmap.v1.models;
 
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorLong;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.mapbox.geojson.Point;
+import com.mapbox.services.exceptions.ServicesException;
+import com.mapbox.services.utils.TextUtils;
 import com.mapbox.staticmap.v1.StaticMapCriteria;
 import com.mapbox.staticmap.v1.StaticMapCriteria.MarkerCriteria;
+import com.sun.tools.internal.ws.wsdl.document.http.HTTPUrlEncoded;
+
+import java.awt.Color;
+import java.util.Locale;
+
+import okhttp3.HttpUrl;
 
 /**
  * Mapbox Static Image API marker overlay. Building this object allows you to place a marker on top
@@ -27,14 +36,29 @@ public abstract class StaticMarkerAnnotation {
   public abstract String label();
 
   @Nullable
-  public abstract Integer color();
+  public abstract Color color();
 
   @Nullable
   public abstract Point lnglat();
 
+  public String url() {
+    String url;
+    if (color() != null && label() != null && !TextUtils.isEmpty(label())) {
+      url = String.format(Locale.US, "%s-%s+%s", name(), label(), toHexString(color()));
+    } else if (label() != null && !TextUtils.isEmpty(label())) {
+      url = String.format(Locale.US, "%s-%s", name(), label());
+    } else if (color() != null) {
+      url = String.format(Locale.US, "%s-%s", name(), toHexString(color()));
+    } else {
+      url = name();
+    }
+
+    return String.format(Locale.US, "%s(%f,%f)", url, lnglat().longitude(), lnglat().latitude());
+  }
+
   public static Builder builder() {
-    return new AutoValue_StaticMarkerAnnotation
-      .name(StaticMapCriteria.MEDIUM_PIN).Builder();
+    return new AutoValue_StaticMarkerAnnotation.Builder()
+      .name(StaticMapCriteria.MEDIUM_PIN);
   }
 
   @AutoValue.Builder
@@ -44,13 +68,20 @@ public abstract class StaticMarkerAnnotation {
 
     public abstract Builder label(String label);
 
-    public abstract Builder color(@ColorInt Integer color);
+    public abstract Builder color(@Nullable Color color);
 
     public abstract Builder lnglat(Point lnglat);
 
-    abstract autoBuild();
+    abstract StaticMarkerAnnotation autoBuild();
 
     public StaticMarkerAnnotation build() {
+      StaticMarkerAnnotation marker = autoBuild();
+      if (marker.lnglat() == null) {
+        throw new ServicesException("A Static map marker requires a defined longitude and latitude"
+          + "coordinate.");
+      }
+      return marker;
+    }
 
 //
 //      {
@@ -58,7 +89,15 @@ public abstract class StaticMarkerAnnotation {
 //      } -{label} + {color} ({lon}, {lat})
 //
 //
+
+  }
+
+  public final static String toHexString(Color colour) throws NullPointerException {
+    String hexColour = Integer.toHexString(colour.getRGB() & 0xffffff);
+    if (hexColour.length() < 6) {
+      hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
     }
+    return hexColour;
   }
 
 

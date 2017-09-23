@@ -1,6 +1,5 @@
 package com.mapbox.directions.v5;
 
-
 import com.google.gson.TypeAdapterFactory;
 import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
 
