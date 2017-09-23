@@ -1,5 +1,7 @@
 package com.mapbox.turf.models;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 
 /**
@@ -22,6 +24,7 @@ public abstract class LineIntersectsResult {
    * @return the {@code X} value where the lines intersect
    * @since 1.2.0
    */
+  @Nullable
   public abstract Double horizontalIntersection();
 
   /**
@@ -30,6 +33,7 @@ public abstract class LineIntersectsResult {
    * @return the {@code Y} value where the lines intersect
    * @since 1.2.0
    */
+  @Nullable
   public abstract Double verticalIntersection();
 
   /**
@@ -65,7 +69,7 @@ public abstract class LineIntersectsResult {
      * @return the {@code X} value where the lines intersect
      * @since 3.0.0
      */
-    public abstract Builder horizontalIntersection(Double horizontalIntersection);
+    public abstract Builder horizontalIntersection(@Nullable Double horizontalIntersection);
 
     /**
      * If the lines intersect, use this method to get the intersecting point {@code Y} value
@@ -73,7 +77,7 @@ public abstract class LineIntersectsResult {
      * @return the {@code Y} value where the lines intersect
      * @since 3.0.0
      */
-    public abstract Builder verticalIntersection(Double verticalIntersection);
+    public abstract Builder verticalIntersection(@Nullable Double verticalIntersection);
 
     /**
      * Determine if the intersecting point lands on line 1 or not.

@@ -1,15 +1,14 @@
 package com.mapbox.matching.v5;
 
+import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.BaseTest;
 import com.mapbox.services.exceptions.ServicesException;
 
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,19 +17,17 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Locale;
 
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 public class MapboxMapMatchingTest extends BaseTest {
 
-  private static final String ACCESS_TOKEN = "pk.XXX";
-
-  private static final String MAP_MATCHING_FIXTURE = "map_matching/map_matching_v5_polyline.json";
+  private static final String MAP_MATCHING_FIXTURE = "map_matching_v5_polyline.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;

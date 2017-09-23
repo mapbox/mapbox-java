@@ -48,8 +48,8 @@ public abstract class StepIntersection implements Serializable {
    */
   @Nullable
   @SerializedName("location")
-  @SuppressWarnings("mutable")
-  abstract double[] rawLocation();
+  @SuppressWarnings( {"mutable", "WeakerAccess"})
+  protected abstract double[] rawLocation();
 
   /**
    * An integer list of bearing values available at the step intersection.

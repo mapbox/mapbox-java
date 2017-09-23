@@ -70,6 +70,7 @@ public class GeocodingResponseTest extends BaseTest {
   @Test
   public void sanity() throws Exception {
     GeocodingResponse response = GeocodingResponse.builder()
+      .attribution("")
       .build();
     assertNotNull(response);
   }

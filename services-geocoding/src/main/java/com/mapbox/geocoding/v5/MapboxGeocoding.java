@@ -9,6 +9,7 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.geocoding.v5.GeocodingCriteria.GeocodingModeCriteria;
 import com.mapbox.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
+import com.mapbox.geocoding.v5.models.GeocodingAdapterFactory;
 import com.mapbox.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Geometry;
@@ -79,7 +80,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(MapboxAdapterFactory.create())
+        .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
         .registerTypeAdapter(Point.class, new PointDeserializer())
         .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
         .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())

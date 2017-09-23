@@ -66,6 +66,7 @@ public abstract class GeocodingResponse {
    * @return the type of GeoJSON this is
    * @since 1.0.0
    */
+  @Nullable
   public abstract String type();
 
   /**
@@ -108,6 +109,7 @@ public abstract class GeocodingResponse {
    * @return information about Mapbox's terms of service and the data sources
    * @since 1.0.0
    */
+  @Nullable
   public abstract String attribution();
 
   /**

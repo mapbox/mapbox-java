@@ -48,6 +48,7 @@ public abstract class StepManeuver implements Serializable {
    * @since 3.0.0
    */
   @SerializedName("location")
+  @SuppressWarnings("mutable")
   abstract double[] rawLocation();
 
   /**

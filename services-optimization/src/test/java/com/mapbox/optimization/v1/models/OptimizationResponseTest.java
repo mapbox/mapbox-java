@@ -1,26 +1,28 @@
 package com.mapbox.optimization.v1.models;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mapbox.geojson.Point;
 import com.mapbox.optimization.v1.BaseTest;
 import com.mapbox.optimization.v1.MapboxOptimization;
-import com.mapbox.geojson.Point;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import retrofit2.Response;
-
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class OptimizationResponseTest extends BaseTest {
 
@@ -37,7 +39,13 @@ public class OptimizationResponseTest extends BaseTest {
     server.setDispatcher(new Dispatcher() {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-        return new MockResponse().setBody(json);
+
+        try {
+          String body = loadJsonFixture(json);
+          return new MockResponse().setBody(body);
+        } catch (IOException ioException) {
+          throw new RuntimeException(ioException);
+        }
       }
     });
     server.start();
@@ -61,7 +69,7 @@ public class OptimizationResponseTest extends BaseTest {
     MapboxOptimization client = MapboxOptimization.builder()
       .coordinate(Point.fromLngLat(1.0, 1.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
-      .accessToken("pk.XXX")
+      .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
       .build();
     Response<OptimizationResponse> response = client.executeCall();
@@ -88,7 +96,7 @@ public class OptimizationResponseTest extends BaseTest {
       .coordinate(Point.fromLngLat(1.0, 1.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .baseUrl(mockUrl.toString())
-      .accessToken("pk.XXX")
+      .accessToken(ACCESS_TOKEN)
       .build();
 
     Response<OptimizationResponse> response = client.executeCall();

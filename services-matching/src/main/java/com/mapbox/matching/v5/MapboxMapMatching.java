@@ -12,7 +12,6 @@ import com.mapbox.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.matching.v5.models.MapMatchingResponse;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
@@ -58,7 +57,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(MapboxAdapterFactory.create())
+        .registerTypeAdapterFactory(MatchingAdapterFactory.create())
         .create()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
@@ -348,7 +347,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     }
 
     // Required for matching with MapboxMapMatching annotations() method.
-    abstract Builder annotations(@Nullable String annotations);
+    @SuppressWarnings("WeakerAccess")
+    protected abstract Builder annotations(@Nullable String annotations);
 
     /**
      * Timestamps corresponding to each coordinate provided in the request; must be numbers in Unix
@@ -365,7 +365,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     }
 
     // Required for matching with MapboxMapMatching timestamps() method.
-    abstract Builder timestamps(@Nullable String timestamps);
+    @SuppressWarnings("WeakerAccess")
+    protected abstract Builder timestamps(@Nullable String timestamps);
 
     /**
      * Add a list of {@link Point}'s which define the points to perform the map matching on. The
@@ -383,7 +384,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     }
 
     // Required for matching with MapboxMapMatching coordinates() method.
-    abstract Builder coordinates(@NonNull String coordinates);
+    @SuppressWarnings("WeakerAccess")
+    protected abstract Builder coordinates(@NonNull String coordinates);
 
     /**
      * This will add a single {@link Point} to the coordinate list which is used to determine the
@@ -450,7 +452,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      */
     public abstract Builder baseUrl(String baseUrl);
 
-    abstract MapboxMapMatching autoBuild();
+    @SuppressWarnings("WeakerAccess")
+    protected abstract MapboxMapMatching autoBuild();
 
     /**
      * This uses the provided parameters set using the {@link Builder} and first checks that all

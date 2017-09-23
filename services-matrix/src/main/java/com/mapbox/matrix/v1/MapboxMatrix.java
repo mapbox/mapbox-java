@@ -9,6 +9,7 @@ import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
+import com.mapbox.matrix.v1.models.MatrixAdapterFactory;
 import com.mapbox.matrix.v1.models.MatrixResponse;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
@@ -107,7 +108,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(MapboxAdapterFactory.create())
+        .registerTypeAdapterFactory(MatrixAdapterFactory.create())
         .create()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());

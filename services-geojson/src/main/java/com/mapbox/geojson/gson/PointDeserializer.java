@@ -35,8 +35,6 @@ public class PointDeserializer implements JsonDeserializer<Point> {
   public Point deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
     JsonArray rawCoordinates;
 
-    System.out.println(json.toString());
-
     if (json instanceof JsonObject) {
       rawCoordinates = json.getAsJsonObject().getAsJsonArray("coordinates");
     } else {

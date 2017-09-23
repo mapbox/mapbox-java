@@ -2,10 +2,10 @@ package com.mapbox.turf;
 
 import android.support.annotation.NonNull;
 
-import com.mapbox.turf.models.LineIntersectsResult;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
+import com.mapbox.turf.models.LineIntersectsResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,7 +169,10 @@ public class TurfMisc {
     double b;
     double numerator1;
     double numerator2;
-    LineIntersectsResult result = LineIntersectsResult.builder().build();
+    LineIntersectsResult result = LineIntersectsResult.builder()
+      .onLine1(false)
+      .onLine2(false)
+      .build();
 
     denominator = ((line2EndY - line2StartY) * (line1EndX - line1StartX))
       - ((line2EndX - line2StartX) * (line1EndY - line1StartY));

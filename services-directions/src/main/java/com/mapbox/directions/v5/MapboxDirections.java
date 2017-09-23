@@ -13,7 +13,6 @@ import com.mapbox.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
-import com.mapbox.directions.v5.models.DirectionsAdapterFactory;
 import com.mapbox.directions.v5.models.DirectionsResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.constants.Constants;
@@ -582,7 +581,8 @@ public abstract class MapboxDirections {
       return this;
     }
 
-    abstract Builder radiuses(@Nullable String radiuses);
+    @SuppressWarnings("WeakerAccess")
+    protected abstract Builder radiuses(@Nullable String radiuses);
 
     /**
      * Base package name or other simple string identifier. Used inside the calls user agent header.

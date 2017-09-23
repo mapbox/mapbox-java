@@ -1,5 +1,7 @@
 package com.mapbox.staticmap.v1;
 
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 import android.support.annotation.StringDef;
 
 import java.lang.annotation.Retention;
@@ -12,21 +14,19 @@ public final class StaticMapCriteria {
     // Empty private constructor since only static methods are found inside class.
   }
 
-
   public static final String SMALL_PIN = "pin-s";
 
   public static final String MEDIUM_PIN = "pin-m";
 
   public static final String LARGE_PIN = "pin-l";
 
-
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef( {
+  @Retention(SOURCE)
+  @StringDef({
     SMALL_PIN,
     MEDIUM_PIN,
     LARGE_PIN
   })
-  public @interface MarkerSize {
+  public @interface MarkerCriteria {
   }
 
 

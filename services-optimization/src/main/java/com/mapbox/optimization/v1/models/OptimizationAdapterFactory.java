@@ -1,13 +1,13 @@
-package com.mapbox.directions.v5.models;
+package com.mapbox.optimization.v1.models;
 
 
 import com.google.gson.TypeAdapterFactory;
 import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
 
 @GsonTypeAdapterFactory
-public abstract class DirectionsAdapterFactory implements TypeAdapterFactory {
+public abstract class OptimizationAdapterFactory implements TypeAdapterFactory {
 
   public static TypeAdapterFactory create() {
-    return new AutoValueGson_DirectionsAdapterFactory();
+    return new AutoValueGson_OptimizationAdapterFactory();
   }
 }

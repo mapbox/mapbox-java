@@ -33,8 +33,6 @@
     <property name="message" value="Line has trailing spaces."/>
   </module>
 
-
-
   <!--################################################-->
   <!--################ Non-AST checks ################-->
   <!--################################################-->
@@ -44,6 +42,11 @@
     <!--#################################################################-->
     <!--################ NAMING CHECKS ##################################-->
     <!--#################################################################-->
+
+    <module name="SuppressionFilter">
+      <property name="file" value="config/checkstyle/suppressions.xml"/>
+      <property name="optional" value="false"/>
+    </module>
 
     <!-- allow the dev to switch the checker OFF in a single file or a method -->
     <!-- <module name="SuppressionCommentFilter"/> -->

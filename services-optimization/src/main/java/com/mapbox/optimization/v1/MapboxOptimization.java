@@ -14,6 +14,7 @@ import com.mapbox.optimization.v1.OptimizationCriteria.GeometriesCriteria;
 import com.mapbox.optimization.v1.OptimizationCriteria.OverviewCriteria;
 import com.mapbox.optimization.v1.OptimizationCriteria.ProfileCriteria;
 import com.mapbox.optimization.v1.OptimizationCriteria.SourceCriteria;
+import com.mapbox.optimization.v1.models.OptimizationAdapterFactory;
 import com.mapbox.optimization.v1.models.OptimizationResponse;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
@@ -109,7 +110,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(MapboxAdapterFactory.create())
+        .registerTypeAdapterFactory(OptimizationAdapterFactory.create())
         .create()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());

@@ -33,6 +33,9 @@ public class DirectionsResponseTest extends BaseTest {
   private MockWebServer server;
   private HttpUrl mockUrl;
 
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
   @Before
   public void setUp() throws IOException {
     server = new MockWebServer();
@@ -72,9 +75,6 @@ public class DirectionsResponseTest extends BaseTest {
   public void tearDown() throws IOException {
     server.shutdown();
   }
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void sanity() throws Exception {

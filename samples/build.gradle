@@ -5,13 +5,13 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    compile project(":services")
-    compile project(":services-directions")
-
-    compile project(":services-geocoding")
-    compile project(":services-optimization")
+  compile project(":services")
+  compile project(":services-directions")
+  compile project(":services-geocoding")
+  compile project(":services-optimization")
+  compile project(":services-staticmap")
 }
