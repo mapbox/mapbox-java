@@ -118,7 +118,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   public void initialize(@NonNull Context context, @NonNull String accessToken, @NonNull String userAgent,
                          @NonNull LocationEngine locationEngine) {
     this.locationEngine = locationEngine;
-    initialize(context, accessToken, userAgent, "", "");
+    initialize(context, accessToken, userAgent, null, null);
   }
 
   /**
@@ -128,7 +128,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * @param accessToken The accessToken associated with the application
    */
   public void initialize(@NonNull Context context, @NonNull String accessToken, @NonNull String userAgent,
-                         @NonNull String sdkIdentifier, @NonNull String sdkVersion) {
+                         String sdkIdentifier, String sdkVersion) {
     if (initialized) {
       return;
     }
@@ -139,8 +139,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     this.userAgent = userAgent;
     this.sdkIdentifier = sdkIdentifier;
     this.sdkVersion = sdkVersion;
-    if (this.context == null || TextUtils.isEmpty(this.accessToken) || TextUtils.isEmpty(this.userAgent)
-      || this.sdkIdentifier == null || this.sdkVersion == null) {
+    if (this.context == null || TextUtils.isEmpty(this.accessToken) || TextUtils.isEmpty(this.userAgent)) {
       throw new TelemetryException(
         "Please, make sure you provide a valid context, access token, and user agent. "
           + "For more information, please visit https://www.mapbox.com/android-sdk.");
