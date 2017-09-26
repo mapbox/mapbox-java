@@ -3,12 +3,7 @@ package com.mapbox.services.android.telemetry.location;
 
 import android.content.Context;
 
-public class AndroidLocationEngineChain implements LocationEngineChain {
-
-  @Override
-  public void nextChain(LocationEngineChain nextChain) {
-    // Last location source in the chain
-  }
+class AndroidLocationEngineFactory implements LocationEngineSupplier {
 
   @Override
   public LocationEngine supply(Context context) {

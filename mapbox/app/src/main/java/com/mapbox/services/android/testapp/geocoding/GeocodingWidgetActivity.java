@@ -13,23 +13,15 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.services.android.telemetry.location.AndroidLocationEngineChain;
-import com.mapbox.services.android.telemetry.location.ClasspathChecker;
-import com.mapbox.services.android.telemetry.location.GoogleLocationEngineChain;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
-import com.mapbox.services.android.telemetry.location.LocationEngineChain;
-import com.mapbox.services.android.telemetry.location.LocationEngineChainSupplier;
-import com.mapbox.services.android.telemetry.location.LostLocationEngineChain;
+import com.mapbox.services.android.telemetry.location.LocationEngineProvider;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.android.ui.geocoder.GeocoderAutoCompleteView;
 import com.mapbox.services.api.geocoding.v5.GeocodingCriteria;
 import com.mapbox.services.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.services.commons.models.Position;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GeocodingWidgetActivity extends AppCompatActivity implements LocationEngineListener {
 
@@ -71,9 +63,12 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
     });
 
     // Set up location services to improve accuracy
-    List<LocationEngineChain> locationSources = initLocationSources();
-    LocationEngineChainSupplier locationSourceSupplier = new LocationEngineChainSupplier(locationSources);
-    locationEngine = locationSourceSupplier.supply(this);
+    LocationEngineProvider locationEngineProvider = new LocationEngineProvider(this);
+    locationEngine = locationEngineProvider.obtainAvailableLocationEngines().get(LocationEngineProvider.LOST);
+    if (locationEngine == null) {
+      locationEngine = locationEngineProvider.obtainAvailableLocationEngines()
+        .get(LocationEngineProvider.ANDROID);
+    }
     locationEngine.addLocationEngineListener(this);
     locationEngine.activate();
   }
@@ -107,15 +102,6 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
     mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
   }
 
-  private List<LocationEngineChain> initLocationSources() {
-    ClasspathChecker classpathChecker = new ClasspathChecker();
-    List<LocationEngineChain> locationSources = new ArrayList<>();
-    locationSources.add(new GoogleLocationEngineChain(classpathChecker));
-    locationSources.add(new LostLocationEngineChain(classpathChecker));
-    locationSources.add(new AndroidLocationEngineChain());
-
-    return locationSources;
-  }
 
   @Override
   protected void onStart() {

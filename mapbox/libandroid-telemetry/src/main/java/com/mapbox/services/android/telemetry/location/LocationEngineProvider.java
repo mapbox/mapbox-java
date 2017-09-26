@@ -3,51 +3,42 @@ package com.mapbox.services.android.telemetry.location;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LocationEngineProvider {
 
-  private static final String GOOGLE_PLAY_SERVICES = "Google Play Services";
-  private static final String LOST = "Lost";
-  private static final String ANDROID = "Android";
+  public static final String GOOGLE_PLAY_SERVICES = "Google Play Services";
+  public static final String LOST = "Lost";
+  public static final String ANDROID = "Android";
   private Map<String, LocationEngine> locationEngineDictionary;
-  private List<LocationEngine> locationEngines;
 
   public LocationEngineProvider(Context context) {
     initAvailableLocationEngines(context);
   }
 
-  public Map<String, LocationEngine> obtainLocationEngineDictionary() {
+  public Map<String, LocationEngine> obtainAvailableLocationEngines() {
     return locationEngineDictionary;
-  }
-
-  public List<LocationEngine> obtainAvailableLocationEngines() {
-    return locationEngines;
   }
 
   private void initAvailableLocationEngines(Context context) {
     locationEngineDictionary = new HashMap<>();
-    Map<String, LocationEngineChain> locationEnginesDictionary = obtainDefaultLocationEnginesDictionary();
-    locationEngines = new ArrayList<>();
-    for (Map.Entry<String, LocationEngineChain> entry : locationEnginesDictionary.entrySet()) {
-      LocationEngineChain locationEngineChain = entry.getValue();
-      if (locationEngineChain.hasDependencyOnClasspath()) {
-        LocationEngine available = locationEngineChain.supply(context);
+    Map<String, LocationEngineSupplier> locationEnginesDictionary = obtainDefaultLocationEnginesDictionary();
+    for (Map.Entry<String, LocationEngineSupplier> entry : locationEnginesDictionary.entrySet()) {
+      LocationEngineSupplier locationEngineSupplier = entry.getValue();
+      if (locationEngineSupplier.hasDependencyOnClasspath()) {
+        LocationEngine available = locationEngineSupplier.supply(context);
         locationEngineDictionary.put(entry.getKey(), available);
-        locationEngines.add(available);
       }
     }
   }
 
-  private Map<String, LocationEngineChain> obtainDefaultLocationEnginesDictionary() {
+  private Map<String, LocationEngineSupplier> obtainDefaultLocationEnginesDictionary() {
     ClasspathChecker classpathChecker = new ClasspathChecker();
-    Map<String, LocationEngineChain> locationSources = new HashMap<>();
-    locationSources.put(GOOGLE_PLAY_SERVICES, new GoogleLocationEngineChain(classpathChecker));
-    locationSources.put(LOST, new LostLocationEngineChain(classpathChecker));
-    locationSources.put(ANDROID, new AndroidLocationEngineChain());
+    Map<String, LocationEngineSupplier> locationSources = new HashMap<>();
+    locationSources.put(GOOGLE_PLAY_SERVICES, new GoogleLocationEngineFactory(classpathChecker));
+    locationSources.put(LOST, new LostLocationEngineFactory(classpathChecker));
+    locationSources.put(ANDROID, new AndroidLocationEngineFactory());
 
     return locationSources;
   }

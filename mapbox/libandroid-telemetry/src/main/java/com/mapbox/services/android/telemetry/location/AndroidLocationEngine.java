@@ -16,7 +16,7 @@ import java.lang.ref.WeakReference;
  * A location engine that uses core android.location and has no external dependencies
  * https://developer.android.com/guide/topics/location/strategies.html
  */
-class AndroidLocationEngine extends LocationEngine implements LocationListener {
+public class AndroidLocationEngine extends LocationEngine implements LocationListener {
 
   private static final String LOG_TAG = AndroidLocationEngine.class.getSimpleName();
 
@@ -40,7 +40,7 @@ class AndroidLocationEngine extends LocationEngine implements LocationListener {
 
   }
 
-  static synchronized LocationEngine getLocationEngine(Context context) {
+  public static synchronized LocationEngine getLocationEngine(Context context) {
     if (instance == null) {
       instance = new AndroidLocationEngine(context.getApplicationContext());
     }
@@ -92,21 +92,6 @@ class AndroidLocationEngine extends LocationEngine implements LocationListener {
     updateCurrentProvider();
   }
 
-  private void updateCurrentProvider() {
-    // We might want to explore android.location.Criteria here.
-    if (priority == LocationEnginePriority.NO_POWER) {
-      currentProvider = LocationManager.PASSIVE_PROVIDER;
-    } else if (priority == LocationEnginePriority.LOW_POWER) {
-      currentProvider = LocationManager.NETWORK_PROVIDER;
-    } else if (priority == LocationEnginePriority.BALANCED_POWER_ACCURACY) {
-      currentProvider = LocationManager.NETWORK_PROVIDER;
-    } else if (priority == LocationEnginePriority.HIGH_ACCURACY) {
-      currentProvider = LocationManager.GPS_PROVIDER;
-    }
-
-    Log.d(LOG_TAG, String.format("Priority set to %d (current provider is %s).", priority, currentProvider));
-  }
-
   @Override
   public void removeLocationUpdates() {
     if (PermissionsManager.areLocationPermissionsGranted(context.get())) {
@@ -149,5 +134,20 @@ class AndroidLocationEngine extends LocationEngine implements LocationListener {
   @Override
   public void onProviderDisabled(String provider) {
     Log.v(LOG_TAG, String.format("Provider %s was disabled (current provider is %s).", provider, currentProvider));
+  }
+
+  private void updateCurrentProvider() {
+    // We might want to explore android.location.Criteria here.
+    if (priority == LocationEnginePriority.NO_POWER) {
+      currentProvider = LocationManager.PASSIVE_PROVIDER;
+    } else if (priority == LocationEnginePriority.LOW_POWER) {
+      currentProvider = LocationManager.NETWORK_PROVIDER;
+    } else if (priority == LocationEnginePriority.BALANCED_POWER_ACCURACY) {
+      currentProvider = LocationManager.NETWORK_PROVIDER;
+    } else if (priority == LocationEnginePriority.HIGH_ACCURACY) {
+      currentProvider = LocationManager.GPS_PROVIDER;
+    }
+
+    Log.d(LOG_TAG, String.format("Priority set to %d (current provider is %s).", priority, currentProvider));
   }
 }

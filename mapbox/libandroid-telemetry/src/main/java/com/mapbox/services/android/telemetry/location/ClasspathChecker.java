@@ -1,7 +1,7 @@
 package com.mapbox.services.android.telemetry.location;
 
 
-public class ClasspathChecker {
+class ClasspathChecker {
 
   boolean hasDependencyOnClasspath(String className) {
     try {

@@ -75,14 +75,18 @@ public class LocationEngineActivity extends AppCompatActivity
 
     String[] locationEngines = getResources().getStringArray(R.array.location_engines);
     LocationEngineProvider locationEngineProvider = new LocationEngineProvider(this);
-    Map<String, LocationEngine> locationSourceDictionary = locationEngineProvider.obtainLocationEngineDictionary();
+    Map<String, LocationEngine> locationEngineDictionary = locationEngineProvider.obtainAvailableLocationEngines();
     if (engineName.equals(locationEngines[1])) {
       // Mock
       locationEngine = new MockLocationEngine();
       ((MockLocationEngine) locationEngine).setLastLocation(Position.fromLngLat(-87.62877, 41.87827));
       ((MockLocationEngine) locationEngine).moveToLocation(Position.fromLngLat(-87.6633, 41.8850));
     } else if (!engineName.equals(locationEngines[0])) {
-      locationEngine = locationSourceDictionary.get(engineName);
+      locationEngine = locationEngineDictionary.get(engineName);
+      if (locationEngine == null) {
+        locationEngine = locationEngineProvider.obtainAvailableLocationEngines()
+          .get(LocationEngineProvider.ANDROID);
+      }
     }
 
     if (!engineName.equals(locationEngines[0]) && locationEngine != null) {

@@ -14,20 +14,20 @@ import java.lang.ref.WeakReference;
 /**
  * Sample LocationEngine using the Open Source Lost library
  */
-public class LostLocationEngine extends LocationEngine implements LocationListener {
+class LostLocationEngine extends LocationEngine implements LocationListener {
 
   private static LocationEngine instance;
 
   private WeakReference<Context> context;
   private LostApiClient lostApiClient;
 
-  public LostLocationEngine(Context context) {
+  private LostLocationEngine(Context context) {
     super();
     this.context = new WeakReference<>(context);
     lostApiClient = new LostApiClient.Builder(this.context.get()).build();
   }
 
-  public static synchronized LocationEngine getLocationEngine(Context context) {
+  static synchronized LocationEngine getLocationEngine(Context context) {
     if (instance == null) {
       instance = new LostLocationEngine(context.getApplicationContext());
     }
