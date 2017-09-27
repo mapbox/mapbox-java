@@ -768,7 +768,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   /**
    * Check for empty strings and returns filled out event
    */
-  private Hashtable<String, Object> checkSDKInfo(Hashtable<String, Object> event){
+  private Hashtable<String, Object> checkSDKInfo(Hashtable<String, Object> event) {
     if (sdkIdentifier.equals("")) {
       event.put(MapboxEvent.KEY_SDK_IDENTIFIER, JSONObject.NULL);
     } else {
