@@ -116,6 +116,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * @param context        The context associated with the application
    * @param accessToken    The accessToken associated with the application
    * @param locationEngine Initialize telemetry with a custom location engine
+   * @param userAgent      source of requests
    */
   public void initialize(@NonNull Context context, @NonNull String accessToken, @NonNull String userAgent,
                          @NonNull LocationEngine locationEngine) {
@@ -129,8 +130,9 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    *
    * @param context        The context associated with the application
    * @param accessToken    The accessToken associated with the application
+   * @param userAgent      source of requests
    * @param sdkIdentifier  Identifies which sdk is sending the event
-   * @param sdkVersion version of the sdk sending the event
+   * @param sdkVersion     version of the sdk sending the event
    */
 
   public void initialize(@NonNull Context context, @NonNull String accessToken, @NonNull String userAgent,
@@ -146,6 +148,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    *
    * @param context     The context associated with the application
    * @param accessToken The accessToken associated with the application
+   * @param userAgent   source of requests
    */
   public void initialize(@NonNull Context context, @NonNull String accessToken, @NonNull String userAgent) {
     if (initialized) {
@@ -675,8 +678,10 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     event.put(MapboxEvent.KEY_CREATED, TelemetryUtils.generateCreateDate(null));
     event.put(MapboxEvent.KEY_USER_ID, mapboxVendorId);
     event.put(MapboxEvent.KEY_ENABLED_TELEMETRY, isTelemetryEnabled());
+    event.put(MapboxEvent.KEY_SDK_IDENTIFIER, addSdkIdentifier());
+    event.put(MapboxEvent.KEY_SDK_VERSION, addsdkVersion());
 
-    events.add(checkSDKInfo(event));
+    events.add(event);
     flushEventsQueueImmediately(true);
   }
 
@@ -766,21 +771,24 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   }
 
   /**
-   * Check for empty strings and returns filled out event
+   * Check for empty strings and returns desired sdkIdentifier input for event
    */
-  private Hashtable<String, Object> checkSDKInfo(Hashtable<String, Object> event) {
-    if (sdkIdentifier.equals("")) {
-      event.put(MapboxEvent.KEY_SDK_IDENTIFIER, JSONObject.NULL);
-    } else {
-      event.put(MapboxEvent.KEY_SDK_IDENTIFIER, sdkIdentifier);
+  private Object addSdkIdentifier() {
+    if (sdkIdentifier.isEmpty()) {
+      return JSONObject.NULL;
     }
 
-    if (sdkVersion.equals("")) {
-      event.put(MapboxEvent.KEY_SDK_VERSION, JSONObject.NULL);
-    } else {
-      event.put(MapboxEvent.KEY_SDK_VERSION, sdkVersion);
+    return sdkIdentifier;
+  }
+
+  /**
+   * Check for empty strings and returns desired sdkVersion input for event
+   */
+  private Object addsdkVersion() {
+    if (sdkVersion.isEmpty()) {
+      return JSONObject.NULL;
     }
 
-    return event;
+    return sdkVersion;
   }
 }
