@@ -124,6 +124,11 @@ class GoogleLocationEngine extends LocationEngine implements
   }
 
   @Override
+  public Type obtainEventType() {
+    return Type.GOOGLE_PLAY_SERVICES;
+  }
+
+  @Override
   public void onLocationChanged(Location location) {
     for (LocationEngineListener listener : locationListeners) {
       listener.onLocationChanged(location);

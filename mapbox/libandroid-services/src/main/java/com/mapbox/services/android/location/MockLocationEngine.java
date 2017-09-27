@@ -179,6 +179,11 @@ public class MockLocationEngine extends LocationEngine {
     }
   }
 
+  @Override
+  public Type obtainEventType() {
+    return Type.MOCK;
+  }
+
   /*
    * Logic methods for getting the user positions.
    */

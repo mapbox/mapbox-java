@@ -100,6 +100,11 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
     }
   }
 
+  @Override
+  public Type obtainEventType() {
+    return Type.ANDROID;
+  }
+
   /**
    * Called when the location has changed.
    */

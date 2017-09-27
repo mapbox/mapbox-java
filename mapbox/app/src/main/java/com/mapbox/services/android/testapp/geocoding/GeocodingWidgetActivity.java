@@ -64,10 +64,9 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
 
     // Set up location services to improve accuracy
     LocationEngineProvider locationEngineProvider = new LocationEngineProvider(this);
-    locationEngine = locationEngineProvider.obtainAvailableLocationEngines().get(LocationEngineProvider.LOST);
+    locationEngine = locationEngineProvider.obtainLocationEngineBy(LocationEngine.Type.LOST);
     if (locationEngine == null) {
-      locationEngine = locationEngineProvider.obtainAvailableLocationEngines()
-        .get(LocationEngineProvider.ANDROID);
+      locationEngine = locationEngineProvider.obtainLocationEngineBy(LocationEngine.Type.ANDROID);
     }
     locationEngine.addLocationEngineListener(this);
     locationEngine.activate();
@@ -101,7 +100,6 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
       .build();
     mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 5000, null);
   }
-
 
   @Override
   protected void onStart() {

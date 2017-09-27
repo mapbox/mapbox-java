@@ -131,6 +131,11 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
     }
   }
 
+  @Override
+  public Type obtainEventType() {
+    return Type.LOST;
+  }
+
   /**
    * Invoked when the Location has changed.
    *

@@ -126,11 +126,9 @@ public class GeocodingServiceActivity extends AppCompatActivity implements Locat
    */
   private void buildAndroidLocationEngine() {
     LocationEngineProvider locationEngineProvider = new LocationEngineProvider(this);
-    locationEngine = locationEngineProvider.obtainAvailableLocationEngines()
-      .get(LocationEngineProvider.GOOGLE_PLAY_SERVICES);
+    locationEngine = locationEngineProvider.obtainLocationEngineBy(LocationEngine.Type.GOOGLE_PLAY_SERVICES);
     if (locationEngine == null) {
-      locationEngine = locationEngineProvider.obtainAvailableLocationEngines()
-        .get(LocationEngineProvider.ANDROID);
+      locationEngine = locationEngineProvider.obtainBestLocationEngineAvailable();
     }
     locationEngine.addLocationEngineListener(this);
     locationEngine.activate();

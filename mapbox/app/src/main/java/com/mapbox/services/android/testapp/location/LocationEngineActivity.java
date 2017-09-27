@@ -18,6 +18,9 @@ import com.mapbox.services.android.telemetry.location.LocationEngineProvider;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.commons.models.Position;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
@@ -29,6 +32,9 @@ public class LocationEngineActivity extends AppCompatActivity
 
   private TextView textLocation;
   private LocationEngine locationEngine;
+  private String[] locationEngines;
+  private LocationEngineProvider locationEngineProvider;
+  private Map<String, LocationEngine.Type> locationEngineDictionary;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,7 @@ public class LocationEngineActivity extends AppCompatActivity
     setContentView(R.layout.activity_location_engine);
     textLocation = (TextView) findViewById(R.id.text_location);
     setupSpinner();
+    setupLocationEngines();
   }
 
   @Override
@@ -56,36 +63,21 @@ public class LocationEngineActivity extends AppCompatActivity
     }
   }
 
-  private void setupSpinner() {
-    Spinner spinner = (Spinner) findViewById(R.id.spinner_engine);
-
-    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-      R.array.location_engines, android.R.layout.simple_spinner_item);
-    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spinner.setAdapter(adapter);
-
-    spinner.setOnItemSelectedListener(this);
-  }
-
   @Override
   public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
     String engineName = (String) parent.getItemAtPosition(pos);
     Log.d(LOG_TAG, "Engine selected: " + engineName);
     setNoEngine();
 
-    String[] locationEngines = getResources().getStringArray(R.array.location_engines);
-    LocationEngineProvider locationEngineProvider = new LocationEngineProvider(this);
-    Map<String, LocationEngine> locationEngineDictionary = locationEngineProvider.obtainAvailableLocationEngines();
     if (engineName.equals(locationEngines[1])) {
       // Mock
       locationEngine = new MockLocationEngine();
       ((MockLocationEngine) locationEngine).setLastLocation(Position.fromLngLat(-87.62877, 41.87827));
       ((MockLocationEngine) locationEngine).moveToLocation(Position.fromLngLat(-87.6633, 41.8850));
     } else if (!engineName.equals(locationEngines[0])) {
-      locationEngine = locationEngineDictionary.get(engineName);
+      locationEngine = locationEngineProvider.obtainLocationEngineBy(locationEngineDictionary.get(engineName));
       if (locationEngine == null) {
-        locationEngine = locationEngineProvider.obtainAvailableLocationEngines()
-          .get(LocationEngineProvider.ANDROID);
+        locationEngine = locationEngineProvider.obtainLocationEngineBy(LocationEngine.Type.ANDROID);
       }
     }
 
@@ -104,17 +96,6 @@ public class LocationEngineActivity extends AppCompatActivity
     setNoEngine();
   }
 
-  private void setNoEngine() {
-    if (locationEngine != null) {
-      locationEngine.removeLocationUpdates();
-      locationEngine.removeLocationEngineListener(this);
-      locationEngine.deactivate();
-    }
-
-    textLocation.setText("No location updates, yet.");
-    locationEngine = null;
-  }
-
   @Override
   public void onConnected() {
     Log.d(LOG_TAG, "Connected to engine, we can now request updates.");
@@ -127,5 +108,49 @@ public class LocationEngineActivity extends AppCompatActivity
       Log.d(LOG_TAG, "New location received: " + location.toString());
       textLocation.setText(location.toString());
     }
+  }
+
+  private void setupSpinner() {
+    Spinner spinner = (Spinner) findViewById(R.id.spinner_engine);
+
+    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+      R.array.location_engines, android.R.layout.simple_spinner_item);
+    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    spinner.setAdapter(adapter);
+
+    spinner.setOnItemSelectedListener(this);
+  }
+
+  private void setupLocationEngines() {
+    locationEngines = getResources().getStringArray(R.array.location_engines);
+    locationEngineProvider = new LocationEngineProvider(this);
+    locationEngineDictionary = obtainLocationEngineDictionary(locationEngines);
+  }
+
+  private Map<String, LocationEngine.Type> obtainLocationEngineDictionary(String[] locationEngines) {
+    List<LocationEngine.Type> values = Arrays.asList(LocationEngine.Type.values());
+    int mockLocationEngineAlreadyIncluded = 1;
+    int size = values.size() - mockLocationEngineAlreadyIncluded;
+    Map<String, LocationEngine.Type> dictionary = new HashMap<>(size);
+    for (int i = 2; i < locationEngines.length; i++) {
+      for (LocationEngine.Type type : values) {
+        if (locationEngines[i].equalsIgnoreCase(type.name())) {
+          dictionary.put(locationEngines[i], type);
+          break;
+        }
+      }
+    }
+    return dictionary;
+  }
+
+  private void setNoEngine() {
+    if (locationEngine != null) {
+      locationEngine.removeLocationUpdates();
+      locationEngine.removeLocationEngineListener(this);
+      locationEngine.deactivate();
+    }
+
+    textLocation.setText("No location updates, yet.");
+    locationEngine = null;
   }
 }
