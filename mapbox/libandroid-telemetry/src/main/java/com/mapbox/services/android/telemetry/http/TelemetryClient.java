@@ -237,6 +237,8 @@ public class TelemetryClient {
       jsonObject.putOpt(MapboxEvent.KEY_SOURCE, evt.get(MapboxEvent.KEY_SOURCE));
       jsonObject.putOpt(MapboxEvent.KEY_SESSION_ID, evt.get(MapboxEvent.KEY_SESSION_ID));
       jsonObject.putOpt(MapboxEvent.KEY_LATITUDE, evt.get(MapboxEvent.KEY_LATITUDE));
+      jsonObject.putOpt(MapboxEvent.KEY_SDK_IDENTIFIER, evt.get(MapboxEvent.KEY_SDK_IDENTIFIER));
+      jsonObject.putOpt(MapboxEvent.KEY_SDK_VERSION, evt.get(MapboxEvent.KEY_SDK_VERSION));
 
       // Make sure longitude is wrapped
       if (evt.containsKey(MapboxEvent.KEY_LONGITUDE)) {

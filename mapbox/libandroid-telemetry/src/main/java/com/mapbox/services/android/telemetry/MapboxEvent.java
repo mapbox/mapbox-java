@@ -49,6 +49,8 @@ public class MapboxEvent implements Serializable {
   public static final String KEY_ALTITUDE = "altitude";
   public static final String KEY_APPLICATION_STATE = "applicationState";
   public static final String KEY_HORIZONTAL_ACCURACY = "horizontalAccuracy";
+  public static final String KEY_SDK_IDENTIFIER = "sdkIdentifier";
+  public static final String KEY_SDK_VERSION = "sdkVersion";
 
   // Gestures
   public static final String GESTURE_SINGLETAP = "SingleTap";
