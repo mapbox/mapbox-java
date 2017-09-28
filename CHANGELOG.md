@@ -4,7 +4,17 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### v2.2.5
 
+- set sdkIdentifier and sdkVersion when pushing turnstile event [#574](https://github.com/mapbox/mapbox-java/pull/574)
+
 ### v2.2.4
+
+- Bumped Navigation Events `EVENT_VERSION` variable to version 3 [#570](https://github.com/mapbox/mapbox-java/pull/570)
+- Adds missing event parameters to the NavigationEvent methods [#569](https://github.com/mapbox/mapbox-java/pull/569)
+- Adds newUserAgent to telemetry [#568](https://github.com/mapbox/mapbox-java/pull/568)
+- Fixes arrival timestamp formatting [#567](https://github.com/mapbox/mapbox-java/pull/567)
+- Omit null optional fields in Nav events [#566](https://github.com/mapbox/mapbox-java/pull/566)
+- Adds missing device attribute to Navigation events [#565](https://github.com/mapbox/mapbox-java/pull/565)
+- Adds roundaboutExits param to MapboxDirections [#562](https://github.com/mapbox/mapbox-java/pull/562)
 
 ### v2.2.3
 
