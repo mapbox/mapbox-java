@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
+import com.mapbox.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.GeometriesCriteria;
@@ -57,7 +58,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(MatchingAdapterFactory.create())
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+//        .registerTypeAdapterFactory(MatchingAdapterFactory.create())
         .create()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());

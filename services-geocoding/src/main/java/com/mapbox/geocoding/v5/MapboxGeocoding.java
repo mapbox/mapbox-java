@@ -16,7 +16,6 @@ import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
@@ -605,7 +604,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      */
     public MapboxGeocoding build() {
 
-      if (countries.size() > 0) {
+      if (!countries.isEmpty()) {
         country(TextUtils.join(",", countries.toArray()));
       }
 

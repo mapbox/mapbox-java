@@ -59,8 +59,8 @@ public abstract class FeatureCollection implements GeoJson {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     return gson.create().fromJson(json, FeatureCollection.class);
   }
 

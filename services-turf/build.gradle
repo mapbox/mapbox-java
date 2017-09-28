@@ -13,10 +13,5 @@ dependencies {
   compileOnly dependenciesList.autoValueGson
 
   // Test Dependencies
-  testCompile dependenciesList.junit
-}
-
-
-sonarqube {
-  skipProject = true
+  testCompile project(path: ':services', configuration: 'testOutput')
 }

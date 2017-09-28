@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mapbox.geojson.Point;
-import com.mapbox.optimization.v1.BaseTest;
 import com.mapbox.optimization.v1.MapboxOptimization;
+import com.mapbox.services.BaseTest;
 
 import org.junit.After;
 import org.junit.Before;

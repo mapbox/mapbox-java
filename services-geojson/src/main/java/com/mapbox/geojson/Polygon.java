@@ -81,9 +81,10 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   public static Polygon fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     return gson.create().fromJson(json, Polygon.class);
   }
 
@@ -217,7 +218,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     List<List<Point>> coordinates = new ArrayList<>();
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
-    if (inner == null || inner.size() < 1) {
+    if (inner == null || inner.isEmpty()) {
       return new AutoValue_Polygon(null, coordinates);
     }
     for (LineString lineString : inner) {

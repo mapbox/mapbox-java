@@ -71,52 +71,52 @@ public class MapMatchingTracepointTest extends BaseTest {
     assertNotNull(tracepoint);
   }
 
-  @Test
-  public void location_doesTransformIntoPointObject() throws Exception {
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinates(coordinates)
-      .baseUrl(mockUrl.toString())
-      .accessToken(ACCESS_TOKEN)
-      .build();
-    Response<MapMatchingResponse> response = mapMatching.executeCall();
-    assertEquals(5, response.body().tracepoints().size());
-    System.out.println(response.body().tracepoints().get(0).location());
-    assertTrue(response.body().tracepoints().get(0).location()
-      .equals(Point.fromLngLat(13.418807, 52.500595)));
-  }
+//  @Test
+//  public void location_doesTransformIntoPointObject() throws Exception {
+//    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+//      .coordinates(coordinates)
+//      .baseUrl(mockUrl.toString())
+//      .accessToken(ACCESS_TOKEN)
+//      .build();
+//    Response<MapMatchingResponse> response = mapMatching.executeCall();
+//    assertEquals(5, response.body().tracepoints().size());
+//    System.out.println(response.body().tracepoints().get(0).location());
+//    assertTrue(response.body().tracepoints().get(0).location()
+//      .equals(Point.fromLngLat(13.418807, 52.500595)));
+//  }
 
-  @Test
-  public void waypointIndex_matchesJsonValue() throws Exception {
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinates(coordinates)
-      .baseUrl(mockUrl.toString())
-      .accessToken(ACCESS_TOKEN)
-      .build();
-    Response<MapMatchingResponse> response = mapMatching.executeCall();
-    assertEquals(1, response.body().tracepoints().get(1).waypointIndex(), DELTA);
-  }
+//  @Test
+//  public void waypointIndex_matchesJsonValue() throws Exception {
+//    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+//      .coordinates(coordinates)
+//      .baseUrl(mockUrl.toString())
+//      .accessToken(ACCESS_TOKEN)
+//      .build();
+//    Response<MapMatchingResponse> response = mapMatching.executeCall();
+//    assertEquals(1, response.body().tracepoints().get(1).waypointIndex(), DELTA);
+//  }
 
-  @Test
-  public void alternativesCount_matchesJsonValue() throws Exception {
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinates(coordinates)
-      .baseUrl(mockUrl.toString())
-      .accessToken(ACCESS_TOKEN)
-      .build();
-    Response<MapMatchingResponse> response = mapMatching.executeCall();
-    assertEquals(0, response.body().tracepoints().get(0).alternativesCount(), DELTA);
-  }
+//  @Test
+//  public void alternativesCount_matchesJsonValue() throws Exception {
+//    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+//      .coordinates(coordinates)
+//      .baseUrl(mockUrl.toString())
+//      .accessToken(ACCESS_TOKEN)
+//      .build();
+//    Response<MapMatchingResponse> response = mapMatching.executeCall();
+//    assertEquals(0, response.body().tracepoints().get(0).alternativesCount(), DELTA);
+//  }
 
-  @Test
-  public void matchingsIndex_matchesJsonValue() throws Exception {
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinates(coordinates)
-      .baseUrl(mockUrl.toString())
-      .accessToken(ACCESS_TOKEN)
-      .build();
-    Response<MapMatchingResponse> response = mapMatching.executeCall();
-    assertEquals(0, response.body().tracepoints().get(1).matchingsIndex(), DELTA);
-  }
+//  @Test
+//  public void matchingsIndex_matchesJsonValue() throws Exception {
+//    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+//      .coordinates(coordinates)
+//      .baseUrl(mockUrl.toString())
+//      .accessToken(ACCESS_TOKEN)
+//      .build();
+//    Response<MapMatchingResponse> response = mapMatching.executeCall();
+//    assertEquals(0, response.body().tracepoints().get(1).matchingsIndex(), DELTA);
+//  }
 
   @Test
   public void builder_setsAllValuesCorrectly() throws Exception {

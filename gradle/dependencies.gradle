@@ -37,6 +37,7 @@ ext {
       mockito             : "org.mockito:mockito-core:${version.mockito}",
       hamcrestJunit       : "org.hamcrest:hamcrest-junit:${version.hamcrestJunit}",
       errorprone          : "com.google.errorprone:error_prone_core:${version.errorprone}"
+
   ]
 
   pluginDependencies = [

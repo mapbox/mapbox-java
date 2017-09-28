@@ -1,7 +1,5 @@
 package com.mapbox.staticmap.v1.models;
 
-
-import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +7,7 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.mapbox.staticmap.v1.MapboxStaticMap;
 
+import java.awt.Color;
 import java.util.List;
 
 /**
@@ -40,13 +39,13 @@ public abstract class StaticPolylineAnnotation {
       sb.append("-").append(strokeColor());
     }
     if (strokeColor() != null) {
-      sb.append("+").append(strokeColor());
+      sb.append("+").append(toHexString(strokeColor()));
     }
     if (strokeOpacity() != null) {
       sb.append("-").append(strokeOpacity());
     }
     if (fillColor() != null) {
-      sb.append("+").append(fillColor());
+      sb.append("+").append(toHexString(fillColor()));
     }
     if (fillOpacity() != null) {
       sb.append("-").append(fillOpacity());
@@ -59,13 +58,13 @@ public abstract class StaticPolylineAnnotation {
   abstract Double strokeWidth();
 
   @Nullable
-  abstract Integer strokeColor();
+  abstract Color strokeColor();
 
   @Nullable
   abstract Float strokeOpacity();
 
   @Nullable
-  abstract Integer fillColor();
+  abstract Color fillColor();
 
   @Nullable
   abstract Float fillOpacity();
@@ -93,11 +92,11 @@ public abstract class StaticPolylineAnnotation {
     /**
      * Set the line outer stroke color.
      *
-     * @param strokeColor a ColorInt representing the stroke color
+     * @param strokeColor {@link Color} denoting the stroke color
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder strokeColor(@ColorInt Integer strokeColor);
+    public abstract Builder strokeColor(@Nullable Color strokeColor);
 
     /**
      * Value between 0, completely transparent, and 1, opaque for the line stroke.
@@ -111,11 +110,11 @@ public abstract class StaticPolylineAnnotation {
     /**
      * Set the inner line fill color.
      *
-     * @param fillColor a ColorInt representing the fill color
+     * @param color {@link Color} denoting the marker icon color
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder fillColor(@ColorInt Integer fillColor);
+    public abstract Builder fillColor(@Nullable Color color);
 
     /**
      * Value between 0, completely transparent, and 1, opaque for the line fill.
@@ -146,5 +145,14 @@ public abstract class StaticPolylineAnnotation {
      * @since 2.1.0
      */
     public abstract StaticPolylineAnnotation build();
+  }
+
+  // TODO move to utils class
+  public final static String toHexString(Color color) throws NullPointerException {
+    String hexColour = Integer.toHexString(color.getRGB() & 0xffffff);
+    if (hexColour.length() < 6) {
+      hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
+    }
+    return hexColour;
   }
 }

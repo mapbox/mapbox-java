@@ -54,6 +54,7 @@ public abstract class MapMatchingMatching implements Serializable {
    * @return an encoded polyline string
    * @since 1.0.0
    */
+  @Nullable
   public abstract String geometry();
 
   /**

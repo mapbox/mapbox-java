@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.geojson.Point;
 import com.mapbox.matrix.v1.models.MatrixResponse;
+import com.mapbox.services.BaseTest;
 import com.mapbox.services.exceptions.ServicesException;
 
 import org.junit.After;
@@ -81,7 +82,7 @@ public class MapboxMatrixTest extends BaseTest {
       .baseUrl(mockUrl.toString())
       .build();
     Response<MatrixResponse> response = client.executeCall();
-    assertEquals(response.code(), 200);
+    assertEquals(200, response.code());
 
     // Check the response body
     assertNotNull(response.body());
@@ -104,7 +105,8 @@ public class MapboxMatrixTest extends BaseTest {
   @Test
   public void validCoordinates() throws ServicesException {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("At least two coordinates must be provided with your APIrequest."));
+    thrown.expectMessage(
+      startsWith("At least two coordinates must be provided with your API request."));
     MapboxMatrix.builder()
       .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_DRIVING)

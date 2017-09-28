@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.mapbox.directions.v5.models.DirectionsResponse;
 import com.mapbox.geojson.Point;
+import com.mapbox.services.BaseTest;
 import com.mapbox.services.exceptions.ServicesException;
 
 import org.junit.After;
@@ -346,8 +347,8 @@ public class MapboxDirectionsTest extends BaseTest {
     // (the default OkHttp client is used)
     client.setCallFactory(null);
     Response<DirectionsResponse> response = client.executeCall();
-    assertEquals(response.code(), 200);
-    assertEquals(response.body().code(), "Ok");
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
   }
 
 

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
+import com.mapbox.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.optimization.v1.OptimizationCriteria.AnnotationCriteria;
@@ -111,6 +112,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
       .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
         .registerTypeAdapterFactory(OptimizationAdapterFactory.create())
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
         .create()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());

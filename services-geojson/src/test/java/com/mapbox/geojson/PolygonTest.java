@@ -126,9 +126,9 @@ public class PolygonTest extends BaseTest {
   public void fromJson() throws IOException {
     final String json = loadJsonFixture(SAMPLE_POLYGON);
     Polygon geo = Polygon.fromJson(json);
-    assertEquals(geo.type(), "Polygon");
-    assertEquals(geo.coordinates().get(0).get(0).longitude(), 100.0, DELTA);
-    assertEquals(geo.coordinates().get(0).get(0).latitude(), 0.0, DELTA);
+    assertEquals("Polygon", geo.type());
+    assertEquals(100.0, geo.coordinates().get(0).get(0).longitude(), DELTA);
+    assertEquals(0.0, geo.coordinates().get(0).get(0).latitude(), DELTA);
     assertFalse(geo.coordinates().get(0).get(0).hasAltitude());
   }
 
@@ -136,12 +136,12 @@ public class PolygonTest extends BaseTest {
   public void fromJsonHoles() throws IOException {
     final String json = loadJsonFixture(SAMPLE_POLYGON_HOLES);
     Polygon geo = Polygon.fromJson(json);
-    assertEquals(geo.type(), "Polygon");
-    assertEquals(geo.coordinates().get(0).get(0).longitude(), 100.0, DELTA);
-    assertEquals(geo.coordinates().get(0).get(0).latitude(), 0.0, DELTA);
-    assertEquals(geo.coordinates().size(), 2);
-    assertEquals(geo.coordinates().get(1).get(0).longitude(), 100.8, DELTA);
-    assertEquals(geo.coordinates().get(1).get(0).latitude(), 0.8, DELTA);
+    assertEquals("Polygon", geo.type());
+    assertEquals(100.0, geo.coordinates().get(0).get(0).longitude(), DELTA);
+    assertEquals(0.0, geo.coordinates().get(0).get(0).latitude(), DELTA);
+    assertEquals(2, geo.coordinates().size());
+    assertEquals(100.8, geo.coordinates().get(1).get(0).longitude(), DELTA);
+    assertEquals(0.8, geo.coordinates().get(1).get(0).latitude(), DELTA);
     assertFalse(geo.coordinates().get(0).get(0).hasAltitude());
   }
 

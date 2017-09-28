@@ -1,11 +1,11 @@
 package com.mapbox.geocoding.v5.models;
 
 import com.google.gson.JsonObject;
-import com.mapbox.geocoding.v5.BaseTest;
 import com.mapbox.geocoding.v5.GeocodingCriteria;
 import com.mapbox.geocoding.v5.MapboxGeocoding;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Point;
+import com.mapbox.services.BaseTest;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.After;

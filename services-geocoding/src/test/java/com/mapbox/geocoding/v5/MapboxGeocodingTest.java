@@ -1,5 +1,6 @@
 package com.mapbox.geocoding.v5;
 
+import com.mapbox.services.BaseTest;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.geojson.Point;

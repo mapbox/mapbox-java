@@ -33,11 +33,10 @@ public class GeometryDeserializer implements JsonDeserializer<Geometry> {
    * @since 1.0.0
    */
   @Override
-  public Geometry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-    throws JsonParseException {
+  public Geometry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
     String geometryType;
     // Find the actual class name from the type property in the JSON.
-    if (json instanceof JsonObject) {
+    if (json.isJsonObject()) {
       geometryType = json.getAsJsonObject().get("type").getAsString();
     } else {
       geometryType = json.getAsJsonArray().get(0).getAsJsonObject().get("type").getAsString();
@@ -46,11 +45,9 @@ public class GeometryDeserializer implements JsonDeserializer<Geometry> {
     try {
       // Use the current context to deserialize it
       Type classType = Class.forName("com.mapbox.geojson." + geometryType);
-      System.out.println(classType);
       return context.deserialize(json, classType);
     } catch (
       ClassNotFoundException classNotFoundException)
-
     {
       // Unknown geometry
       throw new JsonParseException(classNotFoundException);

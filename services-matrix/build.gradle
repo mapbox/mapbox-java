@@ -9,6 +9,9 @@ dependencies {
   compile dependenciesList.retrofit
   compile dependenciesList.retrofit2Gson
 
+  // Annotations
+  compileOnly dependenciesList.supportAnnotation
+
   // OkHttp
   compile dependenciesList.okhttp3Logging
 
@@ -18,9 +21,5 @@ dependencies {
 
   // Test Dependencies
   testCompile dependenciesList.okhttp3Mockwebserver
+  testCompile project(path: ':services', configuration: 'testOutput')
 }
-
-sonarqube {
-  skipProject = true
-}
-

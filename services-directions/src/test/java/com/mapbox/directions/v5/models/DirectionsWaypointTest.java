@@ -3,9 +3,9 @@ package com.mapbox.directions.v5.models;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.mapbox.directions.v5.BaseTest;
 import com.mapbox.directions.v5.MapboxDirections;
 import com.mapbox.geojson.Point;
+import com.mapbox.services.BaseTest;
 
 import org.junit.After;
 import org.junit.Before;

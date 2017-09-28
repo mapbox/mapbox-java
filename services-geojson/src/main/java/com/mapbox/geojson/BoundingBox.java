@@ -1,21 +1,15 @@
 package com.mapbox.geojson;
 
-import static com.mapbox.services.constants.Constants.MAX_LATITUDE;
-import static com.mapbox.services.constants.Constants.MAX_LONGITUDE;
-import static com.mapbox.services.constants.Constants.MIN_LATITUDE;
-import static com.mapbox.services.constants.Constants.MIN_LONGITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MAX_LATITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MAX_LONGITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LATITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+
 import com.google.auto.value.AutoValue;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.annotations.Expose;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
-import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
 

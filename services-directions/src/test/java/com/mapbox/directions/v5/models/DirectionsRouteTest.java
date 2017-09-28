@@ -1,10 +1,10 @@
 package com.mapbox.directions.v5.models;
 
-import com.mapbox.directions.v5.BaseTest;
-
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
+
+import com.mapbox.services.BaseTest;
 
 public class DirectionsRouteTest extends BaseTest {
 

@@ -2,25 +2,25 @@ apply plugin: 'java-library'
 
 dependencies {
 
+  compile project(":services")
   compile project(":services-geojson")
 
   // Retrofit
   compile dependenciesList.retrofit
   compile dependenciesList.retrofit2Gson
 
-  // OkHttp
-  compile dependenciesList.okhttp3Logging
-
   // Annotations
   compileOnly dependenciesList.supportAnnotation
+
+  // OkHttp
+  compile dependenciesList.okhttp3Logging
 
   // AutoValue
   compileOnly dependenciesList.autoValue
   compileOnly dependenciesList.autoValueGson
 
   // Test Dependencies
-  testCompile dependenciesList.junit
-  testCompile dependenciesList.hamcrestJunit
   testCompile dependenciesList.okhttp3Mockwebserver
+  testCompile project(path: ':services', configuration: 'testOutput')
 }
 

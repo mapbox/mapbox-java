@@ -9,7 +9,6 @@ import com.google.gson.TypeAdapter;
 import com.mapbox.directions.v5.models.DirectionsWaypoint;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 /**

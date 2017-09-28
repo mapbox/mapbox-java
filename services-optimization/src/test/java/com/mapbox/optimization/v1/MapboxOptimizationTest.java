@@ -1,6 +1,11 @@
 package com.mapbox.optimization.v1;
 
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+
 import com.mapbox.geojson.Point;
+import com.mapbox.services.BaseTest;
 import com.mapbox.services.exceptions.ServicesException;
 
 import org.hamcrest.junit.ExpectedException;
@@ -10,10 +15,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertTrue;
 
 public class MapboxOptimizationTest extends BaseTest {
 

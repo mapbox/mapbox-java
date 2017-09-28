@@ -15,6 +15,10 @@ import java.util.Locale;
  */
 public class TextUtils {
 
+  private TextUtils() {
+    // Empty private constructor preventing class from getting initialized
+  }
+
   /**
    * Returns true if the string is null or 0-length.
    *

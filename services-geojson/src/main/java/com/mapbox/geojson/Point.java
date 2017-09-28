@@ -1,13 +1,14 @@
 package com.mapbox.geojson;
 
-import static com.mapbox.services.constants.Constants.MAX_LATITUDE;
-import static com.mapbox.services.constants.Constants.MAX_LONGITUDE;
-import static com.mapbox.services.constants.Constants.MIN_LATITUDE;
-import static com.mapbox.services.constants.Constants.MIN_LONGITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MAX_LATITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MAX_LONGITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LATITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,7 +18,6 @@ import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.MapboxAdapterFactory;
-import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
@@ -56,7 +56,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class Point implements Geometry, Serializable {
+public abstract class Point implements Geometry<List<Double>>, Serializable {
 
   @Expose
   @SerializedName("type")
@@ -122,7 +122,7 @@ public abstract class Point implements Geometry, Serializable {
   public static Point fromLngLat(
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
-    @NonNull BoundingBox bbox) {
+    @Nullable BoundingBox bbox) {
     List<Double> coordinates = new ArrayList<>();
     coordinates.add(longitude);
     coordinates.add(latitude);

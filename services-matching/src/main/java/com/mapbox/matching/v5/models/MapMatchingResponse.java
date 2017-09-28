@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.ryanharter.auto.value.gson.GsonTypeAdapter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -42,6 +43,7 @@ public abstract class MapMatchingResponse implements Serializable {
    * @return string containing the code
    * @since 2.0.0
    */
+  @NonNull
   public abstract String code();
 
   /**
@@ -51,6 +53,7 @@ public abstract class MapMatchingResponse implements Serializable {
    * @return a list made up of {@link MapMatchingMatching} objects
    * @since 2.0.0
    */
+  @Nullable
   public abstract List<MapMatchingMatching> matchings();
 
   /**
@@ -62,6 +65,7 @@ public abstract class MapMatchingResponse implements Serializable {
    * @return tracepoints list
    * @since 2.0.0
    */
+  @Nullable
   public abstract List<MapMatchingTracepoint> tracepoints();
 
   /**
@@ -98,7 +102,7 @@ public abstract class MapMatchingResponse implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder code(@NonNull String code);
+    public abstract Builder code(@Nullable String code);
 
     /**
      * List of {@link MapMatchingMatching} objects, essentially a DirectionsWaypoint object with the

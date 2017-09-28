@@ -39,14 +39,16 @@ allprojects {
     mavenCentral()
     jcenter()
   }
+
+  version = "3.0.0-beta.1"
 }
 
 subprojects {
-  apply from: "${rootDir}/gradle/dependencies.gradle"
-  apply from: "${rootDir}/gradle/code-quality.gradle"
   apply plugin: 'java'
   apply plugin: 'idea'
   apply plugin: 'net.ltgt.errorprone'
+  apply from: "${rootDir}/gradle/dependencies.gradle"
+  apply from: "${rootDir}/gradle/code-quality.gradle"
 
   // Fixes issue with test resources not being found inside Intellij
   idea {

@@ -2,18 +2,16 @@ apply plugin: 'java-library'
 
 dependencies {
 
+  compile project(":services")
   compile project(":services-geojson")
   compile project(":services-directions")
-
-  // Annotations
-  compileOnly dependenciesList.supportAnnotation
-
-  // Gson
-  compile dependenciesList.gson
 
   // Retrofit
   compile dependenciesList.retrofit
   compile dependenciesList.retrofit2Gson
+
+  // Annotations
+  compileOnly dependenciesList.supportAnnotation
 
   // OkHttp
   compile dependenciesList.okhttp3Logging
@@ -24,11 +22,5 @@ dependencies {
 
   // Test Dependencies
   testCompile dependenciesList.okhttp3Mockwebserver
-}
-
-
-
-
-sonarqube {
-  skipProject = true
+  testCompile project(path: ':services', configuration: 'testOutput')
 }

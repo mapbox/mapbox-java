@@ -37,13 +37,13 @@ public class PointSerializer implements JsonSerializer<Point> {
     JsonArray rawCoordinates = new JsonArray();
 
     BigDecimal lat = BigDecimal.valueOf(src.latitude());
-    lat = lat.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros();
+    String latString = lat.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
 
     BigDecimal lon = BigDecimal.valueOf(src.longitude());
-    lon = lon.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros();
+    String lonString = lon.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
 
-    rawCoordinates.add(new JsonPrimitive(lon));
-    rawCoordinates.add(new JsonPrimitive(lat));
+    rawCoordinates.add(new JsonPrimitive(Double.valueOf(lonString)));
+    rawCoordinates.add(new JsonPrimitive(Double.valueOf(latString)));
 
     // Includes altitude
     if (src.hasAltitude()) {

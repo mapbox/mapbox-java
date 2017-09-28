@@ -2,6 +2,7 @@ apply plugin: 'java-library'
 
 dependencies {
 
+  compile project(":services")
   compile project(":services-geojson")
 
   // OkHttp
@@ -15,12 +16,6 @@ dependencies {
   compileOnly dependenciesList.autoValueGson
 
   // Test Dependencies
-  testCompile dependenciesList.junit
-  testCompile dependenciesList.hamcrestJunit
   testCompile dependenciesList.okhttp3Mockwebserver
-}
-
-
-sonarqube {
-  skipProject = true
+  testCompile project(path: ':services', configuration: 'testOutput')
 }

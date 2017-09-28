@@ -1,5 +1,8 @@
 package com.mapbox.services;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertEquals;
+
 import com.google.gson.JsonParser;
 
 import java.io.ByteArrayInputStream;
@@ -10,8 +13,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
-
-import static org.junit.Assert.assertEquals;
 
 public class BaseTest {
 
@@ -26,8 +27,8 @@ public class BaseTest {
   protected String loadJsonFixture(String filename) throws IOException {
     ClassLoader classLoader = getClass().getClassLoader();
     InputStream inputStream = classLoader.getResourceAsStream(filename);
-    Scanner s = new Scanner(inputStream).useDelimiter("\\A");
-    return s.hasNext() ? s.next() : "";
+    Scanner scanner = new Scanner(inputStream, UTF_8.name()).useDelimiter("\\A");
+    return scanner.hasNext() ? scanner.next() : "";
   }
 
   public static <T extends Serializable> byte[] serialize(T obj)
@@ -43,7 +44,7 @@ public class BaseTest {
     throws IOException, ClassNotFoundException {
     ByteArrayInputStream bais = new ByteArrayInputStream(b);
     ObjectInputStream ois = new ObjectInputStream(bais);
-    Object o = ois.readObject();
-    return cl.cast(o);
+    Object object = ois.readObject();
+    return cl.cast(object);
   }
 }

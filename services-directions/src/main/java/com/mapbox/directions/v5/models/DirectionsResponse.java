@@ -5,17 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.geojson.BoundingBox;
-import com.mapbox.geojson.Geometry;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
-import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
 import java.util.List;
@@ -82,6 +72,13 @@ public abstract class DirectionsResponse implements Serializable {
   @Nullable
   public abstract List<DirectionsRoute> routes();
 
+  /**
+   * A universally unique identifier (UUID) for identifying and executing a similar specific route
+   * in the future.
+   *
+   * @return a String representing the UUID given by the directions request
+   * @since 3.0.0
+   */
   @Nullable
   public abstract String uuid();
 
@@ -139,6 +136,14 @@ public abstract class DirectionsResponse implements Serializable {
      */
     public abstract Builder routes(@Nullable List<DirectionsRoute> routes);
 
+    /**
+     * A universally unique identifier (UUID) for identifying and executing a similar specific route
+     * in the future.
+     *
+     * @param uuid a String representing the UUID given by the directions request
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder uuid(@Nullable String uuid);
 
     /**

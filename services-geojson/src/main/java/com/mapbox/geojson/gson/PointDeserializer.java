@@ -35,11 +35,17 @@ public class PointDeserializer implements JsonDeserializer<Point> {
   public Point deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
     JsonArray rawCoordinates;
 
-    if (json instanceof JsonObject) {
+    if (json.isJsonObject()) {
       rawCoordinates = json.getAsJsonObject().getAsJsonArray("coordinates");
     } else {
       rawCoordinates = json.getAsJsonArray();
     }
+
+
+
+//    if (rawCoordinates.get(0).getAsJsonArray().isJsonArray()) {
+//      rawCoordinates = rawCoordinates.get(0).getAsJsonArray();
+//    }
 
     double longitude = rawCoordinates.get(0).getAsDouble();
     double latitude = rawCoordinates.get(1).getAsDouble();

@@ -3,6 +3,7 @@ package com.mapbox.staticmap.v1.models;
 import com.mapbox.geojson.Point;
 import com.mapbox.staticmap.v1.StaticMapCriteria;
 import org.hamcrest.junit.ExpectedException;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -53,6 +54,15 @@ public class StaticMarkerAnnotationTest {
       .color(Color.BLUE)
       .build();
     assertTrue(staticMarkerAnnotation.url().contains("pin-m-0000ff(1.000000,2.000000)"));
+  }
+
+  @Test
+  public void iconUrl_formattedInUrlCorrectly() throws Exception {
+    StaticMarkerAnnotation marker = StaticMarkerAnnotation.builder()
+      .iconUrl("https://foobar.com")
+      .lnglat(Point.fromLngLat(0.0, 0.0))
+      .build();
+    assertTrue(marker.url().contains("url-https://foobar.com(0.000000,0.000000)"));
   }
 
   @Test

@@ -2,8 +2,6 @@ apply plugin: 'java-library'
 
 dependencies {
 
-  compile project(":services")
-
   // Gson
   compile dependenciesList.gson
 
@@ -13,4 +11,8 @@ dependencies {
   // AutoValue
   compileOnly dependenciesList.autoValue
   compileOnly dependenciesList.autoValueGson
+
+  // Test Dependencies
+  testCompile dependenciesList.okhttp3Mockwebserver
+  testCompile project(path: ':services', configuration: 'testOutput')
 }

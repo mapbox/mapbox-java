@@ -5,9 +5,11 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
+import com.mapbox.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.matrix.v1.models.MatrixResponse;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
@@ -107,6 +109,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
       .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
         .registerTypeAdapterFactory(MatrixAdapterFactory.create())
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
         .create()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
@@ -306,7 +309,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
     public MapboxMatrix build() throws ServicesException {
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException("At least two coordinates must be provided with your API"
-          + "request.");
+          + " request.");
       } else if (coordinates.size() > 25) {
         throw new ServicesException("Maximum of 25 coordinates are allowed for this API.");
       }

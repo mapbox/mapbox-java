@@ -65,12 +65,4 @@ public final class BoundingBoxTest extends BaseTest {
     BoundingBox boundingBox = BoundingBox.fromPoints(southwest, northeast);
     assertEquals(4.0, boundingBox.north(), DELTA);
   }
-
-  @Test
-  public final void toJson_doesCorrectlyRepresentBoundingBox() throws Exception {
-    Point southwest = Point.fromLngLat(1.0, 2.0);
-    Point northeast = Point.fromLngLat(3.0, 4.0);
-    BoundingBox boundingBox = BoundingBox.fromPoints(southwest, northeast);
-    assertTrue(boundingBox.toJson().equals("bbox:[1.0,2.0,3.0,4.0]"));
-  }
 }

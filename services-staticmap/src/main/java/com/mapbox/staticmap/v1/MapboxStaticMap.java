@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.primitives.Booleans;
 import com.mapbox.geojson.GeoJson;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.constants.Constants;
@@ -16,11 +15,12 @@ import com.mapbox.services.utils.TextUtils;
 import com.mapbox.staticmap.v1.models.StaticMarkerAnnotation;
 import com.mapbox.staticmap.v1.models.StaticPolylineAnnotation;
 
-import okhttp3.HttpUrl;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+
+import okhttp3.HttpUrl;
 
 /**
  * Static maps are standalone images that can be displayed in your mobile app without the aid of a
@@ -100,34 +100,33 @@ public abstract class MapboxStaticMap {
       .addPathSegment("static")
       .addQueryParameter("access_token", accessToken());
 
-    int annotationSize = annotationSize();
-    String[] overlayString = new String[annotationSize];
+    List<String> annotations = new ArrayList<>();
     if (staticMarkerAnnotations() != null) {
+      String[] markerStringArray = new String[staticMarkerAnnotations().size()];
       for (StaticMarkerAnnotation marker : staticMarkerAnnotations()) {
-        overlayString[staticMarkerAnnotations().indexOf(marker)] = marker.url();
+        markerStringArray[staticMarkerAnnotations().indexOf(marker)] = marker.url();
       }
-
-      urlBuilder.addPathSegment(TextUtils.join(",", overlayString));
+      annotations.addAll(Arrays.asList(markerStringArray));
     }
 
+    if (staticPolylineAnnotations() != null) {
+      String[] polylineStringArray = new String[staticPolylineAnnotations().size()];
+      for (StaticPolylineAnnotation polyline : staticPolylineAnnotations()) {
+        polylineStringArray[staticPolylineAnnotations().indexOf(polyline)] = polyline.url();
+      }
+      annotations.addAll(Arrays.asList(polylineStringArray));
+    }
 
+    if (geoJson() != null) {
+      annotations.add(String.format(Locale.US, "geojson(%s)", geoJson().toJson()));
+    }
 
-
-
-
-    // TODO handle adding overlays like markers and polylines
-
-
-
-
-
-
-
+    if (annotations.size() > 0) {
+      urlBuilder.addPathSegment(TextUtils.join(",", annotations.toArray()));
+    }
 
     urlBuilder.addPathSegment(cameraAuto() ? StaticMapCriteria.CAMERA_AUTO
       : generateLocationPathSegment());
-
-
 
     if (beforeLayer() != null) {
       urlBuilder.addQueryParameter(StaticMapCriteria.BEFORE_LAYER, beforeLayer());
@@ -143,17 +142,6 @@ public abstract class MapboxStaticMap {
     urlBuilder.addPathSegment(generateSizePathSegment());
     return urlBuilder.build();
 
-  }
-
-  private int annotationSize() {
-    int size = 0;
-    if (staticMarkerAnnotations() != null) {
-      size = staticMarkerAnnotations().size();
-    }
-    if (staticPolylineAnnotations() != null) {
-      size = staticPolylineAnnotations().size();
-    }
-    return size;
   }
 
   private String generateLocationPathSegment() {

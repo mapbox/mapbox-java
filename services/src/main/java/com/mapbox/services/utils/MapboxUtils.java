@@ -21,13 +21,7 @@ public class MapboxUtils {
    * @since 1.0.0
    */
   public static boolean isAccessTokenValid(String accessToken) {
-    if (TextUtils.isEmpty(accessToken)) {
-      return false;
-    }
-    if (!accessToken.startsWith("pk.") && !accessToken.startsWith("sk.")
-      && !accessToken.startsWith("tk.")) {
-      return false;
-    }
-    return true;
+    return !TextUtils.isEmpty(accessToken) && !(!accessToken.startsWith("pk.")
+      && !accessToken.startsWith("sk.") && !accessToken.startsWith("tk."));
   }
 }

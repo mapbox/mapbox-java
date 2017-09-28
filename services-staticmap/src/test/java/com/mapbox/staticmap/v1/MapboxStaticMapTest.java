@@ -3,11 +3,13 @@ package com.mapbox.staticmap.v1;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.BaseTest;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.TextUtils;
 import com.mapbox.staticmap.v1.models.StaticMarkerAnnotation;
+import com.mapbox.staticmap.v1.models.StaticPolylineAnnotation;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapboxStaticMapTest extends BaseTest {
-
-  private static final String ACCESS_TOKEN = "pk.eyJ1IjoiY2FtbWFjZSIsImEiOiI5OGQxZjRmZGQ2YjU3Mzk1YjJmZTQ5ZDY2MTg1NDJiOCJ9.hIFoCKGAGOwQkKyVPvrxvQ";
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -178,7 +178,17 @@ public class MapboxStaticMapTest extends BaseTest {
 
   @Test
   public void geoJson_getsAddedToUrlCorrectly() throws Exception {
+    LineString lineString
+      = LineString.fromJson("{\"type\":\"LineString\",\"coordinates\":[[100,0],[101,1]]}");
 
+    MapboxStaticMap staticMap = MapboxStaticMap.builder()
+      .accessToken(ACCESS_TOKEN)
+      .retina(true)
+      .cameraAuto(true)
+      .geoJson(lineString)
+      .build();
+    assertTrue(staticMap.url().toString().contains(
+      "geojson(%7B%22coordinates%22:[[100.0,0.0],[101.0,1.0]],%22type%22:%22LineString%22%7D)"));
   }
 
   @Test
@@ -195,7 +205,7 @@ public class MapboxStaticMapTest extends BaseTest {
       .cameraAuto(true)
       .staticMarkerAnnotations(markers)
       .build();
-    System.out.println(staticMap.url());
+    assertTrue(staticMap.url().toString().contains("pin-m-a(-71.041500,42.366200)"));
   }
 
   @Test
@@ -209,24 +219,41 @@ public class MapboxStaticMapTest extends BaseTest {
     markers.add(StaticMarkerAnnotation.builder()
       .name(StaticMapCriteria.MEDIUM_PIN).lnglat(Point.fromLngLat(-71.0842, 42.3943))
       .color(Color.ORANGE).label("a").build());
-
-
     MapboxStaticMap staticMap = MapboxStaticMap.builder()
       .accessToken(ACCESS_TOKEN)
       .retina(true)
       .cameraAuto(true)
       .staticMarkerAnnotations(markers)
       .build();
-    System.out.println(staticMap.url());
+    assertTrue(staticMap.url().toString().contains("pin-m-a(-71.041500,42.366200),"
+      + "pin-m-a+ffc800(-71.084200,42.394300)"));
   }
 
   @Test
   public void staticPolylineAnnotations_getsAddedToUrlCorrectly() throws Exception {
+    List<StaticPolylineAnnotation> polylines = new ArrayList<>();
 
+    polylines.add(StaticPolylineAnnotation.builder()
+      .polyline("abcdefg").fillColor(Color.BLUE).fillOpacity(0.1f).build());
+
+    MapboxStaticMap staticMap = MapboxStaticMap.builder()
+      .accessToken(ACCESS_TOKEN)
+      .retina(true)
+      .cameraAuto(true)
+      .staticPolylineAnnotations(polylines)
+      .build();
+    assertTrue(staticMap.url().toString().contains("/path+0000ff-0.1(abcdefg)/"));
   }
 
   @Test
   public void precision_doesAdjustCoordinateValues() throws Exception {
+    MapboxStaticMap staticMap = MapboxStaticMap.builder()
+      .accessToken(ACCESS_TOKEN)
+      .retina(true)
+      .cameraPoint(Point.fromLngLat(2.123456789, 2.123456789))
+      .precision(4)
+      .build();
 
+    assertTrue(staticMap.url().toString().contains("/2.1234,2.1234,0.0000,0.0000,0.0000/"));
   }
 }

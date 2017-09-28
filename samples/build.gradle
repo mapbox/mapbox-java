@@ -1,17 +1,8 @@
-version 'unspecified'
-
-apply plugin: 'java'
-
-sourceCompatibility = 1.8
-
-repositories {
-  mavenCentral()
-}
-
 dependencies {
   compile project(":services")
   compile project(":services-directions")
   compile project(":services-geocoding")
   compile project(":services-optimization")
+  compile project(":services-matching")
   compile project(":services-staticmap")
 }
