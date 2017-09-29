@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         applicationId "com.mapbox.services.android.testapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        vectorDrawables.useSupportLibrary = true
         versionCode rootProject.ext.MasVersionCode
         versionName rootProject.ext.MasVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -40,6 +41,7 @@ dependencies {
 
     // Android Support libraries
     compile rootProject.ext.dep.supportAppcompat
+    compile rootProject.ext.dep.supportV4
     compile rootProject.ext.dep.supportDesign
     compile rootProject.ext.dep.supportRecyclerview
     compile rootProject.ext.dep.supportCardView

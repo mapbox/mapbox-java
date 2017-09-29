@@ -17,7 +17,7 @@ You'll find all of the documentation for this SDK on [our Mapbox Services page](
 - **Need help with your code?**: Look for previous questions on the [#mapbox tag](https://stackoverflow.com/questions/tagged/mapbox+android) — or [ask a new question](https://stackoverflow.com/questions/tagged/mapbox+android).
 - **Have a bug to report?** [Open an issue](https://github.com/mapbox/mapbox-java/issues/new). If possible, include the version of Mapbox Services, a full log, and a project that shows the issue.
 - **Have a feature request?** [Open an issue](https://github.com/mapbox/mapbox-java/issues/new). Tell us what the feature should do and why you want the feature.
-
+ 
 ## Using Snapshots
 
 If you want to test recent bugfixes or features that have not been packaged in an official release yet, you can use a `-SNAPSHOT` release of the current development version of Mapbox Services via Gradle, available on [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/com/mapbox/mapboxsdk/). There are several different snapshots built nightly. Feel free to use any of the modules as needed.
