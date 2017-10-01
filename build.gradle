@@ -1,7 +1,3 @@
-apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'findbugs'
-apply plugin: 'jacoco'
-
 buildscript {
   apply from: "${rootDir}/gradle/dependencies.gradle"
 
@@ -13,23 +9,10 @@ buildscript {
   }
 
   dependencies {
-
-    dependencies.create("com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}") {
-      transitive = false
-    }
-
-    //nexus: "com.bmuschko:gradle-nexus-plugin:${pluginVersions.nexus}",
-    classpath pluginDependencies.spotbugs
-    classpath pluginDependencies.sonarqube
-    classpath 'com.android.tools.build:gradle:2.3.3'
-    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:${pluginVersion.coveralls}"
     classpath "net.ltgt.gradle:gradle-errorprone-plugin:${pluginVersion.errorprone}"
+    classpath 'com.android.tools.build:gradle:2.3.3'
+    classpath pluginDependencies.sonarqube
   }
-}
-
-task testReport(type: TestReport, group: 'Build') {
-  description = 'Generates an aggregate test report'
-  destinationDir = file("${buildDir}/reports/allTests")
 }
 
 allprojects {
@@ -44,11 +27,10 @@ allprojects {
 }
 
 subprojects {
+  apply from: "${rootDir}/gradle/dependencies.gradle"
   apply plugin: 'java'
   apply plugin: 'idea'
   apply plugin: 'net.ltgt.errorprone'
-  apply from: "${rootDir}/gradle/dependencies.gradle"
-  apply from: "${rootDir}/gradle/code-quality.gradle"
 
   // Fixes issue with test resources not being found inside Intellij
   idea {

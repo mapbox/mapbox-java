@@ -1,8 +1,7 @@
 package com.mapbox.matching.v5.models;
 
 import com.mapbox.geojson.Point;
-import com.mapbox.matching.v5.MapboxMapMatching;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
@@ -11,7 +10,6 @@ import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class MapMatchingTracepointTest extends BaseTest {
+public class MapMatchingTracepointTest extends TestUtils {
 
 
   private static final String ACCESS_TOKEN = "pk.XXX";

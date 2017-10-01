@@ -1,0 +1,17 @@
+apply plugin: 'checkstyle'
+
+checkstyle.toolVersion = '7.1.1'
+
+task checkstyle(type: Checkstyle) {
+  description 'Checks if the code adheres to coding standards'
+  group 'verification'
+
+  configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+  configProperties = [
+      'configDir': rootProject.file('config/checkstyle'),
+      'baseDir'  : rootDir,
+  ]
+
+  classpath = files()
+  ignoreFailures = false
+}

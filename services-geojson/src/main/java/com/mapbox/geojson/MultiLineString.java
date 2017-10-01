@@ -9,7 +9,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
@@ -26,7 +26,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
 
   public static MultiLineString fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
     return gson.create().fromJson(json, MultiLineString.class);
   }

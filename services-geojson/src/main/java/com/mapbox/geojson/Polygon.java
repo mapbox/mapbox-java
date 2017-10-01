@@ -13,8 +13,8 @@ import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
@@ -81,7 +81,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   public static Polygon fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());

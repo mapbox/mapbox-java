@@ -1,7 +1,7 @@
 package com.mapbox.geojson;
 
 import com.google.gson.JsonObject;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class FeatureTest extends BaseTest {
+public class FeatureTest extends TestUtils {
 
   private static final String SAMPLE_FEATURE = "sample-feature.json";
 

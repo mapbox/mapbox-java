@@ -3,7 +3,7 @@ package com.mapbox.turf;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-public class TurfMiscTest extends BaseTest {
+public class TurfMiscTest extends TestUtils {
 
   private static final String LINE_SLICE_ONE = "turf-line-slice/line1.geojson";
   private static final String LINE_SLICE_ROUTE_ONE = "turf-line-slice/route1.geojson";

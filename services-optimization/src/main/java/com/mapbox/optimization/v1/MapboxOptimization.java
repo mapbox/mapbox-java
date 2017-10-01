@@ -1,14 +1,14 @@
 package com.mapbox.optimization.v1;
 
+import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.optimization.v1.OptimizationCriteria.AnnotationCriteria;
 import com.mapbox.optimization.v1.OptimizationCriteria.DestinationCriteria;
 import com.mapbox.optimization.v1.OptimizationCriteria.GeometriesCriteria;
@@ -17,11 +17,11 @@ import com.mapbox.optimization.v1.OptimizationCriteria.ProfileCriteria;
 import com.mapbox.optimization.v1.OptimizationCriteria.SourceCriteria;
 import com.mapbox.optimization.v1.models.OptimizationAdapterFactory;
 import com.mapbox.optimization.v1.models.OptimizationResponse;
+import com.mapbox.services.MapboxService;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -153,9 +153,6 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
     return call;
   }
 
-  @Nullable
-  abstract String distributions();
-
   @NonNull
   abstract String user();
 
@@ -164,6 +161,9 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
 
   @Nullable
   abstract Boolean roundTrip();
+
+  @Nullable
+  abstract String distributions();
 
   @Nullable
   abstract String source();
@@ -309,8 +309,8 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
 
     /**
      * Returned route starts at {@link OptimizationCriteria#SOURCE_ANY} or
-     * {@link OptimizationCriteria#SOURCE_FIRST} coordinate. Null can also be passed in to reset this
-     * value back to the API default if needed.
+     * {@link OptimizationCriteria#SOURCE_FIRST} coordinate. Null can also be passed in to reset
+     * this value back to the API default if needed.
      *
      * @param source one of the values in {@link SourceCriteria}
      * @return this builder for chaining options together

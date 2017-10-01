@@ -1,0 +1,15 @@
+apply plugin: 'jacoco'
+
+jacoco {
+  toolVersion = pluginVersion.jacoco
+}
+
+jacocoTestReport {
+  group = 'Coverage reports'
+  description = 'Generates a test coverage report for a project'
+
+  reports {
+    xml.enabled = true
+    html.enabled = true
+  }
+}

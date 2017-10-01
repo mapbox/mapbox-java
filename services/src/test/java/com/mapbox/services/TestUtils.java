@@ -14,7 +14,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
 
-public class BaseTest {
+public class TestUtils {
 
   public static final double DELTA = 1E-10;
   public static final String ACCESS_TOKEN = "pk.XXX";

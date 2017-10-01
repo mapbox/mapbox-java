@@ -8,7 +8,7 @@ import static org.junit.Assert.assertTrue;
 import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.geojson.Point;
 import com.mapbox.matrix.v1.models.MatrixResponse;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 import com.mapbox.services.exceptions.ServicesException;
 
 import org.junit.After;
@@ -27,7 +27,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
-public class MapboxMatrixTest extends BaseTest {
+public class MapboxMatrixTest extends TestUtils {
 
   private static final String DIRECTIONS_MATRIX_3X3_FIXTURE = "directions_matrix_3x3.json";
   private static final String DIRECTIONS_MATRIX_2x3_FIXTURE = "directions_matrix_2x3.json";

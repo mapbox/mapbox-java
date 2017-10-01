@@ -2,7 +2,7 @@ package com.mapbox.directions.v5.models;
 
 import com.mapbox.directions.v5.MapboxDirections;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,7 +21,7 @@ import retrofit2.Response;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class DirectionsResponseTest extends BaseTest {
+public class DirectionsResponseTest extends TestUtils {
 
   private static final String DIRECTIONS_V5_FIXTURE = "directions_v5.json";
   private static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "directions_v5_precision_6.json";

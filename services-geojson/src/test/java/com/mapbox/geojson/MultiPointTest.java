@@ -1,6 +1,6 @@
 package com.mapbox.geojson;
 
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class MultiPointTest extends BaseTest {
+public class MultiPointTest extends TestUtils {
 
   private static final String SAMPLE_MULTIPOINT = "sample-multipoint.json";
 

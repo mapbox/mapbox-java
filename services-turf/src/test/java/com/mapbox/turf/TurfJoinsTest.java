@@ -5,7 +5,7 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class TurfJoinsTest extends BaseTest {
+public class TurfJoinsTest extends TestUtils {
 
   private static final String POLY_WITH_HOLE_FIXTURE = "turf-inside/poly-with-hole.geojson";
   private static final String MULTIPOLY_WITH_HOLE_FIXTURE

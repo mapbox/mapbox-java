@@ -17,7 +17,7 @@ import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TurfMeasurementTest extends BaseTest {
+public class TurfMeasurementTest extends TestUtils {
 
   private static final String LINE_DISTANCE_ROUTE_ONE = "turf-line-distance/route1.geojson";
   private static final String LINE_DISTANCE_ROUTE_TWO = "turf-line-distance/route2.geojson";

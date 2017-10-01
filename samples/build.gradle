@@ -3,6 +3,6 @@ dependencies {
   compile project(":services-directions")
   compile project(":services-geocoding")
   compile project(":services-optimization")
-  compile project(":services-matching")
+//  compile project(":services-matching")
   compile project(":services-staticmap")
 }

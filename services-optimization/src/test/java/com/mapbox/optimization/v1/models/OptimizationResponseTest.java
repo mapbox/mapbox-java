@@ -8,23 +8,21 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mapbox.geojson.Point;
 import com.mapbox.optimization.v1.MapboxOptimization;
-import com.mapbox.services.BaseTest;
-
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
-
+import com.mapbox.services.TestUtils;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import retrofit2.Response;
 
-public class OptimizationResponseTest extends BaseTest {
+import java.io.IOException;
+
+public class OptimizationResponseTest extends TestUtils {
 
   private static final String OPTIMIZATION_FIXTURE = "optimization.json";
 
@@ -41,12 +39,7 @@ public class OptimizationResponseTest extends BaseTest {
     server.setDispatcher(new Dispatcher() {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-        try {
-          String body = loadJsonFixture(json);
-          return new MockResponse().setBody(body);
-        } catch (IOException ioException) {
-          throw new RuntimeException(ioException);
-        }
+        return new MockResponse().setBody(json);
       }
     });
     server.start();
@@ -68,9 +61,10 @@ public class OptimizationResponseTest extends BaseTest {
   @Test
   public void optimizationResponse_doesDeserializeFromJsonProperly() throws Exception {
     MapboxOptimization client = MapboxOptimization.builder()
-      .coordinate(Point.fromLngLat(1.0, 1.0))
-      .coordinate(Point.fromLngLat(2.0, 2.0))
       .accessToken(ACCESS_TOKEN)
+      .coordinate(Point.fromLngLat(-122.42, 37.78))
+      .coordinate(Point.fromLngLat(-122.45, 37.91))
+      .coordinate(Point.fromLngLat(-122.48, 37.73))
       .baseUrl(mockUrl.toString())
       .build();
     Response<OptimizationResponse> response = client.executeCall();
@@ -79,16 +73,6 @@ public class OptimizationResponseTest extends BaseTest {
     // These objects are tested in their own class tests.
     assertNotNull(response.body().trips());
     assertNotNull(response.body().waypoints());
-  }
-
-  @Test
-  public void testDeserializationWithMissingNullableAttribute() throws IOException {
-    String optimizationJsonString = "{\"code\":\"Ok\"}";
-    Gson gson = new Gson();
-    OptimizationResponse response = gson.fromJson(optimizationJsonString, OptimizationResponse.class);
-    Assert.assertEquals("Ok", response.code());
-    Assert.assertNull(response.waypoints());
-    Assert.assertNull(response.trips());
   }
 
   @Test

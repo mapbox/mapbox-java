@@ -4,9 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
-public class DirectionsRouteTest extends BaseTest {
+public class DirectionsRouteTest extends TestUtils {
 
   @Test
   public void sanity() throws Exception {

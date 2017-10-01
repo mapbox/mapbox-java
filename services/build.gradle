@@ -26,3 +26,7 @@ dependencies {
   // Test Dependencies
   testOutput sourceSets.test.output
 }
+
+apply from: "${rootDir}/gradle/checkstyle.gradle"
+apply from: "${rootDir}/gradle/sonarqube.gradle"
+apply from: "${rootDir}/gradle/jacoco.gradle"

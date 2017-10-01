@@ -1,6 +1,6 @@
 package com.mapbox.geojson;
 
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class MultiPolygonTest extends BaseTest {
+public class MultiPolygonTest extends TestUtils {
   private static final String SAMPLE_MULTIPOLYGON = "sample-multipolygon.json";
 
   @Test

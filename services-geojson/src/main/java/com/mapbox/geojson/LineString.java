@@ -12,8 +12,7 @@ import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 import com.mapbox.geojson.utils.PolylineUtils;
@@ -75,7 +74,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    */
   public static LineString fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     return gson.create().fromJson(json, LineString.class);

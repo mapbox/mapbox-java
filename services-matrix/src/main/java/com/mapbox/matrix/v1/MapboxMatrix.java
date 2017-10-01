@@ -9,8 +9,8 @@ import com.mapbox.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
 import com.mapbox.matrix.v1.models.MatrixResponse;
+import com.mapbox.services.MapboxService;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
@@ -26,6 +26,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
 
 /**
  * the Matrix API returns all travel times between many points. The Matrix API will always return
@@ -50,7 +52,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @AutoValue
 public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
 
-  protected Builder builder;
   private MatrixService service;
   private Call<MatrixResponse> call;
 

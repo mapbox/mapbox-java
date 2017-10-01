@@ -13,7 +13,7 @@ import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.MapboxAdapterFactory;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
@@ -55,7 +55,7 @@ public abstract class GeocodingResponse {
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-    gson.registerTypeAdapterFactory(MapboxAdapterFactory.create());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     return gson.create().fromJson(json, GeocodingResponse.class);
   }
 

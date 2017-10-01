@@ -1,6 +1,6 @@
 package com.mapbox.geocoding.v5;
 
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.geojson.Point;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class MapboxGeocodingTest extends BaseTest {
+public class MapboxGeocodingTest extends TestUtils {
 
   private static final String GEOCODING_FIXTURE = "geocoding.json";
   private static final String GEOCODING_BATCH_FIXTURE = "geocoding_batch.json";

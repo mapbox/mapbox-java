@@ -1,6 +1,6 @@
 package com.mapbox.geojson;
 
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Test;
 
@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public final class BoundingBoxTest extends BaseTest {
+public final class BoundingBoxTest extends TestUtils {
 
   @Test
   public final void sanity() throws Exception {

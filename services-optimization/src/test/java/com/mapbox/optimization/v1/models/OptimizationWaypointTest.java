@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mapbox.geojson.Point;
 import com.mapbox.optimization.v1.MapboxOptimization;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,7 +24,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class OptimizationWaypointTest extends BaseTest {
+public class OptimizationWaypointTest extends TestUtils {
+
+  private static final String OPTIMIZATION_FIXTURE = "optimization.json";
 
   private MockWebServer server;
   private JsonObject object;
@@ -32,7 +34,7 @@ public class OptimizationWaypointTest extends BaseTest {
 
   @Before
   public void setUp() throws Exception {
-    final String json = loadJsonFixture("optimization.json");
+    final String json = loadJsonFixture(OPTIMIZATION_FIXTURE);
     object = new JsonParser().parse(json).getAsJsonObject();
 
     server = new MockWebServer();
@@ -91,7 +93,7 @@ public class OptimizationWaypointTest extends BaseTest {
       .coordinate(Point.fromLngLat(1.0, 1.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .baseUrl(mockUrl.toString())
-      .accessToken("pk.XXX")
+      .accessToken(ACCESS_TOKEN)
       .build();
     Response<OptimizationResponse> response = client.executeCall();
 
@@ -103,17 +105,6 @@ public class OptimizationWaypointTest extends BaseTest {
       response.body().waypoints().get(0).location().longitude(), DELTA);
     assertEquals(waypointObject.get("location").getAsJsonArray().get(1).getAsDouble(),
       response.body().waypoints().get(0).location().latitude(), DELTA);
-  }
-
-  @Test
-  public void testDeserializationWithMissingNullableAttribute() throws IOException {
-    String optimizationJsonString
-      = "{\"code\":\"Ok\",\"waypoints\":[{\"location\":[-122.420019,37.780091],\"waypoint_index\":0,\"trips_index\":0}]}";
-    Gson gson = new Gson();
-    OptimizationWaypoint response = gson.fromJson(optimizationJsonString, OptimizationWaypoint.class);
-    assertEquals(0, response.waypointIndex());
-    assertEquals(0, response.tripsIndex());
-    assertNull(response.name());
   }
 
   @Test

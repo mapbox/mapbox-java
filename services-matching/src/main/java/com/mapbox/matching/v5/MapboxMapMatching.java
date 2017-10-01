@@ -14,6 +14,8 @@ import com.mapbox.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.geojson.Point;
 import com.mapbox.matching.v5.models.MapMatchingResponse;
+import com.mapbox.matching.v5.models.MapMatchingAdapterFactory;
+import com.mapbox.services.MapboxService;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
@@ -29,6 +31,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
 
 /**
  * The Mapbox map matching interface (v5)
@@ -58,8 +62,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(baseUrl())
       .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
+        .registerTypeAdapterFactory(MapMatchingAdapterFactory.create())
         .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-//        .registerTypeAdapterFactory(MatchingAdapterFactory.create())
         .create()));
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());

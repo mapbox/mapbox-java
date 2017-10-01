@@ -1,6 +1,6 @@
 package com.mapbox.geojson;
 
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class MultiLineStringTest extends BaseTest {
+public class MultiLineStringTest extends TestUtils {
 
   private static final String SAMPLE_MULTILINESTRING = "sample-multilinestring.json";
 

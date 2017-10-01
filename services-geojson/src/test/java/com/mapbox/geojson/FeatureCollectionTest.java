@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeatureCollectionTest extends BaseTest {
+public class FeatureCollectionTest extends TestUtils {
 
   private static final String SAMPLE_FEATURECOLLECTION = "sample-featurecollection.json";
 

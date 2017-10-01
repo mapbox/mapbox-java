@@ -125,7 +125,7 @@ public abstract class OptimizationResponse implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder code(@NonNull String code);
+    public abstract Builder code(@Nullable String code);
 
     /**
      * List of {@link OptimizationWaypoint} objects. Each waypoint is an input coordinate snapped to

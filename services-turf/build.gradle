@@ -15,3 +15,7 @@ dependencies {
   // Test Dependencies
   testCompile project(path: ':services', configuration: 'testOutput')
 }
+
+apply from: "${rootDir}/gradle/checkstyle.gradle"
+apply from: "${rootDir}/gradle/sonarqube.gradle"
+apply from: "${rootDir}/gradle/jacoco.gradle"

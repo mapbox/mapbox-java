@@ -3,7 +3,7 @@ package com.mapbox.turf;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertEquals;
 
-public class TurfInvariantTest extends BaseTest {
+public class TurfInvariantTest extends TestUtils {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

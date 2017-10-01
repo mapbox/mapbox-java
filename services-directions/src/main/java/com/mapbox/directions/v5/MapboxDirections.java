@@ -29,6 +29,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+
 /**
  * The Directions API allows the calculation of routes between coordinates. The fastest route can be
  * returned with geometries, turn-by-turn instructions, and much more. The Mapbox Directions API
@@ -111,6 +113,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    * @throws IOException Signals that an I/O exception of some sort has occurred
    * @since 1.0.0
    */
+  @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
     return getCall().execute();
   }
@@ -123,6 +126,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    *                 created.
    * @since 1.0.0
    */
+  @Override
   public void enqueueCall(Callback<DirectionsResponse> callback) {
     getCall().enqueue(callback);
   }

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 import com.mapbox.services.exceptions.ServicesException;
 
 import org.junit.After;
@@ -25,7 +25,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
-public class MapboxMapMatchingTest extends BaseTest {
+public class MapboxMapMatchingTest extends TestUtils {
 
   private static final String MAP_MATCHING_FIXTURE = "map_matching_v5_polyline.json";
 

@@ -5,7 +5,7 @@ import com.mapbox.geocoding.v5.GeocodingCriteria;
 import com.mapbox.geocoding.v5.MapboxGeocoding;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.After;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class CarmenFeatureTest extends BaseTest {
+public class CarmenFeatureTest extends TestUtils {
 
   private static final String GEOCODING_FIXTURE = "geocoding.json";
   private static final String GEOCODING_BATCH_FIXTURE = "geocoding_batch.json";

@@ -2,7 +2,7 @@ package com.mapbox.matching.v5.models;
 
 import com.mapbox.geojson.Point;
 import com.mapbox.matching.v5.MapboxMapMatching;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
@@ -21,11 +21,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class MapMatchingResponseTest extends BaseTest {
+public class MapMatchingResponseTest extends TestUtils {
 
-  private static final String ACCESS_TOKEN = "pk.XXX";
-
-  private static final String MAP_MATCHING_FIXTURE = "map_matching/map_matching_v5_polyline.json";
+  private static final String MAP_MATCHING_FIXTURE = "map_matching_v5_polyline.json";
 
   private List<Point> coordinates;
   private MockWebServer server;

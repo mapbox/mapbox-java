@@ -1,0 +1,9 @@
+apply plugin: 'org.sonarqube'
+
+sonarqube {
+  properties {
+    property "sonar.java.coveragePlugin", "jacoco"
+    property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec"
+    property "sonar.links.homepage", "https://github.com/mapbox/mapbox-java"
+  }
+}

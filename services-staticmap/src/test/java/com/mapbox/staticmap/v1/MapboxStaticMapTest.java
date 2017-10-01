@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.TextUtils;
 import com.mapbox.staticmap.v1.models.StaticMarkerAnnotation;
@@ -19,7 +19,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapboxStaticMapTest extends BaseTest {
+public class MapboxStaticMapTest extends TestUtils {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

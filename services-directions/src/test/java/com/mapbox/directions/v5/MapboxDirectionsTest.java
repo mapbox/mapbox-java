@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.mapbox.directions.v5.models.DirectionsResponse;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 import com.mapbox.services.exceptions.ServicesException;
 
 import org.junit.After;
@@ -26,7 +26,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
-public class MapboxDirectionsTest extends BaseTest {
+public class MapboxDirectionsTest extends TestUtils {
 
   private static final String DIRECTIONS_V5_FIXTURE = "directions_v5.json";
   private static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "directions_v5_precision_6.json";

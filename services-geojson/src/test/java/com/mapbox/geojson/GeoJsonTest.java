@@ -1,14 +1,8 @@
 package com.mapbox.geojson;
 
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
-import org.junit.Test;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-public class GeoJsonTest extends BaseTest {
+public class GeoJsonTest extends TestUtils {
 
   private static final String GEOJSON_FIXTURE = "sample-geojson-result.json";
 

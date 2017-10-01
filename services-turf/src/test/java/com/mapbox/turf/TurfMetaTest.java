@@ -4,7 +4,7 @@ import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class TurfMetaTest extends BaseTest {
+public class TurfMetaTest extends TestUtils {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

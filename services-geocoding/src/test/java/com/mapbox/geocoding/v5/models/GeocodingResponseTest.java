@@ -3,7 +3,7 @@ package com.mapbox.geocoding.v5.models;
 import com.mapbox.geocoding.v5.GeocodingCriteria;
 import com.mapbox.geocoding.v5.MapboxGeocoding;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.After;
@@ -22,7 +22,7 @@ import retrofit2.Response;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class GeocodingResponseTest extends BaseTest {
+public class GeocodingResponseTest extends TestUtils {
 
   private static final String GEOCODING_FIXTURE = "geocoding.json";
   private static final String GEOCODING_BATCH_FIXTURE = "geocoding_batch.json";

@@ -1,6 +1,6 @@
 package com.mapbox.turf;
 
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import static com.mapbox.turf.TurfConstants.UNIT_MILES;
 import static com.mapbox.turf.TurfConstants.UNIT_RADIANS;
 import static org.junit.Assert.assertEquals;
 
-public class TurfHelpersTest extends BaseTest {
+public class TurfHelpersTest extends TestUtils {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 import com.mapbox.services.exceptions.ServicesException;
 
 import org.hamcrest.junit.ExpectedException;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapboxOptimizationTest extends BaseTest {
+public class MapboxOptimizationTest extends TestUtils {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

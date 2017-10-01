@@ -25,19 +25,46 @@ public abstract class MapboxService<T> {
   private OkHttpClient okHttpClient;
   private okhttp3.Call.Factory callFactory;
 
+  /**
+   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
+   * API implementing this class.
+   *
+   * @return the response once the call completes successfully
+   * @throws IOException Signals that an I/O exception of some sort has occurred
+   * @since 1.0.0
+   */
   public abstract Response<T> executeCall() throws IOException;
 
+  /**
+   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
+   * to the API implementing this class. Use this method to make a request on the Main Thread.
+   *
+   * @param callback a {@link Callback} which is used once the API response is created.
+   * @since 1.0.0
+   */
   public abstract void enqueueCall(Callback<T> callback);
 
+  /**
+   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
+   * the user dismisses the calling activity or no longer needs the returned results.
+   *
+   * @since 1.0.0
+   */
   public abstract void cancelCall();
 
+  /**
+   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
+   *
+   * @return cloned call
+   * @since 1.0.0
+   */
   public abstract Call<T> cloneCall();
 
   public boolean isEnableDebug() {
     return enableDebug;
   }
 
-  public void setEnableDebug(boolean enableDebug) {
+  public void enableDebug(boolean enableDebug) {
     this.enableDebug = enableDebug;
   }
 
@@ -81,31 +108,5 @@ public abstract class MapboxService<T> {
     }
 
     return okHttpClient;
-  }
-
-  /**
-   * Computes a full user agent header of the form: MapboxJava/1.2.0 Mac OS X/10.11.5 (x86_64)
-   *
-   * @param clientAppName Application Name
-   * @return {@link String}
-   * @since 1.0.0
-   */
-  public static String getHeaderUserAgent(String clientAppName) {
-    try {
-      String osName = System.getProperty("os.name");
-      String osVersion = System.getProperty("os.version");
-      String osArch = System.getProperty("os.arch");
-
-      if (isEmpty(osName) || isEmpty(osVersion) || isEmpty(osArch)) {
-        return Constants.HEADER_USER_AGENT;
-      } else {
-        String baseUa = String.format(
-          Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
-        return isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s", clientAppName, baseUa);
-      }
-
-    } catch (Exception exception) {
-      return Constants.HEADER_USER_AGENT;
-    }
   }
 }

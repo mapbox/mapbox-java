@@ -2,13 +2,13 @@ package com.mapbox.geojson.gson;
 
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.exception.GeoJsonException;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-public class BoundingBoxDeserializerTest extends BaseTest {
+public class BoundingBoxDeserializerTest extends TestUtils {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

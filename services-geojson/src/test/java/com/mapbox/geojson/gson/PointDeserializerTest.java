@@ -2,11 +2,11 @@ package com.mapbox.geojson.gson;
 
 import com.google.gson.GsonBuilder;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.BaseTest;
+import com.mapbox.services.TestUtils;
 
 import org.junit.Test;
 
-public class PointDeserializerTest extends BaseTest {
+public class PointDeserializerTest extends TestUtils {
 
   private static final String POINT_FIXTURE = "sample-point.json";
 
