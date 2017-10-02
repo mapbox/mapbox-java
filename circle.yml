@@ -23,12 +23,6 @@ jobs:
           name: Accept Android license
           command: |
            echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.1"
-      - run:
-          name: Coveralls
-          command: ./gradlew coveralls
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
@@ -37,7 +31,10 @@ jobs:
           name: Check Java code style
           command: make checkstyle
       - run:
-          name: Run unit-test in for all modules
+          name: Jacoco test report
+          command: ./gradlew jacocoTestReport
+      - run:
+          name: Run unit-test for all modules
           command: make test
       - run:
           name: Update Transifex
@@ -82,13 +79,10 @@ jobs:
             NEXUS_PASSWORD=$PUBLISH_NEXUS_PASSWORD
             signing.keyId=$SIGNING_KEYID
             signing.password=$SIGNING_PASSWORD
-            signing.secretKeyRingFile=../../secring.gpg" >> mapbox/gradle.properties
+            signing.secretKeyRingFile=../secring.gpg" >> gradle.properties
       - run:
           name: Build Java libraries
-          command: make build-release-java
-      - run:
-          name: Build Android libraries
-          command: make build-release-android
+          command: make build-release
       - deploy:
           name: Publish Java Services To Maven Central
           command: |

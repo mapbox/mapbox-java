@@ -48,7 +48,7 @@ import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
  * into {@code 2 Lincoln Memorial Circle NW}. These place names can vary from specific addresses to
  * states and countries that contain the given coordinates.
  * <p>
- * <h4>Batch Geocoding</h4>
+ * Batch Geocoding
  * This feature is limited to enterprise customers only and the {@link #mode()} must be set to
  * {@link GeocodingCriteria#MODE_PLACES_PERMANENT}.
  * <p>
@@ -360,7 +360,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
      *
      * @param proximity a point defining the proximity you'd like to bias the results around
      * @return this builder for chaining options together
-     * @see 1.0.0
+     * @since 1.0.0
      */
     public Builder proximity(@NonNull Point proximity) {
       proximity(String.format(Locale.US, "%s,%s",
