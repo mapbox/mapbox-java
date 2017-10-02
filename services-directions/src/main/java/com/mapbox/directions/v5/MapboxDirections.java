@@ -137,6 +137,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    *
    * @since 1.0.0
    */
+  @Override
   public void cancelCall() {
     getCall().cancel();
   }
@@ -147,6 +148,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    * @return cloned call
    * @since 1.0.0
    */
+  @Override
   public Call<DirectionsResponse> cloneCall() {
     return getCall().clone();
   }

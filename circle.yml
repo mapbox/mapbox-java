@@ -18,7 +18,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: jars-{{ checksum "mapbox/build.gradle" }}-{{ checksum  "mapbox/app/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Accept Android license
           command: |
@@ -28,38 +28,17 @@ jobs:
           command: ./gradlew coveralls
       - run:
           name: Download Dependencies
-          command: cd mapbox && ./gradlew androidDependencies
+          command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "mapbox/build.gradle" }}-{{ checksum  "mapbox/app/build.gradle" }}
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Check Java code style
           command: make checkstyle
       - run:
-          name: Run unit-test in Java libraries
-          command: make test-java
-      - run:
-          name: Run unit-test in Android libraries
-          command: make test-android
-      - run:
-          name: Build testapp APK
-          command: |
-            cd mapbox && ./gradlew accessToken
-            ./gradlew app:assembleDebug
-      - run:
-          name: Log in to Google Cloud Platform
-          shell: /bin/bash -euo pipefail
-          command: |
-            echo "${GCLOUD_SERVICE_ACCOUNT_JSON}" > secret.json
-            gcloud auth activate-service-account --key-file secret.json --project mapbox-java
-            rm secret.json
-      - run:
-          name: Run instrumentation tests on Firebase
-          no_output_timeout: 1200
-          shell: /bin/bash -euo pipefail
-          command: |
-            gcloud firebase test android run --type robo --app mapbox/app/build/outputs/apk/app-debug.apk --device-ids shamu --os-version-ids 22 --locales en --orientations portrait --timeout 10m
+          name: Run unit-test in for all modules
+          command: make test
       - run:
           name: Update Transifex
           command: |
@@ -113,15 +92,6 @@ jobs:
       - deploy:
           name: Publish Java Services To Maven Central
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            make publish-java ;
+            if [ "${CIRCLE_BRANCH}" == "mb-java-3.0.0" ]; then
+            make publish ;
             fi
-      - deploy:
-          name: Publish Android Services To Maven Central
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            make publish-android ;
-            fi
-      - store_artifacts:
-          path: mapbox/app/build/reports
-          destination: reports

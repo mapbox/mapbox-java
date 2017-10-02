@@ -10,6 +10,7 @@ buildscript {
 
   dependencies {
     classpath "net.ltgt.gradle:gradle-errorprone-plugin:${pluginVersion.errorprone}"
+    classpath "gradle.plugin.de.fuerstenau:BuildConfigPlugin:${pluginVersion.buildConfigPlugin}"
     classpath 'com.android.tools.build:gradle:2.3.3'
     classpath pluginDependencies.sonarqube
   }
@@ -23,7 +24,7 @@ allprojects {
     jcenter()
   }
 
-  version = "3.0.0-beta.1"
+  version = "3.0.0-SNAPSHOT"
 }
 
 subprojects {

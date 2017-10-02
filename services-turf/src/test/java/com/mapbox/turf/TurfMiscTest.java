@@ -161,7 +161,7 @@ public class TurfMiscTest extends TestUtils {
     List<Point> pts = new ArrayList<>();
     pts.add(Point.fromLngLat(-122.45717525482178, 37.72009306385638));
     pts.add(Point.fromLngLat(-122.45717525482178, 37.82009306385638));
-    pts.add(Point.fromLngLat(-122.45716525482178, 37.72009306385638));
+    pts.add(Point.fromLngLat(-122.45716525482177, 37.72009306385638));
     pts.add(Point.fromLngLat(-122.45516525482178, 37.72009306385638));
 
     for (Point pt : pts) {

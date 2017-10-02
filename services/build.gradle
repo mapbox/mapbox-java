@@ -1,4 +1,5 @@
 apply plugin: 'java-library'
+//apply plugin: 'de.fuerstenau.buildconfig'
 
 configurations {
   testOutput
@@ -26,6 +27,21 @@ dependencies {
   // Test Dependencies
   testOutput sourceSets.test.output
 }
+
+//buildConfig {
+//  packageName = 'com.mapbox.services'
+//  constants = [
+//          VERSION     : project.VERSION_NAME,
+////          GIT_REVISION: getGitRevision(),
+//  ]
+//}
+//
+//def getGitRevision() {
+//  def cmd = "git rev-parse --short HEAD"
+//  def proc = cmd.execute()
+//  def ref = proc.text.trim()
+//  return ref
+//}
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/sonarqube.gradle"
