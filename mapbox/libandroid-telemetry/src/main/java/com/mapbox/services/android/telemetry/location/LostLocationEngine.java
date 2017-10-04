@@ -3,6 +3,7 @@ package com.mapbox.services.android.telemetry.location;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.mapzen.android.lost.api.LocationListener;
 import com.mapzen.android.lost.api.LocationRequest;
@@ -14,7 +15,10 @@ import java.lang.ref.WeakReference;
 /**
  * Sample LocationEngine using the Open Source Lost library
  */
-class LostLocationEngine extends LocationEngine implements LocationListener {
+class LostLocationEngine extends LocationEngine implements
+  LostApiClient.ConnectionCallbacks, LocationListener {
+
+  private static final String LOG_TAG = LostLocationEngine.class.getSimpleName();
 
   private static LocationEngine instance;
 
@@ -24,7 +28,9 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
   private LostLocationEngine(Context context) {
     super();
     this.context = new WeakReference<>(context);
-    lostApiClient = new LostApiClient.Builder(this.context.get()).build();
+    lostApiClient = new LostApiClient.Builder(this.context.get())
+      .addConnectionCallbacks(this)
+      .build();
   }
 
   static synchronized LocationEngine getLocationEngine(Context context) {
@@ -41,11 +47,8 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
    */
   @Override
   public void activate() {
-    if (!lostApiClient.isConnected()) {
+    if (lostApiClient != null && !lostApiClient.isConnected()) {
       lostApiClient.connect();
-    }
-    for (LocationEngineListener listener : locationListeners) {
-      listener.onConnected();
     }
   }
 
@@ -56,7 +59,7 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
    */
   @Override
   public void deactivate() {
-    if (lostApiClient.isConnected()) {
+    if (lostApiClient != null && lostApiClient.isConnected()) {
       lostApiClient.disconnect();
     }
   }
@@ -73,7 +76,25 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
   }
 
   /**
-   * Returns the Last known location if the location provider is connected and location permissions are granted.
+   * Invoked when the location provider has connected.
+   */
+  @Override
+  public void onConnected() {
+    for (LocationEngineListener listener : locationListeners) {
+      listener.onConnected();
+    }
+  }
+
+  /**
+   * Invoked when the location provider connection has been suspended.
+   */
+  @Override
+  public void onConnectionSuspended() {
+    Log.d(LOG_TAG, "Connection suspended");
+  }
+
+  /**
+   * Returns the Last known location if the location provider is connected.
    *
    * @return the last known location
    */
@@ -82,7 +103,7 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
   public Location getLastLocation() {
     if (lostApiClient.isConnected()) {
       //noinspection MissingPermission
-      return LocationServices.FusedLocationApi.getLastLocation();
+      return LocationServices.FusedLocationApi.getLastLocation(lostApiClient);
     }
     return null;
   }
@@ -104,7 +125,6 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
       request.setSmallestDisplacement(smallestDisplacement);
     }
 
-    // Priority matching is straightforward
     if (priority == LocationEnginePriority.NO_POWER) {
       request.setPriority(LocationRequest.PRIORITY_NO_POWER);
     } else if (priority == LocationEnginePriority.LOW_POWER) {
@@ -117,7 +137,7 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
 
     if (lostApiClient.isConnected()) {
       //noinspection MissingPermission
-      LocationServices.FusedLocationApi.requestLocationUpdates(request, this);
+      LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, this);
     }
   }
 
@@ -127,7 +147,7 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
   @Override
   public void removeLocationUpdates() {
     if (lostApiClient.isConnected()) {
-      LocationServices.FusedLocationApi.removeLocationUpdates(this);
+      LocationServices.FusedLocationApi.removeLocationUpdates(lostApiClient, this);
     }
   }
 
@@ -148,4 +168,3 @@ class LostLocationEngine extends LocationEngine implements LocationListener {
     }
   }
 }
-

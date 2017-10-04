@@ -94,12 +94,18 @@ class GoogleLocationEngine extends LocationEngine implements
 
   @Override
   public void requestLocationUpdates() {
-    // Common params
-    LocationRequest request = LocationRequest.create()
-      .setFastestInterval(1000)
-      .setSmallestDisplacement(3.0f);
+    LocationRequest request = LocationRequest.create();
 
-    // Priority matching is straightforward
+    if (interval != null) {
+      request.setInterval(interval);
+    }
+    if (fastestInterval != null) {
+      request.setFastestInterval(fastestInterval);
+    }
+    if (smallestDisplacement != null) {
+      request.setSmallestDisplacement(smallestDisplacement);
+    }
+
     if (priority == LocationEnginePriority.NO_POWER) {
       request.setPriority(LocationRequest.PRIORITY_NO_POWER);
     } else if (priority == LocationEnginePriority.LOW_POWER) {
