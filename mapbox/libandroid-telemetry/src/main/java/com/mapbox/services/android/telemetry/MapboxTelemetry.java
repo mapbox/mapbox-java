@@ -623,8 +623,9 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     boolean isFeedback = eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_FEEDBACK);
     boolean isArrived = eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_ARRIVE);
     boolean isCanceled = eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_CANCEL);
+    boolean isReroute = eventType.equalsIgnoreCase(MapboxNavigationEvent.TYPE_REROUTE);
 
-    boolean isANavigationEvent = isDepart || isFeedback || isArrived || isCanceled;
+    boolean isANavigationEvent = isDepart || isFeedback || isArrived || isCanceled || isReroute;
 
     return isANavigationEvent;
   }
