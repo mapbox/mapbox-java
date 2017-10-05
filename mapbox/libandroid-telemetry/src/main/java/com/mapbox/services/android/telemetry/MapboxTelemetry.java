@@ -682,7 +682,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     event.put(MapboxEvent.KEY_USER_ID, mapboxVendorId);
     event.put(MapboxEvent.KEY_ENABLED_TELEMETRY, isTelemetryEnabled());
     event.put(MapboxEvent.KEY_SDK_IDENTIFIER, addSdkIdentifier());
-    event.put(MapboxEvent.KEY_SDK_VERSION, addsdkVersion());
+    event.put(MapboxEvent.KEY_SDK_VERSION, addSdkVersion());
 
     events.add(event);
     flushEventsQueueImmediately(true);
@@ -787,7 +787,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   /**
    * Check for empty strings and returns desired sdkVersion input for event
    */
-  private Object addsdkVersion() {
+  private Object addSdkVersion() {
     if (sdkVersion.isEmpty()) {
       return JSONObject.NULL;
     }
