@@ -92,27 +92,17 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
     updateCurrentProvider();
   }
 
-  private void updateCurrentProvider() {
-    // We might want to explore android.location.Criteria here.
-    if (priority == LocationEnginePriority.NO_POWER) {
-      currentProvider = LocationManager.PASSIVE_PROVIDER;
-    } else if (priority == LocationEnginePriority.LOW_POWER) {
-      currentProvider = LocationManager.NETWORK_PROVIDER;
-    } else if (priority == LocationEnginePriority.BALANCED_POWER_ACCURACY) {
-      currentProvider = LocationManager.NETWORK_PROVIDER;
-    } else if (priority == LocationEnginePriority.HIGH_ACCURACY) {
-      currentProvider = LocationManager.GPS_PROVIDER;
-    }
-
-    Log.d(LOG_TAG, String.format("Priority set to %d (current provider is %s).", priority, currentProvider));
-  }
-
   @Override
   public void removeLocationUpdates() {
     if (PermissionsManager.areLocationPermissionsGranted(context.get())) {
       //noinspection MissingPermission
       locationManager.removeUpdates(this);
     }
+  }
+
+  @Override
+  public Type obtainType() {
+    return Type.ANDROID;
   }
 
   /**
@@ -149,5 +139,20 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
   @Override
   public void onProviderDisabled(String provider) {
     Log.v(LOG_TAG, String.format("Provider %s was disabled (current provider is %s).", provider, currentProvider));
+  }
+
+  private void updateCurrentProvider() {
+    // We might want to explore android.location.Criteria here.
+    if (priority == LocationEnginePriority.NO_POWER) {
+      currentProvider = LocationManager.PASSIVE_PROVIDER;
+    } else if (priority == LocationEnginePriority.LOW_POWER) {
+      currentProvider = LocationManager.NETWORK_PROVIDER;
+    } else if (priority == LocationEnginePriority.BALANCED_POWER_ACCURACY) {
+      currentProvider = LocationManager.NETWORK_PROVIDER;
+    } else if (priority == LocationEnginePriority.HIGH_ACCURACY) {
+      currentProvider = LocationManager.GPS_PROVIDER;
+    }
+
+    Log.d(LOG_TAG, String.format("Priority set to %d (current provider is %s).", priority, currentProvider));
   }
 }

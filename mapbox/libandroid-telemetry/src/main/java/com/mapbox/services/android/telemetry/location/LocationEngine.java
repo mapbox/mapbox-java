@@ -18,6 +18,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @since 2.0.0
  */
 public abstract class LocationEngine {
+  public enum Type {
+    GOOGLE_PLAY_SERVICES, LOST, ANDROID, MOCK
+  }
 
   private static final int TWO_MINUTES = 1000 * 60 * 2;
 
@@ -91,6 +94,8 @@ public abstract class LocationEngine {
    * @since 2.0.0
    */
   public abstract void removeLocationUpdates();
+
+  public abstract Type obtainType();
 
   /**
    * Get the current priority being used.

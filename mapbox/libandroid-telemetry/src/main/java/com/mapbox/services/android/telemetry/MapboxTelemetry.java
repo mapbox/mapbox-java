@@ -25,9 +25,9 @@ import com.mapbox.services.android.telemetry.backoff.ExponentialBackoff;
 import com.mapbox.services.android.telemetry.connectivity.ConnectivityReceiver;
 import com.mapbox.services.android.telemetry.constants.TelemetryConstants;
 import com.mapbox.services.android.telemetry.http.TelemetryClient;
-import com.mapbox.services.android.telemetry.location.AndroidLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.mapbox.services.android.telemetry.location.LocationEngineProvider;
 import com.mapbox.services.android.telemetry.navigation.MapboxNavigationEvent;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.telemetry.service.TelemetryService;
@@ -128,11 +128,11 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   /**
    * Initialize MapboxTelemetry - with sdkIdentifier + sdkVersion
    *
-   * @param context        The context associated with the application
-   * @param accessToken    The accessToken associated with the application
-   * @param userAgent      source of requests
-   * @param sdkIdentifier  Identifies which sdk is sending the event
-   * @param sdkVersion     version of the sdk sending the event
+   * @param context       The context associated with the application
+   * @param accessToken   The accessToken associated with the application
+   * @param userAgent     source of requests
+   * @param sdkIdentifier Identifies which sdk is sending the event
+   * @param sdkVersion    version of the sdk sending the event
    */
 
   public void initialize(@NonNull Context context, @NonNull String accessToken, @NonNull String userAgent,
@@ -476,9 +476,11 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   }
 
   private void registerLocationUpdates() {
-    if (locationEngine == null) {
-      locationEngine = new AndroidLocationEngine(context);
-    }
+    // TODO This has to be uncommented when https://github.com/mapbox/mapbox-gl-native/pull/9488 lands
+    // if (locationEngine == null) {
+    LocationEngineProvider locationEngineProvider = new LocationEngineProvider(context);
+    locationEngine = locationEngineProvider.obtainBestLocationEngineAvailable();
+    // }
 
     locationEngine.addLocationEngineListener(this);
     locationEngine.activate();

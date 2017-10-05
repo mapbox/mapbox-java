@@ -1,4 +1,4 @@
-package com.mapbox.services.android.testapp.location;
+package com.mapbox.services.android.telemetry.location;
 
 import android.content.Context;
 import android.location.Location;
@@ -12,9 +12,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.mapbox.services.android.telemetry.location.LocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngineListener;
-import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
 
 import java.lang.ref.WeakReference;
 
@@ -97,12 +94,18 @@ public class GoogleLocationEngine extends LocationEngine implements
 
   @Override
   public void requestLocationUpdates() {
-    // Common params
-    LocationRequest request = LocationRequest.create()
-      .setFastestInterval(1000)
-      .setSmallestDisplacement(3.0f);
+    LocationRequest request = LocationRequest.create();
 
-    // Priority matching is straightforward
+    if (interval != null) {
+      request.setInterval(interval);
+    }
+    if (fastestInterval != null) {
+      request.setFastestInterval(fastestInterval);
+    }
+    if (smallestDisplacement != null) {
+      request.setSmallestDisplacement(smallestDisplacement);
+    }
+
     if (priority == LocationEnginePriority.NO_POWER) {
       request.setPriority(LocationRequest.PRIORITY_NO_POWER);
     } else if (priority == LocationEnginePriority.LOW_POWER) {
@@ -124,6 +127,11 @@ public class GoogleLocationEngine extends LocationEngine implements
     if (googleApiClient.isConnected()) {
       LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
+  }
+
+  @Override
+  public Type obtainType() {
+    return Type.GOOGLE_PLAY_SERVICES;
   }
 
   @Override

@@ -13,9 +13,9 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.services.android.location.LostLocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.mapbox.services.android.telemetry.location.LocationEngineProvider;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.Utils;
 import com.mapbox.services.android.ui.geocoder.GeocoderAutoCompleteView;
@@ -63,7 +63,11 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
     });
 
     // Set up location services to improve accuracy
-    locationEngine = LostLocationEngine.getLocationEngine(this);
+    LocationEngineProvider locationEngineProvider = new LocationEngineProvider(this);
+    locationEngine = locationEngineProvider.obtainLocationEngineBy(LocationEngine.Type.LOST);
+    if (locationEngine == null) {
+      locationEngine = locationEngineProvider.obtainLocationEngineBy(LocationEngine.Type.ANDROID);
+    }
     locationEngine.addLocationEngineListener(this);
     locationEngine.activate();
   }
@@ -77,7 +81,7 @@ public class GeocodingWidgetActivity extends AppCompatActivity implements Locati
   @Override
   public void onLocationChanged(Location location) {
     if (location != null) {
-      Log.d(LOG_TAG, "New LOST location: " + location.toString());
+      Log.d(LOG_TAG, "New location: " + location.toString());
       autocomplete.setProximity(Position.fromCoordinates(
         location.getLongitude(), location.getLatitude()));
     }

@@ -59,6 +59,9 @@ dependencies {
     // Google Play Services
     compile rootProject.ext.dep.gmsLocation
 
+    // LOST
+    compile rootProject.ext.dep.lost
+
     // Picasso (Static Image)
     compile rootProject.ext.dep.picasso
 
