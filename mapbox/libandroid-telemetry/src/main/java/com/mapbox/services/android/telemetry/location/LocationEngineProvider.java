@@ -58,13 +58,13 @@ public class LocationEngineProvider {
   }
 
   private LocationEngine obtainBestLocationEngine() {
-    LocationEngine bestLocationEngine = locationEngineDictionary.get(LocationEngine.Type.ANDROID);
+    LocationEngine androidLocationEngine = locationEngineDictionary.get(LocationEngine.Type.ANDROID);
     for (LocationEngine.Type type : OPTIONAL_LOCATION_ENGINES) {
-      bestLocationEngine = locationEngineDictionary.get(type);
+      LocationEngine bestLocationEngine = locationEngineDictionary.get(type);
       if (bestLocationEngine != null) {
         return bestLocationEngine;
       }
     }
-    return bestLocationEngine;
+    return androidLocationEngine;
   }
 }
