@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
 /**
  * Sample LocationEngine using the Open Source Lost library
  */
-class LostLocationEngine extends LocationEngine implements
+public class LostLocationEngine extends LocationEngine implements
   LostApiClient.ConnectionCallbacks, LocationListener {
 
   private static final String LOG_TAG = LostLocationEngine.class.getSimpleName();
@@ -25,7 +25,7 @@ class LostLocationEngine extends LocationEngine implements
   private WeakReference<Context> context;
   private LostApiClient lostApiClient;
 
-  private LostLocationEngine(Context context) {
+  public LostLocationEngine(Context context) {
     super();
     this.context = new WeakReference<>(context);
     lostApiClient = new LostApiClient.Builder(this.context.get())
@@ -33,7 +33,7 @@ class LostLocationEngine extends LocationEngine implements
       .build();
   }
 
-  static synchronized LocationEngine getLocationEngine(Context context) {
+  public static synchronized LocationEngine getLocationEngine(Context context) {
     if (instance == null) {
       instance = new LostLocationEngine(context.getApplicationContext());
     }

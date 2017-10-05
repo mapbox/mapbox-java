@@ -30,7 +30,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
   private LocationManager locationManager;
   private String currentProvider = null;
 
-  private AndroidLocationEngine(Context context) {
+  public AndroidLocationEngine(Context context) {
     super();
 
     Log.v(LOG_TAG, "Initializing.");

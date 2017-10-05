@@ -18,7 +18,7 @@ import java.lang.ref.WeakReference;
 /**
  * Sample LocationEngine using Google Play Services
  */
-class GoogleLocationEngine extends LocationEngine implements
+public class GoogleLocationEngine extends LocationEngine implements
   GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
   private static final String LOG_TAG = GoogleLocationEngine.class.getSimpleName();
@@ -28,7 +28,7 @@ class GoogleLocationEngine extends LocationEngine implements
   private WeakReference<Context> context;
   private GoogleApiClient googleApiClient;
 
-  private GoogleLocationEngine(Context context) {
+  public GoogleLocationEngine(Context context) {
     super();
     this.context = new WeakReference<>(context);
     googleApiClient = new GoogleApiClient.Builder(this.context.get())
@@ -38,7 +38,7 @@ class GoogleLocationEngine extends LocationEngine implements
       .build();
   }
 
-  static synchronized LocationEngine getLocationEngine(Context context) {
+  public static synchronized LocationEngine getLocationEngine(Context context) {
     if (instance == null) {
       instance = new GoogleLocationEngine(context.getApplicationContext());
     }
