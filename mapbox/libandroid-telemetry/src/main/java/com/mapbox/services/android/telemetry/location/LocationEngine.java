@@ -95,7 +95,7 @@ public abstract class LocationEngine {
    */
   public abstract void removeLocationUpdates();
 
-  public abstract Type obtainEventType();
+  public abstract Type obtainType();
 
   /**
    * Get the current priority being used.

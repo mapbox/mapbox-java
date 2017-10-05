@@ -152,7 +152,7 @@ class LostLocationEngine extends LocationEngine implements
   }
 
   @Override
-  public Type obtainEventType() {
+  public Type obtainType() {
     return Type.LOST;
   }
 

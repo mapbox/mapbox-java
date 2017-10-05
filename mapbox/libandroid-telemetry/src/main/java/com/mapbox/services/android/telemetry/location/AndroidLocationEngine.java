@@ -101,7 +101,7 @@ public class AndroidLocationEngine extends LocationEngine implements LocationLis
   }
 
   @Override
-  public Type obtainEventType() {
+  public Type obtainType() {
     return Type.ANDROID;
   }
 

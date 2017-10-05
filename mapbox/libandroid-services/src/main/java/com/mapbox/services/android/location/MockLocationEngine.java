@@ -180,7 +180,7 @@ public class MockLocationEngine extends LocationEngine {
   }
 
   @Override
-  public Type obtainEventType() {
+  public Type obtainType() {
     return Type.MOCK;
   }
 

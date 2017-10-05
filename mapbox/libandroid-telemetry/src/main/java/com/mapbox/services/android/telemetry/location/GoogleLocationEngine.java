@@ -130,7 +130,7 @@ class GoogleLocationEngine extends LocationEngine implements
   }
 
   @Override
-  public Type obtainEventType() {
+  public Type obtainType() {
     return Type.GOOGLE_PLAY_SERVICES;
   }
 
