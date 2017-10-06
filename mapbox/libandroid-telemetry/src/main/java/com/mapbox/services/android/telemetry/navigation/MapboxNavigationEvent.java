@@ -135,6 +135,7 @@ public class MapboxNavigationEvent {
     String upcomingModifier, String upcomingName, String previousInstruction, String previousType,
     String previousModifier, String previousName, int distance, int duration, int stepDistanceRemaining,
     int stepDurationRemaining, int stepCount, int originalStepCount) {
+    NavigationLocation navigationLoc = new NavigationLocation();
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
       lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount,
       isSimulation, originalRequestIdentifier, requestIdentifier, originalGeometry,
@@ -150,12 +151,12 @@ public class MapboxNavigationEvent {
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
     event.put(KEY_FEEDBACK_TYPE, feedbackType);
     if (locationsBefore != null) {
-      event.put(KEY_LOCATIONS_BEFORE, locationsBefore);
+      event.put(KEY_LOCATIONS_BEFORE, navigationLoc.getSerializedJson(locationsBefore));
     } else {
       event.put(KEY_LOCATIONS_BEFORE, JSONObject.NULL);
     }
     if (locationsAfter != null) {
-      event.put(KEY_LOCATIONS_AFTER, locationsAfter);
+      event.put(KEY_LOCATIONS_AFTER, navigationLoc.getSerializedJson(locationsAfter));
     } else {
       event.put(KEY_LOCATIONS_AFTER, JSONObject.NULL);
     }
@@ -180,6 +181,7 @@ public class MapboxNavigationEvent {
     String upcomingName, String previousInstruction, String previousType, String previousModifier,
     String previousName, int distance, int duration, int stepDistanceRemaining, int stepDurationRemaining,
     int stepCount, int originalStepCount) {
+    NavigationLocation navigationLoc = new NavigationLocation();
     Hashtable<String, Object> event = getMetadata(sdKIdentifier, sdkVersion, sessionIdentifier,
       lat, lng, geometry, profile, estimatedDistance, estimatedDuration, rerouteCount,
       isSimulation, originalRequestIdentifier, requestIdentifier, originalGeometry,
@@ -191,12 +193,12 @@ public class MapboxNavigationEvent {
     event.put(KEY_FEEDBACK_ID, feedbackId);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
     if (locationsBefore != null) {
-      event.put(KEY_LOCATIONS_BEFORE, locationsBefore);
+      event.put(KEY_LOCATIONS_BEFORE, navigationLoc.getSerializedJson(locationsBefore));
     } else {
       event.put(KEY_LOCATIONS_BEFORE, JSONObject.NULL);
     }
     if (locationsAfter != null) {
-      event.put(KEY_LOCATIONS_AFTER, locationsAfter);
+      event.put(KEY_LOCATIONS_AFTER, navigationLoc.getSerializedJson(locationsAfter));
     } else {
       event.put(KEY_LOCATIONS_AFTER, JSONObject.NULL);
     }
