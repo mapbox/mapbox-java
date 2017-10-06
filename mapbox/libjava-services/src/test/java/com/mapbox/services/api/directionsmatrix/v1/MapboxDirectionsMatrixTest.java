@@ -184,4 +184,26 @@ public class MapboxDirectionsMatrixTest extends BaseTest {
     assertEquals(response.body().getDurations()[0][1], 1888.3, DELTA);
     assertEquals(response.body().getDestinations().get(0).getName(), "McAllister Street");
   }
+
+  @Test
+  public void testDestinationsAreFormatted() {
+    MapboxDirectionsMatrix.Builder builder = new MapboxDirectionsMatrix.Builder()
+      .setDestinations(1, 2);
+
+    String formattedDestinations = builder.getDestinations();
+
+    assertNotNull(formattedDestinations);
+    assertEquals(formattedDestinations, "1;2");
+  }
+
+  @Test
+  public void testSourcesAreFormatted() {
+    MapboxDirectionsMatrix.Builder builder = new MapboxDirectionsMatrix.Builder()
+      .setSources(1, 2);
+
+    String formattedSources = builder.getSources();
+
+    assertNotNull(formattedSources);
+    assertEquals(formattedSources, "1;2");
+  }
 }
