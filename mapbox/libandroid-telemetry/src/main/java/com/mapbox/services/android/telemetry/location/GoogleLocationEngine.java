@@ -48,9 +48,7 @@ public class GoogleLocationEngine extends LocationEngine implements
 
   @Override
   public void activate() {
-    if (googleApiClient != null && !googleApiClient.isConnected()) {
-      googleApiClient.connect();
-    }
+    connect();
   }
 
   @Override
@@ -138,6 +136,16 @@ public class GoogleLocationEngine extends LocationEngine implements
   public void onLocationChanged(Location location) {
     for (LocationEngineListener listener : locationListeners) {
       listener.onLocationChanged(location);
+    }
+  }
+
+  private void connect() {
+    if (googleApiClient != null) {
+      if (googleApiClient.isConnected()) {
+        onConnected(null);
+      } else {
+        googleApiClient.connect();
+      }
     }
   }
 }
