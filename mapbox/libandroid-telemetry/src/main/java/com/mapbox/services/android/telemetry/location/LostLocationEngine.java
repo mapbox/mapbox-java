@@ -47,9 +47,7 @@ public class LostLocationEngine extends LocationEngine implements
    */
   @Override
   public void activate() {
-    if (lostApiClient != null && !lostApiClient.isConnected()) {
-      lostApiClient.connect();
-    }
+    connect();
   }
 
   /**
@@ -165,6 +163,16 @@ public class LostLocationEngine extends LocationEngine implements
   public void onLocationChanged(Location location) {
     for (LocationEngineListener listener : locationListeners) {
       listener.onLocationChanged(location);
+    }
+  }
+
+  private void connect() {
+    if (lostApiClient != null) {
+      if (lostApiClient.isConnected()) {
+        onConnected();
+      } else {
+        lostApiClient.connect();
+      }
     }
   }
 }
