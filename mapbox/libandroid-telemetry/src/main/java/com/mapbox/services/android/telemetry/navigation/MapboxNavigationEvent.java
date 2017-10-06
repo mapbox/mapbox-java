@@ -314,7 +314,7 @@ public class MapboxNavigationEvent {
     }
   }
 
-  private static Hashtable<String, Object> getStepMetadata(
+  private static JSONObject getStepMetadata(
     String upcomingInstruction, String upcomingType, String upcomingModifier, String upcomingName,
     String previousInstruction, String previousType, String previousModifier, String previousName,
     int distance, int duration, int distanceRemaining, int durationRemaining
@@ -365,6 +365,8 @@ public class MapboxNavigationEvent {
     event.put(KEY_DURATION, duration);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
     event.put(KEY_DURATION_REMAINING, durationRemaining);
-    return event;
+
+    JSONObject jsonObject = new JSONObject(event);
+    return jsonObject;
   }
 }
