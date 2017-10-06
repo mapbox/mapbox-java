@@ -299,6 +299,11 @@ public class MapboxDirectionsMatrix extends MapboxService<DirectionsMatrixRespon
       }
 
       String[] destinationsFormatted = new String[destinations.length];
+
+      for (int i = 0; i < destinations.length; i++) {
+        destinationsFormatted[i] = String.valueOf(destinations[i]);
+      }
+
       return TextUtils.join(";", destinationsFormatted);
     }
 
@@ -312,6 +317,11 @@ public class MapboxDirectionsMatrix extends MapboxService<DirectionsMatrixRespon
       }
 
       String[] sourcesFormatted = new String[sources.length];
+
+      for (int i = 0; i < sources.length; i++) {
+        sourcesFormatted[i] = String.valueOf(sources[i]);
+      }
+
       return TextUtils.join(";", sourcesFormatted);
     }
 
