@@ -149,8 +149,16 @@ public class MapboxNavigationEvent {
     event.put(KEY_SCREENSHOT, encodedSnapshot);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
     event.put(KEY_FEEDBACK_TYPE, feedbackType);
-    event.put(KEY_LOCATIONS_BEFORE, locationsBefore);
-    event.put(KEY_LOCATIONS_AFTER, locationsAfter);
+    if (locationsBefore != null) {
+      event.put(KEY_LOCATIONS_BEFORE, locationsBefore);
+    } else {
+      event.put(KEY_LOCATIONS_BEFORE, JSONObject.NULL);
+    }
+    if (locationsAfter != null) {
+      event.put(KEY_LOCATIONS_AFTER, locationsAfter);
+    } else {
+      event.put(KEY_LOCATIONS_AFTER, JSONObject.NULL);
+    }
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
     event.put(KEY_DURATION_REMAINING, durationRemaining);
@@ -182,8 +190,16 @@ public class MapboxNavigationEvent {
     event.put(KEY_EVENT, TYPE_REROUTE);
     event.put(KEY_FEEDBACK_ID, feedbackId);
     event.put(KEY_START_TIMESTAMP, TelemetryUtils.generateCreateDateFormatted(startTimestamp));
-    event.put(KEY_LOCATIONS_BEFORE, locationsBefore);
-    event.put(KEY_LOCATIONS_AFTER, locationsAfter);
+    if (locationsBefore != null) {
+      event.put(KEY_LOCATIONS_BEFORE, locationsBefore);
+    } else {
+      event.put(KEY_LOCATIONS_BEFORE, JSONObject.NULL);
+    }
+    if (locationsAfter != null) {
+      event.put(KEY_LOCATIONS_AFTER, locationsAfter);
+    } else {
+      event.put(KEY_LOCATIONS_AFTER, JSONObject.NULL);
+    }
     event.put(KEY_DISTANCE_COMPLETED, distanceCompleted);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
     event.put(KEY_DURATION_REMAINING, durationRemaining);
@@ -302,14 +318,47 @@ public class MapboxNavigationEvent {
     int distance, int duration, int distanceRemaining, int durationRemaining
   ) {
     Hashtable<String, Object> event = new Hashtable<>();
-    event.put(KEY_UPCOMING_INSTRUCTION, upcomingInstruction);
-    event.put(KEY_UPCOMING_TYPE, upcomingType);
-    event.put(KEY_UPCOMING_MODIFIER, upcomingModifier);
-    event.put(KEY_UPCOMING_NAME, upcomingName);
-    event.put(KEY_PREVIOUS_INSTRUCTION, previousInstruction);
-    event.put(KEY_PREVIOUS_TYPE, previousType);
-    event.put(KEY_PREVIOUS_MODIFIER, previousModifier);
-    event.put(KEY_PREVIOUS_NAME, previousName);
+    if (upcomingInstruction != null) {
+      event.put(KEY_UPCOMING_INSTRUCTION, upcomingInstruction);
+    } else {
+      event.put(KEY_UPCOMING_INSTRUCTION, JSONObject.NULL);
+    }
+    if (upcomingType != null) {
+      event.put(KEY_UPCOMING_TYPE, upcomingType);
+    } else {
+      event.put(KEY_UPCOMING_TYPE, JSONObject.NULL);
+    }
+    if (upcomingModifier != null) {
+      event.put(KEY_UPCOMING_MODIFIER, upcomingModifier);
+    } else {
+      event.put(KEY_UPCOMING_MODIFIER, JSONObject.NULL);
+    }
+    if (upcomingName != null) {
+      event.put(KEY_UPCOMING_NAME, upcomingName);
+    } else {
+      event.put(KEY_UPCOMING_NAME, JSONObject.NULL);
+    }
+    if (previousInstruction != null) {
+      event.put(KEY_PREVIOUS_INSTRUCTION, previousInstruction);
+    } else {
+      event.put(KEY_PREVIOUS_INSTRUCTION, JSONObject.NULL);
+    }
+    if (previousType != null) {
+      event.put(KEY_PREVIOUS_TYPE, previousType);
+    } else {
+      event.put(KEY_PREVIOUS_TYPE, JSONObject.NULL);
+    }
+    if (previousModifier != null) {
+      event.put(KEY_PREVIOUS_MODIFIER, previousModifier);
+    } else {
+      event.put(KEY_PREVIOUS_MODIFIER, JSONObject.NULL);
+    }
+    if (previousName != null) {
+      event.put(KEY_PREVIOUS_NAME, previousName);
+    } else {
+      event.put(KEY_PREVIOUS_NAME, JSONObject.NULL);
+    }
+
     event.put(KEY_DISTANCE, distance);
     event.put(KEY_DURATION, duration);
     event.put(KEY_DISTANCE_REMAINING, distanceRemaining);
