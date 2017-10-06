@@ -36,7 +36,7 @@ dependencies {
     provided rootProject.ext.dep.gmsLocation
 
     // LOST
-    provided rootProject.ext.dep.lost
+    provided "com.mapzen.android:lost:3.0.3"
 
     // Testing
     testCompile rootProject.ext.dep.junit
