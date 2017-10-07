@@ -2,6 +2,11 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.2.6
+
+- Fix for Matrix source and destination returning null rather than the true value [#588](https://github.com/mapbox/mapbox-java/pull/588)
+- Add optional locationEngine dependencies [#502](https://github.com/mapbox/mapbox-java/pull/502)
+
 ### v2.2.5
 
 - set sdkIdentifier and sdkVersion when pushing turnstile event [#574](https://github.com/mapbox/mapbox-java/pull/574)
