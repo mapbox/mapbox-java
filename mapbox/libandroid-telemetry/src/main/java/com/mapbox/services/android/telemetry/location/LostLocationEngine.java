@@ -141,7 +141,6 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
    *
    * @param location the new location
    */
-  @Deprecated
   @Override
   public void onLocationChanged(Location location) {
     for (LocationEngineListener listener : locationListeners) {
