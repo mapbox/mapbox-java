@@ -3,7 +3,6 @@ package com.mapbox.services.android.telemetry.location;
 import android.content.Context;
 import android.location.Location;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.mapzen.android.lost.api.LocationListener;
 import com.mapzen.android.lost.api.LocationRequest;
@@ -15,10 +14,7 @@ import java.lang.ref.WeakReference;
 /**
  * Sample LocationEngine using the Open Source Lost library
  */
-public class LostLocationEngine extends LocationEngine implements
-  LostApiClient.ConnectionCallbacks, LocationListener {
-
-  private static final String LOG_TAG = LostLocationEngine.class.getSimpleName();
+public class LostLocationEngine extends LocationEngine implements LocationListener {
 
   private static LocationEngine instance;
 
@@ -28,9 +24,7 @@ public class LostLocationEngine extends LocationEngine implements
   public LostLocationEngine(Context context) {
     super();
     this.context = new WeakReference<>(context);
-    lostApiClient = new LostApiClient.Builder(this.context.get())
-      .addConnectionCallbacks(this)
-      .build();
+    lostApiClient = new LostApiClient.Builder(this.context.get()).build();
   }
 
   public static synchronized LocationEngine getLocationEngine(Context context) {
@@ -47,7 +41,12 @@ public class LostLocationEngine extends LocationEngine implements
    */
   @Override
   public void activate() {
-    connect();
+    if (!lostApiClient.isConnected()) {
+      lostApiClient.connect();
+    }
+    for (LocationEngineListener listener : locationListeners) {
+      listener.onConnected();
+    }
   }
 
   /**
@@ -57,7 +56,7 @@ public class LostLocationEngine extends LocationEngine implements
    */
   @Override
   public void deactivate() {
-    if (lostApiClient != null && lostApiClient.isConnected()) {
+    if (lostApiClient.isConnected()) {
       lostApiClient.disconnect();
     }
   }
@@ -74,25 +73,7 @@ public class LostLocationEngine extends LocationEngine implements
   }
 
   /**
-   * Invoked when the location provider has connected.
-   */
-  @Override
-  public void onConnected() {
-    for (LocationEngineListener listener : locationListeners) {
-      listener.onConnected();
-    }
-  }
-
-  /**
-   * Invoked when the location provider connection has been suspended.
-   */
-  @Override
-  public void onConnectionSuspended() {
-    Log.d(LOG_TAG, "Connection suspended");
-  }
-
-  /**
-   * Returns the Last known location if the location provider is connected.
+   * Returns the Last known location if the location provider is connected and location permissions are granted.
    *
    * @return the last known location
    */
@@ -101,7 +82,7 @@ public class LostLocationEngine extends LocationEngine implements
   public Location getLastLocation() {
     if (lostApiClient.isConnected()) {
       //noinspection MissingPermission
-      return LocationServices.FusedLocationApi.getLastLocation(lostApiClient);
+      return LocationServices.FusedLocationApi.getLastLocation();
     }
     return null;
   }
@@ -123,6 +104,7 @@ public class LostLocationEngine extends LocationEngine implements
       request.setSmallestDisplacement(smallestDisplacement);
     }
 
+    // Priority matching is straightforward
     if (priority == LocationEnginePriority.NO_POWER) {
       request.setPriority(LocationRequest.PRIORITY_NO_POWER);
     } else if (priority == LocationEnginePriority.LOW_POWER) {
@@ -135,8 +117,13 @@ public class LostLocationEngine extends LocationEngine implements
 
     if (lostApiClient.isConnected()) {
       //noinspection MissingPermission
-      LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, this);
+      LocationServices.FusedLocationApi.requestLocationUpdates(request, this);
     }
+  }
+
+  @Override
+  public Type obtainType() {
+    return Type.LOST;
   }
 
   /**
@@ -145,13 +132,8 @@ public class LostLocationEngine extends LocationEngine implements
   @Override
   public void removeLocationUpdates() {
     if (lostApiClient.isConnected()) {
-      LocationServices.FusedLocationApi.removeLocationUpdates(lostApiClient, this);
+      LocationServices.FusedLocationApi.removeLocationUpdates(this);
     }
-  }
-
-  @Override
-  public Type obtainType() {
-    return Type.LOST;
   }
 
   /**
@@ -163,16 +145,6 @@ public class LostLocationEngine extends LocationEngine implements
   public void onLocationChanged(Location location) {
     for (LocationEngineListener listener : locationListeners) {
       listener.onLocationChanged(location);
-    }
-  }
-
-  private void connect() {
-    if (lostApiClient != null) {
-      if (lostApiClient.isConnected()) {
-        onConnected();
-      } else {
-        lostApiClient.connect();
-      }
     }
   }
 }

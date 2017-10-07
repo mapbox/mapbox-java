@@ -36,7 +36,9 @@ dependencies {
     provided rootProject.ext.dep.gmsLocation
 
     // LOST
-    provided "com.mapzen.android:lost:3.0.3"
+    provided(rootProject.ext.dep.lost) {
+        exclude group: 'com.google.guava'
+    }
 
     // Testing
     testCompile rootProject.ext.dep.junit

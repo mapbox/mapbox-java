@@ -60,7 +60,9 @@ dependencies {
     compile rootProject.ext.dep.gmsLocation
 
     // LOST
-    compile "com.mapzen.android:lost:3.0.3"
+    compile(rootProject.ext.dep.lost) {
+        exclude group: 'com.google.guava'
+    }
 
     // Picasso (Static Image)
     compile rootProject.ext.dep.picasso
