@@ -54,13 +54,13 @@ public class TurfJoins {
       // check if it is in the outer ring first
       if (inRing(point, polys.get(i).get(0))) {
         boolean inHole = false;
-        int k = 1;
+        int temp = 1;
         // check for the point in any of the holes
-        while (k < polys.get(i).size() && !inHole) {
-          if (inRing(point, polys.get(i).get(k))) {
+        while (temp < polys.get(i).size() && !inHole) {
+          if (inRing(point, polys.get(i).get(temp))) {
             inHole = true;
           }
-          k++;
+          temp++;
         }
         if (!inHole) {
           insidePoly = true;

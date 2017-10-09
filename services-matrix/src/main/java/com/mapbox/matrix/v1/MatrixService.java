@@ -15,7 +15,7 @@ import retrofit2.http.Query;
 public interface MatrixService {
 
   /**
-   * Call-based interface
+   * Call-based interface.
    *
    * @param userAgent    the user
    * @param user         the user

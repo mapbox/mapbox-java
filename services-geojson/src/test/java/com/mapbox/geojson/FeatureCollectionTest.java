@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.mapbox.services.TestUtils;
-
 import org.junit.Test;
 
 import java.io.IOException;

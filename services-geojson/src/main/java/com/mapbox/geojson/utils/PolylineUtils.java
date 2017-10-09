@@ -46,23 +46,23 @@ public class PolylineUtils {
     while (index < len) {
       int result = 1;
       int shift = 0;
-      int b;
+      int temp;
       do {
-        b = encodedPath.charAt(index++) - 63 - 1;
-        result += b << shift;
+        temp = encodedPath.charAt(index++) - 63 - 1;
+        result += temp << shift;
         shift += 5;
       }
-      while (b >= 0x1f);
+      while (temp >= 0x1f);
       lat += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
 
       result = 1;
       shift = 0;
       do {
-        b = encodedPath.charAt(index++) - 63 - 1;
-        result += b << shift;
+        temp = encodedPath.charAt(index++) - 63 - 1;
+        result += temp << shift;
         shift += 5;
       }
-      while (b >= 0x1f);
+      while (temp >= 0x1f);
       lng += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
 
       path.add(Point.fromLngLat(lng / factor, lat / factor));
@@ -92,11 +92,11 @@ public class PolylineUtils {
       long lat = Math.round(point.latitude() * factor);
       long lng = Math.round(point.longitude() * factor);
 
-      long dLat = lat - lastLat;
-      long dLng = lng - lastLng;
+      long varLat = lat - lastLat;
+      long varLng = lng - lastLng;
 
-      encode(dLat, result);
-      encode(dLng, result);
+      encode(varLat, result);
+      encode(varLng, result);
 
       lastLat = lat;
       lastLng = lng;
@@ -120,7 +120,7 @@ public class PolylineUtils {
 
   /**
    * Reduces the number of points in a polyline while retaining its shape, giving a performance
-   * boost when processing it and also reducing visual noise
+   * boost when processing it and also reducing visual noise.
    *
    * @param points an array of points
    * @return an array of simplified points
@@ -188,7 +188,7 @@ public class PolylineUtils {
   }
 
   /**
-   * Square distance between 2 points
+   * Square distance between 2 points.
    */
   private static double getSqDist(Point p1, Point p2) {
     double dx = p1.longitude() - p2.longitude();
@@ -197,34 +197,36 @@ public class PolylineUtils {
   }
 
   /**
-   * Square distance from a point to a segment
+   * Square distance from a point to a segment.
    */
   private static double getSqSegDist(Point point, Point p1, Point p2) {
-    double x = p1.longitude();
-    double y = p1.latitude();
-    double dx = p2.longitude() - x;
-    double dy = p2.latitude() - y;
+    double horizontal = p1.longitude();
+    double vertical = p1.latitude();
+    double diffHorizontal = p2.longitude() - horizontal;
+    double diffVertical = p2.latitude() - vertical;
 
-    if (dx != 0 || dy != 0) {
-      double t = ((point.longitude() - x) * dx + (point.latitude() - y) * dy) / (dx * dx + dy * dy);
-      if (t > 1) {
-        x = p2.longitude();
-        y = p2.latitude();
+    if (diffHorizontal != 0 || diffVertical != 0) {
+      double total = ((point.longitude() - horizontal) * diffHorizontal + (point.latitude()
+        - vertical) * diffVertical) / (diffHorizontal * diffHorizontal + diffVertical
+        * diffVertical);
+      if (total > 1) {
+        horizontal = p2.longitude();
+        vertical = p2.latitude();
 
-      } else if (t > 0) {
-        x += dx * t;
-        y += dy * t;
+      } else if (total > 0) {
+        horizontal += diffHorizontal * total;
+        vertical += diffVertical * total;
       }
     }
 
-    dx = point.longitude() - x;
-    dy = point.latitude() - y;
+    diffHorizontal = point.longitude() - horizontal;
+    diffVertical = point.latitude() - vertical;
 
-    return dx * dx + dy * dy;
+    return diffHorizontal * diffHorizontal + diffVertical * diffVertical;
   }
 
   /**
-   * Basic distance-based simplification
+   * Basic distance-based simplification.
    */
   private static Point[] simplifyRadialDist(Point[] points, double sqTolerance) {
     Point prevPoint = points[0];
@@ -279,7 +281,7 @@ public class PolylineUtils {
   }
 
   /**
-   * Simplification using Ramer-Douglas-Peucker algorithm
+   * Simplification using Ramer-Douglas-Peucker algorithm.
    */
   private static Point[] simplifyDouglasPeucker(Point[] points, double sqTolerance) {
     int last = points.length - 1;

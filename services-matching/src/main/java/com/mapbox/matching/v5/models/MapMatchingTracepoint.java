@@ -72,6 +72,12 @@ public abstract class MapMatchingTracepoint implements Serializable {
     return Point.fromLngLat(rawLocation()[0], rawLocation()[1]);
   }
 
+  /**
+   * Provides the way name which the waypoint's coordinate is snapped to.
+   *
+   * @return string with the name of the way the coordinate snapped to
+   * @since 1.0.0
+   */
   @Nullable
   public abstract String name();
 
@@ -152,6 +158,13 @@ public abstract class MapMatchingTracepoint implements Serializable {
      */
     public abstract Builder waypointIndex(@Nullable Integer waypointIndex);
 
+    /**
+     * Provides the way name which the waypoint's coordinate is snapped to.
+     *
+     * @param name string with the name of the way the coordinate snapped to
+     * @return this builder for chaining options together
+     * @since 1.0.0
+     */
     public abstract Builder name(@Nullable String name);
 
     /**

@@ -1,0 +1,101 @@
+import org.gradle.api.DefaultTask
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.TaskAction
+
+// Plugin to generate a BuildConfig class from Gradle //
+
+/**
+ * Main plugin class
+ */
+class BuildConfigPlugin implements Plugin<Project> {
+    void apply(Project project) {
+        //Ensure the java plugin is loaded
+        project.apply(plugin: 'java')
+
+        //Setup extensions
+        project.extensions.create("buildConfig", BuildConfigPluginExtension)
+
+        project.afterEvaluate {
+            //Create generate task
+            def task = project.tasks.create([name: "generateBuildConfig", type: BuildConfigTask], {
+                packageName = project.buildConfig.packageName
+                constants = project.buildConfig.constants
+            })
+            project.compileJava.dependsOn(task)
+        }
+    }
+}
+
+/**
+ * Configuration options
+ */
+class BuildConfigPluginExtension {
+    String packageName;
+    Map<String, Object> constants = new LinkedHashMap<>();
+}
+
+/**
+ * Task actually run
+ */
+class BuildConfigTask extends DefaultTask {
+
+    @Input
+    String packageName;
+
+    @Input
+    Map<String, Object> constants
+
+    @OutputFile
+    File javaFile
+
+    @Override
+    Task configure(Closure closure) {
+        Task configure = super.configure(closure)
+        String packagePath = "${packageName}".replaceAll("\\.", "/")
+        javaFile = new File("${project.projectDir.path}/src/main/java/${packagePath}/BuildConfig.java")
+        configure
+    }
+
+    @TaskAction
+    void generate() {
+        //Write file contents
+        javaFile.withWriter { writer ->
+            writer.append "/*** GENERATED ***/\n"
+            writer.append "package ${packageName};\n\n"
+            writer.append "public final class BuildConfig {\n"
+
+            constants.each { k, v ->
+                if (v instanceof String) {
+                    writer.append "public static final String ${k} = \"${v}\";\n"
+                } else if (v instanceof Number) {
+                    writer.append "public static final Number ${k} = ${v};\n"
+                } else if (v instanceof Boolean) {
+                    writer.append "public static final boolean ${k} = ${v};\n"
+                } else {
+                    throw new IllegalStateException("${v.getClass()} is not supported")
+                }
+            }
+
+            writer.append "}\n"
+        }
+    }
+}
+
+class CleanTask extends DefaultTask {
+
+    @Input
+    File dir
+
+    @TaskAction
+    public void clean() {
+        if (dir != null && dir.exists()) {
+            dir.deleteDir()
+        }
+    }
+}
+
+apply plugin: BuildConfigPlugin

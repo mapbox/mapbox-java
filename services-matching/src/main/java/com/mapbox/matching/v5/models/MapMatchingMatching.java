@@ -1,8 +1,6 @@
 package com.mapbox.matching.v5.models;
 
-
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -11,7 +9,6 @@ import com.mapbox.directions.v5.models.RouteLeg;
 
 import java.io.Serializable;
 import java.util.List;
-
 
 /**
  * A match object is a {@link com.mapbox.directions.v5.models.DirectionsRoute} object with an

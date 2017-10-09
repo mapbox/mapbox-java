@@ -1,5 +1,4 @@
 version: 2
-
 workflows:
   version: 2
   default:
@@ -28,11 +27,20 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Check Java code style
-          command: make checkstyle
-      - run:
           name: Jacoco test report
           command: ./gradlew jacocoTestReport
+      - run:
+          name: Sonarcloud upload
+          command: |
+            ./gradlew sonarqube \
+              -DskipTests=true \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.organization=mapbox \
+              -Dsonar.login=$SONARCLOUD_KEY \
+              -Dsonar.test.failure.ignore=true
+      - run:
+          name: Check Java code style
+          command: make checkstyle
       - run:
           name: Run unit-test for all modules
           command: make test

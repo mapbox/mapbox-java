@@ -1,8 +1,9 @@
 package com.mapbox.matrix.v1;
 
+import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.directions.v5.DirectionsAdapterFactory;
@@ -15,19 +16,16 @@ import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * the Matrix API returns all travel times between many points. The Matrix API will always return
@@ -56,10 +54,11 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
   private Call<MatrixResponse> call;
 
   /**
-   * Execute the call
+   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
+   * Matrix API.
    *
-   * @return The Directions Matrix v1 response
-   * @throws IOException Signals that an I/O exception of some sort has occurred.
+   * @return the Matrix v5 response once the call completes successfully
+   * @throws IOException Signals that an I/O exception of some sort has occurred
    * @since 2.1.0
    */
   @Override
@@ -68,9 +67,10 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
   }
 
   /**
-   * Execute the call
+   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
+   * to the Matrix API. Use this method to make a Matrix request on the Main Thread.
    *
-   * @param callback A Retrofit callback.
+   * @param callback a {@link Callback} which is used once the {@link MatrixResponse} is created.
    * @since 2.1.0
    */
   @Override
@@ -79,9 +79,10 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
   }
 
   /**
-   * Cancel the call
+   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
+   * the user dismisses the calling activity or no longer needs the returned results.
    *
-   * @since 2.1.0
+   * @since 1.0.0
    */
   @Override
   public void cancelCall() {
@@ -89,7 +90,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
   }
 
   /**
-   * clone the call
+   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
    *
    * @return cloned call
    * @since 2.1.0
@@ -181,9 +182,18 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
   }
 
   /**
-   * Matrix v1 builder
+   * This builder is used to create a new request to the Mapbox Matrix API. At a bare minimum,
+   * your request must include an access token, and a list of coordinates. All other fields can
+   * be left alone inorder to use the default behaviour of the API.
+   * <p>
+   * By default, the directions profile is set to driving (without traffic) but can be changed to
+   * reflect your users use-case.
+   * </p><p>
+   * Note to contributors: All optional booleans in this builder use the object {@code Boolean}
+   * rather than the primitive to allow for unset (null) values.
+   * </p>
    *
-   * @since 2.1.0
+   * @since 1.0.0
    */
   @AutoValue.Builder
   public abstract static class Builder {
@@ -307,7 +317,15 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
 
     abstract MapboxMatrix autoBuild();
 
-    public MapboxMatrix build() throws ServicesException {
+    /**
+     * This uses the provided parameters set using the {@link Builder} and first checks that all
+     * values are valid, formats the values as strings for easier consumption by the API, and lastly
+     * creates a new {@link MapboxMatrix} object with the values provided.
+     *
+     * @return a new instance of Mapbox Matrix
+     * @since 2.1.0
+     */
+    public MapboxMatrix build() {
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException("At least two coordinates must be provided with your API"
           + " request.");
@@ -337,7 +355,6 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
         TextUtils.formatCoordinate(point.longitude()),
         TextUtils.formatCoordinate(point.latitude())));
     }
-
     return TextUtils.join(";", coordinatesFormatted.toArray());
   }
 }

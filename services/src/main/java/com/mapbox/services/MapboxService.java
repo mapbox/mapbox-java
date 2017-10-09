@@ -1,17 +1,12 @@
 package com.mapbox.services;
 
-import static com.mapbox.services.utils.TextUtils.isEmpty;
-
-import com.mapbox.services.constants.Constants;
-
-import java.io.IOException;
-import java.util.Locale;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.io.IOException;
 
 /**
  * Mapbox specific services used internally within the SDK.
@@ -64,6 +59,12 @@ public abstract class MapboxService<T> {
     return enableDebug;
   }
 
+  /**
+   * Enable for more verbose log output while making request.
+   *
+   * @param enableDebug true if you'd like Okhttp to log
+   * @since 3.0.0
+   */
   public void enableDebug(boolean enableDebug) {
     this.enableDebug = enableDebug;
   }

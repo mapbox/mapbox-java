@@ -40,9 +40,9 @@ public class TestUtils {
     return baos.toByteArray();
   }
 
-  public static <T extends Serializable> T deserialize(byte[] b, Class<T> cl)
+  public static <T extends Serializable> T deserialize(byte[] bytes, Class<T> cl)
     throws IOException, ClassNotFoundException {
-    ByteArrayInputStream bais = new ByteArrayInputStream(b);
+    ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
     ObjectInputStream ois = new ObjectInputStream(bais);
     Object object = ois.readObject();
     return cl.cast(object);

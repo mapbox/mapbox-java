@@ -3,10 +3,11 @@ package com.mapbox.directions.v5.models;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.mapbox.directions.v5.MapboxDirections;
-import com.mapbox.geojson.Point;
 import com.mapbox.services.TestUtils;
-
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,12 +15,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
-import retrofit2.Response;
 
 public class DirectionsWaypointTest extends TestUtils {
 
@@ -92,19 +87,5 @@ public class DirectionsWaypointTest extends TestUtils {
     assertNotNull(waypoint.location());
     assertEquals(1.0, waypoint.location().longitude(), DELTA);
     assertEquals(2.0, waypoint.location().latitude(), DELTA);
-  }
-
-  @Test
-  public void name_doesReturnCorrectInformationAfterRequest() throws Exception {
-    MapboxDirections mapboxDirections = MapboxDirections.builder()
-      .destination(Point.fromLngLat(-122.416667, 37.783333))
-      .origin(Point.fromLngLat(-121.900000, 37.333333))
-      .baseUrl(mockUrl.toString())
-      .accessToken(ACCESS_TOKEN)
-      .build();
-    Response<DirectionsResponse> response = mapboxDirections.executeCall();
-    System.out.println(response.code());
-//    System.out.println(response.body().toString());
-//    System.out.println(response.body().waypoints().get(0).name());
   }
 }

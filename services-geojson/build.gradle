@@ -2,6 +2,8 @@ apply plugin: 'java-library'
 
 dependencies {
 
+  compile project(":services")
+
   // Gson
   compile dependenciesList.gson
 

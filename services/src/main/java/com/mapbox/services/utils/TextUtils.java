@@ -27,11 +27,7 @@ public class TextUtils {
    * @since 1.0.0
    */
   public static boolean isEmpty(CharSequence str) {
-    if (str == null || str.length() == 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return str == null || str.length() == 0;
   }
 
   /**
@@ -69,7 +65,8 @@ public class TextUtils {
    * @since 2.1.0
    */
   public static String formatCoordinate(double coordinate) {
-    DecimalFormat decimalFormat = new DecimalFormat("0.######", new DecimalFormatSymbols(Locale.US));
+    DecimalFormat decimalFormat = new DecimalFormat("0.######",
+      new DecimalFormatSymbols(Locale.US));
     return String.format(Locale.US, "%s",
       decimalFormat.format(coordinate));
   }
@@ -107,12 +104,21 @@ public class TextUtils {
       if (radiuses[i] == Double.POSITIVE_INFINITY) {
         radiusesFormatted[i] = "unlimited";
       } else {
-        radiusesFormatted[i] = String.format(Locale.US, "%s", TextUtils.formatCoordinate(radiuses[i]));
+        radiusesFormatted[i] = String.format(Locale.US, "%s",
+          TextUtils.formatCoordinate(radiuses[i]));
       }
     }
     return join(";", radiusesFormatted);
   }
 
+  /**
+   * Formats the bearing variables from the raw values to a string which can than be used for the
+   * request URL.
+   *
+   * @param bearings a List of doubles representing bearing values
+   * @return a string with the bearing values
+   * @since 3.0.0
+   */
   public static String formatBearing(List<Double[]> bearings) {
     if (bearings.isEmpty()) {
       return null;
@@ -131,6 +137,13 @@ public class TextUtils {
     return TextUtils.join(";", bearingFormatted);
   }
 
+  /**
+   * converts the list of integer arrays to a string ready for API consumption.
+   *
+   * @param distributions the list of integer arrays representing the distribution
+   * @return a string with the distribution values
+   * @since 3.0.0
+   */
   public static String formatDistributions(List<Integer[]> distributions) {
     if (distributions.isEmpty()) {
       return null;

@@ -30,11 +30,10 @@ public class TurfMisc {
    * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
    * @since 1.2.0
    */
-  public static LineString lineSlice(Point startPt, Point stopPt, Feature line) throws TurfException {
+  public static LineString lineSlice(Point startPt, Point stopPt, Feature line) {
     if (!line.geometry().type().equals("LineString")) {
       throw new TurfException("input must be a LineString Feature or Geometry");
     }
-
     return lineSlice(startPt, stopPt, (LineString) line.geometry());
   }
 
@@ -164,17 +163,12 @@ public class TurfMisc {
     // If the lines intersect, the result contains the x and y of the intersection
     // (treating the lines as infinite) and booleans for whether line segment 1 or line
     // segment 2 contain the point
-    double denominator;
-    double a;
-    double b;
-    double numerator1;
-    double numerator2;
     LineIntersectsResult result = LineIntersectsResult.builder()
       .onLine1(false)
       .onLine2(false)
       .build();
 
-    denominator = ((line2EndY - line2StartY) * (line1EndX - line1StartX))
+    double denominator = ((line2EndY - line2StartY) * (line1EndX - line1StartX))
       - ((line2EndX - line2StartX) * (line1EndY - line1StartY));
     if (denominator == 0) {
       if (result.horizontalIntersection() != null && result.verticalIntersection() != null) {
@@ -183,25 +177,25 @@ public class TurfMisc {
         return null;
       }
     }
-    a = line1StartY - line2StartY;
-    b = line1StartX - line2StartX;
-    numerator1 = ((line2EndX - line2StartX) * a) - ((line2EndY - line2StartY) * b);
-    numerator2 = ((line1EndX - line1StartX) * a) - ((line1EndY - line1StartY) * b);
-    a = numerator1 / denominator;
-    b = numerator2 / denominator;
+    double varA = line1StartY - line2StartY;
+    double varB = line1StartX - line2StartX;
+    double numerator1 = ((line2EndX - line2StartX) * varA) - ((line2EndY - line2StartY) * varB);
+    double numerator2 = ((line1EndX - line1StartX) * varA) - ((line1EndY - line1StartY) * varB);
+    varA = numerator1 / denominator;
+    varB = numerator2 / denominator;
 
     // if we cast these lines infinitely in both directions, they intersect here:
     result = result.toBuilder().horizontalIntersection(line1StartX
-      + (a * (line1EndX - line1StartX))).build();
+      + (varA * (line1EndX - line1StartX))).build();
     result = result.toBuilder().verticalIntersection(line1StartY
-      + (a * (line1EndY - line1StartY))).build();
+      + (varA * (line1EndY - line1StartY))).build();
 
     // if line1 is a segment and line2 is infinite, they intersect if:
-    if (a > 0 && a < 1) {
+    if (varA > 0 && varA < 1) {
       result = result.toBuilder().onLine1(true).build();
     }
     // if line2 is a segment and line1 is infinite, they intersect if:
-    if (b > 0 && b < 1) {
+    if (varB > 0 && varB < 1) {
       result = result.toBuilder().onLine2(true).build();
     }
     // if line1 and line2 are segments, they intersect if both of the above are true

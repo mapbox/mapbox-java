@@ -1,9 +1,10 @@
 package com.mapbox.matching.v5;
 
+import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.directions.v5.DirectionsAdapterFactory;
@@ -13,26 +14,23 @@ import com.mapbox.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.geojson.Point;
-import com.mapbox.matching.v5.models.MapMatchingResponse;
 import com.mapbox.matching.v5.models.MapMatchingAdapterFactory;
+import com.mapbox.matching.v5.models.MapMatchingResponse;
 import com.mapbox.services.MapboxService;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * The Mapbox map matching interface (v5)
@@ -42,7 +40,7 @@ import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
  * be displayed on a map or used for other analysis.
  *
  * @see <a href="https://www.mapbox.com/api-documentation/#map-matching">Map matching API
- * documentation</a>
+ *   documentation</a>
  * @since 2.0.0
  */
 @AutoValue
@@ -344,7 +342,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
-     * documentation</a>
+     *   documentation</a>
      * @since 2.1.0
      */
     public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
@@ -416,7 +414,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     * Languages</a>
+     *   Languages</a>
      * @since 3.0.0
      */
     public Builder language(@Nullable Locale language) {
@@ -435,7 +433,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     * Languages</a>
+     *   Languages</a>
      * @since 2.2.0
      */
     public abstract Builder language(String language);

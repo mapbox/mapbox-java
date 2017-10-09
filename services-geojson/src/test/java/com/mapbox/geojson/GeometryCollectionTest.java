@@ -1,16 +1,15 @@
 package com.mapbox.geojson;
 
-import com.mapbox.services.TestUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
+import com.mapbox.services.TestUtils;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 public class GeometryCollectionTest extends TestUtils {
 
@@ -56,8 +55,8 @@ public class GeometryCollectionTest extends TestUtils {
 
     GeometryCollection geometryCollection = GeometryCollection.fromGeometries(geometries);
     compareJson(geometryCollection.toJson(),
-      "{\"type\":\"GeometryCollection\",\"geometries\":["+ "{\"type\":\"Point\",\"coordinates\":[1.0,2.0]},"
-        + "{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]}]}");
+      "{\"type\":\"GeometryCollection\",\"geometries\":[" + "{\"type\":\"Point\","
+        + "\"coordinates\":[1.0,2.0]},{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]}]}");
   }
 
   @Test

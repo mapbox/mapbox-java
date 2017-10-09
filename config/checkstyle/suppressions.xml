@@ -6,8 +6,13 @@
 
 <suppressions>
   <!-- For our tests we do not demand API documentation. -->
-  <suppress checks="Javadoc.*" files="[/\\]src[/\\]test[/\\]java[/\\].*\.java"/>
 
+
+  <suppress checks="MagicNumber" files="com[\\/]mapbox[\\/]samples[\\/].*IT.java"/>
+  <suppress checks="MagicNumber" files="com[\\/]mapbox[\\/]samples[\\/].*IT.java"/>
+
+  <suppress checks="^[a-z][a-z0-9][a-zA-Z0-9]*$" files="[\\/]TurfMeasurement.java$"/>
+  <suppress checks="MagicNumber" files="[\\/]TurfHelpers.java$"/>
   <suppress checks="MagicNumber" files=".*[\\/]src[\\/](test|it)[\\/]"/>
   <suppress checks="WriteTag" files=".*[\\/]src[\\/](test|it)[\\/]"/>
 </suppressions>

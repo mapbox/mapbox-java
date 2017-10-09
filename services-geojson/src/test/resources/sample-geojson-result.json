@@ -1,81 +1,81 @@
 {
   "features": [
     {
-      "type": "Feature",
       "geometry": {
-        "type": "Point",
         "coordinates": [
-          1.1234568,
-          1.1234568
-        ]
+          1.12345678,
+          1.12345678
+        ],
+        "type": "Point"
       },
-      "properties": {}
+      "properties": {},
+      "type": "Feature"
     },
     {
-      "type": "Feature",
       "geometry": {
-        "type": "Point",
         "coordinates": [
           1.1234,
           1.12345
-        ]
+        ],
+        "type": "Point"
       },
-      "properties": {}
+      "properties": {},
+      "type": "Feature"
     },
     {
-      "type": "Feature",
       "geometry": {
-        "type": "Point",
         "coordinates": [
           1.1234567,
           1.1234567
-        ]
+        ],
+        "type": "Point"
       },
-      "properties": {}
+      "properties": {},
+      "type": "Feature"
     },
     {
-      "type": "Feature",
       "geometry": {
-        "type": "Point",
         "coordinates": [
           1.1234567,
-          1.1234568
-        ]
+          1.12345678
+        ],
+        "type": "Point"
       },
-      "properties": {}
+      "properties": {},
+      "type": "Feature"
     },
     {
-      "type": "Feature",
       "geometry": {
-        "type": "Point",
         "coordinates": [
-          1.1234568,
+          1.12345678,
           1.1234567
-        ]
+        ],
+        "type": "Point"
       },
-      "properties": {}
+      "properties": {},
+      "type": "Feature"
     },
     {
-      "type": "Feature",
       "geometry": {
-        "type": "Point",
         "coordinates": [
-          105.1234568,
+          105.12345678,
           89.1234567
-        ]
+        ],
+        "type": "Point"
       },
-      "properties": {}
+      "properties": {},
+      "type": "Feature"
     },
     {
-      "type": "Feature",
       "geometry": {
-        "type": "Point",
         "coordinates": [
-          -105.1234568,
+          -105.12345678,
           -89.1234567
-        ]
+        ],
+        "type": "Point"
       },
-      "properties": {}
+      "properties": {},
+      "type": "Feature"
     }
   ],
   "type": "FeatureCollection"

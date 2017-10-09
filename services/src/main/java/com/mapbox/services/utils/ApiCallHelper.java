@@ -1,12 +1,21 @@
 package com.mapbox.services.utils;
 
+import static com.mapbox.services.utils.TextUtils.isEmpty;
+
 import com.mapbox.services.constants.Constants;
 
 import java.util.Locale;
 
-import static com.mapbox.services.utils.TextUtils.isEmpty;
+/**
+ * Static class with methods for assisting in making Mapbox API calls.
+ *
+ * @since 3.0.0
+ */
+public final class ApiCallHelper {
 
-public class ApiCallHelper {
+  private ApiCallHelper() {
+    // Private constructor preventing instances of class
+  }
 
   /**
    * Computes a full user agent header of the form:
@@ -27,7 +36,8 @@ public class ApiCallHelper {
       } else {
         String baseUa = String.format(
           Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
-        return isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s", clientAppName, baseUa);
+        return isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s",
+          clientAppName, baseUa);
       }
 
     } catch (Exception exception) {

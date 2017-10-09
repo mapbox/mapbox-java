@@ -1,9 +1,10 @@
 package com.mapbox.directions.v5;
 
+import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.directions.v5.DirectionsCriteria.AnnotationCriteria;
@@ -11,25 +12,24 @@ import com.mapbox.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.directions.v5.models.DirectionsResponse;
+import com.mapbox.directions.v5.models.DirectionsRoute;
+import com.mapbox.directions.v5.models.RouteOptions;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.MapboxService;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * The Directions API allows the calculation of routes between coordinates. The fastest route can be
@@ -42,9 +42,9 @@ import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
  * origin.
  *
  * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/directions/">Android
- * Directions documentation</a>
+ *   Directions documentation</a>
  * @see <a href="https://www.mapbox.com/api-documentation/#directions">Directions API
- * documentation</a>
+ *   documentation</a>
  * @since 1.0.0
  */
 @AutoValue
@@ -115,7 +115,13 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    */
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
-    return getCall().execute();
+    Response<DirectionsResponse> response = getCall().execute();
+    if (response.body() == null || response.body().routes().isEmpty()) {
+      return response;
+    }
+    List<DirectionsRoute> routes = response.body().routes();
+    return Response.success(response.body().toBuilder().routes(
+      generateRouteOptions(routes)).build());
   }
 
   /**
@@ -127,8 +133,39 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    * @since 1.0.0
    */
   @Override
-  public void enqueueCall(Callback<DirectionsResponse> callback) {
-    getCall().enqueue(callback);
+  public void enqueueCall(final Callback<DirectionsResponse> callback) {
+    getCall().enqueue(new DirectionsApiCallback<DirectionsResponse>() {
+      @Override
+      public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+        super.onResponse(call, response);
+        if (response == null || response.body().routes().isEmpty()) {
+          // If null just pass the original object back since there's nothing to modify.
+          callback.onResponse(call, response);
+        }
+        DirectionsResponse newResponse = response.body().toBuilder().routes(
+          generateRouteOptions(response.body().routes())).build();
+        callback.onResponse(call, Response.success(newResponse));
+      }
+    });
+  }
+
+  private List<DirectionsRoute> generateRouteOptions(List<DirectionsRoute> routes) {
+    List<DirectionsRoute> modifiedRoutes = new ArrayList<>();
+    for (DirectionsRoute route : routes) {
+      modifiedRoutes.add(route.toBuilder().routeOptions(
+        RouteOptions.builder()
+          .profile(profile())
+          .continueStraight(continueStraight())
+          .annotations(annotations())
+          .bearings(bearings())
+          .alternatives(alternatives())
+          .language(language())
+          .radiuses(radiuses())
+          .user(user())
+          .build()
+      ).build());
+    }
+    return modifiedRoutes;
   }
 
   /**
@@ -238,16 +275,14 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6);
   }
 
-  private static String formatCoordinates(List<Point> coordinates) {
-    List<String> coordinatesFormatted = new ArrayList<>();
-    for (Point point : coordinates) {
-      coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-        TextUtils.formatCoordinate(point.longitude()),
-        TextUtils.formatCoordinate(point.latitude())));
-    }
-
-    return TextUtils.join(";", coordinatesFormatted.toArray());
-  }
+  /**
+   * Returns the builder which created this instance of {@link MapboxDirections} and allows for
+   * modification and building a new directions request with new information.
+   *
+   * @return {@link MapboxDirections.Builder} with the same variables set as this directions object
+   * @since 3.0.0
+   */
+  public abstract Builder toBuilder();
 
   /**
    * This builder is used to create a new request to the Mapbox Directions API. At a bare minimum,
@@ -420,7 +455,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     * Languages</a>
+     *   Languages</a>
      * @since 2.2.0
      */
     public Builder language(@Nullable Locale language) {
@@ -440,7 +475,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    abstract Builder roundaboutExits(@Nullable Boolean roundaboutExits);
+    public abstract Builder roundaboutExits(@Nullable Boolean roundaboutExits);
 
     /**
      * Whether or not to return additional metadata along the route. Possible values are:
@@ -455,7 +490,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
-     * documentation</a>
+     *   documentation</a>
      * @since 2.1.0
      */
     public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
@@ -569,7 +604,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * values are valid, formats the values as strings for easier consumption by the API, and lastly
      * creates a new {@link MapboxDirections} object with the values provided.
      *
-     * @return a new instance of Mapbox Optimization
+     * @return a new instance of Mapbox Directions
      * @since 2.1.0
      */
     public MapboxDirections build() {
@@ -597,6 +632,17 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           + " token.");
       }
       return directions;
+    }
+
+    private static String formatCoordinates(List<Point> coordinates) {
+      List<String> coordinatesFormatted = new ArrayList<>();
+      for (Point point : coordinates) {
+        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+          TextUtils.formatCoordinate(point.longitude()),
+          TextUtils.formatCoordinate(point.latitude())));
+      }
+
+      return TextUtils.join(";", coordinatesFormatted.toArray());
     }
   }
 }

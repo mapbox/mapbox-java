@@ -11,6 +11,13 @@ import com.mapbox.geojson.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class contains methods that are useful for getting all coordinates from a specific GeoJson
+ * geometry.
+ *
+ * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
+ * @since 2.0.0
+ */
 public class TurfMeta {
 
   /**

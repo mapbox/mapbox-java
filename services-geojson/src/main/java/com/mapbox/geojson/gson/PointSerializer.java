@@ -27,8 +27,7 @@ public class PointSerializer implements JsonSerializer<Point> {
    *                  altitude.
    * @param typeOfSrc Common superinterface for all types in the Java.
    * @param context   Context for deserialization that is passed to a custom deserializer during
-   *                  invocation of its {@link com.google.gson.JsonDeserializer#deserialize(JsonElement, Type,
-   *                  com.google.gson.JsonDeserializationContext)} method.
+   *                  invocation of its {@link com.google.gson.JsonDeserializationContext} method.
    * @return a JsonArray containing the raw coordinates.
    * @since 1.0.0
    */

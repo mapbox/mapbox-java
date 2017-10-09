@@ -1,9 +1,6 @@
 package com.mapbox.matching.v5;
 
-
-
 import com.mapbox.matching.v5.models.MapMatchingResponse;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;

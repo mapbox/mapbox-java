@@ -2,7 +2,6 @@ package com.mapbox.matrix.v1.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -20,8 +19,8 @@ import java.util.List;
 public abstract class MatrixResponse implements Serializable {
 
   /**
-   * This method returns a new instance of the {@link Builder} class which provides a way to create
-   * a new instance of this class.
+   * Create a new instance of this class using the {@link MatrixResponse.Builder} which provides a
+   * to pass in variables which define the instance.
    *
    * @return this classes {@link Builder} for creating a new instance
    * @since 3.0.0
@@ -72,10 +71,8 @@ public abstract class MatrixResponse implements Serializable {
   @Nullable
   public abstract List<DirectionsWaypoint> sources();
 
-  // TODO fix javadoc here
-
   /**
-   * Durations as array of arrays representing the matrix in row-major order. durations[i][j] gives
+   * Durations as a list of arrays representing the matrix in row-major order. durations[i][j] gives
    * the travel time from the i-th source to the j-th destination. All values are in seconds. The
    * duration between the same coordinate is always 0. If a duration can not be found, the result is
    * null.

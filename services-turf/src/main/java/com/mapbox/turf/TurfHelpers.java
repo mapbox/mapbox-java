@@ -39,7 +39,8 @@ public class TurfHelpers {
 
   /**
    * Convert a distance measurement (assuming a spherical Earth) from a real-world unit into degrees
-   * Valid units: miles, nauticalmiles, inches, yards, meters, metres, centimeters, kilometres, feet
+   * Valid units: miles, nauticalmiles, inches, yards, meters, metres, centimeters, kilometres,
+   * feet.
    *
    * @param distance in real units
    * @param units    can be degrees, radians, miles, or kilometers inches, yards, metres, meters,
@@ -52,7 +53,7 @@ public class TurfHelpers {
   }
 
   /**
-   * Converts an angle in radians to degrees
+   * Converts an angle in radians to degrees.
    *
    * @param radians angle in radians
    * @return degrees between 0 and 360 degrees

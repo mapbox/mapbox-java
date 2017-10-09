@@ -1,5 +1,10 @@
 package com.mapbox.geojson.constants;
 
+/**
+ * Contains constants used throughout the GeoJson classes.
+ *
+ * @since 3.0.0
+ */
 public class GeoJsonConstants {
 
   private GeoJsonConstants() {

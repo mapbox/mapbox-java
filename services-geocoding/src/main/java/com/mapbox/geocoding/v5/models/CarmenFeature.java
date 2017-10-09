@@ -79,7 +79,7 @@ public abstract class CarmenFeature {
    * {@link Feature}.
    *
    * @return a String which describes the TYPE of geometry, for this object it will always return
-   * {@code Feature}
+   *   {@code Feature}
    * @since 1.0.0
    */
   @NonNull
@@ -102,7 +102,7 @@ public abstract class CarmenFeature {
    * A feature may have a commonly used identifier which is either a unique String or number.
    *
    * @return a String containing this features unique identification or null if one wasn't given
-   * during creation.
+   *   during creation.
    * @since 1.0.0
    */
   @Nullable
@@ -145,7 +145,7 @@ public abstract class CarmenFeature {
    * hierarchy.
    *
    * @return human-readable text representing the full result hierarchy (e.g. "Austin, Texas,
-   * United States")
+   *   United States")
    * @since 1.0.0
    */
   @Nullable
@@ -170,7 +170,7 @@ public abstract class CarmenFeature {
    * address property for {@code poi} features, this property is outside the  properties object.
    *
    * @return while the string content isn't guaranteed, and might return null, in many cases, this
-   * will be the house number
+   *   will be the house number
    * @since 1.0.0
    */
   @Nullable
@@ -201,7 +201,7 @@ public abstract class CarmenFeature {
    * telephone, address, and other information pertaining to this feature.
    *
    * @return a list made up of {@link CarmenContext} which might contain additional information
-   * about this specific feature
+   *   about this specific feature
    * @since 1.0.0
    */
   @Nullable

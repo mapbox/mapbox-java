@@ -1,10 +1,11 @@
 package com.mapbox.geocoding.v5;
 
+import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.geocoding.v5.GeocodingCriteria.GeocodingModeCriteria;
@@ -22,20 +23,17 @@ import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * This class gives you access to both Mapbox forward and reverse geocoding.

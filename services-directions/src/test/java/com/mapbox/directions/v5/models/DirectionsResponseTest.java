@@ -1,25 +1,23 @@
 package com.mapbox.directions.v5.models;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import com.mapbox.directions.v5.MapboxDirections;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.TestUtils;
-
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import java.io.IOException;
-
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import java.io.IOException;
 
 public class DirectionsResponseTest extends TestUtils {
 
@@ -81,13 +79,13 @@ public class DirectionsResponseTest extends TestUtils {
       .code("100")
       .build();
     assertNotNull(response);
- }
+  }
 
   @Test
   public void code_returnsAccurateCode() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
-      .origin(Point.fromLngLat(-122.416667,37.783333))
-      .destination(Point.fromLngLat(-121.900000,37.333333))
+      .origin(Point.fromLngLat(-122.416667, 37.783333))
+      .destination(Point.fromLngLat(-121.900000, 37.333333))
       .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
       .build();

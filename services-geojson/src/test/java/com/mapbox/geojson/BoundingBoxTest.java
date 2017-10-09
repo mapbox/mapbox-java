@@ -1,17 +1,16 @@
 package com.mapbox.geojson;
 
-import com.mapbox.services.TestUtils;
-
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.mapbox.services.TestUtils;
+import org.junit.Test;
+
 public final class BoundingBoxTest extends TestUtils {
 
   @Test
-  public final void sanity() throws Exception {
+  public void sanity() throws Exception {
     Point southwest = Point.fromLngLat(2.0, 2.0);
     Point northeast = Point.fromLngLat(4.0, 4.0);
     BoundingBox boundingBox = BoundingBox.fromPoints(southwest, northeast);
@@ -19,7 +18,7 @@ public final class BoundingBoxTest extends TestUtils {
   }
 
   @Test
-  public final void southWest_doesReturnMostSouthwestCoordinate() throws Exception {
+  public void southWest_doesReturnMostSouthwestCoordinate() throws Exception {
     Point southwest = Point.fromLngLat(1.0, 2.0);
     Point northeast = Point.fromLngLat(3.0, 4.0);
     BoundingBox boundingBox = BoundingBox.fromPoints(southwest, northeast);
@@ -27,7 +26,7 @@ public final class BoundingBoxTest extends TestUtils {
   }
 
   @Test
-  public final void northEast_doesReturnMostNortheastCoordinate() throws Exception {
+  public void northEast_doesReturnMostNortheastCoordinate() throws Exception {
     Point southwest = Point.fromLngLat(1.0, 2.0);
     Point northeast = Point.fromLngLat(3.0, 4.0);
     BoundingBox boundingBox = BoundingBox.fromPoints(southwest, northeast);
@@ -35,7 +34,7 @@ public final class BoundingBoxTest extends TestUtils {
   }
 
   @Test
-  public final void west_doesReturnMostWestCoordinate() throws Exception {
+  public void west_doesReturnMostWestCoordinate() throws Exception {
     Point southwest = Point.fromLngLat(1.0, 2.0);
     Point northeast = Point.fromLngLat(3.0, 4.0);
     BoundingBox boundingBox = BoundingBox.fromPoints(southwest, northeast);
@@ -43,7 +42,7 @@ public final class BoundingBoxTest extends TestUtils {
   }
 
   @Test
-  public final void south_doesReturnMostSouthCoordinate() throws Exception {
+  public void south_doesReturnMostSouthCoordinate() throws Exception {
     Point southwest = Point.fromLngLat(1.0, 2.0);
     Point northeast = Point.fromLngLat(3.0, 4.0);
     BoundingBox boundingBox = BoundingBox.fromPoints(southwest, northeast);
@@ -51,7 +50,7 @@ public final class BoundingBoxTest extends TestUtils {
   }
 
   @Test
-  public final void east_doesReturnMostEastCoordinate() throws Exception {
+  public void east_doesReturnMostEastCoordinate() throws Exception {
     Point southwest = Point.fromLngLat(1.0, 2.0);
     Point northeast = Point.fromLngLat(3.0, 4.0);
     BoundingBox boundingBox = BoundingBox.fromPoints(southwest, northeast);
@@ -59,7 +58,7 @@ public final class BoundingBoxTest extends TestUtils {
   }
 
   @Test
-  public final void north_doesReturnMostNorthCoordinate() throws Exception {
+  public void north_doesReturnMostNorthCoordinate() throws Exception {
     Point southwest = Point.fromLngLat(1.0, 2.0);
     Point northeast = Point.fromLngLat(3.0, 4.0);
     BoundingBox boundingBox = BoundingBox.fromPoints(southwest, northeast);

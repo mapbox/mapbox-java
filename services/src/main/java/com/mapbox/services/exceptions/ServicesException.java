@@ -1,5 +1,11 @@
 package com.mapbox.services.exceptions;
 
+/**
+ * A form of {@code Throwable} that indicates conditions that a reasonable application might
+ * want to catch.
+ *
+ * @since 1.0.0
+ */
 public class ServicesException extends RuntimeException {
 
   /**

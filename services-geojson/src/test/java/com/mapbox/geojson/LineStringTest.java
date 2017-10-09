@@ -1,17 +1,16 @@
 package com.mapbox.geojson;
 
-import com.mapbox.services.TestUtils;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
+import com.mapbox.services.TestUtils;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 public class LineStringTest extends TestUtils {
 
@@ -72,8 +71,8 @@ public class LineStringTest extends TestUtils {
     BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
     compareJson(lineString.toJson(),
-      "{\"coordinates\":[[1,1],[2,2],[3,3]]," +
-        "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}");
+      "{\"coordinates\":[[1,1],[2,2],[3,3]],"
+        + "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}");
   }
 
   @Test

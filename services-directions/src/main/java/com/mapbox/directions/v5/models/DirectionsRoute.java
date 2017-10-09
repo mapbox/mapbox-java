@@ -1,7 +1,6 @@
 package com.mapbox.directions.v5.models;
 
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -86,6 +85,28 @@ public abstract class DirectionsRoute implements Serializable {
   public abstract List<RouteLeg> legs();
 
   /**
+   * Holds onto the parameter information used when making the directions request. Useful for
+   * re-requesting a directions route using the same information previously used.
+   *
+   * @return a {@link RouteOptions}s object which holds onto critical information from the request
+   *   that cannot be derived directly from the directions route
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract RouteOptions routeOptions();
+
+  /**
+   * Convert the current {@link DirectionsRoute} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the project resulting in
+   * an updated and modifier {@link DirectionsRoute}.
+   *
+   * @return a {@link DirectionsRoute.Builder} with the same values set to match the ones defined
+   *   in this {@link DirectionsRoute}
+   * @since 3.0.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -159,6 +180,16 @@ public abstract class DirectionsRoute implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder legs(@Nullable List<RouteLeg> legs);
+
+    /**
+     * Holds onto the parameter information used when making the directions request.
+     *
+     * @param routeOptions a {@link RouteOptions}s object which holds onto critical information from
+     *                     the request that cannot be derived directly from the directions route
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder routeOptions(@Nullable RouteOptions routeOptions);
 
     /**
      * Build a new {@link DirectionsRoute} object.
