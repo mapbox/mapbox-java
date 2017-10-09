@@ -476,11 +476,10 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   }
 
   private void registerLocationUpdates() {
-    // TODO This has to be uncommented when https://github.com/mapbox/mapbox-gl-native/pull/9488 lands
-    // if (locationEngine == null) {
-    LocationEngineProvider locationEngineProvider = new LocationEngineProvider(context);
-    locationEngine = locationEngineProvider.obtainBestLocationEngineAvailable();
-    // }
+    if (locationEngine == null) {
+      LocationEngineProvider locationEngineProvider = new LocationEngineProvider(context);
+      locationEngine = locationEngineProvider.obtainBestLocationEngineAvailable();
+    }
 
     locationEngine.addLocationEngineListener(this);
     locationEngine.activate();
@@ -747,6 +746,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     } else {
       locationEngine.removeLocationEngineListener(this);
       locationEngine.removeLocationUpdates();
+      locationEngine.deactivate();
     }
     if (timer != null) {
       timer.cancel();

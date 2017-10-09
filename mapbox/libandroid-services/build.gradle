@@ -43,7 +43,7 @@ dependencies {
     compile rootProject.ext.dep.timber
 
     // LOST
-    compile(rootProject.ext.dep.lost) {
+    compile('com.mapzen.android:lost:1.1.1') {
         exclude group: 'com.google.guava'
     }
 

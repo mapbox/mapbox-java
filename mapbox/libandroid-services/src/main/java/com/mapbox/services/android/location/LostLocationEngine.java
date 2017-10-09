@@ -16,7 +16,10 @@ import java.lang.ref.WeakReference;
 
 /**
  * Sample LocationEngine using the Open Source Lost library
+ *
+ * @deprecated Use {@link com.mapbox.services.android.telemetry.location.LostLocationEngine} instead
  */
+@Deprecated
 public class LostLocationEngine extends LocationEngine implements LocationListener {
 
   private static LocationEngine instance;
@@ -24,12 +27,14 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
   private WeakReference<Context> context;
   private LostApiClient lostApiClient;
 
+  @Deprecated
   public LostLocationEngine(Context context) {
     super();
     this.context = new WeakReference<>(context);
     lostApiClient = new LostApiClient.Builder(this.context.get()).build();
   }
 
+  @Deprecated
   public static synchronized LocationEngine getLocationEngine(Context context) {
     if (instance == null) {
       instance = new LostLocationEngine(context.getApplicationContext());
@@ -41,7 +46,10 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
   /**
    * Activate the location engine which will connect whichever location provider you are using. You'll need to call
    * this before requesting user location updates using {@link LocationEngine#requestLocationUpdates()}.
+   *
+   * @deprecated Use {@link com.mapbox.services.android.telemetry.location.LostLocationEngine} instead
    */
+  @Deprecated
   @Override
   public void activate() {
     if (!lostApiClient.isConnected()) {
@@ -56,7 +64,10 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
    * Disconnect the location engine which is useful when you no longer need location updates or requesting the users
    * {@link LocationEngine#getLastLocation()}. Before deactivating, you'll need to stop request user location updates
    * using {@link LocationEngine#removeLocationUpdates()}.
+   *
+   * @deprecated Use {@link com.mapbox.services.android.telemetry.location.LostLocationEngine} instead
    */
+  @Deprecated
   @Override
   public void deactivate() {
     if (lostApiClient.isConnected()) {
@@ -69,7 +80,9 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
    * the rare case when you'd like to know if your location engine is connected or not.
    *
    * @return boolean true if the location engine has been activated/connected, else false.
+   * @deprecated Use {@link com.mapbox.services.android.telemetry.location.LostLocationEngine} instead
    */
+  @Deprecated
   @Override
   public boolean isConnected() {
     return lostApiClient.isConnected();
@@ -79,7 +92,9 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
    * Returns the Last known location if the location provider is connected and location permissions are granted.
    *
    * @return the last known location
+   * @deprecated Use {@link com.mapbox.services.android.telemetry.location.LostLocationEngine} instead
    */
+  @Deprecated
   @Override
   @Nullable
   public Location getLastLocation() {
@@ -92,7 +107,10 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
 
   /**
    * Request location updates to the location provider.
+   *
+   * @deprecated Use {@link com.mapbox.services.android.telemetry.location.LostLocationEngine} instead
    */
+  @Deprecated
   @Override
   public void requestLocationUpdates() {
     LocationRequest request = LocationRequest.create();
@@ -124,6 +142,7 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
     }
   }
 
+  @Deprecated
   @Override
   public Type obtainType() {
     return Type.LOST;
@@ -131,7 +150,10 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
 
   /**
    * Dismiss ongoing location update to the location provider.
+   *
+   * @deprecated Use {@link com.mapbox.services.android.telemetry.location.LostLocationEngine} instead
    */
+  @Deprecated
   @Override
   public void removeLocationUpdates() {
     if (lostApiClient.isConnected()) {
@@ -143,7 +165,9 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
    * Invoked when the Location has changed.
    *
    * @param location the new location
+   * @deprecated Use {@link com.mapbox.services.android.telemetry.location.LostLocationEngine} instead
    */
+  @Deprecated
   @Override
   public void onLocationChanged(Location location) {
     for (LocationEngineListener listener : locationListeners) {
