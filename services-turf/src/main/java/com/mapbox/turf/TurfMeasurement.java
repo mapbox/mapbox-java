@@ -345,13 +345,11 @@ public class TurfMeasurement {
   private static double length(List<Point> coords, String units) {
     double travelled = 0;
     Point prevCoords = coords.get(0);
-    Point curCoords = coords.get(0);
-    Point temp;
+    Point curCoords;
     for (int i = 1; i < coords.size(); i++) {
-      travelled += distance(prevCoords, coords.get(i), units);
-      temp = prevCoords;
+      curCoords = coords.get(i);
+      travelled += distance(prevCoords, curCoords, units);
       prevCoords = curCoords;
-      curCoords = temp;
     }
     return travelled;
   }
