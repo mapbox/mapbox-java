@@ -367,12 +367,13 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
    * @return true if plugged in, false if not
    */
   private boolean isPluggedIn() {
-    int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-    if (chargePlug == BatteryManager.BATTERY_PLUGGED_USB
-      || chargePlug == BatteryManager.BATTERY_PLUGGED_AC) {
-      return true;
+    if (batteryStatus != null) {
+      int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+      if (chargePlug == BatteryManager.BATTERY_PLUGGED_USB
+        || chargePlug == BatteryManager.BATTERY_PLUGGED_AC) {
+        return true;
+      }
     }
-
     return false;
   }
 
