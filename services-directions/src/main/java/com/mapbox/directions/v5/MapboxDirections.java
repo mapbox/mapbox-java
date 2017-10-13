@@ -99,7 +99,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       continueStraight(),
       annotations(),
       language(),
-      roundaboutExits());
+      roundaboutExits(),
+      voiceInstructions());
 
     // Done
     return call;
@@ -146,6 +147,12 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           generateRouteOptions(response.body().routes())).build();
         callback.onResponse(call, Response.success(newResponse));
       }
+
+      @Override
+      public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+        super.onFailure(call, throwable);
+        callback.onFailure(call, throwable);
+      }
     });
   }
 
@@ -162,6 +169,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           .language(language())
           .radiuses(radiuses())
           .user(user())
+          .voiceInstructions(voiceInstructions())
           .build()
       ).build());
     }
@@ -237,6 +245,9 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
   @Nullable
   abstract String clientAppName();
+
+  @Nullable
+  abstract Boolean voiceInstructions();
 
   /**
    * Gets the call factory for creating {@link Call} instances.
@@ -562,6 +573,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       this.radiuses = radiuses;
       return this;
     }
+
+    public abstract Builder voiceInstructions(@Nullable Boolean voiceInstructions);
 
     @SuppressWarnings("WeakerAccess")
     protected abstract Builder radiuses(@Nullable String radiuses);

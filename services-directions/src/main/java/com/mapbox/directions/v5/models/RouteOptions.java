@@ -115,6 +115,15 @@ public abstract class RouteOptions {
   public abstract String annotations();
 
   /**
+   * Whether or not the request had voice instructions set to true or not.
+   *
+   * @return true if the original request included voice instructions
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract Boolean voiceInstructions();
+
+  /**
    * This builder can be used to set the values describing the {@link RouteOptions}.
    *
    * @since 3.0.0
@@ -198,6 +207,15 @@ public abstract class RouteOptions {
      * @since 3.0.0
      */
     public abstract Builder annotations(String annotations);
+
+    /**
+     * Whether or not the request had voice instructions set to true or not.
+     *
+     * @param voiceInstructions true if the original request included voice instructions
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder voiceInstructions(Boolean voiceInstructions);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.

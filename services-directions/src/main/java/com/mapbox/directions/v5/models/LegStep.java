@@ -134,6 +134,9 @@ public abstract class LegStep implements Serializable {
   @Nullable
   public abstract StepManeuver maneuver();
 
+  @Nullable
+  public abstract List<VoiceInstructions> voiceInstructions();
+
   /**
    * Specifies a decimal precision of edge weights, default value 1.
    *
@@ -284,6 +287,8 @@ public abstract class LegStep implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder maneuver(@Nullable StepManeuver maneuver);
+
+    public abstract Builder voiceInstructions(@Nullable List<VoiceInstructions> voiceInstructions);
 
     /**
      * Specifies a decimal precision of edge weights, default value 1.

@@ -39,6 +39,8 @@ public interface DirectionsService {
    * @param language         language of returned turn-by-turn text instructions
    * @param roundaboutExits  Add extra step when roundabouts occur with additional information for
    *                         the user
+   * @param voiceInstructions request that the response contain voice instruction information,
+   *                          useful for navigation
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */
@@ -58,6 +60,7 @@ public interface DirectionsService {
     @Query("continue_straight") Boolean continueStraight,
     @Query("annotations") String annotations,
     @Query("language") String language,
-    @Query("roundabout_exits") Boolean roundaboutExits
+    @Query("roundabout_exits") Boolean roundaboutExits,
+    @Query("voice_instructions") Boolean voiceInstructions
   );
 }
