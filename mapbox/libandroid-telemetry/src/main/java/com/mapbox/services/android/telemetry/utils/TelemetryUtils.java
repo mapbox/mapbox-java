@@ -199,8 +199,8 @@ public class TelemetryUtils {
    */
   public static int getVolumeLevel(Context context) {
     AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-    return (int) Math.floor(100.0 * audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM)
-        / audioManager.getStreamMaxVolume(AudioManager.STREAM_SYSTEM));
+    return (int) Math.floor(100.0 * audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
+        / audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
   }
 
   /**
