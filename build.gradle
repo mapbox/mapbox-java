@@ -57,3 +57,5 @@ subprojects {
   }
 }
 
+apply from: "${rootDir}/gradle/sonarqube.gradle"
+

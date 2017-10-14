@@ -26,6 +26,5 @@ dependencies {
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"
-apply from: "${rootDir}/gradle/sonarqube.gradle"
 apply from: "${rootDir}/gradle/jacoco.gradle"
 apply from: "${rootDir}/gradle/mvn-push.gradle"

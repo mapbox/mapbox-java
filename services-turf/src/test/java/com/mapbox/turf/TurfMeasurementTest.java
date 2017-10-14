@@ -100,23 +100,23 @@ public class TurfMeasurementTest extends TestUtils {
   public void testLineDistanceWithGeometries() throws IOException, TurfException {
     Feature route1 = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_ROUTE_ONE));
     Feature route2 = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_ROUTE_TWO));
-    assertEquals(356762, Math.round(TurfMeasurement.lineDistance((LineString) route1.geometry(),
+    assertEquals(202, Math.round(TurfMeasurement.lineDistance((LineString) route1.geometry(),
       UNIT_MILES)));
-    Assert.assertEquals(1344705.4251058456,
+    Assert.assertEquals(741.7787396994203,
       TurfMeasurement.lineDistance((LineString) route2.geometry(), UNIT_KILOMETERS), DELTA);
   }
 
   @Test
   public void testLineDistancePolygon() throws IOException, TurfException {
     Feature feature = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_POLYGON));
-    assertEquals(6588, Math.round(1000 * TurfMeasurement.lineDistance((Polygon) feature.geometry(),
+    assertEquals(5599, Math.round(1000 * TurfMeasurement.lineDistance((Polygon) feature.geometry(),
       UNIT_KILOMETERS)));
   }
 
   @Test
   public void testLineDistanceMultiLineString() throws IOException, TurfException {
     Feature feature = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_MULTILINESTRING));
-    assertEquals(8273d, Math.round(1000
+    assertEquals(4705d, Math.round(1000
       * TurfMeasurement.lineDistance((MultiLineString) feature.geometry(),
       UNIT_KILOMETERS)), DELTA);
   }
