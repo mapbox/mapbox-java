@@ -3,6 +3,7 @@ package com.mapbox.geojson.utils;
 import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -127,7 +128,7 @@ public class PolylineUtils {
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
    */
-  public static Point[] simplify(Point[] points) {
+  public static List<Point> simplify(List<Point> points) {
     return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
   }
 
@@ -142,7 +143,7 @@ public class PolylineUtils {
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
    */
-  public static Point[] simplify(Point[] points, double tolerance) {
+  public static List<Point> simplify(List<Point> points, double tolerance) {
     return simplify(points, tolerance, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
   }
 
@@ -157,7 +158,7 @@ public class PolylineUtils {
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
    */
-  public static Point[] simplify(Point[] points, boolean highestQuality) {
+  public static List<Point> simplify(List<Point> points, boolean highestQuality) {
     return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, highestQuality);
   }
 
@@ -174,8 +175,8 @@ public class PolylineUtils {
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
    */
-  public static Point[] simplify(Point[] points, double tolerance, boolean highestQuality) {
-    if (points.length <= 2) {
+  public static List<Point> simplify(List<Point> points, double tolerance, boolean highestQuality) {
+    if (points.size() <= 2) {
       return points;
     }
 
@@ -228,14 +229,14 @@ public class PolylineUtils {
   /**
    * Basic distance-based simplification.
    */
-  private static Point[] simplifyRadialDist(Point[] points, double sqTolerance) {
-    Point prevPoint = points[0];
+  private static List<Point> simplifyRadialDist(List<Point> points, double sqTolerance) {
+    Point prevPoint = points.get(0);
     ArrayList<Point> newPoints = new ArrayList<>();
     newPoints.add(prevPoint);
     Point point = null;
 
-    for (int i = 1, len = points.length; i < len; i++) {
-      point = points[i];
+    for (int i = 1, len = points.size(); i < len; i++) {
+      point = points.get(i);
 
       if (getSqDist(point, prevPoint) > sqTolerance) {
         newPoints.add(point);
@@ -246,19 +247,18 @@ public class PolylineUtils {
     if (!prevPoint.equals(point)) {
       newPoints.add(point);
     }
-
-    return newPoints.toArray(new Point[newPoints.size()]);
+    return newPoints;
   }
 
   private static List<Point> simplifyDpStep(
-    Point[] points, int first, int last, double sqTolerance, List<Point> simplified) {
+    List<Point> points, int first, int last, double sqTolerance, List<Point> simplified) {
     double maxSqDist = sqTolerance;
     int index = 0;
 
     ArrayList<Point> stepList = new ArrayList<>();
 
     for (int i = first + 1; i < last; i++) {
-      double sqDist = getSqSegDist(points[i], points[first], points[last]);
+      double sqDist = getSqSegDist(points.get(i), points.get(first), points.get(last));
       if (sqDist > maxSqDist) {
         index = i;
         maxSqDist = sqDist;
@@ -270,7 +270,7 @@ public class PolylineUtils {
         stepList.addAll(simplifyDpStep(points, first, index, sqTolerance, simplified));
       }
 
-      stepList.add(points[index]);
+      stepList.add(points.get(index));
 
       if (last - index > 1) {
         stepList.addAll(simplifyDpStep(points, index, last, sqTolerance, simplified));
@@ -283,13 +283,12 @@ public class PolylineUtils {
   /**
    * Simplification using Ramer-Douglas-Peucker algorithm.
    */
-  private static Point[] simplifyDouglasPeucker(Point[] points, double sqTolerance) {
-    int last = points.length - 1;
-
+  private static List<Point> simplifyDouglasPeucker(List<Point> points, double sqTolerance) {
+    int last = points.size() - 1;
     ArrayList<Point> simplified = new ArrayList<>();
-    simplified.add(points[0]);
+    simplified.add(points.get(0));
     simplified.addAll(simplifyDpStep(points, 0, last, sqTolerance, simplified));
-    simplified.add(points[last]);
-    return simplified.toArray(new Point[simplified.size()]);
+    simplified.add(points.get(last));
+    return simplified;
   }
 }

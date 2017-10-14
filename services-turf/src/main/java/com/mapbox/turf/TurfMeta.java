@@ -18,7 +18,11 @@ import java.util.List;
  * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
  * @since 2.0.0
  */
-public class TurfMeta {
+public final class TurfMeta {
+
+  private TurfMeta() {
+    // Private constructor preventing initialization of this class
+  }
 
   /**
    * Get all coordinates from a {@link Point} object, returning a {@code List} of Point objects.

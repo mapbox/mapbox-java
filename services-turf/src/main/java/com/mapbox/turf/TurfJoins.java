@@ -15,7 +15,11 @@ import java.util.List;
  * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
  * @since 1.3.0
  */
-public class TurfJoins {
+public final class TurfJoins {
+
+  private TurfJoins() {
+    // Private constructor preventing initialization of this class
+  }
 
   /**
    * Takes a {@link Point} and a {@link Polygon} and determines if the point resides inside the

@@ -6,10 +6,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.mapbox.services.TestUtils;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PolygonTest extends TestUtils {
@@ -27,6 +31,33 @@ public class PolygonTest extends TestUtils {
     LineString outer = LineString.fromLngLats(points);
     Polygon polygon = Polygon.fromOuterInner(outer);
     assertNotNull(polygon);
+  }
+
+  @Test
+  public void fromLngLats_tripleDoubleArray() throws Exception {
+    double[][][] coordinates = new double[][][] {
+      {{100.0, 0.0},
+        {101.0, 0.0},
+        {101.0, 1.0},
+        {100.0, 1.0},
+        {100.0, 0.0}}
+    };
+    Polygon polygon = Polygon.fromLngLats(coordinates);
+    assertNull(polygon.inner());
+    assertEquals(Point.fromLngLat(100.0, 0.0), polygon.coordinates().get(0).get(0));
+  }
+
+  @Test
+  public void fromOuterInner_handlesSingleLineStringCorrectly() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(10.0, 2.0));
+    points.add(Point.fromLngLat(5.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 2.0));
+    points.add(Point.fromLngLat(10.0, 2.0));
+    LineString lineString = LineString.fromLngLats(points);
+
+    Polygon polygon = Polygon.fromOuterInner(lineString);
+    assertEquals(Point.fromLngLat(10.0, 2.0), polygon.coordinates().get(0).get(0));
   }
 
   @Test

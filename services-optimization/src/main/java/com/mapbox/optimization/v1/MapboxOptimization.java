@@ -1,5 +1,6 @@
 package com.mapbox.optimization.v1;
 
+import static com.mapbox.directions.v5.DirectionsCriteria.*;
 import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
 
 import android.support.annotation.FloatRange;
@@ -8,13 +9,8 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.geojson.Point;
-import com.mapbox.optimization.v1.OptimizationCriteria.AnnotationCriteria;
-import com.mapbox.optimization.v1.OptimizationCriteria.DestinationCriteria;
-import com.mapbox.optimization.v1.OptimizationCriteria.GeometriesCriteria;
-import com.mapbox.optimization.v1.OptimizationCriteria.OverviewCriteria;
-import com.mapbox.optimization.v1.OptimizationCriteria.ProfileCriteria;
-import com.mapbox.optimization.v1.OptimizationCriteria.SourceCriteria;
 import com.mapbox.optimization.v1.models.OptimizationAdapterFactory;
 import com.mapbox.optimization.v1.models.OptimizationResponse;
 import com.mapbox.services.MapboxService;
@@ -214,9 +210,9 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
   public static Builder builder() {
     return new AutoValue_MapboxOptimization.Builder()
       .baseUrl(Constants.BASE_API_URL)
-      .profile(OptimizationCriteria.PROFILE_DRIVING)
-      .user(OptimizationCriteria.PROFILE_DEFAULT_USER)
-      .geometries(OptimizationCriteria.GEOMETRY_POLYLINE6);
+      .profile(PROFILE_DRIVING)
+      .user(PROFILE_DEFAULT_USER)
+      .geometries(GEOMETRY_POLYLINE6);
   }
 
   /**
@@ -235,7 +231,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
-     * always remain the default value of {@link OptimizationCriteria#PROFILE_DEFAULT_USER}.
+     * always remain the default value of {@link DirectionsCriteria#PROFILE_DEFAULT_USER}.
      *
      * @param user a non-null string which will replace the default user used in the directions
      *             request
@@ -295,8 +291,8 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * It is possible to explicitly set the start or end coordinate of the trip. When source? is set
      * to first, the first coordinate is used as the start coordinate of the trip in the output.
      * When destination is set to last, the last coordinate will be used as destination of the trip
-     * in the returned output. If you specify {@link OptimizationCriteria#DESTINATION_ANY}/
-     * {@link OptimizationCriteria#SOURCE_ANY}, any of the coordinates can be used as the first or
+     * in the returned output. If you specify {@link DirectionsCriteria#DESTINATION_ANY}/
+     * {@link DirectionsCriteria#SOURCE_ANY}, any of the coordinates can be used as the first or
      * last coordinate in the output.
      *
      * @param roundTrip true if you'd like the route to return to the origin, else false
@@ -308,8 +304,8 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
     public abstract Builder roundTrip(@Nullable Boolean roundTrip);
 
     /**
-     * Returned route starts at {@link OptimizationCriteria#SOURCE_ANY} or
-     * {@link OptimizationCriteria#SOURCE_FIRST} coordinate. Null can also be passed in to reset
+     * Returned route starts at {@link DirectionsCriteria#SOURCE_ANY} or
+     * {@link DirectionsCriteria#SOURCE_FIRST} coordinate. Null can also be passed in to reset
      * this value back to the API default if needed.
      *
      * @param source one of the values in {@link SourceCriteria}
@@ -319,8 +315,8 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
     public abstract Builder source(@Nullable @SourceCriteria String source);
 
     /**
-     * Returned route ends at {@link OptimizationCriteria#DESTINATION_ANY} or
-     * {@link OptimizationCriteria#DESTINATION_LAST} coordinate.
+     * Returned route ends at {@link DirectionsCriteria#DESTINATION_ANY} or
+     * {@link DirectionsCriteria#DESTINATION_LAST} coordinate.
      *
      * @param destination either {@code "any" or "last"}
      * @return this builder for chaining options together
@@ -331,7 +327,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
     /**
      * alter the default geometry being returned for the directions route. A null value will reset
      * this field to the APIs default value vs this SDKs default value of
-     * {@link OptimizationCriteria#GEOMETRY_POLYLINE6}.
+     * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
      * <p>
      * Note that while the API supports GeoJson as an option for geometry, this SDK intentionally
      * removes this as an option since an encoded string for the geometry significantly reduces
@@ -346,9 +342,9 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
     public abstract Builder geometries(@Nullable @GeometriesCriteria String geometries);
 
     /**
-     * Type of returned overview geometry. Can be {@link OptimizationCriteria#OVERVIEW_FULL} (the most
-     * detailed geometry available), {@link OptimizationCriteria#OVERVIEW_SIMPLIFIED} (a simplified
-     * version of the full geometry), or {@link OptimizationCriteria#OVERVIEW_FALSE} (no overview
+     * Type of returned overview geometry. Can be {@link DirectionsCriteria#OVERVIEW_FULL} (the most
+     * detailed geometry available), {@link DirectionsCriteria#OVERVIEW_SIMPLIFIED} (a simplified
+     * version of the full geometry), or {@link DirectionsCriteria#OVERVIEW_FALSE} (no overview
      * geometry). The default is simplified. Passing in null will use the APIs default setting for
      * the overview field.
      *
@@ -429,10 +425,10 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
 
     /**
      * Whether or not to return additional metadata along the route. Possible values are:
-     * {@link OptimizationCriteria#ANNOTATION_DISTANCE},
-     * {@link OptimizationCriteria#ANNOTATION_DURATION},
-     * {@link OptimizationCriteria#ANNOTATION_DURATION} and
-     * {@link OptimizationCriteria#ANNOTATION_CONGESTION}. Several annotation can be used by
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE},
+     * {@link DirectionsCriteria#ANNOTATION_DURATION},
+     * {@link DirectionsCriteria#ANNOTATION_DURATION} and
+     * {@link DirectionsCriteria#ANNOTATION_CONGESTION}. Several annotation can be used by
      * separating them with {@code ,}.
      *
      * @param annotations string referencing one of the annotation direction criteria's. The strings

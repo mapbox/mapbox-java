@@ -7,3 +7,7 @@ dependencies {
 //  compile project(":services-matching")
   compile project(":services-staticmap")
 }
+
+sonarqube {
+  skipProject = true
+}

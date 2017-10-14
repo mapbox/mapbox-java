@@ -134,6 +134,13 @@ public abstract class LegStep implements Serializable {
   @Nullable
   public abstract StepManeuver maneuver();
 
+  /**
+   * The voice instructions object is useful for navigation sessions providing well spoken text
+   * instructions along with the distance from the maneuver the instructions should be said.
+   *
+   * @return a list of voice instructions which can be triggered on this current step
+   * @since 3.0.0
+   */
   @Nullable
   public abstract List<VoiceInstructions> voiceInstructions();
 
@@ -288,6 +295,14 @@ public abstract class LegStep implements Serializable {
      */
     public abstract Builder maneuver(@Nullable StepManeuver maneuver);
 
+    /**
+     * The voice instructions object is useful for navigation sessions providing well spoken text
+     * instructions along with the distance from the maneuver the instructions should be said.
+     *
+     * @param voiceInstructions a list of voice instructions which can be triggered on this current
+     *                          step
+     * @since 3.0.0
+     */
     public abstract Builder voiceInstructions(@Nullable List<VoiceInstructions> voiceInstructions);
 
     /**

@@ -8,7 +8,13 @@ import com.mapbox.geojson.Point;
 import com.mapbox.services.TestUtils;
 import com.mapbox.services.exceptions.ServicesException;
 
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.hamcrest.junit.ExpectedException;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -17,6 +23,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapboxOptimizationTest extends TestUtils {
+
+  private static final String OPTIMIZATION_DISTRIBUTION = "optimized_trip_distributions.json";
+  private static final String OPTIMIZATION_FIXTURE = "optimization.json";
+  private static final String OPTIMIZATION_STEPS= "optimized_trip_steps.json";
+
+  private MockWebServer server;
+  private HttpUrl mockUrl;
+
+  @Before
+  public void setUp() throws IOException {
+    server = new MockWebServer();
+
+    server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
+      @Override
+      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+
+        String resource = OPTIMIZATION_FIXTURE;
+
+        try {
+          String body = loadJsonFixture(resource);
+          return new MockResponse().setBody(body);
+        } catch (IOException ioException) {
+          throw new RuntimeException(ioException);
+        }
+      }
+    });
+    server.start();
+    mockUrl = server.url("");
+  }
+
+  @After
+  public void tearDown() throws IOException {
+    server.shutdown();
+  }
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -69,7 +109,6 @@ public class MapboxOptimizationTest extends TestUtils {
     MapboxOptimization client = MapboxOptimization.builder()
       .coordinate(Point.fromLngLat(1.23456, 1.23456))
       .coordinate(Point.fromLngLat(20.9876, 20.9876))
-
       .accessToken(ACCESS_TOKEN)
       .build();
 

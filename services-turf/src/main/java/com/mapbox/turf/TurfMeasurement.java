@@ -19,7 +19,11 @@ import java.util.List;
  * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
  * @since 1.2.0
  */
-public class TurfMeasurement {
+public final class TurfMeasurement {
+
+  private TurfMeasurement() {
+    // Private constructor preventing initialization of this class
+  }
 
   /**
    * Takes two {@link Point}s and finds the geographic bearing between them.
@@ -218,7 +222,7 @@ public class TurfMeasurement {
    * @param distance along the linestring geometry which the point should be placed on
    * @param units    one of the units found inside {@link TurfUnitCriteria}
    * @return a {@link Point} which is on the linestring provided and at the distance from the origin
-   * of that line to the end of the distance
+   *   of that line to the end of the distance
    * @since 1.3.0
    */
   public static Point along(@NonNull LineString line, @FloatRange(from = 0) double distance,

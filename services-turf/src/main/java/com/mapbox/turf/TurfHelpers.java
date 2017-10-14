@@ -16,7 +16,7 @@ import java.util.Map;
  * @see <a href="http://turfjs.org/docs/">Turfjs documentation</a>
  * @since 1.2.0
  */
-public class TurfHelpers {
+public final class TurfHelpers {
 
   private static final Map<String, Double> FACTORS;
 
@@ -35,6 +35,10 @@ public class TurfHelpers {
     FACTORS.put(TurfConstants.UNIT_CENTIMETRES, 6.373e+8d);
     FACTORS.put(TurfConstants.UNIT_METRES, 6373000d);
     FACTORS.put(TurfConstants.UNIT_KILOMETRES, 6373d);
+  }
+
+  private TurfHelpers() {
+    // Private constructor preventing initialization of this class
   }
 
   /**

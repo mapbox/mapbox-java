@@ -175,4 +175,64 @@ public final class DirectionsCriteria {
   })
   public @interface AnnotationCriteria {
   }
+
+  // Optimization API criteria's
+
+  /**
+   * Returned route starts at the first provided coordinate in the list. Used specifically for the
+   * Optimization API.
+   *
+   * @since 2.1.0
+   */
+  public static final String SOURCE_FIRST = "first";
+
+  /**
+   * Returned route starts at any of the provided coordinate in the list. Used specifically for the
+   * Optimization API.
+   *
+   * @since 2.1.0
+   */
+  public static final String SOURCE_ANY = "any";
+
+  /**
+   * Retention policy for the source parameter in the Optimization API.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    SOURCE_ANY,
+    SOURCE_FIRST,
+  })
+  public @interface SourceCriteria {
+  }
+
+  /**
+   * Returned route ends at any of the provided coordinate in the list. Used specifically for the
+   * Optimization API.
+   *
+   * @since 3.0.0
+   */
+  public static final String DESTINATION_ANY = "any";
+
+  /**
+   * Returned route ends at the last provided coordinate in the list. Used specifically for the
+   * Optimization API.
+   *
+   * @since 3.0.0
+   */
+  public static final String DESTINATION_LAST = "last";
+
+  /**
+   * Retention policy for the destination parameter in the Optimization API.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    DESTINATION_ANY,
+    DESTINATION_LAST,
+  })
+  public @interface DestinationCriteria {
+  }
 }

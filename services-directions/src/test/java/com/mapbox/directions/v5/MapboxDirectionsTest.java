@@ -1,5 +1,7 @@
 package com.mapbox.directions.v5;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -362,10 +364,10 @@ public class MapboxDirectionsTest extends TestUtils {
       .origin(coordinates.get(0))
       .addWaypoint(coordinates.get(1))
       .destination(coordinates.get(2))
-      .radiuses(new double[] {100, Double.POSITIVE_INFINITY, 100})
+      .radiuses(100, Double.POSITIVE_INFINITY, 100)
       .build();
 
-    assertTrue(client.executeCall().raw().request().url().toString()
-      .contains("radiuses=100;unlimited;100"));
+    assertThat(client.cloneCall().request().url().toString(),
+      containsString("radiuses=100;unlimited;100"));
   }
 }

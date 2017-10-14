@@ -2,8 +2,10 @@ package com.mapbox.services;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.google.gson.JsonParser;
+import org.junit.Assert;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,6 +14,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TestUtils {
@@ -46,5 +49,13 @@ public class TestUtils {
     ObjectInputStream ois = new ObjectInputStream(bais);
     Object object = ois.readObject();
     return cl.cast(object);
+  }
+
+  /**
+   * Comes from Google Utils Test Case
+   */
+  public static void expectNearNumber(double expected, double actual, double epsilon) {
+    assertTrue(String.format("Expected %f to be near %f", actual, expected),
+      Math.abs(expected - actual) <= epsilon);
   }
 }

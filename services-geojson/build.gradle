@@ -17,6 +17,7 @@ dependencies {
   // Test Dependencies
   testCompile dependenciesList.okhttp3Mockwebserver
   testCompile project(path: ':services', configuration: 'testOutput')
+  testCompile project(":services-turf")
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"

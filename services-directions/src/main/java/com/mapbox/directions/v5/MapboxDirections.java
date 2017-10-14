@@ -118,7 +118,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   public Response<DirectionsResponse> executeCall() throws IOException {
     Response<DirectionsResponse> response = getCall().execute();
     if (response.body() == null || response.body().routes().isEmpty()) {
-      return response;
+      return Response.success(response.body(), response.headers());
     }
     List<DirectionsRoute> routes = response.body().routes();
     return Response.success(response.body().toBuilder().routes(
@@ -574,10 +574,23 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       return this;
     }
 
-    public abstract Builder voiceInstructions(@Nullable Boolean voiceInstructions);
-
     @SuppressWarnings("WeakerAccess")
     protected abstract Builder radiuses(@Nullable String radiuses);
+
+    /**
+     * Request voice Instructions objects to be returned in your response. This offers instructions
+     * specific for navigation and provides well spoken text instructions along with the distance
+     * from the maneuver the instructions should be said.
+     * <p>
+     * It's important to note that the {@link #steps(Boolean)} should be true or else these results
+     * wont be returned.
+     * </p>
+     *
+     * @param voiceInstructions true if you'd like voice instruction objects be attached to your
+     *                          response
+     * @since 3.0.0
+     */
+    public abstract Builder voiceInstructions(@Nullable Boolean voiceInstructions);
 
     /**
      * Base package name or other simple string identifier. Used inside the calls user agent header.

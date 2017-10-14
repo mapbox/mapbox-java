@@ -16,7 +16,13 @@ import java.util.List;
  * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
  * @since 1.2.0
  */
-public class TurfMisc {
+public final class TurfMisc {
+
+  private static final String INDEX_KEY = "index";
+
+  private TurfMisc() {
+    // Private constructor preventing initialization of this class
+  }
 
   /**
    * Takes a line, a start {@link Point}, and a stop point and returns the line in between those
@@ -50,6 +56,7 @@ public class TurfMisc {
    */
   public static LineString lineSlice(@NonNull Point startPt, @NonNull Point stopPt,
                                      @NonNull LineString line) {
+
     List<Point> coords = line.coordinates();
 
     if (coords.size() < 2) {
@@ -62,8 +69,8 @@ public class TurfMisc {
     Feature startVertex = pointOnLine(startPt, coords);
     Feature stopVertex = pointOnLine(stopPt, coords);
     List<Feature> ends = new ArrayList<>();
-    if ((int) startVertex.getNumberProperty("index")
-      <= (int) stopVertex.getNumberProperty("index")) {
+    if ((int) startVertex.getNumberProperty(INDEX_KEY)
+      <= (int) stopVertex.getNumberProperty(INDEX_KEY)) {
       ends.add(startVertex);
       ends.add(stopVertex);
     } else {
@@ -72,8 +79,8 @@ public class TurfMisc {
     }
     List<Point> points = new ArrayList<>();
     points.add((Point) ends.get(0).geometry());
-    for (int i = (int) ends.get(0).getNumberProperty("index") + 1;
-         i < (int) ends.get(1).getNumberProperty("index") + 1; i++) {
+    for (int i = (int) ends.get(0).getNumberProperty(INDEX_KEY) + 1;
+         i < (int) ends.get(1).getNumberProperty(INDEX_KEY) + 1; i++) {
       points.add(coords.get(i));
     }
     points.add((Point) ends.get(1).geometry());
@@ -138,18 +145,18 @@ public class TurfMisc {
       if ((double) start.getNumberProperty("dist")
         < (double) closestPt.getNumberProperty("dist")) {
         closestPt = start;
-        closestPt.addNumberProperty("index", i);
+        closestPt.addNumberProperty(INDEX_KEY, i);
       }
       if ((double) stop.getNumberProperty("dist")
         < (double) closestPt.getNumberProperty("dist")) {
         closestPt = stop;
-        closestPt.addNumberProperty("index", i);
+        closestPt.addNumberProperty(INDEX_KEY, i);
       }
       if (intersectPt != null
         && (double) intersectPt.getNumberProperty("dist")
         < (double) closestPt.getNumberProperty("dist")) {
         closestPt = intersectPt;
-        closestPt.addNumberProperty("index", i);
+        closestPt.addNumberProperty(INDEX_KEY, i);
       }
     }
 

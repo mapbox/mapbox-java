@@ -282,6 +282,9 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   @Nullable
   public List<LineString> inner() {
+    if (coordinates().size() <= 1) {
+      return null;
+    }
     List<LineString> inner = new ArrayList<>();
     for (List<Point> points : coordinates().subList(1, coordinates().size() - 1)) {
       inner.add(LineString.fromLngLats(points));

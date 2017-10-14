@@ -5,7 +5,7 @@ package com.mapbox.geojson.constants;
  *
  * @since 3.0.0
  */
-public class GeoJsonConstants {
+public final class GeoJsonConstants {
 
   private GeoJsonConstants() {
     // Private constructor to prevent initializing of this class.

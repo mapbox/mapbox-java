@@ -13,18 +13,21 @@ import com.mapbox.services.utils.TextUtils;
  * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
  * @since 1.2.0
  */
-public class TurfInvariant {
+public final class TurfInvariant {
+
+  private TurfInvariant() {
+    // Private constructor preventing initialization of this class
+  }
 
   /**
    * Unwrap a coordinate {@link Point} from a Feature with a Point geometry.
    *
    * @param obj any value
    * @return a coordinate
-   * @throws TurfException signals that a Turf exception of some sort has occurred
    * @see <a href="http://turfjs.org/docs/#getcoord">Turf getCoord documentation</a>
    * @since 1.2.0
    */
-  public static Point getCoord(Feature obj) throws TurfException {
+  public static Point getCoord(Feature obj) {
     if (obj.geometry() instanceof Point) {
       return (Point) obj.geometry();
     }
@@ -37,11 +40,10 @@ public class TurfInvariant {
    * @param value any GeoJson object
    * @param type  expected GeoJson type
    * @param name  name of calling function
-   * @throws TurfException signals that a Turf exception of some sort has occurred
    * @see <a href="http://turfjs.org/docs/#geojsontype">Turf geojsonType documentation</a>
    * @since 1.2.0
    */
-  public static void geojsonType(GeoJson value, String type, String name) throws TurfException {
+  public static void geojsonType(GeoJson value, String type, String name) {
     if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)) {
       throw new TurfException("Type and name required");
     }
@@ -58,7 +60,6 @@ public class TurfInvariant {
    * @param feature with an expected geometry type
    * @param type    type expected GeoJson type
    * @param name    name of calling function
-   * @throws TurfException signals that a Turf exception of some sort has occurred
    * @see <a href="http://turfjs.org/docs/#featureof">Turf featureOf documentation</a>
    * @since 1.2.0
    */
@@ -67,11 +68,12 @@ public class TurfInvariant {
       throw new TurfException(".featureOf() requires a name");
     }
     if (feature == null || !feature.type().equals("Feature") || feature.geometry() == null) {
-      throw new TurfException("Invalid input to " + name + ", Feature with geometry required");
+      throw new TurfException(String.format(
+        "Invalid input to %s, Feature with geometry required", name));
     }
     if (feature.geometry() == null || !feature.geometry().type().equals(type)) {
-      throw new TurfException("Invalid input to " + name + ": must be a " + type
-        + ", given " + feature.geometry().type());
+      throw new TurfException(String.format(
+        "Invalid input to %s: must be a %s, given %s", name, type, feature.geometry().type()));
     }
   }
 
@@ -82,26 +84,26 @@ public class TurfInvariant {
    * @param featureCollection for which features will be judged
    * @param type              expected GeoJson type
    * @param name              name of calling function
-   * @throws TurfException signals that a Turf exception of some sort has occurred
    * @see <a href="http://turfjs.org/docs/#collectionof">Turf collectionOf documentation</a>
    * @since 1.2.0
    */
-  public static void collectionOf(FeatureCollection featureCollection, String type, String name)
-    throws TurfException {
+  public static void collectionOf(FeatureCollection featureCollection, String type, String name) {
     if (TextUtils.isEmpty(name)) {
       throw new TurfException("collectionOf() requires a name");
     }
     if (featureCollection == null || !featureCollection.type().equals("FeatureCollection")
       || featureCollection.features() == null) {
-      throw new TurfException("Invalid input to " + name + ", FeatureCollection required");
+      throw new TurfException(String.format(
+        "Invalid input to %s, FeatureCollection required", name));
     }
     for (Feature feature : featureCollection.features()) {
       if (feature == null || !feature.type().equals("Feature") || feature.geometry() == null) {
-        throw new TurfException("Invalid input to " + name + ", Feature with geometry required");
+        throw new TurfException(String.format(
+          "Invalid input to %s, Feature with geometry required", name));
       }
       if (feature.geometry() == null || !feature.geometry().type().equals(type)) {
-        throw new TurfException("Invalid input to " + name + ": must be a " + type
-          + ", given " + feature.geometry().type());
+        throw new TurfException(String.format(
+          "Invalid input to %s: must be a %s, given %s", name, type, feature.geometry().type()));
       }
     }
   }

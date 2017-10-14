@@ -7,16 +7,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Shows how to make a request using the minimum required params.
+ */
 public class BasicDirections {
-
   public static void main(String[] args) {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("pk.eyJ1IjoiY2FtbWFjZSIsImEiOiI5OGQxZjRmZGQ2YjU3Mzk1YjJmZTQ5ZDY2MTg1NDJiOCJ9.hIFoCKGAGOwQkKyVPvrxvQ")
-      .origin(Point.fromLngLat(-71.0555, 42.3612))
-      .destination(Point.fromLngLat(-71.1014, 42.3411))
-      .voiceInstructions(true)
-      .steps(true)
-      .build();
+
+    // 1. Build the directions request using the provided builder.
+    MapboxDirections directions = buildMapboXDirections();
 
     directions.enqueueCall(new Callback<DirectionsResponse>() {
       @Override
@@ -34,5 +32,15 @@ public class BasicDirections {
         System.out.println(throwable);
       }
     });
+  }
+
+  private static MapboxDirections buildMapboXDirections() {
+    return MapboxDirections.builder()
+      .accessToken("pk.eyJ1IjoiY2FtbWFjZSIsImEiOiI5OGQxZjRmZGQ2YjU3Mzk1YjJmZTQ5ZDY2MTg1NDJiOCJ9.hIFoCKGAGOwQkKyVPvrxvQ")
+      .origin(Point.fromLngLat(-71.0555, 42.3612))
+      .destination(Point.fromLngLat(-71.1014, 42.3411))
+      .voiceInstructions(true)
+      .steps(true)
+      .build();
   }
 }
