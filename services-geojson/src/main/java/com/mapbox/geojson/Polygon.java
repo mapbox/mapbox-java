@@ -282,11 +282,11 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   @Nullable
   public List<LineString> inner() {
-    if (coordinates().size() <= 1) {
-      return null;
-    }
     List<LineString> inner = new ArrayList<>();
-    for (List<Point> points : coordinates().subList(1, coordinates().size() - 1)) {
+    if (coordinates().size() <= 1) {
+      return inner;
+    }
+    for (List<Point> points : coordinates().subList(1, coordinates().size())) {
       inner.add(LineString.fromLngLats(points));
     }
     return inner;
@@ -371,7 +371,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     }
     if (!(lineString.coordinates().get(0).equals(
       lineString.coordinates().get(lineString.coordinates().size() - 1)))) {
-      throw new GeoJsonException("LinearRings require first and last coordinate to be identical");
+      throw new GeoJsonException("LinearRings require first and last coordinate to be identical.");
     }
     return true;
   }

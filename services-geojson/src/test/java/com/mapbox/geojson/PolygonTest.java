@@ -5,9 +5,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.services.TestUtils;
+import com.mapbox.services.exceptions.ServicesException;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -20,6 +24,9 @@ public class PolygonTest extends TestUtils {
 
   private static final String SAMPLE_POLYGON = "sample-polygon.json";
   private static final String SAMPLE_POLYGON_HOLES = "sample-polygon-holes.json";
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void sanity() throws Exception {
@@ -43,8 +50,33 @@ public class PolygonTest extends TestUtils {
         {100.0, 0.0}}
     };
     Polygon polygon = Polygon.fromLngLats(coordinates);
-    assertNull(polygon.inner());
+    assertEquals(0, polygon.inner().size());
     assertEquals(Point.fromLngLat(100.0, 0.0), polygon.coordinates().get(0).get(0));
+  }
+
+  @Test
+  public void fromOuterInner_throwsNotLinearRingException() throws Exception {
+    thrown.expect(GeoJsonException.class);
+    thrown.expectMessage("LinearRings need to be made up of 4 or more coordinates.");
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(10.0, 2.0));
+    points.add(Point.fromLngLat(5.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 2.0));
+    LineString lineString = LineString.fromLngLats(points);
+    Polygon polygon = Polygon.fromOuterInner(lineString);
+  }
+
+  @Test
+  public void fromOuterInner_throwsNotConnectedLinearRingException() throws Exception {
+    thrown.expect(GeoJsonException.class);
+    thrown.expectMessage("LinearRings require first and last coordinate to be identical.");
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(10.0, 2.0));
+    points.add(Point.fromLngLat(5.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 2.0));
+    points.add(Point.fromLngLat(5.0, 2.0));
+    LineString lineString = LineString.fromLngLats(points);
+    Polygon polygon = Polygon.fromOuterInner(lineString);
   }
 
   @Test
@@ -58,6 +90,54 @@ public class PolygonTest extends TestUtils {
 
     Polygon polygon = Polygon.fromOuterInner(lineString);
     assertEquals(Point.fromLngLat(10.0, 2.0), polygon.coordinates().get(0).get(0));
+  }
+
+  @Test
+  public void fromOuterInner_handlesOuterAndInnerLineStringCorrectly() throws Exception {
+    List<Point> outer = new ArrayList<>();
+    outer.add(Point.fromLngLat(10.0, 2.0));
+    outer.add(Point.fromLngLat(5.0, 2.0));
+    outer.add(Point.fromLngLat(3.0, 2.0));
+    outer.add(Point.fromLngLat(10.0, 2.0));
+    LineString outerLineString = LineString.fromLngLats(outer);
+
+    List<Point> inner = new ArrayList<>();
+    inner.add(Point.fromLngLat(5.0, 2.0));
+    inner.add(Point.fromLngLat(2.5, 2.0));
+    inner.add(Point.fromLngLat(1.5, 2.0));
+    inner.add(Point.fromLngLat(5.0, 2.0));
+    LineString innerLineString = LineString.fromLngLats(inner);
+
+    Polygon polygon = Polygon.fromOuterInner(outerLineString, innerLineString);
+    assertEquals(Point.fromLngLat(10.0, 2.0), polygon.coordinates().get(0).get(0));
+    assertEquals(outerLineString, polygon.outer());
+    assertEquals(1, polygon.inner().size());
+    assertEquals(innerLineString, polygon.inner().get(0));
+  }
+
+  @Test
+  public void fromOuterInner_withABoundingBox() throws Exception {
+    List<Point> outer = new ArrayList<>();
+    outer.add(Point.fromLngLat(10.0, 2.0));
+    outer.add(Point.fromLngLat(5.0, 2.0));
+    outer.add(Point.fromLngLat(3.0, 2.0));
+    outer.add(Point.fromLngLat(10.0, 2.0));
+    LineString outerLineString = LineString.fromLngLats(outer);
+
+    List<Point> inner = new ArrayList<>();
+    inner.add(Point.fromLngLat(5.0, 2.0));
+    inner.add(Point.fromLngLat(2.5, 2.0));
+    inner.add(Point.fromLngLat(1.5, 2.0));
+    inner.add(Point.fromLngLat(5.0, 2.0));
+    LineString innerLineString = LineString.fromLngLats(inner);
+
+    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    Polygon polygon = Polygon.fromOuterInner(outerLineString, bbox, innerLineString);
+
+    Assert.assertEquals(bbox, polygon.bbox());
+    Assert.assertEquals(outerLineString, polygon.outer());
+    Assert.assertEquals(1, polygon.inner().size());
+    Assert.assertEquals(innerLineString, polygon.inner().get(0));
   }
 
   @Test

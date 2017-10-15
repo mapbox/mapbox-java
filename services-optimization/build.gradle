@@ -2,7 +2,7 @@ apply plugin: 'java-library'
 
 dependencies {
 
-  compile project(":services")
+  compile project(":services-core")
   compile project(":services-geojson")
   compile project(":services-directions")
 
@@ -22,7 +22,7 @@ dependencies {
 
   // Test Dependencies
   testCompile dependenciesList.okhttp3Mockwebserver
-  testCompile project(path: ':services', configuration: 'testOutput')
+  testCompile project(path: ':services-core', configuration: 'testOutput')
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"

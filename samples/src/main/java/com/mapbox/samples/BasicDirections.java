@@ -1,11 +1,15 @@
 package com.mapbox.samples;
 
+import com.google.gson.Gson;
+import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.directions.v5.MapboxDirections;
 import com.mapbox.directions.v5.models.DirectionsResponse;
 import com.mapbox.geojson.Point;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.Arrays;
 
 /**
  * Shows how to make a request using the minimum required params.
@@ -19,12 +23,15 @@ public class BasicDirections {
     directions.enqueueCall(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+        System.out.println(response.body().routes().get(0).legs().get(0).steps().get(0).maneuver().location().latitude());
         System.out.println(response.body().routes().get(0).distance());
         System.out.println(response.body().routes().get(0).routeOptions().profile());
         System.out.println(response.body().routes().get(0).routeOptions().alternatives());
         System.out.println(response.body().routes().get(0).routeOptions().user());
+        System.out.println(response.body().routes().get(0).legs().get(0).steps().get(0).maneuver().toString());
         System.out.println(response.body().routes().get(0).legs().get(0).steps().get(0)
           .voiceInstructions().get(0).announcement());
+        System.out.println(response.body().routes().get(0).legs().get(0).annotation().congestion().size());
       }
 
       @Override
@@ -40,6 +47,8 @@ public class BasicDirections {
       .origin(Point.fromLngLat(-71.0555, 42.3612))
       .destination(Point.fromLngLat(-71.1014, 42.3411))
       .voiceInstructions(true)
+      .annotations(DirectionsCriteria.ANNOTATION_CONGESTION)
+      .overview(DirectionsCriteria.OVERVIEW_FULL)
       .steps(true)
       .build();
   }

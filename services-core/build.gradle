@@ -1,9 +1,22 @@
 apply plugin: 'java-library'
-apply from: "${rootDir}/gradle/build-config.gradle"
+//apply plugin: 'de.fuerstenau.buildconfig'
 
 configurations {
   testOutput
 }
+
+//buildConfig {
+//  packageName = 'com.mapbox.services'
+//  version = project.VERSION_NAME
+//  buildConfigField 'String', 'GIT_REVISION', getGitRevision()
+//}
+//
+//static def getGitRevision() {
+//  def cmd = "git rev-parse --short HEAD"
+//  def proc = cmd.execute()
+//  def ref = proc.text.trim()
+//  return ref
+//}
 
 dependencies {
 
@@ -26,21 +39,6 @@ dependencies {
 
   // Test Dependencies
   testOutput sourceSets.test.output
-}
-
-buildConfig {
-  packageName = 'com.mapbox.services'
-  constants = [
-          VERSION     : project.VERSION_NAME,
-          GIT_REVISION: getGitRevision(),
-  ]
-}
-
-def getGitRevision() {
-  def cmd = "git rev-parse --short HEAD"
-  def proc = cmd.execute()
-  def ref = proc.text.trim()
-  return ref
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"

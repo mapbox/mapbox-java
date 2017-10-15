@@ -5,7 +5,6 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 import android.support.annotation.StringDef;
 
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 
 public final class StaticMapCriteria {

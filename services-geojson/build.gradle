@@ -2,7 +2,7 @@ apply plugin: 'java-library'
 
 dependencies {
 
-  compile project(":services")
+  compile project(":services-core")
 
   // Gson
   compile dependenciesList.gson
@@ -16,7 +16,7 @@ dependencies {
 
   // Test Dependencies
   testCompile dependenciesList.okhttp3Mockwebserver
-  testCompile project(path: ':services', configuration: 'testOutput')
+  testCompile project(path: ':services-core', configuration: 'testOutput')
   testCompile project(":services-turf")
 }
 

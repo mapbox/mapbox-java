@@ -1,4 +1,4 @@
 /**
- * Contains the Mapbox Java GeoJson helper classes which assist in parsing.
+ * Contains the Mapbox Java GeoJson GSON helper classes which assist in parsing.
  */
-package com.mapbox.geojson.custom;
+package com.mapbox.geojson.gson;

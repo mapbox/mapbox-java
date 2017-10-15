@@ -28,6 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -97,7 +98,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       steps(),
       bearings(),
       continueStraight(),
-      annotations(),
+      annotation(),
       language(),
       roundaboutExits(),
       voiceInstructions());
@@ -117,7 +118,9 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
     Response<DirectionsResponse> response = getCall().execute();
-    if (response.body() == null || response.body().routes().isEmpty()) {
+    if (response.body() == null
+      || response.body().routes() == null
+      || response.body().routes().isEmpty()) {
       return Response.success(response.body(), response.headers());
     }
     List<DirectionsRoute> routes = response.body().routes();
@@ -135,11 +138,14 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    */
   @Override
   public void enqueueCall(final Callback<DirectionsResponse> callback) {
+    System.out.println(getCall().request().url());
     getCall().enqueue(new DirectionsApiCallback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
         super.onResponse(call, response);
-        if (response == null || response.body().routes().isEmpty()) {
+        if (response == null
+          || response.body() == null
+          || response.body().routes().isEmpty()) {
           // If null just pass the original object back since there's nothing to modify.
           callback.onResponse(call, response);
         }
@@ -163,7 +169,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
         RouteOptions.builder()
           .profile(profile())
           .continueStraight(continueStraight())
-          .annotations(annotations())
+          .annotations(annotation())
           .bearings(bearings())
           .alternatives(alternatives())
           .language(language())
@@ -235,7 +241,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   abstract Boolean continueStraight();
 
   @Nullable
-  abstract String annotations();
+  abstract String annotation();
 
   @Nullable
   abstract String language();
@@ -518,7 +524,14 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder annotations(@Nullable String annotations);
+//    public Builder annotation(@Nullable String annotations) {
+//      this.annotations = new String[] {annotations};
+//      return this;
+//    }
+
+    abstract Builder annotation(@Nullable String annotation);
+
+
 
     /**
      * Optionally, Use to filter the road segment the waypoint will be placed on by direction and
@@ -646,9 +659,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           + " directions API request.");
       }
 
+      System.out.println(Arrays.toString(annotations));
+
       coordinates(formatCoordinates(coordinates));
       bearings(TextUtils.formatBearing(bearings));
-      annotations(TextUtils.join(",", annotations));
+      annotation(TextUtils.join(",", annotations));
       radiuses(TextUtils.formatRadiuses(radiuses));
 
       MapboxDirections directions = autoBuild();

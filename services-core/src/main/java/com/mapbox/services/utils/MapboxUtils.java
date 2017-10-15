@@ -5,7 +5,7 @@ package com.mapbox.services.utils;
  *
  * @since 1.0.0
  */
-public class MapboxUtils {
+public final class MapboxUtils {
 
   private MapboxUtils() {
     // Empty private constructor since only static methods are found inside class.

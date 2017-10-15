@@ -2,6 +2,8 @@ package com.mapbox.directions.v5.models;
 
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.mapbox.directions.v5.DirectionsCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
 
@@ -122,6 +124,17 @@ public abstract class RouteOptions {
    */
   @Nullable
   public abstract Boolean voiceInstructions();
+
+  /**
+   * Gson type adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the type adapter for this class
+   * @since 3.0.0
+   */
+  public static TypeAdapter<RouteOptions> typeAdapter(Gson gson) {
+    return new AutoValue_RouteOptions.GsonTypeAdapter(gson);
+  }
 
   /**
    * This builder can be used to set the values describing the {@link RouteOptions}.

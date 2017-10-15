@@ -11,7 +11,7 @@ build-release:
 	./gradlew assemble
 
 publish:
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services:uploadArchives ; \
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-core:uploadArchives ; \
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-directions:uploadArchives ; \
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geocoding:uploadArchives ; \
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geojson:uploadArchives ; \
@@ -23,7 +23,7 @@ publish:
 
 publish-local:
 	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
-	export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services:uploadArchives ; \
+	export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-core:uploadArchives ; \
     export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-directions:uploadArchives ; \
     export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-geocoding:uploadArchives ; \
     export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-geojson:uploadArchives ; \

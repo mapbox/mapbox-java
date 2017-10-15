@@ -8,6 +8,7 @@ import com.mapbox.geojson.Point;
 import com.mapbox.services.TestUtils;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.TextUtils;
+import com.mapbox.services.utils.TextUtilsTest;
 import com.mapbox.staticmap.v1.models.StaticMarkerAnnotation;
 import com.mapbox.staticmap.v1.models.StaticPolylineAnnotation;
 

@@ -15,6 +15,7 @@ buildscript {
     }
     classpath "net.ltgt.gradle:gradle-errorprone-plugin:${pluginVersion.errorprone}"
     classpath "gradle.plugin.de.fuerstenau:BuildConfigPlugin:${pluginVersion.buildConfigPlugin}"
+    classpath 'gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8'
     classpath 'com.android.tools.build:gradle:2.3.3'
     classpath pluginDependencies.sonarqube
   }

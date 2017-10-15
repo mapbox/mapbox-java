@@ -1,9 +1,5 @@
 package com.mapbox.services.constants;
 
-import com.mapbox.services.BuildConfig;
-
-import java.util.Locale;
-
 /**
  * Includes common variables used throughout the Mapbox Service modules.
  *
@@ -20,9 +16,9 @@ public final class Constants {
    *
    * @since 1.0.0
    */
-  public static final String HEADER_USER_AGENT
-    = String.format(Locale.US, "MapboxJava/%s (%s)",
-    BuildConfig.VERSION, BuildConfig.GIT_REVISION);
+  public static final String HEADER_USER_AGENT = "TODO";
+//    = String.format(Locale.US, "MapboxJava/%s (%s)",
+//    BuildConfig.VERSION, BuildConfig.GIT_REVISION);
 
   /**
    * Base URL for all API calls, not hardcoded to enable testing.

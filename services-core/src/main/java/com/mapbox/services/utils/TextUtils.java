@@ -13,7 +13,7 @@ import java.util.Locale;
  * @see <a href="https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/text/TextUtils.java">Some code came from this source.</a>
  * @since 1.0.0
  */
-public class TextUtils {
+public final class TextUtils {
 
   private TextUtils() {
     // Empty private constructor preventing class from getting initialized

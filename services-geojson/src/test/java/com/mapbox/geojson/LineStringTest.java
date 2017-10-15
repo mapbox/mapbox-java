@@ -5,8 +5,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.services.TestUtils;
+import com.mapbox.services.constants.Constants;
+import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +21,9 @@ public class LineStringTest extends TestUtils {
 
   private static final String SAMPLE_LINESTRING_FIXTURE = "sample-linestring.json";
 
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
   @Test
   public void sanity() throws Exception {
     List<Point> points = new ArrayList<>();
@@ -24,6 +32,26 @@ public class LineStringTest extends TestUtils {
     points.add(Point.fromLngLat(3.0, 3.0));
     LineString lineString = LineString.fromLngLats(points);
     assertNotNull(lineString);
+  }
+
+  @Test
+  public void fromLngLats_generatedFromMultipoint() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0,2.0));
+    points.add(Point.fromLngLat(4.0,8.0));
+    MultiPoint multiPoint = MultiPoint.fromLngLats(points);
+    LineString lineString = LineString.fromLngLats(multiPoint);
+    assertEquals("_gayB_c`|@_wemJ_kbvD", lineString.toPolyline(Constants.PRECISION_6));
+  }
+
+  @Test
+  public void fromLngLats_onlyOnePointInMultipoint() throws Exception {
+    thrown.expect(GeoJsonException.class);
+    thrown.expectMessage("A LineString requires at least 2 coordinates.");
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0,2.0));
+    MultiPoint multiPoint = MultiPoint.fromLngLats(points);
+    LineString.fromLngLats(multiPoint);
   }
 
   @Test

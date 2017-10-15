@@ -121,7 +121,7 @@ public abstract class MapboxStaticMap {
       annotations.add(String.format(Locale.US, "geojson(%s)", geoJson().toJson()));
     }
 
-    if (annotations.size() > 0) {
+    if (!annotations.isEmpty()) {
       urlBuilder.addPathSegment(TextUtils.join(",", annotations.toArray()));
     }
 

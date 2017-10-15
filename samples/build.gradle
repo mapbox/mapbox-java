@@ -1,5 +1,5 @@
 dependencies {
-  compile project(":services")
+  compile project(":services-core")
   compile project(":services-directions")
   compile project(":services-geocoding")
   compile project(":services-optimization")

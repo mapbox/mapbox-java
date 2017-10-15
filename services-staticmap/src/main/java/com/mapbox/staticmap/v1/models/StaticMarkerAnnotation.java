@@ -1,7 +1,6 @@
 package com.mapbox.staticmap.v1.models;
 
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.exceptions.ServicesException;
@@ -135,7 +134,7 @@ public abstract class StaticMarkerAnnotation {
   }
 
   // TODO move to utils class
-  public final static String toHexString(Color color) throws NullPointerException {
+  public static final String toHexString(Color color) {
     String hexColour = Integer.toHexString(color.getRGB() & 0xffffff);
     if (hexColour.length() < 6) {
       hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;

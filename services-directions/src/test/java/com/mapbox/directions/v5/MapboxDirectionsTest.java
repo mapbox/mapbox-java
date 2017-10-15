@@ -267,6 +267,7 @@ public class MapboxDirectionsTest extends TestUtils {
     assertTrue(directions.cloneCall().request().url().toString().contains("language=fr"));
   }
 
+  // TODO this isn't valid since we don't also request for a full overview, need a test for this.
   @Test
   public void annotations_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
