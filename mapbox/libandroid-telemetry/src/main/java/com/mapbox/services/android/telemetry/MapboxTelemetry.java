@@ -636,6 +636,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private void addGeneralNavigationMetadataTo(Hashtable<String, Object> eventWithAttributes) {
     eventWithAttributes.put(MapboxNavigationEvent.KEY_DEVICE, Build.MODEL);
     eventWithAttributes.put(MapboxNavigationEvent.KEY_VOLUME_LEVEL, TelemetryUtils.getVolumeLevel(context));
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_AUDIO_TYPE, TelemetryUtils.obtainAudioType(context));
     eventWithAttributes.put(MapboxNavigationEvent.KEY_SCREEN_BRIGHTNESS, TelemetryUtils.getScreenBrightness(context));
     eventWithAttributes.put(MapboxNavigationEvent.KEY_APPLICATION_STATE, TelemetryUtils.getApplicationState(context));
     eventWithAttributes.put(MapboxNavigationEvent.KEY_BATTERY_PLUGGED_IN, isPluggedIn());
