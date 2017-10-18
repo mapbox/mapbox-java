@@ -23,6 +23,7 @@ public class BasicDirections {
     directions.enqueueCall(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+        System.out.println(call.request().url());
         System.out.println(response.body().routes().get(0).legs().get(0).steps().get(0).maneuver().location().latitude());
         System.out.println(response.body().routes().get(0).distance());
         System.out.println(response.body().routes().get(0).routeOptions().profile());
@@ -36,6 +37,7 @@ public class BasicDirections {
 
       @Override
       public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+        System.out.println(call.request().url());
         System.out.println(throwable);
       }
     });
@@ -49,6 +51,8 @@ public class BasicDirections {
       .voiceInstructions(true)
       .annotations(DirectionsCriteria.ANNOTATION_CONGESTION)
       .overview(DirectionsCriteria.OVERVIEW_FULL)
+      .addBearing(null, null)
+      .radiuses(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
       .steps(true)
       .build();
   }

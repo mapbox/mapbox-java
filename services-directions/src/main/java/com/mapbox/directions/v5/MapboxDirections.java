@@ -32,7 +32,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -100,9 +99,9 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       alternatives(),
       geometries(),
       overview(),
-      radiuses(),
+      radius(),
       steps(),
-      bearings(),
+      bearing(),
       continueStraight(),
       annotation(),
       language(),
@@ -153,7 +152,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
               retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
 
           try {
-            onFailure(call, new Throwable(errorConverter.convert(response.errorBody()).message()));
+            callback.onFailure(
+              call, new Throwable(errorConverter.convert(response.errorBody()).message()));
           } catch (IOException e) {
             e.printStackTrace();
           }
@@ -161,10 +161,10 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           // If the response isn't successful we move invoke onFailure instead
           return;
         }
+        // TODO some of these checks shouldn't be needed anymore thanks to the isSuccessful check.
         if (response == null
           || response.body() == null
           || response.body().routes().isEmpty()) {
-          System.out.println(response.body().message());
           // If null just pass the original object back since there's nothing to modify.
           callback.onResponse(call, response);
         }
@@ -188,10 +188,10 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           .profile(profile())
           .continueStraight(continueStraight())
           .annotations(annotation())
-          .bearings(bearings())
+          .bearings(bearing())
           .alternatives(alternatives())
           .language(language())
-          .radiuses(radiuses())
+          .radiuses(radius())
           .user(user())
           .voiceInstructions(voiceInstructions())
           .build()
@@ -247,10 +247,10 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   abstract String overview();
 
   @Nullable
-  abstract String radiuses();
+  abstract String radius();
 
   @Nullable
-  abstract String bearings();
+  abstract String bearing();
 
   @Nullable
   abstract Boolean steps();
@@ -533,20 +533,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       return this;
     }
 
-    /**
-     * Whether or not to return additional metadata along the route. See
-     * {@link #annotations(String...)} for a full list of possible annotation values. If more than
-     * one annotations desired, separate the annotations inside the string with commas.
-     *
-     * @param annotations string referencing one of the annotation direction criteria's
-     * @return this builder for chaining options together
-     * @since 3.0.0
-     */
-//    public Builder annotation(@Nullable String annotations) {
-//      this.annotations = new String[] {annotations};
-//      return this;
-//    }
-
     abstract Builder annotation(@Nullable String annotation);
 
 
@@ -581,11 +567,15 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      */
     public Builder addBearing(@Nullable @FloatRange(from = 0, to = 360) Double angle,
                               @Nullable @FloatRange(from = 0, to = 360) Double tolerance) {
-      bearings.add(new Double[] {angle, tolerance});
+      if (angle == null || tolerance == null) {
+        bearings.add(new Double[0]);
+      } else {
+        bearings.add(new Double[] {angle, tolerance});
+      }
       return this;
     }
 
-    abstract Builder bearings(@Nullable String bearings);
+    abstract Builder bearing(@Nullable String bearings);
 
     /**
      * Optionally, set the maximum distance in meters that each coordinate is allowed to move when
@@ -605,8 +595,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       return this;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    protected abstract Builder radiuses(@Nullable String radiuses);
+    abstract Builder radius(@Nullable String radiuses);
 
     /**
      * Request voice Instructions objects to be returned in your response. This offers instructions
@@ -677,12 +666,10 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           + " directions API request.");
       }
 
-      System.out.println(Arrays.toString(annotations));
-
       coordinates(formatCoordinates(coordinates));
-      bearings(TextUtils.formatBearing(bearings));
+      bearing(TextUtils.formatBearing(bearings));
       annotation(TextUtils.join(",", annotations));
-      radiuses(TextUtils.formatRadiuses(radiuses));
+      radius(TextUtils.formatRadiuses(radiuses));
 
       MapboxDirections directions = autoBuild();
 

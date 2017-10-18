@@ -90,7 +90,7 @@ public abstract class LegStep implements Serializable {
    * @return String indicating the mode of transportation.
    * @since 1.0.0
    */
-  @NonNull
+  @Nullable
   public abstract String mode();
 
   /**
