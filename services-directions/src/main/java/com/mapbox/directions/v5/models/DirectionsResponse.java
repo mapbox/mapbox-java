@@ -49,6 +49,9 @@ public abstract class DirectionsResponse implements Serializable {
   @NonNull
   public abstract String code();
 
+  @Nullable
+  public abstract String message();
+
   /**
    * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
    * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
@@ -122,6 +125,8 @@ public abstract class DirectionsResponse implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder code(@NonNull String code);
+
+    public abstract Builder message(@Nullable String message);
 
     /**
      * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate

@@ -11,6 +11,7 @@ import com.mapbox.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.directions.v5.models.DirectionsError;
 import com.mapbox.directions.v5.models.DirectionsResponse;
 import com.mapbox.directions.v5.models.DirectionsRoute;
 import com.mapbox.directions.v5.models.RouteOptions;
@@ -20,13 +21,16 @@ import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Converter;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +58,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   private okhttp3.Call.Factory callFactory;
   private Call<DirectionsResponse> call;
   private DirectionsService service;
+  private Retrofit retrofit;
 
   private DirectionsService getService() {
     // No need to recreate it
@@ -68,6 +73,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
         .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
         .create()
       ));
+    retrofit = retrofitBuilder.build();
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
     } else {
@@ -138,14 +144,27 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    */
   @Override
   public void enqueueCall(final Callback<DirectionsResponse> callback) {
-    System.out.println(getCall().request().url());
-    getCall().enqueue(new DirectionsApiCallback<DirectionsResponse>() {
+    getCall().enqueue(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-        super.onResponse(call, response);
+        if (!response.isSuccessful()) {
+
+            Converter<ResponseBody, DirectionsError> errorConverter =
+              retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
+
+          try {
+            onFailure(call, new Throwable(errorConverter.convert(response.errorBody()).message()));
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+
+          // If the response isn't successful we move invoke onFailure instead
+          return;
+        }
         if (response == null
           || response.body() == null
           || response.body().routes().isEmpty()) {
+          System.out.println(response.body().message());
           // If null just pass the original object back since there's nothing to modify.
           callback.onResponse(call, response);
         }
@@ -156,7 +175,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
       @Override
       public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
-        super.onFailure(call, throwable);
         callback.onFailure(call, throwable);
       }
     });
