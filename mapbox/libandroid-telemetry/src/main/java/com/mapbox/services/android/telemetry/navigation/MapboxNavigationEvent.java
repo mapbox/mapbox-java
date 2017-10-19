@@ -72,6 +72,7 @@ public class MapboxNavigationEvent {
   public static final String KEY_ARRIVAL_TIMESTAMP = "arrivalTimestamp";
   public static final String KEY_STEP = "step";
   public static final String KEY_STEP_COUNT = "stepCount";
+  public static final String KEY_LOCATION_ENGINE = "locationEngine";
 
   // Step metadata
   public static final String KEY_UPCOMING_INSTRUCTION = "upcomingInstruction";
