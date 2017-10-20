@@ -5,12 +5,12 @@ class AudioTypeChain {
 
   AudioTypeResolver setup() {
     AudioTypeResolver unknown = new UnknownAudioType();
+    AudioTypeResolver speaker = new SpeakerAudioType();
+    speaker.nextChain(unknown);
     AudioTypeResolver headphones = new HeadphonesAudioType();
-    headphones.nextChain(unknown);
-    AudioTypeResolver bluetooth = new BluetoothAudioType();
-    bluetooth.nextChain(headphones);
-    AudioTypeResolver rootOfTheChain = new SpeakerAudioType();
-    rootOfTheChain.nextChain(bluetooth);
+    headphones.nextChain(speaker);
+    AudioTypeResolver rootOfTheChain = new BluetoothAudioType();
+    rootOfTheChain.nextChain(headphones);
 
     return rootOfTheChain;
   }
