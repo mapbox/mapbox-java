@@ -210,6 +210,7 @@ public class TelemetryClient {
         evt.get(MapboxNavigationEvent.KEY_ARRIVAL_TIMESTAMP));
       jsonObject.putOpt(MapboxNavigationEvent.KEY_STEP, evt.get(MapboxNavigationEvent.KEY_STEP));
       jsonObject.putOpt(MapboxNavigationEvent.KEY_STEP_COUNT, evt.get(MapboxNavigationEvent.KEY_STEP_COUNT));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_LOCATION_ENGINE, evt.get(MapboxNavigationEvent.KEY_LOCATION_ENGINE));
 
       // Step metadata
       jsonObject.putOpt(MapboxNavigationEvent.KEY_UPCOMING_INSTRUCTION,

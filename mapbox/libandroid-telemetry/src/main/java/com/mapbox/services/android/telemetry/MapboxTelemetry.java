@@ -795,4 +795,12 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
 
     return sdkVersion;
   }
+
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public void addLocationEngineName(@NonNull String locationEngineName, Hashtable<String, Object> eventWithAttributes) {
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_LOCATION_ENGINE, locationEngineName);
+  }
 }
