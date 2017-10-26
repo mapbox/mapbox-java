@@ -803,4 +803,13 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   public void addLocationEngineName(@NonNull String locationEngineName, Hashtable<String, Object> eventWithAttributes) {
     eventWithAttributes.put(MapboxNavigationEvent.KEY_LOCATION_ENGINE, locationEngineName);
   }
+
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public void addAbsoluteDistanceToDestination(int absoluteDistanceToDestination,
+                                               Hashtable<String, Object> eventWithAttributes) {
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_ABSOLUTE_DISTANCE_TO_DESTINATION, absoluteDistanceToDestination);
+  }
 }
