@@ -830,4 +830,21 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
                                        Hashtable<String, Object> eventWithAttributes) {
     eventWithAttributes.put(MapboxNavigationEvent.KEY_PERCENT_TIME_IN_PORTRAIT, percentTimeInPortrait);
   }
+
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public void addRatingToCancel(@IntRange(from = -1, to = 100) int rating,
+                                Hashtable<String, Object> eventWithAttributes) {
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_RATING, rating);
+  }
+
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public void addCommentToCancel(String comment, Hashtable<String, Object> eventWithAttributes) {
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_COMMENT, comment);
+  }
 }
