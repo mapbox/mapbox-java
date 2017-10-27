@@ -13,9 +13,9 @@ import com.mapbox.services.utils.TextUtils;
  * @see <a href="http://turfjs.org/docs/">Turf documentation</a>
  * @since 1.2.0
  */
-public final class TurfInvariant {
+public final class TurfAssertions {
 
-  private TurfInvariant() {
+  private TurfAssertions() {
     // Private constructor preventing initialization of this class
   }
 
