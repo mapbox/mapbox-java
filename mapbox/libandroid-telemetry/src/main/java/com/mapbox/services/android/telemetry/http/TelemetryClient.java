@@ -211,6 +211,8 @@ public class TelemetryClient {
       jsonObject.putOpt(MapboxNavigationEvent.KEY_STEP, evt.get(MapboxNavigationEvent.KEY_STEP));
       jsonObject.putOpt(MapboxNavigationEvent.KEY_STEP_COUNT, evt.get(MapboxNavigationEvent.KEY_STEP_COUNT));
       jsonObject.putOpt(MapboxNavigationEvent.KEY_LOCATION_ENGINE, evt.get(MapboxNavigationEvent.KEY_LOCATION_ENGINE));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_ABSOLUTE_DISTANCE_TO_DESTINATION,
+        evt.get(MapboxNavigationEvent.KEY_ABSOLUTE_DISTANCE_TO_DESTINATION));
 
       // Step metadata
       jsonObject.putOpt(MapboxNavigationEvent.KEY_UPCOMING_INSTRUCTION,
