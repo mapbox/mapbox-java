@@ -235,6 +235,8 @@ public class TelemetryClient {
       jsonObject.putOpt(MapboxNavigationEvent.KEY_DISTANCE, evt.get(MapboxNavigationEvent.KEY_DISTANCE));
       jsonObject.putOpt(MapboxNavigationEvent.KEY_ORIGINAL_STEP_COUNT,
         evt.get(MapboxNavigationEvent.KEY_ORIGINAL_STEP_COUNT));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_RATING, evt.get(MapboxNavigationEvent.KEY_RATING));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_COMMENT, evt.get(MapboxNavigationEvent.KEY_COMMENT));
 
       // Build the JSON but only if there's a value for it in the evt
       jsonObject.putOpt(MapboxEvent.KEY_EVENT, evt.get(MapboxEvent.KEY_EVENT));
