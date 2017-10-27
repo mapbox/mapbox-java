@@ -213,6 +213,10 @@ public class TelemetryClient {
       jsonObject.putOpt(MapboxNavigationEvent.KEY_LOCATION_ENGINE, evt.get(MapboxNavigationEvent.KEY_LOCATION_ENGINE));
       jsonObject.putOpt(MapboxNavigationEvent.KEY_ABSOLUTE_DISTANCE_TO_DESTINATION,
         evt.get(MapboxNavigationEvent.KEY_ABSOLUTE_DISTANCE_TO_DESTINATION));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_PERCENT_TIME_IN_FOREGROUND,
+        evt.get(MapboxNavigationEvent.KEY_PERCENT_TIME_IN_FOREGROUND));
+      jsonObject.putOpt(MapboxNavigationEvent.KEY_PERCENT_TIME_IN_PORTRAIT,
+        evt.get(MapboxNavigationEvent.KEY_PERCENT_TIME_IN_PORTRAIT));
 
       // Step metadata
       jsonObject.putOpt(MapboxNavigationEvent.KEY_UPCOMING_INSTRUCTION,

@@ -74,6 +74,8 @@ public class MapboxNavigationEvent {
   public static final String KEY_STEP_COUNT = "stepCount";
   public static final String KEY_LOCATION_ENGINE = "locationEngine";
   public static final String KEY_ABSOLUTE_DISTANCE_TO_DESTINATION = "absoluteDistanceToDestination";
+  public static final String KEY_PERCENT_TIME_IN_FOREGROUND = "percentTimeInForeground";
+  public static final String KEY_PERCENT_TIME_IN_PORTRAIT = "percentTimeInPortrait";
 
   // Step metadata
   public static final String KEY_UPCOMING_INSTRUCTION = "upcomingInstruction";

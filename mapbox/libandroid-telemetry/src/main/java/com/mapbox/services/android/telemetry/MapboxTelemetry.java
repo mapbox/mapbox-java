@@ -812,4 +812,22 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
                                                Hashtable<String, Object> eventWithAttributes) {
     eventWithAttributes.put(MapboxNavigationEvent.KEY_ABSOLUTE_DISTANCE_TO_DESTINATION, absoluteDistanceToDestination);
   }
+
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public void addPercentTimeInForeground(@IntRange(from = 0, to = 100) int percentTimeInForeground,
+                                         Hashtable<String, Object> eventWithAttributes) {
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_PERCENT_TIME_IN_FOREGROUND, percentTimeInForeground);
+  }
+
+  // For internal use only
+  // This is an experimental API. Experimental APIs are quickly evolving and
+  // might change or be removed in minor versions.
+  @Experimental
+  public void addPercentTimeInPortrait(@IntRange(from = 0, to = 100) int percentTimeInPortrait,
+                                       Hashtable<String, Object> eventWithAttributes) {
+    eventWithAttributes.put(MapboxNavigationEvent.KEY_PERCENT_TIME_IN_PORTRAIT, percentTimeInPortrait);
+  }
 }
