@@ -300,8 +300,6 @@ public class MapboxNavigationEvent {
     event.put(KEY_ORIGINAL_GEOMETRY, originalGeometry);
     event.put(KEY_ORIGINAL_ESTIMATED_DISTANCE, originalEstimatedDistance);
     event.put(KEY_ORIGINAL_ESTIMATED_DURATION, originalEstimatedDuration);
-    // audioType may be "null"
-    addPairIntoEventIfNeeded(event, KEY_AUDIO_TYPE, audioType);
     return event;
   }
 
@@ -317,6 +315,8 @@ public class MapboxNavigationEvent {
     // See NavigationMetricsWrapper.java in https://github.com/mapbox/mapbox-navigation-android
     if (value == null || value.equalsIgnoreCase("null")) {
       event.put(key, JSONObject.NULL);
+    } else {
+      event.put(key, value);
     }
   }
 

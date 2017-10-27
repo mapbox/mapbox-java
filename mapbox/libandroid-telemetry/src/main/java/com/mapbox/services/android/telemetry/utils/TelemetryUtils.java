@@ -182,8 +182,8 @@ public class TelemetryUtils {
     int screenBrightness;
     try {
       screenBrightness = android.provider.Settings.System.getInt(
-          context.getContentResolver(),
-          android.provider.Settings.System.SCREEN_BRIGHTNESS);
+        context.getContentResolver(),
+        android.provider.Settings.System.SCREEN_BRIGHTNESS);
 
       // Android returns values between 0 and 255, here we normalize to 0-100.
       screenBrightness = (int) Math.floor(100.0 * screenBrightness / 255.0);
@@ -200,7 +200,7 @@ public class TelemetryUtils {
   public static int getVolumeLevel(Context context) {
     AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     return (int) Math.floor(100.0 * audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
-        / audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+      / audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
   }
 
   /**
@@ -208,5 +208,15 @@ public class TelemetryUtils {
    */
   public static String buildUUID() {
     return UUID.randomUUID().toString();
+  }
+
+  /**
+   * Returns the current audio type
+   */
+  public static String obtainAudioType(Context context) {
+    AudioTypeChain audioTypeChain = new AudioTypeChain();
+    AudioTypeResolver setupChain = audioTypeChain.setup();
+
+    return setupChain.obtainAudioType(context);
   }
 }
