@@ -37,7 +37,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [ ] turf-bbox-clip
 - [ ] turf-bezier
 - [ ] turf-buffer
-- [ ] turf-circle
+- [x] turf-circle
 - [ ] turf-clone
 - [ ] turf-concave
 - [ ] turf-convex
@@ -134,30 +134,30 @@ All of these are already enforced in the GeoJson module
 - [ ] turf-boolean-parallel
 
 ## Unit Conversion 
-bearingToAngle
-convertArea
-convertDistance
-degrees2radians
-distanceToRadians
-distanceToDegrees
-radiansToDistance
-radians2degrees
-clusterEachCallback
-clusterReduceCallback
-removeEmptyPolygon
-ab
-coordEachCallback
-coordReduceCallback
-propEachCallback
-propReduceCallback
-featureEachCallback
-featureReduceCallback
-geomEachCallback
-geomReduceCallback
-flattenEachCallback
-flattenReduceCallback
-segmentEachCallback
-segmentReduceCallback
+- [ ] bearingToAngle
+- [ ] convertArea
+- [x] convertDistance
+- [ ] degrees2radians
+- [x] distanceToRadians
+- [x] distanceToDegrees
+- [x] radiansToDistance
+- [x] radians2degrees
+- [ ] clusterEachCallback
+- [ ] clusterReduceCallback
+- [ ] removeEmptyPolygon
+- [ ] ab
+- [ ] coordEachCallback
+- [ ] coordReduceCallback
+- [ ] propEachCallback
+- [ ] propReduceCallback
+- [ ] featureEachCallback
+- [ ] featureReduceCallback
+- [ ] geomEachCallback
+- [ ] geomReduceCallback
+- [ ] flattenEachCallback
+- [ ] flattenReduceCallback
+- [ ] segmentEachCallback
+- [ ] segmentReduceCallback
 
 ## Others not documented?
 - [ ] turf-point-to-line-distance

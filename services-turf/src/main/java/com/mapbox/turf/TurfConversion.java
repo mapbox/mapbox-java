@@ -16,7 +16,7 @@ import java.util.Map;
  * @see <a href="http://turfjs.org/docs/">Turfjs documentation</a>
  * @since 1.2.0
  */
-public final class TurfHelpers {
+public final class TurfConversion {
 
   private static final Map<String, Double> FACTORS;
 
@@ -37,7 +37,7 @@ public final class TurfHelpers {
     FACTORS.put(TurfConstants.UNIT_KILOMETRES, 6373d);
   }
 
-  private TurfHelpers() {
+  private TurfConversion() {
     // Private constructor preventing initialization of this class
   }
 
@@ -121,7 +121,7 @@ public final class TurfHelpers {
 
   /**
    * Converts a distance to the default units. Use
-   * {@link TurfHelpers#convertDistance(double, String, String)} to specify a unit to convert to.
+   * {@link TurfConversion#convertDistance(double, String, String)} to specify a unit to convert to.
    *
    * @param distance     double representing a distance value
    * @param originalUnit of the distance, must be one of the units defined in
