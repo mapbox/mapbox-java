@@ -371,4 +371,16 @@ public class MapboxDirectionsTest extends TestUtils {
     assertThat(client.cloneCall().request().url().toString(),
       containsString("radiuses=100;unlimited;100"));
   }
+
+  @Test
+  public void noValidRouteTest() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(151.2302, -33.9283))
+      .destination(Point.fromLngLat(174.7654, -36.8641))
+      .steps(true)
+      .accessToken(ACCESS_TOKEN)
+      .build();
+
+
+  }
 }

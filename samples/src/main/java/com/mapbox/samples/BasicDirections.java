@@ -23,16 +23,17 @@ public class BasicDirections {
     directions.enqueueCall(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+        System.out.println(response.code());
         System.out.println(call.request().url());
         System.out.println(response.body().routes().get(0).legs().get(0).steps().get(0).maneuver().location().latitude());
-        System.out.println(response.body().routes().get(0).distance());
-        System.out.println(response.body().routes().get(0).routeOptions().profile());
-        System.out.println(response.body().routes().get(0).routeOptions().alternatives());
-        System.out.println(response.body().routes().get(0).routeOptions().user());
-        System.out.println(response.body().routes().get(0).legs().get(0).steps().get(0).maneuver().toString());
-        System.out.println(response.body().routes().get(0).legs().get(0).steps().get(0)
-          .voiceInstructions().get(0).announcement());
-        System.out.println(response.body().routes().get(0).legs().get(0).annotation().congestion().size());
+//        System.out.println(response.body().routes().get(0).distance());
+//        System.out.println(response.body().routes().get(0).routeOptions().profile());
+//        System.out.println(response.body().routes().get(0).routeOptions().alternatives());
+//        System.out.println(response.body().routes().get(0).routeOptions().user());
+//        System.out.println(response.body().routes().get(0).legs().get(0).steps().get(0).maneuver().toString());
+//        System.out.println(response.body().routes().get(0).legs().get(0).steps().get(0)
+//          .voiceInstructions().get(0).announcement());
+//        System.out.println(response.body().routes().get(0).legs().get(0).annotation().congestion().size());
       }
 
       @Override
@@ -46,8 +47,8 @@ public class BasicDirections {
   private static MapboxDirections buildMapboXDirections() {
     return MapboxDirections.builder()
       .accessToken("pk.eyJ1IjoiY2FtbWFjZSIsImEiOiI5OGQxZjRmZGQ2YjU3Mzk1YjJmZTQ5ZDY2MTg1NDJiOCJ9.hIFoCKGAGOwQkKyVPvrxvQ")
-      .origin(Point.fromLngLat(-71.0555, 42.3612))
-      .destination(Point.fromLngLat(-71.1014, 42.3411))
+      .origin(Point.fromLngLat(151.2302, -33.9283))
+      .destination(Point.fromLngLat(174.7654, -36.8641))
       .voiceInstructions(true)
       .annotations(DirectionsCriteria.ANNOTATION_CONGESTION)
       .overview(DirectionsCriteria.OVERVIEW_FULL)

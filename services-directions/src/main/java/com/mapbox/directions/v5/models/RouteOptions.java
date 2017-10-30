@@ -117,6 +117,15 @@ public abstract class RouteOptions {
   public abstract String annotations();
 
   /**
+   * The same exclusions the user originally made when the request was made.
+   *
+   * @return a string matching one of the {@link DirectionsCriteria} exclusions
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract String exclude();
+
+  /**
    * Whether or not the request had voice instructions set to true or not.
    *
    * @return true if the original request included voice instructions
@@ -229,6 +238,16 @@ public abstract class RouteOptions {
      * @since 3.0.0
      */
     public abstract Builder voiceInstructions(Boolean voiceInstructions);
+
+    /**
+     * The same exclusions the user originally made when the request was made.
+     *
+     * @param exclude a string matching one of the {@link DirectionsCriteria} exclusions
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    @Nullable
+    public abstract Builder exclude(String exclude);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.

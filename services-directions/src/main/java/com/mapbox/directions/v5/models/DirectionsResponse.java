@@ -46,9 +46,15 @@ public abstract class DirectionsResponse implements Serializable {
    * @return a string with one of the given values described in the list above
    * @since 1.0.0
    */
-  @NonNull
+  @Nullable
   public abstract String code();
 
+  /**
+   * Optionally shows up in a directions response if an error or something unexpected occurred.
+   *
+   * @return a string containing the message API Directions response with if an error occurred
+   * @since 3.0.0
+   */
   @Nullable
   public abstract String message();
 

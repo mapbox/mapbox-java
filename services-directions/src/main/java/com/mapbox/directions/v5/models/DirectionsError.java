@@ -9,7 +9,7 @@ import com.google.gson.TypeAdapter;
 @AutoValue
 public abstract class DirectionsError {
 
-  @NonNull
+  @Nullable
   public abstract String code();
 
   @Nullable

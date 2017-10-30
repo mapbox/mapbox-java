@@ -176,6 +176,41 @@ public final class DirectionsCriteria {
   public @interface AnnotationCriteria {
   }
 
+  /**
+   * Exclude all tolls along the returned directions route.
+   *
+   * @since 3.0.0
+   */
+  public static final String EXCLUDE_TOLL = "toll";
+
+  /**
+   * Exclude all motorways along the returned directions route.
+   *
+   * @since 3.0.0
+   */
+  public static final String EXCLUDE_MOTORWAY = "motorway";
+
+  /**
+   * Exclude all ferries along the returned directions route.
+   *
+   * @since 3.0.0
+   */
+  public static final String EXCLUDE_FERRY = "ferry";
+
+  /**
+   * Retention policy for the various direction exclusions.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    EXCLUDE_FERRY,
+    EXCLUDE_MOTORWAY,
+    EXCLUDE_TOLL
+  })
+  public @interface ExcludeCriteria {
+  }
+
   // Optimization API criteria's
 
   /**

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.directions.v5.DirectionsCriteria.AnnotationCriteria;
+import com.mapbox.directions.v5.DirectionsCriteria.ExcludeCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
@@ -106,7 +107,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       annotation(),
       language(),
       roundaboutExits(),
-      voiceInstructions());
+      voiceInstructions(),
+      exclude());
 
     // Done
     return call;
@@ -148,8 +150,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
         if (!response.isSuccessful()) {
 
-            Converter<ResponseBody, DirectionsError> errorConverter =
-              retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
+          Converter<ResponseBody, DirectionsError> errorConverter =
+            retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
 
           try {
             callback.onFailure(
@@ -194,6 +196,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           .radiuses(radius())
           .user(user())
           .voiceInstructions(voiceInstructions())
+          .exclude(exclude())
           .build()
       ).build());
     }
@@ -272,6 +275,9 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
   @Nullable
   abstract Boolean voiceInstructions();
+
+  @Nullable
+  abstract String exclude();
 
   /**
    * Gets the call factory for creating {@link Call} instances.
@@ -536,7 +542,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     abstract Builder annotation(@Nullable String annotation);
 
 
-
     /**
      * Optionally, Use to filter the road segment the waypoint will be placed on by direction and
      * dictates the angle of approach. This option should always be used in conjunction with the
@@ -596,6 +601,16 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     }
 
     abstract Builder radius(@Nullable String radiuses);
+
+    /**
+     * Exclude certain road types from routing. Valid values depend on the profile in use. The
+     * default is to not exclude anything from the profile selected.
+     *
+     * @param exclude one of the constants defined in {@link ExcludeCriteria}
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder exclude(@ExcludeCriteria String exclude);
 
     /**
      * Request voice Instructions objects to be returned in your response. This offers instructions
