@@ -2,8 +2,8 @@ package com.mapbox.services.android;
 
 import android.location.Location;
 
+import com.mapbox.services.android.core.location.LocationEngineListener;
 import com.mapbox.services.android.location.MockLocationEngine;
-import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 
 import org.junit.Assert;
 import org.junit.Test;
