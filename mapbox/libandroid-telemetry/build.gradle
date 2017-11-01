@@ -26,6 +26,7 @@ android {
 }
 
 dependencies {
+    compile rootProject.ext.dep.mapboxAndroidCore
     // Android Support libraries
     compile rootProject.ext.dep.supportAppcompat
 
