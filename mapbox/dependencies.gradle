@@ -18,7 +18,6 @@ ext {
 
             // mapbox
             mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.1.4@aar',
-            mapboxAndroidCore    : 'com.mapbox.mapboxsdk:mapbox-android-core:0.1.1@aar',
 
             // gson
             gson                 : 'com.google.code.gson:gson:2.8.0',

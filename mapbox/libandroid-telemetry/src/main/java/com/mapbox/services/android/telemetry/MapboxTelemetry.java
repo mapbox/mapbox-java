@@ -21,13 +21,13 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.mapbox.services.android.core.location.LocationEngine;
-import com.mapbox.services.android.core.location.LocationEngineListener;
-import com.mapbox.services.android.core.location.LocationEngineProvider;
 import com.mapbox.services.android.telemetry.backoff.ExponentialBackoff;
 import com.mapbox.services.android.telemetry.connectivity.ConnectivityReceiver;
 import com.mapbox.services.android.telemetry.constants.TelemetryConstants;
 import com.mapbox.services.android.telemetry.http.TelemetryClient;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.mapbox.services.android.telemetry.location.LocationEngineProvider;
 import com.mapbox.services.android.telemetry.navigation.MapboxNavigationEvent;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 import com.mapbox.services.android.telemetry.service.TelemetryService;

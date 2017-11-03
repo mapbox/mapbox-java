@@ -13,10 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mapbox.services.android.core.location.LocationEngine;
-import com.mapbox.services.android.core.location.LocationEngineListener;
-import com.mapbox.services.android.core.location.LocationEngineProvider;
 import com.mapbox.services.android.geocoder.AndroidGeocoder;
+import com.mapbox.services.android.telemetry.location.LocationEngine;
+import com.mapbox.services.android.telemetry.location.LocationEngineListener;
+import com.mapbox.services.android.telemetry.location.LocationEngineProvider;
 import com.mapbox.services.android.testapp.R;
 import com.mapbox.services.android.testapp.geocoding.service.Constants;
 import com.mapbox.services.android.testapp.geocoding.service.FetchAddressIntentService;
