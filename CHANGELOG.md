@@ -2,6 +2,22 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.2.8
+
+- Revert mapbox-android-core dependency PR [#627](https://github.com/mapbox/mapbox-java/pull/627)
+
+### v2.2.7
+
+- mapbox-android-core dependency [#622](https://github.com/mapbox/mapbox-java/pull/622)
+- Add telem audio type support [#604](https://github.com/mapbox/mapbox-java/pull/604)
+- Add telem cancel rating and comment track support [#617](https://github.com/mapbox/mapbox-java/pull/617)
+- Add telem percent time in foreground and in portrait track support [#616](https://github.com/mapbox/mapbox-java/pull/616)
+- Add telem absolute distance to destination support [#615](https://github.com/mapbox/mapbox-java/pull/615)
+- Add telem current location engine being used track support [#605](https://github.com/mapbox/mapbox-java/pull/605)
+- Get correct volume level [#600](https://github.com/mapbox/mapbox-java/pull/600)
+- Flush Navigation Events Manually [#601](https://github.com/mapbox/mapbox-java/pull/601)
+- NPE for BatteryStatus [#602](https://github.com/mapbox/mapbox-java/pull/602)
+
 ### v2.2.6
 
 - Fix for Matrix source and destination returning null rather than the true value [#588](https://github.com/mapbox/mapbox-java/pull/588)
