@@ -95,6 +95,12 @@ public abstract class LocationEngine {
    */
   public abstract void removeLocationUpdates();
 
+  /**
+   * Get the current {@link LocationEngine} {@link Type} being used.
+   *
+   * @return one of the location engine types listed inside the {@link Type} enum.
+   * @since 2.2.6
+   */
   public abstract Type obtainType();
 
   /**
