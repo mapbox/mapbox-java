@@ -749,6 +749,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
     } else {
       locationEngine.removeLocationEngineListener(this);
       locationEngine.removeLocationUpdates();
+      locationEngine.deactivate();
     }
     if (timer != null) {
       timer.cancel();
