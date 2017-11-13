@@ -2,6 +2,13 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v2.2.9
+
+- Deactivate location engine when shutting down telemetry service [#638](https://github.com/mapbox/mapbox-java/pull/638)
+- Add obtain location engine type javadoc [#635](https://github.com/mapbox/mapbox-java/pull/635)
+- Bump Lost version to 3.0.4 [#636](https://github.com/mapbox/mapbox-java/pull/636)
+- Downgrade minimum sdk version to 14 [#630](https://github.com/mapbox/mapbox-java/pull/630)
+
 ### v2.2.8
 
 - Revert mapbox-android-core dependency PR [#627](https://github.com/mapbox/mapbox-java/pull/627)
