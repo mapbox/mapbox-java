@@ -17,7 +17,7 @@ import java.lang.ref.WeakReference;
 /**
  * Sample LocationEngine using the Open Source Lost library
  */
-public class LostLocationEngine extends LocationEngine implements LocationListener {
+public class LostLocationEngine extends LocationEngine implements LostApiClient.ConnectionCallbacks, LocationListener {
 
   private static LocationEngine instance;
 
@@ -27,7 +27,9 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
   public LostLocationEngine(Context context) {
     super();
     this.context = new WeakReference<>(context);
-    lostApiClient = new LostApiClient.Builder(this.context.get()).build();
+    lostApiClient = new LostApiClient.Builder(this.context.get())
+      .addConnectionCallbacks(this)
+      .build();
   }
 
   public static synchronized LocationEngine getLocationEngine(Context context) {
@@ -44,12 +46,7 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
    */
   @Override
   public void activate() {
-    if (!lostApiClient.isConnected()) {
-      lostApiClient.connect();
-    }
-    for (LocationEngineListener listener : locationListeners) {
-      listener.onConnected();
-    }
+    connect();
   }
 
   /**
@@ -59,7 +56,7 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
    */
   @Override
   public void deactivate() {
-    if (lostApiClient.isConnected()) {
+    if (lostApiClient != null && lostApiClient.isConnected()) {
       lostApiClient.disconnect();
     }
   }
@@ -76,6 +73,24 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
   }
 
   /**
+   * Invoked when the location provider has connected.
+   */
+  @Override
+  public void onConnected() {
+    for (LocationEngineListener listener : locationListeners) {
+      listener.onConnected();
+    }
+  }
+
+  /**
+   * Invoked when the location provider connection has been suspended.
+   */
+  @Override
+  public void onConnectionSuspended() {
+    // Empty
+  }
+
+  /**
    * Returns the Last known location if the location provider is connected and location permissions are granted.
    *
    * @return the last known location
@@ -85,7 +100,7 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
   public Location getLastLocation() {
     if (lostApiClient.isConnected()) {
       //noinspection MissingPermission
-      return LocationServices.FusedLocationApi.getLastLocation();
+      return LocationServices.FusedLocationApi.getLastLocation(lostApiClient);
     }
     return null;
   }
@@ -120,7 +135,7 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
 
     if (lostApiClient.isConnected()) {
       //noinspection MissingPermission
-      LocationServices.FusedLocationApi.requestLocationUpdates(request, this);
+      LocationServices.FusedLocationApi.requestLocationUpdates(lostApiClient, request, this);
     }
   }
 
@@ -135,7 +150,7 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
   @Override
   public void removeLocationUpdates() {
     if (lostApiClient.isConnected()) {
-      LocationServices.FusedLocationApi.removeLocationUpdates(this);
+      LocationServices.FusedLocationApi.removeLocationUpdates(lostApiClient, this);
     }
   }
 
@@ -148,6 +163,16 @@ public class LostLocationEngine extends LocationEngine implements LocationListen
   public void onLocationChanged(Location location) {
     for (LocationEngineListener listener : locationListeners) {
       listener.onLocationChanged(location);
+    }
+  }
+
+  private void connect() {
+    if (lostApiClient != null) {
+      if (lostApiClient.isConnected()) {
+        onConnected();
+      } else {
+        lostApiClient.connect();
+      }
     }
   }
 }
