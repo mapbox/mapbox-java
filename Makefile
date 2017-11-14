@@ -84,6 +84,10 @@ directions-fixtures:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/-77.04014240930304,38.91313201360546;-77.04573453985853,38.90725177816208.json?steps=true&overview=full&geometries=polyline&roundabout_exits=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-directions/src/test/resources/directions_v5_roundabout_exits.json
 
+	# Directions: voice announcements fixture
+	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-77.04014240930304,38.91313201360546;-77.04573453985853,38.90725177816208.json?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+    		-o services-directions/src/test/resources/directions_v5_voice_banner.json
+
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-matching/src/test/resources/mapmatching_v5_polyline.json

@@ -63,6 +63,7 @@ public interface DirectionsService {
     @Query("language") String language,
     @Query("roundabout_exits") Boolean roundaboutExits,
     @Query("voice_instructions") Boolean voiceInstructions,
+    @Query("banner_instructions") Boolean bannerInstructions,
     @Query("exclude") String exclude
   );
 }

@@ -134,6 +134,9 @@ public abstract class RouteOptions {
   @Nullable
   public abstract Boolean voiceInstructions();
 
+  @Nullable
+  public abstract Boolean bannerInstructions();
+
   /**
    * Gson type adapter for parsing Gson to this class.
    *
@@ -238,6 +241,8 @@ public abstract class RouteOptions {
      * @since 3.0.0
      */
     public abstract Builder voiceInstructions(Boolean voiceInstructions);
+
+    public abstract Builder bannerInstructions(Boolean bannerInstructions);
 
     /**
      * The same exclusions the user originally made when the request was made.

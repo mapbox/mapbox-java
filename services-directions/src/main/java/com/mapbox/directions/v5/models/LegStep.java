@@ -1,6 +1,5 @@
 package com.mapbox.directions.v5.models;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -143,6 +142,9 @@ public abstract class LegStep implements Serializable {
    */
   @Nullable
   public abstract List<VoiceInstructions> voiceInstructions();
+
+  @Nullable
+  public abstract List<BannerInstructions> bannerInstructions();
 
   /**
    * Specifies a decimal precision of edge weights, default value 1.
@@ -304,6 +306,9 @@ public abstract class LegStep implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder voiceInstructions(@Nullable List<VoiceInstructions> voiceInstructions);
+
+    public abstract Builder bannerInstructions(
+      @Nullable List<BannerInstructions> bannerInstructions);
 
     /**
      * Specifies a decimal precision of edge weights, default value 1.

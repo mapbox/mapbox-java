@@ -108,6 +108,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       language(),
       roundaboutExits(),
       voiceInstructions(),
+      bannerInstructions(),
       exclude());
 
     // Done
@@ -196,6 +197,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           .radiuses(radius())
           .user(user())
           .voiceInstructions(voiceInstructions())
+          .bannerInstructions(bannerInstructions())
           .exclude(exclude())
           .build()
       ).build());
@@ -275,6 +277,9 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
   @Nullable
   abstract Boolean voiceInstructions();
+
+  @Nullable
+  abstract Boolean bannerInstructions();
 
   @Nullable
   abstract String exclude();
@@ -541,7 +546,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
     abstract Builder annotation(@Nullable String annotation);
 
-
     /**
      * Optionally, Use to filter the road segment the waypoint will be placed on by direction and
      * dictates the angle of approach. This option should always be used in conjunction with the
@@ -613,7 +617,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     public abstract Builder exclude(@ExcludeCriteria String exclude);
 
     /**
-     * Request voice Instructions objects to be returned in your response. This offers instructions
+     * Request voice instructions objects to be returned in your response. This offers instructions
      * specific for navigation and provides well spoken text instructions along with the distance
      * from the maneuver the instructions should be said.
      * <p>
@@ -623,9 +627,22 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      *
      * @param voiceInstructions true if you'd like voice instruction objects be attached to your
      *                          response
+     * @return this builder for chaining options together
      * @since 3.0.0
      */
     public abstract Builder voiceInstructions(@Nullable Boolean voiceInstructions);
+
+    /**
+     * Request banner instructions object to be returned in your response. This is useful
+     * specifically for navigation and provides an abundance of information one might want to
+     * display to their user inside an Android view for example.
+     *
+     * @param bannerInstructions true if you'd like the receive banner objects within your response
+     *                           object
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder bannerInstructions(@Nullable Boolean bannerInstructions);
 
     /**
      * Base package name or other simple string identifier. Used inside the calls user agent header.
