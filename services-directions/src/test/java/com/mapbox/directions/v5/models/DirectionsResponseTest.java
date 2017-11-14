@@ -18,6 +18,7 @@ import org.junit.rules.ExpectedException;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class DirectionsResponseTest extends TestUtils {
 
@@ -77,6 +78,7 @@ public class DirectionsResponseTest extends TestUtils {
   public void sanity() throws Exception {
     DirectionsResponse response = DirectionsResponse.builder()
       .code("100")
+      .routes(new ArrayList<DirectionsRoute>())
       .build();
     assertNotNull(response);
   }

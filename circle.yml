@@ -23,17 +23,17 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}
       - run:
-          name: Jacoco test report
-          command: ./gradlew jacocoTestReport
-      - run:
-          name: Sonarcloud upload
-          command: make sonarqube
-      - run:
           name: Check Java code style
           command: make checkstyle
       - run:
+          name: Jacoco test report
+          command: ./gradlew jacocoTestReport
+      - run:
           name: Run unit-test for all modules
           command: make test
+      - run:
+          name: SonarQube upload
+          command: make sonarqube
       - run:
           name: Update Transifex
           command: |

@@ -137,6 +137,7 @@ public abstract class RouteOptions {
   @Nullable
   public abstract Boolean bannerInstructions();
 
+  @Nullable
   public abstract String voiceUnits();
 
   /**
@@ -246,7 +247,7 @@ public abstract class RouteOptions {
 
     public abstract Builder bannerInstructions(Boolean bannerInstructions);
 
-    public abstract Builder voiceUnits(String voiceUnits);
+    public abstract Builder voiceUnits(@Nullable String voiceUnits);
 
     /**
      * The same exclusions the user originally made when the request was made.

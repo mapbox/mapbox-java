@@ -45,16 +45,6 @@ public class LineStringTest extends TestUtils {
   }
 
   @Test
-  public void fromLngLats_onlyOnePointInMultipoint() throws Exception {
-    thrown.expect(GeoJsonException.class);
-    thrown.expectMessage("A LineString requires at least 2 coordinates.");
-    List<Point> points = new ArrayList<>();
-    points.add(Point.fromLngLat(1.0,2.0));
-    MultiPoint multiPoint = MultiPoint.fromLngLats(points);
-    LineString.fromLngLats(multiPoint);
-  }
-
-  @Test
   public void bbox_nullWhenNotSet() throws Exception {
     List<Point> points = new ArrayList<>();
     points.add(Point.fromLngLat(1.0, 1.0));

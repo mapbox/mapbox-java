@@ -2,13 +2,24 @@ apply plugin: 'org.sonarqube'
 
 sonarqube {
   properties {
+    // Project Configuration
+    property "sonar.projectKey", "mapbox-java-services:master"
+    property "sonar.host.url", "https://mb-sonarqube-staging.tilestream.net"
+
+    // Project identity
+    property "sonar.projectName", "Mapbox Java"
+
+    // Test reports
     property "sonar.java.coveragePlugin", "jacoco"
-    property "sonar.host.url", "https://sonarcloud.io"
-    property "sonar.login", System.env.SONARQUBE_API_TOKEN
-    property "sonar.organization", "mapbox"
-    property "sonar.projectName", "mapbox-java"
-    property "sonar.projectKey", "mapbox-java-services"
     property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec"
+
+    // Authentication
+    property "sonar.login", System.env.SONARQUBE_API_TOKEN
+
+    // Project information
+    property "sonar.projectDescription", "Contains both a lightwight wrappers for many of Mapbox's APIs and utilities such as Turf for geo-calculations"
     property "sonar.links.homepage", "https://github.com/mapbox/mapbox-java"
+    property "sonar.links.ci", "https://circleci.com/gh/mapbox/mapbox-java"
+    property "sonar.links.issue", "https://github.com/mapbox/mapbox-java/issues"
   }
 }

@@ -12,10 +12,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 public final class DirectionsCriteria {
 
-  private DirectionsCriteria() {
-    //not called
-  }
-
   /**
    * Mapbox default username.
    *
@@ -56,21 +52,6 @@ public final class DirectionsCriteria {
   public static final String PROFILE_CYCLING = "cycling";
 
   /**
-   * Retention policy for the various direction profiles.
-   *
-   * @since 3.0.0
-   */
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef( {
-    PROFILE_DRIVING_TRAFFIC,
-    PROFILE_DRIVING,
-    PROFILE_WALKING,
-    PROFILE_CYCLING
-  })
-  public @interface ProfileCriteria {
-  }
-
-  /**
    * Format to return route geometry will be an encoded polyline.
    *
    * @since 1.0.0
@@ -83,19 +64,6 @@ public final class DirectionsCriteria {
    * @since 2.0.0
    */
   public static final String GEOMETRY_POLYLINE6 = "polyline6";
-
-  /**
-   * Retention policy for the various direction geometries.
-   *
-   * @since 3.0.0
-   */
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef( {
-    GEOMETRY_POLYLINE,
-    GEOMETRY_POLYLINE6
-  })
-  public @interface GeometriesCriteria {
-  }
 
   /**
    * A simplified version of the {@link #OVERVIEW_FULL} geometry. If not specified simplified is
@@ -118,20 +86,6 @@ public final class DirectionsCriteria {
    * @since 1.0.0
    */
   public static final String OVERVIEW_FALSE = "false";
-
-  /**
-   * Retention policy for the various direction overviews.
-   *
-   * @since 3.0.0
-   */
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef( {
-    OVERVIEW_FALSE,
-    OVERVIEW_FULL,
-    OVERVIEW_SIMPLIFIED
-  })
-  public @interface OverviewCriteria {
-  }
 
   /**
    * The duration, in seconds, between each pair of coordinates.
@@ -162,21 +116,6 @@ public final class DirectionsCriteria {
   public static final String ANNOTATION_CONGESTION = "congestion";
 
   /**
-   * Retention policy for the various direction annotations.
-   *
-   * @since 3.0.0
-   */
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef( {
-    ANNOTATION_CONGESTION,
-    ANNOTATION_DISTANCE,
-    ANNOTATION_DURATION,
-    ANNOTATION_SPEED
-  })
-  public @interface AnnotationCriteria {
-  }
-
-  /**
    * Exclude all tolls along the returned directions route.
    *
    * @since 3.0.0
@@ -198,32 +137,20 @@ public final class DirectionsCriteria {
   public static final String EXCLUDE_FERRY = "ferry";
 
   /**
-   * Retention policy for the various direction exclusions.
+   * Change the units to imperial for voice and visual information. Note that this won't change
+   * other results such as raw distance measurements which will always be returned in meters.
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef( {
-    EXCLUDE_FERRY,
-    EXCLUDE_MOTORWAY,
-    EXCLUDE_TOLL
-  })
-  public @interface ExcludeCriteria {
-  }
-
   public static final String IMPERIAL = "imperial";
 
+  /**
+   * Change the units to metric for voice and visual information. Note that this won't change
+   * other results such as raw distance measurements which will always be returned in meters.
+   *
+   * @since 3.0.0
+   */
   public static final String METRIC = "metric";
-
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef( {
-    IMPERIAL,
-    METRIC
-  })
-  public @interface VoiceUnitCriteria {
-  }
-
-  // Optimization API criteria's
 
   /**
    * Returned route starts at the first provided coordinate in the list. Used specifically for the
@@ -241,18 +168,6 @@ public final class DirectionsCriteria {
    */
   public static final String SOURCE_ANY = "any";
 
-  /**
-   * Retention policy for the source parameter in the Optimization API.
-   *
-   * @since 3.0.0
-   */
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef( {
-    SOURCE_ANY,
-    SOURCE_FIRST,
-  })
-  public @interface SourceCriteria {
-  }
 
   /**
    * Returned route ends at any of the provided coordinate in the list. Used specifically for the
@@ -270,6 +185,107 @@ public final class DirectionsCriteria {
    */
   public static final String DESTINATION_LAST = "last";
 
+  private DirectionsCriteria() {
+    //not called
+  }
+
+  /**
+   * Retention policy for the various direction profiles.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    PROFILE_DRIVING_TRAFFIC,
+    PROFILE_DRIVING,
+    PROFILE_WALKING,
+    PROFILE_CYCLING
+  })
+  public @interface ProfileCriteria {
+  }
+
+  /**
+   * Retention policy for the various direction geometries.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    GEOMETRY_POLYLINE,
+    GEOMETRY_POLYLINE6
+  })
+  public @interface GeometriesCriteria {
+  }
+
+  /**
+   * Retention policy for the various direction overviews.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    OVERVIEW_FALSE,
+    OVERVIEW_FULL,
+    OVERVIEW_SIMPLIFIED
+  })
+  public @interface OverviewCriteria {
+  }
+
+  /**
+   * Retention policy for the various direction annotations.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    ANNOTATION_CONGESTION,
+    ANNOTATION_DISTANCE,
+    ANNOTATION_DURATION,
+    ANNOTATION_SPEED
+  })
+  public @interface AnnotationCriteria {
+  }
+
+  /**
+   * Retention policy for the various direction exclusions.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    EXCLUDE_FERRY,
+    EXCLUDE_MOTORWAY,
+    EXCLUDE_TOLL
+  })
+  public @interface ExcludeCriteria {
+  }
+
+  /**
+   * Retention policy for the various units of measurements.
+   *
+   * @since 0.3.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    IMPERIAL,
+    METRIC
+  })
+  public @interface VoiceUnitCriteria {
+  }
+
+  /**
+   * Retention policy for the source parameter in the Optimization API.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    SOURCE_ANY,
+    SOURCE_FIRST
+  })
+  public @interface SourceCriteria {
+  }
+
   /**
    * Retention policy for the destination parameter in the Optimization API.
    *
@@ -278,7 +294,7 @@ public final class DirectionsCriteria {
   @Retention(RetentionPolicy.SOURCE)
   @StringDef( {
     DESTINATION_ANY,
-    DESTINATION_LAST,
+    DESTINATION_LAST
   })
   public @interface DestinationCriteria {
   }

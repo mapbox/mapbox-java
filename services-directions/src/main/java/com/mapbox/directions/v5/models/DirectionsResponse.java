@@ -14,7 +14,8 @@ import java.util.List;
  * This is the root Mapbox Directions API response. Inside this class are several nested classes
  * chained together to make up a similar structure to the original APIs JSON response.
  *
- * @see <a href="https://www.mapbox.com/api-documentation/#directions-response-object">Direction Response Object</a>
+ * @see <a href="https://www.mapbox.com/api-documentation/#directions-response-object">Direction
+ *   Response Object</a>
  * @since 1.0.0
  */
 @AutoValue
@@ -46,7 +47,7 @@ public abstract class DirectionsResponse implements Serializable {
    * @return a string with one of the given values described in the list above
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract String code();
 
   /**
@@ -78,7 +79,7 @@ public abstract class DirectionsResponse implements Serializable {
    * @return list of {@link DirectionsRoute} objects
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract List<DirectionsRoute> routes();
 
   /**
@@ -156,7 +157,7 @@ public abstract class DirectionsResponse implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder routes(@Nullable List<DirectionsRoute> routes);
+    public abstract Builder routes(@NonNull List<DirectionsRoute> routes);
 
     /**
      * A universally unique identifier (UUID) for identifying and executing a similar specific route

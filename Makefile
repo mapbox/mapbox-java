@@ -2,6 +2,7 @@ checkstyle:
 	./gradlew checkstyle
 
 sonarqube:
+	./gradlew JacocoTestReport
 	./gradlew sonarqube
 
 test:
@@ -87,6 +88,10 @@ directions-fixtures:
 	# Directions: voice announcements fixture
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-77.04014240930304,38.91313201360546;-77.04573453985853,38.90725177816208.json?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
     		-o services-directions/src/test/resources/directions_v5_voice_banner.json
+
+	# Directions: No route found
+	curl "https://api.mapbox.com/directions/v5/mapbox/driving/149.72227,-37.59764;170.72975,-42.96489.json?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+	  		-o services-directions/src/test/resources/directions_v5_no_route.json
 
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \

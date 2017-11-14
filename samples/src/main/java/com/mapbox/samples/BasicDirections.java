@@ -54,7 +54,7 @@ public class BasicDirections {
       .addBearing(null, null)
       .radiuses(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
       .steps(true)
-      .voiceUnits(DirectionsCriteria.METRIC)
+//      .voiceUnits(DirectionsCriteria.METRIC)
       .build();
   }
 }

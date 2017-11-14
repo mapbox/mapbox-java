@@ -1,7 +1,5 @@
 package com.mapbox.directions.v5;
 
-import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
-
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +19,7 @@ import com.mapbox.geojson.Point;
 import com.mapbox.services.MapboxService;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
+import com.mapbox.services.utils.ApiCallHelper;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
 import okhttp3.ResponseBody;
@@ -36,6 +35,8 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The Directions API allows the calculation of routes between coordinates. The fastest route can be
@@ -46,6 +47,7 @@ import java.util.Locale;
  * <p>
  * Requesting a route at a bare minimal must include, a Mapbox access token, destination, and an
  * origin.
+ * </p>
  *
  * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/directions/">Android
  *   Directions documentation</a>
@@ -55,6 +57,8 @@ import java.util.Locale;
  */
 @AutoValue
 public abstract class MapboxDirections extends MapboxService<DirectionsResponse> {
+
+  private static final Logger logger = Logger.getLogger(MapboxDirections.class.getName());
 
   private okhttp3.Call.Factory callFactory;
   private Call<DirectionsResponse> call;
@@ -93,7 +97,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     }
 
     call = getService().getCall(
-      getHeaderUserAgent(clientAppName()),
+      ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
       coordinates(),
@@ -128,9 +132,9 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
     Response<DirectionsResponse> response = getCall().execute();
-    if (response.body() == null
-      || response.body().routes() == null
-      || response.body().routes().isEmpty()) {
+    if (!response.isSuccessful()) {
+      errorDidOccur(null, response);
+    } else {
       return Response.success(response.body(), response.headers());
     }
     List<DirectionsRoute> routes = response.body().routes();
@@ -152,24 +156,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
         if (!response.isSuccessful()) {
-
-          Converter<ResponseBody, DirectionsError> errorConverter =
-            retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
-
-          try {
-            callback.onFailure(
-              call, new Throwable(errorConverter.convert(response.errorBody()).message()));
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
-
-          // If the response isn't successful we move invoke onFailure instead
+          errorDidOccur(callback, response);
           return;
-        }
-        // TODO some of these checks shouldn't be needed anymore thanks to the isSuccessful check.
-        if (response == null
-          || response.body() == null
-          || response.body().routes().isEmpty()) {
+
+          // TODO test whether routes an empty list is created or null
+        } else if (response.body() == null || response.body().routes().isEmpty()) {
           // If null just pass the original object back since there's nothing to modify.
           callback.onResponse(call, response);
         }
@@ -184,6 +175,23 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       }
     });
   }
+
+  private void errorDidOccur(@Nullable Callback<DirectionsResponse> callback,
+                             @NonNull Response<DirectionsResponse> response) {
+    // Response gave an error, we try to logger any messages into the logger here.
+    Converter<ResponseBody, DirectionsError> errorConverter =
+      retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
+    if (callback == null) {
+      return;
+    }
+    try {
+      callback.onFailure(call,
+        new Throwable(errorConverter.convert(response.errorBody()).message()));
+    } catch (IOException ioException) {
+      logger.log(Level.WARNING, "Failed to complete your request. ", ioException);
+    }
+  }
+
 
   private List<DirectionsRoute> generateRouteOptions(List<DirectionsRoute> routes) {
     List<DirectionsRoute> modifiedRoutes = new ArrayList<>();
@@ -335,6 +343,31 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    * @since 3.0.0
    */
   public abstract Builder toBuilder();
+
+  public static MapboxDirections create(String user, String profile, String coordinates, String baseUrl, String accessToken, Boolean alternatives, String geometries, String overview, String radius, String bearing, Boolean steps, Boolean continueStraight, String annotation, String language, Boolean roundaboutExits, String clientAppName, Boolean voiceInstructions, Boolean bannerInstructions, String voiceUnits, String exclude) {
+    return builder()
+      .user(user)
+      .profile(profile)
+      .coordinates(coordinates)
+      .baseUrl(baseUrl)
+      .accessToken(accessToken)
+      .alternatives(alternatives)
+      .geometries(geometries)
+      .overview(overview)
+      .radius(radius)
+      .bearing(bearing)
+      .steps(steps)
+      .continueStraight(continueStraight)
+      .annotation(annotation)
+      .language(language)
+      .roundaboutExits(roundaboutExits)
+      .clientAppName(clientAppName)
+      .voiceInstructions(voiceInstructions)
+      .bannerInstructions(bannerInstructions)
+      .voiceUnits(voiceUnits)
+      .exclude(exclude)
+      .build();
+  }
 
   /**
    * This builder is used to create a new request to the Mapbox Directions API. At a bare minimum,

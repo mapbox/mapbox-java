@@ -20,7 +20,7 @@ import java.util.List;
 
 
 /**
- * A multPolygon is an array of Polygon coordinate arrays.
+ * A multiPolygon is an array of Polygon coordinate arrays.
  * <p>
  * This adheres to the RFC 7946 internet standard when serialized into JSON. When deserialized, this
  * class becomes an immutable object which should be initiated using its static factory methods.
