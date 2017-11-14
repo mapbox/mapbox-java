@@ -211,6 +211,18 @@ public final class DirectionsCriteria {
   public @interface ExcludeCriteria {
   }
 
+  public static final String IMPERIAL = "imperial";
+
+  public static final String METRIC = "metric";
+
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    IMPERIAL,
+    METRIC
+  })
+  public @interface VoiceUnitCriteria {
+  }
+
   // Optimization API criteria's
 
   /**

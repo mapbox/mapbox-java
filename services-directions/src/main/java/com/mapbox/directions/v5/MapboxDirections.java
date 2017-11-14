@@ -12,6 +12,7 @@ import com.mapbox.directions.v5.DirectionsCriteria.ExcludeCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.directions.v5.DirectionsCriteria.VoiceUnitCriteria;
 import com.mapbox.directions.v5.models.DirectionsError;
 import com.mapbox.directions.v5.models.DirectionsResponse;
 import com.mapbox.directions.v5.models.DirectionsRoute;
@@ -109,6 +110,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       roundaboutExits(),
       voiceInstructions(),
       bannerInstructions(),
+      voiceUnits(),
       exclude());
 
     // Done
@@ -199,6 +201,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           .voiceInstructions(voiceInstructions())
           .bannerInstructions(bannerInstructions())
           .exclude(exclude())
+          .voiceUnits(voiceUnits())
           .build()
       ).build());
     }
@@ -280,6 +283,9 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
   @Nullable
   abstract Boolean bannerInstructions();
+
+  @Nullable
+  abstract String voiceUnits();
 
   @Nullable
   abstract String exclude();
@@ -643,6 +649,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * @since 3.0.0
      */
     public abstract Builder bannerInstructions(@Nullable Boolean bannerInstructions);
+
+    public abstract Builder voiceUnits(@Nullable @VoiceUnitCriteria String voiceUnits);
 
     /**
      * Base package name or other simple string identifier. Used inside the calls user agent header.

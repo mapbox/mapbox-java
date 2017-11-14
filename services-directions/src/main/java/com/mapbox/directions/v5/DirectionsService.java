@@ -64,6 +64,7 @@ public interface DirectionsService {
     @Query("roundabout_exits") Boolean roundaboutExits,
     @Query("voice_instructions") Boolean voiceInstructions,
     @Query("banner_instructions") Boolean bannerInstructions,
+    @Query("voice_units") String voiceUnits,
     @Query("exclude") String exclude
   );
 }
