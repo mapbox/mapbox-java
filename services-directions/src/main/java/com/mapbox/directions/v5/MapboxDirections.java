@@ -344,31 +344,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    */
   public abstract Builder toBuilder();
 
-  public static MapboxDirections create(String user, String profile, String coordinates, String baseUrl, String accessToken, Boolean alternatives, String geometries, String overview, String radius, String bearing, Boolean steps, Boolean continueStraight, String annotation, String language, Boolean roundaboutExits, String clientAppName, Boolean voiceInstructions, Boolean bannerInstructions, String voiceUnits, String exclude) {
-    return builder()
-      .user(user)
-      .profile(profile)
-      .coordinates(coordinates)
-      .baseUrl(baseUrl)
-      .accessToken(accessToken)
-      .alternatives(alternatives)
-      .geometries(geometries)
-      .overview(overview)
-      .radius(radius)
-      .bearing(bearing)
-      .steps(steps)
-      .continueStraight(continueStraight)
-      .annotation(annotation)
-      .language(language)
-      .roundaboutExits(roundaboutExits)
-      .clientAppName(clientAppName)
-      .voiceInstructions(voiceInstructions)
-      .bannerInstructions(bannerInstructions)
-      .voiceUnits(voiceUnits)
-      .exclude(exclude)
-      .build();
-  }
-
   /**
    * This builder is used to create a new request to the Mapbox Directions API. At a bare minimum,
    * your request must include an access token, an origin, and a destination. All other fields can
@@ -716,7 +691,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
     abstract Builder coordinates(@NonNull String coordinates);
 
-    abstract MapboxDirections autoBuild(); // not public
+    abstract MapboxDirections autoBuild();
 
     /**
      * This uses the provided parameters set using the {@link Builder} and first checks that all

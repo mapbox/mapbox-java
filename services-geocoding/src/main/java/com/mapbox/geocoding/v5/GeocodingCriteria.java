@@ -12,10 +12,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 public final class GeocodingCriteria {
 
-  private GeocodingCriteria() {
-    // Empty private constructor
-  }
-
   /**
    * Default geocoding mode.
    *
@@ -29,19 +25,6 @@ public final class GeocodingCriteria {
    * @since 1.0.0
    */
   public static final String MODE_PLACES_PERMANENT = "mapbox.places-permanent";
-
-  /**
-   * Retention policy for the various geocoding modes.
-   *
-   * @since 3.0.0
-   */
-  @Retention(RetentionPolicy.SOURCE)
-  @StringDef( {
-    MODE_PLACES,
-    MODE_PLACES_PERMANENT
-  })
-  public @interface GeocodingModeCriteria {
-  }
 
   /**
    * Filter results by country.
@@ -112,6 +95,23 @@ public final class GeocodingCriteria {
    * @since 1.3.2
    */
   public static final String TYPE_POI_LANDMARK = "poi.landmark";
+
+  private GeocodingCriteria() {
+    // Empty private constructor
+  }
+
+  /**
+   * Retention policy for the various geocoding modes.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    MODE_PLACES,
+    MODE_PLACES_PERMANENT
+  })
+  public @interface GeocodingModeCriteria {
+  }
 
   /**
    * Retention policy for the various filter result types.

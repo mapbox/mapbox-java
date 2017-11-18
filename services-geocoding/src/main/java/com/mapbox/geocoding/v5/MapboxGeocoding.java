@@ -69,7 +69,6 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   private Call<List<GeocodingResponse>> batchCall;
   private Call<GeocodingResponse> call;
   private GeocodingService service;
-  protected Builder builder;
 
   private GeocodingService getService() {
     // No need to recreate it
