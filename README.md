@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/"><img src="https://github.com/mapbox/mapbox-java/blob/mb-java-3.0.0/.github/mbxservice-logo.png" alt="Mapbox Service" width="400"></a>
+  <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/"><img src="https://github.com/mapbox/mapbox-java/blob/master/.github/mbxservice-logo.png" alt="Mapbox Service" width="400"></a>
 </h1>
 
 <h4 align="center">Build powerful Java apps using Mapbox's tools and services</h4>
