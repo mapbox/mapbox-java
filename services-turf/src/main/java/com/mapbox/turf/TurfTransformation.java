@@ -66,7 +66,7 @@ public final class TurfTransformation {
                                @TurfUnitCriteria String units) {
     List<Point> coordinates = new ArrayList<>();
     for (int i = 0; i < steps; i++) {
-      coordinates.add(TurfMeasurement.destination(center, radius, i * 360 / steps, units));
+      coordinates.add(TurfMeasurement.destination(center, radius, i * 360d / steps, units));
     }
 
     List<List<Point>> coordinate = new ArrayList<>();
