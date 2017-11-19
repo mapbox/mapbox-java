@@ -2,7 +2,6 @@ package com.mapbox.geocoding.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,13 +9,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.util.List;
@@ -191,9 +190,10 @@ public abstract class CarmenFeature {
     return null;
   }
 
+  // No public access thus, we lessen enforcement on mutability here.
   @Nullable
   @SerializedName("center")
-  @SuppressWarnings("mutable") // No public access
+  @SuppressWarnings("mutable")
   abstract double[] rawCenter();
 
   /**
