@@ -2,23 +2,26 @@ package com.mapbox.geocoding.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.GeometryDeserializer;
+import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
+import com.mapbox.geojson.gson.PointSerializer;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -40,8 +43,10 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class CarmenFeature {
+public abstract class CarmenFeature implements Serializable {
 
+  @Expose
+  @SerializedName("type")
   private static final String TYPE = "Feature";
 
   /**
@@ -51,8 +56,7 @@ public abstract class CarmenFeature {
    * @since 3.0.0
    */
   public static Builder builder() {
-    return new AutoValue_CarmenFeature.Builder()
-      .type(TYPE);
+    return new AutoValue_CarmenFeature.Builder();
   }
 
   /**
@@ -64,13 +68,13 @@ public abstract class CarmenFeature {
    */
   public static CarmenFeature fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(GeocodingAdapterFactory.create());
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
     return gson.create().fromJson(json, CarmenFeature.class);
   }
-
 
   // Feature specific attributes
 
@@ -83,7 +87,9 @@ public abstract class CarmenFeature {
    * @since 1.0.0
    */
   @NonNull
-  public abstract String type();
+  public String type() {
+    return TYPE;
+  }
 
   /**
    * A {@link CarmenFeature} might have a member named {@code bbox} to include information on the
@@ -265,23 +271,35 @@ public abstract class CarmenFeature {
   }
 
   /**
+   * This takes the currently defined values found inside this instance and converts it to a JSON
+   * string.
+   *
+   * @return a JSON string which represents this CarmenFeature
+   * @since 3.0.0
+   */
+  public String toJson() {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointSerializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
+    return gson.create().toJson(this);
+  }
+
+  /**
+   * Convert current instance values into another Builder to quickly change one or more values.
+   *
+   * @return a new instance of {@link CarmenFeature} using the newly defined values
+   * @since 3.0.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * This builder can be used to set the values describing the {@link CarmenFeature}.
    *
    * @since 3.0.0
    */
   @AutoValue.Builder
   public abstract static class Builder {
-
-    /**
-     * This describes the TYPE of GeoJson geometry this object is, thus this will always return
-     * {@link Feature}. Note that this isn't public since it should always be set to "Feature"
-     *
-     * @param type a String which describes the TYPE of geometry, for this object it will always
-     *             return {@code Feature}
-     * @return this builder for chaining options together
-     * @since 3.0.0
-     */
-    abstract Builder type(@NonNull String type);
 
     /**
      * A Feature might have a member named {@code bbox} to include information on the coordinate
