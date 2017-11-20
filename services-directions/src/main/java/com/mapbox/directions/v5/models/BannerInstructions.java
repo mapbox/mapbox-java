@@ -5,8 +5,10 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
+import java.io.Serializable;
+
 @AutoValue
-public abstract class BannerInstructions {
+public abstract class BannerInstructions implements Serializable {
 
   public static Builder builder() {
     return new AutoValue_BannerInstructions.Builder();
