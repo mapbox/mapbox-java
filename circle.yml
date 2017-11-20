@@ -84,6 +84,6 @@ jobs:
       - deploy:
           name: Publish Java Services To Maven Central
           command: |
-            if [ "${CIRCLE_BRANCH}" == "mb-java-3.0.0" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
             make publish ;
             fi
