@@ -38,6 +38,9 @@ public class CarmenFeatureTest extends TestUtils {
 
   private MockWebServer server;
   private HttpUrl mockUrl;
+  private CarmenFeature carmenFeature;
+  private BoundingBox bbox;
+  private Point geometry;
 
   @Before
   public void setUp() throws Exception {
@@ -66,6 +69,27 @@ public class CarmenFeatureTest extends TestUtils {
     });
     server.start();
     mockUrl = server.url("");
+
+    JsonObject properties = new JsonObject();
+    properties.addProperty("key", "value");
+    geometry = Point.fromLngLat(2.0, 2.0);
+    bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+
+    carmenFeature = CarmenFeature.builder()
+      .address("1000")
+      .bbox(bbox)
+      .context(null)
+      .geometry(geometry)
+      .id("poi.123456789")
+      .language("fr")
+      .matchingPlaceName("matchingPlaceName")
+      .matchingText("matchingText")
+      .placeName("placeName")
+      .placeType(null)
+      .properties(properties)
+      .relevance(0.5)
+      .text("text")
+      .build();
   }
 
   @After
@@ -140,7 +164,7 @@ public class CarmenFeatureTest extends TestUtils {
       .baseUrl(mockUrl.toString())
       .build();
     Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
-    Assert.assertNotNull(response.body().features().get(0).geometry());
+    assertNotNull(response.body().features().get(0).geometry());
     assertTrue(response.body().features().get(0).geometry() instanceof Point);
     assertEquals(-77.036491,
       ((Point) response.body().features().get(0).geometry()).longitude(), DELTA);
@@ -156,7 +180,7 @@ public class CarmenFeatureTest extends TestUtils {
       .baseUrl(mockUrl.toString())
       .build();
     Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
-    Assert.assertNotNull(response.body().features().get(0).properties());
+    assertNotNull(response.body().features().get(0).properties());
     assertTrue(response.body().features().get(0).properties().get("address")
       .getAsString().equals("1600 Pennsylvania Ave NW"));
     assertTrue(response.body().features().get(0).properties().get("category")
@@ -274,28 +298,14 @@ public class CarmenFeatureTest extends TestUtils {
   }
 
   @Test
+  public void toJson_doesConvertToJsonStringCorrectly() throws Exception {
+    String json = carmenFeature.toJson();
+    CarmenFeature carmenFeature = CarmenFeature.fromJson(json);
+    assertNotNull(carmenFeature);
+  }
+
+  @Test
   public void carmenFeatureBuilder_sanity() throws Exception {
-    JsonObject properties = new JsonObject();
-    properties.addProperty("key", "value");
-    Point geometry = Point.fromLngLat(2.0, 2.0);
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
-
-    CarmenFeature carmenFeature = CarmenFeature.builder()
-      .address("1000")
-      .bbox(bbox)
-      .context(null)
-      .geometry(geometry)
-      .id("poi.123456789")
-      .language("fr")
-      .matchingPlaceName("matchingPlaceName")
-      .matchingText("matchingText")
-      .placeName("placeName")
-      .placeType(null)
-      .properties(properties)
-      .relevance(0.5)
-      .text("text")
-      .build();
-
     assertTrue(carmenFeature.address().equals("1000"));
     assertTrue(carmenFeature.bbox().equals(bbox));
     assertNull(carmenFeature.context());
@@ -310,13 +320,4 @@ public class CarmenFeatureTest extends TestUtils {
     assertEquals(0.5, carmenFeature.relevance(), DELTA);
     assertTrue(carmenFeature.text().equals("text"));
   }
-
-  // TODO fix to and from JSON
-//  @Test
-//  public void toJson_convertsCarmenFeatureToJsonCorrectly() throws Exception {
-//    CarmenFeature carmenFeature = CarmenFeature.fromJson(GEOCODING_FIXTURE);
-//    System.out.println(carmenFeature);
-//  }
-
-
 }
