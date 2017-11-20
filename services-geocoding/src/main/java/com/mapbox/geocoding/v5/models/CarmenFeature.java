@@ -21,6 +21,7 @@ import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class CarmenFeature {
+public abstract class CarmenFeature implements Serializable {
 
   @Expose
   @SerializedName("type")
