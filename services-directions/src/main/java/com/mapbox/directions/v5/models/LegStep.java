@@ -1,6 +1,7 @@
 package com.mapbox.directions.v5.models;
 
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -67,7 +68,7 @@ public abstract class LegStep implements Serializable {
    * String with reference number or code of the way along which the travel proceeds.
    *
    * @return String with reference number or code of the way along which the travel proceeds.
-   *   Optionally included, if data is available.
+   * Optionally included, if data is available.
    * @since 2.0.0
    */
   @Nullable
@@ -77,7 +78,7 @@ public abstract class LegStep implements Serializable {
    * String with the destinations of the way along which the travel proceeds.
    *
    * @return String with the destinations of the way along which the travel proceeds. Optionally
-   *   included, if data is available
+   * included, if data is available
    * @since 2.0.0
    */
   @Nullable
@@ -303,12 +304,12 @@ public abstract class LegStep implements Serializable {
      *
      * @param voiceInstructions a list of voice instructions which can be triggered on this current
      *                          step
+     * @return this builder for chaining options together
      * @since 3.0.0
      */
     public abstract Builder voiceInstructions(@Nullable List<VoiceInstructions> voiceInstructions);
 
-    public abstract Builder bannerInstructions(
-      @Nullable List<BannerInstructions> bannerInstructions);
+    public abstract Builder bannerInstructions(@Nullable List<BannerInstructions> bannerInstructions);
 
     /**
      * Specifies a decimal precision of edge weights, default value 1.

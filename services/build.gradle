@@ -1,0 +1,33 @@
+apply plugin: 'java-library'
+
+sourceSets {
+    main.java.srcDirs = ['../services-core/src/main/java', '../services-directions/src/main/java',
+                         '../services-geocoding/src/main/java', '../services-geojson/src/main/java',
+                         '../services-matching/src/main/java', '../services-matrix/src/main/java',
+                         '../services-optimization/src/main/java', '../services-staticmap/src/main/java',
+                         '../services-turf/src/main/java']
+
+}
+
+dependencies {
+
+    // Gson
+    compile dependenciesList.gson
+
+    // Retrofit
+    compile dependenciesList.retrofit
+    compile dependenciesList.retrofit2Gson
+
+    // Annotations
+    compileOnly dependenciesList.supportAnnotation
+
+    // OkHttp
+    compile dependenciesList.okhttp3Logging
+
+    // AutoValue
+    compileOnly dependenciesList.autoValue
+    compileOnly dependenciesList.autoValueGson
+
+}
+
+apply from: "${rootDir}/gradle/mvn-push.gradle"

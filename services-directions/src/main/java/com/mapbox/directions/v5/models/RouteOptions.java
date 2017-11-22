@@ -1,6 +1,7 @@
 package com.mapbox.directions.v5.models;
 
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -69,7 +70,7 @@ public abstract class RouteOptions {
    * response.
    *
    * @return the language as a string used during the request, if english, this will most likely be
-   *   empty
+   * empty
    * @since 3.0.0
    */
   @Nullable
@@ -100,7 +101,7 @@ public abstract class RouteOptions {
    * directions response.
    *
    * @return a boolean value representing whether or not continueStraight was enabled or not during
-   *   the initial request
+   * the initial request
    * @since 3.0.0
    */
   @Nullable
@@ -134,6 +135,12 @@ public abstract class RouteOptions {
   @Nullable
   public abstract Boolean voiceInstructions();
 
+  /**
+   * Whether or not the request had banner instructions set to true or not.
+   *
+   * @return true if the original request included banner instructions
+   * @since 3.0.0
+   */
   @Nullable
   public abstract Boolean bannerInstructions();
 
@@ -250,6 +257,13 @@ public abstract class RouteOptions {
      */
     public abstract Builder voiceInstructions(Boolean voiceInstructions);
 
+    /**
+     * Whether or not the request had banner instructions set to true or not.
+     *
+     * @param bannerInstructions true if the original request included banner instructions
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder bannerInstructions(Boolean bannerInstructions);
 
     public abstract Builder voiceUnits(@Nullable String voiceUnits);

@@ -137,7 +137,7 @@ public abstract class OptimizationWaypoint implements Serializable {
      *
      * @param rawLocation a double array with a length of two, index 0 being the longitude and
      *                    index 1 being latitude.
-
+     * @return this builder for chaining options together
      * @since 3.0.0
      */
     public abstract Builder rawLocation(double[] rawLocation);
