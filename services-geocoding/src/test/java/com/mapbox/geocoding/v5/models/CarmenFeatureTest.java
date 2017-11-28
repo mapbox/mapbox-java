@@ -302,6 +302,9 @@ public class CarmenFeatureTest extends TestUtils {
     String json = carmenFeature.toJson();
     CarmenFeature carmenFeature = CarmenFeature.fromJson(json);
     assertNotNull(carmenFeature);
+    assertNotNull(carmenFeature.placeName());
+    assertNotNull(carmenFeature.matchingText());
+    assertNotNull(carmenFeature.matchingPlaceName());
   }
 
   @Test

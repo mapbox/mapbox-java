@@ -3,6 +3,7 @@ package com.mapbox.geocoding.v5.models;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -191,8 +192,10 @@ public abstract class CarmenFeature implements Serializable {
    */
   @Nullable
   public Point center() {
-    if (rawCenter() != null && rawCenter().length == 2) {
-      return Point.fromLngLat(rawCenter()[0], rawCenter()[1]);
+    // Store locally since rawCenter() is mutable
+    double[] center = rawCenter();
+    if (center != null && center.length == 2) {
+      return Point.fromLngLat(center[0], center[1]);
     }
     return null;
   }
@@ -282,6 +285,7 @@ public abstract class CarmenFeature implements Serializable {
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
     gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
+    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 

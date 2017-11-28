@@ -9,6 +9,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 
 import java.io.Serializable;
@@ -168,6 +169,7 @@ public abstract class BoundingBox implements Serializable {
   public final String toJson() {
     GsonBuilder gson = new GsonBuilder();
     gson.excludeFieldsWithoutExposeAnnotation();
+    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 }
