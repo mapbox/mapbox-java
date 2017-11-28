@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -345,6 +346,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
     gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
+    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 
