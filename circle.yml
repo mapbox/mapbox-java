@@ -33,16 +33,9 @@ jobs:
           command: make test
       - run:
           name: SonarQube upload
-          command: make sonarqube
-      - run:
-          name: Update Transifex
           command: |
-            if [ "${CIRCLE_BRANCH}" == "${DEPLOY_BRANCH}" ]; then
-              pip install transifex-client
-              echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername = '"${TRANSIFEX_USER}"$'\npassword = '"${TRANSIFEX_API_TOKEN}"$'\ntoken = '""$'\n' > ~/.transifexrc
-              tx push -s
-            else
-              echo "Skipping push to Transifex"
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            make sonarqube ;
             fi
       - store_artifacts:
           path: mapbox/app/build/reports
