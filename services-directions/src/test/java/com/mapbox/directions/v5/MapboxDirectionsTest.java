@@ -5,6 +5,11 @@ import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import com.mapbox.directions.v5.models.DirectionsResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.TestUtils;
@@ -19,12 +24,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class MapboxDirectionsTest extends TestUtils {
 
@@ -33,6 +35,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_TRAFFIC_FIXTURE = "directions_v5_traffic.json";
   private static final String DIRECTIONS_ROTARY_FIXTURE = "directions_v5_fixtures_rotary.json";
   private static final String DIRECTIONS_V5_ANNOTATIONS_FIXTURE = "directions_annotations_v5.json";
+  private static final String DIRECTIONS_V5_NO_ROUTE = "directions_v5_no_route.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -58,6 +61,9 @@ public class MapboxDirectionsTest extends TestUtils {
         }
         if (request.getPath().contains("annotations")) {
           resource = DIRECTIONS_V5_ANNOTATIONS_FIXTURE;
+        }
+        if (request.getPath().contains("151.2302,-33.9283")) {
+          resource = DIRECTIONS_V5_NO_ROUTE;
         }
         try {
           String body = loadJsonFixture(resource);
@@ -267,17 +273,19 @@ public class MapboxDirectionsTest extends TestUtils {
     assertTrue(directions.cloneCall().request().url().toString().contains("language=fr"));
   }
 
-  // TODO this isn't valid since we don't also request for a full overview, need a test for this.
   @Test
   public void annotations_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
       .annotations(DirectionsCriteria.ANNOTATION_CONGESTION, DirectionsCriteria.ANNOTATION_DURATION)
+      .overview(DirectionsCriteria.OVERVIEW_FULL)
       .accessToken(ACCESS_TOKEN)
       .build();
     assertTrue(directions.cloneCall().request().url().toString()
       .contains("annotations=congestion,duration"));
+
+    System.out.println(directions.cloneCall().request().url().toString());
   }
 
   @Test
@@ -336,6 +344,62 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void voiceUnits_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .voiceUnits(DirectionsCriteria.METRIC)
+      .build();
+
+    assertThat(directions.cloneCall().request().url().toString(),
+      containsString("voice_units=metric"));
+  }
+
+  @Test
+  public void bannerInstructions_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .bannerInstructions(true)
+      .build();
+
+    assertThat(directions.cloneCall().request().url().toString(),
+      containsString("banner_instructions=true"));
+  }
+
+  @Test
+  public void voiceInstructions_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .voiceInstructions(true)
+      .build();
+
+    assertThat(directions.cloneCall().request().url().toString(),
+      containsString("voice_instructions=true"));
+  }
+
+  @Test
+  public void exclude_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .exclude(DirectionsCriteria.EXCLUDE_MOTORWAY)
+      .build();
+
+    assertThat(directions.cloneCall().request().url().toString(),
+      containsString("exclude=motorway"));
+  }
+
+  @Test
   public void callFactoryNonNull() throws IOException {
     MapboxDirections client = MapboxDirections.builder()
       .accessToken(ACCESS_TOKEN)
@@ -352,7 +416,6 @@ public class MapboxDirectionsTest extends TestUtils {
     assertEquals("Ok", response.body().code());
   }
 
-
   @Test
   public void testRadiusWithUnlimitedDistance() throws IOException {
     List<Point> coordinates = new ArrayList<>();
@@ -365,6 +428,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .origin(coordinates.get(0))
       .addWaypoint(coordinates.get(1))
       .destination(coordinates.get(2))
+      .baseUrl(mockUrl.toString())
       .radiuses(100, Double.POSITIVE_INFINITY, 100)
       .build();
 
@@ -377,10 +441,13 @@ public class MapboxDirectionsTest extends TestUtils {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .origin(Point.fromLngLat(151.2302, -33.9283))
       .destination(Point.fromLngLat(174.7654, -36.8641))
-      .steps(true)
+      .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
+      .steps(true)
       .build();
 
-
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    assertThat(response.body().message(), containsString("No route found"));
+    assertThat(response.body().code(), containsString("NoRoute"));
   }
 }

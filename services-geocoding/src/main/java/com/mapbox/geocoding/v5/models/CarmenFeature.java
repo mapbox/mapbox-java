@@ -200,9 +200,10 @@ public abstract class CarmenFeature implements Serializable {
     return null;
   }
 
+  // No public access thus, we lessen enforcement on mutability here.
   @Nullable
   @SerializedName("center")
-  @SuppressWarnings("mutable") // No public access
+  @SuppressWarnings("mutable")
   abstract double[] rawCenter();
 
   /**

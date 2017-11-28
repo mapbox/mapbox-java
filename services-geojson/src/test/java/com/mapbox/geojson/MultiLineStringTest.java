@@ -109,7 +109,7 @@ public class MultiLineStringTest extends TestUtils {
   public void fromJson() throws IOException {
     final String json = loadJsonFixture(SAMPLE_MULTILINESTRING);
     MultiLineString geo = MultiLineString.fromJson(json);
-    assertEquals(geo.type(), "MultiLineString");
+    assertEquals("MultiLineString", geo.type());
     assertEquals(geo.coordinates().get(0).get(0).longitude(), 100.0, DELTA);
     assertEquals(geo.coordinates().get(0).get(0).latitude(), 0.0, DELTA);
     assertFalse(geo.coordinates().get(0).get(0).hasAltitude());
