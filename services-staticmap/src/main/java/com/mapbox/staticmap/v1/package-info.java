@@ -1,4 +1,4 @@
 /**
- * Contains the Mapbox Java Services classes.
+ * Contains the builders for Mapbox Static Map API.
  */
-package com.mapbox.services.api.staticimage.v1;
+package com.mapbox.staticmap.v1;

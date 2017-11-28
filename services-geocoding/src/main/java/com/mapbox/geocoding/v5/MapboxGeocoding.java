@@ -1,7 +1,5 @@
 package com.mapbox.geocoding.v5;
 
-import static com.mapbox.services.utils.ApiCallHelper.getHeaderUserAgent;
-
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -21,6 +19,7 @@ import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.services.MapboxService;
 import com.mapbox.services.constants.Constants;
 import com.mapbox.services.exceptions.ServicesException;
+import com.mapbox.services.utils.ApiCallHelper;
 import com.mapbox.services.utils.MapboxUtils;
 import com.mapbox.services.utils.TextUtils;
 import retrofit2.Call;
@@ -104,7 +103,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     }
 
     call = getService().getCall(
-      getHeaderUserAgent(clientAppName()),
+      ApiCallHelper.getHeaderUserAgent(clientAppName()),
       mode(),
       query(),
       accessToken(),
@@ -130,7 +129,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     }
 
     batchCall = getService().getBatchCall(
-      getHeaderUserAgent(clientAppName()),
+      ApiCallHelper.getHeaderUserAgent(clientAppName()),
       mode(),
       query(),
       accessToken(),
@@ -303,7 +302,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   @AutoValue.Builder
   public abstract static class Builder {
 
-    List<String> countries = new ArrayList<>();
+    private List<String> countries = new ArrayList<>();
 
     /**
      * Perform a reverse geocode on the provided {@link Point}. Only one point can be passed in as

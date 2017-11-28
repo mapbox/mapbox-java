@@ -1,5 +1,13 @@
 package com.mapbox.directions.v5;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,14 +38,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * The Directions API allows the calculation of routes between coordinates. The fastest route can be
  * returned with geometries, turn-by-turn instructions, and much more. The Mapbox Directions API
@@ -58,7 +58,7 @@ import java.util.logging.Logger;
 @AutoValue
 public abstract class MapboxDirections extends MapboxService<DirectionsResponse> {
 
-  private static final Logger logger = Logger.getLogger(MapboxDirections.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(MapboxDirections.class.getName());
 
   private okhttp3.Call.Factory callFactory;
   private Call<DirectionsResponse> call;
@@ -134,8 +134,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     Response<DirectionsResponse> response = getCall().execute();
     if (!response.isSuccessful()) {
       errorDidOccur(null, response);
-    } else {
-      return Response.success(response.body(), response.headers());
     }
     List<DirectionsRoute> routes = response.body().routes();
     return Response.success(response.body().toBuilder().routes(
@@ -158,8 +156,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
         if (!response.isSuccessful()) {
           errorDidOccur(callback, response);
           return;
-
-          // TODO test whether routes an empty list is created or null
         } else if (response.body() == null || response.body().routes().isEmpty()) {
           // If null just pass the original object back since there's nothing to modify.
           callback.onResponse(call, response);
@@ -178,7 +174,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
   private void errorDidOccur(@Nullable Callback<DirectionsResponse> callback,
                              @NonNull Response<DirectionsResponse> response) {
-    // Response gave an error, we try to logger any messages into the logger here.
+    // Response gave an error, we try to LOGGER any messages into the LOGGER here.
     Converter<ResponseBody, DirectionsError> errorConverter =
       retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
     if (callback == null) {
@@ -188,7 +184,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       callback.onFailure(call,
         new Throwable(errorConverter.convert(response.errorBody()).message()));
     } catch (IOException ioException) {
-      logger.log(Level.WARNING, "Failed to complete your request. ", ioException);
+      LOGGER.log(Level.WARNING, "Failed to complete your request. ", ioException);
     }
   }
 
@@ -658,6 +654,13 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      */
     public abstract Builder bannerInstructions(@Nullable Boolean bannerInstructions);
 
+    /**
+     * Specify what unit you'd like voice and banner instructions to use.
+     *
+     * @param voiceUnits either Imperial (default) or Metric
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder voiceUnits(@Nullable @VoiceUnitCriteria String voiceUnits);
 
     /**

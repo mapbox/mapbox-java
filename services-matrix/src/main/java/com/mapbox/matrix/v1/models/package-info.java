@@ -1,4 +1,4 @@
 /**
- * Contains the Mapbox Java Services classes.
+ * Contains the Mapbox Matrix response model classes.
  */
-package com.mapbox.services.api.directionsmatrix.v1.models;
+package com.mapbox.matrix.v1.models;

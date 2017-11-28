@@ -1,7 +1,6 @@
 package com.mapbox.directions.v5.models;
 
 import android.support.annotation.FloatRange;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
