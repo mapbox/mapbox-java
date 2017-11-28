@@ -5,10 +5,12 @@ sourceSets {
                        '../services-geocoding/src/main/java', '../services-matching/src/main/java',
                        '../services-matrix/src/main/java', '../services-optimization/src/main/java',
                        '../services-staticmap/src/main/java']
-
 }
 
 dependencies {
+
+  compile project(":services-core")
+  compile project(":services-geojson")
 
   // Gson
   compile dependenciesList.gson
