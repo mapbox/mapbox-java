@@ -6,8 +6,8 @@ ext {
             junit            : '4.12',
             supportLibVersion: '26.1.0',
             gson             : '2.8.0',
-            retrofit         : '2.2.0',
-            okhttp3          : '3.9.0',
+            retrofit         : '2.3.0',
+            okhttp3          : '3.9.1',
             mockito          : '2.7.13',
             hamcrestJunit    : '2.0.0.0',
             errorprone       : '2.0.21'
