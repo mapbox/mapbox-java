@@ -206,6 +206,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           .bannerInstructions(bannerInstructions())
           .exclude(exclude())
           .voiceUnits(voiceUnits())
+          .accessToken(accessToken())
           .build()
       ).build());
     }
