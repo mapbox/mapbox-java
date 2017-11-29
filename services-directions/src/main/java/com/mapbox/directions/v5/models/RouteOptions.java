@@ -142,6 +142,9 @@ public abstract class RouteOptions {
 
   public abstract String accessToken();
 
+  @Nullable
+  public abstract String requestUuid();
+
   /**
    * Gson type adapter for parsing Gson to this class.
    *
@@ -252,6 +255,8 @@ public abstract class RouteOptions {
     public abstract Builder voiceUnits(@Nullable String voiceUnits);
 
     public abstract Builder accessToken(String accessToken);
+
+    public abstract Builder requestUuid(String requestUuid);
 
     /**
      * The same exclusions the user originally made when the request was made.
