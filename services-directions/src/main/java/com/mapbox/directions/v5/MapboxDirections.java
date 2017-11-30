@@ -135,9 +135,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     if (!response.isSuccessful()) {
       errorDidOccur(null, response);
     }
-    List<DirectionsRoute> routes = response.body().routes();
     return Response.success(response.body().toBuilder().routes(
-      generateRouteOptions(routes)).build());
+      generateRouteOptions(response)).build());
   }
 
   /**
@@ -161,7 +160,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           callback.onResponse(call, response);
         }
         DirectionsResponse newResponse = response.body().toBuilder().routes(
-          generateRouteOptions(response.body().routes())).build();
+          generateRouteOptions(response)).build();
         callback.onResponse(call, Response.success(newResponse));
       }
 
@@ -188,8 +187,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     }
   }
 
-
-  private List<DirectionsRoute> generateRouteOptions(List<DirectionsRoute> routes) {
+  private List<DirectionsRoute> generateRouteOptions(Response<DirectionsResponse> response) {
+    List<DirectionsRoute> routes = response.body().routes();
     List<DirectionsRoute> modifiedRoutes = new ArrayList<>();
     for (DirectionsRoute route : routes) {
       modifiedRoutes.add(route.toBuilder().routeOptions(
@@ -206,6 +205,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           .bannerInstructions(bannerInstructions())
           .exclude(exclude())
           .voiceUnits(voiceUnits())
+          .accessToken(accessToken())
+          .requestUuid(response.body().uuid())
           .build()
       ).build());
     }
