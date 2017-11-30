@@ -1,9 +1,9 @@
 package com.mapbox.turf;
 
 import android.support.annotation.NonNull;
-import com.mapbox.geojson.Point;
+
 import com.mapbox.geojson.Polygon;
-import com.mapbox.turf.TurfConstants.TurfUnitCriteria;
+import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +42,12 @@ public final class TurfTransformation {
    *
    * @param center a {@link Point} which the circle will center around
    * @param radius the radius of the circle
-   * @param units  one of the units found inside {@link TurfUnitCriteria}
+   * @param units  one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return a {@link Polygon} which represents the newly created circle
    * @since 3.0.0
    */
   public static Polygon circle(@NonNull Point center, double radius,
-                               @TurfUnitCriteria String units) {
+                               @TurfConstants.TurfUnitCriteria String units) {
     return circle(center, radius, DEFAULT_STEPS, units);
   }
 
@@ -58,12 +58,12 @@ public final class TurfTransformation {
    * @param center a {@link Point} which the circle will center around
    * @param radius the radius of the circle
    * @param steps  number of steps which make up the circle parameter
-   * @param units  one of the units found inside {@link TurfUnitCriteria}
+   * @param units  one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return a {@link Polygon} which represents the newly created circle
    * @since 3.0.0
    */
   public static Polygon circle(@NonNull Point center, double radius, int steps,
-                               @TurfUnitCriteria String units) {
+                               @TurfConstants.TurfUnitCriteria String units) {
     List<Point> coordinates = new ArrayList<>();
     for (int i = 0; i < steps; i++) {
       coordinates.add(TurfMeasurement.destination(center, radius, i * 360d / steps, units));

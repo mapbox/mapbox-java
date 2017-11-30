@@ -1,6 +1,7 @@
 package com.mapbox.turf;
 
 import android.support.annotation.StringDef;
+
 import com.mapbox.geojson.Point;
 
 import java.lang.annotation.Retention;

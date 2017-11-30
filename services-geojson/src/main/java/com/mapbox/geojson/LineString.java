@@ -9,12 +9,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.utils.PolylineUtils;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
-import com.mapbox.geojson.utils.PolylineUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -47,7 +47,7 @@ import java.util.List;
  *   ]
  * }
  * </pre>
- * Look over the {@link com.mapbox.geojson.Point} documentation to get more
+ * Look over the {@link Point} documentation to get more
  * information about formatting your list of point objects correctly.
  *
  * @since 1.0.0

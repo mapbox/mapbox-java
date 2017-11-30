@@ -2,13 +2,13 @@ package com.mapbox.turf;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-import com.mapbox.turf.TurfConstants.TurfUnitCriteria;
+
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.MultiPoint;
-import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
+import com.mapbox.geojson.MultiPolygon;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public final class TurfMeasurement {
    * @param point    starting point used for calculating the destination
    * @param distance distance from the starting point
    * @param bearing  ranging from -180 to 180 in decimal degrees
-   * @param units    one of the units found inside {@link TurfUnitCriteria}
+   * @param units    one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return destination {@link Point} result where you specified
    * @see <a href="http://turfjs.org/docs/#destination">Turf Destination documetation</a>
    * @since 1.2.0
@@ -65,7 +65,7 @@ public final class TurfMeasurement {
   @NonNull
   public static Point destination(@NonNull Point point, @FloatRange(from = 0) double distance,
                                   @FloatRange(from = -180, to = 180) double bearing,
-                                  @NonNull @TurfUnitCriteria String units) {
+                                  @NonNull @TurfConstants.TurfUnitCriteria String units) {
     double degrees2radians = Math.PI / 180;
     double radians2degrees = 180 / Math.PI;
     double longitude1 = degrees2radians * point.longitude();
@@ -104,13 +104,13 @@ public final class TurfMeasurement {
    *
    * @param point1 first point used for calculating the bearing
    * @param point2 second point used for calculating the bearing
-   * @param units  one of the units found inside {@link TurfUnitCriteria}
+   * @param units  one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return distance between the two points in kilometers
    * @see <a href="http://turfjs.org/docs/#distance">Turf distance documentation</a>
    * @since 1.2.0
    */
   public static double distance(@NonNull Point point1, @NonNull Point point2,
-                                @NonNull @TurfUnitCriteria String units) {
+                                @NonNull @TurfConstants.TurfUnitCriteria String units) {
     double degrees2radians = Math.PI / 180;
     double dLat = degrees2radians * (point2.latitude() - point1.latitude());
     double dLon = degrees2radians * (point2.longitude() - point1.longitude());
@@ -128,13 +128,13 @@ public final class TurfMeasurement {
    * Takes a {@link LineString} and measures its length in the specified units.
    *
    * @param lineString geometry to measure
-   * @param units      one of the units found inside {@link TurfUnitCriteria}
+   * @param units      one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return length of the input line in the units specified
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
   public static double lineDistance(@NonNull LineString lineString,
-                                    @NonNull @TurfUnitCriteria String units) {
+                                    @NonNull @TurfConstants.TurfUnitCriteria String units) {
     List<Point> coordinates = lineString.coordinates();
     return length(coordinates, units);
   }
@@ -143,13 +143,13 @@ public final class TurfMeasurement {
    * Takes a {@link MultiLineString} and measures its length in the specified units.
    *
    * @param multiLineString geometry to measure
-   * @param units           one of the units found inside {@link TurfUnitCriteria}
+   * @param units           one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return length of the input lines combined, in the units specified
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
   public static double lineDistance(@NonNull MultiLineString multiLineString,
-                                    @NonNull @TurfUnitCriteria String units) {
+                                    @NonNull @TurfConstants.TurfUnitCriteria String units) {
     double d = 0;
     for (List<Point> points : multiLineString.coordinates()) {
       d += length(points, units);
@@ -162,13 +162,13 @@ public final class TurfMeasurement {
    * contains holes, the perimeter will also be included.
    *
    * @param polygon geometry to measure
-   * @param units   one of the units found inside {@link TurfUnitCriteria}
+   * @param units   one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return total perimeter of the input polygon in the units specified
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
   public static double lineDistance(@NonNull Polygon polygon,
-                                    @NonNull @TurfUnitCriteria String units) {
+                                    @NonNull @TurfConstants.TurfUnitCriteria String units) {
     double d = 0;
     for (List<Point> points : polygon.coordinates()) {
       d += length(points, units);
@@ -181,13 +181,13 @@ public final class TurfMeasurement {
    * one of the polygons contains holes, the perimeter will also be included.
    *
    * @param multiPolygon geometry to measure
-   * @param units        one of the units found inside {@link TurfUnitCriteria}
+   * @param units        one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return total perimeter of the input polygons combined, in the units specified
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
   public static double lineDistance(@NonNull MultiPolygon multiPolygon,
-                                    @NonNull @TurfUnitCriteria String units) {
+                                    @NonNull @TurfConstants.TurfUnitCriteria String units) {
     double d = 0;
     List<List<List<Point>>> coordinates = multiPolygon.coordinates();
     for (List<List<Point>> coordinate : coordinates) {
@@ -220,13 +220,13 @@ public final class TurfMeasurement {
    *
    * @param line     that the point should be placed upon
    * @param distance along the linestring geometry which the point should be placed on
-   * @param units    one of the units found inside {@link TurfUnitCriteria}
+   * @param units    one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return a {@link Point} which is on the linestring provided and at the distance from the origin
    *   of that line to the end of the distance
    * @since 1.3.0
    */
   public static Point along(@NonNull LineString line, @FloatRange(from = 0) double distance,
-                            @NonNull @TurfUnitCriteria String units) {
+                            @NonNull @TurfConstants.TurfUnitCriteria String units) {
     List<Point> coords = line.coordinates();
 
     double travelled = 0;
