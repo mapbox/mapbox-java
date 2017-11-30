@@ -12,10 +12,10 @@ build-release:
 	./gradlew assemble
 
 publish:
-    export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-core:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geojson:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-turf:uploadArchives ; \
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-core:uploadArchives ; \
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geojson:uploadArchives ; \
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services:uploadArchives ; \
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-turf:uploadArchives ; \
 
 publish-local:
 	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
