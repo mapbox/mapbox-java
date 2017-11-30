@@ -1,7 +1,7 @@
 package com.mapbox.samples;
 
-import com.mapbox.geocoding.v5.MapboxGeocoding;
-import com.mapbox.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.api.geocoding.v5.MapboxGeocoding;
+import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;

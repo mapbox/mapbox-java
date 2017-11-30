@@ -5,19 +5,15 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.exception.GeoJsonException;
-import com.mapbox.services.TestUtils;
-import com.mapbox.services.exceptions.ServicesException;
-import org.junit.Assert;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class PolygonTest extends TestUtils {
@@ -134,10 +130,10 @@ public class PolygonTest extends TestUtils {
     BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     Polygon polygon = Polygon.fromOuterInner(outerLineString, bbox, innerLineString);
 
-    Assert.assertEquals(bbox, polygon.bbox());
-    Assert.assertEquals(outerLineString, polygon.outer());
-    Assert.assertEquals(1, polygon.inner().size());
-    Assert.assertEquals(innerLineString, polygon.inner().get(0));
+    assertEquals(bbox, polygon.bbox());
+    assertEquals(outerLineString, polygon.outer());
+    assertEquals(1, polygon.inner().size());
+    assertEquals(innerLineString, polygon.inner().get(0));
   }
 
   @Test

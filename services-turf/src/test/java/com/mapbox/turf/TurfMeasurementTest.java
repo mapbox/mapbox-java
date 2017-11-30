@@ -1,23 +1,18 @@
 package com.mapbox.turf;
 
-import static com.mapbox.turf.TurfConstants.UNIT_DEGREES;
-import static com.mapbox.turf.TurfConstants.UNIT_KILOMETERS;
-import static com.mapbox.turf.TurfConstants.UNIT_MILES;
-import static com.mapbox.turf.TurfConstants.UNIT_NAUTICAL_MILES;
-import static com.mapbox.turf.TurfConstants.UNIT_RADIANS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
+import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Polygon;
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.Polygon;
-import com.mapbox.services.TestUtils;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -57,7 +52,7 @@ public class TurfMeasurementTest extends TestUtils {
     Point pt1 = Point.fromLngLat(-75.0, 39.0);
     double dist = 100;
     double bear = 180;
-    assertNotNull(TurfMeasurement.destination(pt1, dist, bear, UNIT_KILOMETERS));
+    assertNotNull(TurfMeasurement.destination(pt1, dist, bear, TurfConstants.UNIT_KILOMETERS));
   }
 
   /*
@@ -70,15 +65,15 @@ public class TurfMeasurementTest extends TestUtils {
     Point pt2 = Point.fromLngLat(-75.534, 39.123);
 
     // Common cases
-    assertEquals(60.37218405837491, TurfMeasurement.distance(pt1, pt2, UNIT_MILES), DELTA);
+    assertEquals(60.37218405837491, TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_MILES), DELTA);
     assertEquals(52.461979624130436,
-      TurfMeasurement.distance(pt1, pt2, UNIT_NAUTICAL_MILES), DELTA);
-    assertEquals(97.15957803131901, TurfMeasurement.distance(pt1, pt2, UNIT_KILOMETERS), DELTA);
-    assertEquals(0.015245501024842149, TurfMeasurement.distance(pt1, pt2, UNIT_RADIANS), DELTA);
-    assertEquals(0.8735028650863799, TurfMeasurement.distance(pt1, pt2, UNIT_DEGREES), DELTA);
+      TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_NAUTICAL_MILES), DELTA);
+    assertEquals(97.15957803131901, TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_KILOMETERS), DELTA);
+    assertEquals(0.015245501024842149, TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_RADIANS), DELTA);
+    assertEquals(0.8735028650863799, TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_DEGREES), DELTA);
 
     // This also works
-    assertEquals(97.15957803131901, TurfMeasurement.distance(pt1, pt2, UNIT_KILOMETERS), DELTA);
+    assertEquals(97.15957803131901, TurfMeasurement.distance(pt1, pt2, TurfConstants.UNIT_KILOMETERS), DELTA);
 
     // Default is kilometers
     assertEquals(97.15957803131901, TurfMeasurement.distance(pt1, pt2), DELTA);
@@ -101,16 +96,16 @@ public class TurfMeasurementTest extends TestUtils {
     Feature route1 = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_ROUTE_ONE));
     Feature route2 = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_ROUTE_TWO));
     assertEquals(202, Math.round(TurfMeasurement.lineDistance((LineString) route1.geometry(),
-      UNIT_MILES)));
+      TurfConstants.UNIT_MILES)));
     Assert.assertEquals(741.7787396994203,
-      TurfMeasurement.lineDistance((LineString) route2.geometry(), UNIT_KILOMETERS), DELTA);
+      TurfMeasurement.lineDistance((LineString) route2.geometry(), TurfConstants.UNIT_KILOMETERS), DELTA);
   }
 
   @Test
   public void testLineDistancePolygon() throws IOException, TurfException {
     Feature feature = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_POLYGON));
     assertEquals(5599, Math.round(1000 * TurfMeasurement.lineDistance((Polygon) feature.geometry(),
-      UNIT_KILOMETERS)));
+      TurfConstants.UNIT_KILOMETERS)));
   }
 
   @Test
@@ -118,7 +113,7 @@ public class TurfMeasurementTest extends TestUtils {
     Feature feature = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_MULTILINESTRING));
     assertEquals(4705d, Math.round(1000
       * TurfMeasurement.lineDistance((MultiLineString) feature.geometry(),
-      UNIT_KILOMETERS)), DELTA);
+      TurfConstants.UNIT_KILOMETERS)), DELTA);
   }
 
   /*
@@ -131,8 +126,8 @@ public class TurfMeasurementTest extends TestUtils {
     Point pt2 = Point.fromLngLat(10, 0);
     Point mid = TurfMeasurement.midpoint(pt1, pt2);
 
-    assertEquals(TurfMeasurement.distance(pt1, mid, UNIT_MILES),
-      TurfMeasurement.distance(pt2, mid, UNIT_MILES), DELTA);
+    assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+      TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
   }
 
   @Test
@@ -141,8 +136,8 @@ public class TurfMeasurementTest extends TestUtils {
     Point pt2 = Point.fromLngLat(0, 10);
     Point mid = TurfMeasurement.midpoint(pt1, pt2);
 
-    assertEquals(TurfMeasurement.distance(pt1, mid, UNIT_MILES),
-      TurfMeasurement.distance(pt2, mid, UNIT_MILES), DELTA);
+    assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+      TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
   }
 
   @Test
@@ -151,8 +146,8 @@ public class TurfMeasurementTest extends TestUtils {
     Point pt2 = Point.fromLngLat(0, 0);
     Point mid = TurfMeasurement.midpoint(pt1, pt2);
 
-    assertEquals(TurfMeasurement.distance(pt1, mid, UNIT_MILES),
-      TurfMeasurement.distance(pt2, mid, UNIT_MILES), DELTA);
+    assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+      TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
   }
 
   @Test
@@ -161,8 +156,8 @@ public class TurfMeasurementTest extends TestUtils {
     Point pt2 = Point.fromLngLat(1, -1);
     Point mid = TurfMeasurement.midpoint(pt1, pt2);
 
-    assertEquals(TurfMeasurement.distance(pt1, mid, UNIT_MILES),
-      TurfMeasurement.distance(pt2, mid, UNIT_MILES), DELTA);
+    assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+      TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
   }
 
   @Test
@@ -171,8 +166,8 @@ public class TurfMeasurementTest extends TestUtils {
     Point pt2 = Point.fromLngLat(5, 10);
     Point mid = TurfMeasurement.midpoint(pt1, pt2);
 
-    assertEquals(TurfMeasurement.distance(pt1, mid, UNIT_MILES),
-      TurfMeasurement.distance(pt2, mid, UNIT_MILES), DELTA);
+    assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+      TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
   }
 
   @Test
@@ -181,8 +176,8 @@ public class TurfMeasurementTest extends TestUtils {
     Point pt2 = Point.fromLngLat(92.10937499999999, 46.800059446787316);
     Point mid = TurfMeasurement.midpoint(pt1, pt2);
 
-    assertEquals(TurfMeasurement.distance(pt1, mid, UNIT_MILES),
-      TurfMeasurement.distance(pt2, mid, UNIT_MILES), DELTA);
+    assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+      TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
   }
 
   // Custom test to make sure conversion of Position to point works correctly
@@ -192,8 +187,8 @@ public class TurfMeasurementTest extends TestUtils {
     Point pt2 = Point.fromLngLat(10, 0);
     Point mid = TurfMeasurement.midpoint(pt1, pt2);
 
-    assertEquals(TurfMeasurement.distance(pt1, mid, UNIT_MILES),
-      TurfMeasurement.distance(pt2, mid, UNIT_MILES), DELTA);
+    assertEquals(TurfMeasurement.distance(pt1, mid, TurfConstants.UNIT_MILES),
+      TurfMeasurement.distance(pt2, mid, TurfConstants.UNIT_MILES), DELTA);
   }
 
   @Test

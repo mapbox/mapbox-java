@@ -4,7 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.mapbox.services.TestUtils;
+import com.mapbox.core.TestUtils;
+
 import org.junit.Test;
 
 public final class BoundingBoxTest extends TestUtils {

@@ -12,11 +12,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
+import com.mapbox.geojson.gson.BoundingBoxDeserializer;
+import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
 /**
