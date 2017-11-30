@@ -1,12 +1,13 @@
 package com.mapbox.turf;
 
 import android.support.annotation.NonNull;
+
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.MultiPoint;
-import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
+import com.mapbox.geojson.MultiPolygon;
 
 import java.util.ArrayList;
 import java.util.List;

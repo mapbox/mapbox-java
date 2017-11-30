@@ -1,10 +1,11 @@
 package com.mapbox.turf;
 
 import com.mapbox.geojson.Feature;
+import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
-import com.mapbox.services.TestUtils;
+import com.mapbox.geojson.Point;
+
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -1,8 +1,8 @@
 package com.mapbox.geojson.gson;
 
+import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.exception.GeoJsonException;
-import com.mapbox.services.TestUtils;
 
 import org.junit.Rule;
 import org.junit.Test;

@@ -12,26 +12,16 @@ build-release:
 	./gradlew assemble
 
 publish:
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-core:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-directions:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geocoding:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geojson:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-matching:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-matrix:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-optimization:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-staticmap:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-turf:uploadArchives ; \
+    export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-core:uploadArchives ; \
+    export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geojson:uploadArchives ; \
+    export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services:uploadArchives ; \
+    export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-turf:uploadArchives ; \
 
 publish-local:
 	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
 	export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-core:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-directions:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-geocoding:uploadArchives ; \
     export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-geojson:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-matching:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-matrix:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-optimization:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-staticmap:uploadArchives ; \
+    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services:uploadArchives ; \
     export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-turf:uploadArchives ; \
 
 directions-matrix-fixtures:

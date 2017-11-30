@@ -2,8 +2,8 @@ package com.mapbox.samples;
 
 
 import com.mapbox.geojson.Point;
-import com.mapbox.optimization.v1.MapboxOptimization;
-import com.mapbox.optimization.v1.models.OptimizationResponse;
+import com.mapbox.api.optimization.v1.MapboxOptimization;
+import com.mapbox.api.optimization.v1.models.OptimizationResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
