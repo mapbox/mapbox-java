@@ -4,13 +4,14 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### v3.0.0
 
+
+### v3.0.0-beta.1
+
 - Model and GeoJSON classes made immutable using AutoValue.
 - Directions API UUID added inside the `DirectionsResponse` model.
 - Position object removed in favor of GeoJSON `Point` for coordinate representation.
 - Support for direction `class` has been added.
 - Requesting `RoundaboutExit` is now possible and adds an additional instruction when traversing inside a roundabout or rotary.
-
-
 
 ### v2.2.3
 
