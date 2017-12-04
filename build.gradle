@@ -55,6 +55,7 @@ subprojects {
     // Test Dependencies
     testCompile dependenciesList.junit
     testCompile dependenciesList.hamcrestJunit
+    testCompile dependenciesList.mockito
   }
 }
 
