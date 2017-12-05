@@ -196,7 +196,7 @@ public abstract class LegStep implements Serializable {
    * @return a string with either a left or right value
    * @since 3.0.0
    */
-  @NonNull
+  @Nullable
   @SerializedName("driving_side")
   public abstract String drivingSide();
 
@@ -382,7 +382,7 @@ public abstract class LegStep implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder drivingSide(@NonNull String drivingSide);
+    public abstract Builder drivingSide(@Nullable String drivingSide);
 
     /**
      * Specifies a decimal precision of edge weights, default value 1.
