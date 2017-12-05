@@ -4,21 +4,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.MapboxDirections;
-import com.mapbox.geojson.BoundingBox;
-import com.mapbox.geojson.Geometry;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,24 +27,6 @@ public abstract class LegStep implements Serializable {
    */
   public static Builder builder() {
     return new AutoValue_LegStep.Builder();
-  }
-
-  /**
-   * Create a new instance of this class by passing in a formatted valid JSON String.
-   *
-   * @param json a formatted valid JSON string defining a GeoJson Directions Response
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @since 3.0.0
-   */
-  public static LegStep fromJson(String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gson.create().fromJson(json, LegStep.class);
   }
 
   /**
@@ -79,7 +51,7 @@ public abstract class LegStep implements Serializable {
    * @return an encoded polyline string
    * @since 1.0.0
    */
-  @NonNull
+  @Nullable
   public abstract String geometry();
 
   /**
@@ -271,7 +243,7 @@ public abstract class LegStep implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder geometry(@NonNull String geometry);
+    public abstract Builder geometry(@Nullable String geometry);
 
     /**
      * String with the name of the way along which the travel proceeds.

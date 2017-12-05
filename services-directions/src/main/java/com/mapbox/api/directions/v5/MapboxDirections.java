@@ -13,6 +13,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
+import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.ExcludeCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.VoiceUnitCriteria;
 import com.mapbox.api.directions.v5.models.DirectionsError;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.core.utils.MapboxUtils;
@@ -376,11 +382,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * origin to the final destination. The options include driving, driving considering traffic,
      * walking, and cycling. Using each of these profiles will result in different routing biases.
      *
-     * @param profile required to be one of the String values found in the {@link DirectionsCriteria.ProfileCriteria}
+     * @param profile required to be one of the String values found in the {@link ProfileCriteria}
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder profile(@NonNull @DirectionsCriteria.ProfileCriteria String profile);
+    public abstract Builder profile(@NonNull @ProfileCriteria String profile);
 
     /**
      * This sets the starting point on the map where the route will begin. It is one of the
@@ -454,11 +460,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * </p>
      *
      * @param geometries null if you'd like the default geometry, else one of the options found in
-     *                   {@link DirectionsCriteria.GeometriesCriteria}.
+     *                   {@link GeometriesCriteria}.
      * @return this builder for chaining options together
      * @since 2.0.0
      */
-    public abstract Builder geometries(@DirectionsCriteria.GeometriesCriteria String geometries);
+    public abstract Builder geometries(@GeometriesCriteria String geometries);
 
     /**
      * Type of returned overview geometry. Can be {@link DirectionsCriteria#OVERVIEW_FULL} (the most
@@ -467,11 +473,12 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * geometry). The default is simplified. Passing in null will use the APIs default setting for
      * the overview field.
      *
-     * @param overview null or one of the options found in {@link DirectionsCriteria.OverviewCriteria}
+     * @param overview null or one of the options found in
+     *                 {@link OverviewCriteria}
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder overview(@Nullable @DirectionsCriteria.OverviewCriteria String overview);
+    public abstract Builder overview(@Nullable @OverviewCriteria String overview);
 
     /**
      * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
@@ -538,14 +545,14 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * separating them with {@code ,}.
      *
      * @param annotations string referencing one of the annotation direction criteria's. The strings
-     *                    restricted to one or multiple values inside the {@link DirectionsCriteria.AnnotationCriteria}
+     *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
      *   documentation</a>
      * @since 2.1.0
      */
-    public Builder annotations(@Nullable @DirectionsCriteria.AnnotationCriteria String... annotations) {
+    public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
       this.annotations = annotations;
       return this;
     }
@@ -616,11 +623,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * Exclude certain road types from routing. Valid values depend on the profile in use. The
      * default is to not exclude anything from the profile selected.
      *
-     * @param exclude one of the constants defined in {@link DirectionsCriteria.ExcludeCriteria}
+     * @param exclude one of the constants defined in {@link ExcludeCriteria}
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder exclude(@DirectionsCriteria.ExcludeCriteria String exclude);
+    public abstract Builder exclude(@ExcludeCriteria String exclude);
 
     /**
      * Request voice instructions objects to be returned in your response. This offers instructions
@@ -657,7 +664,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder voiceUnits(@Nullable @DirectionsCriteria.VoiceUnitCriteria String voiceUnits);
+    public abstract Builder voiceUnits(@Nullable @VoiceUnitCriteria String voiceUnits);
 
     /**
      * Base package name or other simple string identifier. Used inside the calls user agent header.
