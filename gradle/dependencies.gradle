@@ -43,6 +43,7 @@ ext {
   pluginDependencies = [
       checkstyle: "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",
       spotbugs  : "gradle.plugin.com.github.spotbugs:gradlePlugin:${pluginVersion.spotbugs}",
-      sonarqube : "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${pluginVersion.sonarqube}"
+      sonarqube : "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${pluginVersion.sonarqube}",
+      errorprone: "net.ltgt.gradle:gradle-errorprone-plugin:${pluginVersion.errorprone}"
   ]
 }

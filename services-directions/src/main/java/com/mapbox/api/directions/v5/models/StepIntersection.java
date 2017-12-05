@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -34,7 +35,7 @@ public abstract class StepIntersection implements Serializable {
    * @return GeoJson Point representing this intersection location
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   public Point location() {
     return Point.fromLngLat(rawLocation()[0], rawLocation()[1]);
   }
@@ -46,7 +47,7 @@ public abstract class StepIntersection implements Serializable {
    * @return GeoJson Point representing this intersection location
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   @SerializedName("location")
   @SuppressWarnings( {"mutable", "WeakerAccess"})
   protected abstract double[] rawLocation();
@@ -228,7 +229,7 @@ public abstract class StepIntersection implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder rawLocation(double[] rawLocation);
+    public abstract Builder rawLocation(@NonNull double[] rawLocation);
 
     /**
      * Build a new {@link StepIntersection} object.

@@ -159,6 +159,14 @@ public abstract class DirectionsResponse implements Serializable {
      */
     public abstract Builder code(@NonNull String code);
 
+    /**
+     * Optionally shows up in a directions response if an error or something unexpected occurred.
+     *
+     * @param message a string containing the message API Directions response with if an error
+     *                occurred
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder message(@Nullable String message);
 
     /**
