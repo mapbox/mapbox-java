@@ -1,5 +1,8 @@
 package com.mapbox.geojson;
 
+import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LATITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 
@@ -56,10 +59,10 @@ public abstract class BoundingBox implements Serializable {
    * @since 3.0.0
    */
   public static BoundingBox fromCoordinates(
-    @FloatRange(from = GeoJsonConstants.MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double west,
-    @FloatRange(from = GeoJsonConstants.MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double south,
-    @FloatRange(from = GeoJsonConstants.MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double east,
-    @FloatRange(from = GeoJsonConstants.MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double north) {
+    @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double west,
+    @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double south,
+    @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double east,
+    @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double north) {
     return new AutoValue_BoundingBox(Point.fromLngLat(west, south), Point.fromLngLat(east, north));
   }
 
@@ -80,11 +83,11 @@ public abstract class BoundingBox implements Serializable {
    * @since 3.0.0
    */
   public static BoundingBox fromCoordinates(
-    @FloatRange(from = GeoJsonConstants.MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double west,
-    @FloatRange(from = GeoJsonConstants.MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double south,
+    @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double west,
+    @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double south,
     double southwestAltitude,
-    @FloatRange(from = GeoJsonConstants.MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double east,
-    @FloatRange(from = GeoJsonConstants.MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double north,
+    @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double east,
+    @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double north,
     double northEastAltitude) {
     return new AutoValue_BoundingBox(
       Point.fromLngLat(west, south, southwestAltitude),

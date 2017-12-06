@@ -11,13 +11,14 @@ sonarqube {
 
     // Test reports
     property "sonar.java.coveragePlugin", "jacoco"
+    property "sonar.coverage.exclusions", ["${rootDir}/samples/*", "**/GeoJsonConstants.java"]
     property "sonar.jacoco.reportPaths", "${project.buildDir}/jacoco/test.exec"
 
     // Authentication
     property "sonar.login", System.env.SONARQUBE_API_TOKEN
 
     // Project information
-    property "sonar.projectDescription", "Contains both a lightwight wrappers for many of Mapbox's APIs and utilities such as Turf for geo-calculations"
+    property "sonar.projectDescription", "Contains both a lightwight wrappers for many of Mapbox's APIs and utilities such as Turf for geo-calculations."
     property "sonar.links.homepage", "https://github.com/mapbox/mapbox-java"
     property "sonar.links.ci", "https://circleci.com/gh/mapbox/mapbox-java"
     property "sonar.links.issue", "https://github.com/mapbox/mapbox-java/issues"

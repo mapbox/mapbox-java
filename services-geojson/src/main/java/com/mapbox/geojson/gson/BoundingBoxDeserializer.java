@@ -19,6 +19,15 @@ import java.lang.reflect.Type;
 public class BoundingBoxDeserializer implements JsonDeserializer<BoundingBox> {
 
   /**
+   * Empty constructor to prevent relying on the default one.
+   *
+   * @since 3.0.0
+   */
+  public BoundingBoxDeserializer() {
+    // Empty Constructor
+  }
+
+  /**
    * When deserializing a GeoJSONs optional bounding box, we want to convert the JsonArray to a
    * {@link BoundingBox} object for easier consumption in developers java applications.
    *

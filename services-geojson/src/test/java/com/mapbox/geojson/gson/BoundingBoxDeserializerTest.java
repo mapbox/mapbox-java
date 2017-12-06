@@ -1,6 +1,9 @@
 package com.mapbox.geojson.gson;
 
 import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.exception.GeoJsonException;
 
@@ -20,6 +23,23 @@ public class BoundingBoxDeserializerTest extends TestUtils {
     String fixtureJson
       = "{\"type\":\"Point\",\"bbox\":[1.0,2.0,3.0,4.0,5.0],\"coordinates\":[100,0]}";
     Point point = Point.fromJson(fixtureJson);
-    compareJson(point.toJson(), fixtureJson);
+    compareJson(fixtureJson, point.toJson());
+  }
+
+  @Test
+  public void bboxDeserializer_deserializeThreeDimensionalArray() throws Exception {
+    String fixtureJson
+      = "{\"type\":\"LineString\",\"bbox\": "
+      + "[100.0,0.0,-100.0,105.0,1.0,0.0],\"coordinates\":[[100.0, 0.0],[101.0, 1.0]]}";
+    LineString lineString = LineString.fromJson(fixtureJson);
+    compareJson(fixtureJson, lineString.toJson());
+  }
+
+  @Test
+  public void bboxDeserializer_deserializeTwoDimensionalArray() throws Exception {
+    String fixtureJson
+      = "{\"type\":\"Point\",\"bbox\":[1,2,3,4],\"coordinates\":[100,0]}";
+    Point point = Point.fromJson(fixtureJson);
+    compareJson(fixtureJson, point.toJson());
   }
 }

@@ -69,7 +69,7 @@ public abstract class RouteOptions {
    * response.
    *
    * @return the language as a string used during the request, if english, this will most likely be
-   * empty
+   *   empty
    * @since 3.0.0
    */
   @Nullable
@@ -100,7 +100,7 @@ public abstract class RouteOptions {
    * directions response.
    *
    * @return a boolean value representing whether or not continueStraight was enabled or not during
-   * the initial request
+   *   the initial request
    * @since 3.0.0
    */
   @Nullable
