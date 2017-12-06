@@ -1,6 +1,7 @@
 package com.mapbox.turf;
 
 import android.support.annotation.NonNull;
+
 import com.mapbox.geojson.Point;
 
 import java.util.List;

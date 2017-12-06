@@ -1,9 +1,9 @@
 package com.mapbox.turf;
 
 import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.TestUtils;
+import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.FeatureCollection;
 
 import org.junit.Rule;
 import org.junit.Test;

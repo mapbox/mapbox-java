@@ -1,12 +1,8 @@
 package com.mapbox.samples;
 
-import com.mapbox.geojson.Point;
 //import com.mapbox.matching.v5.MapboxMapMatching;
 //import com.mapbox.matching.v5.models.MapMatchingResponse;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BasicMapMatching {
 //  public static void main(String[] args) {

@@ -3,20 +3,18 @@ buildscript {
 
   repositories {
     maven { url 'https://plugins.gradle.org/m2' }
-    maven { url "https://maven.google.com" }
+    google()
     mavenCentral()
     jcenter()
   }
 
   dependencies {
 
-    dependencies.create("com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}") {
+    dependencies.create(pluginDependencies.checkstyle) {
       transitive = false
     }
-    classpath "net.ltgt.gradle:gradle-errorprone-plugin:${pluginVersion.errorprone}"
-    classpath "gradle.plugin.de.fuerstenau:BuildConfigPlugin:${pluginVersion.buildConfigPlugin}"
-    classpath 'gradle.plugin.de.fuerstenau:BuildConfigPlugin:1.1.8'
     classpath 'com.android.tools.build:gradle:2.3.3'
+    classpath pluginDependencies.errorprone
     classpath pluginDependencies.sonarqube
   }
 }
@@ -24,7 +22,7 @@ buildscript {
 allprojects {
   repositories {
     maven { url 'https://plugins.gradle.org/m2' }
-    maven { url "https://maven.google.com" }
+    google()
     mavenCentral()
     jcenter()
   }
@@ -55,8 +53,8 @@ subprojects {
     // Test Dependencies
     testCompile dependenciesList.junit
     testCompile dependenciesList.hamcrestJunit
+    testCompile dependenciesList.mockito
   }
 }
 
 apply from: "${rootDir}/gradle/sonarqube.gradle"
-

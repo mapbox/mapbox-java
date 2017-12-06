@@ -13,25 +13,15 @@ build-release:
 
 publish:
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-core:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-directions:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geocoding:uploadArchives ; \
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geojson:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-matching:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-matrix:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-optimization:uploadArchives ; \
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-staticmap:uploadArchives ; \
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services:uploadArchives ; \
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-turf:uploadArchives ; \
 
 publish-local:
 	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
 	export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-core:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-directions:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-geocoding:uploadArchives ; \
     export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-geojson:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-matching:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-matrix:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-optimization:uploadArchives ; \
-    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-staticmap:uploadArchives ; \
+    export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services:uploadArchives ; \
     export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-turf:uploadArchives ; \
 
 directions-matrix-fixtures:
@@ -92,6 +82,10 @@ directions-fixtures:
 	# Directions: No route found
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/149.72227,-37.59764;170.72975,-42.96489.json?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 	  		-o services-directions/src/test/resources/directions_v5_no_route.json
+
+	# Directions: route with banner shield
+	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-95.69263,29.78771;-95.54899,29.78284.json?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+	  		-o services-directions/src/test/resources/directions_v5_banner_with_shield.json
 
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \

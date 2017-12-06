@@ -5,10 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.mapbox.geojson.exception.GeoJsonException;
-import com.mapbox.services.TestUtils;
-import com.mapbox.services.constants.Constants;
-import org.junit.Assert;
+import com.mapbox.core.TestUtils;
+import com.mapbox.core.constants.Constants;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

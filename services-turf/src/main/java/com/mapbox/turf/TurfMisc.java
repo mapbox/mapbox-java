@@ -2,10 +2,10 @@ package com.mapbox.turf;
 
 import android.support.annotation.NonNull;
 
+import com.mapbox.turf.models.LineIntersectsResult;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
-import com.mapbox.turf.models.LineIntersectsResult;
 
 import java.util.ArrayList;
 import java.util.List;

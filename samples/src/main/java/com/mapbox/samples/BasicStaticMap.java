@@ -1,10 +1,10 @@
 package com.mapbox.samples;
 
 import com.mapbox.geojson.Point;
-import com.mapbox.staticmap.v1.MapboxStaticMap;
-import com.mapbox.staticmap.v1.StaticMapCriteria;
-import com.mapbox.staticmap.v1.models.StaticMarkerAnnotation;
-import com.mapbox.staticmap.v1.models.StaticPolylineAnnotation;
+import com.mapbox.api.staticmap.v1.MapboxStaticMap;
+import com.mapbox.api.staticmap.v1.StaticMapCriteria;
+import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation;
+import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation;
 
 import java.awt.Color;
 import java.util.ArrayList;

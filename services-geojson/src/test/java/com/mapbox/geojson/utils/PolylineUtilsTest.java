@@ -1,8 +1,9 @@
 package com.mapbox.geojson.utils;
 
+import com.mapbox.core.constants.Constants;
+import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
-import com.mapbox.services.TestUtils;
-import com.mapbox.services.constants.Constants;
+
 import org.junit.Assert;
 import org.junit.Test;
 
