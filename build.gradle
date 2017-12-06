@@ -21,6 +21,11 @@ buildscript {
   }
 }
 
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+  options.compilerArgs << '-Xlint:all' << '-Xlint:unchecked'
+}
+
 allprojects {
   repositories {
     maven { url 'https://plugins.gradle.org/m2' }
