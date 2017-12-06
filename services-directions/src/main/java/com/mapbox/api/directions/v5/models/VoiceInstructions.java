@@ -5,6 +5,8 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
+import java.io.Serializable;
+
 /**
  * This class provides information thats useful for properly making navigation announcements at the
  * correct time. Essentially, a distance and a string are given, using Turf Distance measurement
@@ -14,7 +16,7 @@ import com.google.gson.TypeAdapter;
  * @since 3.0.0
  */
 @AutoValue
-public abstract class VoiceInstructions {
+public abstract class VoiceInstructions implements Serializable {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.

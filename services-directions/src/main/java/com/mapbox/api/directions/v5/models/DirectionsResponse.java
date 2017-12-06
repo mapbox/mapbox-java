@@ -2,10 +2,18 @@ package com.mapbox.api.directions.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.geojson.BoundingBox;
+import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.gson.BoundingBoxDeserializer;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.GeometryDeserializer;
+import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,6 +37,24 @@ public abstract class DirectionsResponse implements Serializable {
    */
   public static Builder builder() {
     return new AutoValue_DirectionsResponse.Builder();
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a GeoJson Directions Response
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static DirectionsResponse fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, DirectionsResponse.class);
   }
 
   /**
@@ -133,6 +159,14 @@ public abstract class DirectionsResponse implements Serializable {
      */
     public abstract Builder code(@NonNull String code);
 
+    /**
+     * Optionally shows up in a directions response if an error or something unexpected occurred.
+     *
+     * @param message a string containing the message API Directions response with if an error
+     *                occurred
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder message(@Nullable String message);
 
     /**

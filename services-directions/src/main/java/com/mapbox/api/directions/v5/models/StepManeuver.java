@@ -1,6 +1,7 @@
 package com.mapbox.api.directions.v5.models;
 
 import android.support.annotation.FloatRange;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -34,7 +35,7 @@ public abstract class StepManeuver implements Serializable {
    * @return GeoJson Point representing this intersection location
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   public Point location() {
     return Point.fromLngLat(rawLocation()[0], rawLocation()[1]);
   }
@@ -46,9 +47,10 @@ public abstract class StepManeuver implements Serializable {
    * @return GeoJson Point representing this intersection location
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   @SerializedName("location")
-  abstract double[] rawLocation();
+  @SuppressWarnings( {"mutable", "WeakerAccess"})
+  protected abstract double[] rawLocation();
 
   /**
    * Number between 0 and 360 indicating the clockwise angle from true north to the direction of
@@ -172,7 +174,7 @@ public abstract class StepManeuver implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder rawLocation(@Nullable double[] rawLocation);
+    public abstract Builder rawLocation(@NonNull double[] rawLocation);
 
     /**
      * Number between 0 and 360 indicating the clockwise angle from true north to the direction of

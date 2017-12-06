@@ -1,11 +1,12 @@
 package com.mapbox.api.directions.v5.models;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.api.directions.v5.MapboxDirections;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,8 +35,7 @@ public abstract class LegStep implements Serializable {
    * @return a double number with unit meters
    * @since 1.0.0
    */
-  @Nullable
-  public abstract Double distance();
+  public abstract double distance();
 
   /**
    * The estimated travel time from the maneuver to the next {@link LegStep}.
@@ -43,8 +43,7 @@ public abstract class LegStep implements Serializable {
    * @return a double number with unit seconds
    * @since 1.0.0
    */
-  @Nullable
-  public abstract Double duration();
+  public abstract double duration();
 
   /**
    * Gives the geometry of the leg step.
@@ -65,10 +64,16 @@ public abstract class LegStep implements Serializable {
   public abstract String name();
 
   /**
-   * String with reference number or code of the way along which the travel proceeds.
+   * Any road designations associated with the road or path leading from this step’s maneuver to the
+   * next step’s maneuver. Optionally included, if data is available. If multiple road designations
+   * are associated with the road, they are separated by semicolons. A road designation typically
+   * consists of an alphabetic network code (identifying the road type or numbering system), a space
+   * or hyphen, and a route number. You should not assume that the network code is globally unique:
+   * for example, a network code of “NH” may appear on a “National Highway” or “New Hampshire”.
+   * Moreover, a route number may not even uniquely identify a road within a given network.
    *
    * @return String with reference number or code of the way along which the travel proceeds.
-   * Optionally included, if data is available.
+   *   Optionally included, if data is available.
    * @since 2.0.0
    */
   @Nullable
@@ -78,7 +83,7 @@ public abstract class LegStep implements Serializable {
    * String with the destinations of the way along which the travel proceeds.
    *
    * @return String with the destinations of the way along which the travel proceeds. Optionally
-   * included, if data is available
+   *   included, if data is available
    * @since 2.0.0
    */
   @Nullable
@@ -90,7 +95,7 @@ public abstract class LegStep implements Serializable {
    * @return String indicating the mode of transportation.
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract String mode();
 
   /**
@@ -131,7 +136,7 @@ public abstract class LegStep implements Serializable {
    * @return new {@link StepManeuver} object
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract StepManeuver maneuver();
 
   /**
@@ -144,8 +149,28 @@ public abstract class LegStep implements Serializable {
   @Nullable
   public abstract List<VoiceInstructions> voiceInstructions();
 
+  /**
+   * If in your request you set {@link MapboxDirections#bannerInstructions()} to true, you'll
+   * receive a list of {@link BannerInstructions} which encompasses all information necessary for
+   * creating a visual cue about a given {@link LegStep}.
+   *
+   * @return a list of {@link BannerInstructions}s which help display visual cues
+   *   inside your application
+   * @since 3.0.0
+   */
   @Nullable
   public abstract List<BannerInstructions> bannerInstructions();
+
+  /**
+   * The legal driving side at the location for this step. Result will either be {@code left} or
+   * {@code right}.
+   *
+   * @return a string with either a left or right value
+   * @since 3.0.0
+   */
+  @Nullable
+  @SerializedName("driving_side")
+  public abstract String drivingSide();
 
   /**
    * Specifies a decimal precision of edge weights, default value 1.
@@ -153,8 +178,7 @@ public abstract class LegStep implements Serializable {
    * @return a decimal precision double value
    * @since 2.1.0
    */
-  @Nullable
-  public abstract Double weight();
+  public abstract double weight();
 
   /**
    * Provides a list of all the intersections connected to the current way the user is traveling
@@ -201,7 +225,7 @@ public abstract class LegStep implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder distance(@Nullable Double distance);
+    public abstract Builder distance(double distance);
 
     /**
      * The estimated travel time from the maneuver to the next {@link LegStep}.
@@ -210,7 +234,7 @@ public abstract class LegStep implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder duration(@Nullable Double duration);
+    public abstract Builder duration(double duration);
 
     /**
      * Gives the geometry of the leg step.
@@ -257,7 +281,7 @@ public abstract class LegStep implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder mode(@Nullable String mode);
+    public abstract Builder mode(@NonNull String mode);
 
     /**
      * The pronunciation hint of the way name. Will be undefined if no pronunciation is hit.
@@ -296,7 +320,7 @@ public abstract class LegStep implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder maneuver(@Nullable StepManeuver maneuver);
+    public abstract Builder maneuver(@NonNull StepManeuver maneuver);
 
     /**
      * The voice instructions object is useful for navigation sessions providing well spoken text
@@ -307,9 +331,30 @@ public abstract class LegStep implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder voiceInstructions(@Nullable List<VoiceInstructions> voiceInstructions);
+    public abstract Builder voiceInstructions(@NonNull List<VoiceInstructions> voiceInstructions);
 
-    public abstract Builder bannerInstructions(@Nullable List<BannerInstructions> bannerInstructions);
+    /**
+     * If in your request you set {@link MapboxDirections#bannerInstructions()} to true, you'll
+     * receive a list of {@link BannerInstructions} which encompasses all information necessary for
+     * creating a visual cue about a given {@link LegStep}.
+     *
+     * @param bannerInstructions a list of {@link BannerInstructions}s which help display visual
+     *                           cues inside your application
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder bannerInstructions(
+      @NonNull List<BannerInstructions> bannerInstructions);
+
+    /**
+     * The legal driving side at the location for this step. Result will either be {@code left} or
+     * {@code right}.
+     *
+     * @param drivingSide a string with either a left or right value
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder drivingSide(@Nullable String drivingSide);
 
     /**
      * Specifies a decimal precision of edge weights, default value 1.
@@ -318,7 +363,7 @@ public abstract class LegStep implements Serializable {
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder weight(@Nullable Double weight);
+    public abstract Builder weight(double weight);
 
     /**
      * Provide a list of all the intersections connected to the current way the user is traveling
@@ -329,7 +374,7 @@ public abstract class LegStep implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder intersections(@Nullable List<StepIntersection> intersections);
+    public abstract Builder intersections(@NonNull List<StepIntersection> intersections);
 
     /**
      * String with the exit numbers or names of the way. Optionally included, if data is available.
