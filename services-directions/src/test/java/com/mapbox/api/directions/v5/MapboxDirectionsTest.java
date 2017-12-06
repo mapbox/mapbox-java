@@ -282,8 +282,6 @@ public class MapboxDirectionsTest extends TestUtils {
       .build();
     assertTrue(directions.cloneCall().request().url().toString()
       .contains("annotations=congestion,duration"));
-
-    System.out.println(directions.cloneCall().request().url().toString());
   }
 
   @Test
@@ -447,5 +445,19 @@ public class MapboxDirectionsTest extends TestUtils {
     Response<DirectionsResponse> response = mapboxDirections.executeCall();
     assertThat(response.body().message(), containsString("No route found"));
     assertThat(response.body().code(), containsString("NoRoute"));
+  }
+
+  @Test
+  public void setCoordinates_localeShouldNotMatter() {
+    Locale.setDefault(Locale.GERMANY);
+    MapboxDirections directions = MapboxDirections.builder()
+      .origin(Point.fromLngLat(1.1, 1.2))
+      .accessToken(ACCESS_TOKEN)
+      .destination(Point.fromLngLat(4.1, 4.2))
+      .addWaypoint(Point.fromLngLat(2.1, 2.2))
+      .addWaypoint(Point.fromLngLat(3.1, 3.2))
+      .build();
+    assertThat(directions.coordinates(),
+      containsString("1.1,1.2;2.1,2.2;3.1,3.2;4.1,4.2"));
   }
 }
