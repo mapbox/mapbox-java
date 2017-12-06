@@ -20,6 +20,15 @@ import java.math.RoundingMode;
 public class PointSerializer implements JsonSerializer<Point> {
 
   /**
+   * Empty constructor to prevent relying on the default one.
+   *
+   * @since 3.0.0
+   */
+  public PointSerializer() {
+    // Empty Constructor
+  }
+
+  /**
    * Required to handle the special case where the altitude might be a Double.NaN, which isn't a
    * valid double value as per JSON specification.
    *
@@ -36,10 +45,12 @@ public class PointSerializer implements JsonSerializer<Point> {
     JsonArray rawCoordinates = new JsonArray();
 
     BigDecimal lat = BigDecimal.valueOf(src.latitude());
-    String latString = lat.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
+    String latString = lat.setScale(7, RoundingMode.HALF_UP)
+      .stripTrailingZeros().toPlainString();
 
     BigDecimal lon = BigDecimal.valueOf(src.longitude());
-    String lonString = lon.setScale(7, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString();
+    String lonString = lon.setScale(7, RoundingMode.HALF_UP)
+      .stripTrailingZeros().toPlainString();
 
     rawCoordinates.add(new JsonPrimitive(Double.valueOf(lonString)));
     rawCoordinates.add(new JsonPrimitive(Double.valueOf(latString)));
@@ -51,5 +62,4 @@ public class PointSerializer implements JsonSerializer<Point> {
 
     return rawCoordinates;
   }
-
 }

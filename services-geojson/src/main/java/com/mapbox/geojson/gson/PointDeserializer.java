@@ -18,6 +18,15 @@ import java.lang.reflect.Type;
 public class PointDeserializer implements JsonDeserializer<Point> {
 
   /**
+   * Empty constructor to prevent relying on the default one.
+   *
+   * @since 3.0.0
+   */
+  public PointDeserializer() {
+    // Empty Constructor
+  }
+
+  /**
    * Deserialize the coordinates inside the json into {@link Point}s capturing the same information.
    * Otherwise when deserializing, you'll most likely see this error: Required to handle the
    * "Expected BEGIN_OBJECT but was BEGIN_ARRAY".

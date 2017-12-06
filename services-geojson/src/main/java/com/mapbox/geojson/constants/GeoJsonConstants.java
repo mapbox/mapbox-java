@@ -7,10 +7,6 @@ package com.mapbox.geojson.constants;
  */
 public final class GeoJsonConstants {
 
-  private GeoJsonConstants() {
-    // Private constructor to prevent initializing of this class.
-  }
-
   /**
    * A Mercator project has a finite longitude values, this constant represents the lowest value
    * available to represent a geolocation.
@@ -44,4 +40,8 @@ public final class GeoJsonConstants {
    * @since 3.0.0
    */
   public static final double MAX_LATITUDE = 90;
+
+  private GeoJsonConstants() {
+    // Private constructor to prevent initializing of this class.
+  }
 }

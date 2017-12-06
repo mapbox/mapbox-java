@@ -10,15 +10,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria;
+import com.mapbox.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
 import com.mapbox.geojson.BoundingBox;
+import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
@@ -161,7 +162,7 @@ public abstract class CarmenFeature implements Serializable {
 
   /**
    * A list of feature types describing the feature. Options are one of the following types defined
-   * in the {@link GeocodingCriteria.GeocodingTypeCriteria}. Most features have only one type, but if the feature has
+   * in the {@link GeocodingTypeCriteria}. Most features have only one type, but if the feature has
    * multiple types, (for example, Vatican City is a country, region, and place), all applicable
    * types will be provided in the list.
    *
@@ -372,7 +373,7 @@ public abstract class CarmenFeature implements Serializable {
 
     /**
      * A list of feature types describing the feature. Options are one of the following types
-     * defined in the {@link GeocodingCriteria.GeocodingTypeCriteria}. Most features have only one type, but if the
+     * defined in the {@link GeocodingTypeCriteria}. Most features have only one type, but if the
      * feature has multiple types, (for example, Vatican City is a country, region, and place), all
      * applicable types will be provided in the list.
      *

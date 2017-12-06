@@ -9,10 +9,6 @@ import java.lang.annotation.Retention;
 
 public final class StaticMapCriteria {
 
-  private StaticMapCriteria() {
-    // Empty private constructor since only static methods are found inside class.
-  }
-
   public static final String SMALL_PIN = "pin-s";
 
   public static final String MEDIUM_PIN = "pin-m";
@@ -44,4 +40,8 @@ public final class StaticMapCriteria {
   public static final String NAVIGATION_PREVIEW_NIGHT = "navigation-preview-night-v2";
   public static final String NAVIGATION_GUIDANCE_DAY = "navigation-guidance-day-v2";
   public static final String NAVIGATION_GUIDANCE_NIGHT = "navigation-guidance-night-v2";
+
+  private StaticMapCriteria() {
+    // Empty private constructor since only static methods are found inside class.
+  }
 }
