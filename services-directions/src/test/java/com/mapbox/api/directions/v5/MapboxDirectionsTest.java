@@ -448,8 +448,7 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testLocale() {
-    // Locale shouldn't matter (#39)
+  public void setCoordinates_localeShouldNotMatter() {
     Locale.setDefault(Locale.GERMANY);
     MapboxDirections directions = MapboxDirections.builder()
       .origin(Point.fromLngLat(1.1, 1.2))
