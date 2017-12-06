@@ -1,5 +1,6 @@
 package com.mapbox.core.utils;
 
+import android.support.annotation.Nullable;
 import com.mapbox.core.constants.Constants;
 
 import java.util.Locale;
@@ -23,23 +24,18 @@ public final class ApiCallHelper {
    * @return {@link String} representing the header user agent
    * @since 1.0.0
    */
-  public static String getHeaderUserAgent(String clientAppName) {
-    try {
-      String osName = System.getProperty("os.name");
-      String osVersion = System.getProperty("os.version");
-      String osArch = System.getProperty("os.arch");
+  public static String getHeaderUserAgent(@Nullable String clientAppName) {
+    String osName = System.getProperty("os.name");
+    String osVersion = System.getProperty("os.version");
+    String osArch = System.getProperty("os.arch");
 
-      if (TextUtils.isEmpty(osName) || TextUtils.isEmpty(osVersion) || TextUtils.isEmpty(osArch)) {
-        return Constants.HEADER_USER_AGENT;
-      } else {
-        String baseUa = String.format(
-          Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
-        return TextUtils.isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s",
-          clientAppName, baseUa);
-      }
-
-    } catch (Exception exception) {
+    if (TextUtils.isEmpty(osName) || TextUtils.isEmpty(osVersion) || TextUtils.isEmpty(osArch)) {
       return Constants.HEADER_USER_AGENT;
+    } else {
+      String baseUa = String.format(
+        Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
+      return TextUtils.isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s",
+        clientAppName, baseUa);
     }
   }
 }

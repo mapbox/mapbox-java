@@ -74,14 +74,15 @@ public abstract class DirectionsError implements Serializable {
   public abstract static class Builder {
 
     /**
-     * String indicating the state of the response. This is a separate code than the HTTP status code.
-     * On normal valid responses, the value will be Ok. The possible responses are listed below:
+     * String indicating the state of the response. This is a separate code than the HTTP status
+     * code. On normal valid responses, the value will be Ok. The possible responses are listed
+     * below:
      * <ul>
      * <li><strong>Ok</strong>:200 Normal success case</li>
      * <li><strong>NoRoute</strong>: 200 There was no route found for the given coordinates. Check
      * for impossible routes (e.g. routes over oceans without ferry connections).</li>
-     * <li><strong>NoSegment</strong>: 200 No road segment could be matched for coordinates. Check for
-     * coordinates too far away from a road.</li>
+     * <li><strong>NoSegment</strong>: 200 No road segment could be matched for coordinates. Check
+     * for coordinates too far away from a road.</li>
      * <li><strong>ProfileNotFound</strong>: 404 Use a valid profile as described above</li>
      * <li><strong>InvalidInput</strong>: 422</li>
      * </ul>
