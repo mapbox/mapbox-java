@@ -14,6 +14,10 @@ import java.util.List;
  */
 public class TurfClassification {
 
+  private TurfClassification() {
+    // Private constructor preventing initialization of this class
+  }
+
   /**
    * Takes a reference point and a list of {@link Point} geometries and returns the point from the
    * set point list closest to the reference. This calculation is geodesic.

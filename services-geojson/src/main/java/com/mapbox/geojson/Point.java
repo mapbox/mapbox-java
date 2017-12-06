@@ -1,8 +1,9 @@
 package com.mapbox.geojson;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MAX_LATITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MAX_LONGITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LATITUDE;
+import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
@@ -14,11 +15,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.geojson.constants.GeoJsonConstants;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointSerializer;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A point represents a single geographic position and is one of the seven Geometries found in the
@@ -92,8 +96,8 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
    * @since 3.0.0
    */
   public static Point fromLngLat(
-    @FloatRange(from = GeoJsonConstants.MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double longitude,
-    @FloatRange(from = GeoJsonConstants.MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double latitude) {
+    @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
+    @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude) {
     List<Double> coordinates = new ArrayList<>();
     coordinates.add(longitude);
     coordinates.add(latitude);
@@ -116,8 +120,8 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
    * @since 3.0.0
    */
   public static Point fromLngLat(
-    @FloatRange(from = GeoJsonConstants.MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double longitude,
-    @FloatRange(from = GeoJsonConstants.MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double latitude,
+    @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
+    @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     @Nullable BoundingBox bbox) {
     List<Double> coordinates = new ArrayList<>();
     coordinates.add(longitude);
@@ -142,8 +146,8 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
    * @since 3.0.0
    */
   public static Point fromLngLat(
-    @FloatRange(from = GeoJsonConstants.MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double longitude,
-    @FloatRange(from = GeoJsonConstants.MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double latitude,
+    @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
+    @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     double altitude) {
     List<Double> coordinates = new ArrayList<>();
     coordinates.add(longitude);
@@ -170,8 +174,8 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
    * @since 3.0.0
    */
   public static Point fromLngLat(
-    @FloatRange(from = GeoJsonConstants.MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double longitude,
-    @FloatRange(from = GeoJsonConstants.MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double latitude,
+    @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
+    @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     double altitude, @Nullable BoundingBox bbox) {
     List<Double> coordinates = new ArrayList<>();
     coordinates.add(longitude);

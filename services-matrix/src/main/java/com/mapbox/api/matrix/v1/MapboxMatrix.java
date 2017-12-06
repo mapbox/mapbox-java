@@ -4,17 +4,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
-import com.mapbox.api.matrix.v1.models.MatrixResponse;
-import com.mapbox.core.MapboxService;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.matrix.v1.models.MatrixResponse;
+import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
-import com.mapbox.geojson.Point;
 import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
-
+import com.mapbox.geojson.Point;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -249,11 +249,11 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
      * matrix durations. The options include driving, driving considering traffic, walking, and
      * cycling. Using each of these profiles will result in different durations
      *
-     * @param profile required to be one of the String values found in the {@link DirectionsCriteria.ProfileCriteria}
+     * @param profile required to be one of the String values found in the {@link ProfileCriteria}
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder profile(@NonNull @DirectionsCriteria.ProfileCriteria String profile);
+    public abstract Builder profile(@NonNull @ProfileCriteria String profile);
 
     /**
      * Required to call when this is being built. If no access token provided,
@@ -345,15 +345,15 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
       }
       return matrix;
     }
-  }
 
-  private static String formatCoordinates(List<Point> coordinates) {
-    List<String> coordinatesFormatted = new ArrayList<>();
-    for (Point point : coordinates) {
-      coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-        TextUtils.formatCoordinate(point.longitude()),
-        TextUtils.formatCoordinate(point.latitude())));
+    private static String formatCoordinates(List<Point> coordinates) {
+      List<String> coordinatesFormatted = new ArrayList<>();
+      for (Point point : coordinates) {
+        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+          TextUtils.formatCoordinate(point.longitude()),
+          TextUtils.formatCoordinate(point.latitude())));
+      }
+      return TextUtils.join(";", coordinatesFormatted.toArray());
     }
-    return TextUtils.join(";", coordinatesFormatted.toArray());
   }
 }

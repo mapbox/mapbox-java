@@ -18,7 +18,8 @@ import retrofit2.http.Query;
 public interface GeocodingService {
 
   /**
-   * Constructs the html call using the information passed in through the {@link MapboxGeocoding.Builder}.
+   * Constructs the html call using the information passed in through the
+   * {@link MapboxGeocoding.Builder}.
    *
    * @param userAgent    The user
    * @param mode         mapbox.places or mapbox.places-permanent for enterprise geocoding.
@@ -50,7 +51,8 @@ public interface GeocodingService {
     @Query("language") String language);
 
   /**
-   * Constructs the html call using the information passed in through the {@link MapboxGeocoding.Builder}.
+   * Constructs the html call using the information passed in through the
+   * {@link MapboxGeocoding.Builder}.
    *
    * @param userAgent    The user
    * @param mode         mapbox.places-permanent for batch geocoding.

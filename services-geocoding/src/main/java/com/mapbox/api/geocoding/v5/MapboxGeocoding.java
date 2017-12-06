@@ -6,21 +6,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
+import com.mapbox.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
 import com.mapbox.api.geocoding.v5.models.GeocodingAdapterFactory;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.core.utils.ApiCallHelper;
+import com.mapbox.core.utils.MapboxUtils;
+import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.core.utils.ApiCallHelper;
-import com.mapbox.core.utils.MapboxUtils;
-import com.mapbox.core.utils.TextUtils;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -368,18 +368,18 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     /**
      * This optionally can be set to filter the results returned back after making your forward or
      * reverse geocoding request. A null value can't be passed in and only values defined in
-     * {@link GeocodingCriteria.GeocodingTypeCriteria} are allowed.
+     * {@link GeocodingTypeCriteria} are allowed.
      * <p>
      * Note that {@link GeocodingCriteria#TYPE_POI_LANDMARK} returns a subset of the results
      * returned by {@link GeocodingCriteria#TYPE_POI}. More than one type can be specified.
      * </p>
      *
      * @param geocodingTypes optionally filter the result types by one or more defined types inside
-     *                       the {@link GeocodingCriteria.GeocodingTypeCriteria}
+     *                       the {@link GeocodingTypeCriteria}
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public Builder geocodingTypes(@NonNull @GeocodingCriteria.GeocodingTypeCriteria String... geocodingTypes) {
+    public Builder geocodingTypes(@NonNull @GeocodingTypeCriteria String... geocodingTypes) {
       geocodingTypes(TextUtils.join(",", geocodingTypes));
       return this;
     }

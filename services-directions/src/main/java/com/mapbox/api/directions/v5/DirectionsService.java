@@ -33,9 +33,9 @@ public interface DirectionsService {
    *                           direction and dictates the angle of approach
    * @param continueStraight   define whether the route should continue straight even if the route
    *                           will be slower
-   * @param annotations        an annotations object that contains additional details about each line
-   *                           segment along the route geometry. Each entry in an annotations field
-   *                           corresponds to a coordinate along the route geometry
+   * @param annotations        an annotations object that contains additional details about each
+   *                           line segment along the route geometry. Each entry in an annotations
+   *                           field corresponds to a coordinate along the route geometry
    * @param language           language of returned turn-by-turn text instructions
    * @param roundaboutExits    Add extra step when roundabouts occur with additional information for
    *                           the user
