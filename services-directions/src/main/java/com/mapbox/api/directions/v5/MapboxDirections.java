@@ -159,6 +159,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
         } else if (response.body() == null || response.body().routes().isEmpty()) {
           // If null just pass the original object back since there's nothing to modify.
           callback.onResponse(call, response);
+          return;
         }
         DirectionsResponse newResponse = response.body().toBuilder().routes(
           generateRouteOptions(response)).build();
