@@ -4,8 +4,9 @@ dependencies {
   compile project(":services-geocoding")
   compile project(":services-optimization")
   compile project(":services-geojson")
-//  compile project(":services-matching")
+  compile project(":services-matching")
   compile project(":services-staticmap")
+  compile project(":services-rxbinding")
 }
 
 sonarqube {

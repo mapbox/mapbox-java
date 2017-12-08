@@ -11,6 +11,7 @@ ext {
       mockito          : '2.7.13',
       hamcrestJunit    : '2.0.0.0',
       errorprone       : '2.0.21',
+      rxJava           : '2.1.7'
   ]
 
   pluginVersion = [
@@ -37,6 +38,7 @@ ext {
       mockito             : "org.mockito:mockito-core:${version.mockito}",
       hamcrestJunit       : "org.hamcrest:hamcrest-junit:${version.hamcrestJunit}",
       errorprone          : "com.google.errorprone:error_prone_core:${version.errorprone}",
+      rxJava              : "io.reactivex.rxjava2:rxjava:${version.rxJava}"
   ]
 
 
