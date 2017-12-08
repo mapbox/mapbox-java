@@ -11,7 +11,7 @@ import retrofit2.Response;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class EnqueueCallObservable extends Observable<Response<DirectionsResponse>> {
+public final class EnqueueCallObservable extends Observable<DirectionsResponse> {
 
   private final MapboxDirections mapboxDirections;
 
@@ -20,7 +20,7 @@ public final class EnqueueCallObservable extends Observable<Response<DirectionsR
   }
 
   @Override
-  protected void subscribeActual(Observer<? super Response<DirectionsResponse>> observer) {
+  protected void subscribeActual(Observer<? super DirectionsResponse> observer) {
     Listener listener = new Listener(mapboxDirections, observer);
     mapboxDirections.enqueueCall(listener);
     observer.onSubscribe(listener);
@@ -31,9 +31,9 @@ public final class EnqueueCallObservable extends Observable<Response<DirectionsR
     private final AtomicBoolean unsubscribed = new AtomicBoolean();
 
     private final MapboxDirections mapboxDirections;
-    private final Observer<? super Response<DirectionsResponse>> observer;
+    private final Observer<? super DirectionsResponse> observer;
 
-    Listener(MapboxDirections mapboxDirections, Observer<? super Response<DirectionsResponse>> observer) {
+    Listener(MapboxDirections mapboxDirections, Observer<? super DirectionsResponse> observer) {
       this.mapboxDirections = mapboxDirections;
       this.observer = observer;
     }
@@ -52,7 +52,7 @@ public final class EnqueueCallObservable extends Observable<Response<DirectionsR
     @Override
     public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
       if (!isDisposed()) {
-        observer.onNext(response);
+        observer.onNext(response.body());
       }
     }
 

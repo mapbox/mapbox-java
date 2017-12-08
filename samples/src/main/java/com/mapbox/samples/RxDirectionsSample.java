@@ -5,7 +5,6 @@ import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.rx.directions.v5.RxDirections;
 import com.mapbox.geojson.Point;
 import io.reactivex.functions.Consumer;
-import retrofit2.Response;
 
 public class RxDirectionsSample {
 
@@ -17,13 +16,12 @@ public class RxDirectionsSample {
       .origin(Point.fromLngLat(-95.3591, 29.7576))
       .build();
 
-    RxDirections.enqueueCall(mapboxDirections).subscribe(new Consumer<Response<DirectionsResponse>>() {
-      @Override
-      public void accept(Response<DirectionsResponse> directionsResponse) throws Exception {
-        System.out.println(directionsResponse.body().routes().get(0).distance());
-      }
-    });
+    RxDirections.enqueueCall(mapboxDirections)
+      .subscribe(new Consumer<DirectionsResponse>() {
+        @Override
+        public void accept(DirectionsResponse directionsResponse) throws Exception {
+          System.out.println(directionsResponse.routes().get(0).distance());
+        }
+      });
   }
-
-
 }
