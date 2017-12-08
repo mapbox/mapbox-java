@@ -17,6 +17,15 @@ import java.lang.reflect.Type;
 public class GeometryDeserializer implements JsonDeserializer<Geometry> {
 
   /**
+   * Empty constructor to prevent relying on the default one.
+   *
+   * @since 3.0.0
+   */
+  public GeometryDeserializer() {
+    // Empty Constructor
+  }
+
+  /**
    * Required to handle the "Unable to invoke no-args constructor for interface {@link Geometry}
    * error that Gson shows when trying to deserialize a list of {@link Geometry}.
    *

@@ -5,6 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
+import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.DestinationCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.optimization.v1.models.OptimizationAdapterFactory;
 import com.mapbox.api.optimization.v1.models.OptimizationResponse;
 import com.mapbox.core.MapboxService;
@@ -50,7 +55,6 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
 
   private Call<OptimizationResponse> call;
   private OptimizationService service;
-  protected Builder builder;
 
   /**
    * Execute the call
@@ -275,11 +279,11 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * origin to the final destination. The options include driving, driving considering traffic,
      * walking, and cycling. Using each of these profiles will result in different routing biases.
      *
-     * @param profile required to be one of the String values found in the {@link DirectionsCriteria.ProfileCriteria}
+     * @param profile required to be one of the String values found in the {@link ProfileCriteria}
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder profile(@NonNull @DirectionsCriteria.ProfileCriteria String profile);
+    public abstract Builder profile(@NonNull @ProfileCriteria String profile);
 
     /**
      * Returned route is a roundtrip (route returns to first location). Allowed values are:
@@ -321,7 +325,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder destination(@Nullable @DirectionsCriteria.DestinationCriteria String destination);
+    public abstract Builder destination(@Nullable @DestinationCriteria String destination);
 
     /**
      * alter the default geometry being returned for the directions route. A null value will reset
@@ -334,11 +338,11 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * </p>
      *
      * @param geometries null if you'd like the default geometry, else one of the options found in
-     *                   {@link DirectionsCriteria.GeometriesCriteria}.
+     *                   {@link GeometriesCriteria}.
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder geometries(@Nullable @DirectionsCriteria.GeometriesCriteria String geometries);
+    public abstract Builder geometries(@Nullable @GeometriesCriteria String geometries);
 
     /**
      * Type of returned overview geometry. Can be {@link DirectionsCriteria#OVERVIEW_FULL} (the most
@@ -347,11 +351,11 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * geometry). The default is simplified. Passing in null will use the APIs default setting for
      * the overview field.
      *
-     * @param overview null or one of the options found in {@link DirectionsCriteria.OverviewCriteria}
+     * @param overview null or one of the options found in {@link OverviewCriteria}
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder overview(@Nullable @DirectionsCriteria.OverviewCriteria String overview);
+    public abstract Builder overview(@Nullable @OverviewCriteria String overview);
 
     /**
      * Optionally, set the maximum distance in meters that each coordinate is allowed to move when
@@ -431,14 +435,14 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
      * separating them with {@code ,}.
      *
      * @param annotations string referencing one of the annotation direction criteria's. The strings
-     *                    restricted to one or multiple values inside the {@link DirectionsCriteria.AnnotationCriteria}
+     *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
      *   documentation</a>
      * @since 2.1.0
      */
-    public Builder annotations(@Nullable @DirectionsCriteria.AnnotationCriteria String... annotations) {
+    public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
       this.annotations = annotations;
       return this;
     }
@@ -565,16 +569,16 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
       }
       return optimization;
     }
-  }
 
-  private static String formatCoordinates(List<Point> coordinates) {
-    List<String> coordinatesFormatted = new ArrayList<>();
-    for (Point point : coordinates) {
-      coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-        TextUtils.formatCoordinate(point.longitude()),
-        TextUtils.formatCoordinate(point.latitude())));
+    private static String formatCoordinates(List<Point> coordinates) {
+      List<String> coordinatesFormatted = new ArrayList<>();
+      for (Point point : coordinates) {
+        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+          TextUtils.formatCoordinate(point.longitude()),
+          TextUtils.formatCoordinate(point.latitude())));
+      }
+
+      return TextUtils.join(";", coordinatesFormatted.toArray());
     }
-
-    return TextUtils.join(";", coordinatesFormatted.toArray());
   }
 }

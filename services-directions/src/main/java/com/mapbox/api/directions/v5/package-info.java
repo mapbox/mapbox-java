@@ -1,5 +1,5 @@
 /**
- * Contains the Mapbox Java Services classes.
+ * Contains classes for accessing the Mapbox Directions API.
  *
  * @since 1.0.0
  */

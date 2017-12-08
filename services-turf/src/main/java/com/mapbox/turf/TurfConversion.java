@@ -3,6 +3,7 @@ package com.mapbox.turf;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.mapbox.turf.TurfConstants.TurfUnitCriteria;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +51,7 @@ public final class TurfConversion {
    * @return a double value representing the distance in degrees
    * @since 3.0.0
    */
-  public static double distanceToDegrees(double distance, @TurfConstants.TurfUnitCriteria String units) {
+  public static double distanceToDegrees(double distance, @TurfUnitCriteria String units) {
     return radiansToDegrees(distanceToRadians(distance, units));
   }
 
@@ -83,11 +84,11 @@ public final class TurfConversion {
    * unit.
    *
    * @param radians a double using unit radian
-   * @param units   pass in one of the units defined in {@link TurfConstants.TurfUnitCriteria}
+   * @param units   pass in one of the units defined in {@link TurfUnitCriteria}
    * @return converted radian to distance value
    * @since 1.2.0
    */
-  public static double radiansToDistance(double radians, @NonNull @TurfConstants.TurfUnitCriteria String units) {
+  public static double radiansToDistance(double radians, @NonNull @TurfUnitCriteria String units) {
     return radians * FACTORS.get(units);
   }
 
@@ -109,11 +110,11 @@ public final class TurfConversion {
    * radians.
    *
    * @param distance double representing a distance value
-   * @param units    pass in one of the units defined in {@link TurfConstants.TurfUnitCriteria}
+   * @param units    pass in one of the units defined in {@link TurfUnitCriteria}
    * @return converted distance to radians value
    * @since 1.2.0
    */
-  public static double distanceToRadians(double distance, @NonNull @TurfConstants.TurfUnitCriteria String units) {
+  public static double distanceToRadians(double distance, @NonNull @TurfUnitCriteria String units) {
     return distance / FACTORS.get(units);
   }
 
@@ -123,12 +124,12 @@ public final class TurfConversion {
    *
    * @param distance     double representing a distance value
    * @param originalUnit of the distance, must be one of the units defined in
-   *                     {@link TurfConstants.TurfUnitCriteria}
+   *                     {@link TurfUnitCriteria}
    * @return converted distance in the default unit
    * @since 2.2.0
    */
   public static double convertDistance(@FloatRange(from = 0) double distance,
-                                       @NonNull @TurfConstants.TurfUnitCriteria String originalUnit) {
+                                       @NonNull @TurfUnitCriteria String originalUnit) {
     return convertDistance(distance, originalUnit, TurfConstants.UNIT_DEFAULT);
   }
 
@@ -137,14 +138,14 @@ public final class TurfConversion {
    *
    * @param distance     the distance to be converted
    * @param originalUnit of the distance, must be one of the units defined in
-   *                     {@link TurfConstants.TurfUnitCriteria}
+   *                     {@link TurfUnitCriteria}
    * @param finalUnit    returned unit, {@link TurfConstants#UNIT_DEFAULT} if not specified
    * @return the converted distance
    * @since 2.2.0
    */
   public static double convertDistance(@FloatRange(from = 0) double distance,
-                                       @NonNull @TurfConstants.TurfUnitCriteria String originalUnit,
-                                       @Nullable @TurfConstants.TurfUnitCriteria String finalUnit) {
+                                       @NonNull @TurfUnitCriteria String originalUnit,
+                                       @Nullable @TurfUnitCriteria String finalUnit) {
     if (finalUnit == null) {
       finalUnit = TurfConstants.UNIT_DEFAULT;
     }

@@ -15,16 +15,6 @@ public final class StaticMapCriteria {
 
   public static final String LARGE_PIN = "pin-l";
 
-  @Retention(SOURCE)
-  @StringDef({
-    SMALL_PIN,
-    MEDIUM_PIN,
-    LARGE_PIN
-  })
-  public @interface MarkerCriteria {
-  }
-
-
   static final String CAMERA_AUTO = "auto";
 
   static final String BEFORE_LAYER = "before_layer";
@@ -43,5 +33,14 @@ public final class StaticMapCriteria {
 
   private StaticMapCriteria() {
     // Empty private constructor since only static methods are found inside class.
+  }
+
+  @Retention(SOURCE)
+  @StringDef( {
+    SMALL_PIN,
+    MEDIUM_PIN,
+    LARGE_PIN
+  })
+  public @interface MarkerCriteria {
   }
 }
