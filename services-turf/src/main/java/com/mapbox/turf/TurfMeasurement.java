@@ -22,7 +22,7 @@ import java.util.List;
 public final class TurfMeasurement {
 
   private TurfMeasurement() {
-    // Private constructor preventing initialization of this class
+    throw new AssertionError("No Instances.");
   }
 
   /**
