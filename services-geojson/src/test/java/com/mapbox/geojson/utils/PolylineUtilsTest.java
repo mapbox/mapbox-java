@@ -16,7 +16,8 @@ import java.util.List;
 
 public class PolylineUtilsTest extends TestUtils {
 
-  private static final String TEST_LINE = "_cqeFf~cjVf@p@fA}AtAoB`ArAx@hA`GbIvDiFv@gAh@t@X\\|@z@`@Z\\Xf@Vf@VpA\\tATJ@NBBkC";
+  private static final String TEST_LINE
+    = "_cqeFf~cjVf@p@fA}AtAoB`ArAx@hA`GbIvDiFv@gAh@t@X\\|@z@`@Z\\Xf@Vf@VpA\\tATJ@NBBkC";
 
   @Test
   public void testDecodePath() {
