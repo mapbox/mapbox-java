@@ -1,12 +1,16 @@
-package com.mapbox.api.rx.directions.v5;
+package com.mapbox.rx.api.directions.v5;
 
 import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.exceptions.CompositeException;
+import io.reactivex.exceptions.Exceptions;
+import io.reactivex.plugins.RxJavaPlugins;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.HttpException;
 import retrofit2.Response;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -51,9 +55,24 @@ public final class EnqueueCallObservable extends Observable<DirectionsResponse> 
 
     @Override
     public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-      if (!isDisposed()) {
+//      if (!isDisposed()) {
+//        observer.onNext(response.body());
+//      }
+
+
+
+      if (response.isSuccessful()) {
         observer.onNext(response.body());
+      } else {
+        Throwable t = new HttpException(response);
+        try {
+          observer.onError(t);
+        } catch (Throwable inner) {
+          Exceptions.throwIfFatal(inner);
+          RxJavaPlugins.onError(new CompositeException(t, inner));
+        }
       }
+
     }
 
     @Override

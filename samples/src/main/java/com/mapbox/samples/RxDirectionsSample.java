@@ -2,10 +2,11 @@ package com.mapbox.samples;
 
 import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.rx.directions.v5.RxDirections;
 import com.mapbox.geojson.Point;
+import com.mapbox.rx.api.directions.v5.RxDirections;
 import io.reactivex.functions.Consumer;
 
+@SuppressWarnings("CheckReturnValue")
 public class RxDirectionsSample {
 
   public static void main(String[] args) {
@@ -19,8 +20,8 @@ public class RxDirectionsSample {
     RxDirections.enqueueCall(mapboxDirections)
       .subscribe(new Consumer<DirectionsResponse>() {
         @Override
-        public void accept(DirectionsResponse directionsResponse) throws Exception {
-          System.out.println(directionsResponse.routes().get(0).distance());
+        public void accept(DirectionsResponse response) throws Exception {
+          System.out.printf("Total distance: %f", response.routes().get(0).distance());
         }
       });
   }
