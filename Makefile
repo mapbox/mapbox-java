@@ -1,3 +1,6 @@
+build-config:
+	./gradlew compileBuildConfig
+
 checkstyle:
 	./gradlew checkstyle
 
