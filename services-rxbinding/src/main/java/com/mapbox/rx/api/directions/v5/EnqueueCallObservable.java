@@ -10,10 +10,7 @@ import io.reactivex.exceptions.Exceptions;
 import io.reactivex.plugins.RxJavaPlugins;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.HttpException;
 import retrofit2.Response;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class EnqueueCallObservable extends Observable<DirectionsResponse> {
 
@@ -32,10 +29,9 @@ public final class EnqueueCallObservable extends Observable<DirectionsResponse> 
 
   static final class Listener implements Disposable, Callback<DirectionsResponse> {
 
-    private final AtomicBoolean unsubscribed = new AtomicBoolean();
-
     private final MapboxDirections mapboxDirections;
     private final Observer<? super DirectionsResponse> observer;
+    private boolean terminated = false;
 
     Listener(MapboxDirections mapboxDirections, Observer<? super DirectionsResponse> observer) {
       this.mapboxDirections = mapboxDirections;
@@ -44,41 +40,51 @@ public final class EnqueueCallObservable extends Observable<DirectionsResponse> 
 
     @Override
     public void dispose() {
-      unsubscribed.compareAndSet(false, true);
       mapboxDirections.cancelCall();
     }
 
     @Override
     public boolean isDisposed() {
-      return unsubscribed.get();
+      return mapboxDirections.isCanceled();
     }
 
     @Override
     public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-//      if (!isDisposed()) {
-//        observer.onNext(response.body());
-//      }
-
-
-
-      if (response.isSuccessful()) {
-        observer.onNext(response.body());
-      } else {
-        Throwable t = new HttpException(response);
-        try {
-          observer.onError(t);
-        } catch (Throwable inner) {
-          Exceptions.throwIfFatal(inner);
-          RxJavaPlugins.onError(new CompositeException(t, inner));
-        }
+      if (isDisposed()) {
+        return;
       }
 
+      try {
+        observer.onNext(response.body());
+        if (!call.isCanceled()) {
+          terminated = true;
+          observer.onComplete();
+        }
+      } catch (Exception exception) {
+        if (terminated) {
+          RxJavaPlugins.onError(exception);
+        } else if (!call.isCanceled()) {
+          try {
+            observer.onError(exception);
+          } catch (Exception inner) {
+            Exceptions.throwIfFatal(inner);
+            RxJavaPlugins.onError(new CompositeException(exception, inner));
+          }
+        }
+      }
     }
 
     @Override
     public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
-      if (!isDisposed()) {
+      if (call.isCanceled()) {
+        return;
+      }
+
+      try {
         observer.onError(throwable);
+      } catch (Exception inner) {
+        Exceptions.throwIfFatal(inner);
+        RxJavaPlugins.onError(new CompositeException(throwable, inner));
       }
     }
   }
