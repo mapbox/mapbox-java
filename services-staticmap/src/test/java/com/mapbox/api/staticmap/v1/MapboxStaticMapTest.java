@@ -34,12 +34,17 @@ public class MapboxStaticMapTest extends TestUtils {
   }
 
   @Test
+  public void build_throwsExceptionWhenStyleIdNotSet() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("You need to set a map style.");
+    MapboxStaticMap.builder().accessToken(ACCESS_TOKEN).styleId("").build();
+  }
+
+  @Test
   public void accessToken_exceptionGetsThrownWhenMissing() throws Exception {
     thrown.expect(ServicesException.class);
     thrown.expectMessage("Using Mapbox Services requires setting a valid access token.");
-    MapboxStaticMap staticMap = MapboxStaticMap.builder()
-      .build();
-    assertNotNull(staticMap);
+    MapboxStaticMap.builder().build();
   }
 
   @Test

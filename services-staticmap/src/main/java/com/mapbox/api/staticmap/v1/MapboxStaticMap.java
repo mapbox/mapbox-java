@@ -4,23 +4,21 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
+import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation;
 import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation;
 import com.mapbox.core.constants.Constants;
-import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation;
-import com.mapbox.geojson.GeoJson;
-import com.mapbox.geojson.Point;
+import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
-import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.geojson.GeoJson;
+import com.mapbox.geojson.Point;
+import okhttp3.HttpUrl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-
-import okhttp3.HttpUrl;
 
 /**
  * Static maps are standalone images that can be displayed in your mobile app without the aid of a
@@ -36,6 +34,9 @@ import okhttp3.HttpUrl;
  */
 @AutoValue
 public abstract class MapboxStaticMap {
+
+  private static final String BEFORE_LAYER = "before_layer";
+  private static final String CAMERA_AUTO = "auto";
 
   @Nullable
   abstract String accessToken();
@@ -125,11 +126,11 @@ public abstract class MapboxStaticMap {
       urlBuilder.addPathSegment(TextUtils.join(",", annotations.toArray()));
     }
 
-    urlBuilder.addPathSegment(cameraAuto() ? StaticMapCriteria.CAMERA_AUTO
+    urlBuilder.addPathSegment(cameraAuto() ? CAMERA_AUTO
       : generateLocationPathSegment());
 
     if (beforeLayer() != null) {
-      urlBuilder.addQueryParameter(StaticMapCriteria.BEFORE_LAYER, beforeLayer());
+      urlBuilder.addQueryParameter(BEFORE_LAYER, beforeLayer());
     }
     if (!attribution()) {
       urlBuilder.addQueryParameter("attribution", "false");
@@ -176,7 +177,7 @@ public abstract class MapboxStaticMap {
       .styleId(StaticMapCriteria.STREET_STYLE)
       .baseUrl(Constants.BASE_API_URL)
       .user(Constants.MAPBOX_USER)
-      .cameraPoint(Point.fromLngLat(0d,0d))
+      .cameraPoint(Point.fromLngLat(0d, 0d))
       .cameraAuto(false)
       .attribution(true)
       .width(250)
@@ -398,6 +399,13 @@ public abstract class MapboxStaticMap {
 
     abstract MapboxStaticMap autoBuild();
 
+    /**
+     * This uses the provided parameters set using the {@link Builder} and creates a new
+     * {@link MapboxStaticMap} object.
+     *
+     * @return a new instance of {@link MapboxStaticMap}
+     * @since 2.1.0
+     */
     public MapboxStaticMap build() {
       MapboxStaticMap staticMap = autoBuild();
 
@@ -406,8 +414,7 @@ public abstract class MapboxStaticMap {
           + " token.");
       }
 
-
-      if (staticMap.styleId() == null || staticMap.styleId().isEmpty()) {
+      if (staticMap.styleId().isEmpty()) {
         throw new ServicesException("You need to set a map style.");
       }
       return staticMap;
