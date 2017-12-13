@@ -3,6 +3,7 @@ package com.mapbox.samples;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 
+import com.mapbox.sample.BuildConfig;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -11,7 +12,7 @@ public class BasicGeocoding {
 
   public static void main(String[] args) {
     MapboxGeocoding geocoding = MapboxGeocoding.builder()
-      .accessToken("pk.eyJ1IjoiY2FtbWFjZSIsImEiOiI5OGQxZjRmZGQ2YjU3Mzk1YjJmZTQ5ZDY2MTg1NDJiOCJ9.hIFoCKGAGOwQkKyVPvrxvQ")
+      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
       .query("1600")
       .build();
 
