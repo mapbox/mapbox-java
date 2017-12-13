@@ -1,5 +1,6 @@
 package com.mapbox.geojson.utils;
 
+import android.support.annotation.NonNull;
 import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
@@ -34,7 +35,8 @@ public final class PolylineUtils {
    * @see <a href="https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/android/PolyUtil.java">Part of algorithm came from this source.</a>
    * @since 1.0.0
    */
-  public static List<Point> decode(final String encodedPath, int precision) {
+  @NonNull
+  public static List<Point> decode(@NonNull final String encodedPath, int precision) {
     int len = encodedPath.length();
 
     // OSRM uses precision=6, the default Polyline spec divides by 1E5, capping at precision=5
@@ -83,7 +85,8 @@ public final class PolylineUtils {
    * @return a String representing a path string
    * @since 1.0.0
    */
-  public static String encode(final List<Point> path, int precision) {
+  @NonNull
+  public static String encode(@NonNull final List<Point> path, int precision) {
     long lastLat = 0;
     long lastLng = 0;
 
@@ -131,7 +134,8 @@ public final class PolylineUtils {
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
    */
-  public static List<Point> simplify(List<Point> points) {
+  @NonNull
+  public static List<Point> simplify(@NonNull List<Point> points) {
     return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
   }
 
@@ -146,7 +150,8 @@ public final class PolylineUtils {
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
    */
-  public static List<Point> simplify(List<Point> points, double tolerance) {
+  @NonNull
+  public static List<Point> simplify(@NonNull List<Point> points, double tolerance) {
     return simplify(points, tolerance, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
   }
 
@@ -161,7 +166,8 @@ public final class PolylineUtils {
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
    */
-  public static List<Point> simplify(List<Point> points, boolean highestQuality) {
+  @NonNull
+  public static List<Point> simplify(@NonNull List<Point> points, boolean highestQuality) {
     return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, highestQuality);
   }
 
@@ -178,7 +184,9 @@ public final class PolylineUtils {
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
    */
-  public static List<Point> simplify(List<Point> points, double tolerance, boolean highestQuality) {
+  @NonNull
+  public static List<Point> simplify(@NonNull List<Point> points, double tolerance,
+                                     boolean highestQuality) {
     if (points.size() <= 2) {
       return points;
     }

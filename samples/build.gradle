@@ -1,3 +1,6 @@
+apply plugin: 'java'
+apply plugin: 'de.fuerstenau.buildconfig'
+
 dependencies {
   compile project(":services-core")
   compile project(":services-directions")
@@ -7,6 +10,11 @@ dependencies {
   compile project(":services-matching")
   compile project(":services-staticmap")
   compile project(":services-rxbinding")
+}
+
+buildConfig {
+  packageName = 'com.mapbox.sample'
+  buildConfigField 'String', 'MAPBOX_ACCESS_TOKEN', System.getenv("MAPBOX_ACCESS_TOKEN")
 }
 
 sonarqube {

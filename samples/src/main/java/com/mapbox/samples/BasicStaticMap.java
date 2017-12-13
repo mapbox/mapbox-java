@@ -5,6 +5,7 @@ import com.mapbox.api.staticmap.v1.MapboxStaticMap;
 import com.mapbox.api.staticmap.v1.StaticMapCriteria;
 import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation;
 import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation;
+import com.mapbox.sample.BuildConfig;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class BasicStaticMap {
     polylines.add(StaticPolylineAnnotation.builder().polyline("abcdef").build());
 
     MapboxStaticMap mapboxStaticMap = MapboxStaticMap.builder()
-      .accessToken("pk.eyJ1IjoiY2FtbWFjZSIsImEiOiI5OGQxZjRmZGQ2YjU3Mzk1YjJmZTQ5ZDY2MTg1NDJiOCJ9.hIFoCKGAGOwQkKyVPvrxvQ")
+      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
       .width(500)
       .height(300)
       .retina(true)
