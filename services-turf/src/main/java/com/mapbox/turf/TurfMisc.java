@@ -1,11 +1,12 @@
 package com.mapbox.turf;
 
-import android.support.annotation.NonNull;
+import static com.mapbox.core.internal.Preconditions.checkNotNull;
 
-import com.mapbox.turf.models.LineIntersectsResult;
+import android.support.annotation.NonNull;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
+import com.mapbox.turf.models.LineIntersectsResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public final class TurfMisc {
   private static final String INDEX_KEY = "index";
 
   private TurfMisc() {
-    // Private constructor preventing initialization of this class
+    throw new AssertionError("No Instances.");
   }
 
   /**
@@ -36,7 +37,10 @@ public final class TurfMisc {
    * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
    * @since 1.2.0
    */
-  public static LineString lineSlice(Point startPt, Point stopPt, Feature line) {
+  @NonNull
+  public static LineString lineSlice(@NonNull Point startPt, @NonNull Point stopPt,
+                                     @NonNull Feature line) {
+    checkNotNull(line.geometry(), "Feature.geometry() == null");
     if (!line.geometry().type().equals("LineString")) {
       throw new TurfException("input must be a LineString Feature or Geometry");
     }
@@ -54,6 +58,7 @@ public final class TurfMisc {
    * @see <a href="http://turfjs.org/docs/#lineslice">Turf Line slice documentation</a>
    * @since 1.2.0
    */
+  @NonNull
   public static LineString lineSlice(@NonNull Point startPt, @NonNull Point stopPt,
                                      @NonNull LineString line) {
 
@@ -96,7 +101,14 @@ public final class TurfMisc {
    * @return closest point on the line to point
    * @since 1.3.0
    */
+  @NonNull
   public static Feature pointOnLine(@NonNull Point pt, @NonNull List<Point> coords) {
+
+    if (coords.size() < 2) {
+      throw new TurfException("Turf pointOnLine requires a List of Points made up of at least 2 "
+        + "coordinates.");
+    }
+
     Feature closestPt = Feature.fromGeometry(
       Point.fromLngLat(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
     closestPt.addNumberProperty("dist", Double.POSITIVE_INFINITY);
