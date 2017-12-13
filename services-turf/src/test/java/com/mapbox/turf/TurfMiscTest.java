@@ -5,6 +5,7 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -55,6 +56,15 @@ public class TurfMiscTest extends TestUtils {
     Point point = Point.fromLngLat(1.0, 1.0);
     LineString lineString = LineString.fromLngLats(coords);
     TurfMisc.lineSlice(point, point, lineString);
+  }
+
+  @Test
+  public void lineSlice_returnsEmptyLineStringRatherThanNull() throws Exception {
+    List<Point> coords = new ArrayList<>();
+    coords.add(Point.fromLngLat(1.0, 1.0));
+    coords.add(Point.fromLngLat(2.0, 2.0));
+    LineString lineString = LineString.fromLngLats(coords);
+    assertNotNull(TurfMisc.lineSlice(coords.get(0), coords.get(1), lineString));
   }
 
   @Test
@@ -135,6 +145,17 @@ public class TurfMiscTest extends TestUtils {
   /*
    * Point on line test
    */
+
+  @Test
+  public void pointOnLine_throwLineMustContainTwoOrMorePoints() throws Exception {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("Turf pointOnLine requires a List of Points made up of at least"
+      + " 2 coordinates."));
+
+    List<Point> line = new ArrayList<>();
+    line.add(Point.fromLngLat(-122.45717525482178, 37.72003306385638));
+    TurfMisc.pointOnLine(line.get(0), line);
+  }
 
   @Test
   public void testTurfPointOnLineFirstPoint() throws TurfException {
