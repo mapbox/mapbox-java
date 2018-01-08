@@ -128,13 +128,10 @@ public class MapboxDirectionsTest extends TestUtils {
       .origin(Point.fromLngLat(1.234, 2.345))
       .destination(Point.fromLngLat(13.4930, 9.958))
       .addWaypoint(Point.fromLngLat(5.29838, 4.42189))
-      .addWaypoint(Point.fromLngLat(5.29838, 4.42189))
       .accessToken(ACCESS_TOKEN)
       .build();
-
-    assertTrue(directions.coordinates().startsWith("1.234,2.345;"));
-    assertTrue(directions.coordinates().contains(";5.29838,4.42189;"));
-    assertTrue(directions.coordinates().endsWith(";13.493,9.958"));
+    assertTrue(directions.cloneCall().request().url().toString()
+      .contains("1.234,2.345;5.29838,4.42189;13.493,9.958"));
   }
 
   @Test
@@ -144,9 +141,8 @@ public class MapboxDirectionsTest extends TestUtils {
       .origin(Point.fromLngLat(1.234, 2.345))
       .accessToken(ACCESS_TOKEN)
       .build();
-
-    assertTrue(directions.coordinates().startsWith("1.234,2.345;"));
-    assertTrue(directions.coordinates().endsWith(";13.493,9.958"));
+    assertTrue(directions.cloneCall().request().url().toString()
+      .contains("1.234,2.345;13.493,9.958"));
   }
 
   @Test
@@ -451,13 +447,12 @@ public class MapboxDirectionsTest extends TestUtils {
   public void setCoordinates_localeShouldNotMatter() {
     Locale.setDefault(Locale.GERMANY);
     MapboxDirections directions = MapboxDirections.builder()
-      .origin(Point.fromLngLat(1.1, 1.2))
       .accessToken(ACCESS_TOKEN)
-      .destination(Point.fromLngLat(4.1, 4.2))
-      .addWaypoint(Point.fromLngLat(2.1, 2.2))
-      .addWaypoint(Point.fromLngLat(3.1, 3.2))
+      .origin(Point.fromLngLat(1.234,2.345))
+      .addWaypoint(Point.fromLngLat(13.493,9.958))
+      .destination(Point.fromLngLat(5.29838,4.42189))
       .build();
-    assertThat(directions.coordinates(),
-      containsString("1.1,1.2;2.1,2.2;3.1,3.2;4.1,4.2"));
+    assertThat(directions.cloneCall().request().url().toString(),
+      containsString("1.234,2.345;13.493,9.958;5.29838,4.42189"));
   }
 }
