@@ -120,7 +120,7 @@ public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>,
    * {@link BoundingBox} which better describes this MultiPolygon.
    *
    * @param polygons a list of Polygons which make up this MultiPolygon
-   * @param bbox     optionally include a bbox definition as a double array
+   * @param bbox     optionally include a bbox definition
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @since 3.0.0
@@ -131,6 +131,39 @@ public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>,
     for (Polygon polygon : polygons) {
       coordinates.add(polygon.coordinates());
     }
+    return new AutoValue_MultiPolygon(bbox, coordinates);
+  }
+
+  /**
+   * Create a new instance of this class by defining a single {@link Polygon} objects and passing
+   * it in as a parameter in this method. The Polygon should comply with the GeoJson
+   * specifications described in the documentation.
+   *
+   * @param polygon a single Polygon which make up this MultiPolygon
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static MultiPolygon fromPolygon(@NonNull Polygon polygon) {
+    List<List<List<Point>>> coordinates = new ArrayList<>();
+    coordinates.add(polygon.coordinates());
+    return new AutoValue_MultiPolygon(null, coordinates);
+  }
+
+  /**
+   * Create a new instance of this class by defining a single {@link Polygon} objects and passing
+   * it in as a parameter in this method. The Polygon should comply with the GeoJson
+   * specifications described in the documentation.
+   *
+   * @param polygon a single Polygon which make up this MultiPolygon
+   * @param bbox    optionally include a bbox definition
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static MultiPolygon fromPolygon(@NonNull Polygon polygon, @Nullable BoundingBox bbox) {
+    List<List<List<Point>>> coordinates = new ArrayList<>();
+    coordinates.add(polygon.coordinates());
     return new AutoValue_MultiPolygon(bbox, coordinates);
   }
 
@@ -152,14 +185,13 @@ public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>,
    * which follow the correct specifications described in the Point documentation.
    *
    * @param points a list of {@link Point}s which make up the MultiPolygon geometry
-   * @param bbox   optionally include a bbox definition as a double array
+   * @param bbox   optionally include a bbox definition
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @since 3.0.0
    */
   public static MultiPolygon fromLngLats(@NonNull List<List<List<Point>>> points,
                                          @Nullable BoundingBox bbox) {
-
     return new AutoValue_MultiPolygon(bbox, points);
   }
 

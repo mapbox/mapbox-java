@@ -95,13 +95,28 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
   }
 
   /**
+   * Create a new instance of this class by passing in a single {@link LineString} object. The
+   * LineStrings should comply with the GeoJson specifications described in the documentation.
+   *
+   * @param lineString a single LineString which make up this MultiLineString
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static MultiLineString fromLineString(@NonNull LineString lineString) {
+    List<List<Point>> coordinates = new ArrayList<>();
+    coordinates.add(lineString.coordinates());
+    return new AutoValue_MultiLineString(null, coordinates);
+  }
+
+  /**
    * Create a new instance of this class by defining a list of {@link LineString} objects and
    * passing that list in as a parameter in this method. The LineStrings should comply with the
    * GeoJson specifications described in the documentation. Optionally, pass in an instance of a
    * {@link BoundingBox} which better describes this MultiLineString.
    *
    * @param lineStrings a list of LineStrings which make up this MultiLineString
-   * @param bbox        optionally include a bbox definition as a double array
+   * @param bbox        optionally include a bbox definition
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @since 3.0.0
@@ -112,6 +127,23 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
+    return new AutoValue_MultiLineString(bbox, coordinates);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a single {@link LineString} object. The
+   * LineStrings should comply with the GeoJson specifications described in the documentation.
+   *
+   * @param lineString a single LineString which make up this MultiLineString
+   * @param bbox       optionally include a bbox definition
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static MultiLineString fromLineString(@NonNull LineString lineString,
+                                               @Nullable BoundingBox bbox) {
+    List<List<Point>> coordinates = new ArrayList<>();
+    coordinates.add(lineString.coordinates());
     return new AutoValue_MultiLineString(bbox, coordinates);
   }
 
@@ -137,7 +169,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
    * distance greater than 0.
    *
    * @param points a list of {@link Point}s which make up the MultiLineString geometry
-   * @param bbox   optionally include a bbox definition as a double array
+   * @param bbox   optionally include a bbox definition
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @since 3.0.0
