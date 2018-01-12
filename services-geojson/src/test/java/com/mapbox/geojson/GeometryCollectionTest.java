@@ -80,6 +80,15 @@ public class GeometryCollectionTest extends TestUtils {
   }
 
   @Test
+  public void passingInSingleGeometry_doesHandleCorrectly() throws Exception {
+    Point geometry = Point.fromLngLat(1.0, 2.0);
+    GeometryCollection collection = GeometryCollection.fromGeometry(geometry);
+    assertNotNull(collection);
+    assertEquals(1, collection.geometries().size());
+    assertEquals(2.0, ((Point) collection.geometries().get(0)).latitude(), DELTA);
+  }
+
+  @Test
   public void bbox_doesSerializeWhenPresent() throws Exception {
     List<Point> points = new ArrayList<>();
     points.add(Point.fromLngLat(1.0, 2.0));

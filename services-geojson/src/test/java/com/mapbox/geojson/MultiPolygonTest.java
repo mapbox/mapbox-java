@@ -85,6 +85,20 @@ public class MultiPolygonTest extends TestUtils {
   }
 
   @Test
+  public void passingInSinglePolygon_doesHandleCorrectly() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 4.0));
+    List<List<Point>> pointsList = new ArrayList<>();
+    pointsList.add(points);
+    Polygon geometry = Polygon.fromLngLats(pointsList);
+    MultiPolygon multiPolygon = MultiPolygon.fromPolygon(geometry);
+    assertNotNull(multiPolygon);
+    assertEquals(1, multiPolygon.polygons().size());
+    assertEquals(2.0, multiPolygon.polygons().get(0).coordinates().get(0).get(0).latitude(), DELTA);
+  }
+
+  @Test
   public void bbox_doesSerializeWhenPresent() throws Exception {
     List<Point> points = new ArrayList<>();
     points.add(Point.fromLngLat(1.0, 2.0));
