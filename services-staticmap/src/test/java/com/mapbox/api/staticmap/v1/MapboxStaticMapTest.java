@@ -34,12 +34,17 @@ public class MapboxStaticMapTest extends TestUtils {
   }
 
   @Test
+  public void build_throwsExceptionWhenStyleIdNotSet() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("You need to set a map style.");
+    MapboxStaticMap.builder().accessToken(ACCESS_TOKEN).styleId("").build();
+  }
+
+  @Test
   public void accessToken_exceptionGetsThrownWhenMissing() throws Exception {
     thrown.expect(ServicesException.class);
     thrown.expectMessage("Using Mapbox Services requires setting a valid access token.");
-    MapboxStaticMap staticMap = MapboxStaticMap.builder()
-      .build();
-    assertNotNull(staticMap);
+    MapboxStaticMap.builder().build();
   }
 
   @Test
@@ -226,7 +231,7 @@ public class MapboxStaticMapTest extends TestUtils {
       .staticMarkerAnnotations(markers)
       .build();
     assertTrue(staticMap.url().toString().contains("pin-m-a(-71.041500,42.366200),"
-      + "pin-m-a+ffc800(-71.084200,42.394300)"));
+      + "pin-m-a+FFC800(-71.084200,42.394300)"));
   }
 
   @Test
@@ -242,7 +247,7 @@ public class MapboxStaticMapTest extends TestUtils {
       .cameraAuto(true)
       .staticPolylineAnnotations(polylines)
       .build();
-    assertTrue(staticMap.url().toString().contains("/path+0000ff-0.1(abcdefg)/"));
+    assertTrue(staticMap.url().toString().contains("/path+0000FF-0.1(abcdefg)/"));
   }
 
   @Test

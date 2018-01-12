@@ -9,6 +9,8 @@ import org.junit.Test;
 
 import java.awt.Color;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class StaticMarkerAnnotationTest {
@@ -43,7 +45,8 @@ public class StaticMarkerAnnotationTest {
       .label("abc")
       .color(Color.BLUE)
       .build();
-    assertTrue(staticMarkerAnnotation.url().contains("pin-m-abc+0000ff(1.000000,2.000000)"));
+    assertThat(staticMarkerAnnotation.url(),
+      containsString("pin-m-abc+0000FF(1.000000,2.000000)"));
   }
 
   @Test
@@ -53,7 +56,7 @@ public class StaticMarkerAnnotationTest {
       .name(StaticMapCriteria.MEDIUM_PIN)
       .color(Color.BLUE)
       .build();
-    assertTrue(staticMarkerAnnotation.url().contains("pin-m-0000ff(1.000000,2.000000)"));
+    assertTrue(staticMarkerAnnotation.url().contains("pin-m-0000FF(1.000000,2.000000)"));
   }
 
   @Test
