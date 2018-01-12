@@ -231,7 +231,7 @@ public class MapboxStaticMapTest extends TestUtils {
       .staticMarkerAnnotations(markers)
       .build();
     assertTrue(staticMap.url().toString().contains("pin-m-a(-71.041500,42.366200),"
-      + "pin-m-a+ffc800(-71.084200,42.394300)"));
+      + "pin-m-a+FFC800(-71.084200,42.394300)"));
   }
 
   @Test
@@ -247,7 +247,7 @@ public class MapboxStaticMapTest extends TestUtils {
       .cameraAuto(true)
       .staticPolylineAnnotations(polylines)
       .build();
-    assertTrue(staticMap.url().toString().contains("/path+0000ff-0.1(abcdefg)/"));
+    assertTrue(staticMap.url().toString().contains("/path+0000FF-0.1(abcdefg)/"));
   }
 
   @Test
