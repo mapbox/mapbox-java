@@ -75,6 +75,18 @@ public class MultiLineStringTest extends TestUtils {
   }
 
   @Test
+  public void passingInSingleLineString_doesHandleCorrectly() throws Exception {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 4.0));
+    LineString geometry = LineString.fromLngLats(points);
+    MultiLineString multiLineString = MultiLineString.fromLineString(geometry);
+    assertNotNull(multiLineString);
+    assertEquals(1, multiLineString.lineStrings().size());
+    assertEquals(2.0, multiLineString.lineStrings().get(0).coordinates().get(0).latitude(), DELTA);
+  }
+
+  @Test
   public void bbox_doesSerializeWhenPresent() throws Exception {
     List<Point> points = new ArrayList<>();
     points.add(Point.fromLngLat(1.0, 2.0));

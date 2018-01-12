@@ -17,6 +17,7 @@ import com.mapbox.geojson.gson.PointSerializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -100,6 +101,20 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
   }
 
   /**
+   * Create a new instance of this class by giving the collection a single GeoJSON {@link Geometry}.
+   *
+   * @param geometry a non-null object of type geometry which makes up this collection
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static GeometryCollection fromGeometry(@NonNull Geometry geometry) {
+    List<Geometry> geometries = new ArrayList<>();
+    geometries.add(geometry);
+    return new AutoValue_GeometryCollection(null, geometries);
+  }
+
+  /**
    * Create a new instance of this class by giving the collection a list of {@link Geometry}.
    *
    * @param geometries a non-null list of geometry which makes up this collection
@@ -110,6 +125,22 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries,
                                                   @Nullable BoundingBox bbox) {
+    return new AutoValue_GeometryCollection(bbox, geometries);
+  }
+
+  /**
+   * Create a new instance of this class by giving the collection a single GeoJSON {@link Geometry}.
+   *
+   * @param geometry a non-null object of type geometry which makes up this collection
+   * @param bbox     optionally include a bbox definition as a double array
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static GeometryCollection fromGeometry(@NonNull Geometry geometry,
+                                                @Nullable BoundingBox bbox) {
+    List<Geometry> geometries = new ArrayList<>();
+    geometries.add(geometry);
     return new AutoValue_GeometryCollection(bbox, geometries);
   }
 

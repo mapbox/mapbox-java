@@ -91,6 +91,16 @@ public class FeatureCollectionTest extends TestUtils {
   }
 
   @Test
+  public void passingInSingleFeature_doesHandleCorrectly() throws Exception {
+    Point geometry = Point.fromLngLat(1.0, 2.0);
+    Feature feature = Feature.fromGeometry(geometry);
+    FeatureCollection geo = FeatureCollection.fromFeature(feature);
+    assertNotNull(geo.features());
+    assertEquals(1, geo.features().size());
+    assertEquals(2.0, ((Point) geo.features().get(0).geometry()).coordinates().get(1), DELTA);
+  }
+
+  @Test
   public void fromJson() throws IOException {
     final String json = loadJsonFixture(SAMPLE_FEATURECOLLECTION);
     FeatureCollection geo = FeatureCollection.fromJson(json);
