@@ -58,8 +58,6 @@ import java.util.List;
 @AutoValue
 public abstract class Point implements Geometry<List<Double>>, Serializable {
 
-  @Expose
-  @SerializedName("type")
   private static final String TYPE = "Point";
 
   /**
@@ -101,7 +99,7 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
     List<Double> coordinates = new ArrayList<>();
     coordinates.add(longitude);
     coordinates.add(latitude);
-    return new AutoValue_Point(null, coordinates);
+    return new AutoValue_Point(TYPE, null, coordinates);
   }
 
   /**
@@ -126,7 +124,7 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
     List<Double> coordinates = new ArrayList<>();
     coordinates.add(longitude);
     coordinates.add(latitude);
-    return new AutoValue_Point(bbox, coordinates);
+    return new AutoValue_Point(TYPE, bbox, coordinates);
   }
 
   /**
@@ -153,7 +151,7 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
     coordinates.add(longitude);
     coordinates.add(latitude);
     coordinates.add(altitude);
-    return new AutoValue_Point(null, coordinates);
+    return new AutoValue_Point(TYPE, null, coordinates);
   }
 
   /**
@@ -181,7 +179,7 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
     coordinates.add(longitude);
     coordinates.add(latitude);
     coordinates.add(altitude);
-    return new AutoValue_Point(bbox, coordinates);
+    return new AutoValue_Point(TYPE, bbox, coordinates);
   }
 
   /**
@@ -248,9 +246,7 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
    */
   @NonNull
   @Override
-  public String type() {
-    return TYPE;
-  }
+  public abstract String type();
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -288,10 +284,6 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 

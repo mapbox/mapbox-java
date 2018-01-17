@@ -1,26 +1,15 @@
 package com.mapbox.api.geocoding.v5.models;
 
-import com.mapbox.api.geocoding.v5.GeocodingCriteria;
-import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.core.TestUtils;
-
-import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
-import java.io.IOException;
-
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
-import retrofit2.Response;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import com.mapbox.api.geocoding.v5.MapboxGeocoding;
+import com.mapbox.core.TestUtils;
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.Test;
+import retrofit2.Response;
 
 public class CarmenContextTest extends TestUtils {
 
@@ -32,43 +21,6 @@ public class CarmenContextTest extends TestUtils {
 
   private MockWebServer server;
   private HttpUrl mockUrl;
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
-
-  @Before
-  public void setUp() throws Exception {
-    server = new MockWebServer();
-    server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
-      @Override
-      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-        try {
-          String response;
-          if (request.getPath().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
-            response = loadJsonFixture(GEOCODING_BATCH_FIXTURE);
-          } else if (request.getPath().contains("-77.0366,38.8971")) {
-            response = loadJsonFixture(REVERSE_GEOCODE_FIXTURE);
-          } else if (request.getPath().contains("texas")) {
-            response = loadJsonFixture(GEOCODE_WITH_BBOX_FIXTURE);
-          } else if (request.getPath().contains("language")) {
-            response = loadJsonFixture(GEOCODE_LANGUAGE_FIXTURE);
-          } else {
-            response = loadJsonFixture(GEOCODING_FIXTURE);
-          }
-          return new MockResponse().setBody(response);
-        } catch (IOException ioException) {
-          throw new RuntimeException(ioException);
-        }
-      }
-    });
-    server.start();
-    mockUrl = server.url("");
-  }
-
-  @After
-  public void tearDown() throws IOException {
-    server.shutdown();
-  }
 
   @Test
   public void sanity() throws Exception {
@@ -120,7 +72,6 @@ public class CarmenContextTest extends TestUtils {
       .baseUrl(mockUrl.toString())
       .build();
     Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
-    System.out.println(response.body().features().get(0).context().get(0).wikidata());
     assertTrue(response.body().features().get(0).context().get(0).wikidata()
       .equals("Q30"));
   }

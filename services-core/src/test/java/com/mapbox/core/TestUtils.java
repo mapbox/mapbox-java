@@ -1,6 +1,20 @@
 package com.mapbox.core;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import com.google.gson.JsonParser;
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.Dispatcher;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.hamcrest.Matchers;
+import org.hamcrest.junit.ExpectedException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,18 +25,59 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+public class TestUtils extends Dispatcher {
 
-public class TestUtils {
+  protected static final String FORWARD_GEOCODING = "geocoding.json";
+  protected static final String FORWARD_VALID = "forward_valid.json";
+  private static final String FORWARD_INVALID = "forward_invalid.json";
+  private static final String FORWARD_VALID_ZH = "forward_valid_zh.json";
 
   public static final double DELTA = 1E-10;
   public static final String ACCESS_TOKEN = "pk.XXX";
 
-  public void compareJson(String json1, String json2) {
+  public MockWebServer server;
+  public HttpUrl mockUrl;
+
+  @Before
+  public void setUp() throws Exception {
+    server = new MockWebServer();
+    server.setDispatcher(this);
+    server.start();
+    mockUrl = server.url("");
+  }
+
+
+  @After
+  public void tearDown() throws IOException {
+    server.shutdown();
+  }
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
+
+  @Override
+  public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+    try {
+      String response;
+      if (request.getPath().contains("1600") && !request.getPath().contains("nw")) {
+        response = loadJsonFixture(FORWARD_VALID);
+      }else if (request.getPath().contains("nw")) {
+        response = loadJsonFixture(FORWARD_GEOCODING);
+      } else if (request.getPath().contains("sandy")) {
+        response = loadJsonFixture(FORWARD_INVALID);
+      } else {
+        response = loadJsonFixture(FORWARD_VALID_ZH);
+      }
+      return new MockResponse().setBody(response);
+    } catch (IOException ioException) {
+      throw new RuntimeException(ioException);
+    }
+  }
+
+  public void compareJson(String expectedJson, String actualJson) {
     JsonParser parser = new JsonParser();
-    assertEquals(parser.parse(json1), parser.parse(json2));
+    assertThat(parser.parse(actualJson), Matchers.equalTo(parser.parse(expectedJson)));
   }
 
   protected String loadJsonFixture(String filename) throws IOException {

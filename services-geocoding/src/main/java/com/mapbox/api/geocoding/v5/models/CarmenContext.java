@@ -1,10 +1,16 @@
 package com.mapbox.api.geocoding.v5.models;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.gson.GeometryDeserializer;
+import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.io.Serializable;
 
@@ -27,6 +33,14 @@ public abstract class CarmenContext implements Serializable {
    */
   public static Builder builder() {
     return new AutoValue_CarmenContext.Builder();
+  }
+
+  @SuppressWarnings("unused")
+  public static CarmenContext fromJson(@NonNull String json) {
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
+      .create();
+    return gson.fromJson(json, CarmenContext.class);
   }
 
   /**
@@ -99,12 +113,30 @@ public abstract class CarmenContext implements Serializable {
     return new AutoValue_CarmenContext.GsonTypeAdapter(gson);
   }
 
+  @SuppressWarnings("unused")
+  public String toJson() {
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
+      .create();
+    return gson.toJson(this);
+  }
+
+  /**
+   * Convert current instance values into another Builder to quickly change one or more values.
+   *
+   * @return a new instance of {@link CarmenContext} using the newly defined values
+   * @since 3.0.0
+   */
+  @SuppressWarnings("unused")
+  public abstract Builder toBuilder();
+
   /**
    * This builder can be used to set the values describing the {@link CarmenFeature}.
    *
    * @since 3.0.0
    */
   @AutoValue.Builder
+  @SuppressWarnings("unused")
   public abstract static class Builder {
 
     /**
