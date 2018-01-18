@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.core.TestUtils;
 import org.junit.Test;
@@ -13,7 +14,7 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GeocodingResponseTest extends TestUtils {
+public class GeocodingResponseTest extends GeocodingTestUtils {
 
   @Test
   public void sanity() throws Exception {

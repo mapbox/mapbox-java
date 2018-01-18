@@ -8,6 +8,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 
 import com.google.gson.JsonObject;
+import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
@@ -17,7 +18,7 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.util.Locale;
 
-public class CarmenFeatureTest extends TestUtils {
+public class CarmenFeatureTest extends GeocodingTestUtils {
 
   private static final String FORWARD_FEATURE_VALID = "forward_feature_valid.json";
 

@@ -3,18 +3,15 @@ package com.mapbox.geojson;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.utils.PolylineUtils;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
+import com.mapbox.geojson.utils.PolylineUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -55,8 +52,6 @@ import java.util.List;
 @AutoValue
 public abstract class LineString implements Geometry<List<Point>>, Serializable {
 
-  @Expose
-  @SerializedName("type")
   private static final String TYPE = "LineString";
 
   /**
@@ -89,7 +84,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull MultiPoint multiPoint) {
-    return new AutoValue_LineString(null, multiPoint.coordinates());
+    return new AutoValue_LineString(TYPE, null, multiPoint.coordinates());
   }
 
   /**
@@ -107,7 +102,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull List<Point> points) {
-    return new AutoValue_LineString(null, points);
+    return new AutoValue_LineString(TYPE, null, points);
   }
 
   /**
@@ -126,7 +121,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull List<Point> points, @Nullable BoundingBox bbox) {
-    return new AutoValue_LineString(bbox, points);
+    return new AutoValue_LineString(TYPE, bbox, points);
   }
 
   /**
@@ -140,7 +135,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
-    return new AutoValue_LineString(bbox, multiPoint.coordinates());
+    return new AutoValue_LineString(TYPE, bbox, multiPoint.coordinates());
   }
 
   /**
@@ -171,9 +166,7 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    */
   @NonNull
   @Override
-  public String type() {
-    return TYPE;
-  }
+  public abstract String type();
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -211,8 +204,6 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 

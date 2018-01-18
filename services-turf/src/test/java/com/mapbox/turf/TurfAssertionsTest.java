@@ -56,7 +56,7 @@ public class TurfAssertionsTest extends TestUtils {
 
   @Test
   public void testInvariantFeatureOf2() throws TurfException {
-    String json = "{}";
+    String json = "{ type: 'Feature'}";
     thrown.expect(TurfException.class);
     thrown.expectMessage(startsWith("Invalid input to foo, Feature with geometry required"));
     TurfAssertions.featureOf(Feature.fromJson(json), "Polygon", "foo");
@@ -88,7 +88,7 @@ public class TurfAssertionsTest extends TestUtils {
 
   @Test
   public void testInvariantCollectionOf2() throws TurfException {
-    String json = "{}";
+    String json = "{type: 'FeatureCollection'}";
     thrown.expect(TurfException.class);
     thrown.expectMessage(startsWith("collectionOf() requires a name"));
     TurfAssertions.collectionOf(FeatureCollection.fromJson(json), "Polygon", null);
@@ -96,7 +96,7 @@ public class TurfAssertionsTest extends TestUtils {
 
   @Test
   public void testInvariantCollectionOf3() throws TurfException {
-    String json = "{}";
+    String json = "{type: 'FeatureCollection'}";
     thrown.expect(TurfException.class);
     thrown.expectMessage(startsWith("Invalid input to foo, FeatureCollection required"));
     TurfAssertions.collectionOf(FeatureCollection.fromJson(json), "Polygon", "foo");

@@ -26,44 +26,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class MapboxGeocodingTest extends TestUtils {
-
-  private static final String GEOCODING_FIXTURE = "geocoding.json";
-  private static final String GEOCODING_BATCH_FIXTURE = "geocoding_batch.json";
-
-  private MockWebServer server;
-  private HttpUrl mockUrl;
-
-  @Before
-  public void setUp() throws Exception {
-    server = new MockWebServer();
-    server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
-      @Override
-      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-        try {
-          String response;
-          if (request.getPath().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
-            response = loadJsonFixture(GEOCODING_BATCH_FIXTURE);
-          } else {
-            response = loadJsonFixture(GEOCODING_FIXTURE);
-          }
-          return new MockResponse().setBody(response);
-        } catch (IOException ioException) {
-          throw new RuntimeException(ioException);
-        }
-      }
-    });
-    server.start();
-    mockUrl = server.url("");
-  }
-
-  @After
-  public void tearDown() throws IOException {
-    server.shutdown();
-  }
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
+public class MapboxGeocodingTest extends GeocodingTestUtils {
 
   @Test
   public void sanity() throws Exception {

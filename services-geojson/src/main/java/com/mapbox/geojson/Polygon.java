@@ -64,8 +64,6 @@ import java.util.List;
 @AutoValue
 public abstract class Polygon implements Geometry<List<List<Point>>>, Serializable {
 
-  @Expose
-  @SerializedName("type")
   private static final String TYPE = "Polygon";
 
   /**
@@ -100,7 +98,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    * @since 3.0.0
    */
   public static Polygon fromLngLats(@NonNull List<List<Point>> coordinates) {
-    return new AutoValue_Polygon(null, coordinates);
+    return new AutoValue_Polygon(TYPE, null, coordinates);
   }
 
   /**
@@ -116,7 +114,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   public static Polygon fromLngLats(@NonNull List<List<Point>> coordinates,
                                     @Nullable BoundingBox bbox) {
-    return new AutoValue_Polygon(bbox, coordinates);
+    return new AutoValue_Polygon(TYPE, bbox, coordinates);
   }
 
   /**
@@ -137,7 +135,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
       }
       converted.add(innerList);
     }
-    return new AutoValue_Polygon(null, converted);
+    return new AutoValue_Polygon(TYPE, null, converted);
   }
 
   /**
@@ -159,13 +157,13 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null) {
-      return new AutoValue_Polygon(null, coordinates);
+      return new AutoValue_Polygon(TYPE, null, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(null, coordinates);
+    return new AutoValue_Polygon(TYPE, null, coordinates);
   }
 
   /**
@@ -189,13 +187,13 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null) {
-      return new AutoValue_Polygon(bbox, coordinates);
+      return new AutoValue_Polygon(TYPE, bbox, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(bbox, coordinates);
+    return new AutoValue_Polygon(TYPE, bbox, coordinates);
   }
 
   /**
@@ -220,13 +218,13 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null || inner.isEmpty()) {
-      return new AutoValue_Polygon(null, coordinates);
+      return new AutoValue_Polygon(TYPE, null, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(null, coordinates);
+    return new AutoValue_Polygon(TYPE, null, coordinates);
   }
 
   /**
@@ -252,13 +250,13 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null) {
-      return new AutoValue_Polygon(bbox, coordinates);
+      return new AutoValue_Polygon(TYPE, bbox, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(bbox, coordinates);
+    return new AutoValue_Polygon(TYPE, bbox, coordinates);
   }
 
   /**
@@ -303,9 +301,7 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   @NonNull
   @Override
-  public String type() {
-    return TYPE;
-  }
+  public abstract String type();
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -345,8 +341,6 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 

@@ -1,13 +1,17 @@
 package com.mapbox.api.staticmap.v1;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation;
+import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
-import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation;
-import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -15,9 +19,6 @@ import org.junit.rules.ExpectedException;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class MapboxStaticMapTest extends TestUtils {
 
@@ -187,8 +188,9 @@ public class MapboxStaticMapTest extends TestUtils {
       .cameraAuto(true)
       .geoJson(lineString)
       .build();
-    assertTrue(staticMap.url().toString().contains(
-      "geojson(%7B%22coordinates%22:[[100.0,0.0],[101.0,1.0]],%22type%22:%22LineString%22%7D)"));
+    assertThat(staticMap.url().toString(),
+      containsString("geojson(%7B%22type%22:%22LineString%22,%22coordinates%22:"
+        + "[[100.0,0.0],[101.0,1.0]]%7D)"));
   }
 
   @Test

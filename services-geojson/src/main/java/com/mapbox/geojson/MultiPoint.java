@@ -40,8 +40,6 @@ import java.util.List;
 @AutoValue
 public abstract class MultiPoint implements Geometry<List<Point>>, Serializable {
 
-  @Expose
-  @SerializedName("type")
   private static final String TYPE = "MultiPoint";
 
   /**
@@ -74,7 +72,7 @@ public abstract class MultiPoint implements Geometry<List<Point>>, Serializable 
    * @since 3.0.0
    */
   public static MultiPoint fromLngLats(@NonNull List<Point> points) {
-    return new AutoValue_MultiPoint(null, points);
+    return new AutoValue_MultiPoint(TYPE, null, points);
   }
 
   /**
@@ -90,7 +88,7 @@ public abstract class MultiPoint implements Geometry<List<Point>>, Serializable 
    * @since 3.0.0
    */
   public static MultiPoint fromLngLats(@NonNull List<Point> points, @Nullable BoundingBox bbox) {
-    return new AutoValue_MultiPoint(bbox, points);
+    return new AutoValue_MultiPoint(TYPE, bbox, points);
   }
 
   /**
@@ -103,9 +101,7 @@ public abstract class MultiPoint implements Geometry<List<Point>>, Serializable 
    */
   @NonNull
   @Override
-  public String type() {
-    return TYPE;
-  }
+  public abstract String type();
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -143,8 +139,6 @@ public abstract class MultiPoint implements Geometry<List<Point>>, Serializable 
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 

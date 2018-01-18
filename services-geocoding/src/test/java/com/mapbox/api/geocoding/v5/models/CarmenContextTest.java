@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.core.TestUtils;
 import okhttp3.HttpUrl;
@@ -14,7 +15,7 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import retrofit2.Response;
 
-public class CarmenContextTest extends TestUtils {
+public class CarmenContextTest extends GeocodingTestUtils {
 
   @Test
   public void sanity() throws Exception {

@@ -18,6 +18,7 @@ import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
@@ -284,6 +285,7 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
     return gson.create().toJson(this);
   }
 
