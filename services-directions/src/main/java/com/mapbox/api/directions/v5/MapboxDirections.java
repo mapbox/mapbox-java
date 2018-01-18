@@ -101,7 +101,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
-      coordinates(),
+      formatCoordinates(coordinates()),
       accessToken(),
       alternatives(),
       geometries(),
@@ -196,6 +196,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       modifiedRoutes.add(route.toBuilder().routeOptions(
         RouteOptions.builder()
           .profile(profile())
+          .coordinates(coordinates())
           .continueStraight(continueStraight())
           .annotations(annotation())
           .bearings(bearing())
@@ -213,6 +214,17 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       ).build());
     }
     return modifiedRoutes;
+  }
+
+  private static String formatCoordinates(List<Point> coordinates) {
+    List<String> coordinatesFormatted = new ArrayList<>();
+    for (Point point : coordinates) {
+      coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+        TextUtils.formatCoordinate(point.longitude()),
+        TextUtils.formatCoordinate(point.latitude())));
+    }
+
+    return TextUtils.join(";", coordinatesFormatted.toArray());
   }
 
   /**
@@ -244,7 +256,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   abstract String profile();
 
   @NonNull
-  abstract String coordinates();
+  abstract List<Point> coordinates();
 
   @NonNull
   abstract String baseUrl();
@@ -696,7 +708,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
      */
     public abstract Builder baseUrl(String baseUrl);
 
-    abstract Builder coordinates(@NonNull String coordinates);
+    abstract Builder coordinates(@NonNull List<Point> coordinates);
 
     abstract MapboxDirections autoBuild();
 
@@ -721,7 +733,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           + " directions API request.");
       }
 
-      coordinates(formatCoordinates(coordinates));
+      coordinates(coordinates);
       bearing(TextUtils.formatBearing(bearings));
       annotation(TextUtils.join(",", annotations));
       radius(TextUtils.formatRadiuses(radiuses));
@@ -733,17 +745,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           + " token.");
       }
       return directions;
-    }
-
-    private static String formatCoordinates(List<Point> coordinates) {
-      List<String> coordinatesFormatted = new ArrayList<>();
-      for (Point point : coordinates) {
-        coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(point.longitude()),
-          TextUtils.formatCoordinate(point.latitude())));
-      }
-
-      return TextUtils.join(";", coordinatesFormatted.toArray());
     }
   }
 }
