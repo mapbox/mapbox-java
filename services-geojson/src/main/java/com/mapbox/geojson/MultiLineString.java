@@ -3,15 +3,12 @@ package com.mapbox.geojson;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
@@ -104,7 +101,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
   public static MultiLineString fromLineString(@NonNull LineString lineString) {
     List<List<Point>> coordinates = new ArrayList<>();
     coordinates.add(lineString.coordinates());
-    return new AutoValue_MultiLineString(null, coordinates);
+    return new AutoValue_MultiLineString(TYPE, null, coordinates);
   }
 
   /**
@@ -142,7 +139,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
                                                @Nullable BoundingBox bbox) {
     List<List<Point>> coordinates = new ArrayList<>();
     coordinates.add(lineString.coordinates());
-    return new AutoValue_MultiLineString(bbox, coordinates);
+    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
   }
 
   /**

@@ -106,7 +106,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
   public static GeometryCollection fromGeometry(@NonNull Geometry geometry) {
     List<Geometry> geometries = new ArrayList<>();
     geometries.add(geometry);
-    return new AutoValue_GeometryCollection(null, geometries);
+    return new AutoValue_GeometryCollection(TYPE, null, geometries);
   }
 
   /**
@@ -136,7 +136,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
                                                 @Nullable BoundingBox bbox) {
     List<Geometry> geometries = new ArrayList<>();
     geometries.add(geometry);
-    return new AutoValue_GeometryCollection(bbox, geometries);
+    return new AutoValue_GeometryCollection(TYPE, bbox, geometries);
   }
 
   /**
