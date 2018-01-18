@@ -1,9 +1,13 @@
 package com.mapbox.api.staticmap.v1.models;
 
+import static android.support.annotation.RestrictTo.Scope.LIBRARY;
+import static com.mapbox.core.utils.ColorUtils.toHexString;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import android.support.annotation.RestrictTo;
 import com.google.auto.value.AutoValue;
 import com.mapbox.api.staticmap.v1.MapboxStaticMap;
 import com.mapbox.geojson.utils.PolylineUtils;
@@ -32,6 +36,13 @@ public abstract class StaticPolylineAnnotation {
     return new AutoValue_StaticPolylineAnnotation.Builder();
   }
 
+  /**
+   * <em>Used Internally</em>
+   *
+   * @return a String representing the marker part of the URL
+   * @since 2.1.0
+   */
+  @RestrictTo(LIBRARY)
   public String url() {
     StringBuilder sb = new StringBuilder();
 
@@ -142,18 +153,9 @@ public abstract class StaticPolylineAnnotation {
      * {@link StaticMarkerAnnotation} object which can be passed into the {@link MapboxStaticMap}
      * request.
      *
-     * @return a new instance of StaticPolylineAnnotation
+     * @return a new instance of {@link StaticPolylineAnnotation}
      * @since 2.1.0
      */
     public abstract StaticPolylineAnnotation build();
-  }
-
-  // TODO move to utils class
-  public static final String toHexString(Color color) {
-    String hexColour = Integer.toHexString(color.getRGB() & 0xffffff);
-    if (hexColour.length() < 6) {
-      hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
-    }
-    return hexColour;
   }
 }

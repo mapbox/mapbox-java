@@ -1,11 +1,16 @@
 package com.mapbox.api.directions.v5.models;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.MapboxDirections;
+import com.mapbox.geojson.Point;
+
+import java.util.List;
 
 /**
  * Provides information connected to your request that help when a new directions request is needing
@@ -41,21 +46,34 @@ public abstract class RouteOptions {
    * @return string value representing the user
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   public abstract String user();
 
   /**
    * The same profile which was used during the request that resulted in this root directions
-   * response.
+   * response. {@link MapboxDirections#builder()} ensures that a profile is always set even if the
+   * {@link MapboxDirections} requesting object doesn't specifically set a profile.
    *
    * @return string value representing the profile
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   public abstract String profile();
 
   /**
-   * The same alternative setting which was used during the request that resulted in this root
+   * The coordinates used for the routes origin, destination, and optionally, waypoints. Note that
+   * these coordinates are different than the direction responses {@link DirectionsWaypoint}s in
+   * that these are the non-snapped coordinates.
+   *
+   * @return a list of {@link Point}s which represent the route origin, destination, and optionally,
+   *   waypoints
+   * @since 3.0.0
+   */
+  @NonNull
+  public abstract List<Point> coordinates();
+
+  /**
+   * The same alternative setting which were used during the request that resulted in this root
    * directions response.
    *
    * @return boolean object representing the setting for alternatives
@@ -143,12 +161,33 @@ public abstract class RouteOptions {
   @Nullable
   public abstract Boolean bannerInstructions();
 
+  /**
+   * Whether or not the units used inside the voice instruction's string are in imperial or metric.
+   *
+   * @return a string matching either imperial or metric
+   * @since 3.0.0
+   */
   @Nullable
   public abstract String voiceUnits();
 
+  /**
+   * A valid Mapbox access token used to making the request.
+   *
+   * @return a string representing the Mapbox access token
+   * @since 3.0.0
+   */
+  @NonNull
   public abstract String accessToken();
 
-  @Nullable
+  /**
+   * A universally unique identifier (UUID) for identifying and executing a similar specific route
+   * in the future. {@link MapboxDirections} always waits for the response object which ensures this
+   * value will never be null.
+   *
+   * @return a string containing the request UUID
+   * @since 3.0.0
+   */
+  @NonNull
   public abstract String requestUuid();
 
   /**
@@ -177,7 +216,7 @@ public abstract class RouteOptions {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder user(String user);
+    public abstract Builder user(@NonNull String user);
 
     /**
      * The directions profile that was used during the request time and resulted in this responses
@@ -188,7 +227,19 @@ public abstract class RouteOptions {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder profile(@Nullable @DirectionsCriteria.ProfileCriteria String profile);
+    public abstract Builder profile(@NonNull @DirectionsCriteria.ProfileCriteria String profile);
+
+    /**
+     * The coordinates used for the routes origin, destination, and optionally, waypoints. Note that
+     * these coordinates are different than the direction responses {@link DirectionsWaypoint}s in
+     * that these are the non-snapped coordinates.
+     *
+     * @param coordinates a list of {@link Point}s which represent the route origin, destination,
+     *                    and optionally, waypoints
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder coordinates(@NonNull List<Point> coordinates);
 
     /**
      * Whether the alternatives value was set to true or not.
@@ -197,7 +248,7 @@ public abstract class RouteOptions {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder alternatives(Boolean alternatives);
+    public abstract Builder alternatives(@Nullable Boolean alternatives);
 
     /**
      * The language for instructions to be in when the response is given.
@@ -265,11 +316,33 @@ public abstract class RouteOptions {
      */
     public abstract Builder bannerInstructions(Boolean bannerInstructions);
 
+    /**
+     * Whether or not the units used inside the voice instruction's string are in imperial or metric.
+     *
+     * @param voiceUnits string matching either imperial or metric
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
     public abstract Builder voiceUnits(@Nullable String voiceUnits);
 
-    public abstract Builder accessToken(String accessToken);
+    /**
+     * A valid Mapbox access token used to making the request.
+     *
+     * @param accessToken a string containing a valid Mapbox access token
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder accessToken(@NonNull String accessToken);
 
-    public abstract Builder requestUuid(String requestUuid);
+    /**
+     * A universally unique identifier (UUID) for identifying and executing a similar specific route
+     * in the future.
+     *
+     * @param requestUuid a string containing the request UUID
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder requestUuid(@NonNull String requestUuid);
 
     /**
      * The same exclusions the user originally made when the request was made.

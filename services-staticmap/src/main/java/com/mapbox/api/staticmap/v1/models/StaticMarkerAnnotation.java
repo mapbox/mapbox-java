@@ -1,11 +1,16 @@
 package com.mapbox.api.staticmap.v1.models;
 
+import static android.support.annotation.RestrictTo.Scope.LIBRARY;
+import static com.mapbox.core.utils.ColorUtils.toHexString;
+
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
 import com.google.auto.value.AutoValue;
 import com.mapbox.api.staticmap.v1.StaticMapCriteria;
-import com.mapbox.geojson.Point;
-import com.mapbox.core.utils.TextUtils;
+import com.mapbox.api.staticmap.v1.StaticMapCriteria.MarkerCriteria;
 import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.core.utils.TextUtils;
+import com.mapbox.geojson.Point;
 
 import java.awt.Color;
 import java.util.Locale;
@@ -32,6 +37,13 @@ public abstract class StaticMarkerAnnotation {
       .name(StaticMapCriteria.MEDIUM_PIN);
   }
 
+  /**
+   * <em>Used Internally</em>
+   *
+   * @return a String representing the marker part of the URL
+   * @since 2.1.0
+   */
+  @RestrictTo(LIBRARY)
   public String url() {
     String url;
     if (iconUrl() != null) {
@@ -86,7 +98,7 @@ public abstract class StaticMarkerAnnotation {
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder name(@StaticMapCriteria.MarkerCriteria String name);
+    public abstract Builder name(@MarkerCriteria String name);
 
     /**
      * Marker symbol. Options are an alphanumeric label "a" through "z", "0" through  "99", or a
@@ -96,7 +108,6 @@ public abstract class StaticMarkerAnnotation {
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    // TODO place a filter on only accepted labels
     public abstract Builder label(String label);
 
     /**
@@ -118,10 +129,25 @@ public abstract class StaticMarkerAnnotation {
      */
     public abstract Builder lnglat(Point lnglat);
 
+    /**
+     * a percent-encoded URL for the marker image. Can be of type PNG or JPG.
+     *
+     * @param url an encoded URL for the marker image
+     * @return this builder for chaining options together
+     * @since 2.1.0
+     */
     public abstract Builder iconUrl(@Nullable String url);
 
     abstract StaticMarkerAnnotation autoBuild();
 
+    /**
+     * Build a new marker instance and pass it into
+     * {@link com.mapbox.api.staticmap.v1.MapboxStaticMap} in order to use it during your Static Map
+     * API request.
+     *
+     * @return a new instance of {@link StaticMarkerAnnotation}
+     * @since 2.1.0
+     */
     public StaticMarkerAnnotation build() {
       StaticMarkerAnnotation marker = autoBuild();
       if (marker.lnglat() == null) {
@@ -130,14 +156,5 @@ public abstract class StaticMarkerAnnotation {
       }
       return marker;
     }
-  }
-
-  // TODO move to utils class
-  public static final String toHexString(Color color) {
-    String hexColour = Integer.toHexString(color.getRGB() & 0xffffff);
-    if (hexColour.length() < 6) {
-      hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
-    }
-    return hexColour;
   }
 }

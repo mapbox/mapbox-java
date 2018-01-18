@@ -13,6 +13,7 @@ import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -88,6 +89,20 @@ public abstract class FeatureCollection implements GeoJson {
   }
 
   /**
+   * Create a new instance of this class by giving the feature collection a single {@link Feature}.
+   *
+   * @param feature a single feature
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static FeatureCollection fromFeature(@NonNull Feature feature) {
+    List<Feature> featureList = new ArrayList<>();
+    featureList.add(feature);
+    return new AutoValue_FeatureCollection(null, featureList);
+  }
+
+  /**
    * Create a new instance of this class by giving the feature collection an array of
    * {@link Feature}s. The array of features itself isn't null but it can be empty and have a length
    * of 0.
@@ -117,6 +132,22 @@ public abstract class FeatureCollection implements GeoJson {
   public static FeatureCollection fromFeatures(@NonNull List<Feature> features,
                                                @Nullable BoundingBox bbox) {
     return new AutoValue_FeatureCollection(TYPE, bbox, features);
+  }
+
+  /**
+   * Create a new instance of this class by giving the feature collection a single {@link Feature}.
+   *
+   * @param feature a single feature
+   * @param bbox    optionally include a bbox definition as a double array
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static FeatureCollection fromFeature(@NonNull Feature feature,
+                                              @Nullable BoundingBox bbox) {
+    List<Feature> featureList = new ArrayList<>();
+    featureList.add(feature);
+    return new AutoValue_FeatureCollection(bbox, featureList);
   }
 
   /**
