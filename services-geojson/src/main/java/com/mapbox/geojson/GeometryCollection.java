@@ -3,18 +3,15 @@ package com.mapbox.geojson;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
+import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -65,8 +62,6 @@ import java.util.List;
 @AutoValue
 public abstract class GeometryCollection implements GeoJson, Serializable {
 
-  @Expose
-  @SerializedName("type")
   private static final String TYPE = "GeometryCollection";
 
   /**
@@ -97,7 +92,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    * @since 1.0.0
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries) {
-    return new AutoValue_GeometryCollection(null, geometries);
+    return new AutoValue_GeometryCollection(TYPE, null, geometries);
   }
 
   /**
@@ -111,7 +106,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
   public static GeometryCollection fromGeometry(@NonNull Geometry geometry) {
     List<Geometry> geometries = new ArrayList<>();
     geometries.add(geometry);
-    return new AutoValue_GeometryCollection(null, geometries);
+    return new AutoValue_GeometryCollection(TYPE, null, geometries);
   }
 
   /**
@@ -125,7 +120,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries,
                                                   @Nullable BoundingBox bbox) {
-    return new AutoValue_GeometryCollection(bbox, geometries);
+    return new AutoValue_GeometryCollection(TYPE, bbox, geometries);
   }
 
   /**
@@ -141,7 +136,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
                                                 @Nullable BoundingBox bbox) {
     List<Geometry> geometries = new ArrayList<>();
     geometries.add(geometry);
-    return new AutoValue_GeometryCollection(bbox, geometries);
+    return new AutoValue_GeometryCollection(TYPE, bbox, geometries);
   }
 
   /**
@@ -154,9 +149,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    */
   @NonNull
   @Override
-  public String type() {
-    return TYPE;
-  }
+  public abstract String type();
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -195,8 +188,6 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 

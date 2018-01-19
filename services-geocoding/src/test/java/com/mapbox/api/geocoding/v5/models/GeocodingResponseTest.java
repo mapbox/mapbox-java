@@ -1,90 +1,101 @@
 package com.mapbox.api.geocoding.v5.models;
 
-import com.mapbox.api.geocoding.v5.GeocodingCriteria;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
+import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.core.TestUtils;
-import com.mapbox.geojson.Point;
-
-import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-
-import java.io.IOException;
-
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import java.io.IOException;
+import java.util.ArrayList;
 
-public class GeocodingResponseTest extends TestUtils {
-
-  private static final String GEOCODING_FIXTURE = "geocoding.json";
-  private static final String GEOCODING_BATCH_FIXTURE = "geocoding_batch.json";
-  private static final String REVERSE_GEOCODE_FIXTURE = "geocoding_reverse.json";
-  private static final String GEOCODE_WITH_BBOX_FIXTURE = "bbox_geocoding_result.json";
-
-  private MockWebServer server;
-  private HttpUrl mockUrl;
-
-  @Before
-  public void setUp() throws Exception {
-    server = new MockWebServer();
-    server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
-      @Override
-      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
-        try {
-          String response;
-          if (request.getPath().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
-            response = loadJsonFixture(GEOCODING_BATCH_FIXTURE);
-          } else if (request.getPath().contains("")) {
-            response = loadJsonFixture(REVERSE_GEOCODE_FIXTURE);
-          } else if (request.getPath().contains("texas")) {
-            response = loadJsonFixture(GEOCODE_WITH_BBOX_FIXTURE);
-          } else {
-            response = loadJsonFixture(GEOCODING_FIXTURE);
-          }
-          return new MockResponse().setBody(response);
-        } catch (IOException ioException) {
-          throw new RuntimeException(ioException);
-        }
-      }
-    });
-    server.start();
-    mockUrl = server.url("");
-  }
-
-  @After
-  public void tearDown() throws IOException {
-    server.shutdown();
-  }
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
+public class GeocodingResponseTest extends GeocodingTestUtils {
 
   @Test
   public void sanity() throws Exception {
-    GeocodingResponse response = GeocodingResponse.builder()
-      .attribution("")
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("1600 pennsylvania ave")
+      .baseUrl(mockUrl.toString())
       .build();
-    assertNotNull(response);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(200, response.code());
   }
 
   @Test
-  public void reverseGeocoding_responseSuccessfully() throws Exception {
+  public void builder_doesSuccessfullyBuildGeocodingResponse() throws Exception {
+    GeocodingResponse response = GeocodingResponse.builder()
+      .attribution("attribution")
+      .features(new ArrayList<CarmenFeature>())
+      .query(new ArrayList<String>())
+      .build();
+    assertThat(response, notNullValue());
+    assertThat(response.attribution(), equalTo("attribution"));
+    assertThat(response.type(), equalTo("FeatureCollection"));
+    assertEquals(0, response.features().size());
+    assertEquals(0, response.query().size());
+  }
+
+  @Test
+  public void fromJson_handlesConversionCorrectly() throws Exception {
+    String json = loadJsonFixture(FORWARD_VALID);
+    GeocodingResponse response = GeocodingResponse.fromJson(json);
+
+    assertThat(response.attribution(), equalTo("NOTICE: © 2016 Mapbox and its "
+      + "suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service"
+      + " (https://www.mapbox.com/about/maps/). This response and the information it contains may "
+      + "not be retained."));
+    assertThat(response.type(), equalTo("FeatureCollection"));
+    assertThat(response.query().get(0), equalTo("1600"));
+    assertThat(response.query().get(1), equalTo("pennsylvania"));
+    assertThat(response.query().get(2), equalTo("ave"));
+    assertEquals(3, response.query().size());
+
+    // response carmen features are checked in separate test class.
+    assertEquals(4, response.features().size());
+  }
+
+  @Test
+  public void toJson_handlesConversionCorrectly() throws IOException {
+    String json = loadJsonFixture(FORWARD_VALID);
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
-      .query(Point.fromLngLat(-77.0366, 38.8971))
+      .query("1600 pennsylvania ave")
       .baseUrl(mockUrl.toString())
       .build();
-    assertNotNull(mapboxGeocoding);
     Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
     assertEquals(200, response.code());
-    assertNotNull(response.body());
+    compareJson(json, response.body().toJson());
+  }
+
+  @Test
+  public void forwardRequest_invalidQuery() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("sandy")
+      .baseUrl(mockUrl.toString())
+      .build();
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(200, response.code());
+    GeocodingResponse object = response.body();
+    assert object != null;
+
+    assertEquals(4, object.query().size());
+    assertThat(object.query().get(0), equalTo("sandy"));
+    assertThat(object.query().get(1), equalTo("island"));
+    assertThat(object.query().get(2), equalTo("new"));
+    assertThat(object.query().get(3), equalTo("caledonia"));
+    assertThat(object.attribution(), equalTo("NOTICE: © 2016 Mapbox and its "
+      + "suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service"
+      + " (https://www.mapbox.com/about/maps/). This response and the information it contains may "
+      + "not be retained."));
+    assertThat(object.type(), equalTo("FeatureCollection"));
+    assertThat(object.features(), notNullValue());
+    assertEquals(0, object.features().size());
   }
 }

@@ -3,24 +3,20 @@ package com.mapbox.api.geocoding.v5.models;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.GeometryDeserializer;
+import com.mapbox.geojson.gson.GeometryTypeAdapter;
 import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
 import java.util.List;
@@ -46,19 +42,7 @@ import java.util.List;
 @AutoValue
 public abstract class CarmenFeature implements Serializable {
 
-  @Expose
-  @SerializedName("type")
   private static final String TYPE = "Feature";
-
-  /**
-   * Create a new instance of this class by using the {@link Builder} class.
-   *
-   * @return this classes {@link Builder} for creating a new instance
-   * @since 3.0.0
-   */
-  public static Builder builder() {
-    return new AutoValue_CarmenFeature.Builder();
-  }
 
   /**
    * Create a CarmenFeature object from JSON.
@@ -67,17 +51,31 @@ public abstract class CarmenFeature implements Serializable {
    * @return this class using the defined information in the provided JSON string
    * @since 2.0.0
    */
+  @NonNull
   public static CarmenFeature fromJson(@NonNull String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(GeocodingAdapterFactory.create());
-    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    return gson.create().fromJson(json, CarmenFeature.class);
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapter(Point.class, new PointDeserializer())
+      .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
+      .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
+      .create();
+    return gson.fromJson(json, CarmenFeature.class);
   }
 
+  /**
+   * Create a new instance of this class by using the {@link Builder} class.
+   *
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
+   */
+  @NonNull
+  public static Builder builder() {
+    return new AutoValue_CarmenFeature.Builder()
+      .type(TYPE);
+  }
+
+  //
   // Feature specific attributes
+  //
 
   /**
    * This describes the TYPE of GeoJson geometry this object is, thus this will always return
@@ -88,9 +86,8 @@ public abstract class CarmenFeature implements Serializable {
    * @since 1.0.0
    */
   @NonNull
-  public String type() {
-    return TYPE;
-  }
+  @SerializedName("type")
+  public abstract String type();
 
   /**
    * A {@link CarmenFeature} might have a member named {@code bbox} to include information on the
@@ -136,7 +133,9 @@ public abstract class CarmenFeature implements Serializable {
   @NonNull
   public abstract JsonObject properties();
 
+  //
   // CarmenFeature specific attributes
+  //
 
   /**
    * A string representing the feature in the requested language, if specified.
@@ -281,13 +280,14 @@ public abstract class CarmenFeature implements Serializable {
    * @return a JSON string which represents this CarmenFeature
    * @since 3.0.0
    */
+  @SuppressWarnings("unused")
   public String toJson() {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-    return gson.create().toJson(this);
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapter(Geometry.class, new GeometryTypeAdapter())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer())
+      .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
+      .create();
+    return gson.toJson(this, CarmenFeature.class);
   }
 
   /**
@@ -296,6 +296,7 @@ public abstract class CarmenFeature implements Serializable {
    * @return a new instance of {@link CarmenFeature} using the newly defined values
    * @since 3.0.0
    */
+  @SuppressWarnings("unused")
   public abstract Builder toBuilder();
 
   /**
@@ -304,7 +305,11 @@ public abstract class CarmenFeature implements Serializable {
    * @since 3.0.0
    */
   @AutoValue.Builder
+  @SuppressWarnings("unused")
   public abstract static class Builder {
+
+    // Type will always be set to "Feature"
+    abstract Builder type(@NonNull String type);
 
     /**
      * A Feature might have a member named {@code bbox} to include information on the coordinate

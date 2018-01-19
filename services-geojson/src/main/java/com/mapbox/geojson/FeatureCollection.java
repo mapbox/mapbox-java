@@ -3,18 +3,15 @@ package com.mapbox.geojson;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
+import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,8 +40,6 @@ import java.util.List;
 @AutoValue
 public abstract class FeatureCollection implements GeoJson {
 
-  @Expose
-  @SerializedName("type")
   private static final String TYPE = "FeatureCollection";
 
   /**
@@ -77,7 +72,7 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 1.0.0
    */
   public static FeatureCollection fromFeatures(@NonNull Feature[] features) {
-    return new AutoValue_FeatureCollection(null, Arrays.asList(features));
+    return new AutoValue_FeatureCollection(TYPE, null, Arrays.asList(features));
   }
 
   /**
@@ -90,7 +85,7 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 1.0.0
    */
   public static FeatureCollection fromFeatures(@NonNull List<Feature> features) {
-    return new AutoValue_FeatureCollection(null, features);
+    return new AutoValue_FeatureCollection(TYPE, null, features);
   }
 
   /**
@@ -104,7 +99,7 @@ public abstract class FeatureCollection implements GeoJson {
   public static FeatureCollection fromFeature(@NonNull Feature feature) {
     List<Feature> featureList = new ArrayList<>();
     featureList.add(feature);
-    return new AutoValue_FeatureCollection(null, featureList);
+    return new AutoValue_FeatureCollection(TYPE, null, featureList);
   }
 
   /**
@@ -120,7 +115,7 @@ public abstract class FeatureCollection implements GeoJson {
    */
   public static FeatureCollection fromFeatures(@NonNull Feature[] features,
                                                @Nullable BoundingBox bbox) {
-    return new AutoValue_FeatureCollection(bbox, Arrays.asList(features));
+    return new AutoValue_FeatureCollection(TYPE, bbox, Arrays.asList(features));
   }
 
   /**
@@ -136,7 +131,7 @@ public abstract class FeatureCollection implements GeoJson {
    */
   public static FeatureCollection fromFeatures(@NonNull List<Feature> features,
                                                @Nullable BoundingBox bbox) {
-    return new AutoValue_FeatureCollection(bbox, features);
+    return new AutoValue_FeatureCollection(TYPE, bbox, features);
   }
 
   /**
@@ -152,7 +147,7 @@ public abstract class FeatureCollection implements GeoJson {
                                               @Nullable BoundingBox bbox) {
     List<Feature> featureList = new ArrayList<>();
     featureList.add(feature);
-    return new AutoValue_FeatureCollection(bbox, featureList);
+    return new AutoValue_FeatureCollection(TYPE, bbox, featureList);
   }
 
   /**
@@ -165,9 +160,7 @@ public abstract class FeatureCollection implements GeoJson {
    */
   @NonNull
   @Override
-  public String type() {
-    return TYPE;
-  }
+  public abstract String type();
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -206,8 +199,6 @@ public abstract class FeatureCollection implements GeoJson {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 

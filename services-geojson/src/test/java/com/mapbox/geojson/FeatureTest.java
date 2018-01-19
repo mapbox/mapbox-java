@@ -75,9 +75,9 @@ public class FeatureTest extends TestUtils {
 
     BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
     Feature feature = Feature.fromGeometry(lineString, bbox);
-    compareJson(feature.toJson(),
-      "{\"type\":\"Feature\",\"bbox\":[1.0,2.0,3.0,4.0],\"geometry\":"
-        + "{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]},\"properties\":{}}");
+    compareJson("{\"type\":\"Feature\",\"bbox\":[1.0,2.0,3.0,4.0],\"geometry\":"
+        + "{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]},\"properties\":{}}",
+      feature.toJson());
   }
 
   @Test
