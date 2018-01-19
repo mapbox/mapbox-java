@@ -3,15 +3,12 @@ package com.mapbox.geojson;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
@@ -55,8 +52,6 @@ import java.util.List;
 @AutoValue
 public abstract class MultiLineString implements Geometry<List<List<Point>>>, Serializable {
 
-  @Expose
-  @SerializedName("type")
   private static final String TYPE = "MultiLineString";
 
   /**
@@ -91,7 +86,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_MultiLineString(null, coordinates);
+    return new AutoValue_MultiLineString(TYPE, null, coordinates);
   }
 
   /**
@@ -106,7 +101,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
   public static MultiLineString fromLineString(@NonNull LineString lineString) {
     List<List<Point>> coordinates = new ArrayList<>();
     coordinates.add(lineString.coordinates());
-    return new AutoValue_MultiLineString(null, coordinates);
+    return new AutoValue_MultiLineString(TYPE, null, coordinates);
   }
 
   /**
@@ -127,7 +122,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_MultiLineString(bbox, coordinates);
+    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
   }
 
   /**
@@ -144,7 +139,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
                                                @Nullable BoundingBox bbox) {
     List<List<Point>> coordinates = new ArrayList<>();
     coordinates.add(lineString.coordinates());
-    return new AutoValue_MultiLineString(bbox, coordinates);
+    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
   }
 
   /**
@@ -159,7 +154,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
    * @since 3.0.0
    */
   public static MultiLineString fromLngLats(@NonNull List<List<Point>> points) {
-    return new AutoValue_MultiLineString(null, points);
+    return new AutoValue_MultiLineString(TYPE, null, points);
   }
 
   /**
@@ -176,7 +171,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
    */
   public static MultiLineString fromLngLats(@NonNull List<List<Point>> points,
                                             @Nullable BoundingBox bbox) {
-    return new AutoValue_MultiLineString(bbox, points);
+    return new AutoValue_MultiLineString(TYPE, bbox, points);
   }
 
   /**
@@ -189,9 +184,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
    */
   @NonNull
   @Override
-  public String type() {
-    return TYPE;
-  }
+  public abstract String type();
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -243,8 +236,6 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    gson.excludeFieldsWithModifiers(java.lang.reflect.Modifier.TRANSIENT);
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
     return gson.create().toJson(this);
   }
 

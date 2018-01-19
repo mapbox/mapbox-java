@@ -5,11 +5,12 @@ import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.mapbox.geojson.constants.GeoJsonConstants;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 
 import java.io.Serializable;
 
@@ -30,6 +31,11 @@ import java.io.Serializable;
  */
 @AutoValue
 public abstract class BoundingBox implements Serializable {
+
+  public static BoundingBox fromJson(String json) {
+    Gson gson = new GsonBuilder().registerTypeAdapterFactory(GeoJsonAdapterFactory.create()).create();
+    return gson.fromJson(json, BoundingBox.class);
+  }
 
   /**
    * Define a new instance of this class by passing in two {@link Point}s, representing both the
@@ -158,6 +164,10 @@ public abstract class BoundingBox implements Serializable {
     return northeast().latitude();
   }
 
+  public static TypeAdapter<BoundingBox> typeAdapter(Gson gson) {
+    return new AutoValue_BoundingBox.GsonTypeAdapter(gson);
+  }
+
   /**
    * This takes the currently defined values found inside this instance and converts it to a GeoJson
    * string.
@@ -166,9 +176,10 @@ public abstract class BoundingBox implements Serializable {
    * @since 3.0.0
    */
   public final String toJson() {
-    GsonBuilder gson = new GsonBuilder();
-    gson.excludeFieldsWithoutExposeAnnotation();
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-    return gson.create().toJson(this);
+    Gson gson = new GsonBuilder()
+      .setPrettyPrinting()
+      .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
+      .create();
+    return gson.toJson(this, BoundingBox.class);
   }
 }

@@ -1,22 +1,19 @@
 package com.mapbox.api.geocoding.v5.models;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.GeometryDeserializer;
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.BoundingBox;
-import com.mapbox.geojson.gson.PointSerializer;
+import com.mapbox.geojson.gson.BoundingBoxDeserializer;
+import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.mapbox.geojson.gson.GeometryDeserializer;
+import com.mapbox.geojson.gson.GeometryTypeAdapter;
+import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,31 +31,34 @@ public abstract class GeocodingResponse implements Serializable {
   private static final String TYPE = "FeatureCollection";
 
   /**
-   * Create a new instance of this class by using the {@link Builder} class.
-   *
-   * @return this classes {@link Builder} for creating a new instance
-   * @since 3.0.0
-   */
-  public static Builder builder() {
-    return new AutoValue_GeocodingResponse.Builder()
-      .type(TYPE);
-  }
-
-  /**
    * Create a new instance of this class by passing in a formatted valid JSON String.
    *
    * @param json a formatted valid JSON string defining a GeoJson Geocoding Response
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
-   * @since 1.0.0
+   * @since 3.0.0
    */
-  public static GeocodingResponse fromJson(String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    return gson.create().fromJson(json, GeocodingResponse.class);
+  @NonNull
+  public static GeocodingResponse fromJson(@NonNull String json) {
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapter(Point.class, new PointDeserializer())
+      .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
+      .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
+      .create();
+    return gson.fromJson(json, GeocodingResponse.class);
+  }
+
+  /**
+   * Create a new instance of this class by using the {@link Builder} class.
+   *
+   * @return this classes {@link Builder} for creating a new instance
+   * @since 3.0.0
+   */
+  @NonNull
+  public static Builder builder() {
+    return new AutoValue_GeocodingResponse.Builder()
+      .type(TYPE);
   }
 
   /**
@@ -68,21 +68,8 @@ public abstract class GeocodingResponse implements Serializable {
    * @return the type of GeoJSON this is
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract String type();
-
-  /**
-   * A Geocoding Response might have a member named {@code bbox} to include information on the
-   * coordinate range for it's {@link CarmenFeature}s. The value of the bbox member MUST be a list
-   * of size 2*n where n is the number of dimensions represented in the contained feature
-   * geometries, with all axes of the most southwesterly point followed by all axes of the more
-   * northeasterly point. The axes order of a bbox follows the axes order of geometries.
-   *
-   * @return a list of double coordinate values describing a bounding box
-   * @since 3.0.0
-   */
-  @Nullable
-  public abstract BoundingBox bbox();
 
   /**
    * A list of space and punctuation-separated strings from the original query.
@@ -90,7 +77,7 @@ public abstract class GeocodingResponse implements Serializable {
    * @return a list containing the original query
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract List<String> query();
 
   /**
@@ -101,7 +88,7 @@ public abstract class GeocodingResponse implements Serializable {
    *   query
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract List<CarmenFeature> features();
 
   /**
@@ -111,8 +98,20 @@ public abstract class GeocodingResponse implements Serializable {
    * @return information about Mapbox's terms of service and the data sources
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract String attribution();
+
+  /**
+   * Convert the current {@link GeocodingResponse} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the object resulting in
+   * an updated and modified {@link GeocodingResponse}.
+   *
+   * @return a {@link GeocodingResponse.Builder} with the same values set to match the ones defined
+   *   in this {@link GeocodingResponse}
+   * @since 3.0.0
+   */
+  @NonNull
+  public abstract Builder toBuilder();
 
   /**
    * This takes the currently defined values found inside this instance and converts it to a GeoJson
@@ -121,12 +120,14 @@ public abstract class GeocodingResponse implements Serializable {
    * @return a JSON string which represents this Geocoding Response
    * @since 1.0.0
    */
+  @NonNull
   public String toJson() {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    gson.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-    return gson.create().toJson(this);
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapter(Geometry.class, new GeometryTypeAdapter())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer())
+      .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
+      .create();
+    return gson.toJson(this, GeocodingResponse.class);
   }
 
   /**
@@ -146,6 +147,7 @@ public abstract class GeocodingResponse implements Serializable {
    * @since 3.0.0
    */
   @AutoValue.Builder
+  @SuppressWarnings("unused")
   public abstract static class Builder {
 
     /**
@@ -161,27 +163,13 @@ public abstract class GeocodingResponse implements Serializable {
     abstract Builder type(@NonNull String type);
 
     /**
-     * A Geocoding Response might have a member named {@code bbox} to include information on the
-     * coordinate range for it's {@link CarmenFeature}s. The value of the bbox member MUST be a list
-     * of size 2*n where n is the number of dimensions represented in the contained feature
-     * geometries, with all axes of the most southwesterly point followed by all axes of the more
-     * northeasterly point. The axes order of a bbox follows the axes order of geometries.
-     *
-     * @param bbox a list of double coordinate values describing a bounding box
-     * @return this builder for chaining options together
-     * @since 3.0.0
-     */
-    @Nullable
-    public abstract Builder bbox(@Nullable BoundingBox bbox);
-
-    /**
      * A list of space and punctuation-separated strings from the original query.
      *
      * @param query a list containing the original query
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder query(@Nullable List<String> query);
+    public abstract Builder query(@NonNull List<String> query);
 
     /**
      * A list of the CarmenFeatures which contain the results and are ordered from most relevant to
@@ -192,7 +180,7 @@ public abstract class GeocodingResponse implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder features(@Nullable List<CarmenFeature> features);
+    public abstract Builder features(@NonNull List<CarmenFeature> features);
 
     /**
      * A string attributing the results of the Mapbox Geocoding API to Mapbox and links to Mapbox's
@@ -202,7 +190,7 @@ public abstract class GeocodingResponse implements Serializable {
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder attribution(@Nullable String attribution);
+    public abstract Builder attribution(@NonNull String attribution);
 
     /**
      * Build a new {@link GeocodingResponse} object.

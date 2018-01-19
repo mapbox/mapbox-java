@@ -1,6 +1,11 @@
 package com.mapbox.core;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import com.google.gson.JsonParser;
+import org.hamcrest.Matchers;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,18 +16,14 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 public class TestUtils {
 
   public static final double DELTA = 1E-10;
   public static final String ACCESS_TOKEN = "pk.XXX";
 
-  public void compareJson(String json1, String json2) {
+  public void compareJson(String expectedJson, String actualJson) {
     JsonParser parser = new JsonParser();
-    assertEquals(parser.parse(json1), parser.parse(json2));
+    assertThat(parser.parse(actualJson), Matchers.equalTo(parser.parse(expectedJson)));
   }
 
   protected String loadJsonFixture(String filename) throws IOException {
