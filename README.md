@@ -4,7 +4,7 @@
 </h1>
 
 <h4 align="center">Build powerful Java apps using Mapbox's tools and services</h4>
- 
+
 <p align="center">
   <a href="https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services">
     <img src="https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-android-services/badge.svg"
