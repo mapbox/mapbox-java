@@ -2,16 +2,38 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
-### v3.0.0
-
+### v3.0.0-beta.2
+- Added static initializer methods with parameters accepting single objects rather than list in GeoJSON classes - [#691](https://github.com/mapbox/mapbox-java/issues/691)
+- Annotations added to the `PolylineUtils` class. - [#687](https://github.com/mapbox/mapbox-java/pull/687)
+- Adds check to `PointOnLine` Turf method to ensure 2 or more non-identical `Point`s are used. - [#689](https://github.com/mapbox/mapbox-java/pull/689)
+- Added a missing return statement inside the internal `MapboxDirections` response code. - [#685](https://github.com/mapbox/mapbox-java/pull/685) 
+- User header agent constant is now using the generated BuildConfig file to add device information (Identical behavior to what was happening in 2.X). - [#679](https://github.com/mapbox/mapbox-java/pull/679)
+- Save access token in RouteOptions. - [#669](https://github.com/mapbox/mapbox-java/pull/669)
+- Resolved bug where the generated type adapter in `CarmenFeature` class wasn't being used causing the `SeralizedName` annotation to be ignored. - [#698](https://github.com/mapbox/mapbox-java/pull/698) 
 
 ### v3.0.0-beta.1
 
+- Banner instructions added to the Directions API.
+- DrivingSide API in `RouteStep` class added.
+- `CarmenFeature` class now has `toJson` and `fromJson` APIs.
+- Direction Bearing param is no longer placed in order added, but rather, the matching of coordinate.
+- `RouteOptions` object added to Directions API to allow for making identical request.
+- In the Directions API, errors returned from server are now returned in the `message` API.
+- Exclusions added to the directions API.
+- Mapbox builders no longer require unnecessary generics.
+- Model classes are now serializable.
+- Directions Matrix API changed to Matrix API.
+- Directions Optimization API name changed to Optimization API.
+- Object classes now contains `equals`, `hash`, and `toString` methods.
+- Gradle `java` plugin switched to `java-library`.
+- Annotations library added so methods and classes can convey more information.
 - Model and GeoJSON classes made immutable using AutoValue.
 - Directions API UUID added inside the `DirectionsResponse` model.
 - Position object removed in favor of GeoJSON `Point` for coordinate representation.
 - Support for direction `class` has been added.
 - Requesting `RoundaboutExit` is now possible and adds an additional instruction when traversing inside a roundabout or rotary.
+- Retrofit, OkHttp, and other dependencies updated to use the latest.
+- API service module split up in project to reflect individual Mapbox APIs.
 
 ### v2.2.3
 
