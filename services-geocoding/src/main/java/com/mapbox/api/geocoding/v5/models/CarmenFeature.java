@@ -13,6 +13,7 @@ import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.GeometryTypeAdapter;
@@ -56,6 +57,7 @@ public abstract class CarmenFeature implements Serializable {
     Gson gson = new GsonBuilder()
       .registerTypeAdapter(Point.class, new PointDeserializer())
       .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .create();
     return gson.fromJson(json, CarmenFeature.class);
