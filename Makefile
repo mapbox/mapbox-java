@@ -14,6 +14,17 @@ test:
 build-release:
 	./gradlew assemble
 
+javadoc:
+	mkdir documentation
+	mkdir documentation/core/
+	mkdir documentation/geojson/
+	mkdir documentation/turf/
+	mkdir documentation/services/
+	./gradlew :services-core:javadoc; mv services-core/build/docs/javadoc/ ./documentation/core/javadoc/ ; \
+	./gradlew :services-geojson:javadoc; mv services-geojson/build/docs/javadoc/ ./documentation/geojson/javadoc/ ; \
+	./gradlew :services-turf:javadoc; mv services-turf/build/docs/javadoc/ ./documentation/turf/javadoc/ ; \
+	./gradlew :services:javadoc; mv services/build/docs/javadoc/ ./documentation/services/javadoc/ ; \
+
 publish:
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-core:uploadArchives ; \
 	export IS_LOCAL_DEVELOPMENT=false; ./gradlew :services-geojson:uploadArchives ; \
