@@ -3,12 +3,13 @@
 buildscript {
     repositories {
         jcenter()
+        google()
         mavenCentral()
         maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -19,7 +20,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven { url 'https://maven.google.com' }
+        google()
         maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
     }
 

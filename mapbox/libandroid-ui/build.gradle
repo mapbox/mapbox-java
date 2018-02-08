@@ -27,15 +27,15 @@ android {
 
 dependencies {
     // Mapbox Android UI is an extension of Mapbox Android Services
-    compile project(':libandroid-services')
+    api project(':libandroid-services')
 
     // Android Support libraries
-    compile rootProject.ext.dep.supportAppcompat
-    compile rootProject.ext.dep.supportDesign
+    implementation rootProject.ext.dep.supportAppcompat
+    implementation rootProject.ext.dep.supportDesign
 
     // Testing
-    testCompile rootProject.ext.dep.junit
-    androidTestCompile(rootProject.ext.dep.supportEspresso, {
+    testImplementation rootProject.ext.dep.junit
+    androidTestImplementation(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

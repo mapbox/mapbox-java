@@ -1,19 +1,19 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 dependencies {
     // Mapbox GeoJSON requires access to core models
-    compile project(':libjava-core')
+    api project(':libjava-core')
 
     // External dependencies
-    compile rootProject.ext.dep.gson
+    implementation rootProject.ext.dep.gson
 
     // Testing
-    testCompile rootProject.ext.dep.okhttp3Mockwebserver
-    testCompile rootProject.ext.dep.junit
-    testCompile rootProject.ext.dep.hamcrestJunit
+    testImplementation rootProject.ext.dep.okhttp3Mockwebserver
+    testImplementation rootProject.ext.dep.junit
+    testImplementation rootProject.ext.dep.hamcrestJunit
 }
 
 apply from: 'gradle-javadoc.gradle'

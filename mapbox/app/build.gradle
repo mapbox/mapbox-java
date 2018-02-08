@@ -46,7 +46,6 @@ dependencies {
 
     // Mapbox SDK
     compile(rootProject.ext.dep.mapbox) {
-        transitive = true
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-java-geojson'
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
     }

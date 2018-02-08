@@ -27,24 +27,24 @@ android {
 
 dependencies {
     // Android Support libraries
-    compile rootProject.ext.dep.supportAppcompat
+    implementation rootProject.ext.dep.supportAppcompat
 
     // OkHttp for network requests
-    compile rootProject.ext.dep.okhttp3
+    implementation rootProject.ext.dep.okhttp3
 
     // Google Play Services
-    provided rootProject.ext.dep.gmsLocation
+    compileOnly rootProject.ext.dep.gmsLocation
 
     // LOST
-    provided rootProject.ext.dep.lost
+    compileOnly rootProject.ext.dep.lost
 
     // Testing
-    testCompile rootProject.ext.dep.junit
-    androidTestCompile(rootProject.ext.dep.supportEspresso, {
+    testImplementation rootProject.ext.dep.junit
+    androidTestImplementation(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile rootProject.ext.dep.junit
-    testCompile rootProject.ext.dep.mockito
+    testImplementation rootProject.ext.dep.junit
+    testImplementation rootProject.ext.dep.mockito
 }
 
 apply from: 'gradle-javadoc.gradle'
