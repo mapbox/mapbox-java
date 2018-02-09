@@ -333,4 +333,120 @@ public class MapboxMapMatchingTest extends TestUtils {
     assertTrue(mapMatching.cloneCall().request().url().toString()
       .startsWith("https://foobar.com"));
   }
+
+
+  @Test
+  public void build_exceptionThrownWhenLessThanTwoWayPointsProvided() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Waypoints must be a list of at least two indexes separated by"));
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .waypoints(0)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void build_exceptionThrownWhenWaypointsDoNotStartWith0() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Waypoints must contain indices of the first and last coordinates"));
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(3.0, 3.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .waypoints(1, 2)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void build_exceptionThrownWhenWaypointDoNotEndWithLast() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Waypoints must contain indices of the first and last coordinates"));
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(3.0, 3.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .waypoints(0, 1)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void build_exceptionThrownWhenMiddleWaypointsAreWrong() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Waypoints index too large (no corresponding coordinate)"));
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(3.0, 3.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .waypoints(0, 3, 2)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void sanityWaypoints() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(3.0, 3.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .waypoints(0, 1, 2)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapMatching);
+  }
+
+  @Test
+  public void sanityVoiceInstructions() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .voiceInstructions(true)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapMatching);
+    assertTrue(mapMatching.cloneCall().request().url().toString()
+      .contains("voice_instructions=true"));
+  }
+
+  @Test
+  public void sanityBannerInstructions() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .bannerInstructions(true)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapMatching);
+    assertTrue(mapMatching.cloneCall().request().url().toString()
+      .contains("banner_instructions=true"));
+  }
+
+  @Test
+  public void sanityRoundExtsInstructions() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .roundaboutExits(true)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapMatching);
+    assertTrue(mapMatching.cloneCall().request().url().toString()
+      .contains("roundabout_exits=true"));
+  }
+
 }
