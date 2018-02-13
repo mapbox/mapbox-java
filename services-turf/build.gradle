@@ -2,8 +2,8 @@ apply plugin: 'java-library'
 
 dependencies {
 
-  compile project(":services-core")
-  compile project(":services-geojson")
+  implementation project(":services-core")
+  implementation project(":services-geojson")
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
@@ -13,7 +13,7 @@ dependencies {
   compileOnly dependenciesList.autoValueGson
 
   // Test Dependencies
-  testCompile project(path: ':services-core', configuration: 'testOutput')
+  testImplementation project(path: ':services-core', configuration: 'testOutput')
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"

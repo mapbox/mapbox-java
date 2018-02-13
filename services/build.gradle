@@ -8,21 +8,21 @@ sourceSets {
 
 dependencies {
 
-  compile project(":services-core")
-  compile project(":services-geojson")
+  implementation project(":services-core")
+  implementation project(":services-geojson")
 
   // Gson
-  compile dependenciesList.gson
+  implementation dependenciesList.gson
 
   // Retrofit
-  compile dependenciesList.retrofit
-  compile dependenciesList.retrofit2Gson
+  implementation dependenciesList.retrofit
+  implementation dependenciesList.retrofit2Gson
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
 
   // OkHttp
-  compile dependenciesList.okhttp3Logging
+  implementation dependenciesList.okhttp3Logging
 
   // AutoValue
   compileOnly dependenciesList.autoValue
