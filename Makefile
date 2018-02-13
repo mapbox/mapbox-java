@@ -1,3 +1,6 @@
+# Used for Map Matching
+MAP_MATCHING_COORDINATES = 13.418946862220764,52.50055852688439;13.419011235237122,52.50113000479732;13.419756889343262,52.50171780290061;13.419885635375975,52.50237416816131;13.420631289482117,52.50294888790448
+
 build-config:
 	./gradlew compileBuildConfig
 
@@ -104,6 +107,7 @@ directions-fixtures:
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-matching/src/test/resources/mapmatching_v5_polyline.json
+
 
 optimization-fixtures:
 	# request an optimized car trip with no additional options

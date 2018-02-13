@@ -50,6 +50,12 @@ public interface MapMatchingService {
    * @param language    language of returned turn-by-turn text instructions
    * @param tidy        whether or not to transparently remove clusters and re-sample traces for
    *                    improved map matching results
+   * @param roundaboutExits  Whether or not to emit instructions at roundabout exits.
+   * @param bannerInstructions Whether or not to return banner objects associated with the `routeSteps`.
+   *                           Should be used in conjunction with `steps`.
+   * @param voiceInstructions whether or not to return
+   *                        marked-up text for voice guidance along the route.
+   * @param waypoints  Which input coordinates should be treated as waypoints.
    * @return the MapMatchingResponse in a Call wrapper
    * @since 2.0.0
    */
@@ -67,5 +73,9 @@ public interface MapMatchingService {
     @Query("timestamps") String timestamps,
     @Query("annotations") String annotations,
     @Query("language") String language,
-    @Query("tidy") Boolean tidy);
+    @Query("tidy") Boolean tidy,
+    @Query("roundabout_exits") Boolean roundaboutExits,
+    @Query("banner_instructions") Boolean bannerInstructions,
+    @Query("voice_instructions") Boolean voiceInstructions,
+    @Query("waypoints") String waypoints);
 }

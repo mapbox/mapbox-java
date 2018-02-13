@@ -1,6 +1,7 @@
 package com.mapbox.api.matching.v5;
 
 import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
@@ -97,7 +98,11 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
       timestamps(),
       annotations(),
       language(),
-      tidy()
+      tidy(),
+      roundaboutExits(),
+      bannerInstructions(),
+      voiceInstructions(),
+      waypoints()
     );
 
     return call;
@@ -190,6 +195,19 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   @Nullable
   abstract String language();
 
+  @Nullable
+  abstract Boolean roundaboutExits();
+
+  @Nullable
+  abstract Boolean bannerInstructions();
+
+  @Nullable
+  abstract Boolean voiceInstructions();
+
+  @Nullable
+  abstract String waypoints();
+
+
   @NonNull
   abstract String baseUrl();
 
@@ -220,6 +238,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     private String[] annotations;
     private String[] timestamps;
     private Double[] radiuses;
+    private Integer[] waypoints;
 
     /**
      * Required to call when this is being built. If no access token provided,
@@ -303,6 +322,28 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     // Required for matching with MapboxMapMatching radiuses() method.
     abstract Builder radiuses(@Nullable String radiuses);
 
+
+    /**
+     * Optionally, set which input coordinates should be treated as waypoints.
+     * <p>
+     * Most useful in combination with  steps=true and requests based on traces with high sample rates.
+     * Can be an index corresponding to any of the input coordinates,
+     * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
+     * {@link #steps()}
+     * </p>
+     *
+     * @param waypoints integer array of coordinate indices to be used as waypoints
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public Builder waypoints(@Nullable @IntRange(from = 0) Integer... waypoints) {
+      this.waypoints = waypoints;
+      return this;
+    }
+
+    // Required for matching with MapboxMapMatching waypoints() method.
+    abstract Builder waypoints(@Nullable String waypoints);
+
     /**
      * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
      * set to either true or false to enable or disable respectively. null can also optionally be
@@ -326,6 +367,42 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      * @since 1.0.0
      */
     public abstract Builder overview(@Nullable @OverviewCriteria String overview);
+
+    /**
+     * Setting this will determine Whether or not to return banner objects associated with the `routeSteps`.
+     * Should be used in conjunction with `steps`. Can be set to either true or false to enable or
+     * disable respectively. null can also optionally be
+     * passed in to set the default behavior to match what the API does by default.
+     *
+     * @param bannerInstructions true if you'd like step information
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder bannerInstructions(@Nullable Boolean bannerInstructions);
+
+
+    /**
+     * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
+     * set to either true or false to enable or disable respectively. null can also optionally be
+     * passed in to set the default behavior to match what the API does by default.
+     *
+     * @param voiceInstructions true if you'd like step information
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder voiceInstructions(@Nullable Boolean voiceInstructions);
+
+
+    /**
+     * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
+     * set to either true or false to enable or disable respectively. null can also optionally be
+     * passed in to set the default behavior to match what the API does by default.
+     *
+     * @param roundaboutExits true if you'd like step information
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder roundaboutExits(@Nullable Boolean roundaboutExits);
 
     /**
      * Whether or not to return additional metadata along the route. Possible values are:
@@ -486,10 +563,29 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
           "There must be as many timestamps as there are coordinates.");
       }
 
+      if (waypoints != null) {
+        if (waypoints.length < 2) {
+          throw new ServicesException(
+            "Waypoints must be a list of at least two indexes separated by ';'");
+        }
+        if (waypoints[0] != 0 || waypoints[waypoints.length - 1] != coordinates.size() - 1) {
+          throw new ServicesException(
+            "Waypoints must contain indices of the first and last coordinates"
+          );
+        }
+        for (int i = 1; i < waypoints.length -1; i++) {
+          if (waypoints[i] < 0 || waypoints[i] >= coordinates.size()) {
+            throw new ServicesException(
+              "Waypoints index too large (no corresponding coordinate)");
+          }
+        }
+      }
+
       coordinates(formatCoordinates(coordinates));
       timestamps(TextUtils.join(",", timestamps));
       annotations(TextUtils.join(",", annotations));
       radiuses(TextUtils.join(",", radiuses));
+      waypoints(TextUtils.join(";", waypoints));
 
       // Generate build so that we can check that values are valid.
       MapboxMapMatching mapMatching = autoBuild();
