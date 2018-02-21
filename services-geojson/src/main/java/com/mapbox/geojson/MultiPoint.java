@@ -3,18 +3,16 @@ package com.mapbox.geojson;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -89,6 +87,15 @@ public abstract class MultiPoint implements Geometry<List<Point>>, Serializable 
    */
   public static MultiPoint fromLngLats(@NonNull List<Point> points, @Nullable BoundingBox bbox) {
     return new AutoValue_MultiPoint(TYPE, bbox, points);
+  }
+
+  static MultiPoint fromLngLats(@NonNull double[][] coordinates) {
+    ArrayList<Point> converted = new ArrayList<>(coordinates.length);
+    for (int i = 0; i < coordinates.length; i++) {
+      converted.add(Point.fromLngLat(coordinates[i]));
+    }
+
+    return new AutoValue_MultiPoint(TYPE, null, converted);
   }
 
   /**

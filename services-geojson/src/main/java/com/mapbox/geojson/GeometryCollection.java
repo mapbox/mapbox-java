@@ -15,6 +15,7 @@ import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -104,8 +105,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    * @since 3.0.0
    */
   public static GeometryCollection fromGeometry(@NonNull Geometry geometry) {
-    List<Geometry> geometries = new ArrayList<>();
-    geometries.add(geometry);
+    List<Geometry> geometries = Arrays.asList(geometry);
     return new AutoValue_GeometryCollection(TYPE, null, geometries);
   }
 
@@ -134,8 +134,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    */
   public static GeometryCollection fromGeometry(@NonNull Geometry geometry,
                                                 @Nullable BoundingBox bbox) {
-    List<Geometry> geometries = new ArrayList<>();
-    geometries.add(geometry);
+    List<Geometry> geometries = Arrays.asList(geometry);
     return new AutoValue_GeometryCollection(TYPE, bbox, geometries);
   }
 

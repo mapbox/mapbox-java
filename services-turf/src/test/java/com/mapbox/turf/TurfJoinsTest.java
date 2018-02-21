@@ -3,6 +3,7 @@ package com.mapbox.turf;
 import com.mapbox.geojson.Feature;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
@@ -11,6 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -132,8 +134,20 @@ public class TurfJoinsTest extends TestUtils {
     assertEquals(counted.features().size(), 1); // 1 point in 1 polygon
 
     // test with multiple points and multiple polygons
-    Polygon poly1 = Polygon.fromLngLats(new double[][][] {{{0, 0}, {10, 0}, {10, 10}, {0, 10}, {0, 0}}});
-    Polygon poly2 = Polygon.fromLngLats(new double[][][] {{{10, 0}, {20, 10}, {20, 20}, {20, 0}, {10, 0}}});
+    Polygon poly1 = Polygon.fromLngLats(Arrays.asList(Arrays.asList(
+      Point.fromLngLat(0, 0),
+      Point.fromLngLat(10, 0),
+      Point.fromLngLat(10, 10),
+      Point.fromLngLat(0, 10),
+      Point.fromLngLat(0, 0))));
+
+    Polygon poly2 = Polygon.fromLngLats(Arrays.asList(Arrays.asList(
+      Point.fromLngLat(10, 0),
+      Point.fromLngLat(20, 10),
+      Point.fromLngLat(20, 20),
+      Point.fromLngLat(20, 0),
+      Point.fromLngLat(10, 0))));
+    
     polyFeatureCollection = FeatureCollection.fromFeatures(new Feature[] {
       Feature.fromGeometry(poly1),
       Feature.fromGeometry(poly2)});

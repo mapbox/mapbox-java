@@ -13,6 +13,7 @@ import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -100,7 +101,7 @@ public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>,
    * @since 3.0.0
    */
   public static MultiPolygon fromPolygons(@NonNull List<Polygon> polygons) {
-    List<List<List<Point>>> coordinates = new ArrayList<>();
+    List<List<List<Point>>> coordinates = new ArrayList<>(polygons.size());
     for (Polygon polygon : polygons) {
       coordinates.add(polygon.coordinates());
     }
@@ -121,7 +122,7 @@ public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>,
    */
   public static MultiPolygon fromPolygons(@NonNull List<Polygon> polygons,
                                           @Nullable BoundingBox bbox) {
-    List<List<List<Point>>> coordinates = new ArrayList<>();
+    List<List<List<Point>>> coordinates = new ArrayList<>(polygons.size());
     for (Polygon polygon : polygons) {
       coordinates.add(polygon.coordinates());
     }
@@ -139,8 +140,7 @@ public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>,
    * @since 3.0.0
    */
   public static MultiPolygon fromPolygon(@NonNull Polygon polygon) {
-    List<List<List<Point>>> coordinates = new ArrayList<>();
-    coordinates.add(polygon.coordinates());
+    List<List<List<Point>>> coordinates = Arrays.asList(polygon.coordinates());
     return new AutoValue_MultiPolygon(TYPE, null, coordinates);
   }
 
@@ -156,8 +156,7 @@ public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>,
    * @since 3.0.0
    */
   public static MultiPolygon fromPolygon(@NonNull Polygon polygon, @Nullable BoundingBox bbox) {
-    List<List<List<Point>>> coordinates = new ArrayList<>();
-    coordinates.add(polygon.coordinates());
+    List<List<List<Point>>> coordinates = Arrays.asList(polygon.coordinates());
     return new AutoValue_MultiPolygon(TYPE, bbox, coordinates);
   }
 
@@ -189,6 +188,23 @@ public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>,
     return new AutoValue_MultiPolygon(TYPE, bbox, points);
   }
 
+  static MultiPolygon fromLngLats(@NonNull double[][][][] coordinates) {
+    List<List<List<Point>>> converted = new ArrayList<>(coordinates.length);
+    for (int i = 0; i < coordinates.length; i++) {
+      List<List<Point>> innerOneList = new ArrayList<>(coordinates[i].length);
+      for (int j = 0; j < coordinates[i].length; j++) {
+        List<Point> innerTwoList = new ArrayList<>(coordinates[i][j].length);
+        for (int k = 0; k < coordinates[i][j].length; k++) {
+          innerTwoList.add(Point.fromLngLat(coordinates[i][j][k]));
+        }
+        innerOneList.add(innerTwoList);
+      }
+      converted.add(innerOneList);
+    }
+
+    return new AutoValue_MultiPolygon(TYPE, null, converted);
+  }
+
   /**
    * Returns a list of polygons which make up this MultiPolygon instance.
    *
@@ -196,8 +212,9 @@ public abstract class MultiPolygon implements Geometry<List<List<List<Point>>>>,
    * @since 3.0.0
    */
   public List<Polygon> polygons() {
-    List<Polygon> polygons = new ArrayList<>();
-    for (List<List<Point>> points : coordinates()) {
+    List<List<List<Point>>> coordinates = coordinates();
+    List<Polygon> polygons = new ArrayList<>(coordinates.size());
+    for (List<List<Point>> points : coordinates) {
       polygons.add(Polygon.fromLngLats(points));
     }
     return polygons;

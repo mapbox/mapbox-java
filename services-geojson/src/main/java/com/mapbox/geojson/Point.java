@@ -23,6 +23,7 @@ import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -97,9 +98,7 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
   public static Point fromLngLat(
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude) {
-    List<Double> coordinates = new ArrayList<>();
-    coordinates.add(longitude);
-    coordinates.add(latitude);
+    List<Double> coordinates = Arrays.asList(longitude, latitude);
     return new AutoValue_Point(TYPE, null, coordinates);
   }
 
@@ -122,9 +121,7 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     @Nullable BoundingBox bbox) {
-    List<Double> coordinates = new ArrayList<>();
-    coordinates.add(longitude);
-    coordinates.add(latitude);
+    List<Double> coordinates = Arrays.asList(longitude, latitude);
     return new AutoValue_Point(TYPE, bbox, coordinates);
   }
 
@@ -148,10 +145,7 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     double altitude) {
-    List<Double> coordinates = new ArrayList<>();
-    coordinates.add(longitude);
-    coordinates.add(latitude);
-    coordinates.add(altitude);
+    List<Double> coordinates = Arrays.asList(longitude, latitude, altitude);
     return new AutoValue_Point(TYPE, null, coordinates);
   }
 
@@ -176,11 +170,18 @@ public abstract class Point implements Geometry<List<Double>>, Serializable {
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     double altitude, @Nullable BoundingBox bbox) {
-    List<Double> coordinates = new ArrayList<>();
-    coordinates.add(longitude);
-    coordinates.add(latitude);
-    coordinates.add(altitude);
+    List<Double> coordinates = Arrays.asList(longitude, latitude, altitude);
     return new AutoValue_Point(TYPE, bbox, coordinates);
+  }
+
+  static Point fromLngLat(@NonNull double[] coords) {
+    if (coords.length == 2) {
+      return Point.fromLngLat(coords[0], coords[1]);
+
+    } else if (coords.length > 2) {
+      return  Point.fromLngLat(coords[0], coords[1], coords[2]);
+    }
+    return null;
   }
 
   /**

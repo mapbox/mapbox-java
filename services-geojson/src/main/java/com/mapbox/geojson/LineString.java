@@ -14,6 +14,7 @@ import com.mapbox.geojson.gson.PointSerializer;
 import com.mapbox.geojson.utils.PolylineUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -136,6 +137,14 @@ public abstract class LineString implements Geometry<List<Point>>, Serializable 
    */
   public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
     return new AutoValue_LineString(TYPE, bbox, multiPoint.coordinates());
+  }
+
+  static LineString fromLngLats(double[][] coordinates) {
+    ArrayList<Point> converted = new ArrayList<>(coordinates.length);
+    for (int i = 0; i < coordinates.length; i++) {
+      converted.add(Point.fromLngLat(coordinates[i]));
+    }
+    return LineString.fromLngLats(converted);
   }
 
   /**
