@@ -5,12 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
@@ -126,12 +123,12 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    *   method
    * @since 3.0.0
    */
-  public static Polygon fromLngLats(@NonNull double[][][] coordinates) {
+  static Polygon fromLngLats(@NonNull double[][][] coordinates) {
     List<List<Point>> converted = new ArrayList<>(coordinates.length);
     for (double[][] coordinate : coordinates) {
       List<Point> innerList = new ArrayList<>(coordinate.length);
       for (double[] pointCoordinate : coordinate) {
-        innerList.add(Point.fromLngLat(pointCoordinate[0], pointCoordinate[1]));
+        innerList.add(Point.fromLngLat(pointCoordinate));
       }
       converted.add(innerList);
     }
@@ -281,11 +278,12 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    */
   @Nullable
   public List<LineString> inner() {
-    List<LineString> inner = new ArrayList<>();
-    if (coordinates().size() <= 1) {
-      return inner;
+    List<List<Point>> coordinates = coordinates();
+    if (coordinates.size() <= 1) {
+      return new ArrayList(0);
     }
-    for (List<Point> points : coordinates().subList(1, coordinates().size())) {
+    List<LineString> inner = new ArrayList<>(coordinates.size() - 1);
+    for (List<Point> points : coordinates.subList(1, coordinates.size())) {
       inner.add(LineString.fromLngLats(points));
     }
     return inner;

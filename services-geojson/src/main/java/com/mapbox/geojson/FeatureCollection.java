@@ -97,8 +97,7 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 3.0.0
    */
   public static FeatureCollection fromFeature(@NonNull Feature feature) {
-    List<Feature> featureList = new ArrayList<>();
-    featureList.add(feature);
+    List<Feature> featureList = Arrays.asList(feature);
     return new AutoValue_FeatureCollection(TYPE, null, featureList);
   }
 
@@ -145,8 +144,7 @@ public abstract class FeatureCollection implements GeoJson {
    */
   public static FeatureCollection fromFeature(@NonNull Feature feature,
                                               @Nullable BoundingBox bbox) {
-    List<Feature> featureList = new ArrayList<>();
-    featureList.add(feature);
+    List<Feature> featureList = Arrays.asList(feature);
     return new AutoValue_FeatureCollection(TYPE, bbox, featureList);
   }
 

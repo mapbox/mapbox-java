@@ -13,6 +13,7 @@ import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -82,7 +83,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
    * @since 3.0.0
    */
   public static MultiLineString fromLineStrings(@NonNull List<LineString> lineStrings) {
-    List<List<Point>> coordinates = new ArrayList<>();
+    List<List<Point>> coordinates = new ArrayList<>(lineStrings.size());
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
@@ -99,8 +100,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
    * @since 3.0.0
    */
   public static MultiLineString fromLineString(@NonNull LineString lineString) {
-    List<List<Point>> coordinates = new ArrayList<>();
-    coordinates.add(lineString.coordinates());
+    List<List<Point>> coordinates = Arrays.asList(lineString.coordinates());
     return new AutoValue_MultiLineString(TYPE, null, coordinates);
   }
 
@@ -118,7 +118,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
    */
   public static MultiLineString fromLineStrings(@NonNull List<LineString> lineStrings,
                                                 @Nullable BoundingBox bbox) {
-    List<List<Point>> coordinates = new ArrayList<>();
+    List<List<Point>> coordinates = new ArrayList<>(lineStrings.size());
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
@@ -137,8 +137,7 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
    */
   public static MultiLineString fromLineString(@NonNull LineString lineString,
                                                @Nullable BoundingBox bbox) {
-    List<List<Point>> coordinates = new ArrayList<>();
-    coordinates.add(lineString.coordinates());
+    List<List<Point>> coordinates = Arrays.asList(lineString.coordinates());
     return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
   }
 
@@ -172,6 +171,19 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
   public static MultiLineString fromLngLats(@NonNull List<List<Point>> points,
                                             @Nullable BoundingBox bbox) {
     return new AutoValue_MultiLineString(TYPE, bbox, points);
+  }
+
+  static MultiLineString fromLngLats(double[][][] coordinates) {
+    List<List<Point>> multiLine = new ArrayList<>(coordinates.length);
+    for (int i = 0; i < coordinates.length; i++) {
+      List<Point> lineString = new ArrayList<>(coordinates[i].length);
+      for (int j = 0; j < coordinates[i].length; j++) {
+        lineString.add(Point.fromLngLat(coordinates[i][j]));
+      }
+      multiLine.add(lineString);
+    }
+
+    return new AutoValue_MultiLineString(TYPE, null, multiLine);
   }
 
   /**
@@ -217,8 +229,9 @@ public abstract class MultiLineString implements Geometry<List<List<Point>>>, Se
    * @since 3.0.0
    */
   public List<LineString> lineStrings() {
-    List<LineString> lineStrings = new ArrayList<>();
-    for (List<Point> points : coordinates()) {
+    List<List<Point>> coordinates = coordinates();
+    List<LineString> lineStrings = new ArrayList<>(coordinates.size());
+    for (List<Point> points : coordinates) {
       lineStrings.add(LineString.fromLngLats(points));
     }
     return lineStrings;
