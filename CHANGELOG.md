@@ -2,6 +2,12 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.0.0-beta.3
+
+- Added back fromLngLats() that take double arrays for coordinates [#722](https://github.com/mapbox/mapbox-java/pull/722)
+- Adds `waypoints`, `roundaboutExits`, `voiceInstructions`, `bannerInstructions` params to MapMatching API [#718](https://github.com/mapbox/mapbox-java/pull/718)
+- Added back Bounding box deserializer to `CarmenFeature` [#712](https://github.com/mapbox/mapbox-java/pull/712)
+
 ### v3.0.0-beta.2
 - Added static initializer methods with parameters accepting single objects rather than list in GeoJSON classes - [#691](https://github.com/mapbox/mapbox-java/issues/691)
 - Annotations added to the `PolylineUtils` class. - [#687](https://github.com/mapbox/mapbox-java/pull/687)
