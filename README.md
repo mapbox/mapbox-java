@@ -13,7 +13,7 @@
   <a href="https://circleci.com/gh/mapbox/mapbox-java">
     <img src="https://circleci.com/gh/mapbox/mapbox-java.svg?style=shield&circle-token=:circle-token">
   </a>
-  <a href="https://sonarcloud.io/dashboard?id=mapbox-java-services"><img src="https://sonarcloud.io/api/badges/gate?key=mapbox-java-services"/></a>
+  <a href="https://mb-sonarqube-staging.tilestream.net/dashboard?id=mapbox-java-services%3Amaster"><img src="https://mb-sonarqube-staging.tilestream.net/api/badges/measure?key=mapbox-java-services%3Amaster&metric=coverage"/></a>
 </p>
 <br>
 
