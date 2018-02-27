@@ -48,7 +48,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-import okhttp3.internal.Util;
+
+import static com.mapbox.services.android.telemetry.utils.TelemetryUtils.toHumanReadableAscii;
 
 /**
  * This is the entry point to manage Mapbox telemetry
@@ -64,7 +65,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private Context context = null;
   private String accessToken = null;
   private String userAgent = null;
-  private String mapboxSessionId = null;
+  private String mapboxSessionId = null;g
   private long mapboxSessionIdLastSet = 0;
   private String mapboxVendorId = null;
   private DisplayMetrics displayMetrics = null;
@@ -312,7 +313,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private void setUserAgent() {
     // Append app identifier to user agent if present
     String appIdentifier = TelemetryUtils.getApplicationIdentifier(context);
-    String fullUserAgent = TextUtils.isEmpty(appIdentifier) ? userAgent : Util.toHumanReadableAscii(
+    String fullUserAgent = TextUtils.isEmpty(appIdentifier) ? userAgent : toHumanReadableAscii(
       String.format(TelemetryConstants.DEFAULT_LOCALE, "%s %s", appIdentifier, userAgent));
     client.setUserAgent(fullUserAgent);
   }

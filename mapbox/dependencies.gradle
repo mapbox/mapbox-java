@@ -18,7 +18,7 @@ ext {
             supportCardView      : "com.android.support:cardview-v7:${supportLibVersion}",
 
             // mapbox
-            mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.2.0-20171110.170407-225@aar',
+            mapbox               : 'com.mapbox.mapboxsdk:mapbox-android-sdk:5.4.1@aar',
 
             // gson
             gson                 : 'com.google.code.gson:gson:2.8.0',
@@ -32,9 +32,9 @@ ext {
             retrofit2Rx          : 'com.squareup.retrofit2:adapter-rxjava2:2.2.0',
 
             // okhttp
-            okhttp3              : 'com.squareup.okhttp3:okhttp:3.6.0',
-            okhttp3Logging       : 'com.squareup.okhttp3:logging-interceptor:3.6.0',
-            okhttp3Mockwebserver : 'com.squareup.okhttp3:mockwebserver:3.6.0',
+            okhttp3              : 'com.squareup.okhttp3:okhttp:3.10.0',
+            okhttp3Logging       : 'com.squareup.okhttp3:logging-interceptor:3.10.0',
+            okhttp3Mockwebserver : 'com.squareup.okhttp3:mockwebserver:3.10.0',
 
             // lost
             lost                 : 'com.mapzen.android:lost:3.0.4',

@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import okio.Buffer;
+
 /**
  * Static utilities to complete the event data.
  */
@@ -37,6 +39,23 @@ public class TelemetryUtils {
     } else {
       return generateCreateDateFormatted(new Date());
     }
+  }
+
+  public static String toHumanReadableAscii(String s) {
+    for (int i = 0, length = s.length(), c; i < length; i += Character.charCount(c)) {
+      c = s.codePointAt(i);
+      if (c > '\u001f' && c < '\u007f') continue;
+
+      Buffer buffer = new Buffer();
+      buffer.writeUtf8(s, 0, i);
+      buffer.writeUtf8CodePoint('?');
+      for (int j = i + Character.charCount(c); j < length; j += Character.charCount(c)) {
+        c = s.codePointAt(j);
+        buffer.writeUtf8CodePoint(c > '\u001f' && c < '\u007f' ? c : '?');
+      }
+      return buffer.readUtf8();
+    }
+    return s;
   }
 
   public static String generateCreateDateFormatted(Date date) {
