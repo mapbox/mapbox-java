@@ -65,7 +65,7 @@ public class MapboxTelemetry implements Callback, LocationEngineListener {
   private Context context = null;
   private String accessToken = null;
   private String userAgent = null;
-  private String mapboxSessionId = null;g
+  private String mapboxSessionId = null;
   private long mapboxSessionIdLastSet = 0;
   private String mapboxVendorId = null;
   private DisplayMetrics displayMetrics = null;
