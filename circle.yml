@@ -30,9 +30,9 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "mapbox/build.gradle" }}-{{ checksum  "mapbox/app/build.gradle" }}
-      - run:
-          name: Check Java code style
-          command: make checkstyle
+      # - run:
+      #     name: Check Java code style
+      #     command: make checkstyle
       - run:
           name: Run unit-test in Java libraries
           command: make test-java
