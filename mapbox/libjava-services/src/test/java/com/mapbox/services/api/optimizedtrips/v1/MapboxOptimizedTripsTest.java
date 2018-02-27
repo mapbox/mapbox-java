@@ -13,7 +13,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -254,10 +256,9 @@ public class MapboxOptimizedTripsTest extends BaseTest {
       .setDistributions(new double[] {3, 1})
       .build();
 
-    String callUrl = client.executeCall().raw().request().url().toString();
-    assertTrue(
-      callUrl.contains("distributions=3,1")
-    );
+    String callUrl= URLDecoder.decode(client.executeCall().raw().request().url().toString(),
+      StandardCharsets.UTF_8.name());
+    assertTrue(callUrl.contains("distributions=3,1"));
   }
 
   @Test

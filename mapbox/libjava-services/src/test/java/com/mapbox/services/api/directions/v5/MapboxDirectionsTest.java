@@ -18,7 +18,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -30,7 +33,9 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import okio.Utf8;
 import retrofit2.Response;
+import retrofit2.http.Url;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertArrayEquals;
@@ -225,8 +230,8 @@ public class MapboxDirectionsTest {
       .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
 
-    assertTrue(client.executeCall().raw().request().url().toString()
-      .contains("radiuses=100;100;100"));
+    assertTrue(URLDecoder.decode(client.executeCall().raw().request().url().toString(),
+      StandardCharsets.UTF_8.name()).contains("radiuses=100;100;100"));
   }
 
   @Test
@@ -245,8 +250,8 @@ public class MapboxDirectionsTest {
       .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
 
-    assertTrue(client.executeCall().raw().request().url().toString()
-      .contains("radiuses=100;unlimited;100"));
+    assertTrue(URLDecoder.decode(client.executeCall().raw().request().url().toString(),
+      StandardCharsets.UTF_8.name()).contains("radiuses=100;unlimited;100"));
   }
 
   @Test
@@ -278,8 +283,9 @@ public class MapboxDirectionsTest {
       .executeCall().raw().request().url().toString().contains("annotations=distance"));
     assertTrue(builder.setAnnotation(DirectionsCriteria.ANNOTATION_SPEED).build()
       .executeCall().raw().request().url().toString().contains("annotations=speed"));
-    assertTrue(builder.setAnnotation(DirectionsCriteria.ANNOTATION_DURATION, DirectionsCriteria.ANNOTATION_SPEED)
-      .build().executeCall().raw().request().url().toString().contains("annotations=duration,speed"));
+    builder.setAnnotation(DirectionsCriteria.ANNOTATION_DURATION, DirectionsCriteria.ANNOTATION_SPEED);
+    assertTrue(URLDecoder.decode(builder.build().executeCall().raw().request().toString(),
+      StandardCharsets.UTF_8.name()).contains("annotations=duration,speed"));
   }
 
   @Test
@@ -298,8 +304,8 @@ public class MapboxDirectionsTest {
       .setGeometry(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
 
-    assertTrue(client.executeCall().raw().request().url().toString()
-      .contains("bearings=60,45;;45,45"));
+    assertTrue(URLDecoder.decode(client.executeCall().raw().request().url().toString(),
+      StandardCharsets.UTF_8.name()).contains("bearings=60,45;;45,45"));
   }
 
   @Test

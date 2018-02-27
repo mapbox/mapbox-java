@@ -16,6 +16,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
@@ -213,9 +215,11 @@ public class MapboxGeocodingTest extends BaseTest {
       .build();
 
     assertTrue(
-      clientNeSw.executeCall().raw().request().url().toString().contains("bbox=-77.0702,38.8561,-77.0035,38.9115"));
+      URLDecoder.decode(clientNeSw.executeCall().raw().request().url().toString(),
+        StandardCharsets.UTF_8.name()).contains("bbox=-77.0702,38.8561,-77.0035,38.9115"));
     assertTrue(
-      clientMinMax.executeCall().raw().request().url().toString().contains("bbox=-77.0035,38.9115,-77.0702,38.8561"));
+      URLDecoder.decode(clientMinMax.executeCall().raw().request().url().toString(),
+        StandardCharsets.UTF_8.name()).contains("bbox=-77.0035,38.9115,-77.0702,38.8561"));
   }
 
   @Test
@@ -250,6 +254,7 @@ public class MapboxGeocodingTest extends BaseTest {
       .build();
 
     // setLanguage() will include the languages query parameter
-    assertTrue(clientLanguage.getCall().request().url().toString().contains("language=en_GB,en_US,ja_JP"));
+    assertTrue(URLDecoder.decode(clientLanguage.getCall().request().url().toString(),
+      StandardCharsets.UTF_8.name()).contains("language=en_GB,en_US,ja_JP"));
   }
 }
