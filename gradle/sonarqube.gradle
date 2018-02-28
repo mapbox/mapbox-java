@@ -4,7 +4,8 @@ sonarqube {
   properties {
     // Project Configuration
     property "sonar.projectKey", "mapbox-java-services:master"
-    property "sonar.host.url", "https://mb-sonarqube-staging.tilestream.net"
+    property "sonar.host.url", "https://sonarcloud.io"
+    property "sonar.organization", "mapbox"
 
     // Project identity
     property "sonar.projectName", "Mapbox Java"
