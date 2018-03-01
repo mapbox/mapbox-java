@@ -1,21 +1,21 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 dependencies {
     // Mapbox Java Services requires GeoJSON support
-    compile project(':libjava-geojson')
+    api project(':libjava-geojson')
 
     // Retrofit
-    compile rootProject.ext.dep.retrofit2Main
-    compile rootProject.ext.dep.retrofit2Gson
-    compile rootProject.ext.dep.okhttp3Logging
+    implementation rootProject.ext.dep.retrofit2Main
+    api rootProject.ext.dep.retrofit2Gson
+    implementation rootProject.ext.dep.okhttp3Logging
 
     // Testing
-    testCompile rootProject.ext.dep.okhttp3Mockwebserver
-    testCompile rootProject.ext.dep.junit
-    testCompile rootProject.ext.dep.hamcrestJunit
+    testImplementation rootProject.ext.dep.okhttp3Mockwebserver
+    testImplementation rootProject.ext.dep.junit
+    testImplementation rootProject.ext.dep.hamcrestJunit
 }
 
 apply from: 'gradle-javadoc.gradle'

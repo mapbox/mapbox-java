@@ -32,26 +32,26 @@ android {
 
 dependencies {
     // Mapbox Android Services includes Mapbox Java Services and Mapbox Android Telemetry
-    compile project(':libjava-services')
-    compile project(':libandroid-telemetry')
+    api project(':libjava-services')
+    api project(':libandroid-telemetry')
 
     // Android Support libraries
-    compile rootProject.ext.dep.supportAppcompat
-    compile rootProject.ext.dep.supportCompat
+    implementation rootProject.ext.dep.supportAppcompat
+    implementation rootProject.ext.dep.supportCompat
 
     // Timber for logging
-    compile rootProject.ext.dep.timber
+    implementation rootProject.ext.dep.timber
 
     // LOST
-    compile rootProject.ext.dep.lost
+    implementation rootProject.ext.dep.lost
 
     // Testing
-    testCompile rootProject.ext.dep.mockito
-    testCompile rootProject.ext.dep.okhttp3Mockwebserver
-    testCompile rootProject.ext.dep.hamcrestJunit
-    testCompile rootProject.ext.dep.junit
+    testImplementation rootProject.ext.dep.mockito
+    testImplementation rootProject.ext.dep.okhttp3Mockwebserver
+    testImplementation rootProject.ext.dep.hamcrestJunit
+    testImplementation rootProject.ext.dep.junit
 
-    androidTestCompile(rootProject.ext.dep.supportEspresso, {
+    androidTestImplementation(rootProject.ext.dep.supportEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
