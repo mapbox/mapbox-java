@@ -392,6 +392,20 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void baseUrl_doesGetAddedToRouteOptions() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    Response<DirectionsResponse> response = directions.executeCall();
+    String baseUrl = response.body().routes().get(0).routeOptions().baseUrl();
+    assertEquals( mockUrl.toString(), baseUrl);
+  }
+
+  @Test
   public void callFactoryNonNull() throws IOException {
     MapboxDirections client = MapboxDirections.builder()
       .accessToken(ACCESS_TOKEN)
