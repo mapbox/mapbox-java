@@ -41,6 +41,16 @@ public abstract class RouteOptions {
   }
 
   /**
+   * The same base URL which was used during the request that resulted in this root directions
+   * response.
+   *
+   * @return string value representing the base URL
+   * @since 3.0.0
+   */
+  @NonNull
+  public abstract String baseUrl();
+
+  /**
    * The same user which was used during the request that resulted in this root directions response.
    *
    * @return string value representing the user
@@ -66,7 +76,7 @@ public abstract class RouteOptions {
    * that these are the non-snapped coordinates.
    *
    * @return a list of {@link Point}s which represent the route origin, destination, and optionally,
-   *   waypoints
+   * waypoints
    * @since 3.0.0
    */
   @NonNull
@@ -87,7 +97,7 @@ public abstract class RouteOptions {
    * response.
    *
    * @return the language as a string used during the request, if english, this will most likely be
-   *   empty
+   * empty
    * @since 3.0.0
    */
   @Nullable
@@ -118,7 +128,7 @@ public abstract class RouteOptions {
    * directions response.
    *
    * @return a boolean value representing whether or not continueStraight was enabled or not during
-   *   the initial request
+   * the initial request
    * @since 3.0.0
    */
   @Nullable
@@ -208,6 +218,16 @@ public abstract class RouteOptions {
    */
   @AutoValue.Builder
   public abstract static class Builder {
+
+    /**
+     * The base URL that was used during the request time and resulted in this responses
+     * result.
+     *
+     * @param baseUrl base URL used for original request
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder baseUrl(@NonNull String baseUrl);
 
     /**
      * The user value that was used during the request.

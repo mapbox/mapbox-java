@@ -65,6 +65,7 @@ public class RouteOptionsTest extends TestUtils {
     pointList.add(Point.fromLngLat(1.0, 2.0));
     pointList.add(Point.fromLngLat(3.0, 4.0));
     RouteOptions routeOptions = RouteOptions.builder()
+      .baseUrl(mockUrl.toString())
       .profile("hello")
       .user("user")
       .coordinates(pointList)
@@ -95,5 +96,21 @@ public class RouteOptionsTest extends TestUtils {
     // Never set values
     assertNull(route.routeOptions().annotations());
     assertNull(route.routeOptions().bearings());
+  }
+
+  @Test
+  public void requestResult_doesContainBaseUrl() throws Exception {
+    Response<DirectionsResponse> response = MapboxDirections.builder()
+      .baseUrl(mockUrl.toString())
+      .accessToken(ACCESS_TOKEN)
+      .origin(Point.fromLngLat(1.0, 1.0))
+      .destination(Point.fromLngLat(5.0, 5.0))
+      .profile(DirectionsCriteria.PROFILE_WALKING)
+      .continueStraight(false)
+      .language(Locale.CANADA)
+      .alternatives(true).build().executeCall();
+    DirectionsRoute route = response.body().routes().get(0);
+
+    assertEquals(mockUrl.toString(), route.routeOptions().baseUrl());
   }
 }

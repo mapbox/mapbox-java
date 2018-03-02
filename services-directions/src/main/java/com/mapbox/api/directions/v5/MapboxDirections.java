@@ -210,6 +210,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           .voiceUnits(voiceUnits())
           .accessToken(accessToken())
           .requestUuid(response.body().uuid())
+          .baseUrl(baseUrl())
           .build()
       ).build());
     }
