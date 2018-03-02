@@ -65,6 +65,7 @@ public class RouteOptionsTest extends TestUtils {
     pointList.add(Point.fromLngLat(1.0, 2.0));
     pointList.add(Point.fromLngLat(3.0, 4.0));
     RouteOptions routeOptions = RouteOptions.builder()
+      .baseUrl(mockUrl.toString())
       .profile("hello")
       .user("user")
       .coordinates(pointList)
