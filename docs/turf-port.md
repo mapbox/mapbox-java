@@ -10,7 +10,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [x] turf-bearing
 - [x] turf-destination
 - [x] turf-distance
-- [x] turf-line-distance
+- [x] turf-length
 - [x] turf-midpoint
 - [x] turf-bbox
 - [ ] turf-rhumb-bearing
