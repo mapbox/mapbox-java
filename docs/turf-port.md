@@ -104,7 +104,7 @@ The helper functions are all part of the GeoJson module; this class contains uni
 - [ ] turf-triangle-grid
 
 ## Classification
-- [x] turf-nearest
+- [x] turf-nearest-point
 
 ## Aggregation
 - [ ] turf-collect
