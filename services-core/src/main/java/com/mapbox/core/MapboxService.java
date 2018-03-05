@@ -95,7 +95,7 @@ public abstract class MapboxService<T> {
    * @return OkHttpClient
    * @since 1.0.0
    */
-  public OkHttpClient getOkHttpClient() {
+  public synchronized OkHttpClient getOkHttpClient() {
     if (okHttpClient == null) {
       if (isEnableDebug()) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
