@@ -29,6 +29,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [ ] turf-great-circle
 
 ## Coordinate Mutation
+- [ ] turf-clean-coords
 - [ ] turf-flip
 - [ ] turf-rewind
 - [ ] turf-truncate
@@ -36,7 +37,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 
 ## Transformation
 - [ ] turf-bbox-clip
-- [ ] turf-bezier
+- [ ] turf-bezier-spline
 - [ ] turf-buffer
 - [x] turf-circle
 - [ ] turf-clone
@@ -49,17 +50,18 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [ ] turf-simplify
 - [ ] turf-tesselate
 - [ ] turf-transform-rotate
-- [ ] turf-transform-scale
 - [ ] turf-transform-translate
+- [ ] turf-transform-scale
 - [ ] turf-union
+- [ ] turf-voronoi
 
 ## Feature Conversion
 - [ ] turf-combine
 - [ ] turf-explode
 - [ ] turf-flatten
-- [ ] turf-linestring-to-polygon
+- [ ] turf-line-to-polygon
 - [ ] turf-polygonize
-- [ ] turf-polygon-to-linestring
+- [ ] turf-polygon-to-line
 
 ## Misc
 - [ ] turf-kinks
@@ -80,17 +82,15 @@ Below's an on going list of the Turf functions which currently exist inside the 
 ## Helper
 The helper functions are all part of the GeoJson module; this class contains unit conversion and additional functionality to help other calculations.
 
-## Data
-- [ ] turf-random
-- [ ] turf-sample
+## Random
+- [ ] turf-random-interpolate
+- [ ] turf-random-isobands
+- [ ] turf-random-isolines
+- [ ] turf-random-planepoint
+- [ ] turf-random-tin
 
-## Interpolation
-- [ ] turf-interpolate
-- [ ] turf-isobands
-- [ ] turf-isolines
-- [ ] turf-tin
-- [ ] turf-planepoint
-- [ ] turf-idw
+## Data
+- [ ] turf-sample
 
 ## Joins
 - [x] turf-inside // not in Turf
@@ -141,14 +141,16 @@ All of these are already enforced in the GeoJson module
 - [x] featureOf 
 
 ## Booleans
-- [ ] turf-boolean-point-on-line
 - [ ] turf-boolean-clockwise
 - [ ] turf-boolean-contains
 - [ ] turf-boolean-crosses
 - [ ] turf-boolean-disjoint
-- [ ] turf-boolean-overlap
 - [ ] turf-boolean-equal
+- [ ] turf-boolean-overlap
 - [ ] turf-boolean-parallel
+- [ ] turf-boolean-point-in-polygon
+- [ ] turf-boolean-point-on-line
+- [ ] turf-boolean-within
 
 ## Unit Conversion 
 - [ ] bearingToAzimuth
@@ -161,6 +163,8 @@ All of these are already enforced in the GeoJson module
 - [x] radiansToDegrees
 - [ ] toMercator
 - [ ] toWgs84
+
+## Others not documented?
 - [ ] clusterEachCallback
 - [ ] clusterReduceCallback
 - [ ] removeEmptyPolygon
@@ -178,11 +182,6 @@ All of these are already enforced in the GeoJson module
 - [ ] segmentEachCallback
 - [ ] segmentReduceCallback
 
-## Others not documented?
-- [ ] turf-point-to-line-distance
-- [ ] turf-nearest-point-to-line
-- [ ] turf-shortest-path
-- [ ] turf-voronoi
 - [ ] turf-invariant
 - [ ] turf-helpers
 - [ ] turf-projection
