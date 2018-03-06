@@ -7,24 +7,25 @@ Below's an on going list of the Turf functions which currently exist inside the 
 
 ## Measurement
 - [x] turf-along
+- [ ] turf-area
+- [x] turf-bbox
+- [ ] turf-bbox-polygon
 - [x] turf-bearing
+- [ ] turf-center
+- [ ] turf-center-of-mass
+- [ ] turf-centroid
 - [x] turf-destination
 - [x] turf-distance
+- [ ] turf-envelope
 - [x] turf-length
 - [x] turf-midpoint
-- [x] turf-bbox
+- [ ] turf-point-on-feature
+- [ ] turf-polygon-tangents
+- [ ] turf-point-to-line-distance
 - [ ] turf-rhumb-bearing
 - [ ] turf-rhumb-destination
 - [ ] turf-rhumb-distance
-- [ ] turf-area
-- [ ] turf-bbox-polygon
 - [ ] turf-square
-- [ ] turf-center-of-mass
-- [ ] turf-center
-- [ ] turf-centroid
-- [ ] turf-envelope
-- [ ] turf-point-on-surface
-- [ ] turf-polygon-tangents
 - [ ] turf-great-circle
 
 ## Coordinate Mutation
