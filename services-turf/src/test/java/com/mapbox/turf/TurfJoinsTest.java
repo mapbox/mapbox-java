@@ -3,7 +3,6 @@ package com.mapbox.turf;
 import com.mapbox.geojson.Feature;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
@@ -129,7 +128,7 @@ public class TurfJoinsTest extends TestUtils {
     features2.add(Feature.fromGeometry(pt));
     FeatureCollection ptFeatureCollection = FeatureCollection.fromFeatures(features2);
 
-    FeatureCollection counted = TurfJoins.within(ptFeatureCollection, polyFeatureCollection);
+    FeatureCollection counted = TurfJoins.pointsWithinPolygon(ptFeatureCollection, polyFeatureCollection);
     assertNotNull(counted);
     assertEquals(counted.features().size(), 1); // 1 point in 1 polygon
 
@@ -162,7 +161,7 @@ public class TurfJoinsTest extends TestUtils {
       Feature.fromGeometry(pt1), Feature.fromGeometry(pt2), Feature.fromGeometry(pt3),
       Feature.fromGeometry(pt4), Feature.fromGeometry(pt5), Feature.fromGeometry(pt6)});
 
-    counted = TurfJoins.within(ptFeatureCollection, polyFeatureCollection);
+    counted = TurfJoins.pointsWithinPolygon(ptFeatureCollection, polyFeatureCollection);
     assertNotNull(counted);
     assertEquals(counted.features().size(), 5); // multiple points in multiple polygons
   }

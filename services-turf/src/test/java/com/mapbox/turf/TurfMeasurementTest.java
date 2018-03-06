@@ -87,7 +87,7 @@ public class TurfMeasurementTest extends TestUtils {
     coords.add(Point.fromLngLat(1.0, 1.0));
 
     LineString lineString = LineString.fromLngLats(coords);
-    double distance = TurfMeasurement.lineDistance(lineString, TurfConstants.UNIT_METERS);
+    double distance = TurfMeasurement.length(lineString, TurfConstants.UNIT_METERS);
     assertEquals(0d, distance, DELTA);
   }
 
@@ -95,16 +95,16 @@ public class TurfMeasurementTest extends TestUtils {
   public void testLineDistanceWithGeometries() throws IOException, TurfException {
     Feature route1 = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_ROUTE_ONE));
     Feature route2 = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_ROUTE_TWO));
-    assertEquals(202, Math.round(TurfMeasurement.lineDistance((LineString) route1.geometry(),
+    assertEquals(202, Math.round(TurfMeasurement.length((LineString) route1.geometry(),
       TurfConstants.UNIT_MILES)));
     Assert.assertEquals(741.7787396994203,
-      TurfMeasurement.lineDistance((LineString) route2.geometry(), TurfConstants.UNIT_KILOMETERS), DELTA);
+      TurfMeasurement.length((LineString) route2.geometry(), TurfConstants.UNIT_KILOMETERS), DELTA);
   }
 
   @Test
   public void testLineDistancePolygon() throws IOException, TurfException {
     Feature feature = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_POLYGON));
-    assertEquals(5599, Math.round(1000 * TurfMeasurement.lineDistance((Polygon) feature.geometry(),
+    assertEquals(5599, Math.round(1000 * TurfMeasurement.length((Polygon) feature.geometry(),
       TurfConstants.UNIT_KILOMETERS)));
   }
 
@@ -112,7 +112,7 @@ public class TurfMeasurementTest extends TestUtils {
   public void testLineDistanceMultiLineString() throws IOException, TurfException {
     Feature feature = Feature.fromJson(loadJsonFixture(LINE_DISTANCE_MULTILINESTRING));
     assertEquals(4705d, Math.round(1000
-      * TurfMeasurement.lineDistance((MultiLineString) feature.geometry(),
+      * TurfMeasurement.length((MultiLineString) feature.geometry(),
       TurfConstants.UNIT_KILOMETERS)), DELTA);
   }
 

@@ -51,8 +51,8 @@ public final class TurfConversion {
    * @return a double value representing the distance in degrees
    * @since 3.0.0
    */
-  public static double distanceToDegrees(double distance, @TurfUnitCriteria String units) {
-    return radiansToDegrees(distanceToRadians(distance, units));
+  public static double lengthToDegrees(double distance, @TurfUnitCriteria String units) {
+    return radiansToDegrees(lengthToRadians(distance, units));
   }
 
   /**
@@ -75,8 +75,8 @@ public final class TurfConversion {
    * @return converted radian to distance value
    * @since 1.2.0
    */
-  public static double radiansToDistance(double radians) {
-    return radiansToDistance(radians, TurfConstants.UNIT_DEFAULT);
+  public static double radiansToLength(double radians) {
+    return radiansToLength(radians, TurfConstants.UNIT_DEFAULT);
   }
 
   /**
@@ -88,7 +88,7 @@ public final class TurfConversion {
    * @return converted radian to distance value
    * @since 1.2.0
    */
-  public static double radiansToDistance(double radians, @NonNull @TurfUnitCriteria String units) {
+  public static double radiansToLength(double radians, @NonNull @TurfUnitCriteria String units) {
     return radians * FACTORS.get(units);
   }
 
@@ -101,8 +101,8 @@ public final class TurfConversion {
    * @return converted distance to radians value
    * @since 1.2.0
    */
-  public static double distanceToRadians(double distance) {
-    return distanceToRadians(distance, TurfConstants.UNIT_DEFAULT);
+  public static double lengthToRadians(double distance) {
+    return lengthToRadians(distance, TurfConstants.UNIT_DEFAULT);
   }
 
   /**
@@ -114,13 +114,13 @@ public final class TurfConversion {
    * @return converted distance to radians value
    * @since 1.2.0
    */
-  public static double distanceToRadians(double distance, @NonNull @TurfUnitCriteria String units) {
+  public static double lengthToRadians(double distance, @NonNull @TurfUnitCriteria String units) {
     return distance / FACTORS.get(units);
   }
 
   /**
    * Converts a distance to the default units. Use
-   * {@link TurfConversion#convertDistance(double, String, String)} to specify a unit to convert to.
+   * {@link TurfConversion#convertLength(double, String, String)} to specify a unit to convert to.
    *
    * @param distance     double representing a distance value
    * @param originalUnit of the distance, must be one of the units defined in
@@ -128,9 +128,9 @@ public final class TurfConversion {
    * @return converted distance in the default unit
    * @since 2.2.0
    */
-  public static double convertDistance(@FloatRange(from = 0) double distance,
-                                       @NonNull @TurfUnitCriteria String originalUnit) {
-    return convertDistance(distance, originalUnit, TurfConstants.UNIT_DEFAULT);
+  public static double convertLength(@FloatRange(from = 0) double distance,
+                                     @NonNull @TurfUnitCriteria String originalUnit) {
+    return convertLength(distance, originalUnit, TurfConstants.UNIT_DEFAULT);
   }
 
   /**
@@ -143,12 +143,12 @@ public final class TurfConversion {
    * @return the converted distance
    * @since 2.2.0
    */
-  public static double convertDistance(@FloatRange(from = 0) double distance,
-                                       @NonNull @TurfUnitCriteria String originalUnit,
-                                       @Nullable @TurfUnitCriteria String finalUnit) {
+  public static double convertLength(@FloatRange(from = 0) double distance,
+                                     @NonNull @TurfUnitCriteria String originalUnit,
+                                     @Nullable @TurfUnitCriteria String finalUnit) {
     if (finalUnit == null) {
       finalUnit = TurfConstants.UNIT_DEFAULT;
     }
-    return radiansToDistance(distanceToRadians(distance, originalUnit), finalUnit);
+    return radiansToLength(lengthToRadians(distance, originalUnit), finalUnit);
   }
 }
