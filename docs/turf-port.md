@@ -134,14 +134,16 @@ All of these are already enforced in the GeoJson module
 - [ ] turf-boolean-parallel
 
 ## Unit Conversion 
-- [ ] bearingToAngle
+- [ ] bearingToAzimuth
 - [ ] convertArea
-- [x] convertDistance
-- [ ] degrees2radians
-- [x] distanceToRadians
-- [x] distanceToDegrees
-- [x] radiansToDistance
-- [x] radians2degrees
+- [x] convertLength
+- [ ] degreesToRadians
+- [x] lengthToRadians
+- [x] lengthToDegrees
+- [x] radiansToLength
+- [x] radiansToDegrees
+- [ ] toMercator
+- [ ] toWgs84
 - [ ] clusterEachCallback
 - [ ] clusterReduceCallback
 - [ ] removeEmptyPolygon
