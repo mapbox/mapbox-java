@@ -92,10 +92,9 @@ The helper functions are all part of the GeoJson module; this class contains uni
 - [ ] turf-idw
 
 ## Joins
-- [x] turf-inside
+- [x] turf-inside // not in Turf
 - [ ] turf-tag
-- [x] turf-within
-- [ ] turf-boolean-within
+- [x] turf-points-within-polygon
 
 ## Grids
 - [ ] turf-hex-grid
