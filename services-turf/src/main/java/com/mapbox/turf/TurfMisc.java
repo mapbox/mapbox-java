@@ -71,8 +71,8 @@ public final class TurfMisc {
       throw new TurfException("Start and stop points in Turf lineSlice cannot equal each other.");
     }
 
-    Feature startVertex = pointOnLine(startPt, coords);
-    Feature stopVertex = pointOnLine(stopPt, coords);
+    Feature startVertex = nearestPointOnLine(startPt, coords);
+    Feature stopVertex = nearestPointOnLine(stopPt, coords);
     List<Feature> ends = new ArrayList<>();
     if ((int) startVertex.getNumberProperty(INDEX_KEY)
       <= (int) stopVertex.getNumberProperty(INDEX_KEY)) {
@@ -102,10 +102,10 @@ public final class TurfMisc {
    * @since 1.3.0
    */
   @NonNull
-  public static Feature pointOnLine(@NonNull Point pt, @NonNull List<Point> coords) {
+  public static Feature nearestPointOnLine(@NonNull Point pt, @NonNull List<Point> coords) {
 
     if (coords.size() < 2) {
-      throw new TurfException("Turf pointOnLine requires a List of Points made up of at least 2 "
+      throw new TurfException("Turf nearestPointOnLine requires a List of Points made up of at least 2 "
         + "coordinates.");
     }
 

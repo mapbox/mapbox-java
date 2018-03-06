@@ -72,7 +72,7 @@ public final class TurfMeasurement {
     double latitude1 = degrees2radians * point.latitude();
     double bearingRad = degrees2radians * bearing;
 
-    double radians = TurfConversion.distanceToRadians(distance, units);
+    double radians = TurfConversion.lengthToRadians(distance, units);
 
     double latitude2 = Math.asin(Math.sin(latitude1) * Math.cos(radians)
       + Math.cos(latitude1) * Math.sin(radians) * Math.cos(bearingRad));
@@ -120,7 +120,7 @@ public final class TurfMeasurement {
     double a = Math.pow(Math.sin(dLat / 2), 2)
       + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
 
-    return TurfConversion.radiansToDistance(
+    return TurfConversion.radiansToLength(
       2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)), units);
   }
 
@@ -133,8 +133,8 @@ public final class TurfMeasurement {
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(@NonNull LineString lineString,
-                                    @NonNull @TurfConstants.TurfUnitCriteria String units) {
+  public static double length(@NonNull LineString lineString,
+                              @NonNull @TurfConstants.TurfUnitCriteria String units) {
     List<Point> coordinates = lineString.coordinates();
     return length(coordinates, units);
   }
@@ -148,8 +148,8 @@ public final class TurfMeasurement {
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(@NonNull MultiLineString multiLineString,
-                                    @NonNull @TurfConstants.TurfUnitCriteria String units) {
+  public static double length(@NonNull MultiLineString multiLineString,
+                              @NonNull @TurfConstants.TurfUnitCriteria String units) {
     double d = 0;
     for (List<Point> points : multiLineString.coordinates()) {
       d += length(points, units);
@@ -167,8 +167,8 @@ public final class TurfMeasurement {
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(@NonNull Polygon polygon,
-                                    @NonNull @TurfConstants.TurfUnitCriteria String units) {
+  public static double length(@NonNull Polygon polygon,
+                              @NonNull @TurfConstants.TurfUnitCriteria String units) {
     double d = 0;
     for (List<Point> points : polygon.coordinates()) {
       d += length(points, units);
@@ -186,8 +186,8 @@ public final class TurfMeasurement {
    * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
    * @since 1.2.0
    */
-  public static double lineDistance(@NonNull MultiPolygon multiPolygon,
-                                    @NonNull @TurfConstants.TurfUnitCriteria String units) {
+  public static double length(@NonNull MultiPolygon multiPolygon,
+                              @NonNull @TurfConstants.TurfUnitCriteria String units) {
     double d = 0;
     List<List<List<Point>>> coordinates = multiPolygon.coordinates();
     for (List<List<Point>> coordinate : coordinates) {

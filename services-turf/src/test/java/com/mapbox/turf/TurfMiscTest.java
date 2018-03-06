@@ -5,7 +5,6 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -149,12 +148,12 @@ public class TurfMiscTest extends TestUtils {
   @Test
   public void pointOnLine_throwLineMustContainTwoOrMorePoints() throws Exception {
     thrown.expect(TurfException.class);
-    thrown.expectMessage(startsWith("Turf pointOnLine requires a List of Points made up of at least"
+    thrown.expectMessage(startsWith("Turf nearestPointOnLine requires a List of Points made up of at least"
       + " 2 coordinates."));
 
     List<Point> line = new ArrayList<>();
     line.add(Point.fromLngLat(-122.45717525482178, 37.72003306385638));
-    TurfMisc.pointOnLine(line.get(0), line);
+    TurfMisc.nearestPointOnLine(line.get(0), line);
   }
 
   @Test
@@ -165,7 +164,7 @@ public class TurfMiscTest extends TestUtils {
 
     Point pt = Point.fromLngLat(-122.45717525482178, 37.72003306385638);
 
-    Feature snappedFeature = TurfMisc.pointOnLine(pt, line);
+    Feature snappedFeature = TurfMisc.nearestPointOnLine(pt, line);
     Point snapped = (Point) snappedFeature.geometry();
     // pt on start does not move
     assertEquals(pt, snapped);
@@ -186,7 +185,7 @@ public class TurfMiscTest extends TestUtils {
     pts.add(Point.fromLngLat(-122.45516525482178, 37.72009306385638));
 
     for (Point pt : pts) {
-      Feature snappedFeature = TurfMisc.pointOnLine(pt, line);
+      Feature snappedFeature = TurfMisc.nearestPointOnLine(pt, line);
       Point snapped = (Point) snappedFeature.geometry();
       // pt behind start moves to first vertex
       assertEquals(first, snapped);
@@ -209,7 +208,7 @@ public class TurfMiscTest extends TestUtils {
     pts.add(Point.fromLngLat(-122.45718061923981, 37.71704571582896));
 
     for (Point pt : pts) {
-      Feature snappedFeature = TurfMisc.pointOnLine(pt, line);
+      Feature snappedFeature = TurfMisc.nearestPointOnLine(pt, line);
       Point snapped = (Point) snappedFeature.geometry();
       // pt behind start moves to last vertex
       assertEquals(last, snapped);
@@ -261,7 +260,7 @@ public class TurfMiscTest extends TestUtils {
           Point.fromLngLat(pt.longitude(), pt.latitude()));
       }
       for (Point pt : line) {
-        Feature snappedFeature = TurfMisc.pointOnLine(pt, linePoint);
+        Feature snappedFeature = TurfMisc.nearestPointOnLine(pt, linePoint);
         Point snapped = (Point) snappedFeature.geometry();
         // pt on joint stayed in place
         assertEquals(pt, snapped);
@@ -286,13 +285,13 @@ public class TurfMiscTest extends TestUtils {
     line.add(Point.fromLngLat(-0.10789990425109863, 51.518624199789016));
     line.add(Point.fromLngLat(-0.10759949684143065, 51.51778299991493));
 
-    double dist = TurfMeasurement.lineDistance(LineString.fromLngLats(line), TurfConstants.UNIT_MILES);
+    double dist = TurfMeasurement.length(LineString.fromLngLats(line), TurfConstants.UNIT_MILES);
     double increment = dist / 10;
 
     for (int i = 0; i < 10; i++) {
       Point pt = TurfMeasurement.along(
         LineString.fromLngLats(line), increment * i, TurfConstants.UNIT_MILES);
-      Feature snappedFeature = TurfMisc.pointOnLine(pt, line);
+      Feature snappedFeature = TurfMisc.nearestPointOnLine(pt, line);
       Point snapped = (Point) snappedFeature.geometry();
 
       double shift = TurfMeasurement.distance(pt, snapped, TurfConstants.UNIT_MILES);
@@ -310,7 +309,7 @@ public class TurfMiscTest extends TestUtils {
 
     Point pt = TurfMeasurement.along(
       LineString.fromLngLats(line), 0.019, TurfConstants.UNIT_MILES);
-    Feature snappedFeature = TurfMisc.pointOnLine(pt, line);
+    Feature snappedFeature = TurfMisc.nearestPointOnLine(pt, line);
     Point snapped = (Point) snappedFeature.geometry();
     double shift = TurfMeasurement.distance(pt, snapped, TurfConstants.UNIT_MILES);
 
@@ -333,7 +332,7 @@ public class TurfMiscTest extends TestUtils {
     pts.add(Point.fromLngLat(-122.45652079582213, 37.72063561093274));
 
     for (Point pt : pts) {
-      Feature snappedFeature = TurfMisc.pointOnLine(pt, line);
+      Feature snappedFeature = TurfMisc.nearestPointOnLine(pt, line);
       Point snapped = (Point) snappedFeature.geometry();
       // pt did not snap to first vertex
       assertNotEquals(snapped, first);

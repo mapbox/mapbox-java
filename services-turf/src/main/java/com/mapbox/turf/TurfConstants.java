@@ -13,7 +13,7 @@ import java.lang.annotation.RetentionPolicy;
  * between two GeoJson Points using {@link TurfMeasurement#distance(Point, Point, String)} the third
  * optional parameter can define the output units.
  * <p>
- * Note that {@link TurfConversion#convertDistance(double, String, String)} can be used to transform
+ * Note that {@link TurfConversion#convertLength(double, String, String)} can be used to transform
  * one unit to another, such as miles to feet.
  * </p>
  *
