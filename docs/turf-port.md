@@ -68,14 +68,14 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [ ] turf-line-intersect
 - [ ] turf-line-overlap
 - [ ] turf-line-segment
-- [ ] turf-line-slice-along
 - [x] turf-line-slice
+- [ ] turf-line-slice-along
 - [ ] turf-line-split
 - [ ] turf-mask
-- [ ] turf-boolean-point-on-line
+- [x] turf-nearest-point-on-line
 - [ ] turf-sector
+- [ ] turf-shortest-parth
 - [ ] turf-unkink-polygon
-- [x] turf-point-on-line
 
 ## Helper
 The helper functions are all part of the GeoJson module; this class contains unit conversion and additional functionality to help other calculations.
@@ -113,8 +113,25 @@ The helper functions are all part of the GeoJson module; this class contains uni
 
 ## Meta
 - [x] coordAll
-- [x] coordEach
+- [ ] coordEach
 - [ ] coordReduce
+- [ ] featureEach
+- [ ] featureReduce
+- [ ] flattenEach
+- [ ] flattenReduce
+- [ ] getCoord
+- [ ] getCoords
+- [ ] getGeom
+- [ ] getType
+- [ ] geomEach
+- [ ] geomReduce
+- [ ] propEach
+- [ ] propReduce
+- [ ] segmentEach
+- [ ] segmentReduce
+- [ ] getCluster
+- [ ] clusterEach
+- [ ] clusterReduce
 
 ## Assertions
 All of these are already enforced in the GeoJson module
