@@ -21,17 +21,17 @@ static def getGitRevision() {
 dependencies {
 
   // Gson
-  implementation dependenciesList.gson
+  api dependenciesList.gson
 
   // Retrofit
-  implementation dependenciesList.retrofit
-  implementation dependenciesList.retrofit2Gson
+  api dependenciesList.retrofit
+  api dependenciesList.retrofit2Gson
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
 
   // OkHttp
-  implementation dependenciesList.okhttp3Logging
+  api dependenciesList.okhttp3Logging
 
   // AutoValue
   compileOnly dependenciesList.autoValue

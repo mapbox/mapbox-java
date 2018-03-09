@@ -1,11 +1,8 @@
 apply plugin: 'java-library'
 
 dependencies {
-
-  implementation project(":services-core")
-
   // Gson
-  implementation dependenciesList.gson
+  api dependenciesList.gson
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation

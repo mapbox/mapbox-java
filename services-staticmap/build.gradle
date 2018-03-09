@@ -1,12 +1,8 @@
 apply plugin: 'java-library'
 
 dependencies {
-
-  implementation project(":services-core")
-  implementation project(":services-geojson")
-
-  // OkHttp
-  implementation dependenciesList.okhttp3Logging
+  api project(":services-core")
+  api project(":services-geojson")
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation

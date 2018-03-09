@@ -1,20 +1,10 @@
 apply plugin: 'java-library'
 
 dependencies {
-
-  implementation project(":services-core")
-  implementation project(":services-geojson")
-  implementation project(":services-directions")
-
-  // Retrofit
-  implementation dependenciesList.retrofit
-  implementation dependenciesList.retrofit2Gson
+  api project(":services-directions")
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
-
-  // OkHttp
-  implementation dependenciesList.okhttp3Logging
 
   // AutoValue
   compileOnly dependenciesList.autoValue
