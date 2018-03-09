@@ -1,0 +1,19 @@
+apply plugin: 'java-library'
+
+dependencies {
+
+    compile project(":services-core")
+
+    // Retrofit
+    compile dependenciesList.retrofit
+
+    // AutoValue
+    compileOnly dependenciesList.autoValue
+
+    // Test Dependencies
+//    testCompile dependenciesList.okhttp3Mockwebserver
+//    testCompile project(path: ':services-core', configuration: 'testOutput')
+}
+
+apply from: "${rootDir}/gradle/checkstyle.gradle"
+apply from: "${rootDir}/gradle/jacoco.gradle"
