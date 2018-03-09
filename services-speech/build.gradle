@@ -1,7 +1,6 @@
 apply plugin: 'java-library'
 
 dependencies {
-
     compile project(":services-core")
 
     // Retrofit
@@ -9,10 +8,6 @@ dependencies {
 
     // AutoValue
     compileOnly dependenciesList.autoValue
-
-    // Test Dependencies
-//    testCompile dependenciesList.okhttp3Mockwebserver
-//    testCompile project(path: ':services-core', configuration: 'testOutput')
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"
