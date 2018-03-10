@@ -137,6 +137,20 @@ public final class DirectionsCriteria {
   public static final String EXCLUDE_FERRY = "ferry";
 
   /**
+   * Exclude all tunnels along the returned directions route.
+   *
+   * @since 3.0.0
+   */
+  public static final String EXCLUDE_TUNNEL = "tunnel";
+
+  /**
+   * Exclude all roads with access restrictions along the returned directions route.
+   *
+   * @since 3.0.0
+   */
+  public static final String EXCLUDE_RESTRICTED = "restricted";
+
+  /**
    * Change the units to imperial for voice and visual information. Note that this won't change
    * other results such as raw distance measurements which will always be returned in meters.
    *
@@ -255,7 +269,9 @@ public final class DirectionsCriteria {
   @StringDef( {
     EXCLUDE_FERRY,
     EXCLUDE_MOTORWAY,
-    EXCLUDE_TOLL
+    EXCLUDE_TOLL,
+    EXCLUDE_TUNNEL,
+    EXCLUDE_RESTRICTED
   })
   public @interface ExcludeCriteria {
   }
