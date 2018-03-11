@@ -239,6 +239,12 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     getCall().cancel();
   }
 
+  // TODO should override
+//  @Override
+  public boolean isCanceled() {
+    return getCall().isCanceled();
+  }
+
   /**
    * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
    *

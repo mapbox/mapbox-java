@@ -10,5 +10,6 @@ include ':services-optimization'
 include ':services-matrix'
 include ':services-matching'
 include ':services-staticmap'
+include ':services-rxbinding'
 include 'samples'
 

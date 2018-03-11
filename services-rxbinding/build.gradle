@@ -1,0 +1,23 @@
+apply plugin: 'java-library'
+
+dependencies {
+
+  compile project(":services-directions")
+
+  // RxJava
+  compile dependenciesList.rxJava
+
+  // Annotations
+  compileOnly dependenciesList.supportAnnotation
+
+  // AutoValue
+  compileOnly dependenciesList.autoValue
+  compileOnly dependenciesList.autoValueGson
+
+  // Test Dependencies
+  testCompile project(path: ':services-core', configuration: 'testOutput')
+}
+
+apply from: "${rootDir}/gradle/checkstyle.gradle"
+apply from: "${rootDir}/gradle/jacoco.gradle"
+apply from: "${rootDir}/gradle/mvn-push.gradle"

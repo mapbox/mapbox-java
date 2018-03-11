@@ -12,6 +12,7 @@ dependencies {
   compile project(":services-geojson")
   compile project(":services-matching")
   compile project(":services-staticmap")
+  compile project(":services-rxbinding")
 }
 
 buildConfig {
