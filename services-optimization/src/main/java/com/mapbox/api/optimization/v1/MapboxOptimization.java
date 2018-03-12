@@ -102,6 +102,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
 
   private OptimizationService getService() {
     // No need to recreate it
+
     if (service != null) {
       return service;
     }
