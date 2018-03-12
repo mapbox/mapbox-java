@@ -1,9 +1,11 @@
 package com.mapbox.api.directions.v5.models;
 
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.MapboxDirections;
 
 import java.io.Serializable;
@@ -90,6 +92,28 @@ public abstract class BannerText implements Serializable {
   @Nullable
   public abstract String modifier();
 
+
+  /**
+   * The degrees at which you will be exiting a roundabout, assuming `180` indicates
+   * going straight through the roundabout.
+   *
+   * @return at which you will be exiting a roundabout
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract Double degrees();
+
+  /**
+   * A string representing which side the of the street people drive on
+   * in that location. Can be 'left' or 'right'.
+   *
+   * @return String either `left` or `right`
+   * @since 3.0.0
+   */
+  @Nullable
+  @SerializedName("driving_side")
+  public abstract String drivingSide();
+
   /**
    * Gson type adapter for parsing Gson to this class.
    *
@@ -149,6 +173,27 @@ public abstract class BannerText implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder modifier(@Nullable String modifier);
+
+    /**
+     * The degrees at which you will be exiting a roundabout, assuming `180` indicates
+     * going straight through the roundabout.
+     *
+     * @param degrees at which you will be exiting a roundabout
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder degrees(Double degrees);
+
+    /**
+     * A string representing which side the of the street people drive on in
+     * that location. Can be 'left' or 'right'.
+     *
+     * @param drivingSide either `left` or `right`
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder drivingSide(@Nullable String drivingSide);
+
     /**
      * Build a new {@link BannerText} object.
      *
