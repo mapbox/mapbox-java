@@ -1,12 +1,8 @@
 apply plugin: 'java-library'
 
 dependencies {
-
-  compile project(":services-core")
-  compile project(":services-geojson")
-
-  // OkHttp
-  compile dependenciesList.okhttp3Logging
+  api project(":services-core")
+  api project(":services-geojson")
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
@@ -16,8 +12,8 @@ dependencies {
   compileOnly dependenciesList.autoValueGson
 
   // Test Dependencies
-  testCompile dependenciesList.okhttp3Mockwebserver
-  testCompile project(path: ':services-core', configuration: 'testOutput')
+  testImplementation dependenciesList.okhttp3Mockwebserver
+  testImplementation project(path: ':services-core', configuration: 'testOutput')
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"
