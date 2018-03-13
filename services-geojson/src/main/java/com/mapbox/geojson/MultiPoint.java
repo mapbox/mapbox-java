@@ -36,7 +36,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class MultiPoint implements Geometry<List<Point>>, Serializable {
+public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Serializable {
 
   private static final String TYPE = "MultiPoint";
 
