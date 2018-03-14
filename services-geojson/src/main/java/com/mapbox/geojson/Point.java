@@ -58,7 +58,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class Point implements Geometry<List<Double>>, Serializable {
+public abstract class Point implements CoordinateContainer<List<Double>>, Serializable {
 
   private static final String TYPE = "Point";
 

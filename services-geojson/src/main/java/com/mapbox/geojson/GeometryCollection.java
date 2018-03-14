@@ -2,6 +2,7 @@ package com.mapbox.geojson;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,7 +62,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class GeometryCollection implements GeoJson, Serializable {
+public abstract class GeometryCollection implements Geometry, Serializable {
 
   private static final String TYPE = "GeometryCollection";
 
@@ -72,7 +73,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    *
    * @param json a formatted valid JSON string defining a GeoJson Geometry Collection
    * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
+   * method
    * @since 1.0.0
    */
   public static GeometryCollection fromJson(String json) {
@@ -89,7 +90,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    *
    * @param geometries a non-null list of geometry which makes up this collection
    * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
+   * method
    * @since 1.0.0
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries) {
@@ -101,7 +102,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    *
    * @param geometry a non-null object of type geometry which makes up this collection
    * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
+   * method
    * @since 3.0.0
    */
   public static GeometryCollection fromGeometry(@NonNull Geometry geometry) {
@@ -115,7 +116,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    * @param geometries a non-null list of geometry which makes up this collection
    * @param bbox       optionally include a bbox definition as a double array
    * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
+   * method
    * @since 1.0.0
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries,
@@ -129,7 +130,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    * @param geometry a non-null object of type geometry which makes up this collection
    * @param bbox     optionally include a bbox definition as a double array
    * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
+   * method
    * @since 3.0.0
    */
   public static GeometryCollection fromGeometry(@NonNull Geometry geometry,
@@ -143,7 +144,7 @@ public abstract class GeometryCollection implements GeoJson, Serializable {
    * {@link GeometryCollection}.
    *
    * @return a String which describes the TYPE of geometry, for this object it will always return
-   *   {@code GeometryCollection}
+   * {@code GeometryCollection}
    * @since 1.0.0
    */
   @NonNull
