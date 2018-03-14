@@ -1,10 +1,7 @@
 apply plugin: 'java-library'
 
 dependencies {
-    compile project(":services-core")
-
-    // Retrofit
-    compile dependenciesList.retrofit
+    api project(":services-core")
 
     // AutoValue
     compileOnly dependenciesList.autoValue

@@ -6,7 +6,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface VoiceService {
+public interface SpeechService {
   @GET("/voice/v1/speak/{text}")
   Call<ResponseBody> getInstruction(
     @Path("text") String text,
