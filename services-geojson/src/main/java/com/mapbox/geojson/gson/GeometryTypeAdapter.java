@@ -3,6 +3,7 @@ package com.mapbox.geojson.gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import com.mapbox.geojson.CoordinateContainer;
 import com.mapbox.geojson.Geometry;
 
 import java.io.IOException;
@@ -16,7 +17,9 @@ public class GeometryTypeAdapter extends TypeAdapter<Geometry> {
     if (value.bbox() != null) {
       out.name("bbox").jsonValue(value.bbox().toJson());
     }
-    out.name("coordinates").jsonValue(value.coordinates().toString());
+    if (value instanceof CoordinateContainer) {
+      out.name("coordinates").jsonValue(((CoordinateContainer) value).coordinates().toString());
+    }
     out.endObject();
   }
 

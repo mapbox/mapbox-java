@@ -51,7 +51,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class MultiLineString implements Geometry<List<List<Point>>>, Serializable {
+public abstract class MultiLineString implements CoordinateContainer<List<List<Point>>>, Serializable {
 
   private static final String TYPE = "MultiLineString";
 
