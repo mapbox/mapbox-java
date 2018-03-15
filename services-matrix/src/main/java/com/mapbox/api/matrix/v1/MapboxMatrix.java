@@ -47,83 +47,21 @@ import java.util.Locale;
  * @since 2.1.0
  */
 @AutoValue
-public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
-
-  private MatrixService service;
-  private Call<MatrixResponse> call;
-
-  /**
-   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
-   * Matrix API.
-   *
-   * @return the Matrix v5 response once the call completes successfully
-   * @throws IOException Signals that an I/O exception of some sort has occurred
-   * @since 2.1.0
-   */
+public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixService> {
   @Override
-  public Response<MatrixResponse> executeCall() throws IOException {
-    return getCall().execute();
+  protected GsonConverterFactory getGsonConverterFactory() {
+    return GsonConverterFactory.create(new GsonBuilder()
+      .registerTypeAdapterFactory(MatrixAdapterFactory.create())
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+      .create());
   }
 
-  /**
-   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
-   * to the Matrix API. Use this method to make a Matrix request on the Main Thread.
-   *
-   * @param callback a {@link Callback} which is used once the {@link MatrixResponse} is created.
-   * @since 2.1.0
-   */
   @Override
-  public void enqueueCall(Callback<MatrixResponse> callback) {
-    getCall().enqueue(callback);
+  protected Class getServiceClass() {
+    return MatrixService.class;
   }
 
-  /**
-   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
-   * the user dismisses the calling activity or no longer needs the returned results.
-   *
-   * @since 1.0.0
-   */
-  @Override
-  public void cancelCall() {
-    getCall().cancel();
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
-   *
-   * @return cloned call
-   * @since 2.1.0
-   */
-  @Override
-  public Call<MatrixResponse> cloneCall() {
-    return getCall().clone();
-  }
-
-  private MatrixService getService() {
-    // No need to recreate it
-    if (service != null) {
-      return service;
-    }
-
-    // Retrofit instance
-    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(baseUrl())
-      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(MatrixAdapterFactory.create())
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-        .create()));
-    if (getCallFactory() != null) {
-      retrofitBuilder.callFactory(getCallFactory());
-    } else {
-      retrofitBuilder.client(getOkHttpClient());
-    }
-
-    // Directions service
-    service = retrofitBuilder.build().create(MatrixService.class);
-    return service;
-  }
-
-  private Call<MatrixResponse> getCall() {
+  protected Call<MatrixResponse> getCall() {
     // No need to recreate it
     if (call != null) {
       return call;
@@ -164,7 +102,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
   abstract String destinations();
 
   @NonNull
-  abstract String baseUrl();
+  protected abstract String baseUrl();
 
   /**
    * Build a new {@link MapboxMatrix} object with the initial values set for {@link #baseUrl()},

@@ -51,80 +51,22 @@ import java.util.Locale;
  * @since 2.1.0
  */
 @AutoValue
-public abstract class MapboxOptimization extends MapboxService<OptimizationResponse> {
-
-  private Call<OptimizationResponse> call;
-  private OptimizationService service;
-
-  /**
-   * Execute the call
-   *
-   * @return The Directions Optimization v1 response
-   * @throws IOException Signals that an I/O exception of some sort has occurred.
-   * @since 2.1.0
-   */
+public abstract class MapboxOptimization extends MapboxService<OptimizationResponse, OptimizationService> {
   @Override
-  public Response<OptimizationResponse> executeCall() throws IOException {
-    return getCall().execute();
+  protected GsonConverterFactory getGsonConverterFactory() {
+    return GsonConverterFactory.create(new GsonBuilder()
+      .registerTypeAdapterFactory(OptimizationAdapterFactory.create())
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+      .create());
   }
 
-  /**
-   * Execute the call
-   *
-   * @param callback A Retrofit callback.
-   * @since 2.1.0
-   */
   @Override
-  public void enqueueCall(Callback<OptimizationResponse> callback) {
-    getCall().enqueue(callback);
+  protected Class getServiceClass() {
+    return OptimizationService.class;
   }
 
-  /**
-   * Cancel the call
-   *
-   * @since 2.1.0
-   */
   @Override
-  public void cancelCall() {
-    getCall().cancel();
-  }
-
-  /**
-   * clone the call
-   *
-   * @return cloned call
-   * @since 2.1.0
-   */
-  @Override
-  public Call<OptimizationResponse> cloneCall() {
-    return getCall().clone();
-  }
-
-  private OptimizationService getService() {
-    // No need to recreate it
-    if (service != null) {
-      return service;
-    }
-
-    // Retrofit instance
-    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(baseUrl())
-      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(OptimizationAdapterFactory.create())
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-        .create()));
-    if (getCallFactory() != null) {
-      retrofitBuilder.callFactory(getCallFactory());
-    } else {
-      retrofitBuilder.client(getOkHttpClient());
-    }
-
-    // Optimization's service
-    service = retrofitBuilder.build().create(OptimizationService.class);
-    return service;
-  }
-
-  private Call<OptimizationResponse> getCall() {
+  protected Call<OptimizationResponse> getCall() {
     // No need to recreate it
     if (call != null) {
       return call;
@@ -186,7 +128,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
   abstract String accessToken();
 
   @NonNull
-  abstract String baseUrl();
+  protected abstract String  baseUrl();
 
   @Nullable
   abstract String language();
