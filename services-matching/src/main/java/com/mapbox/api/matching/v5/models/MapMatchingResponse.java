@@ -4,7 +4,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.geojson.BoundingBox;
+import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.gson.BoundingBoxDeserializer;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.GeometryDeserializer;
+import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,6 +38,24 @@ public abstract class MapMatchingResponse implements Serializable {
   }
 
   /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a GeoJson MapMatching Response
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static MapMatchingResponse fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
+    gson.registerTypeAdapterFactory(MapMatchingAdapterFactory.create());
+    return gson.create().fromJson(json, MapMatchingResponse.class);
+  }
+
+  /**
    * A string depicting the state of the response.
    * <ul>
    * <li>"Ok" - Normal case</li>
@@ -44,6 +71,15 @@ public abstract class MapMatchingResponse implements Serializable {
    */
   @NonNull
   public abstract String code();
+
+  /**
+   * Optionally shows up in a directions response if an error or something unexpected occurred.
+   *
+   * @return a string containing the message API MapMatching response with if an error occurred
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract String message();
 
   /**
    * List of {@link MapMatchingMatching} objects, essentially a DirectionsWaypoint object with the
@@ -66,6 +102,41 @@ public abstract class MapMatchingResponse implements Serializable {
    */
   @Nullable
   public abstract List<MapMatchingTracepoint> tracepoints();
+
+  /**
+   * List containing all the different route options. It's ordered by descending recommendation
+   * rank. In other words, object 0 in the List is the highest recommended route. if you don't
+   * setAlternatives to true (default is false) in your builder this should always be a List of
+   * size 1. At most this will return 2 {@link DirectionsRoute} objects.
+   *
+   * @return list of {@link DirectionsRoute} objects
+   * @since 3.0.0
+   */
+  @NonNull
+  public abstract List<DirectionsRoute> routes();
+
+
+  /**
+   * A universally unique identifier (UUID) for identifying and executing a similar specific route
+   * in the future.
+   *
+   * @return a String representing the UUID given by the directions request
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract String uuid();
+
+
+  /**
+   * Convert the current {@link MapMatchingResponse} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the project resulting in
+   * an updated and modifier {@link MapMatchingResponse}.
+   *
+   * @return a {@link MapMatchingResponse.Builder} with the same values set to match the ones defined
+   *   in this {@link MapMatchingResponse}
+   * @since 3.0.0
+   */
+  public abstract MapMatchingResponse.Builder toBuilder();
 
   /**
    * Gson type adapter for parsing Gson to this class.
@@ -104,6 +175,16 @@ public abstract class MapMatchingResponse implements Serializable {
     public abstract Builder code(@Nullable String code);
 
     /**
+     * Optionally shows up in a map maptching response if an error or something unexpected occurred.
+     *
+     * @param message a string containing the message API MapMatching response with if an error
+     *                occurred
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder message(@Nullable String message);
+
+    /**
      * List of {@link MapMatchingMatching} objects, essentially a DirectionsWaypoint object with the
      * addition of a confidence value.
      *
@@ -126,6 +207,27 @@ public abstract class MapMatchingResponse implements Serializable {
      */
     public abstract Builder tracepoints(@Nullable List<MapMatchingTracepoint> tracepoints);
 
+    /**
+     * List containing all the different route options. It's ordered by descending recommendation
+     * rank. In other words, object 0 in the List is the highest recommended route. if you don't
+     * setAlternatives to true (default is false) in your builder this should always be a List of
+     * size 1. At most this will return 2 {@link DirectionsRoute} objects.
+     *
+     * @param routes list of {@link DirectionsRoute} objects
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract MapMatchingResponse.Builder routes(@NonNull List<DirectionsRoute> routes);
+
+    /**
+     * A universally unique identifier (UUID) for identifying and executing a similar specific route
+     * in the future.
+     *
+     * @param uuid a String representing the UUID given by the directions request
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract MapMatchingResponse.Builder uuid(@Nullable String uuid);
     /**
      * Build a new {@link MapMatchingResponse} object.
      *
