@@ -2,6 +2,17 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.0.0-beta.4
+- Rework dependency tree, add api instead of implementation
+- Remove unprintable chars in api request
+- Make GeometryCollection a Geometry as specified in the spec at sections 1.4 and 3.1.8
+- Add Degrees and Driving Side to BannerText
+- Add tunnel and restricted to possible values of exclude criteria
+- Turf functions name changes
+- Make getOkHttpClient synchronized
+- Add type and modifier to BannerText
+- Add baseUrl to RouteOptions
+
 ### v3.0.0-beta.3
 
 - Added back fromLngLats() that take double arrays for coordinates [#722](https://github.com/mapbox/mapbox-java/pull/722)

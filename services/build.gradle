@@ -7,27 +7,15 @@ sourceSets {
 }
 
 dependencies {
-
-  compile project(":services-core")
-  compile project(":services-geojson")
-
-  // Gson
-  compile dependenciesList.gson
-
-  // Retrofit
-  compile dependenciesList.retrofit
-  compile dependenciesList.retrofit2Gson
+  api project(":services-core")
+  api project(":services-geojson")
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
 
-  // OkHttp
-  compile dependenciesList.okhttp3Logging
-
   // AutoValue
   compileOnly dependenciesList.autoValue
   compileOnly dependenciesList.autoValueGson
-
 }
 
 apply from: "${rootDir}/gradle/mvn-push.gradle"

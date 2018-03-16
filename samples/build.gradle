@@ -5,13 +5,11 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-  compile project(":services-core")
-  compile project(":services-directions")
-  compile project(":services-geocoding")
-  compile project(":services-optimization")
-  compile project(":services-geojson")
-  compile project(":services-matching")
-  compile project(":services-staticmap")
+  implementation project(":services-geocoding")
+  implementation project(":services-optimization")
+  implementation project(":services-geojson")
+  implementation project(":services-matching")
+  implementation project(":services-staticmap")
 }
 
 buildConfig {
