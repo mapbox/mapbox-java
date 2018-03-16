@@ -4,6 +4,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
@@ -21,16 +22,12 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
 
 /**
  * The Mapbox map matching interface (v5)
@@ -44,48 +41,22 @@ import java.util.Locale;
  * @since 2.0.0
  */
 @AutoValue
-public abstract class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
+public abstract class MapboxMapMatching extends MapboxService<MapMatchingResponse, MapMatchingService> {
 
-  private Call<MapMatchingResponse> call;
-  private MapMatchingService service;
-
-  private MapMatchingService getService() {
-    // No need to recreate it
-    if (service != null) {
-      return service;
-    }
-
-    // Retrofit instance
-    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(baseUrl())
-      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(MapMatchingAdapterFactory.create())
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-        .create()));
-    if (getCallFactory() != null) {
-      retrofitBuilder.callFactory(getCallFactory());
-    } else {
-      retrofitBuilder.client(getOkHttpClient());
-    }
-
-    // MapMatching service
-    service = retrofitBuilder.build().create(MapMatchingService.class);
-    return service;
+  private MapboxMapMatching() {
+    super(MapMatchingService.class);
   }
 
-  /**
-   * Used internally.
-   *
-   * @return call
-   * @since 2.0.0
-   */
-  public Call<MapMatchingResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
+  @Override
+  protected GsonBuilder getGsonBuilder() {
+    return new GsonBuilder()
+      .registerTypeAdapterFactory(MapMatchingAdapterFactory.create())
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+  }
 
-    call = getService().getCall(
+  @Override
+  protected Call<MapMatchingResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -102,58 +73,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
       roundaboutExits(),
       bannerInstructions(),
       voiceInstructions(),
-      waypoints()
-    );
-
-    return call;
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
-   * Map Matching API.
-   *
-   * @return the Map Matching v5 response once the call completes successfully
-   * @throws IOException Signals that an I/O exception of some sort has occurred
-   * @since 1.0.0
-   */
-  @Override
-  public Response<MapMatchingResponse> executeCall() throws IOException {
-    return getCall().execute();
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
-   * to the Map Matching API. Use this method to make a directions request on the Main Thread.
-   *
-   * @param callback a {@link Callback} which is used once the {@link MapMatchingResponse} is
-   *                 created.
-   * @since 1.0.0
-   */
-  @Override
-  public void enqueueCall(Callback<MapMatchingResponse> callback) {
-    getCall().enqueue(callback);
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
-   * the user dismisses the calling activity or no longer needs the returned results.
-   *
-   * @since 1.0.0
-   */
-  @Override
-  public void cancelCall() {
-    getCall().cancel();
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
-   *
-   * @return cloned call
-   * @since 1.0.0
-   */
-  @Override
-  public Call<MapMatchingResponse> cloneCall() {
-    return getCall().clone();
+      waypoints());
   }
 
   @Nullable
@@ -209,7 +129,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
 
 
   @NonNull
-  abstract String baseUrl();
+  @Override
+  protected abstract String baseUrl();
 
   /**
    * Build a new {@link MapboxMapMatching} object with the initial values set for

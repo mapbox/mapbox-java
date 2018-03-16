@@ -2,6 +2,7 @@ package com.mapbox.api.matrix.v1;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
@@ -15,16 +16,12 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
 
 /**
  * the Matrix API returns all travel times between many points. The Matrix API will always return
@@ -47,89 +44,22 @@ import java.util.Locale;
  * @since 2.1.0
  */
 @AutoValue
-public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
+public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixService> {
 
-  private MatrixService service;
-  private Call<MatrixResponse> call;
+  private MapboxMatrix() {
+    super(MatrixService.class);
+  }
 
-  /**
-   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
-   * Matrix API.
-   *
-   * @return the Matrix v5 response once the call completes successfully
-   * @throws IOException Signals that an I/O exception of some sort has occurred
-   * @since 2.1.0
-   */
   @Override
-  public Response<MatrixResponse> executeCall() throws IOException {
-    return getCall().execute();
+  protected GsonBuilder getGsonBuilder() {
+    return new GsonBuilder()
+      .registerTypeAdapterFactory(MatrixAdapterFactory.create())
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
   }
 
-  /**
-   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
-   * to the Matrix API. Use this method to make a Matrix request on the Main Thread.
-   *
-   * @param callback a {@link Callback} which is used once the {@link MatrixResponse} is created.
-   * @since 2.1.0
-   */
   @Override
-  public void enqueueCall(Callback<MatrixResponse> callback) {
-    getCall().enqueue(callback);
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
-   * the user dismisses the calling activity or no longer needs the returned results.
-   *
-   * @since 1.0.0
-   */
-  @Override
-  public void cancelCall() {
-    getCall().cancel();
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
-   *
-   * @return cloned call
-   * @since 2.1.0
-   */
-  @Override
-  public Call<MatrixResponse> cloneCall() {
-    return getCall().clone();
-  }
-
-  private MatrixService getService() {
-    // No need to recreate it
-    if (service != null) {
-      return service;
-    }
-
-    // Retrofit instance
-    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(baseUrl())
-      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(MatrixAdapterFactory.create())
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-        .create()));
-    if (getCallFactory() != null) {
-      retrofitBuilder.callFactory(getCallFactory());
-    } else {
-      retrofitBuilder.client(getOkHttpClient());
-    }
-
-    // Directions service
-    service = retrofitBuilder.build().create(MatrixService.class);
-    return service;
-  }
-
-  private Call<MatrixResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
-
-    call = getService().getCall(
+  protected Call<MatrixResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -137,9 +67,6 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
       accessToken(),
       destinations(),
       sources());
-
-    // Done
-    return call;
   }
 
   @Nullable
@@ -164,7 +91,8 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse> {
   abstract String destinations();
 
   @NonNull
-  abstract String baseUrl();
+  @Override
+  protected abstract String baseUrl();
 
   /**
    * Build a new {@link MapboxMatrix} object with the initial values set for {@link #baseUrl()},

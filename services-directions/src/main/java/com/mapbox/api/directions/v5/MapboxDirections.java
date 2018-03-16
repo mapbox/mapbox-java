@@ -1,18 +1,10 @@
 package com.mapbox.api.directions.v5;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
-import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ExcludeCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
@@ -21,23 +13,30 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.VoiceUnitCriteria;
 import com.mapbox.api.directions.v5.models.DirectionsError;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.RouteOptions;
-import com.mapbox.core.exceptions.ServicesException;
-import com.mapbox.geojson.Point;
 import com.mapbox.core.MapboxService;
-import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.constants.Constants;
+import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.core.utils.ApiCallHelper;
+import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
+import com.mapbox.geojson.Point;
+
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Converter;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * The Directions API allows the calculation of routes between coordinates. The fastest route can be
@@ -57,47 +56,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class MapboxDirections extends MapboxService<DirectionsResponse> {
+public abstract class MapboxDirections extends MapboxService<DirectionsResponse, DirectionsService> {
 
   private static final Logger LOGGER = Logger.getLogger(MapboxDirections.class.getName());
 
-  private okhttp3.Call.Factory callFactory;
-  private Call<DirectionsResponse> call;
-  private DirectionsService service;
-  private Retrofit retrofit;
-
-  private DirectionsService getService() {
-    // No need to recreate it
-    if (service != null) {
-      return service;
-    }
-
-    // Retrofit instance
-    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(baseUrl())
-      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-        .create()
-      ));
-    retrofit = retrofitBuilder.build();
-    if (getCallFactory() != null) {
-      retrofitBuilder.callFactory(getCallFactory());
-    } else {
-      retrofitBuilder.client(getOkHttpClient());
-    }
-
-    // Directions service
-    service = retrofitBuilder.build().create(DirectionsService.class);
-    return service;
+  private MapboxDirections() {
+    super(DirectionsService.class);
   }
 
-  private Call<DirectionsResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
-
-    call = getService().getCall(
+  @Override
+  protected Call<DirectionsResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -117,9 +86,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       bannerInstructions(),
       voiceUnits(),
       exclude());
-
-    // Done
-    return call;
   }
 
   /**
@@ -132,7 +98,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    */
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
-    Response<DirectionsResponse> response = getCall().execute();
+    Response<DirectionsResponse> response = super.executeCall();
     if (!response.isSuccessful()) {
       errorDidOccur(null, response);
     }
@@ -177,12 +143,12 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
                              @NonNull Response<DirectionsResponse> response) {
     // Response gave an error, we try to LOGGER any messages into the LOGGER here.
     Converter<ResponseBody, DirectionsError> errorConverter =
-      retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
+      getRetrofit().responseBodyConverter(DirectionsError.class, new Annotation[0]);
     if (callback == null) {
       return;
     }
     try {
-      callback.onFailure(call,
+      callback.onFailure(getCall(),
         new Throwable(errorConverter.convert(response.errorBody()).message()));
     } catch (IOException ioException) {
       LOGGER.log(Level.WARNING, "Failed to complete your request. ", ioException);
@@ -228,28 +194,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     return TextUtils.join(";", coordinatesFormatted.toArray());
   }
 
-  /**
-   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
-   * the user dismisses the calling activity or no longer needs the returned results.
-   *
-   * @since 1.0.0
-   */
-  @Override
-  public void cancelCall() {
-    getCall().cancel();
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
-   *
-   * @return cloned call
-   * @since 1.0.0
-   */
-  @Override
-  public Call<DirectionsResponse> cloneCall() {
-    return getCall().clone();
-  }
-
   @NonNull
   abstract String user();
 
@@ -260,7 +204,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   abstract List<Point> coordinates();
 
   @NonNull
-  abstract String baseUrl();
+  @Override
+  protected abstract String baseUrl();
 
   @Nullable
   abstract String accessToken();
@@ -309,28 +254,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
   @Nullable
   abstract String exclude();
-
-  /**
-   * Gets the call factory for creating {@link Call} instances.
-   *
-   * @return the call factory, or the default OkHttp client if it's null.
-   * @since 2.0.0
-   */
-  @Override
-  public okhttp3.Call.Factory getCallFactory() {
-    return callFactory;
-  }
-
-  /**
-   * Specify a custom call factory for creating {@link Call} instances.
-   *
-   * @param callFactory implementation
-   * @since 2.0.0
-   */
-  @Override
-  public void setCallFactory(okhttp3.Call.Factory callFactory) {
-    this.callFactory = callFactory;
-  }
 
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for

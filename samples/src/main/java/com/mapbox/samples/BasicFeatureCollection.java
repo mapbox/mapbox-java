@@ -11,8 +11,4 @@ public class BasicFeatureCollection {
     System.out.println(feature.toJson());
 
   }
-
-
-
-
 }
