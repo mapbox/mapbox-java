@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Mapbox specific services used internally within the SDK. Subclasses must implement baseUrl and
- * getCall.
+ * initializeCall.
  *
  * @param <T> Type parameter for response.
  * @param <S> Type parameter for service interface.
@@ -26,9 +26,9 @@ public abstract class MapboxService<T, S> {
   private boolean enableDebug;
   private OkHttpClient okHttpClient;
   private okhttp3.Call.Factory callFactory;
-  protected Retrofit retrofit;
-  protected Call<T> call;
-  protected S service;
+  private Retrofit retrofit;
+  private Call<T> call;
+  private S service;
 
   /**
    * Constructor for creating a new MapboxService setting the service type for use when
@@ -56,7 +56,21 @@ public abstract class MapboxService<T, S> {
    * @return call
    * @since 3.0.0
    */
-  protected abstract Call<T> getCall();
+  protected abstract Call<T> initializeCall();
+
+  /**
+   * Get call if already created, otherwise get it from subclass implementation
+   *
+   * @return call
+   * @since 3.0.0
+   */
+  protected Call<T> getCall() {
+    if (call == null) {
+      call = initializeCall();
+    }
+
+    return call;
+  }
 
   /**
    * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
@@ -127,6 +141,16 @@ public abstract class MapboxService<T, S> {
     retrofit = retrofitBuilder.build();
     service = (S) retrofit.create(serviceType);
     return service;
+  }
+
+  /**
+   * Returns the retrofit instance.
+   *
+   * @return retrofit, or null if it hasn't been initialized yet.
+   * @since 3.0.0
+   */
+  public Retrofit getRetrofit() {
+    return retrofit;
   }
 
   /**

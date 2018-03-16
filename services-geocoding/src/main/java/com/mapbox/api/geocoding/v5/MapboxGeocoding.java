@@ -79,17 +79,12 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
   }
 
   @Override
-  protected Call<GeocodingResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
-
+  protected Call<GeocodingResponse> initializeCall() {
     if (mode().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
       throw new IllegalArgumentException("Use getBatchCall() for batch calls.");
     }
 
-    call = getService().getCall(
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       mode(),
       query(),
@@ -101,8 +96,6 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       bbox(),
       limit(),
       languages());
-
-    return call;
   }
 
   private Call<List<GeocodingResponse>> getBatchCall() {
@@ -112,7 +105,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
     }
 
     if (mode().equals(GeocodingCriteria.MODE_PLACES)) {
-      throw new ServicesException("Use getCall() for non-batch calls.");
+      throw new ServicesException("Use initializeCall() for non-batch calls.");
     }
 
     batchCall = getService().getBatchCall(

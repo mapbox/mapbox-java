@@ -55,13 +55,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   }
 
   @Override
-  protected Call<MapMatchingResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
-
-    call = getService().getCall(
+  protected Call<MapMatchingResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -78,10 +73,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
       roundaboutExits(),
       bannerInstructions(),
       voiceInstructions(),
-      waypoints()
-    );
-
-    return call;
+      waypoints());
   }
 
   @Nullable

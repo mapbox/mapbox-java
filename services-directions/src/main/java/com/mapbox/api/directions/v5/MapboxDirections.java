@@ -65,13 +65,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
   }
 
   @Override
-  protected Call<DirectionsResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
-
-    call = getService().getCall(
+  protected Call<DirectionsResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -91,9 +86,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
       bannerInstructions(),
       voiceUnits(),
       exclude());
-
-    // Done
-    return call;
   }
 
   /**
@@ -151,12 +143,12 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
                              @NonNull Response<DirectionsResponse> response) {
     // Response gave an error, we try to LOGGER any messages into the LOGGER here.
     Converter<ResponseBody, DirectionsError> errorConverter =
-      retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
+      getRetrofit().responseBodyConverter(DirectionsError.class, new Annotation[0]);
     if (callback == null) {
       return;
     }
     try {
-      callback.onFailure(call,
+      callback.onFailure(getCall(),
         new Throwable(errorConverter.convert(response.errorBody()).message()));
     } catch (IOException ioException) {
       LOGGER.log(Level.WARNING, "Failed to complete your request. ", ioException);

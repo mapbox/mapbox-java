@@ -58,13 +58,8 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
   }
 
   @Override
-  protected Call<MatrixResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
-
-    call = getService().getCall(
+  protected Call<MatrixResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -72,9 +67,6 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
       accessToken(),
       destinations(),
       sources());
-
-    // Done
-    return call;
   }
 
   @Nullable

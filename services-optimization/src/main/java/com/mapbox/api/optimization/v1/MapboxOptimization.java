@@ -61,13 +61,8 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
   }
 
   @Override
-  protected Call<OptimizationResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
-
-    call = getService().getCall(
+  protected Call<OptimizationResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -84,9 +79,6 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
       source(),
       language(),
       distributions());
-
-    // Done
-    return call;
   }
 
   @NonNull
