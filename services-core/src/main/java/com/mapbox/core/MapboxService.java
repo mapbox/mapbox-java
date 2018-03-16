@@ -163,7 +163,6 @@ public abstract class MapboxService<T, S> {
     return new GsonBuilder();
   }
 
-
   /**
    * Returns if debug logging is enabled in Okhttp
    *
