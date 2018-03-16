@@ -4,9 +4,9 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
@@ -22,16 +22,12 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
 
 /**
  * The Mapbox map matching interface (v5)
@@ -47,12 +43,15 @@ import java.util.Locale;
 @AutoValue
 public abstract class MapboxMapMatching extends MapboxService<MapMatchingResponse, MapMatchingService> {
 
+  private MapboxMapMatching() {
+    super(MapMatchingService.class);
+  }
+
   @Override
-  protected GsonConverterFactory getGsonConverterFactory() {
-    return GsonConverterFactory.create(new GsonBuilder()
+  protected GsonBuilder getGsonBuilder() {
+    return new GsonBuilder()
       .registerTypeAdapterFactory(MapMatchingAdapterFactory.create())
-      .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-      .create());
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
   }
 
   /**

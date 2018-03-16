@@ -60,6 +60,10 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
 
   private static final Logger LOGGER = Logger.getLogger(MapboxDirections.class.getName());
 
+  private MapboxDirections() {
+    super(DirectionsService.class);
+  }
+
   protected Call<DirectionsResponse> getCall() {
     // No need to recreate it
     if (call != null) {
@@ -89,11 +93,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
 
     // Done
     return call;
-  }
-
-  @Override
-  protected Class getServiceClass() {
-    return DirectionsService.class;
   }
 
   /**

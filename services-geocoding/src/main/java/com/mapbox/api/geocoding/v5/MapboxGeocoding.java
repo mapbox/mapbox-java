@@ -32,7 +32,6 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * This class gives you access to both Mapbox forward and reverse geocoding.
@@ -66,19 +65,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, GeocodingService> {
   private Call<List<GeocodingResponse>> batchCall;
 
-  @Override
-  protected GsonConverterFactory getGsonConverterFactory() {
-    return GsonConverterFactory.create(new GsonBuilder()
-      .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
-      .registerTypeAdapter(Point.class, new PointDeserializer())
-      .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
-      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
-      .create());
+  private MapboxGeocoding() {
+    super(GeocodingService.class);
   }
 
   @Override
-  protected Class getServiceClass() {
-    return GeocodingService.class;
+  protected GsonBuilder getGsonBuilder() {
+    return new GsonBuilder()
+      .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
+      .registerTypeAdapter(Point.class, new PointDeserializer())
+      .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
   }
 
   @Override

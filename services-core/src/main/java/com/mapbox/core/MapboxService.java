@@ -1,10 +1,8 @@
 package com.mapbox.core;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapterFactory;
 
 import java.io.IOException;
-import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -17,11 +15,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Mapbox specific services used internally within the SDK.
  *
- * @param <T> Type parameter.
+ * @param <T> Type parameter for response.
+ * @param <S> Type parameter for service interface.
  * @since 1.0.0
  */
 public abstract class MapboxService<T, S> {
 
+  private final Class<S> serviceType;
   private boolean enableDebug;
   private OkHttpClient okHttpClient;
   private okhttp3.Call.Factory callFactory;
@@ -30,12 +30,49 @@ public abstract class MapboxService<T, S> {
   protected S service;
 
   /**
+   * Constructor for creating a new MapboxService setting the service type for use when
+   * initializing retrofit. Subclasses should pass their service class to this constructor.
+   *
+   * @param serviceType for initializing retrofit
+   * @since 3.0.0
+   */
+  public MapboxService(Class<S> serviceType) {
+    this.serviceType = serviceType;
+  }
+
+  /**
+   * Abstract class for subclass to implement. Builds the service class object.
+   *
+   * @return the service object
+   * @since 3.0.0
+   */
+  public abstract S build();
+
+  /**
+   * Should return base url for retrofit calls.
+   *
+   * @return baseUrl as a string
+   * @since 3.0.0
+   */
+  protected abstract String baseUrl();
+
+
+  /**
+   * Abstract method for getting Retrofit {@link Call} from the subclass. Subclasses should override
+   * this method and construct and return the call.
+   *
+   * @return call
+   * @since 3.0.0
+   */
+  protected abstract Call<T> getCall();
+
+  /**
    * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
    * API implementing this class.
    *
    * @return the response once the call completes successfully
    * @throws IOException Signals that an I/O exception of some sort has occurred
-   * @since 1.0.0
+   * @since 3.0.0
    */
   public Response<T> executeCall() throws IOException {
     return getCall().execute();
@@ -46,7 +83,7 @@ public abstract class MapboxService<T, S> {
    * to the API implementing this class. Use this method to make a request on the Main Thread.
    *
    * @param callback a {@link Callback} which is used once the API response is created.
-   * @since 1.0.0
+   * @since 3.0.0
    */
   public void enqueueCall(Callback<T> callback) {
     getCall().enqueue(callback);
@@ -56,7 +93,7 @@ public abstract class MapboxService<T, S> {
    * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
    * the user dismisses the calling activity or no longer needs the returned results.
    *
-   * @since 1.0.0
+   * @since 3.0.0
    */
   public void cancelCall() {
     getCall().cancel();
@@ -66,14 +103,19 @@ public abstract class MapboxService<T, S> {
    * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
    *
    * @return cloned call
-   * @since 1.0.0
+   * @since 3.0.0
    */
   public Call<T> cloneCall() {
     return getCall().clone();
   }
 
-  protected abstract Call<T> getCall();
-
+  /**
+   * Creates the Retrofit object and the service if they are not already created. Subclasses can
+   * override getGsonBuilder to add anything to the GsonBuilder.
+   *
+   * @return new service if not already created, otherwise the existing service
+   * @since 3.0.0
+   */
   protected S getService() {
     // No need to recreate it
     if (service != null) {
@@ -82,7 +124,7 @@ public abstract class MapboxService<T, S> {
 
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
       .baseUrl(baseUrl())
-      .addConverterFactory(getGsonConverterFactory());
+      .addConverterFactory(GsonConverterFactory.create(getGsonBuilder().create()));
 
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
@@ -91,20 +133,27 @@ public abstract class MapboxService<T, S> {
     }
 
     retrofit = retrofitBuilder.build();
-    service = (S) retrofit.create(getServiceClass());
+    service = (S) retrofit.create(serviceType);
     return service;
   }
 
-  protected GsonConverterFactory getGsonConverterFactory() {
-    return GsonConverterFactory.create(new GsonBuilder().create());
+  /**
+   * Gets the GsonConverterFactory. Subclasses can override to register TypeAdapterFactories, etc.
+   *
+   * @return GsonBuilder for Retrofit
+   * @since 3.0.0
+   */
+  protected GsonBuilder getGsonBuilder() {
+    return new GsonBuilder();
   }
 
-  protected abstract String baseUrl();
 
-  protected abstract Class getServiceClass();
-
-  protected abstract List<TypeAdapterFactory> getTypeAdapterFactories();
-
+  /**
+   * Returns if debug logging is enabled in Okhttp
+   *
+   * @return whether enableDebug is true
+   * @since 3.0.0
+   */
   public boolean isEnableDebug() {
     return enableDebug;
   }
