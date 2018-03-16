@@ -57,6 +57,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
       .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
   }
 
+  @Override
   protected Call<MatrixResponse> getCall() {
     // No need to recreate it
     if (call != null) {
@@ -98,6 +99,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
   abstract String destinations();
 
   @NonNull
+  @Override
   protected abstract String baseUrl();
 
   /**

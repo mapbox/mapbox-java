@@ -54,13 +54,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
       .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
   }
 
-  /**
-   * Used internally.
-   *
-   * @return call
-   * @since 2.0.0
-   */
-  public Call<MapMatchingResponse> getCall() {
+  @Override
+  protected Call<MapMatchingResponse> getCall() {
     // No need to recreate it
     if (call != null) {
       return call;
@@ -85,6 +80,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
       voiceInstructions(),
       waypoints()
     );
+
+    return call;
   }
 
   @Nullable

@@ -64,6 +64,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
     super(DirectionsService.class);
   }
 
+  @Override
   protected Call<DirectionsResponse> getCall() {
     // No need to recreate it
     if (call != null) {
@@ -211,6 +212,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
   abstract List<Point> coordinates();
 
   @NonNull
+  @Override
   protected abstract String baseUrl();
 
   @Nullable

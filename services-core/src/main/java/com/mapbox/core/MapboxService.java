@@ -13,7 +13,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Mapbox specific services used internally within the SDK.
+ * Mapbox specific services used internally within the SDK. Subclasses must implement baseUrl and
+ * getCall.
  *
  * @param <T> Type parameter for response.
  * @param <S> Type parameter for service interface.
@@ -41,21 +42,12 @@ public abstract class MapboxService<T, S> {
   }
 
   /**
-   * Abstract class for subclass to implement. Builds the service class object.
-   *
-   * @return the service object
-   * @since 3.0.0
-   */
-  public abstract S build();
-
-  /**
    * Should return base url for retrofit calls.
    *
    * @return baseUrl as a string
    * @since 3.0.0
    */
   protected abstract String baseUrl();
-
 
   /**
    * Abstract method for getting Retrofit {@link Call} from the subclass. Subclasses should override

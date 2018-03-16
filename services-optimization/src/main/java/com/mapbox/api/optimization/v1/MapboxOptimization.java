@@ -123,6 +123,7 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
   abstract String accessToken();
 
   @NonNull
+  @Override
   protected abstract String  baseUrl();
 
   @Nullable
