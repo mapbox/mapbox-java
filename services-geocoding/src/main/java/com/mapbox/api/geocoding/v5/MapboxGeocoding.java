@@ -105,7 +105,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
     }
 
     if (mode().equals(GeocodingCriteria.MODE_PLACES)) {
-      throw new ServicesException("Use initializeCall() for non-batch calls.");
+      throw new ServicesException("Use getCall() for non-batch calls.");
     }
 
     batchCall = getService().getBatchCall(
