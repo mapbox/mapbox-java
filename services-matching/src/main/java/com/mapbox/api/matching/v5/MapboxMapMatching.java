@@ -143,11 +143,6 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   @Override
   protected abstract String baseUrl();
 
-  @Override
-  protected Class getServiceClass() {
-    return MapMatchingService.class;
-  }
-
   /**
    * Build a new {@link MapboxMapMatching} object with the initial values set for
    * {@link #baseUrl()}, {@link #profile()}, {@link #geometries()}, and {@link #user()}.
