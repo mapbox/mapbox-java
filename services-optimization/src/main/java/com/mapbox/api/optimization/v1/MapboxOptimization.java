@@ -3,8 +3,11 @@ package com.mapbox.api.optimization.v1;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.DestinationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
@@ -13,25 +16,18 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.optimization.v1.models.OptimizationAdapterFactory;
 import com.mapbox.api.optimization.v1.models.OptimizationResponse;
 import com.mapbox.core.MapboxService;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.constants.Constants;
+import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
-import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
-import com.mapbox.core.utils.ApiCallHelper;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
 
 /**
  * The Mapbox Optimization API returns a duration-optimized trip between the input coordinates.
@@ -51,86 +47,22 @@ import java.util.Locale;
  * @since 2.1.0
  */
 @AutoValue
-public abstract class MapboxOptimization extends MapboxService<OptimizationResponse> {
+public abstract class MapboxOptimization extends MapboxService<OptimizationResponse, OptimizationService> {
 
-  private Call<OptimizationResponse> call;
-  private OptimizationService service;
+  protected MapboxOptimization() {
+    super(OptimizationService.class);
+  }
 
-  /**
-   * Execute the call
-   *
-   * @return The Directions Optimization v1 response
-   * @throws IOException Signals that an I/O exception of some sort has occurred.
-   * @since 2.1.0
-   */
   @Override
-  public Response<OptimizationResponse> executeCall() throws IOException {
-    return getCall().execute();
+  protected GsonBuilder getGsonBuilder() {
+    return new GsonBuilder()
+      .registerTypeAdapterFactory(OptimizationAdapterFactory.create())
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
   }
 
-  /**
-   * Execute the call
-   *
-   * @param callback A Retrofit callback.
-   * @since 2.1.0
-   */
   @Override
-  public void enqueueCall(Callback<OptimizationResponse> callback) {
-    getCall().enqueue(callback);
-  }
-
-  /**
-   * Cancel the call
-   *
-   * @since 2.1.0
-   */
-  @Override
-  public void cancelCall() {
-    getCall().cancel();
-  }
-
-  /**
-   * clone the call
-   *
-   * @return cloned call
-   * @since 2.1.0
-   */
-  @Override
-  public Call<OptimizationResponse> cloneCall() {
-    return getCall().clone();
-  }
-
-  private OptimizationService getService() {
-    // No need to recreate it
-    if (service != null) {
-      return service;
-    }
-
-    // Retrofit instance
-    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(baseUrl())
-      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(OptimizationAdapterFactory.create())
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-        .create()));
-    if (getCallFactory() != null) {
-      retrofitBuilder.callFactory(getCallFactory());
-    } else {
-      retrofitBuilder.client(getOkHttpClient());
-    }
-
-    // Optimization's service
-    service = retrofitBuilder.build().create(OptimizationService.class);
-    return service;
-  }
-
-  private Call<OptimizationResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
-
-    call = getService().getCall(
+  protected Call<OptimizationResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -147,9 +79,6 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
       source(),
       language(),
       distributions());
-
-    // Done
-    return call;
   }
 
   @NonNull
@@ -186,7 +115,8 @@ public abstract class MapboxOptimization extends MapboxService<OptimizationRespo
   abstract String accessToken();
 
   @NonNull
-  abstract String baseUrl();
+  @Override
+  protected abstract String  baseUrl();
 
   @Nullable
   abstract String language();
