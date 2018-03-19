@@ -49,7 +49,7 @@ import retrofit2.Call;
 @AutoValue
 public abstract class MapboxOptimization extends MapboxService<OptimizationResponse, OptimizationService> {
 
-  private MapboxOptimization() {
+  protected MapboxOptimization() {
     super(OptimizationService.class);
   }
 

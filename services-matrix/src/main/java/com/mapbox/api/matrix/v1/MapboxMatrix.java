@@ -46,7 +46,7 @@ import retrofit2.Call;
 @AutoValue
 public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixService> {
 
-  private MapboxMatrix() {
+  protected MapboxMatrix() {
     super(MatrixService.class);
   }
 

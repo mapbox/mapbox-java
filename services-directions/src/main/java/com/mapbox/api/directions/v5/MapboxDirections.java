@@ -60,7 +60,7 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
 
   private static final Logger LOGGER = Logger.getLogger(MapboxDirections.class.getName());
 
-  private MapboxDirections() {
+  protected MapboxDirections() {
     super(DirectionsService.class);
   }
 

@@ -65,7 +65,7 @@ import retrofit2.Response;
 public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, GeocodingService> {
   private Call<List<GeocodingResponse>> batchCall;
 
-  private MapboxGeocoding() {
+  protected MapboxGeocoding() {
     super(GeocodingService.class);
   }
 
