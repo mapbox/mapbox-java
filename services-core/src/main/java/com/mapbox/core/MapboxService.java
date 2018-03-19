@@ -135,7 +135,8 @@ public abstract class MapboxService<T, S> {
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
     } else {
-      retrofitBuilder.client(getOkHttpClient());
+      okHttpClient = okHttpClient == null ? initializeOkHttpClient() : okHttpClient;
+      retrofitBuilder.client(okHttpClient);
     }
 
     retrofit = retrofitBuilder.build();
@@ -209,19 +210,16 @@ public abstract class MapboxService<T, S> {
    * @return OkHttpClient
    * @since 1.0.0
    */
-  public synchronized OkHttpClient getOkHttpClient() {
-    if (okHttpClient == null) {
-      if (isEnableDebug()) {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(logging);
-        okHttpClient = httpClient.build();
-      } else {
-        okHttpClient = new OkHttpClient();
-      }
+  protected synchronized OkHttpClient initializeOkHttpClient() {
+    if (isEnableDebug()) {
+      HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+      logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+      OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+      httpClient.addInterceptor(logging);
+      return httpClient.build();
+    } else {
+      return new OkHttpClient();
     }
-
-    return okHttpClient;
   }
 }
+
