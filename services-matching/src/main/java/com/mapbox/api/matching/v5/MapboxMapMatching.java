@@ -43,7 +43,7 @@ import retrofit2.Call;
 @AutoValue
 public abstract class MapboxMapMatching extends MapboxService<MapMatchingResponse, MapMatchingService> {
 
-  private MapboxMapMatching() {
+  protected MapboxMapMatching() {
     super(MapMatchingService.class);
   }
 
