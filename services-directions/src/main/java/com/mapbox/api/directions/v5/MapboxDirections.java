@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ExcludeCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
@@ -86,6 +87,12 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
       bannerInstructions(),
       voiceUnits(),
       exclude());
+  }
+
+  @Override
+  protected GsonBuilder getGsonBuilder() {
+    return super.getGsonBuilder()
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
   }
 
   /**
