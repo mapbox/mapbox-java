@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.google.auto.value.AutoValue;
 import com.mapbox.core.MapboxService;
+import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
 import com.sun.istack.internal.Nullable;
 
@@ -80,6 +81,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
    */
   public static Builder builder() {
     return new AutoValue_MapboxSpeech.Builder()
+      .baseUrl(Constants.BASE_API_URL)
       .cacheSize(10 * 1024 * 1024); // default cache size is 10 MB
   }
 
