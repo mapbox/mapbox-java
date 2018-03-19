@@ -57,7 +57,8 @@ import retrofit2.Response;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class MapboxDirections extends MapboxService<DirectionsResponse, DirectionsService> {
+public abstract class MapboxDirections extends
+  MapboxService<DirectionsResponse, DirectionsService> {
 
   private static final Logger LOGGER = Logger.getLogger(MapboxDirections.class.getName());
 

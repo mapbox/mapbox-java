@@ -37,9 +37,9 @@ public abstract class StaticPolylineAnnotation {
   }
 
   /**
-   * <em>Used Internally</em>
+   * <em>Used Internally.</em>
    *
-   * @return a String representing the marker part of the URL
+   * @return a String representing the marker part of the URL.
    * @since 2.1.0
    */
   @RestrictTo(LIBRARY)
@@ -117,7 +117,8 @@ public abstract class StaticPolylineAnnotation {
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder strokeOpacity(@Nullable @FloatRange(from = 0, to = 1) Float strokeOpacity);
+    public abstract Builder strokeOpacity(
+      @Nullable @FloatRange(from = 0, to = 1) Float strokeOpacity);
 
     /**
      * Set the inner line fill color.

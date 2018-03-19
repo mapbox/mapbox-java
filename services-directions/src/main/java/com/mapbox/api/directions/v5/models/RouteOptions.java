@@ -75,8 +75,8 @@ public abstract class RouteOptions {
    * these coordinates are different than the direction responses {@link DirectionsWaypoint}s in
    * that these are the non-snapped coordinates.
    *
-   * @return a list of {@link Point}s which represent the route origin, destination, and optionally,
-   * waypoints
+   * @return a list of {@link Point}s which represent the route origin, destination,
+   *         and optionally, waypoints
    * @since 3.0.0
    */
   @NonNull
@@ -96,8 +96,8 @@ public abstract class RouteOptions {
    * The same language which was used during the request that resulted in this root directions
    * response.
    *
-   * @return the language as a string used during the request, if english, this will most likely be
-   * empty
+   * @return the language as a string used during the request,
+   *         if english, this will most likely be empty
    * @since 3.0.0
    */
   @Nullable
@@ -127,8 +127,8 @@ public abstract class RouteOptions {
    * The same continueStraight setting which was used during the request that resulted in this root
    * directions response.
    *
-   * @return a boolean value representing whether or not continueStraight was enabled or not during
-   * the initial request
+   * @return a boolean value representing whether or not continueStraight was enabled or
+   *         not during the initial request
    * @since 3.0.0
    */
   @Nullable
@@ -337,7 +337,8 @@ public abstract class RouteOptions {
     public abstract Builder bannerInstructions(Boolean bannerInstructions);
 
     /**
-     * Whether or not the units used inside the voice instruction's string are in imperial or metric.
+     * Whether or not the units used inside the voice instruction's string are
+     * in imperial or metric.
      *
      * @param voiceUnits string matching either imperial or metric
      * @return this builder for chaining options together

@@ -537,9 +537,9 @@
     <module name="AvoidNestedBlocks"/>
 
     <!-- Forbid the use of arbitrary numeric literals -->
-    <module name="MagicNumber">
+    <!-- module name="MagicNumber">
       <property name="tokens" value="NUM_DOUBLE,NUM_FLOAT,NUM_LONG"/>
-    </module>
+    </module -->
 
     <!-- Require boolean expressions to be simplifed -->
     <module name="SimplifyBooleanExpression"/>

@@ -8,7 +8,14 @@ import com.mapbox.geojson.Geometry;
 
 import java.io.IOException;
 
+/**
+ * Converts {@code Geometry} instances to JSON and JSON to
+ * instances of {@code Geometry}.
+ *
+ * @since 3.0.0
+ */
 public class GeometryTypeAdapter extends TypeAdapter<Geometry> {
+
 
   @Override
   public void write(JsonWriter out, Geometry value) throws IOException {

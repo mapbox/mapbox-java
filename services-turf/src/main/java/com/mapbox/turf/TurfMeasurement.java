@@ -42,11 +42,11 @@ public final class TurfMeasurement {
     double lon2 = degrees2radians * point2.longitude();
     double lat1 = degrees2radians * point1.latitude();
     double lat2 = degrees2radians * point2.latitude();
-    double a = Math.sin(lon2 - lon1) * Math.cos(lat2);
-    double b = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
+    double value1 = Math.sin(lon2 - lon1) * Math.cos(lat2);
+    double value2 = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
       * Math.cos(lat2) * Math.cos(lon2 - lon1);
 
-    return radians2degrees * Math.atan2(a, b);
+    return radians2degrees * Math.atan2(value1, value2);
   }
 
   /**
@@ -112,16 +112,16 @@ public final class TurfMeasurement {
   public static double distance(@NonNull Point point1, @NonNull Point point2,
                                 @NonNull @TurfConstants.TurfUnitCriteria String units) {
     double degrees2radians = Math.PI / 180;
-    double dLat = degrees2radians * (point2.latitude() - point1.latitude());
-    double dLon = degrees2radians * (point2.longitude() - point1.longitude());
+    double difLat = degrees2radians * (point2.latitude() - point1.latitude());
+    double difLon = degrees2radians * (point2.longitude() - point1.longitude());
     double lat1 = degrees2radians * point1.latitude();
     double lat2 = degrees2radians * point2.latitude();
 
-    double a = Math.pow(Math.sin(dLat / 2), 2)
-      + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+    double value = Math.pow(Math.sin(difLat / 2), 2)
+      + Math.pow(Math.sin(difLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
 
     return TurfConversion.radiansToLength(
-      2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)), units);
+      2 * Math.atan2(Math.sqrt(value), Math.sqrt(1 - value)), units);
   }
 
   /**
@@ -150,11 +150,11 @@ public final class TurfMeasurement {
    */
   public static double length(@NonNull MultiLineString multiLineString,
                               @NonNull @TurfConstants.TurfUnitCriteria String units) {
-    double d = 0;
+    double len = 0;
     for (List<Point> points : multiLineString.coordinates()) {
-      d += length(points, units);
+      len += length(points, units);
     }
-    return d;
+    return len;
   }
 
   /**
@@ -169,11 +169,11 @@ public final class TurfMeasurement {
    */
   public static double length(@NonNull Polygon polygon,
                               @NonNull @TurfConstants.TurfUnitCriteria String units) {
-    double d = 0;
+    double len = 0;
     for (List<Point> points : polygon.coordinates()) {
-      d += length(points, units);
+      len += length(points, units);
     }
-    return d;
+    return len;
   }
 
   /**
@@ -188,14 +188,26 @@ public final class TurfMeasurement {
    */
   public static double length(@NonNull MultiPolygon multiPolygon,
                               @NonNull @TurfConstants.TurfUnitCriteria String units) {
-    double d = 0;
+    double len = 0;
     List<List<List<Point>>> coordinates = multiPolygon.coordinates();
     for (List<List<Point>> coordinate : coordinates) {
-      for (List<Point> aCoordinate : coordinate) {
-        d += length(aCoordinate, units);
+      for (List<Point> theCoordinate : coordinate) {
+        len += length(theCoordinate, units);
       }
     }
-    return d;
+    return len;
+  }
+
+  private static double length(List<Point> coords, String units) {
+    double travelled = 0;
+    Point prevCoords = coords.get(0);
+    Point curCoords;
+    for (int i = 1; i < coords.size(); i++) {
+      curCoords = coords.get(i);
+      travelled += distance(prevCoords, curCoords, units);
+      prevCoords = curCoords;
+    }
+    return travelled;
   }
 
   /**
@@ -344,17 +356,5 @@ public final class TurfMeasurement {
       }
     }
     return bbox;
-  }
-
-  private static double length(List<Point> coords, String units) {
-    double travelled = 0;
-    Point prevCoords = coords.get(0);
-    Point curCoords;
-    for (int i = 1; i < coords.size(); i++) {
-      curCoords = coords.get(i);
-      travelled += distance(prevCoords, curCoords, units);
-      prevCoords = curCoords;
-    }
-    return travelled;
   }
 }

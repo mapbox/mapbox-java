@@ -35,6 +35,7 @@ public abstract class DirectionsResponse implements Serializable {
    * @return this classes {@link Builder} for creating a new instance
    * @since 3.0.0
    */
+  @NonNull
   public static Builder builder() {
     return new AutoValue_DirectionsResponse.Builder();
   }

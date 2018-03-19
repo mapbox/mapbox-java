@@ -15,7 +15,6 @@ import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -73,7 +72,7 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    *
    * @param json a formatted valid JSON string defining a GeoJson Geometry Collection
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *         method
    * @since 1.0.0
    */
   public static GeometryCollection fromJson(String json) {
@@ -90,23 +89,10 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    *
    * @param geometries a non-null list of geometry which makes up this collection
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *         method
    * @since 1.0.0
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries) {
-    return new AutoValue_GeometryCollection(TYPE, null, geometries);
-  }
-
-  /**
-   * Create a new instance of this class by giving the collection a single GeoJSON {@link Geometry}.
-   *
-   * @param geometry a non-null object of type geometry which makes up this collection
-   * @return a new instance of this class defined by the values passed inside this static factory
-   * method
-   * @since 3.0.0
-   */
-  public static GeometryCollection fromGeometry(@NonNull Geometry geometry) {
-    List<Geometry> geometries = Arrays.asList(geometry);
     return new AutoValue_GeometryCollection(TYPE, null, geometries);
   }
 
@@ -116,7 +102,7 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    * @param geometries a non-null list of geometry which makes up this collection
    * @param bbox       optionally include a bbox definition as a double array
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *         method
    * @since 1.0.0
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries,
@@ -128,9 +114,22 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    * Create a new instance of this class by giving the collection a single GeoJSON {@link Geometry}.
    *
    * @param geometry a non-null object of type geometry which makes up this collection
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *         method
+   * @since 3.0.0
+   */
+  public static GeometryCollection fromGeometry(@NonNull Geometry geometry) {
+    List<Geometry> geometries = Arrays.asList(geometry);
+    return new AutoValue_GeometryCollection(TYPE, null, geometries);
+  }
+
+  /**
+   * Create a new instance of this class by giving the collection a single GeoJSON {@link Geometry}.
+   *
+   * @param geometry a non-null object of type geometry which makes up this collection
    * @param bbox     optionally include a bbox definition as a double array
    * @return a new instance of this class defined by the values passed inside this static factory
-   * method
+   *         method
    * @since 3.0.0
    */
   public static GeometryCollection fromGeometry(@NonNull Geometry geometry,

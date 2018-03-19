@@ -59,7 +59,7 @@ public abstract class MapboxService<T, S> {
   protected abstract Call<T> initializeCall();
 
   /**
-   * Get call if already created, otherwise get it from subclass implementation
+   * Get call if already created, otherwise get it from subclass implementation.
    *
    * @return call
    * @since 3.0.0
@@ -164,7 +164,7 @@ public abstract class MapboxService<T, S> {
   }
 
   /**
-   * Returns if debug logging is enabled in Okhttp
+   * Returns if debug logging is enabled in Okhttp.
    *
    * @return whether enableDebug is true
    * @since 3.0.0
