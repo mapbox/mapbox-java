@@ -165,5 +165,15 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
      * @since 3.0.0
      */
     public abstract Builder cacheDirectory(File cacheDirectory);
+
+    /**
+     * This uses the provided parameters set using the {@link Builder} and first checks that all
+     * values are valid, formats the values as strings for easier consumption by the API, and lastly
+     * creates a new {@link MapboxSpeech} object with the values provided.
+     *
+     * @return a new instance of Mapbox Speech
+     * @since 3.0.0
+     */
+    public abstract MapboxSpeech build();
   }
 }
