@@ -41,7 +41,8 @@ import retrofit2.Call;
  * @since 2.0.0
  */
 @AutoValue
-public abstract class MapboxMapMatching extends MapboxService<MapMatchingResponse, MapMatchingService> {
+public abstract class MapboxMapMatching extends
+  MapboxService<MapMatchingResponse, MapMatchingService> {
 
   protected MapboxMapMatching() {
     super(MapMatchingService.class);
@@ -247,8 +248,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     /**
      * Optionally, set which input coordinates should be treated as waypoints.
      * <p>
-     * Most useful in combination with  steps=true and requests based on traces with high sample rates.
-     * Can be an index corresponding to any of the input coordinates,
+     * Most useful in combination with  steps=true and requests based on traces
+     * with high sample rates. Can be an index corresponding to any of the input coordinates,
      * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
      * {@link #steps()}
      * </p>
@@ -290,8 +291,9 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     public abstract Builder overview(@Nullable @OverviewCriteria String overview);
 
     /**
-     * Setting this will determine Whether or not to return banner objects associated with the `routeSteps`.
-     * Should be used in conjunction with `steps`. Can be set to either true or false to enable or
+     * Setting this will determine Whether or not to return banner objects associated with
+     * the `routeSteps`. Should be used in conjunction with `steps`.
+     * Can be set to either true or false to enable or
      * disable respectively. null can also optionally be
      * passed in to set the default behavior to match what the API does by default.
      *
@@ -494,7 +496,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
             "Waypoints must contain indices of the first and last coordinates"
           );
         }
-        for (int i = 1; i < waypoints.length -1; i++) {
+        for (int i = 1; i < waypoints.length - 1; i++) {
           if (waypoints[i] < 0 || waypoints[i] >= coordinates.size()) {
             throw new ServicesException(
               "Waypoints index too large (no corresponding coordinate)");

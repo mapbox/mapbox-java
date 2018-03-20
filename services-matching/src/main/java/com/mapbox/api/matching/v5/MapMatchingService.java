@@ -51,8 +51,8 @@ public interface MapMatchingService {
    * @param tidy        whether or not to transparently remove clusters and re-sample traces for
    *                    improved map matching results
    * @param roundaboutExits  Whether or not to emit instructions at roundabout exits.
-   * @param bannerInstructions Whether or not to return banner objects associated with the `routeSteps`.
-   *                           Should be used in conjunction with `steps`.
+   * @param bannerInstructions Whether or not to return banner objects associated with
+   *                           the `routeSteps`. Should be used in conjunction with `steps`.
    * @param voiceInstructions whether or not to return
    *                        marked-up text for voice guidance along the route.
    * @param waypoints  Which input coordinates should be treated as waypoints.

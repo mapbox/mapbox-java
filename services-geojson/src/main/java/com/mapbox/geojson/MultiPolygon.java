@@ -69,7 +69,8 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class MultiPolygon implements CoordinateContainer<List<List<List<Point>>>>, Serializable {
+public abstract class MultiPolygon
+  implements CoordinateContainer<List<List<List<Point>>>>, Serializable {
 
   private static final String TYPE = "MultiPolygon";
 

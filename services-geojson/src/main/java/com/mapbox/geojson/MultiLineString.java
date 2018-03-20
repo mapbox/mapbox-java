@@ -51,7 +51,8 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class MultiLineString implements CoordinateContainer<List<List<Point>>>, Serializable {
+public abstract class MultiLineString
+  implements CoordinateContainer<List<List<Point>>>, Serializable {
 
   private static final String TYPE = "MultiLineString";
 
@@ -91,20 +92,6 @@ public abstract class MultiLineString implements CoordinateContainer<List<List<P
   }
 
   /**
-   * Create a new instance of this class by passing in a single {@link LineString} object. The
-   * LineStrings should comply with the GeoJson specifications described in the documentation.
-   *
-   * @param lineString a single LineString which make up this MultiLineString
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @since 3.0.0
-   */
-  public static MultiLineString fromLineString(@NonNull LineString lineString) {
-    List<List<Point>> coordinates = Arrays.asList(lineString.coordinates());
-    return new AutoValue_MultiLineString(TYPE, null, coordinates);
-  }
-
-  /**
    * Create a new instance of this class by defining a list of {@link LineString} objects and
    * passing that list in as a parameter in this method. The LineStrings should comply with the
    * GeoJson specifications described in the documentation. Optionally, pass in an instance of a
@@ -123,6 +110,20 @@ public abstract class MultiLineString implements CoordinateContainer<List<List<P
       coordinates.add(lineString.coordinates());
     }
     return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a single {@link LineString} object. The
+   * LineStrings should comply with the GeoJson specifications described in the documentation.
+   *
+   * @param lineString a single LineString which make up this MultiLineString
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static MultiLineString fromLineString(@NonNull LineString lineString) {
+    List<List<Point>> coordinates = Arrays.asList(lineString.coordinates());
+    return new AutoValue_MultiLineString(TYPE, null, coordinates);
   }
 
   /**

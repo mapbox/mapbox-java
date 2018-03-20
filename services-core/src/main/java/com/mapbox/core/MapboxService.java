@@ -59,7 +59,11 @@ public abstract class MapboxService<T, S> {
   protected abstract Call<T> initializeCall();
 
   /**
+   <<<<<<< HEAD
    * Get call if already created, otherwise get it from subclass implementation
+   =======
+   * Get call if already created, otherwise get it from subclass implementation.
+   >>>>>>> origin/master
    *
    * @return call
    * @since 3.0.0
@@ -121,6 +125,7 @@ public abstract class MapboxService<T, S> {
    *
    * @return new service if not already created, otherwise the existing service
    * @since 3.0.0
+
    */
   protected S getService() {
     // No need to recreate it
@@ -135,8 +140,7 @@ public abstract class MapboxService<T, S> {
     if (getCallFactory() != null) {
       retrofitBuilder.callFactory(getCallFactory());
     } else {
-      okHttpClient = okHttpClient == null ? initializeOkHttpClient() : okHttpClient;
-      retrofitBuilder.client(okHttpClient);
+      retrofitBuilder.client(getOkHttpClient());
     }
 
     retrofit = retrofitBuilder.build();
@@ -153,7 +157,6 @@ public abstract class MapboxService<T, S> {
   public Retrofit getRetrofit() {
     return retrofit;
   }
-
   /**
    * Gets the GsonConverterFactory. Subclasses can override to register TypeAdapterFactories, etc.
    *
@@ -165,7 +168,7 @@ public abstract class MapboxService<T, S> {
   }
 
   /**
-   * Returns if debug logging is enabled in Okhttp
+   * Returns if debug logging is enabled in Okhttp.
    *
    * @return whether enableDebug is true
    * @since 3.0.0
@@ -222,4 +225,3 @@ public abstract class MapboxService<T, S> {
     }
   }
 }
-

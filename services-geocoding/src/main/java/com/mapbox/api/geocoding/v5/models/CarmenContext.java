@@ -7,10 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.geojson.Geometry;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.io.Serializable;
 
@@ -35,6 +31,13 @@ public abstract class CarmenContext implements Serializable {
     return new AutoValue_CarmenContext.Builder();
   }
 
+  /**
+   * Create a CarmenContext object from JSON.
+   *
+   * @param json string of JSON making up a carmen context
+   * @return this class using the defined information in the provided JSON string
+   * @since 3.0.0
+   */
   @SuppressWarnings("unused")
   public static CarmenContext fromJson(@NonNull String json) {
     Gson gson = new GsonBuilder()
@@ -113,6 +116,13 @@ public abstract class CarmenContext implements Serializable {
     return new AutoValue_CarmenContext.GsonTypeAdapter(gson);
   }
 
+  /**
+   * This takes the currently defined values found inside this instance and converts it to a JSON
+   * string.
+   *
+   * @return a JSON string which represents this CarmenContext
+   * @since 3.0.0
+   */
   @SuppressWarnings("unused")
   public String toJson() {
     Gson gson = new GsonBuilder()

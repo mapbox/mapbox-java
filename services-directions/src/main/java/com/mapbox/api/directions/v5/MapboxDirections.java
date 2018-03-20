@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ExcludeCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
@@ -56,7 +57,8 @@ import retrofit2.Response;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class MapboxDirections extends MapboxService<DirectionsResponse, DirectionsService> {
+public abstract class MapboxDirections extends
+  MapboxService<DirectionsResponse, DirectionsService> {
 
   private static final Logger LOGGER = Logger.getLogger(MapboxDirections.class.getName());
 
@@ -86,6 +88,12 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse,
       bannerInstructions(),
       voiceUnits(),
       exclude());
+  }
+
+  @Override
+  protected GsonBuilder getGsonBuilder() {
+    return super.getGsonBuilder()
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
   }
 
   /**

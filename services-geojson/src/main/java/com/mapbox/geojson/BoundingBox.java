@@ -32,8 +32,18 @@ import java.io.Serializable;
 @AutoValue
 public abstract class BoundingBox implements Serializable {
 
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a Bounding Box
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
   public static BoundingBox fromJson(String json) {
-    Gson gson = new GsonBuilder().registerTypeAdapterFactory(GeoJsonAdapterFactory.create()).create();
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
+      .create();
     return gson.fromJson(json, BoundingBox.class);
   }
 
@@ -164,6 +174,13 @@ public abstract class BoundingBox implements Serializable {
     return northeast().latitude();
   }
 
+  /**
+   * Gson TYPE adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the TYPE adapter for this class
+   * @since 3.0.0
+   */
   public static TypeAdapter<BoundingBox> typeAdapter(Gson gson) {
     return new AutoValue_BoundingBox.GsonTypeAdapter(gson);
   }

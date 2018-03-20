@@ -38,7 +38,7 @@ public abstract class StaticMarkerAnnotation {
   }
 
   /**
-   * <em>Used Internally</em>
+   * <em>Used Internally.</em>
    *
    * @return a String representing the marker part of the URL
    * @since 2.1.0

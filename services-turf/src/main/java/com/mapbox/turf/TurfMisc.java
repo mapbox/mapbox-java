@@ -105,8 +105,8 @@ public final class TurfMisc {
   public static Feature nearestPointOnLine(@NonNull Point pt, @NonNull List<Point> coords) {
 
     if (coords.size() < 2) {
-      throw new TurfException("Turf nearestPointOnLine requires a List of Points made up of at least 2 "
-        + "coordinates.");
+      throw new TurfException("Turf nearestPointOnLine requires a List of Points "
+        + "made up of at least 2 coordinates.");
     }
 
     Feature closestPt = Feature.fromGeometry(
