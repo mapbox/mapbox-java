@@ -59,11 +59,7 @@ public abstract class MapboxService<T, S> {
   protected abstract Call<T> initializeCall();
 
   /**
-   <<<<<<< HEAD
-   * Get call if already created, otherwise get it from subclass implementation
-   =======
    * Get call if already created, otherwise get it from subclass implementation.
-   >>>>>>> origin/master
    *
    * @return call
    * @since 3.0.0
@@ -125,7 +121,6 @@ public abstract class MapboxService<T, S> {
    *
    * @return new service if not already created, otherwise the existing service
    * @since 3.0.0
-
    */
   protected S getService() {
     // No need to recreate it
@@ -157,6 +152,7 @@ public abstract class MapboxService<T, S> {
   public Retrofit getRetrofit() {
     return retrofit;
   }
+
   /**
    * Gets the GsonConverterFactory. Subclasses can override to register TypeAdapterFactories, etc.
    *
@@ -213,15 +209,18 @@ public abstract class MapboxService<T, S> {
    * @return OkHttpClient
    * @since 1.0.0
    */
-  protected synchronized OkHttpClient initializeOkHttpClient() {
-    if (isEnableDebug()) {
-      HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-      logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-      OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-      httpClient.addInterceptor(logging);
-      return httpClient.build();
-    } else {
-      return new OkHttpClient();
+  protected synchronized OkHttpClient getOkHttpClient() {
+    if (okHttpClient == null) {
+      if(isEnableDebug()) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(logging);
+        okHttpClient = httpClient.build();
+      } else {
+        okHttpClient = new OkHttpClient();
+      }
     }
+    return okHttpClient;
   }
 }

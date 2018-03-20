@@ -1,6 +1,5 @@
 package com.mapbox.api.speech.v1;
 
-
 import android.support.annotation.NonNull;
 
 import com.google.auto.value.AutoValue;
@@ -65,8 +64,8 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
   protected abstract String baseUrl();
 
   @Override
-  public synchronized OkHttpClient initializeOkHttpClient() {
-    return super.initializeOkHttpClient()
+  public synchronized OkHttpClient getOkHttpClient() {
+    return super.getOkHttpClient()
       .newBuilder()
       .cache(new Cache(
         cacheDirectory(),
