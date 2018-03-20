@@ -211,7 +211,7 @@ public abstract class MapboxService<T, S> {
    */
   protected synchronized OkHttpClient getOkHttpClient() {
     if (okHttpClient == null) {
-      if(isEnableDebug()) {
+      if (isEnableDebug()) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
