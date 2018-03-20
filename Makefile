@@ -5,7 +5,7 @@ build-config:
 	./gradlew compileBuildConfig
 
 checkstyle:
-	./gradlew checkstyle
+	./gradlew checkstyleMain
 
 sonarqube:
 	./gradlew JacocoTestReport

@@ -27,7 +27,7 @@ public class BoundingBoxSerializer implements JsonSerializer<BoundingBox> {
   }
 
   /**
-   * Converts the {@link BoundingBox} object into a JsonArray
+   * Converts the {@link BoundingBox} object into a JsonArray.
    *
    * @param src       a {@link BoundingBox}
    * @param typeOfSrc common superinterface for all types in the Java

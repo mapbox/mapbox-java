@@ -51,15 +51,17 @@ public final class ApiCallHelper {
    * @since 1.0.0
    */
   public static String getHeaderUserAgent(@Nullable String clientAppName,
-                                           @NonNull String osName, @NonNull String osVersion, @NonNull String osArch) {
+                                           @NonNull String osName,
+                                          @NonNull String osVersion,
+                                          @NonNull String osArch) {
 
-      osName = osName.replaceAll(ONLY_PRINTABLE_CHARS, "");
-      osVersion = osVersion.replaceAll(ONLY_PRINTABLE_CHARS, "");
-      osArch = osArch.replaceAll(ONLY_PRINTABLE_CHARS, "");
-      String baseUa = String.format(
-        Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
+    osName = osName.replaceAll(ONLY_PRINTABLE_CHARS, "");
+    osVersion = osVersion.replaceAll(ONLY_PRINTABLE_CHARS, "");
+    osArch = osArch.replaceAll(ONLY_PRINTABLE_CHARS, "");
+    String baseUa = String.format(
+      Locale.US, "%s %s/%s (%s)", Constants.HEADER_USER_AGENT, osName, osVersion, osArch);
 
-      return TextUtils.isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s",
-        clientAppName, baseUa);
+    return TextUtils.isEmpty(clientAppName) ? baseUa : String.format(Locale.US, "%s %s",
+      clientAppName, baseUa);
   }
 }
