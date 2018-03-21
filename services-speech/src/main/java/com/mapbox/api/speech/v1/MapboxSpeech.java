@@ -1,19 +1,19 @@
 package com.mapbox.api.speech.v1;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
-import com.sun.istack.internal.Nullable;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 
 /**
@@ -50,11 +50,10 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
   @Nullable
   abstract String outputType();
 
+  @Nullable
+  abstract Cache cache();
+
   abstract String accessToken();
-
-  abstract long cacheSize();
-
-  abstract File cacheDirectory();
 
   abstract String instruction();
 
@@ -65,11 +64,20 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
 
   @Override
   public synchronized OkHttpClient getOkHttpClient() {
-    return super.getOkHttpClient()
-      .newBuilder()
-      .cache(new Cache(
-        cacheDirectory(),
-        cacheSize())).build();
+    if (okHttpClient == null) {
+      OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+      if (isEnableDebug()) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        httpClient.addInterceptor(logging);
+      }
+      if (cache() != null) {
+        httpClient.cache(cache());
+      }
+
+      okHttpClient = httpClient.build();
+    }
+    return okHttpClient;
   }
 
   /**
@@ -80,8 +88,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
    */
   public static Builder builder() {
     return new AutoValue_MapboxSpeech.Builder()
-      .baseUrl(Constants.BASE_API_URL)
-      .cacheSize(10 * 1024 * 1024); // default cache size is 10 MB
+      .baseUrl(Constants.BASE_API_URL);
   }
 
   /**
@@ -148,22 +155,13 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
     public abstract Builder baseUrl(@NonNull String baseUrl);
 
     /**
-     * Size for the OkHTTP cache. Default is 10 MB
+     * Adds an optional cache to set in the OkHttp client.
      *
-     * @param cacheSize in bytes
+     * @param cache to set for OkHttp
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder cacheSize(long cacheSize);
-
-    /**
-     * Directory where to instantiate OkHTTP cache. Required for caching. If not specified, retrofit
-     * will be utilized without a cache.
-     *
-     * @return this builder for chaining options together
-     * @since 3.0.0
-     */
-    public abstract Builder cacheDirectory(File cacheDirectory);
+    public abstract Builder cache(Cache cache);
 
     /**
      * This uses the provided parameters set using the {@link Builder} and first checks that all
