@@ -1,5 +1,7 @@
 package com.mapbox.api.matching.v5;
 
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.matching.v5.models.MapMatchingAdapterFactory;
+import com.mapbox.api.matching.v5.models.MapMatchingError;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
@@ -23,11 +26,19 @@ import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Converter;
+import retrofit2.Response;
+
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import retrofit2.Call;
+import java.util.logging.Level;
 
 /**
  * The Mapbox map matching interface (v5)
@@ -43,6 +54,7 @@ import retrofit2.Call;
 @AutoValue
 public abstract class MapboxMapMatching extends
   MapboxService<MapMatchingResponse, MapMatchingService> {
+
 
   protected MapboxMapMatching() {
     super(MapMatchingService.class);
@@ -75,6 +87,69 @@ public abstract class MapboxMapMatching extends
       bannerInstructions(),
       voiceInstructions(),
       waypoints());
+  }
+
+  /**
+   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
+   * Map Matching API.
+   *
+   * @return the Map Matching v5 response once the call completes successfully
+   * @throws IOException Signals that an I/O exception of some sort has occurred
+   * @since 1.0.0
+   */
+  @Override
+  public Response<MapMatchingResponse> executeCall() throws IOException {
+
+    Response<MapMatchingResponse> response = getCall().execute();
+    if (!response.isSuccessful()) {
+      errorDidOccur(null, response);
+    }
+    return response;
+  }
+
+  /**
+   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
+   * to the Map Matching API. Use this method to make a directions request on the Main Thread.
+   *
+   * @param callback a {@link Callback} which is used once the {@link MapMatchingResponse} is
+   *                 created.
+   * @since 1.0.0
+   */
+  @Override
+  public void enqueueCall(final Callback<MapMatchingResponse> callback) {
+    getCall().enqueue(new Callback<MapMatchingResponse>() {
+      @Override
+      public void onResponse(Call<MapMatchingResponse> call,
+                             Response<MapMatchingResponse> response) {
+        if (!response.isSuccessful()) {
+          errorDidOccur(callback, response);
+          return;
+        }
+        callback.onResponse(call, response);
+      }
+
+      @Override
+      public void onFailure(Call<MapMatchingResponse> call, Throwable throwable) {
+        callback.onFailure(call, throwable);
+      }
+    });
+  }
+
+
+  private void errorDidOccur(@Nullable Callback<MapMatchingResponse> callback,
+                             @NonNull Response<MapMatchingResponse> response) {
+    // Response gave an error, we try to LOGGER any messages into the LOGGER here.
+    Converter<ResponseBody, MapMatchingError> errorConverter =
+      getRetrofit().responseBodyConverter(MapMatchingError.class, new Annotation[0]);
+    if (callback == null) {
+      return;
+    }
+    try {
+      callback.onFailure(getCall(),
+        new Throwable(errorConverter.convert(response.errorBody()).message()));
+    } catch (IOException ioException) {
+      LOGGER.log(Level.WARNING, "Failed to complete your request. ", ioException);
+    }
   }
 
   @Nullable
