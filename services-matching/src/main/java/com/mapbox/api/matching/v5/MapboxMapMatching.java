@@ -1,5 +1,7 @@
 package com.mapbox.api.matching.v5;
 
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -37,10 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
-
-import retrofit2.Call;
-
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 /**
  * The Mapbox map matching interface (v5)
@@ -121,7 +119,8 @@ public abstract class MapboxMapMatching extends
   public void enqueueCall(final Callback<MapMatchingResponse> callback) {
     getCall().enqueue(new Callback<MapMatchingResponse>() {
       @Override
-      public void onResponse(Call<MapMatchingResponse> call, Response<MapMatchingResponse> response) {
+      public void onResponse(Call<MapMatchingResponse> call,
+                             Response<MapMatchingResponse> response) {
         if (!response.isSuccessful()) {
           errorDidOccur(callback, response);
           return;

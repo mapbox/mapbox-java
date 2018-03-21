@@ -13,10 +13,11 @@ import java.io.Serializable;
  * which holds an explanation of the invalid input.
  *
  * On error, the server responds with different HTTP status codes.
- * For responses with HTTP status codes lower than 500, the JSON response body includes the code property,
- * which may be used by client programs to manage control flow. The response body may also include a message property,
- * with a human-readable explaination of the error. If a server error occurs,
- * the HTTP status code will be 500 or higher and the response will not include a code property.
+ * For responses with HTTP status codes lower than 500, the JSON response body includes the code
+ * property, which may be used by client programs to manage control flow.
+ * The response body may also include a message property, with a human-readable explaination
+ * of the error. If a server error occurs, the HTTP status code will be 500 or higher and
+ * the response will not include a code property.
  *
  * @since 3.0.0
  */
@@ -38,8 +39,8 @@ public abstract class MapMatchingError implements Serializable {
    * On normal valid responses, the value will be Ok. The possible responses are listed below:
    * <ul>
    * <li><strong>Ok</strong> Normal case.</li>
-   * <li><strong>NoMatch</strong> The input did not produce any matches, or the  waypoints requested were not found
-   * in the resulting match. features will be an empty array.</li>
+   * <li><strong>NoMatch</strong> The input did not produce any matches, or the  waypoints requested
+   * were not found in the resulting match. features will be an empty array.</li>
    * <li><strong>TooManyCoordinates</strong> There are more than 100 points in the request.</li>
    * <li><strong>ProfileNotFound</strong> Needs to be a valid profile. </li>
    * <li><strong>InvalidInput</strong>message will hold an explanation of the invalid input.</li>
@@ -85,8 +86,8 @@ public abstract class MapMatchingError implements Serializable {
      * below:
      * <ul>
      * <li><strong>Ok</strong> Normal case.</li>
-     * <li><strong>NoMatch</strong> The input did not produce any matches, or the  waypoints requested were not found
-     * in the resulting match. features will be an empty array.</li>
+     * <li><strong>NoMatch</strong> The input did not produce any matches, or the  waypoints
+     * requested were not found in the resulting match. features will be an empty array.</li>
      * <li><strong>TooManyCoordinates</strong> There are more than 100 points in the request.</li>
      * <li><strong>ProfileNotFound</strong> Needs to be a valid profile. </li>
      * <li><strong>InvalidInput</strong>message will hold an explanation of the invalid input.</li>

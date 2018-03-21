@@ -1,5 +1,9 @@
 package com.mapbox.api.matching.v5;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.junit.MatcherAssert.assertThat;
+
+import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
@@ -20,6 +24,7 @@ import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import retrofit2.Response;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertNotNull;
@@ -28,6 +33,7 @@ import static org.junit.Assert.assertTrue;
 public class MapboxMapMatchingTest extends TestUtils {
 
   private static final String MAP_MATCHING_FIXTURE = "map_matching_v5_polyline.json";
+  private static final String MAP_MATCHING_ERROR_FIXTURE = "mapmatching_nosegment_v5_polyline.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -38,8 +44,12 @@ public class MapboxMapMatchingTest extends TestUtils {
     server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+          String resource = MAP_MATCHING_FIXTURE;
+          if (request.getPath().contains("0,-40;0,-20")) { // no matching segment
+            resource = MAP_MATCHING_ERROR_FIXTURE;
+          }
         try {
-          String response = loadJsonFixture(MAP_MATCHING_FIXTURE);
+          String response = loadJsonFixture(resource);
           return new MockResponse().setBody(response);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
@@ -447,6 +457,20 @@ public class MapboxMapMatchingTest extends TestUtils {
     assertNotNull(mapMatching);
     assertTrue(mapMatching.cloneCall().request().url().toString()
       .contains("roundabout_exits=true"));
+  }
+
+  @Test
+  public void noValidMatchTest() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(0, -40))
+      .coordinate(Point.fromLngLat(0, -20 ))
+      .baseUrl(mockUrl.toString())
+      .accessToken(ACCESS_TOKEN)
+      .build();
+
+    Response<MapMatchingResponse> response = mapMatching.executeCall();
+    assertThat(response.body().message(), containsString("Could not find"));
+    assertThat(response.body().code(), containsString("NoSegment"));
   }
 
 }
