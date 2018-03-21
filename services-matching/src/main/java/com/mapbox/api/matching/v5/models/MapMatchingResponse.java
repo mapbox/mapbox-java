@@ -46,6 +46,15 @@ public abstract class MapMatchingResponse implements Serializable {
   public abstract String code();
 
   /**
+   * Optionally shows up in a directions response if an error or something unexpected occurred.
+   *
+   * @return a string containing the message API MapMatching response with if an error occurred
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract String message();
+
+  /**
    * List of {@link MapMatchingMatching} objects, essentially a DirectionsWaypoint object with the
    * addition of a confidence value.
    *
@@ -66,6 +75,18 @@ public abstract class MapMatchingResponse implements Serializable {
    */
   @Nullable
   public abstract List<MapMatchingTracepoint> tracepoints();
+
+
+  /**
+   * Convert the current {@link MapMatchingResponse} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the project resulting in
+   * an updated and modifier {@link MapMatchingResponse}.
+   *
+   * @return a {@link MapMatchingResponse.Builder} with the same values set to match the ones
+   *   defined in this {@link MapMatchingResponse}
+   * @since 3.0.0
+   */
+  public abstract MapMatchingResponse.Builder toBuilder();
 
   /**
    * Gson type adapter for parsing Gson to this class.
@@ -102,6 +123,16 @@ public abstract class MapMatchingResponse implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder code(@Nullable String code);
+
+    /**
+     * Optionally shows up in a map maptching response if an error or something unexpected occurred.
+     *
+     * @param message a string containing the message API MapMatching response with if an error
+     *                occurred
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder message(@Nullable String message);
 
     /**
      * List of {@link MapMatchingMatching} objects, essentially a DirectionsWaypoint object with the

@@ -91,6 +91,17 @@ public abstract class MapMatchingMatching implements Serializable {
   public abstract double confidence();
 
   /**
+   * Convert the current {@link MapMatchingMatching} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the project resulting in
+   * an updated and modifier {@link MapMatchingMatching}.
+   *
+   * @return a {@link MapMatchingMatching.Builder} with the same values set to match the ones
+   *   defined in this {@link MapMatchingMatching}
+   * @since 3.0.0
+   */
+  public abstract MapMatchingMatching.Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
