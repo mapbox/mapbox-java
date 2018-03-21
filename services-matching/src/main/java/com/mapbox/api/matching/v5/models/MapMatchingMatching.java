@@ -3,10 +3,21 @@ package com.mapbox.api.matching.v5.models;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.api.matching.v5.MapboxMapMatching;
+import com.mapbox.geojson.BoundingBox;
+import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.gson.BoundingBoxDeserializer;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.GeometryDeserializer;
+import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,6 +39,24 @@ public abstract class MapMatchingMatching implements Serializable {
    */
   public static Builder builder() {
     return new AutoValue_MapMatchingMatching.Builder();
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a GeoJson MapboxMapMatching
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static MapMatchingMatching fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
+    gson.registerTypeAdapterFactory(MapMatchingAdapterFactory.create());
+    return gson.create().fromJson(json, MapMatchingMatching.class);
   }
 
   /**
@@ -89,6 +118,17 @@ public abstract class MapMatchingMatching implements Serializable {
    * @since 2.0.0
    */
   public abstract double confidence();
+
+  /**
+   * Convert the current {@link MapMatchingMatching} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the project resulting in
+   * an updated and modifier {@link MapMatchingMatching}.
+   *
+   * @return a {@link MapMatchingMatching.Builder} with the same values set to match the ones defined
+   *   in this {@link MapMatchingMatching}
+   * @since 3.0.0
+   */
+  public abstract MapMatchingMatching.Builder toBuilder();
 
   /**
    * Gson type adapter for parsing Gson to this class.
