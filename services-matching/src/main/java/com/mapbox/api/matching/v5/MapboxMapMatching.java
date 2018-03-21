@@ -15,8 +15,10 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.matching.v5.models.MapMatchingAdapterFactory;
 import com.mapbox.api.matching.v5.models.MapMatchingError;
+import com.mapbox.api.matching.v5.models.MapMatchingMatching;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
@@ -104,7 +106,11 @@ public abstract class MapboxMapMatching extends
     if (!response.isSuccessful()) {
       errorDidOccur(null, response);
     }
-    return response;
+
+    return Response.success(response.body()
+            .toBuilder()
+            .matchings(generateRouteOptions(response))
+            .build());
   }
 
   /**
@@ -124,8 +130,19 @@ public abstract class MapboxMapMatching extends
         if (!response.isSuccessful()) {
           errorDidOccur(callback, response);
           return;
+
+        } else if (response.body() == null || response.body().matchings().isEmpty()) {
+          // If null just pass the original object back since there's nothing to modify.
+          callback.onResponse(call, response);
+          return;
         }
-        callback.onResponse(call, response);
+        MapMatchingResponse newResponse =
+          response
+            .body()
+            .toBuilder()
+            .matchings(generateRouteOptions(response))
+            .build();
+        callback.onResponse(call, Response.success(newResponse));
       }
 
       @Override
@@ -151,6 +168,47 @@ public abstract class MapboxMapMatching extends
       LOGGER.log(Level.WARNING, "Failed to complete your request. ", ioException);
     }
   }
+
+  private List<MapMatchingMatching> generateRouteOptions(Response<MapMatchingResponse> response) {
+    List<MapMatchingMatching> matchings = response.body().matchings();
+    List<MapMatchingMatching> modifiedMatchings = new ArrayList<>();
+    for (MapMatchingMatching matching : matchings) {
+      modifiedMatchings.add(matching.toBuilder().routeOptions(
+        RouteOptions.builder()
+          .profile(profile())
+          .coordinates(formatCoordinates(coordinates()))
+          .annotations(annotations())
+          .language(language())
+          .radiuses(radiuses())
+          .user(user())
+          .voiceInstructions(voiceInstructions())
+          .bannerInstructions(bannerInstructions())
+          //.continueStraight(continueStraight())
+          //.bearings(bearings())
+          //.alternatives(alternatives())
+          //.exclude(exclude())
+          //.voiceUnits(voiceUnits())
+          .requestUuid("mapmatching")
+          .accessToken(accessToken())
+          .baseUrl(baseUrl())
+          .build()
+      ).build());
+    }
+    return modifiedMatchings;
+  }
+
+  private static List<Point> formatCoordinates(String coordinates) {
+    String[] coordPairs = coordinates.split(";");
+    List<Point> coordinatesFormatted = new ArrayList<>();
+    for (String coordPair : coordPairs) {
+      String[] coords = coordPair.split(",");
+      coordinatesFormatted.add(
+        Point.fromLngLat(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
+
+    }
+    return coordinatesFormatted;
+  }
+
 
   @Nullable
   abstract String clientAppName();

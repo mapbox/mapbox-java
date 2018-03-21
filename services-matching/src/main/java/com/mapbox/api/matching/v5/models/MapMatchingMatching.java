@@ -7,6 +7,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 
 import java.io.Serializable;
 import java.util.List;
@@ -91,6 +92,17 @@ public abstract class MapMatchingMatching implements Serializable {
   public abstract double confidence();
 
   /**
+   * Holds onto the parameter information used when making the directions request. Useful for
+   * re-requesting a directions route using the same information previously used.
+   *
+   * @return a {@link RouteOptions}s object which holds onto critical information from the request
+   *   that cannot be derived directly from the directions route
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract RouteOptions routeOptions();
+
+  /**
    * Convert the current {@link MapMatchingMatching} to its builder holding the currently assigned
    * values. This allows you to modify a single variable and then rebuild the project resulting in
    * an updated and modifier {@link MapMatchingMatching}.
@@ -100,6 +112,24 @@ public abstract class MapMatchingMatching implements Serializable {
    * @since 3.0.0
    */
   public abstract MapMatchingMatching.Builder toBuilder();
+
+  /**
+   * Map this MapMatchingMatching object to a {@link DirectionsRoute} object.
+   *
+   * @return a {@link DirectionsRoute} object
+   */
+  public DirectionsRoute toDirectionRoute() {
+
+    return DirectionsRoute.builder()
+      .legs(legs())
+      .geometry(geometry())
+      .weightName(weightName())
+      .weight(weight())
+      .duration(duration())
+      .distance(distance())
+      .routeOptions(routeOptions())
+      .build();
+  }
 
   /**
    * Gson type adapter for parsing Gson to this class.
@@ -184,6 +214,16 @@ public abstract class MapMatchingMatching implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder confidence(double confidence);
+
+    /**
+     * Holds onto the parameter information used when making the directions request.
+     *
+     * @param routeOptions a {@link RouteOptions}s object which holds onto critical information from
+     *                     the request that cannot be derived directly from the directions route
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract MapMatchingMatching.Builder routeOptions(@Nullable RouteOptions routeOptions);
 
     /**
      * Build a new {@link MapMatchingMatching} object.
