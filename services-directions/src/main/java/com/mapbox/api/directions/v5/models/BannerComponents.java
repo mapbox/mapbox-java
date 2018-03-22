@@ -46,9 +46,11 @@ public abstract class BannerComponents implements Serializable {
    * <p>
    * Possible values:
    * <ul>
-   * <li><strong>text (default)</strong>: indicates the text is part of the instructions and no other type</li>
+   * <li><strong>text (default)</strong>: indicates the text is part of
+   * the instructions and no other type</li>
    * <li><strong>icon</strong>: this is text that can be replaced by an icon, see imageBaseURL</li>
-   * <li><strong>delimiter</strong>: this is text that can be dropped and should be dropped if you are rendering icons</li>
+   * <li><strong>delimiter</strong>: this is text that can be dropped and
+   * should be dropped if you are rendering icons</li>
    * <li><strong>exit-number</strong>: the exit number for the maneuver</li>
    * <li><strong>exit</strong>: the word for exit in the local language</li>
    * </ul>
