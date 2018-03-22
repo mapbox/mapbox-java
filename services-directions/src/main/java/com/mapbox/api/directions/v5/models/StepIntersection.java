@@ -70,6 +70,7 @@ public abstract class StepIntersection implements Serializable {
    * <li><strong>ferry</strong>: the road continues on a ferry</li>
    * <li><strong>restricted</strong>: the road continues on with access restrictions</li>
    * <li><strong>motorway</strong>: the road continues on a motorway</li>
+   * <li><strong>tunnel</strong>: the road continues on a tunnel</li>
    * </ul>
    *
    * @return a string list containing the classes of the road exiting the intersection

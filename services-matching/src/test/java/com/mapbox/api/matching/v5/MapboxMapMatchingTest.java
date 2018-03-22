@@ -3,6 +3,7 @@ package com.mapbox.api.matching.v5;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 
+import com.mapbox.api.matching.v5.models.MapMatchingMatching;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
@@ -37,6 +38,7 @@ public class MapboxMapMatchingTest extends TestUtils {
 
   private MockWebServer server;
   private HttpUrl mockUrl;
+  private List<Point> coordinates;
 
   @Before
   public void setUp() throws Exception {
@@ -56,6 +58,14 @@ public class MapboxMapMatchingTest extends TestUtils {
         }
       }
     });
+
+    coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(13.418946862220764, 52.50055852688439));
+    coordinates.add(Point.fromLngLat(13.419011235237122, 52.50113000479732));
+    coordinates.add(Point.fromLngLat(13.419756889343262, 52.50171780290061));
+    coordinates.add(Point.fromLngLat(13.419885635375975, 52.50237416816131));
+    coordinates.add(Point.fromLngLat(13.420631289482117, 52.50294888790448));
+
     server.start();
     mockUrl = server.url("");
   }
@@ -71,8 +81,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanity() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -86,7 +95,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       startsWith("At least two coordinates must be provided with your API request."));
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .coordinate(Point.fromLngLat(2.0, 2.0))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
     mapMatching.executeCall();
@@ -103,7 +112,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     }
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .coordinates(coordinates)
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
     mapMatching.executeCall();
@@ -119,7 +128,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .radiuses(2d, 3d, 4d)
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -136,7 +145,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .timestamps("1", "1", "2")
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -151,7 +160,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .build();
     mapMatching.executeCall();
   }
@@ -159,20 +168,28 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void clientAppName_doesSetInHeaderCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
       .clientAppName("APP")
       .accessToken(ACCESS_TOKEN)
       .build();
-    assertTrue(mapMatching.executeCall().raw().request().header("User-Agent").contains("APP"));
+    assertTrue(mapMatching.cloneCall().request().header("User-Agent").contains("APP"));
+  }
+
+  @Test
+  public void mapMatchingToDirectionsRoute() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinates(coordinates)
+      .baseUrl(mockUrl.toString())
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapMatching.executeCall().body().matchings().get(0).toDirectionRoute());
   }
 
   @Test
   public void accessToken_doesGetPlacedInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -184,7 +201,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .tidy(true)
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -196,7 +213,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .user("userString")
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -208,7 +225,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -221,7 +238,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -236,7 +253,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE)
       .build();
@@ -250,7 +267,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .radiuses(1d, 2d, 3d)
       .build();
@@ -264,7 +281,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .steps(true)
       .build();
@@ -278,7 +295,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .overview(DirectionsCriteria.OVERVIEW_FULL)
       .build();
@@ -292,7 +309,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .timestamps("1", "2", "3")
       .build();
@@ -306,7 +323,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .annotations(
         DirectionsCriteria.ANNOTATION_DISTANCE,
@@ -322,7 +339,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .language(Locale.US)
       .build();
@@ -336,9 +353,8 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
-      .baseUrl(mockUrl.toString())
-      .accessToken(ACCESS_TOKEN)
       .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
       .build();
     assertTrue(mapMatching.cloneCall().request().url().toString()
       .startsWith("https://foobar.com"));

@@ -86,7 +86,7 @@ public abstract class MapMatchingResponse implements Serializable {
    *   defined in this {@link MapMatchingResponse}
    * @since 3.0.0
    */
-  public abstract MapMatchingResponse.Builder toBuilder();
+  public abstract Builder toBuilder();
 
   /**
    * Gson type adapter for parsing Gson to this class.
