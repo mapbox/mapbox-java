@@ -110,7 +110,7 @@ directions-fixtures:
 
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-		-o services-matching/src/test/resources/mapmatching_v5_polyline.json
+		-o services-matching/src/test/resources/map_matching_v5_polyline.json
 
 	# Unmatchable MapMatching request
 		curl "https://api.mapbox.com/matching/v5/mapbox/driving/0,-40;0,-20?access_token=$(MAPBOX_ACCESS_TOKEN)" \
