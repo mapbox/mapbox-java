@@ -44,12 +44,12 @@ public interface MapMatchingService {
    *                           must be as many timestamps as there are coordinates in the request,
    *                           each separated by {@code ;}
    * @param annotations        whether or not to return additional metadata for each coordinate
-   *                           along the match geometry. Can be one or all of 'duration', 'distance',
-   *                           or 'nodes', each separated by ,. See the response object for more
-   *                           details on what it is included with annotations
+   *                           along the match geometry. Can be one or all of 'duration',
+   *                           'distance', or 'nodes', each separated by ,. See the response
+   *                           object for more details on what it is included with annotations
    * @param language           language of returned turn-by-turn text instructions
-   * @param tidy               whether or not to transparently remove clusters and re-sample traces for
-   *                           improved map matching results
+   * @param tidy               whether or not to transparently remove clusters and re-sample
+   *                           traces for improved map matching results
    * @param roundaboutExits    Whether or not to emit instructions at roundabout exits.
    * @param bannerInstructions Whether or not to return banner objects associated with
    *                           the `routeSteps`. Should be used in conjunction with `steps`.

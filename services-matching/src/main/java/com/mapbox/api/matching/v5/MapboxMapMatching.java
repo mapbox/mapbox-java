@@ -1,7 +1,5 @@
 package com.mapbox.api.matching.v5;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
-
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
@@ -15,7 +13,6 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
-import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.matching.v5.models.MapMatchingAdapterFactory;
 import com.mapbox.api.matching.v5.models.MapMatchingError;
@@ -28,20 +25,20 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
+import com.sun.xml.internal.ws.spi.db.BindingContextFactory;
+
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Converter;
 import retrofit2.Response;
-
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
 
 /**
  * The Mapbox map matching interface (v5)
@@ -51,7 +48,7 @@ import java.util.logging.Level;
  * be displayed on a map or used for other analysis.
  *
  * @see <a href="https://www.mapbox.com/api-documentation/#map-matching">Map matching API
- *   documentation</a>
+ * documentation</a>
  * @since 2.0.0
  */
 @AutoValue
@@ -110,9 +107,9 @@ public abstract class MapboxMapMatching extends
     }
 
     return Response.success(response.body()
-            .toBuilder()
-            .matchings(generateRouteOptions(response))
-            .build());
+      .toBuilder()
+      .matchings(generateRouteOptions(response))
+      .build());
   }
 
   /**
@@ -167,7 +164,9 @@ public abstract class MapboxMapMatching extends
       callback.onFailure(getCall(),
         new Throwable(errorConverter.convert(response.errorBody()).message()));
     } catch (IOException ioException) {
-      LOGGER.log(Level.WARNING, "Failed to complete your request. ", ioException);
+      BindingContextFactory.LOGGER.log(
+        Level.WARNING, "Failed to complete your request. ", ioException
+      );
     }
   }
 
@@ -455,7 +454,9 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder voiceUnits(@Nullable @DirectionsCriteria.VoiceUnitCriteria String voiceUnits);
+    public abstract Builder voiceUnits(
+      @Nullable @DirectionsCriteria.VoiceUnitCriteria String voiceUnits
+    );
 
     /**
      * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
@@ -481,7 +482,7 @@ public abstract class MapboxMapMatching extends
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
-     *   documentation</a>
+     * documentation</a>
      * @since 2.1.0
      */
     public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
@@ -553,7 +554,7 @@ public abstract class MapboxMapMatching extends
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     *   Languages</a>
+     * Languages</a>
      * @since 3.0.0
      */
     public Builder language(@Nullable Locale language) {
@@ -572,7 +573,7 @@ public abstract class MapboxMapMatching extends
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     *   Languages</a>
+     * Languages</a>
      * @since 2.2.0
      */
     public abstract Builder language(String language);
