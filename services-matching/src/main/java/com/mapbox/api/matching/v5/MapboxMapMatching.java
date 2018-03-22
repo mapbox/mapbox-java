@@ -15,6 +15,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.matching.v5.models.MapMatchingAdapterFactory;
 import com.mapbox.api.matching.v5.models.MapMatchingError;
@@ -88,6 +89,7 @@ public abstract class MapboxMapMatching extends
       roundaboutExits(),
       bannerInstructions(),
       voiceInstructions(),
+      voiceUnits(),
       waypoints());
   }
 
@@ -183,11 +185,7 @@ public abstract class MapboxMapMatching extends
           .user(user())
           .voiceInstructions(voiceInstructions())
           .bannerInstructions(bannerInstructions())
-          //.continueStraight(continueStraight())
-          //.bearings(bearings())
-          //.alternatives(alternatives())
-          //.exclude(exclude())
-          //.voiceUnits(voiceUnits())
+          .voiceUnits(voiceUnits())
           .requestUuid("mapmatching")
           .accessToken(accessToken())
           .baseUrl(baseUrl())
@@ -259,8 +257,10 @@ public abstract class MapboxMapMatching extends
   abstract Boolean voiceInstructions();
 
   @Nullable
-  abstract String waypoints();
+  abstract String voiceUnits();
 
+  @Nullable
+  abstract String waypoints();
 
   @NonNull
   @Override
@@ -448,6 +448,14 @@ public abstract class MapboxMapMatching extends
      */
     public abstract Builder voiceInstructions(@Nullable Boolean voiceInstructions);
 
+    /**
+     * Specify what unit you'd like voice and banner instructions to use.
+     *
+     * @param voiceUnits either Imperial (default) or Metric
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder voiceUnits(@Nullable @DirectionsCriteria.VoiceUnitCriteria String voiceUnits);
 
     /**
      * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
