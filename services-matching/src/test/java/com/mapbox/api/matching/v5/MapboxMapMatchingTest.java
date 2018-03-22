@@ -1,13 +1,9 @@
 package com.mapbox.api.matching.v5;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.junit.MatcherAssert.assertThat;
-
-import com.mapbox.api.matching.v5.models.MapMatchingMatching;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
-import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.geojson.Point;
 
 import org.junit.After;
@@ -27,7 +23,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -445,6 +443,21 @@ public class MapboxMapMatchingTest extends TestUtils {
     assertNotNull(mapMatching);
     assertTrue(mapMatching.cloneCall().request().url().toString()
       .contains("voice_instructions=true"));
+  }
+
+  @Test
+  public void sanityVoiceUnits() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.METRIC)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapMatching);
+    assertTrue(mapMatching.cloneCall().request().url().toString()
+      .contains("voice_units=metric"));
   }
 
   @Test
