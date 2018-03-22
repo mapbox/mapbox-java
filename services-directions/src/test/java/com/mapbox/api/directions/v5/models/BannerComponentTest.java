@@ -20,8 +20,7 @@ public class BannerComponentTest extends TestUtils {
 
   @Test
   public void testSerializable() throws Exception {
-    BannerComponents bannerComponents
-      = BannerComponents.builder()
+    BannerComponents bannerComponents = BannerComponents.builder()
       .imageBaseUrl("www.test.com")
       .text("test")
       .type("icon")
