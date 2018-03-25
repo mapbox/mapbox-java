@@ -19,7 +19,7 @@ import java.io.Serializable;
  * @since 3.0.0
  */
 @AutoValue
-public abstract class BannerComponents implements Serializable {
+public abstract class BannerComponents implements Serializable, Comparable<BannerComponents> {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -110,6 +110,19 @@ public abstract class BannerComponents implements Serializable {
    */
   public static TypeAdapter<BannerComponents> typeAdapter(Gson gson) {
     return new AutoValue_BannerComponents.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Allows ability to sort/compare by abbreviation priority.
+   *
+   * @param bannerComponents to compare to
+   * @return a negative integer, zero, or a positive integer as this object is less than, equal to,
+   * or greater than the specified object.
+   * @since 3.0.0
+   */
+  @Override
+  public int compareTo(BannerComponents bannerComponents) {
+    return this.abbreviationPriority().compareTo(bannerComponents.abbreviationPriority());
   }
 
   /**
