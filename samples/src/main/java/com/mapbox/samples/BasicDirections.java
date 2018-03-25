@@ -23,6 +23,8 @@ public class BasicDirections {
 
   /**
    * Demonstrates how to make the most basic directions request.
+   *
+   * @throws IOException signals that an I/O exception of some sort has occurred
    */
   private static void simpleMapboxDirectionsRequest() throws IOException {
 

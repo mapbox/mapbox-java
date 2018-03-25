@@ -201,6 +201,10 @@ public final class PolylineUtils {
 
   /**
    * Square distance between 2 points.
+   *
+   * @param p1 first {@link Point}
+   * @param p2 second Point
+   * @return square of the distance between two input points
    */
   private static double getSqDist(Point p1, Point p2) {
     double dx = p1.longitude() - p2.longitude();
@@ -210,20 +214,25 @@ public final class PolylineUtils {
 
   /**
    * Square distance from a point to a segment.
+   *
+   * @param point {@link Point} whose distance from segment needs to be determined
+   * @param start {@link Point} of the line segment
+   * @param end {@link Point} of the line segment
+   * @return square of the distance between first input point and segment defined by other two input points
    */
-  private static double getSqSegDist(Point point, Point p1, Point p2) {
-    double horizontal = p1.longitude();
-    double vertical = p1.latitude();
-    double diffHorizontal = p2.longitude() - horizontal;
-    double diffVertical = p2.latitude() - vertical;
+  private static double getSqSegDist(Point point, Point start, Point end) {
+    double horizontal = start.longitude();
+    double vertical = start.latitude();
+    double diffHorizontal = end.longitude() - horizontal;
+    double diffVertical = end.latitude() - vertical;
 
     if (diffHorizontal != 0 || diffVertical != 0) {
       double total = ((point.longitude() - horizontal) * diffHorizontal + (point.latitude()
         - vertical) * diffVertical) / (diffHorizontal * diffHorizontal + diffVertical
         * diffVertical);
       if (total > 1) {
-        horizontal = p2.longitude();
-        vertical = p2.latitude();
+        horizontal = end.longitude();
+        vertical = end.latitude();
 
       } else if (total > 0) {
         horizontal += diffHorizontal * total;
@@ -239,6 +248,10 @@ public final class PolylineUtils {
 
   /**
    * Basic distance-based simplification.
+   *
+   * @param points a list of points to be simplified
+   * @param sqTolerance square of amount of simplification
+   * @return a list of simplified points
    */
   private static List<Point> simplifyRadialDist(List<Point> points, double sqTolerance) {
     Point prevPoint = points.get(0);
@@ -293,6 +306,10 @@ public final class PolylineUtils {
 
   /**
    * Simplification using Ramer-Douglas-Peucker algorithm.
+   *
+   * @param points a list of points to be simplified
+   * @param sqTolerance square of amount of simplification
+   * @return a list of simplified points
    */
   private static List<Point> simplifyDouglasPeucker(List<Point> points, double sqTolerance) {
     int last = points.size() - 1;
