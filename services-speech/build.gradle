@@ -3,6 +3,9 @@ apply plugin: 'java-library'
 dependencies {
     api project(":services-core")
 
+    // Annotations
+    compileOnly dependenciesList.supportAnnotation
+
     // AutoValue
     compileOnly dependenciesList.autoValue
 }
