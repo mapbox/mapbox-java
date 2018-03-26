@@ -3,6 +3,8 @@ package com.mapbox.turf;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 
+import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.GeometryCollection;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.MultiPoint;
@@ -10,6 +12,7 @@ import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
 import com.mapbox.geojson.MultiPolygon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -331,6 +334,42 @@ public final class TurfMeasurement {
   public static double[] bbox(MultiPolygon multiPolygon) {
     List<Point> resultCoords = TurfMeta.coordAll(multiPolygon, false);
     return bboxCalculator(resultCoords);
+  }
+
+  /**
+   * Takes an arbitrary {@link Geometry} and calculates a bounding box.
+   *
+   * @param geometry a {@link Geometry} object
+   * @return a double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
+   * @since 2.0.0
+   */
+  public static double[] bbox(Geometry geometry) {
+    if (geometry instanceof Point) {
+      return bbox((Point) geometry);
+    } else if (geometry instanceof MultiPoint) {
+      return bbox((MultiPoint) geometry);
+    } else if (geometry instanceof LineString) {
+      return bbox((LineString) geometry);
+    } else if (geometry instanceof MultiLineString) {
+      return bbox((MultiLineString) geometry);
+    } else if (geometry instanceof Polygon) {
+      return bbox((Polygon) geometry);
+    } else if (geometry instanceof MultiPolygon) {
+      return bbox((MultiPolygon) geometry);
+    } else if (geometry instanceof GeometryCollection) {
+      List<Point> points = new ArrayList<>();
+      for (Geometry geo : ((GeometryCollection) geometry).geometries()) {
+        // recursive
+        double[] bbox = bbox(geo);
+        points.add(Point.fromLngLat(bbox[0], bbox[1]));
+        points.add(Point.fromLngLat(bbox[2], bbox[1]));
+        points.add(Point.fromLngLat(bbox[2], bbox[3]));
+        points.add(Point.fromLngLat(bbox[0], bbox[3]));
+      }
+      return TurfMeasurement.bbox(MultiPoint.fromLngLats(points));
+    } else {
+      throw new RuntimeException(("Unknown geometry class: " + geometry.getClass()));
+    }
   }
 
   private static double[] bboxCalculator(List<Point> resultCoords) {
