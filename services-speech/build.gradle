@@ -8,6 +8,10 @@ dependencies {
 
     // AutoValue
     compileOnly dependenciesList.autoValue
+
+    // Test Dependencies
+    testImplementation dependenciesList.okhttp3Mockwebserver
+    testImplementation project(path: ':services-core', configuration: 'testOutput')
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"

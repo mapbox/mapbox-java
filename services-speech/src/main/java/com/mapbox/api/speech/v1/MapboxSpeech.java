@@ -94,7 +94,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
   /**
    * This builder is used to create a MapboxSpeech instance, with details about how the API calls
    * should be made (input/output format, language, etc.). To use caching, specify a cache
-   * directory. Access token is required, along with cache directory if you choose to use caching.
+   * directory. Access token and instruction are required, along with cache directory if you choose to use caching.
    *
    * @since 3.0.0
    */
