@@ -59,6 +59,18 @@ public abstract class LegAnnotation implements Serializable {
   public abstract List<Double> speed();
 
   /**
+   * The posted speed limit, between each pair of coordinates.
+   * Maxspeed is only available for the `mapbox/driving` and `mapbox/driving-traffic`
+   * profiles, other profiles will return `unknown`s only.
+   *
+   * @return a list with each entry being a {@link MaxSpeed} value between two of the routeLeg geometry
+   *   coordinates
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract List<MaxSpeed> maxSpeed();
+
+  /**
    * The congestion between each pair of coordinates.
    *
    * @return a list of Strings with each entry being a congestion value between two of the routeLeg
