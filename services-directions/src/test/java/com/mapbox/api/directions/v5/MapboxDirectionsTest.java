@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 public class MapboxDirectionsTest extends TestUtils {
 
   private static final String DIRECTIONS_V5_FIXTURE = "directions_v5.json";
@@ -304,7 +306,7 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void clientAppName_doesGetAddedToRequestHeader() throws Exception {
+  public void clientAppName_doesGetAddedToRequestHeader1() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
@@ -312,6 +314,17 @@ public class MapboxDirectionsTest extends TestUtils {
       .clientAppName("APP")
       .build();
     assertTrue(directions.cloneCall().request().header("User-Agent").contains("APP"));
+  }
+
+  @Test
+  public void clientAppName_doesGetAddedToRequestHeader2() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .accessToken(ACCESS_TOKEN)
+      .clientAppName("APP")
+      .build();
+    assertTrue(directions.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
   @Test
