@@ -120,7 +120,7 @@ public final class DirectionsCriteria {
    *
    * @since 2.1.0
    */
-  public static final String ANNOTATION_MAX_SPEED = "maxspeed";
+  public static final String ANNOTATION_MAXSPEED = "maxspeed";
 
   /**
    * Exclude all tolls along the returned directions route.
@@ -263,7 +263,7 @@ public final class DirectionsCriteria {
     ANNOTATION_DISTANCE,
     ANNOTATION_DURATION,
     ANNOTATION_SPEED,
-    ANNOTATION_MAX_SPEED
+    ANNOTATION_MAXSPEED
   })
   public @interface AnnotationCriteria {
   }
