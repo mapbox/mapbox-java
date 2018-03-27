@@ -7,6 +7,7 @@ import com.google.auto.value.AutoValue;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.core.utils.MapboxUtils;
 
 import java.util.logging.Logger;
 
@@ -34,11 +35,11 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
   @Override
   protected Call<ResponseBody> initializeCall() {
     return getService().getCall(
-      instruction(),
-      textType(),
-      language(),
-      outputType(),
-      accessToken());
+            instruction(),
+            textType(),
+            language(),
+            outputType(),
+            accessToken());
   }
 
   @Nullable
@@ -53,8 +54,10 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
   @Nullable
   abstract Cache cache();
 
+  @Nullable
   abstract String accessToken();
 
+  @Nullable
   abstract String instruction();
 
   public abstract Builder toBuilder();
@@ -88,7 +91,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
    */
   public static Builder builder() {
     return new AutoValue_MapboxSpeech.Builder()
-      .baseUrl(Constants.BASE_API_URL);
+            .baseUrl(Constants.BASE_API_URL);
   }
 
   /**
@@ -163,14 +166,28 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
      */
     public abstract Builder cache(Cache cache);
 
+    abstract MapboxSpeech autoBuild();
+
     /**
      * This uses the provided parameters set using the {@link Builder} and first checks that all
      * values are valid, formats the values as strings for easier consumption by the API, and lastly
      * creates a new {@link MapboxSpeech} object with the values provided.
      *
      * @return a new instance of Mapbox Speech
+     * @throws ServicesException when a provided parameter is detected to be incorrect
      * @since 3.0.0
      */
-    public abstract MapboxSpeech build();
+    public MapboxSpeech build() {
+      MapboxSpeech mapboxSpeech = autoBuild();
+      if (!MapboxUtils.isAccessTokenValid(mapboxSpeech.accessToken())) {
+        throw new ServicesException("Using Mapbox Services requires setting a valid access token.");
+      }
+
+      if (mapboxSpeech.instruction() == null || mapboxSpeech.instruction().trim().isEmpty()) {
+        throw new ServicesException("Non-null, non-empty instruction text is required.");
+      }
+
+      return mapboxSpeech;
+    }
   }
 }
