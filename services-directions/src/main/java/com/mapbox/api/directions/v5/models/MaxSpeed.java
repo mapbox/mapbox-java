@@ -21,9 +21,9 @@ public abstract class MaxSpeed implements Serializable {
   public abstract Integer speed();
 
   /**
-   * String indicating the unit of speed, either as `kmh` or `mph`.
+   * String indicating the unit of speed, either as `km/h` or `mph`.
    *
-   * @return String unit either as `kmh` or `mph`
+   * @return String unit either as `km/h` or `mph`
    * @since 3.0.0
    */
   @Nullable
@@ -75,9 +75,9 @@ public abstract class MaxSpeed implements Serializable {
     public abstract Builder speed(@Nullable Integer speed);
 
     /**
-     * String indicating the unit of speed, either as `kmh` or `mph`.
+     * String indicating the unit of speed, either as `km/h` or `mph`.
      *
-     * @param unit either as `kmh` or `mph`
+     * @param unit either as `km/h` or `mph`
      * @since 3.0.0
      */
     public abstract Builder unit(@Nullable String unit);
