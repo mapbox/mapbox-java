@@ -54,7 +54,7 @@ public abstract class MaxSpeed implements Serializable {
    * @return the type adapter for this class
    * @since 3.0.0
    */
-  public static TypeAdapter<IntersectionLanes> typeAdapter(Gson gson) {
+  public static TypeAdapter<MaxSpeed> typeAdapter(Gson gson) {
     return new AutoValue_MaxSpeed.GsonTypeAdapter(gson);
   }
 
