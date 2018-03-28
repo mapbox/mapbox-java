@@ -164,7 +164,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
   @Test
-  public void clientAppName_doesSetInHeaderCorrectly() throws Exception {
+  public void clientAppName_doesSetInHeaderCorrectly1() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
@@ -172,6 +172,18 @@ public class MapboxMapMatchingTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .build();
     assertTrue(mapMatching.cloneCall().request().header("User-Agent").contains("APP"));
+  }
+
+  @Test
+  public void clientAppName_doesSetInHeaderCorrectly2() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinates(coordinates)
+      .baseUrl(mockUrl.toString())
+      .clientAppName("APP")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+
+    assertTrue(mapMatching.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
   @Test
