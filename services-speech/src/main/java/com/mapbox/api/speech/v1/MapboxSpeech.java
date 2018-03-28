@@ -124,7 +124,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
     /**
      * Output format for spoken instructions. If not specified, default is mp3
      *
-     * @param outputType, either mp3, ogg_vorbis or pcm
+     * @param outputType, either mp3 or json
      * @return this builder for chaining options together
      * @since 3.0.0
      */
@@ -142,7 +142,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
     public abstract Builder accessToken(String accessToken);
 
     /**
-     * @param instruction
+     * @param instruction to dictate
      * @return this builder for chaining options together
      * @since 3.0.0
      */
