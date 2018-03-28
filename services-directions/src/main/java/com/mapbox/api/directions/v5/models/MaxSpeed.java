@@ -8,6 +8,11 @@ import com.google.gson.TypeAdapter;
 
 import java.io.Serializable;
 
+/**
+ * Object representing max speeds along a route.
+ *
+ * @since 3.0.0
+ */
 @AutoValue
 public abstract class MaxSpeed implements Serializable {
 
