@@ -63,8 +63,8 @@ public abstract class LegAnnotation implements Serializable {
    * Maxspeed is only available for the `mapbox/driving` and `mapbox/driving-traffic`
    * profiles, other profiles will return `unknown`s only.
    *
-   * @return a list with each entry being a {@link MaxSpeed} value between two of the routeLeg geometry
-   *   coordinates
+   * @return a list with each entry being a {@link MaxSpeed} value between two of
+   *   the routeLeg geometry coordinates
    * @since 3.0.0
    */
   @Nullable
