@@ -8,6 +8,7 @@ import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.core.utils.MapboxUtils;
+import com.mapbox.core.utils.TextUtils;
 
 import java.util.logging.Logger;
 
@@ -141,6 +142,8 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
     public abstract Builder accessToken(String accessToken);
 
     /**
+     * Add the instruction text to dictate, either as plain text or ssml
+     *
      * @param instruction to dictate
      * @return this builder for chaining options together
      * @since 3.0.0
@@ -182,7 +185,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
         throw new ServicesException("Using Mapbox Services requires setting a valid access token.");
       }
 
-      if (mapboxSpeech.instruction() == null || mapboxSpeech.instruction().trim().isEmpty()) {
+      if (TextUtils.isEmpty(mapboxSpeech.instruction())) {
         throw new ServicesException("Non-null, non-empty instruction text is required.");
       }
 
