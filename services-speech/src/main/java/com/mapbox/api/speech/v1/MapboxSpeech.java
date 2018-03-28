@@ -142,7 +142,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
     public abstract Builder accessToken(String accessToken);
 
     /**
-     * Add the instruction text to dictate, either as plain text or ssml
+     * Add the instruction text to dictate, either as plain text or ssml.
      *
      * @param instruction to dictate
      * @return this builder for chaining options together
