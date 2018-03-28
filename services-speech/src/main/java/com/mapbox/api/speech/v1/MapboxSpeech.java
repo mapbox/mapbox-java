@@ -138,8 +138,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    @NonNull
-    public abstract Builder accessToken(String accessToken);
+    public abstract Builder accessToken(@NonNull String accessToken);
 
     /**
      * Add the instruction text to dictate, either as plain text or ssml.
@@ -148,8 +147,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    @NonNull
-    public abstract Builder instruction(String instruction);
+    public abstract Builder instruction(@NonNull String instruction);
 
     /**
      * Optionally change the APIs base URL to something other then the default Mapbox one.
