@@ -93,4 +93,16 @@ public class MapboxSpeechTest extends TestUtils {
             .baseUrl(mockUrl.toString())
             .build();
   }
+
+  @Test
+  public void build_doesThrowEmptyInstructionTextException() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Non-null, non-empty instruction text is required."));
+    MapboxSpeech.builder()
+            .accessToken(ACCESS_TOKEN)
+            .instruction("")
+            .textType("text")
+            .baseUrl(mockUrl.toString())
+            .build();
+  }
 }

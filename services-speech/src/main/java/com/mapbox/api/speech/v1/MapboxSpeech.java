@@ -7,6 +7,7 @@ import com.google.auto.value.AutoValue;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.core.utils.TextUtils;
 
 import java.util.logging.Logger;
 
@@ -137,6 +138,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder accessToken(String accessToken);
 
     /**
@@ -146,6 +148,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder instruction(String instruction);
 
     /**
@@ -166,12 +169,25 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
      */
     public abstract Builder cache(Cache cache);
 
+    abstract MapboxSpeech autoBuild();
+
     /**
-     * Build a new {@link MapboxSpeech} object.
+     * This uses the provided parameters set using the {@link Builder} and first checks that all
+     * values are valid, formats the values as strings for easier consumption by the API, and lastly
+     * creates a new {@link MapboxSpeech} object with the values provided.
      *
-     * @return a new {@link MapboxSpeech} using the provided values in this builder
+     * @return a new instance of Mapbox Speech
+     * @throws ServicesException when a provided parameter is detected to be incorrect
      * @since 3.0.0
      */
-    public abstract MapboxSpeech build();
+    public MapboxSpeech build() {
+      MapboxSpeech mapboxSpeech = autoBuild();
+
+      if (TextUtils.isEmpty(mapboxSpeech.instruction())) {
+        throw new ServicesException("Non-null, non-empty instruction text is required.");
+      }
+
+      return mapboxSpeech;
+    }
   }
 }
