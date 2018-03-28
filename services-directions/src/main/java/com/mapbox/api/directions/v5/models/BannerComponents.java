@@ -113,7 +113,9 @@ public abstract class BannerComponents implements Serializable, Comparable<Banne
   }
 
   /**
-   * Allows ability to sort/compare by abbreviation priority.
+   * Allows ability to sort/compare by abbreviation priority. This is null-safe for values of
+   * abbreviationPriority, and treats BannerComponents with a null abreviationPriority as having an
+   * abbreviationPriority of infinity.
    *
    * @param bannerComponents to compare to
    * @return a negative integer, zero, or a positive integer as this object is less than, equal to,
@@ -122,7 +124,18 @@ public abstract class BannerComponents implements Serializable, Comparable<Banne
    */
   @Override
   public int compareTo(BannerComponents bannerComponents) {
-    return this.abbreviationPriority().compareTo(bannerComponents.abbreviationPriority());
+    Integer ab1 = this.abbreviationPriority();
+    Integer ab2 = bannerComponents.abbreviationPriority();
+
+    if (ab1 == null && ab2 == null) {
+      return 0;
+    } else if (ab1 == null) {
+      return 1;
+    } else if (ab2 == null) {
+      return -1;
+    } else {
+      return ab1.compareTo(ab2);
+    }
   }
 
   /**
