@@ -166,6 +166,12 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
      */
     public abstract Builder cache(Cache cache);
 
+    /**
+     * Build a new {@link MapboxSpeech} object.
+     *
+     * @return a new {@link MapboxSpeech} using the provided values in this builder
+     * @since 3.0.0
+     */
     public abstract MapboxSpeech build();
   }
 }
