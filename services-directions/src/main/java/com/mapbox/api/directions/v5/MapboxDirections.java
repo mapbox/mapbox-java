@@ -24,6 +24,7 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
+import com.sun.xml.internal.ws.spi.db.BindingContextFactory;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -31,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -59,8 +59,6 @@ import retrofit2.Response;
 @AutoValue
 public abstract class MapboxDirections extends
   MapboxService<DirectionsResponse, DirectionsService> {
-
-  private static final Logger LOGGER = Logger.getLogger(MapboxDirections.class.getName());
 
   protected MapboxDirections() {
     super(DirectionsService.class);
@@ -107,11 +105,26 @@ public abstract class MapboxDirections extends
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
     Response<DirectionsResponse> response = super.executeCall();
-    if (!response.isSuccessful()) {
+    if (response.isSuccessful()) {
+      if (response.body() != null && !response.body().routes().isEmpty()) {
+        return Response.success(
+          response.body()
+            .toBuilder()
+            .routes(generateRouteOptions(response))
+            .build(),
+          new okhttp3.Response.Builder()
+            .code(200)
+            .message("OK")
+            .protocol(response.raw().protocol())
+            .headers(response.headers())
+            .request(response.raw().request())
+            .build());
+      }
+    } else {
       errorDidOccur(null, response);
     }
-    return Response.success(response.body().toBuilder().routes(
-      generateRouteOptions(response)).build());
+
+    return response;
   }
 
   /**
@@ -129,15 +142,31 @@ public abstract class MapboxDirections extends
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
         if (!response.isSuccessful()) {
           errorDidOccur(callback, response);
-          return;
-        } else if (response.body() == null || response.body().routes().isEmpty()) {
-          // If null just pass the original object back since there's nothing to modify.
-          callback.onResponse(call, response);
-          return;
+
+        } else if (callback != null) {
+          if (response.body() == null || response.body().routes().isEmpty()) {
+            // If null just pass the original object back since there's nothing to modify.
+            callback.onResponse(call, response);
+
+          } else {
+            Response<DirectionsResponse> newResponse =
+              Response.success(
+                response
+                  .body()
+                  .toBuilder()
+                  .routes(generateRouteOptions(response))
+                  .build(),
+                new okhttp3.Response.Builder()
+                  .code(200)
+                  .message("OK")
+                  .protocol(response.raw().protocol())
+                  .headers(response.headers())
+                  .request(response.raw().request())
+                  .build());
+
+            callback.onResponse(call, newResponse);
+          }
         }
-        DirectionsResponse newResponse = response.body().toBuilder().routes(
-          generateRouteOptions(response)).build();
-        callback.onResponse(call, Response.success(newResponse));
       }
 
       @Override
@@ -153,13 +182,16 @@ public abstract class MapboxDirections extends
     Converter<ResponseBody, DirectionsError> errorConverter =
       getRetrofit().responseBodyConverter(DirectionsError.class, new Annotation[0]);
     if (callback == null) {
-      return;
-    }
-    try {
-      callback.onFailure(getCall(),
-        new Throwable(errorConverter.convert(response.errorBody()).message()));
-    } catch (IOException ioException) {
-      LOGGER.log(Level.WARNING, "Failed to complete your request. ", ioException);
+      BindingContextFactory.LOGGER.log(
+        Level.WARNING, "Failed to complete your request and callback is null");
+    } else {
+      try {
+        callback.onFailure(getCall(),
+          new Throwable(errorConverter.convert(response.errorBody()).message()));
+      } catch (IOException ioException) {
+        BindingContextFactory.LOGGER.log(
+          Level.WARNING, "Failed to complete your request. ", ioException);
+      }
     }
   }
 

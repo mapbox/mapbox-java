@@ -25,7 +25,14 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
+
 import com.sun.xml.internal.ws.spi.db.BindingContextFactory;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Converter;
+import retrofit2.Response;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -34,11 +41,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Converter;
-import retrofit2.Response;
 
 /**
  * The Mapbox map matching interface (v5)
@@ -102,14 +104,26 @@ public abstract class MapboxMapMatching extends
   public Response<MapMatchingResponse> executeCall() throws IOException {
 
     Response<MapMatchingResponse> response = getCall().execute();
-    if (!response.isSuccessful()) {
+    if (response.isSuccessful()) {
+      if (response.body() != null && !response.body().matchings().isEmpty()) {
+        return Response.success(
+          response.body()
+            .toBuilder()
+            .matchings(generateRouteOptions(response))
+            .build(),
+          new okhttp3.Response.Builder()
+            .code(200)
+            .message("OK")
+            .protocol(response.raw().protocol())
+            .headers(response.headers())
+            .request(response.raw().request())
+            .build());
+      }
+    } else {
       errorDidOccur(null, response);
     }
 
-    return Response.success(response.body()
-      .toBuilder()
-      .matchings(generateRouteOptions(response))
-      .build());
+    return response;
   }
 
   /**
@@ -128,21 +142,33 @@ public abstract class MapboxMapMatching extends
                              Response<MapMatchingResponse> response) {
         if (!response.isSuccessful()) {
           errorDidOccur(callback, response);
-          return;
 
-        } else if (response.body() == null || response.body().matchings().isEmpty()) {
-          // If null just pass the original object back since there's nothing to modify.
-          callback.onResponse(call, response);
-          return;
+        } else if (callback != null) {
+          if (response.body() == null || response.body().matchings().isEmpty()) {
+            // If null just pass the original object back since there's nothing to modify.
+            callback.onResponse(call, response);
+
+          } else {
+            Response<MapMatchingResponse> newResponse =
+              Response.success(
+                response
+                  .body()
+                  .toBuilder()
+                  .matchings(generateRouteOptions(response))
+                  .build(),
+                new okhttp3.Response.Builder()
+                  .code(200)
+                  .message("OK")
+                  .protocol(response.raw().protocol())
+                  .headers(response.headers())
+                  .request(response.raw().request())
+                  .build());
+
+            callback.onResponse(call, newResponse);
+          }
         }
-        MapMatchingResponse newResponse =
-          response
-            .body()
-            .toBuilder()
-            .matchings(generateRouteOptions(response))
-            .build();
-        callback.onResponse(call, Response.success(newResponse));
       }
+
 
       @Override
       public void onFailure(Call<MapMatchingResponse> call, Throwable throwable) {
@@ -158,15 +184,16 @@ public abstract class MapboxMapMatching extends
     Converter<ResponseBody, MapMatchingError> errorConverter =
       getRetrofit().responseBodyConverter(MapMatchingError.class, new Annotation[0]);
     if (callback == null) {
-      return;
-    }
-    try {
-      callback.onFailure(getCall(),
-        new Throwable(errorConverter.convert(response.errorBody()).message()));
-    } catch (IOException ioException) {
       BindingContextFactory.LOGGER.log(
-        Level.WARNING, "Failed to complete your request. ", ioException
-      );
+        Level.WARNING, "Failed to complete your request and callback is null");
+    } else {
+      try {
+        callback.onFailure(getCall(),
+          new Throwable(errorConverter.convert(response.errorBody()).message()));
+      } catch (IOException ioException) {
+        BindingContextFactory.LOGGER.log(
+          Level.WARNING, "Failed to complete your request. ", ioException);
+      }
     }
   }
 
