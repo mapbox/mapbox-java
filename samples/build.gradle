@@ -10,6 +10,7 @@ dependencies {
   implementation project(":services-geojson")
   implementation project(":services-matching")
   implementation project(":services-staticmap")
+  implementation project(":services-speech")
 }
 
 buildConfig {
