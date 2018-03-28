@@ -130,6 +130,17 @@ public abstract class LegAnnotation implements Serializable {
     public abstract Builder speed(@Nullable List<Double> speed);
 
     /**
+     * The posted speed limit, between each pair of coordinates.
+     * Maxspeed is only available for the `mapbox/driving` and `mapbox/driving-traffic`
+     * profiles, other profiles will return `unknown`s only.
+     *
+     * @param maxSpeed list of speeds between each pair of coordinates
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder maxSpeed(@Nullable List<MaxSpeed> maxSpeed);
+
+    /**
      * The congestion between each pair of coordinates.
      *
      * @param congestion a list of Strings with each entry being a congestion value between two of
