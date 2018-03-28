@@ -74,8 +74,8 @@ public class MapboxSpeechTest extends TestUtils {
 
   @Test
   public void build_doesThrowRequiredAccessTokenException() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Using Mapbox Services requires setting a valid access token"));
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage(startsWith("Missing required properties: accessToken"));
     MapboxSpeech.builder()
             .instruction("hello")
             .textType("text")
@@ -85,11 +85,10 @@ public class MapboxSpeechTest extends TestUtils {
 
   @Test
   public void build_doesThrowRequiredInstructionTextException() throws ServicesException {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Non-null, non-empty instruction text is required."));
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage(startsWith("Missing required properties: text"));
     MapboxSpeech.builder()
             .accessToken(ACCESS_TOKEN)
-            .instruction("")
             .textType("text")
             .baseUrl(mockUrl.toString())
             .build();
