@@ -12,6 +12,16 @@ import java.io.Serializable;
 public abstract class MaxSpeed implements Serializable {
 
   /**
+   * Create a new instance of this class by using the {@link Builder} class.
+   *
+   * @return {@link Builder} for creating a new instance
+   * @since 3.0.0
+   */
+  public static Builder builder() {
+    return new AutoValue_MaxSpeed.Builder();
+  }
+
+  /**
    * Number indicating the posted speed limit.
    *
    * @return number indicating the posted speed limit
