@@ -60,8 +60,6 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
   @Nullable
   abstract String instruction();
 
-  public abstract Builder toBuilder();
-
   @Override
   protected abstract String baseUrl();
 
@@ -84,7 +82,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
   }
 
   /**
-   * Creates a builder for a MapboxSpeech object with a default cache size of 10 MB
+   * Creates a builder for a MapboxSpeech object with a default cache size of 10 MB.
    *
    * @return a builder to create a MapboxSpeech object
    * @since 3.0.0
@@ -97,7 +95,8 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
   /**
    * This builder is used to create a MapboxSpeech instance, with details about how the API calls
    * should be made (input/output format, language, etc.). To use caching, specify a cache
-   * directory. Access token and instruction are required, along with cache directory if you choose to use caching.
+   * directory. Access token and instruction are required, along with cache directory if you choose
+   * to use caching.
    *
    * @since 3.0.0
    */
@@ -124,7 +123,7 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
     /**
      * Output format for spoken instructions. If not specified, default is mp3
      *
-     * @param outputType, either mp3 or json
+     * @param outputType either mp3 or json
      * @return this builder for chaining options together
      * @since 3.0.0
      */
