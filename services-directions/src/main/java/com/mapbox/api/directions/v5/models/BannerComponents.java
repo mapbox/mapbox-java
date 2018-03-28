@@ -94,7 +94,7 @@ public abstract class BannerComponents implements Serializable, Comparable<Banne
    * icon that's included to better identify to your user to roadway. Note that this doesn't
    * return the image itself but rather the url which can be used to download the file.
    *
-   * @return the url which can be used to download the shield icon if one is avaliable
+   * @return the url which can be used to download the shield icon if one is available
    * @since 3.0.0
    */
   @Nullable
@@ -115,11 +115,11 @@ public abstract class BannerComponents implements Serializable, Comparable<Banne
   /**
    * Allows ability to sort/compare by abbreviation priority. This is null-safe for values of
    * abbreviationPriority, and treats BannerComponents with a null abreviationPriority as having an
-   * abbreviationPriority of infinity.
+   * abbreviationPriority of infinity. This method returns a negative integer, zero, or a positive
+   * integer as this object is less than, equal to, or greater than the specified object.
    *
    * @param bannerComponents to compare to
-   * @return a negative integer, zero, or a positive integer as this object is less than, equal to,
-   * or greater than the specified object.
+   * @return the compareTo int value
    * @since 3.0.0
    */
   @Override
