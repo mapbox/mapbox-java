@@ -19,7 +19,7 @@ import java.io.Serializable;
  * @since 3.0.0
  */
 @AutoValue
-public abstract class BannerComponents implements Serializable {
+public abstract class BannerComponents implements Serializable, Comparable<BannerComponents> {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -94,7 +94,7 @@ public abstract class BannerComponents implements Serializable {
    * icon that's included to better identify to your user to roadway. Note that this doesn't
    * return the image itself but rather the url which can be used to download the file.
    *
-   * @return the url which can be used to download the shield icon if one is avaliable
+   * @return the url which can be used to download the shield icon if one is available
    * @since 3.0.0
    */
   @Nullable
@@ -110,6 +110,32 @@ public abstract class BannerComponents implements Serializable {
    */
   public static TypeAdapter<BannerComponents> typeAdapter(Gson gson) {
     return new AutoValue_BannerComponents.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Allows ability to sort/compare by abbreviation priority. This is null-safe for values of
+   * abbreviationPriority, and treats BannerComponents with a null abreviationPriority as having an
+   * abbreviationPriority of infinity. This method returns a negative integer, zero, or a positive
+   * integer as this object is less than, equal to, or greater than the specified object.
+   *
+   * @param bannerComponents to compare to
+   * @return the compareTo int value
+   * @since 3.0.0
+   */
+  @Override
+  public int compareTo(BannerComponents bannerComponents) {
+    Integer ab1 = this.abbreviationPriority();
+    Integer ab2 = bannerComponents.abbreviationPriority();
+
+    if (ab1 == null && ab2 == null) {
+      return 0;
+    } else if (ab1 == null) {
+      return 1;
+    } else if (ab2 == null) {
+      return -1;
+    } else {
+      return ab1.compareTo(ab2);
+    }
   }
 
   /**
