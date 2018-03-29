@@ -1,18 +1,16 @@
 package com.mapbox.turf;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.MultiLineString;
 import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Polygon;
+import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.GeometryCollection;
 import com.mapbox.geojson.LineString;
+import com.mapbox.geojson.MultiLineString;
+import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -23,6 +21,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+
 public class TurfMeasurementTest extends TestUtils {
 
   private static final String LINE_DISTANCE_ROUTE_ONE = "turf-line-distance/route1.geojson";
@@ -30,6 +33,7 @@ public class TurfMeasurementTest extends TestUtils {
   private static final String LINE_DISTANCE_POLYGON = "turf-line-distance/polygon.geojson";
   private static final String TURF_ALONG_DC_LINE = "turf-along/dc-line.geojson";
   private static final String TURF_BBOX_POINT = "turf-bbox/point.geojson";
+  private static final String TURF_BBOX_MULTI_POINT = "turf-bbox/multipoint.geojson";
   private static final String TURF_BBOX_LINESTRING = "turf-bbox/linestring.geojson";
   private static final String TURF_BBOX_POLYGON = "turf-bbox/polygon.geojson";
   private static final String TURF_BBOX_MULTILINESTRING = "turf-bbox/multilinestring.geojson";
@@ -300,5 +304,41 @@ public class TurfMeasurementTest extends TestUtils {
     assertEquals(0, bbox[1], DELTA);
     assertEquals(103, bbox[2], DELTA);
     assertEquals(3, bbox[3], DELTA);
+  }
+
+  @Test
+  public void bboxFromGeometry() throws IOException, TurfException {
+    Geometry geometry = MultiPolygon.fromJson(loadJsonFixture(TURF_BBOX_MULTIPOLYGON));
+    double[] bbox = TurfMeasurement.bbox(geometry);
+
+    assertEquals(4, bbox.length);
+    assertEquals(100, bbox[0], DELTA);
+    assertEquals(0, bbox[1], DELTA);
+    assertEquals(103, bbox[2], DELTA);
+    assertEquals(3, bbox[3], DELTA);
+  }
+
+  @Test
+  public void bboxFromGeometryCollection() throws IOException, TurfException {
+    // Check that geometry collection and direct bbox are equal
+    MultiPolygon multiPolygon = MultiPolygon.fromJson(loadJsonFixture(TURF_BBOX_MULTIPOLYGON));
+    assertArrayEquals(TurfMeasurement.bbox(multiPolygon), TurfMeasurement.bbox(GeometryCollection.fromGeometry(multiPolygon)), DELTA);
+
+    // Check all geometry types
+    List<Geometry> geometries = new ArrayList<>();
+    geometries.add(Feature.fromJson(loadJsonFixture(TURF_BBOX_POINT)).geometry());
+    geometries.add(MultiPoint.fromJson(loadJsonFixture(TURF_BBOX_MULTI_POINT)));
+    geometries.add(LineString.fromJson(loadJsonFixture(TURF_BBOX_LINESTRING)));
+    geometries.add(MultiLineString.fromJson(loadJsonFixture(TURF_BBOX_MULTILINESTRING)));
+    geometries.add(Feature.fromJson(loadJsonFixture(TURF_BBOX_POLYGON)).geometry());
+    geometries.add(MultiPolygon.fromJson(loadJsonFixture(TURF_BBOX_MULTIPOLYGON)));
+    geometries.add(GeometryCollection.fromGeometry(Point.fromLngLat(-1., -1.)));
+    double[] bbox = TurfMeasurement.bbox(GeometryCollection.fromGeometries(geometries));
+
+    assertEquals(4, bbox.length);
+    assertEquals(-1, bbox[0], DELTA);
+    assertEquals(-10, bbox[1], DELTA);
+    assertEquals(130, bbox[2], DELTA);
+    assertEquals(4, bbox[3], DELTA);
   }
 }
