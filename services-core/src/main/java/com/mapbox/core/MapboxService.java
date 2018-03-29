@@ -24,7 +24,7 @@ public abstract class MapboxService<T, S> {
 
   private final Class<S> serviceType;
   private boolean enableDebug;
-  private OkHttpClient okHttpClient;
+  protected OkHttpClient okHttpClient;
   private okhttp3.Call.Factory callFactory;
   private Retrofit retrofit;
   private Call<T> call;
@@ -209,7 +209,7 @@ public abstract class MapboxService<T, S> {
    * @return OkHttpClient
    * @since 1.0.0
    */
-  public synchronized OkHttpClient getOkHttpClient() {
+  protected synchronized OkHttpClient getOkHttpClient() {
     if (okHttpClient == null) {
       if (isEnableDebug()) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -221,7 +221,6 @@ public abstract class MapboxService<T, S> {
         okHttpClient = new OkHttpClient();
       }
     }
-
     return okHttpClient;
   }
 }
