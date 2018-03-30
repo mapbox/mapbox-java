@@ -116,6 +116,13 @@ public final class DirectionsCriteria {
   public static final String ANNOTATION_CONGESTION = "congestion";
 
   /**
+   * The posted speed limit, between each pair of coordinates.
+   *
+   * @since 2.1.0
+   */
+  public static final String ANNOTATION_MAXSPEED = "maxspeed";
+
+  /**
    * Exclude all tolls along the returned directions route.
    *
    * @since 3.0.0
@@ -255,7 +262,8 @@ public final class DirectionsCriteria {
     ANNOTATION_CONGESTION,
     ANNOTATION_DISTANCE,
     ANNOTATION_DURATION,
-    ANNOTATION_SPEED
+    ANNOTATION_SPEED,
+    ANNOTATION_MAXSPEED
   })
   public @interface AnnotationCriteria {
   }
