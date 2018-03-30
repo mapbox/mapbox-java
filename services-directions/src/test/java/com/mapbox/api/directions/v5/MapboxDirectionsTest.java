@@ -1,6 +1,10 @@
 package com.mapbox.api.directions.v5;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
@@ -26,6 +30,7 @@ import retrofit2.Response;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest extends TestUtils {
@@ -36,6 +41,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_ROTARY_FIXTURE = "directions_v5_fixtures_rotary.json";
   private static final String DIRECTIONS_V5_ANNOTATIONS_FIXTURE = "directions_annotations_v5.json";
   private static final String DIRECTIONS_V5_NO_ROUTE = "directions_v5_no_route.json";
+  private static final String DIRECTIONS_V5_MAX_SPEED_ANNOTATION = "directions_v5_max_speed_annotation.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -479,7 +485,20 @@ public class MapboxDirectionsTest extends TestUtils {
       .destination(Point.fromLngLat(5.29838,4.42189))
       .annotations(DirectionsCriteria.ANNOTATION_MAXSPEED)
       .build();
+
     assertThat(directions.cloneCall().request().url().toString(),
       containsString("annotations=maxspeed"));
+  }
+
+  @Test
+  public void maxSpeedAnnotation_doesGetCreatedInResponse() throws IOException {
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
+    String body = loadJsonFixture(DIRECTIONS_V5_MAX_SPEED_ANNOTATION);
+    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
+    DirectionsRoute maxSpeedRoute = response.routes().get(0);
+    LegAnnotation maxSpeedAnnotation = maxSpeedRoute.legs().get(0).annotation();
+
+    assertNotNull(maxSpeedAnnotation.maxspeed());
   }
 }

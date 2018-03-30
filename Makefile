@@ -108,6 +108,10 @@ directions-fixtures:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.03067988107114,37.331808179989494;-122.03178702099605,37.3302383113533?voice_units=imperial&roundabout_exits=true&geometries=polyline&overview=full&steps=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-directions/src/test/resources/directions_v5_banner_text.json
 
+    # Directions: route with maxspeed
+	curl "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/9.950072,52.150015;7.569915,52.916751?alternatives=true&geometries=polyline6&overview=full&steps=true&bearings=%3B&continue_straight=true&annotations=maxspeed&language=en&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+        -o services-directions/src/test/resources/directions_v5_max_speed_annotation.json
+
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-matching/src/test/resources/map_matching_v5_polyline.json
