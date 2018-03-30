@@ -1,32 +1,32 @@
 package com.mapbox.api.directions.v5;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.junit.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import retrofit2.Response;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.junit.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest extends TestUtils {
 
@@ -467,5 +467,19 @@ public class MapboxDirectionsTest extends TestUtils {
       .build();
     assertThat(directions.cloneCall().request().url().toString(),
       containsString("1.234,2.345;13.493,9.958;5.29838,4.42189"));
+  }
+
+  @Test
+  public void maxSpeedAnnotation_doesGetFormattedInUrlCorrectly() {
+    Locale.setDefault(Locale.GERMANY);
+    MapboxDirections directions = MapboxDirections.builder()
+      .accessToken(ACCESS_TOKEN)
+      .origin(Point.fromLngLat(1.234,2.345))
+      .addWaypoint(Point.fromLngLat(13.493,9.958))
+      .destination(Point.fromLngLat(5.29838,4.42189))
+      .annotations(DirectionsCriteria.ANNOTATION_MAXSPEED)
+      .build();
+    assertThat(directions.cloneCall().request().url().toString(),
+      containsString("annotations=maxspeed"));
   }
 }

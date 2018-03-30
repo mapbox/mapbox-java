@@ -68,7 +68,7 @@ public abstract class LegAnnotation implements Serializable {
    * @since 3.0.0
    */
   @Nullable
-  public abstract List<MaxSpeed> maxSpeed();
+  public abstract List<MaxSpeed> maxspeed();
 
   /**
    * The congestion between each pair of coordinates.
@@ -134,11 +134,11 @@ public abstract class LegAnnotation implements Serializable {
      * Maxspeed is only available for the `mapbox/driving` and `mapbox/driving-traffic`
      * profiles, other profiles will return `unknown`s only.
      *
-     * @param maxSpeed list of speeds between each pair of coordinates
+     * @param maxspeed list of speeds between each pair of coordinates
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder maxSpeed(@Nullable List<MaxSpeed> maxSpeed);
+    public abstract Builder maxspeed(@Nullable List<MaxSpeed> maxspeed);
 
     /**
      * The congestion between each pair of coordinates.
