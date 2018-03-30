@@ -2,6 +2,16 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.0.0
+- Added MapMatching Error reporting #758
+- MapMaptchingMatching to DirectionsRoute #759
+- Add Abbreviations and type to BannerComponent #762
+- Add voiceUnits to MapMatching #764
+- Implemented Comparable in BannerComponents #768
+- Adds a bbox() utility method for Geometry #769
+- Adds a method to Geometry to load from json #770
+- Add MaxSpeed Annotation to Directions API #772
+
 ### v3.0.0-beta.4
 - Rework dependency tree, add api instead of implementation
 - Remove unprintable chars in api request
