@@ -1,32 +1,37 @@
 package com.mapbox.api.directions.v5;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.junit.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import retrofit2.Response;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.junit.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest extends TestUtils {
 
@@ -36,6 +41,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_ROTARY_FIXTURE = "directions_v5_fixtures_rotary.json";
   private static final String DIRECTIONS_V5_ANNOTATIONS_FIXTURE = "directions_annotations_v5.json";
   private static final String DIRECTIONS_V5_NO_ROUTE = "directions_v5_no_route.json";
+  private static final String DIRECTIONS_V5_MAX_SPEED_ANNOTATION = "directions_v5_max_speed_annotation.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -467,5 +473,32 @@ public class MapboxDirectionsTest extends TestUtils {
       .build();
     assertThat(directions.cloneCall().request().url().toString(),
       containsString("1.234,2.345;13.493,9.958;5.29838,4.42189"));
+  }
+
+  @Test
+  public void maxSpeedAnnotation_doesGetFormattedInUrlCorrectly() {
+    Locale.setDefault(Locale.GERMANY);
+    MapboxDirections directions = MapboxDirections.builder()
+      .accessToken(ACCESS_TOKEN)
+      .origin(Point.fromLngLat(1.234,2.345))
+      .addWaypoint(Point.fromLngLat(13.493,9.958))
+      .destination(Point.fromLngLat(5.29838,4.42189))
+      .annotations(DirectionsCriteria.ANNOTATION_MAXSPEED)
+      .build();
+
+    assertThat(directions.cloneCall().request().url().toString(),
+      containsString("annotations=maxspeed"));
+  }
+
+  @Test
+  public void maxSpeedAnnotation_doesGetCreatedInResponse() throws IOException {
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
+    String body = loadJsonFixture(DIRECTIONS_V5_MAX_SPEED_ANNOTATION);
+    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
+    DirectionsRoute maxSpeedRoute = response.routes().get(0);
+    LegAnnotation maxSpeedAnnotation = maxSpeedRoute.legs().get(0).annotation();
+
+    assertNotNull(maxSpeedAnnotation.maxspeed());
   }
 }
