@@ -17,7 +17,7 @@
 </p>
 <br>
 
-Mapbox Java Services contains directions, geocoding, and many more APIs to use inside your Android or Java application. This repository holds the source code for the project and is divided into several modules to make it easier for developers to only include the dependencies needed for their project.
+The Mapbox Java SDK contains directions, geocoding, and many more APIs to use inside your Android or Java application. This repository holds the source code for the project and is divided into several modules to make it easier for developers to only include the dependencies needed for their project.
 
 ## Getting Started
 
@@ -44,13 +44,13 @@ repositories {
 }
 
 dependencies {
-    compile 'com.mapbox.mapboxsdk:mapbox-android-services:3.1.0-SNAPSHOT'
+    compile 'com.mapbox.mapboxsdk:mapbox-sdk-services:3.1.0-SNAPSHOT'
 }
 ```
 
 ## Sample code
 
-Check the [Android Test App](https://github.com/mapbox/mapbox-java/tree/master/mapbox/app) for examples or download the [Mapbox Demo App](https://play.google.com/store/apps/details?id=com.mapbox.mapboxandroiddemo) to see what's possible with Mapbox Java Services. You can also visit the [Mapbox Android examples page](https://www.mapbox.com/android-docs/mapbox-services/examples/) for additional code examples.
+Check the [the Mapbox Java SDK's Android Test App](https://github.com/mapbox/mapbox-java/tree/master/mapbox/app) for examples or download the [Mapbox Demo App](https://play.google.com/store/apps/details?id=com.mapbox.mapboxandroiddemo) to see what's possible with the Mapbox Java SDK. You can also visit the [Mapbox Android examples page](https://www.mapbox.com/android-docs/mapbox-services/examples/) for additional code examples.
 
 ## Contributing
 
