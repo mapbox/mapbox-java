@@ -34,7 +34,7 @@ jobs:
       - run:
           name: SonarQube upload
           command: |
-            if [ "${CIRCLE_BRANCH}" == "release-v3.0.1" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
             make sonarqube ;
             fi
       - store_artifacts:
@@ -73,6 +73,6 @@ jobs:
       - deploy:
           name: Publish Java Services To Maven Central
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "release-v3.0.1" ]; then
             make publish ;
             fi

@@ -2,6 +2,9 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.0.1
+- Adjust maxspeed annotation [#777](https://github.com/mapbox/mapbox-java/pull/777)
+
 ### v3.0.0
 - Added MapMatching Error reporting #758
 - MapMaptchingMatching to DirectionsRoute #759
