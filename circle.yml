@@ -34,7 +34,7 @@ jobs:
       - run:
           name: SonarQube upload
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "release-v3.0.1" ]; then
             make sonarqube ;
             fi
       - store_artifacts:
