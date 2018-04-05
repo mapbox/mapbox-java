@@ -3,7 +3,8 @@ apply plugin: 'java-library'
 sourceSets {
   main.java.srcDirs = ['../services-directions/src/main/java', '../services-geocoding/src/main/java',
                        '../services-matching/src/main/java', '../services-matrix/src/main/java',
-                       '../services-optimization/src/main/java', '../services-staticmap/src/main/java']
+                       '../services-optimization/src/main/java', '../services-staticmap/src/main/java',
+                        '../services-speech/src/main/java']
 }
 
 dependencies {
