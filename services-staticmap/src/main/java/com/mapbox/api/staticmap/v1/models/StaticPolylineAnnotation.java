@@ -85,6 +85,17 @@ public abstract class StaticPolylineAnnotation {
   abstract String polyline();
 
   /**
+   * Convert the current {@link StaticPolylineAnnotation} to its builder holding the currently
+   * assigned values. This allows you to modify a single variable and then rebuild
+   * the object resulting in an updated and modified {@link StaticPolylineAnnotation}.
+   *
+   * @return a {@link StaticPolylineAnnotation.Builder} with the same values set to match the ones
+   *   defined in this {@link StaticPolylineAnnotation}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * Builder used for passing in custom parameters.
    *
    * @since 2.1.0

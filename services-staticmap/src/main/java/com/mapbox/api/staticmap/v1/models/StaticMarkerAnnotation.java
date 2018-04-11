@@ -80,6 +80,17 @@ public abstract class StaticMarkerAnnotation {
   abstract String iconUrl();
 
   /**
+   * Convert the current {@link StaticMarkerAnnotation} to its builder holding the currently
+   * assigned values. This allows you to modify a single variable and then rebuild the object
+   * resulting in an updated and modified {@link StaticMarkerAnnotation}.
+   *
+   * @return a {@link StaticMarkerAnnotation.Builder} with the same values set to match the ones
+   *   defined in this {@link StaticMarkerAnnotation}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * This builder is used to create a new request to the Mapbox Static Map API. At a bare minimum,
    * your request must include a name and {@link StaticMarkerAnnotation.Builder#lnglat(Point)}.
    * All other fields can be left alone inorder to use the default behaviour of the API.
