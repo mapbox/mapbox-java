@@ -57,7 +57,7 @@ public class FeatureTest extends TestUtils {
     points.add(Point.fromLngLat(2.0, 3.0));
     LineString lineString = LineString.fromLngLats(points);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     Feature feature = Feature.fromGeometry(lineString, bbox);
     assertNotNull(feature.bbox());
     assertEquals(1.0, feature.bbox().west(), DELTA);
@@ -73,7 +73,7 @@ public class FeatureTest extends TestUtils {
     points.add(Point.fromLngLat(2.0, 3.0));
     LineString lineString = LineString.fromLngLats(points);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     Feature feature = Feature.fromGeometry(lineString, bbox);
     compareJson("{\"type\":\"Feature\",\"bbox\":[1.0,2.0,3.0,4.0],\"geometry\":"
         + "{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]},\"properties\":{}}",
