@@ -125,8 +125,8 @@ public abstract class DirectionsRoute implements Serializable {
 
   /**
    * Convert the current {@link DirectionsRoute} to its builder holding the currently assigned
-   * values. This allows you to modify a single variable and then rebuild the project resulting in
-   * an updated and modifier {@link DirectionsRoute}.
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link DirectionsRoute}.
    *
    * @return a {@link DirectionsRoute.Builder} with the same values set to match the ones defined
    *   in this {@link DirectionsRoute}

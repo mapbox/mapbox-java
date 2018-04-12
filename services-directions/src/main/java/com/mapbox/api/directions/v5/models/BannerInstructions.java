@@ -58,6 +58,17 @@ public abstract class BannerInstructions implements Serializable {
   public abstract BannerText secondary();
 
   /**
+   * Convert the current {@link BannerInstructions} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link BannerInstructions}.
+   *
+   * @return a {@link BannerInstructions.Builder} with the same values set to match the ones defined
+   *   in this {@link BannerInstructions}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object

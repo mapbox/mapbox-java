@@ -121,8 +121,8 @@ public abstract class DirectionsResponse implements Serializable {
 
   /**
    * Convert the current {@link DirectionsResponse} to its builder holding the currently assigned
-   * values. This allows you to modify a single variable and then rebuild the project resulting in
-   * an updated and modifier {@link DirectionsResponse}.
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link DirectionsResponse}.
    *
    * @return a {@link DirectionsResponse.Builder} with the same values set to match the ones defined
    *   in this {@link DirectionsResponse}

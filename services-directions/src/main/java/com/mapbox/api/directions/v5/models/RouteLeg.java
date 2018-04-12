@@ -74,6 +74,18 @@ public abstract class RouteLeg implements Serializable {
   public abstract LegAnnotation annotation();
 
   /**
+   * Convert the current {@link RouteLeg} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link RouteLeg}.
+   *
+   * @return a {@link RouteLeg.Builder} with the same values set to match the ones defined
+   *   in this {@link RouteLeg}
+   * @since 3.1.0
+   */
+
+  public abstract Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object

@@ -85,6 +85,17 @@ public abstract class OptimizationWaypoint implements Serializable {
   abstract double[] rawLocation();
 
   /**
+   * Convert the current {@link OptimizationWaypoint} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the object resulting in
+   * an updated and modified {@link OptimizationWaypoint}.
+   *
+   * @return a {@link OptimizationWaypoint.Builder} with the same values set to match the ones
+   *   defined in this {@link OptimizationWaypoint}
+   * @since 3.1.0
+   */
+  public abstract OptimizationWaypoint.Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
