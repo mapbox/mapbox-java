@@ -12,7 +12,6 @@ import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 
-import java.awt.Color;
 import java.util.Locale;
 
 /**
@@ -52,11 +51,11 @@ public abstract class StaticMarkerAnnotation {
     }
 
     if (color() != null && label() != null && !TextUtils.isEmpty(label())) {
-      url = String.format(Locale.US, "%s-%s+%s", name(), label(), toHexString(color()));
+      url = String.format(Locale.US, "%s-%s+%s", name(), label(), color());
     } else if (label() != null && !TextUtils.isEmpty(label())) {
       url = String.format(Locale.US, "%s-%s", name(), label());
     } else if (color() != null) {
-      url = String.format(Locale.US, "%s-%s", name(), toHexString(color()));
+      url = String.format(Locale.US, "%s-%s", name(), color());
     } else {
       url = name();
     }
@@ -71,7 +70,7 @@ public abstract class StaticMarkerAnnotation {
   abstract String label();
 
   @Nullable
-  abstract Color color();
+  abstract String color();
 
   @Nullable
   abstract Point lnglat();
@@ -122,13 +121,26 @@ public abstract class StaticMarkerAnnotation {
     public abstract Builder label(String label);
 
     /**
-     * A reference to a {@link Color} which defines the markers color.
+     * A hex representation of the markers color.
      *
-     * @param color {@link Color} denoting the marker icon color
+     * @param color  hex reppresentation of the marker icon color
      * @return this builder for chaining options together
-     * @since 2.1.0
+     * @since 3.1.0
      */
-    public abstract Builder color(@Nullable Color color);
+    public abstract Builder color(@Nullable String color);
+
+    /**
+     * A hex representation of the markers color.
+     *
+     * @param red the value of the marker icon color
+     * @param green the value of the marker icon color
+     * @param blue the value of the marker icon color
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public Builder color(int red, int green, int blue) {
+      return color(toHexString(red, green, blue));
+    }
 
     /**
      * Represents where the marker should be shown on the map.

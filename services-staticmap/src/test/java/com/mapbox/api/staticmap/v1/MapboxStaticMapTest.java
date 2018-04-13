@@ -9,6 +9,7 @@ import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation;
 import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.core.utils.ColorUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
@@ -225,7 +226,11 @@ public class MapboxStaticMapTest extends TestUtils {
 
     markers.add(StaticMarkerAnnotation.builder()
       .name(StaticMapCriteria.MEDIUM_PIN).lnglat(Point.fromLngLat(-71.0842, 42.3943))
-      .color(Color.ORANGE).label("a").build());
+      .color(
+        Color.ORANGE.getRed(),
+        Color.ORANGE.getGreen(),
+        Color.ORANGE.getBlue())
+      .label("a").build());
     MapboxStaticMap staticMap = MapboxStaticMap.builder()
       .accessToken(ACCESS_TOKEN)
       .retina(true)
@@ -241,7 +246,12 @@ public class MapboxStaticMapTest extends TestUtils {
     List<StaticPolylineAnnotation> polylines = new ArrayList<>();
 
     polylines.add(StaticPolylineAnnotation.builder()
-      .polyline("abcdefg").fillColor(Color.BLUE).fillOpacity(0.1f).build());
+      .polyline("abcdefg")
+      .fillColor(
+        Color.BLUE.getRed(),
+        Color.BLUE.getGreen(),
+        Color.BLUE.getBlue())
+      .fillOpacity(0.1f).build());
 
     MapboxStaticMap staticMap = MapboxStaticMap.builder()
       .accessToken(ACCESS_TOKEN)
