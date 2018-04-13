@@ -57,6 +57,7 @@ import java.util.logging.Level;
 public abstract class MapboxMapMatching extends
   MapboxService<MapMatchingResponse, MapMatchingService> {
 
+  private static final String PLACEHOLDER_UUID = "mapmatching";
 
   protected MapboxMapMatching() {
     super(MapMatchingService.class);
@@ -211,8 +212,12 @@ public abstract class MapboxMapMatching extends
           .user(user())
           .voiceInstructions(voiceInstructions())
           .bannerInstructions(bannerInstructions())
+          .roundaboutExits(roundaboutExits())
+          .geometries(geometries())
+          .overview(overview())
+          .steps(steps())
           .voiceUnits(voiceUnits())
-          .requestUuid("mapmatching")
+          .requestUuid(PLACEHOLDER_UUID)
           .accessToken(accessToken())
           .baseUrl(baseUrl())
           .build()

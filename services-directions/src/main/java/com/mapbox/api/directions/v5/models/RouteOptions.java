@@ -76,7 +76,7 @@ public abstract class RouteOptions {
    * that these are the non-snapped coordinates.
    *
    * @return a list of {@link Point}s which represent the route origin, destination,
-   *         and optionally, waypoints
+   *   and optionally, waypoints
    * @since 3.0.0
    */
   @NonNull
@@ -97,7 +97,7 @@ public abstract class RouteOptions {
    * response.
    *
    * @return the language as a string used during the request,
-   *         if english, this will most likely be empty
+   *   if english, this will most likely be empty
    * @since 3.0.0
    */
   @Nullable
@@ -128,11 +128,50 @@ public abstract class RouteOptions {
    * directions response.
    *
    * @return a boolean value representing whether or not continueStraight was enabled or
-   *         not during the initial request
+   *   not during the initial request
    * @since 3.0.0
    */
   @Nullable
   public abstract Boolean continueStraight();
+
+  /**
+   * This is set to true if you want to enable instructions while exiting roundabouts
+   * and rotaries.
+   *
+   * @return a boolean value representing whether or not roundaboutExits was enabled or disabled
+   *   during the initial route request
+   * @since 3.1.0
+   */
+  @Nullable
+  public abstract Boolean roundaboutExits();
+
+  /**
+   * Geometry type used to make the initial directions request.
+   *
+   * @return String geometry type used to make the initial directions request.
+   * @since 3.1.0
+   */
+  public abstract String geometries();
+
+  /**
+   * Type of returned overview geometry that was used to make the initial directions request.
+   *
+   * @return null or one of the options found in
+   *   {@link DirectionsCriteria.OverviewCriteria}
+   * @since 3.1.0
+   */
+  @Nullable
+  public abstract String overview();
+
+  /**
+   * Boolean value used to determine whether to return steps and turn-by-turn instructions in the
+   * initial directions request.
+   *
+   * @return true if you'd like step information, false otherwise
+   * @since 3.1.0
+   */
+  @Nullable
+  public abstract Boolean steps();
 
   /**
    * The same annotations in String format which were used during the request that resulted in this
@@ -307,6 +346,50 @@ public abstract class RouteOptions {
      * @since 3.0.0
      */
     public abstract Builder continueStraight(Boolean continueStraight);
+
+    /**
+     * This is set to true if you want to enable instructions while exiting roundabouts
+     * and rotaries.
+     *
+     * @param roundaboutExits true if you'd like extra roundabout instructions
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder roundaboutExits(@Nullable Boolean roundaboutExits);
+
+    /**
+     * alter the default geometry being returned for the directions route. A null value will reset
+     * this field to the APIs default value vs this SDKs default value of
+     * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
+     *
+     * @param geometries null if you'd like the default geometry, else one of the options found in
+     *                   {@link DirectionsCriteria.GeometriesCriteria}.
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder geometries(@DirectionsCriteria.GeometriesCriteria String geometries);
+
+    /**
+     * Type of returned overview geometry that was used to make the initial directions request.
+     *
+     * @param overview null or one of the options found in
+     *                 {@link DirectionsCriteria.OverviewCriteria}
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder overview(
+      @Nullable @DirectionsCriteria.OverviewCriteria String overview
+    );
+
+    /**
+     * Boolean value used to determine whether to return steps and turn-by-turn instructions in the
+     * initial directions request.
+     *
+     * @param steps true if you'd like step information, false otherwise
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder steps(@Nullable Boolean steps);
 
     /**
      * The annotation which were used during the request process.
