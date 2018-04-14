@@ -357,6 +357,11 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
    * Checks to ensure that the LineStrings defining the polygon correctly and adhering to the linear
    * ring rules.
    *
+   * @param lineString {@link LineString} the polygon geometry
+   * @return true if number of coordinates are 4 or more, and first and last coordinates
+   *   are identical, else false
+   * @throws GeoJsonException if number of coordinates are less than 4,
+   *   or first and last coordinates are not identical
    * @since 3.0.0
    */
   private static boolean isLinearRing(LineString lineString) {

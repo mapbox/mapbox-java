@@ -79,8 +79,8 @@ public abstract class MapMatchingResponse implements Serializable {
 
   /**
    * Convert the current {@link MapMatchingResponse} to its builder holding the currently assigned
-   * values. This allows you to modify a single variable and then rebuild the project resulting in
-   * an updated and modifier {@link MapMatchingResponse}.
+   * values. This allows you to modify a single variable and then rebuild the object resulting in
+   * an updated and modified {@link MapMatchingResponse}.
    *
    * @return a {@link MapMatchingResponse.Builder} with the same values set to match the ones
    *   defined in this {@link MapMatchingResponse}

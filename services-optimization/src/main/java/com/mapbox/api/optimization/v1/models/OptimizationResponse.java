@@ -79,6 +79,17 @@ public abstract class OptimizationResponse implements Serializable {
   public abstract List<DirectionsRoute> trips();
 
   /**
+   * Convert the current {@link OptimizationResponse} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the object resulting in
+   * an updated and modified {@link OptimizationResponse}.
+   *
+   * @return a {@link OptimizationResponse.Builder} with the same values set to match the ones
+   *   defined in this {@link OptimizationResponse}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object

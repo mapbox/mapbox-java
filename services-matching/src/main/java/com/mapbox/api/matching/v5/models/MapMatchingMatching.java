@@ -104,14 +104,14 @@ public abstract class MapMatchingMatching implements Serializable {
 
   /**
    * Convert the current {@link MapMatchingMatching} to its builder holding the currently assigned
-   * values. This allows you to modify a single variable and then rebuild the project resulting in
-   * an updated and modifier {@link MapMatchingMatching}.
+   * values. This allows you to modify a single variable and then rebuild the object resulting in
+   * an updated and modified {@link MapMatchingMatching}.
    *
    * @return a {@link MapMatchingMatching.Builder} with the same values set to match the ones
    *   defined in this {@link MapMatchingMatching}
    * @since 3.0.0
    */
-  public abstract MapMatchingMatching.Builder toBuilder();
+  public abstract Builder toBuilder();
 
   /**
    * Map this MapMatchingMatching object to a {@link DirectionsRoute} object.
