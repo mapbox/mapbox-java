@@ -1,6 +1,7 @@
 package com.mapbox.api.staticmap.v1.models;
 
 import com.mapbox.api.staticmap.v1.StaticMapCriteria;
+import com.mapbox.core.utils.ColorUtils;
 import com.mapbox.geojson.Point;
 
 import org.hamcrest.junit.ExpectedException;
@@ -43,7 +44,10 @@ public class StaticMarkerAnnotationTest {
       .lnglat(Point .fromLngLat(1.0,2.0))
       .name(StaticMapCriteria.MEDIUM_PIN)
       .label("abc")
-      .color(Color.BLUE)
+      .color(
+        Color.BLUE.getRed(),
+        Color.BLUE.getGreen(),
+        Color.BLUE.getBlue())
       .build();
     assertThat(staticMarkerAnnotation.url(),
       containsString("pin-m-abc+0000FF(1.000000,2.000000)"));
@@ -54,7 +58,10 @@ public class StaticMarkerAnnotationTest {
     StaticMarkerAnnotation staticMarkerAnnotation = StaticMarkerAnnotation.builder()
       .lnglat(Point .fromLngLat(1.0,2.0))
       .name(StaticMapCriteria.MEDIUM_PIN)
-      .color(Color.BLUE)
+      .color(
+        Color.BLUE.getRed(),
+        Color.BLUE.getGreen(),
+        Color.BLUE.getBlue())
       .build();
     assertTrue(staticMarkerAnnotation.url().contains("pin-m-0000FF(1.000000,2.000000)"));
   }
