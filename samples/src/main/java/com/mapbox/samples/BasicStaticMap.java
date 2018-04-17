@@ -1,5 +1,6 @@
 package com.mapbox.samples;
 
+import com.mapbox.core.utils.ColorUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.api.staticmap.v1.MapboxStaticMap;
 import com.mapbox.api.staticmap.v1.StaticMapCriteria;
@@ -20,11 +21,19 @@ public class BasicStaticMap {
 
     markers.add(StaticMarkerAnnotation.builder().name(StaticMapCriteria.LARGE_PIN)
       .lnglat(Point.fromLngLat(-122.46589, 37.77343))
-      .color(Color.MAGENTA).label("a").build());
+      .color(ColorUtils.toHexString(
+        Color.MAGENTA.getRed(),
+        Color.MAGENTA.getGreen(),
+        Color.MAGENTA.getBlue()))
+      .label("a").build());
 
     markers.add(StaticMarkerAnnotation.builder().name(StaticMapCriteria.LARGE_PIN)
       .lnglat(Point.fromLngLat(-122.42816,37.75965))
-      .color(Color.GREEN).label("b").build());
+      .color(Color.GREEN.getRed(),
+        Color.GREEN.getGreen(),
+        Color.GREEN.getBlue())
+      .label("b")
+      .build());
 
     polylines.add(StaticPolylineAnnotation.builder().polyline("abcdef").build());
 
