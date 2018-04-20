@@ -1,5 +1,8 @@
 package com.mapbox.turf;
 
+import static com.mapbox.turf.TurfConversion.degreesToRadians;
+import static com.mapbox.turf.TurfConversion.radiansToDegrees;
+
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 
@@ -38,18 +41,16 @@ public final class TurfMeasurement {
    * @since 1.3.0
    */
   public static double bearing(@NonNull Point point1, @NonNull Point point2) {
-    double degrees2radians = Math.PI / 180;
-    double radians2degrees = 180 / Math.PI;
 
-    double lon1 = degrees2radians * point1.longitude();
-    double lon2 = degrees2radians * point2.longitude();
-    double lat1 = degrees2radians * point1.latitude();
-    double lat2 = degrees2radians * point2.latitude();
+    double lon1 = degreesToRadians(point1.longitude());
+    double lon2 = degreesToRadians(point2.longitude());
+    double lat1 = degreesToRadians(point1.latitude());
+    double lat2 = degreesToRadians(point2.latitude());
     double value1 = Math.sin(lon2 - lon1) * Math.cos(lat2);
     double value2 = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
       * Math.cos(lat2) * Math.cos(lon2 - lon1);
 
-    return radians2degrees * Math.atan2(value1, value2);
+    return radiansToDegrees(Math.atan2(value1, value2));
   }
 
   /**
@@ -69,11 +70,10 @@ public final class TurfMeasurement {
   public static Point destination(@NonNull Point point, @FloatRange(from = 0) double distance,
                                   @FloatRange(from = -180, to = 180) double bearing,
                                   @NonNull @TurfConstants.TurfUnitCriteria String units) {
-    double degrees2radians = Math.PI / 180;
-    double radians2degrees = 180 / Math.PI;
-    double longitude1 = degrees2radians * point.longitude();
-    double latitude1 = degrees2radians * point.latitude();
-    double bearingRad = degrees2radians * bearing;
+
+    double longitude1 = degreesToRadians(point.longitude());
+    double latitude1 = degreesToRadians(point.latitude());
+    double bearingRad = degreesToRadians(bearing);
 
     double radians = TurfConversion.lengthToRadians(distance, units);
 
@@ -84,7 +84,7 @@ public final class TurfMeasurement {
       Math.cos(radians) - Math.sin(latitude1) * Math.sin(latitude2));
 
     return Point.fromLngLat(
-      radians2degrees * longitude2, radians2degrees * latitude2);
+      radiansToDegrees(longitude2), radiansToDegrees(latitude2));
   }
 
   /**
@@ -114,11 +114,10 @@ public final class TurfMeasurement {
    */
   public static double distance(@NonNull Point point1, @NonNull Point point2,
                                 @NonNull @TurfConstants.TurfUnitCriteria String units) {
-    double degrees2radians = Math.PI / 180;
-    double difLat = degrees2radians * (point2.latitude() - point1.latitude());
-    double difLon = degrees2radians * (point2.longitude() - point1.longitude());
-    double lat1 = degrees2radians * point1.latitude();
-    double lat2 = degrees2radians * point2.latitude();
+    double difLat = degreesToRadians((point2.latitude() - point1.latitude()));
+    double difLon = degreesToRadians((point2.longitude() - point1.longitude()));
+    double lat1 = degreesToRadians(point1.latitude());
+    double lat2 = degreesToRadians(point2.latitude());
 
     double value = Math.pow(Math.sin(difLat / 2), 2)
       + Math.pow(Math.sin(difLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);

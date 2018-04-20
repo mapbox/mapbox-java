@@ -11,6 +11,7 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
@@ -25,6 +26,10 @@ public class TurfMiscTest extends TestUtils {
   private static final String LINE_SLICE_ROUTE_ONE = "turf-line-slice/route1.geojson";
   private static final String LINE_SLICE_ROUTE_TWO = "turf-line-slice/route2.geojson";
   private static final String LINE_SLICE_VERTICAL = "turf-line-slice/vertical.geojson";
+
+  private static final String LINE_SLICE_ALONG_LINE_ONE = "turf-line-slice-along/line1.geojson";
+  private static final String LINE_SLICE_ALONG_ROUTE_ONE = "turf-line-slice-along/route1.geojson";
+  private static final String LINE_SLICE_ALONG_ROUTE_TWO = "turf-line-slice-along/route2.geojson";
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -339,5 +344,127 @@ public class TurfMiscTest extends TestUtils {
       // pt did not snap to last vertex
       assertNotEquals(snapped, last);
     }
+  }
+
+  @Test
+  public void testLineSliceAlongLine1() throws IOException, TurfException {
+    Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
+    LineString lineStringLine1 = (LineString) line1.geometry();
+
+    double start = 500;
+    double stop = 750;
+
+    Point start_point = TurfMeasurement.along(lineStringLine1, start, TurfConstants.UNIT_MILES);
+    Point end_point = TurfMeasurement.along(lineStringLine1, stop, TurfConstants.UNIT_MILES);
+    LineString sliced = TurfMisc.lineSliceAlong(line1, start, stop, TurfConstants.UNIT_MILES);
+
+    assertEquals(sliced.coordinates().get(0).coordinates(),
+      start_point.coordinates());
+    assertEquals(sliced.coordinates().get(sliced.coordinates().size() - 1).coordinates(),
+      end_point.coordinates());
+  }
+
+  @Test
+   public void testLineSliceAlongOvershootLine1() throws IOException, TurfException {
+    Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
+    LineString lineStringLine1 = (LineString) line1.geometry();
+
+    double start = 500;
+    double stop = 1500;
+
+    Point start_point = TurfMeasurement.along(lineStringLine1, start, TurfConstants.UNIT_MILES);
+    Point end_point = TurfMeasurement.along(lineStringLine1, stop, TurfConstants.UNIT_MILES);
+    LineString sliced = TurfMisc.lineSliceAlong(line1, start, stop, TurfConstants.UNIT_MILES);
+
+    assertEquals(sliced.coordinates().get(0).coordinates(),
+      start_point.coordinates());
+    assertEquals(sliced.coordinates().get(sliced.coordinates().size() - 1).coordinates(),
+      end_point.coordinates());
+  }
+
+  @Test
+  public void testLineSliceAlongRoute1() throws IOException, TurfException {
+    Feature route1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_ROUTE_ONE));
+    LineString lineStringRoute1 = (LineString)route1.geometry();
+
+    double start = 500;
+    double stop = 750;
+
+    Point start_point = TurfMeasurement.along(lineStringRoute1, start, TurfConstants.UNIT_MILES);
+    Point end_point = TurfMeasurement.along(lineStringRoute1, stop, TurfConstants.UNIT_MILES);
+
+    LineString sliced = TurfMisc.lineSliceAlong(route1, start, stop, TurfConstants.UNIT_MILES);
+
+    assertEquals(sliced.coordinates().get(0).coordinates(),
+      start_point.coordinates());
+    assertEquals(sliced.coordinates().get(sliced.coordinates().size() - 1).coordinates(),
+      end_point.coordinates());
+  }
+
+  @Test
+  public void testLineSliceAlongRoute2() throws IOException, TurfException {
+
+    Feature route2 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_ROUTE_TWO));
+    LineString lineStringRoute2 = (LineString)route2.geometry();
+    double start = 25;
+    double stop = 50;
+
+    Point start_point = TurfMeasurement.along(lineStringRoute2, start, TurfConstants.UNIT_MILES);
+    Point end_point = TurfMeasurement.along(lineStringRoute2, stop, TurfConstants.UNIT_MILES);
+    LineString sliced = TurfMisc.lineSliceAlong(route2, start, stop, TurfConstants.UNIT_MILES);
+
+    assertEquals(sliced.coordinates().get(0).coordinates(),
+      start_point.coordinates());
+    assertEquals(sliced.coordinates().get(sliced.coordinates().size() - 1).coordinates(),
+      end_point.coordinates());
+  }
+
+  @Test
+  public void testLineAlongStartLongerThanLength() throws Exception {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("Start position is beyond line"));
+
+    Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
+
+    double start = 500000;
+    double stop = 800000;
+    TurfMisc.lineSliceAlong(line1, start, stop, TurfConstants.UNIT_MILES);
+  }
+
+  @Test
+  public void testLineAlongStopLongerThanLength() throws IOException, TurfException {
+    Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
+    LineString lineStringLine1 = (LineString) line1.geometry();
+
+    double start = 500;
+    double stop = 800000;
+    Point start_point = TurfMeasurement.along(lineStringLine1, start, TurfConstants.UNIT_MILES);
+    List<Point> lineCoordinates = lineStringLine1.coordinates();
+    LineString sliced = TurfMisc.lineSliceAlong(line1, start, stop, TurfConstants.UNIT_MILES);
+    assertEquals(sliced.coordinates().get(0).coordinates(),
+      start_point.coordinates());
+    assertEquals(sliced.coordinates().get(sliced.coordinates().size() - 1).coordinates(),
+      lineCoordinates.get(lineCoordinates.size() - 1).coordinates());
+  }
+
+  @Test
+  public void testShortLine() throws IOException, TurfException {
+
+    // Distance between points is about 186 miles
+    LineString lineStringLine1 = LineString.fromLngLats(Arrays.asList(
+      Point.fromLngLat(113.99414062499999, 22.350075806124867),
+      Point.fromLngLat(116.76269531249999, 23.241346102386135)));
+
+    double start = 50;
+    double stop =  100;
+
+    Point start_point = TurfMeasurement.along(lineStringLine1, start, TurfConstants.UNIT_MILES);
+    Point end_point = TurfMeasurement.along(lineStringLine1, stop, TurfConstants.UNIT_MILES);
+    LineString sliced = TurfMisc.lineSliceAlong(lineStringLine1, start, stop, TurfConstants.UNIT_MILES);
+
+    assertEquals(sliced.coordinates().get(0).coordinates(),
+      start_point.coordinates());
+    assertEquals(sliced.coordinates().get(sliced.coordinates().size() - 1).coordinates(),
+      end_point.coordinates());
   }
 }
