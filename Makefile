@@ -41,6 +41,12 @@ publish-local:
     export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services:uploadArchives ; \
     export IS_LOCAL_DEVELOPMENT=true; ./gradlew :services-turf:uploadArchives ; \
 
+graphs:
+	./gradlew :services-core:generateDependencyGraphMapboxLibraries
+	./gradlew :services-geojson:generateDependencyGraphMapboxLibraries
+	./gradlew :services:generateDependencyGraphMapboxLibraries
+	./gradlew :services-turf:generateDependencyGraphMapboxLibraries
+
 directions-matrix-fixtures:
 	# request a symmetric 3x3 matrix for cars
 	curl "https://api.mapbox.com/directions-matrix/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?access_token=$(MAPBOX_ACCESS_TOKEN)" \
@@ -131,3 +137,7 @@ optimization-fixtures:
 
 	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219;13.418555,52.523215?roundtrip=true&distributions=3,1&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-optimization/src/test/resources/optimized_trip_distributions.json
+
+clean:
+	./gradlew clean
+
