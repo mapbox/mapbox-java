@@ -59,7 +59,7 @@ public class FeatureCollectionTest extends TestUtils {
     List<Feature> features = new ArrayList<>();
     features.add(Feature.fromGeometry(null));
     features.add(Feature.fromGeometry(null));
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     FeatureCollection featureCollection = FeatureCollection.fromFeatures(features, bbox);
     assertNotNull(featureCollection.bbox());
     assertEquals(1.0, featureCollection.bbox().west(), DELTA);
@@ -79,7 +79,7 @@ public class FeatureCollectionTest extends TestUtils {
     List<Feature> features = new ArrayList<>();
     features.add(feature);
     features.add(feature);
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     FeatureCollection featureCollection = FeatureCollection.fromFeatures(features, bbox);
     compareJson(featureCollection.toJson(),
       "{\"type\":\"FeatureCollection\",\"bbox\":[1.0,2.0,3.0,4.0],"

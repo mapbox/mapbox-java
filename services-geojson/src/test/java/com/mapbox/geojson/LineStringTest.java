@@ -70,7 +70,7 @@ public class LineStringTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 1.0));
     points.add(Point.fromLngLat(2.0, 2.0));
     points.add(Point.fromLngLat(3.0, 3.0));
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
     assertNotNull(lineString.bbox());
     assertEquals(1.0, lineString.bbox().west(), DELTA);
@@ -85,7 +85,7 @@ public class LineStringTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 1.0));
     points.add(Point.fromLngLat(2.0, 2.0));
     points.add(Point.fromLngLat(3.0, 3.0));
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
     compareJson(lineString.toJson(),
       "{\"coordinates\":[[1,1],[2,2],[3,3]],"
@@ -98,7 +98,7 @@ public class LineStringTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 1.0));
     points.add(Point.fromLngLat(2.0, 2.0));
     points.add(Point.fromLngLat(3.0, 3.0));
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
     byte[] bytes = serialize(lineString);
     assertEquals(lineString, deserialize(bytes, LineString.class));

@@ -48,7 +48,7 @@ public class BoundingBoxDeserializer implements JsonDeserializer<BoundingBox> {
     JsonArray rawCoordinates = json.getAsJsonArray();
 
     if (rawCoordinates.size() == 6) {
-      return BoundingBox.fromCoordinates(
+      return BoundingBox.fromLngLats(
         rawCoordinates.get(0).getAsDouble(),
         rawCoordinates.get(1).getAsDouble(),
         rawCoordinates.get(2).getAsDouble(),
@@ -57,7 +57,7 @@ public class BoundingBoxDeserializer implements JsonDeserializer<BoundingBox> {
         rawCoordinates.get(5).getAsDouble());
     }
     if (rawCoordinates.size() == 4) {
-      return BoundingBox.fromCoordinates(
+      return BoundingBox.fromLngLats(
         rawCoordinates.get(0).getAsDouble(),
         rawCoordinates.get(1).getAsDouble(),
         rawCoordinates.get(2).getAsDouble(),

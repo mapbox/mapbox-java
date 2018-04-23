@@ -70,7 +70,7 @@ public class GeometryCollectionTest extends TestUtils {
     geometries.add(points.get(0));
     geometries.add(lineString);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     GeometryCollection geometryCollection = GeometryCollection.fromGeometries(geometries, bbox);
     assertNotNull(geometryCollection.bbox());
     assertEquals(1.0, geometryCollection.bbox().west(), DELTA);
@@ -98,7 +98,7 @@ public class GeometryCollectionTest extends TestUtils {
     geometries.add(points.get(0));
     geometries.add(lineString);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     GeometryCollection geometryCollection = GeometryCollection.fromGeometries(geometries, bbox);
     compareJson(geometryCollection.toJson(),
       "{\"type\":\"GeometryCollection\",\"bbox\":[1.0,2.0,3.0,4.0],"
@@ -116,7 +116,7 @@ public class GeometryCollectionTest extends TestUtils {
     geometries.add(points.get(0));
     geometries.add(lineString);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     GeometryCollection geometryCollection = GeometryCollection.fromGeometries(geometries, bbox);
     byte[] bytes = serialize(geometryCollection);
     assertEquals(geometryCollection, deserialize(bytes, GeometryCollection.class));

@@ -73,8 +73,59 @@ public abstract class BoundingBox implements Serializable {
    * @param north the top side of the bounding box when the map is facing due north
    * @return a new instance of this class defined by the provided coordinates
    * @since 3.0.0
+   * @deprecated As of 3.1.0, use {@link #fromLngLats} instead.
    */
+
+  @Deprecated
   public static BoundingBox fromCoordinates(
+    @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double west,
+    @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double south,
+    @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double east,
+    @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double north) {
+    return fromLngLats(west, south, east, north);
+  }
+
+  /**
+   * Define a new instance of this class by passing in four coordinates in the same order they would
+   * appear in the serialized GeoJson form. Limits are placed on the minimum and maximum coordinate
+   * values which can exist and comply with the GeoJson spec.
+   *
+   * @param west              the left side of the bounding box when the map is facing due north
+   * @param south             the bottom side of the bounding box when the map is facing due north
+   * @param southwestAltitude the southwest corner altitude or elevation when the map is facing due
+   *                          north
+   * @param east              the right side of the bounding box when the map is facing due north
+   * @param north             the top side of the bounding box when the map is facing due north
+   * @param northEastAltitude the northeast corner altitude or elevation when the map is facing due
+   *                          north
+   * @return a new instance of this class defined by the provided coordinates
+   * @since 3.0.0
+   * @deprecated As of 3.1.0, use {@link #fromLngLats} instead.
+   * */
+  @Deprecated
+  public static BoundingBox fromCoordinates(
+    @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double west,
+    @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double south,
+    double southwestAltitude,
+    @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double east,
+    @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double north,
+    double northEastAltitude) {
+    return fromLngLats(west, south, southwestAltitude, east, north, northEastAltitude);
+  }
+
+  /**
+   * Define a new instance of this class by passing in four coordinates in the same order they would
+   * appear in the serialized GeoJson form. Limits are placed on the minimum and maximum coordinate
+   * values which can exist and comply with the GeoJson spec.
+   *
+   * @param west  the left side of the bounding box when the map is facing due north
+   * @param south the bottom side of the bounding box when the map is facing due north
+   * @param east  the right side of the bounding box when the map is facing due north
+   * @param north the top side of the bounding box when the map is facing due north
+   * @return a new instance of this class defined by the provided coordinates
+   * @since 3.1.0
+   */
+  public static BoundingBox fromLngLats(
     @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double west,
     @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double south,
     @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double east,
@@ -96,9 +147,9 @@ public abstract class BoundingBox implements Serializable {
    * @param northEastAltitude the northeast corner altitude or elevation when the map is facing due
    *                          north
    * @return a new instance of this class defined by the provided coordinates
-   * @since 3.0.0
+   * @since 3.1.0
    */
-  public static BoundingBox fromCoordinates(
+  public static BoundingBox fromLngLats(
     @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double west,
     @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double south,
     double southwestAltitude,

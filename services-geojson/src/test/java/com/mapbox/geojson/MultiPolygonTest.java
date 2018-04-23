@@ -72,7 +72,7 @@ public class MultiPolygonTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     List<Polygon> polygons = new ArrayList<>();
     polygons.add(Polygon.fromOuterInner(outer));
     polygons.add(Polygon.fromOuterInner(outer));
@@ -107,7 +107,7 @@ public class MultiPolygonTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     List<Polygon> polygons = new ArrayList<>();
     polygons.add(Polygon.fromOuterInner(outer));
     polygons.add(Polygon.fromOuterInner(outer));
@@ -126,7 +126,7 @@ public class MultiPolygonTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     List<Polygon> polygons = new ArrayList<>();
     polygons.add(Polygon.fromOuterInner(outer));
     polygons.add(Polygon.fromOuterInner(outer));
