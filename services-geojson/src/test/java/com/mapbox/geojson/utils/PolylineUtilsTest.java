@@ -22,6 +22,9 @@ public class PolylineUtilsTest extends TestUtils {
 
   // Delta for Coordinates comparison
   private static final double DELTA = 0.000001;
+  
+  private static final String SIMPLIFICATION_INPUT = "simplification-input";
+  private static final String SIMPLIFICATION_EXPECTED_OUTPUT = "simplification-expected-output";
 
   private static final String TEST_LINE
     = "_cqeFf~cjVf@p@fA}AtAoB`ArAx@hA`GbIvDiFv@gAh@t@X\\|@z@`@Z\\Xf@Vf@VpA\\tATJ@NBBkC";
