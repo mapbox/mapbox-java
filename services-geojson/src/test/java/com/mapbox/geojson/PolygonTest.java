@@ -127,7 +127,7 @@ public class PolygonTest extends TestUtils {
     inner.add(Point.fromLngLat(5.0, 2.0));
     LineString innerLineString = LineString.fromLngLats(inner);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     Polygon polygon = Polygon.fromOuterInner(outerLineString, bbox, innerLineString);
 
     assertEquals(bbox, polygon.bbox());
@@ -179,7 +179,7 @@ public class PolygonTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     List<LineString> inner = new ArrayList<>();
     inner.add(LineString.fromLngLats(points));
     inner.add(LineString.fromLngLats(points));
@@ -200,7 +200,7 @@ public class PolygonTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     List<LineString> inner = new ArrayList<>();
     inner.add(LineString.fromLngLats(points));
     inner.add(LineString.fromLngLats(points));
@@ -219,7 +219,7 @@ public class PolygonTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     LineString outer = LineString.fromLngLats(points);
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     List<LineString> inner = new ArrayList<>();
     inner.add(LineString.fromLngLats(points));
     inner.add(LineString.fromLngLats(points));

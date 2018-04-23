@@ -189,7 +189,7 @@ public class StaticMarkerAnnotationTest {
 //
 //  @Test
 //  public void markerPositionWorking() throws ServicesException {
-//    Position position = Position.fromCoordinates(1.0, 2.0);
+//    Position position = Position.fromLngLats(1.0, 2.0);
 //
 //    StaticMarkerAnnotation staticMarkerAnnotation
 //      = new StaticMarkerAnnotation.Builder().setName(Constants.PIN_SMALL).setPosition(position).build();
@@ -200,14 +200,14 @@ public class StaticMarkerAnnotationTest {
 //  public void singleMarkerInUrl() {
 //    StaticMarkerAnnotation staticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
 //      .setName(Constants.PIN_SMALL)
-//      .setPosition(Position.fromCoordinates(1.0, 2.0))
+//      .setPosition(Position.fromLngLats(1.0, 2.0))
 //      .build();
 //
 //    MapboxStaticImage image = new MapboxStaticImage.Builder()
 //      .setAccessToken("pk.")
 //      .setStyleId(Constants.MAPBOX_STYLE_STREETS)
 //      .setStaticMarkerAnnotations(staticMarkerAnnotation)
-//      .setPosition(Position.fromCoordinates(1.0, 2.0))
+//      .setPosition(Position.fromLngLats(1.0, 2.0))
 //      .setWidth(100).setHeight(200)
 //      .build();
 //
@@ -218,19 +218,19 @@ public class StaticMarkerAnnotationTest {
 //  public void doubleMarkersInUrl() {
 //    StaticMarkerAnnotation staticMarkerAnnotation1 = new StaticMarkerAnnotation.Builder()
 //      .setName(Constants.PIN_SMALL)
-//      .setPosition(Position.fromCoordinates(1.0, 2.0))
+//      .setPosition(Position.fromLngLats(1.0, 2.0))
 //      .build();
 //
 //    StaticMarkerAnnotation staticMarkerAnnotation2 = new StaticMarkerAnnotation.Builder()
 //      .setName(Constants.PIN_MEDIUM)
-//      .setPosition(Position.fromCoordinates(5.0, 6.0))
+//      .setPosition(Position.fromLngLats(5.0, 6.0))
 //      .build();
 //
 //    MapboxStaticImage image = new MapboxStaticImage.Builder()
 //      .setAccessToken("pk.")
 //      .setStyleId(Constants.MAPBOX_STYLE_STREETS)
 //      .setStaticMarkerAnnotations(staticMarkerAnnotation1, staticMarkerAnnotation2)
-//      .setPosition(Position.fromCoordinates(1.0, 2.0))
+//      .setPosition(Position.fromLngLats(1.0, 2.0))
 //      .setWidth(100).setHeight(200)
 //      .build();
 //
@@ -241,7 +241,7 @@ public class StaticMarkerAnnotationTest {
 //  public void customMarkerIcon() {
 //    StaticMarkerAnnotation staticMarkerAnnotation = new StaticMarkerAnnotation.Builder()
 //      .setUrl("https://www.mapbox.com/img/rocket.png")
-//      .setPosition(Position.fromCoordinates(1.0, 2.0))
+//      .setPosition(Position.fromLngLats(1.0, 2.0))
 //      .build();
 //
 //    assertTrue(staticMarkerAnnotation.getMarker().contains("url-https://www.mapbox.com/img/rocket.png(1.0,2.0)"));

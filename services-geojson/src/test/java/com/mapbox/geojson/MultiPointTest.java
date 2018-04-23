@@ -54,7 +54,7 @@ public class MultiPointTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     MultiPoint multiPoint = MultiPoint.fromLngLats(points, bbox);
     assertNotNull(multiPoint.bbox());
     assertEquals(1.0, multiPoint.bbox().west(), DELTA);
@@ -69,7 +69,7 @@ public class MultiPointTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     MultiPoint multiPoint = MultiPoint.fromLngLats(points, bbox);
     compareJson(multiPoint.toJson(),
       "{\"coordinates\":[[1,2],[2,3]],\"type\":\"MultiPoint\",\"bbox\":[1.0,2.0,3.0,4.0]}");
@@ -81,7 +81,7 @@ public class MultiPointTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     MultiPoint multiPoint = MultiPoint.fromLngLats(points, bbox);
     byte[] bytes = serialize(multiPoint);
     assertEquals(multiPoint, deserialize(bytes, MultiPoint.class));

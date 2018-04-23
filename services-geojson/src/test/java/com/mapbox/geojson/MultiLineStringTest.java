@@ -62,7 +62,7 @@ public class MultiLineStringTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     List<LineString> lineStrings = new ArrayList<>();
     lineStrings.add(LineString.fromLngLats(points));
     lineStrings.add(LineString.fromLngLats(points));
@@ -92,7 +92,7 @@ public class MultiLineStringTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     List<LineString> lineStrings = new ArrayList<>();
     lineStrings.add(LineString.fromLngLats(points));
     lineStrings.add(LineString.fromLngLats(points));
@@ -108,7 +108,7 @@ public class MultiLineStringTest extends TestUtils {
     points.add(Point.fromLngLat(1.0, 2.0));
     points.add(Point.fromLngLat(2.0, 3.0));
 
-    BoundingBox bbox = BoundingBox.fromCoordinates(1.0, 2.0, 3.0, 4.0);
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     List<LineString> lineStrings = new ArrayList<>();
     lineStrings.add(LineString.fromLngLats(points));
     lineStrings.add(LineString.fromLngLats(points));
