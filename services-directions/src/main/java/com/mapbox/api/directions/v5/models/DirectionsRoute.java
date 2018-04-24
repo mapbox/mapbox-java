@@ -123,6 +123,17 @@ public abstract class DirectionsRoute implements Serializable {
   @Nullable
   public abstract RouteOptions routeOptions();
 
+
+  /**
+   * String of the locale used for voice instructions.  Defaults to en, and
+   * can be any accepted instruction language.
+   *
+   * @return String compatible with voice instructions, null otherwise
+   * @since 3.1.0
+   */
+  @Nullable
+  public abstract String voiceLocale();
+
   /**
    * Convert the current {@link DirectionsRoute} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
@@ -218,6 +229,16 @@ public abstract class DirectionsRoute implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder routeOptions(@Nullable RouteOptions routeOptions);
+
+    /**
+     * String of the locale used for voice instructions.  Defaults to en, and
+     * can be any accepted instruction language.
+     *
+     * @param voiceLocale String compatible with voice instructions, null otherwise
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder voiceLocale(@Nullable String voiceLocale);
 
     /**
      * Build a new {@link DirectionsRoute} object.
