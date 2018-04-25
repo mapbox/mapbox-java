@@ -56,6 +56,18 @@ public final class TurfConversion {
   }
 
   /**
+   * Converts an angle in degrees to radians.
+   *
+   * @param degrees angle between 0 and 360 degrees
+   * @return angle in radians
+   * @since 3.1.0
+   */
+  public static double degreesToRadians(double degrees) {
+    double radians = degrees % 360;
+    return radians * Math.PI / 180;
+  }
+
+  /**
    * Converts an angle in radians to degrees.
    *
    * @param radians angle in radians
