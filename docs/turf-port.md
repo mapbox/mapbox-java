@@ -71,7 +71,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [ ] turf-line-overlap
 - [ ] turf-line-segment
 - [x] turf-line-slice
-- [ ] turf-line-slice-along
+- [x] turf-line-slice-along
 - [ ] turf-line-split
 - [ ] turf-mask
 - [x] turf-nearest-point-on-line
