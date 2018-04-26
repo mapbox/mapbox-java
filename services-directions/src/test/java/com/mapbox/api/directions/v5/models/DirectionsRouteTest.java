@@ -35,19 +35,19 @@ public class DirectionsRouteTest extends TestUtils {
     DirectionsResponse response = DirectionsResponse.fromJson(json);
     DirectionsRoute route = response.routes().get(FIRST_ROUTE);
 
-    String voiceLocale = route.voiceLocale();
+    String voiceLanguage = route.voiceLanguage();
 
-    assertEquals("en-US", voiceLocale);
+    assertEquals("en-US", voiceLanguage);
   }
 
   @Test
-  public void directionsRouteWithInvalidLanguage_doesReturnNullVoiceLocale() throws Exception {
+  public void directionsRouteWithInvalidLanguage_doesReturnNullVoiceLanguage() throws Exception {
     String json = loadJsonFixture(DIRECTIONS_V5_VOICE_INVALID_FIXTURE);
     DirectionsResponse response = DirectionsResponse.fromJson(json);
     DirectionsRoute route = response.routes().get(FIRST_ROUTE);
 
-    String voiceLocale = route.voiceLocale();
+    String voiceLanguage = route.voiceLanguage();
 
-    assertNull(voiceLocale);
+    assertNull(voiceLanguage);
   }
 }
