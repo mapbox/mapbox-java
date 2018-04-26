@@ -3,7 +3,7 @@
 This document tracks the progress being made to port over all of the Turf functionality to Java. This is an on going project and funtions are being added once needed. If you'd like to contribute by adding a Turf function that's missing, please open a GitHub issue still with information relative to why you need this functionality.
 
 Below's an on going list of the Turf functions which currently exist inside the `services-turf` module in this project:
-  (Last updated 10/27/17)
+  (Last updated 04/25/18)
 
 ## Measurement
 - [x] turf-along
