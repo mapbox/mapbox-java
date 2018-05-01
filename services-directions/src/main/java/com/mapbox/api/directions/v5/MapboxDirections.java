@@ -50,7 +50,7 @@ import retrofit2.Response;
  * origin.
  * </p>
  *
- * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/directions/">Android
+ * @see <a href="https://www.mapbox.com/android-docs/java-sdk/overview/directions/">Android
  *   Directions documentation</a>
  * @see <a href="https://www.mapbox.com/api-documentation/#directions">Directions API
  *   documentation</a>
