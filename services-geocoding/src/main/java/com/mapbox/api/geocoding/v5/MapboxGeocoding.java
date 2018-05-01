@@ -57,7 +57,7 @@ import retrofit2.Response;
  * {@link GeocodingResponse}s. Each query in a batch request counts individually against your
  * account's rate limits.
  *
- * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/geocoder/">Android
+ * @see <a href="https://www.mapbox.com/android-docs/java-sdk/overview/geocoder/">Android
  *   Geocoding documentation</a>
  * @since 1.0.0
  */
