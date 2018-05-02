@@ -2,6 +2,14 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.1.0
+- Added voiceLocale to DirectionsRoute  (#804)
+- Added line-slice-along() and degreesToRadians() to Turf functions(#800)
+- Removed java.awt.Color dependency in static map (#793)
+- Add missing RouteOptions params for MapMatching (#792)
+- Added BoundingBox.fromLngLats() for consistency (#789)
+- added toBuilder() to model classes (#787)
+
 ### v3.0.1
 - Adjust maxspeed annotation [#777](https://github.com/mapbox/mapbox-java/pull/777)
 
