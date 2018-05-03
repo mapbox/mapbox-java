@@ -12,7 +12,6 @@ Visit [https://github.com/mapbox/mapbox-java](https://github.com/mapbox/mapbox-j
 
 Either Gradle or Maven can be used to install the Turf dependency. Visit [mapbox.com/android-docs/java-sdk/overview/#installation](https://www.mapbox.com/android-docs/java-sdk/overview/#installation) for more in-depth installation instructions.
 
-
 ## Available functionality
 
 [This list](https://github.com/mapbox/mapbox-java/blob/master/docs/turf-port.md) shows the progress made in porting [the various Turf.js methods](http://turfjs.org/docs/) to Java. 
