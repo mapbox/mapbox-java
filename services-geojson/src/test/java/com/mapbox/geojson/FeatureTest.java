@@ -1,6 +1,7 @@
 package com.mapbox.geojson;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -47,7 +48,7 @@ public class FeatureTest extends TestUtils {
     Feature feature = Feature.fromGeometry(lineString);
     compareJson(feature.toJson(),
       "{\"type\":\"Feature\",\"geometry\":{\"type\":"
-        + "\"LineString\",\"coordinates\":[[1,2],[2,3]]},\"properties\":{}}");
+        + "\"LineString\",\"coordinates\":[[1,2],[2,3]]}}");
   }
 
   @Test
@@ -76,7 +77,7 @@ public class FeatureTest extends TestUtils {
     BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     Feature feature = Feature.fromGeometry(lineString, bbox);
     compareJson("{\"type\":\"Feature\",\"bbox\":[1.0,2.0,3.0,4.0],\"geometry\":"
-        + "{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]},\"properties\":{}}",
+        + "{\"type\":\"LineString\",\"coordinates\":[[1,2],[2,3]]}}",
       feature.toJson());
   }
 
@@ -103,7 +104,12 @@ public class FeatureTest extends TestUtils {
     coordinates.add(Point.fromLngLat(4.5, 6.7));
     LineString line = LineString.fromLngLats(coordinates);
     Feature feature = Feature.fromGeometry(line);
-    assertTrue(feature.toJson().contains("\"properties\":{}"));
+    String jsonString = feature.toJson();
+    assertFalse(jsonString.contains("\"properties\":{}"));
+
+    // Feature (empty Properties) -> Json (null Properties) -> Equavalent Feature
+    Feature featureFromJson = Feature.fromJson(jsonString);
+    assertEquals(featureFromJson, feature);
   }
 
   @Test
@@ -115,6 +121,21 @@ public class FeatureTest extends TestUtils {
     JsonObject properties = new JsonObject();
     properties.addProperty("key", "value");
     Feature feature = Feature.fromGeometry(line, properties);
-    assertTrue(feature.toJson().contains("\"properties\":{\"key\":\"value\"}"));
+    String jsonString = feature.toJson();
+    assertTrue(jsonString.contains("\"properties\":{\"key\":\"value\"}"));
+
+    // Feature (non-empty Properties) -> Json (non-empty Properties) -> Equavalent Feature
+    assertEquals(Feature.fromJson(jsonString), feature);
+  }
+
+  @Test
+  public void testNullPropertiesJson() {
+    String jsonString = "{\"type\":\"Feature\",\"bbox\":[1.0,2.0,3.0,4.0],\"geometry\":"
+      + "{\"type\":\"LineString\",\"coordinates\":[[1.0,2.0],[2.0,3.0]]}}";
+    Feature feature = Feature.fromJson(jsonString);
+
+    // Json( null Properties) -> Feature (empty Properties) -> Json(null Properties)
+    String fromFeatureJsonString = feature.toJson();
+    assertEquals(fromFeatureJsonString, jsonString);
   }
 }
