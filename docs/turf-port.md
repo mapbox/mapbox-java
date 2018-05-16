@@ -3,7 +3,7 @@
 This document tracks the progress being made to port over all of the Turf functionality to Java. This is an on going project and funtions are being added once needed. If you'd like to contribute by adding a Turf function that's missing, please open a GitHub issue still with information relative to why you need this functionality.
 
 Below's an on going list of the Turf functions which currently exist inside the `services-turf` module in this project:
-  (Last updated 04/25/18)
+  (Last updated 05/16/18)
 
 ## Measurement
 - [x] turf-along
@@ -119,7 +119,7 @@ The helper functions are all part of the GeoJson module; this class contains uni
 - [ ] featureReduce
 - [ ] flattenEach
 - [ ] flattenReduce
-- [ ] getCoord
+- [x] getCoord
 - [ ] getCoords
 - [ ] getGeom
 - [ ] getType
@@ -156,7 +156,7 @@ All of these are already enforced in the GeoJson module
 - [ ] bearingToAzimuth
 - [ ] convertArea
 - [x] convertLength
-- [ ] degreesToRadians
+- [x] degreesToRadians
 - [x] lengthToRadians
 - [x] lengthToDegrees
 - [x] radiansToLength
