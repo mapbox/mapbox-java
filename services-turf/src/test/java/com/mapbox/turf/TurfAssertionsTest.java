@@ -108,12 +108,4 @@ public class TurfAssertionsTest extends TestUtils {
       + "type: 'Point', coordinates: [0, 0]}, properties: {}}]}";
     TurfAssertions.collectionOf(FeatureCollection.fromJson(json), "Point", "myfn");
   }
-
-
-  @Test
-  public void testInvariantGetCoord() {
-    String jsonFeature = "{type: 'Feature', geometry: {type: 'Point', coordinates: [1, 2]}}";
-    assertEquals(TurfAssertions.getCoord(Feature.fromJson(jsonFeature)),
-      Point.fromLngLat(1, 2));
-  }
 }
