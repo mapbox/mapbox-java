@@ -506,8 +506,7 @@ public abstract class MapboxMapMatching extends
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE},
      * {@link DirectionsCriteria#ANNOTATION_DURATION},
      * {@link DirectionsCriteria#ANNOTATION_DURATION} and
-     * {@link DirectionsCriteria#ANNOTATION_CONGESTION}. Several annotation can be used by
-     * separating them with {@code ,}.
+     * {@link DirectionsCriteria#ANNOTATION_CONGESTION}.
      *
      * @param annotations string referencing one of the annotation direction criteria's. The strings
      *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
@@ -529,7 +528,7 @@ public abstract class MapboxMapMatching extends
     /**
      * Timestamps corresponding to each coordinate provided in the request; must be numbers in Unix
      * time (seconds since the Unix epoch) converted to a String. There must be as many timestamps
-     * as there are coordinates in the request, each separated by {@code ;} .
+     * as there are coordinates in the request.
      *
      * @param timestamps timestamp corresponding to the coordinate added at the identical index
      * @return this builder for chaining options together
@@ -679,9 +678,9 @@ public abstract class MapboxMapMatching extends
       }
 
       coordinates(formatCoordinates(coordinates));
-      timestamps(TextUtils.join(",", timestamps));
+      timestamps(TextUtils.join(";", timestamps));
       annotations(TextUtils.join(",", annotations));
-      radiuses(TextUtils.join(",", radiuses));
+      radiuses(TextUtils.join(";", radiuses));
       waypoints(TextUtils.join(";", waypoints));
 
       // Generate build so that we can check that values are valid.

@@ -282,7 +282,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .radiuses(1d, 2d, 3d)
       .build();
     assertTrue(mapMatching.cloneCall().request().url().toString()
-      .contains("radiuses=1.0,2.0,3.0"));
+      .contains("radiuses=1.0;2.0;3.0"));
   }
 
   @Test
@@ -324,7 +324,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .timestamps("1", "2", "3")
       .build();
     assertTrue(mapMatching.cloneCall().request().url().toString()
-      .contains("timestamps=1,2,3"));
+      .contains("timestamps=1;2;3"));
   }
 
   @Test
