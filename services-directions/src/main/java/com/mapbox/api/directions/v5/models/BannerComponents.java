@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.MapboxDirections;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A part of the {@link BannerText} which includes a snippet of the full banner text instruction. In
@@ -100,6 +101,29 @@ public abstract class BannerComponents implements Serializable, Comparable<Banne
   @Nullable
   @SerializedName("imageBaseURL")
   public abstract String imageBaseUrl();
+
+  /**
+   * A List of directions indicating which way you can go from a lane
+   * (left, right, or straight). If the value is ['left', 'straight'],
+   * the driver can go straight or left from that lane.
+   * Present if this is a lane component.
+   *
+   * @return List of allowed directions from that lane.
+   * @since 3.2.0
+   */
+  @Nullable
+  public abstract List<String> directions();
+
+  /**
+   * A boolean telling you if that lane can be used to complete the upcoming maneuver.
+   * If multiple lanes are active, then they can all be used to complete the upcoming maneuver.
+   * Present if this is a lane component.
+   *
+   * @return List of allowed directions from that lane.
+   * @since 3.2.0
+   */
+  @Nullable
+  public abstract Boolean active();
 
   /**
    * Convert the current {@link BannerComponents} to its builder holding the currently assigned
@@ -225,6 +249,29 @@ public abstract class BannerComponents implements Serializable, Comparable<Banne
      * @since 3.0.0
      */
     public abstract Builder imageBaseUrl(@Nullable String imageBaseUrl);
+
+    /**
+     * A List of directions indicating which way you can go from a lane
+     * (left, right, or straight). If the value is ['left', 'straight'],
+     * the driver can go straight or left from that lane.
+     * Present if this is a lane component.
+     *
+     * @param  directions List of allowed directions from that lane
+     * @return this builder for chaining options together
+     * @since 3.2.0
+     */
+    public abstract Builder directions(List<String> directions);
+
+    /**
+     * A boolean telling you if that lane can be used to complete the upcoming maneuver.
+     * If multiple lanes are active, then they can all be used to complete the upcoming maneuver.
+     * Present if this is a lane component.
+     *
+     * @param activeState true, if the lane could be used for upcoming maneuver, false - otherwise
+     * @return this builder for chaining options together
+     * @since 3.2.0
+     */
+    public abstract Builder active(Boolean activeState);
 
     /**
      * Build a new {@link BannerComponents} object.
