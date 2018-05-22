@@ -1,5 +1,6 @@
 package com.mapbox.turf;
 
+import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
@@ -76,5 +77,12 @@ public class TurfMetaTest extends TestUtils {
     assertEquals(resultList.get(1), Point.fromLngLat(1, 1));
     assertEquals(resultList.get(2), Point.fromLngLat(0, 1));
     assertEquals(resultList.get(3), Point.fromLngLat(0, 0));
+  }
+
+  @Test
+  public void testInvariantGetCoord() {
+    String jsonFeature = "{type: 'Feature', geometry: {type: 'Point', coordinates: [1, 2]}}";
+    assertEquals(TurfMeta.getCoord(Feature.fromJson(jsonFeature)),
+      Point.fromLngLat(1, 2));
   }
 }

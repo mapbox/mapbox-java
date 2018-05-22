@@ -3,7 +3,6 @@ package com.mapbox.turf;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.GeoJson;
-import com.mapbox.geojson.Point;
 import com.mapbox.core.utils.TextUtils;
 
 /**
@@ -17,21 +16,6 @@ public final class TurfAssertions {
 
   private TurfAssertions() {
     // Private constructor preventing initialization of this class
-  }
-
-  /**
-   * Unwrap a coordinate {@link Point} from a Feature with a Point geometry.
-   *
-   * @param obj any value
-   * @return a coordinate
-   * @see <a href="http://turfjs.org/docs/#getcoord">Turf getCoord documentation</a>
-   * @since 1.2.0
-   */
-  public static Point getCoord(Feature obj) {
-    if (obj.geometry() instanceof Point) {
-      return (Point) obj.geometry();
-    }
-    throw new TurfException("A feature with a Point geometry is required.");
   }
 
   /**
