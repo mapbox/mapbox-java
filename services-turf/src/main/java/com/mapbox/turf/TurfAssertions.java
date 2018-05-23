@@ -4,6 +4,7 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.GeoJson;
 import com.mapbox.core.utils.TextUtils;
+import com.mapbox.geojson.Point;
 
 /**
  * Also called Assertions, these methods enforce expectations of a certain type or calculate various
@@ -16,6 +17,20 @@ public final class TurfAssertions {
 
   private TurfAssertions() {
     // Private constructor preventing initialization of this class
+  }
+
+  /**
+   * Unwrap a coordinate {@link Point} from a Feature with a Point geometry.
+   *
+   * @param obj any value
+   * @return a coordinate
+   * @see <a href="http://turfjs.org/docs/#getcoord">Turf getCoord documentation</a>
+   * @since 1.2.0
+   * @deprecated use {@link TurfMeta#getCoord(Feature)}
+   */
+  @Deprecated
+  public static Point getCoord(Feature obj) {
+    return TurfMeta.getCoord(obj);
   }
 
   /**
