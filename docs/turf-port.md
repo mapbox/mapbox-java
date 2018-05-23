@@ -1,6 +1,6 @@
 # Turf Port to Java
 
-More information about Turf can be found at [https://www.mapbox.com/android-docs/java-sdk/overview/turf/](https://www.mapbox.com/android-docs/java-sdk/overview/turf/)
+More information about the Turf for Java library can be found at [https://www.mapbox.com/android-docs/java-sdk/overview/turf/](https://www.mapbox.com/android-docs/java-sdk/overview/turf/)
 
 This document tracks the progress being made to port over all of the Turf functionality to Java. This is an on going project and funtions are being added once needed. If you'd like to contribute by adding a Turf function that's missing, please open a GitHub issue still with information relative to why you need this functionality.
 
