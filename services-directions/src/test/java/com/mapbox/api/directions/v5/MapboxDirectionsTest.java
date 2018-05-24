@@ -2,6 +2,8 @@ package com.mapbox.api.directions.v5;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mapbox.api.directions.v5.models.BannerComponents;
+import com.mapbox.api.directions.v5.models.BannerInstructions;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
@@ -27,6 +29,8 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
+import static com.mapbox.api.directions.v5.DirectionsCriteria.GEOMETRY_POLYLINE;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -42,6 +46,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_V5_ANNOTATIONS_FIXTURE = "directions_annotations_v5.json";
   private static final String DIRECTIONS_V5_NO_ROUTE = "directions_v5_no_route.json";
   private static final String DIRECTIONS_V5_MAX_SPEED_ANNOTATION = "directions_v5_max_speed_annotation.json";
+  private static final String DIRECTIONS_V5_BANNER_INSTRUCTIONS = "directions_v5_banner_instructions.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -56,21 +61,20 @@ public class MapboxDirectionsTest extends TestUtils {
 
         // Switch response on geometry parameter (only false supported, so nice and simple)
         String resource = DIRECTIONS_V5_FIXTURE;
-        if (request.getPath().contains("geometries=polyline6")) {
-          resource = DIRECTIONS_V5_PRECISION6_FIXTURE;
-        }
-        if (request.getPath().contains("driving-traffic")) {
-          resource = DIRECTIONS_TRAFFIC_FIXTURE;
-        }
         if (request.getPath().contains("-77.04430")) {
           resource = DIRECTIONS_ROTARY_FIXTURE;
-        }
-        if (request.getPath().contains("annotations")) {
+        } else if (request.getPath().contains("annotations")) {
           resource = DIRECTIONS_V5_ANNOTATIONS_FIXTURE;
-        }
-        if (request.getPath().contains("151.2302,-33.9283")) {
+        } else if (request.getPath().contains("-151.2302")) {
           resource = DIRECTIONS_V5_NO_ROUTE;
+        } else if (request.getPath().contains("-122.403561,37.777689")) {
+          resource = DIRECTIONS_V5_BANNER_INSTRUCTIONS;
+        } else if (request.getPath().contains("driving-traffic")) {
+          resource = DIRECTIONS_TRAFFIC_FIXTURE;
+        } else if (request.getPath().contains("geometries=polyline6")) {
+          resource = DIRECTIONS_V5_PRECISION6_FIXTURE;
         }
+
         try {
           String body = loadJsonFixture(resource);
           return new MockResponse().setBody(body);
@@ -360,7 +364,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
       .accessToken(ACCESS_TOKEN)
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .voiceUnits(DirectionsCriteria.METRIC)
       .build();
 
@@ -374,7 +378,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
       .accessToken(ACCESS_TOKEN)
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .bannerInstructions(true)
       .build();
 
@@ -388,7 +392,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
       .accessToken(ACCESS_TOKEN)
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .voiceInstructions(true)
       .build();
 
@@ -402,7 +406,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
       .accessToken(ACCESS_TOKEN)
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .exclude(DirectionsCriteria.EXCLUDE_MOTORWAY)
       .build();
 
@@ -439,7 +443,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .origin(coordinates.get(0))
       .addWaypoint(coordinates.get(1))
       .destination(coordinates.get(2))
-      .baseUrl(mockUrl.toString())
+      .baseUrl("https://foobar.com")
       .radiuses(100, Double.POSITIVE_INFINITY, 100)
       .build();
 
@@ -450,8 +454,8 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void noValidRouteTest() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
-      .origin(Point.fromLngLat(151.2302, -33.9283))
-      .destination(Point.fromLngLat(174.7654, -36.8641))
+      .origin(Point.fromLngLat(-151.2302, -33.9283))
+      .destination(Point.fromLngLat(-174.7654, -36.8641))
       .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
       .steps(true)
@@ -500,5 +504,52 @@ public class MapboxDirectionsTest extends TestUtils {
     LegAnnotation maxSpeedAnnotation = maxSpeedRoute.legs().get(0).annotation();
 
     assertNotNull(maxSpeedAnnotation.maxspeed());
+  }
+
+  @Test
+  public void subBannerInstructions() throws Exception {
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
+    String body = loadJsonFixture(DIRECTIONS_V5_BANNER_INSTRUCTIONS);
+    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
+
+    BannerInstructions bannerInstructions =
+      response.routes().get(0).legs().get(0).steps().get(0).bannerInstructions().get(1);
+
+    assertNotNull(bannerInstructions.sub());
+    assertNotNull(bannerInstructions.sub().components());
+
+    BannerComponents component = bannerInstructions.sub().components().get(1);
+    assertNotNull(component.active());
+    assertNotNull(component.directions());
+    assertEquals(2, component.directions().size());
+  }
+
+  @Test
+  public void subBannerInstructionsFromJson() throws Exception {
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(-122.403561,37.777689))
+      .destination(Point.fromLngLat(-122.405786,37.770369))
+      .accessToken(ACCESS_TOKEN)
+      .profile(PROFILE_DRIVING)
+      .steps(true)
+      .geometries(GEOMETRY_POLYLINE)
+      .bannerInstructions(true)
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+
+    BannerInstructions bannerInstructions =
+      response.body().routes().get(0).legs().get(0).steps().get(0).bannerInstructions().get(1);
+
+    assertNotNull(bannerInstructions.sub());
+    assertNotNull(bannerInstructions.sub().components());
+
+    BannerComponents component = bannerInstructions.sub().components().get(1);
+    assertNotNull(component.active());
+    assertNotNull(component.directions());
+    assertEquals(2, component.directions().size());
   }
 }
