@@ -100,19 +100,19 @@ directions-fixtures:
 
 	# Directions: voice announcements fixture
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-77.04014240930304,38.91313201360546;-77.04573453985853,38.90725177816208.json?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-    		-o services-directions/src/test/resources/directions_v5_voice_banner.json
+        -o services-directions/src/test/resources/directions_v5_voice_banner.json
 
 	# Directions: voice announcements invalid locale
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-77.04014240930304,38.91313201360546;-77.04573453985853,38.90725177816208.json?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&language=he&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-    		-o services-directions/src/test/resources/directions_v5_voice_invalid.json
+        -o services-directions/src/test/resources/directions_v5_voice_invalid.json
 
 	# Directions: No route found
-	curl "https://api.mapbox.com/directions/v5/mapbox/driving/149.72227,-37.59764;170.72975,-42.96489.json?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-	  		-o services-directions/src/test/resources/directions_v5_no_route.json
+	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-151.2302,-33.9283;-174.7654,-36.8641.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+        -o services-directions/src/test/resources/directions_v5_no_route.json
 
 	# Directions: route with banner shield
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-95.69263,29.78771;-95.54899,29.78284.json?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
-	  		-o services-directions/src/test/resources/directions_v5_banner_with_shield.json
+        -o services-directions/src/test/resources/directions_v5_banner_with_shield.json
 
 	# Directions: route with bannerText
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.03067988107114,37.331808179989494;-122.03178702099605,37.3302383113533?voice_units=imperial&roundabout_exits=true&geometries=polyline&overview=full&steps=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
@@ -121,6 +121,10 @@ directions-fixtures:
     # Directions: route with maxspeed
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/9.950072,52.150015;7.569915,52.916751?alternatives=true&geometries=polyline6&overview=full&steps=true&bearings=%3B&continue_straight=true&annotations=maxspeed&language=en&access_token=$(MAPBOX_ACCESS_TOKEN)" \
         -o services-directions/src/test/resources/directions_v5_max_speed_annotation.json
+
+    # Directions: route with sub (and lane data) in BannerInstructions
+	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.403561,37.777689;-122.405786,37.770369.json?access_token=$(MAPBOX_ACCESS_TOKEN)&steps=true&geometries=polyline&banner_instructions=true" \
+        -o services-directions/src/test/resources/directions_v5_banner_instructions.json
 
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \

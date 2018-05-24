@@ -57,6 +57,18 @@ public abstract class BannerInstructions implements Serializable {
   @Nullable
   public abstract BannerText secondary();
 
+
+  /**
+   * Additional information that is included if we feel the driver needs a heads up about something.
+   * Can include information about the next maneuver (the one after the upcoming one),
+   * if the step is short - can be null, or can be lane information.
+   * If we have lane information, that trumps information about the next maneuver.
+   * @return {@link BannerText} representing the sub visual information
+   * @since 3.2.0
+   */
+  @Nullable
+  public abstract BannerText sub();
+
   /**
    * Convert the current {@link BannerInstructions} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
@@ -115,6 +127,18 @@ public abstract class BannerInstructions implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder secondary(@Nullable BannerText secondary);
+
+    /**
+     * Additional information that is included
+     * if we feel the driver needs a heads up about something.
+     * Can include information about the next maneuver (the one after the upcoming one),
+     * if the step is short - can be null, or can be lane information.
+     * If we have lane information, that trumps information about the next maneuver.
+     * @param sub {@link BannerText} representing the sub visual information
+     * @return {@link BannerText} representing the sub visual information
+     * @since 3.2.0
+     */
+    public abstract Builder sub(@Nullable BannerText sub);
 
     /**
      * Build a new {@link BannerInstructions} object.
