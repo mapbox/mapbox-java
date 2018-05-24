@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.GeoJson;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
@@ -24,7 +25,7 @@ import java.util.List;
 
 /**
  * The Features key in the geocoding API response contains the majority of information you'll want
- * to use. It extends the {@link Feature} object in GeoJSON and adds several additional attribute
+ * to use. It extends the {@link GeoJson} object in GeoJSON and adds several additional attribute
  * which further describe the geocoding result.
  * <p>
  * A Geocoding id is a String in the form {@code {type}.{id}} where {@code {type}} is the lowest
@@ -41,7 +42,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class CarmenFeature implements Serializable {
+public abstract class CarmenFeature implements GeoJson, Serializable {
 
   private static final String TYPE = "Feature";
 
@@ -60,7 +61,12 @@ public abstract class CarmenFeature implements Serializable {
       .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .create();
-    return gson.fromJson(json, CarmenFeature.class);
+    CarmenFeature feature = gson.fromJson(json, CarmenFeature.class);
+    // Even thought properties are Nullable,
+    // Feature object will be created with properties set to an empty object,
+    return feature.properties() == null
+      ? feature.toBuilder().properties(new JsonObject()).build()
+      : feature;
   }
 
   /**
@@ -72,12 +78,14 @@ public abstract class CarmenFeature implements Serializable {
   @NonNull
   public static Builder builder() {
     return new AutoValue_CarmenFeature.Builder()
-      .type(TYPE);
+      .type(TYPE)
+      .properties(new JsonObject());
   }
 
   //
   // Feature specific attributes
   //
+  // Note that CarmenFeature cannot extend Feature due to AutoValue limitations
 
   /**
    * This describes the TYPE of GeoJson geometry this object is, thus this will always return
@@ -89,6 +97,7 @@ public abstract class CarmenFeature implements Serializable {
    */
   @NonNull
   @SerializedName("type")
+  @Override
   public abstract String type();
 
   /**
@@ -102,6 +111,7 @@ public abstract class CarmenFeature implements Serializable {
    * @since 3.0.0
    */
   @Nullable
+  @Override
   public abstract BoundingBox bbox();
 
   /**
@@ -132,7 +142,7 @@ public abstract class CarmenFeature implements Serializable {
    * @return a {@link JsonObject} which holds this features current properties
    * @since 1.0.0
    */
-  @NonNull
+  @Nullable
   public abstract JsonObject properties();
 
   //
@@ -282,6 +292,7 @@ public abstract class CarmenFeature implements Serializable {
    * @return a JSON string which represents this CarmenFeature
    * @since 3.0.0
    */
+  @Override
   @SuppressWarnings("unused")
   public String toJson() {
     Gson gson = new GsonBuilder()
@@ -289,7 +300,14 @@ public abstract class CarmenFeature implements Serializable {
       .registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer())
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .create();
-    return gson.toJson(this, CarmenFeature.class);
+
+    // Empty properties -> should not appear in json string
+    CarmenFeature feature = this;
+    if (properties() != null && properties().size() == 0) {
+      feature = toBuilder().properties(null).build();
+    }
+
+    return gson.toJson(feature, CarmenFeature.class);
   }
 
   /**
@@ -355,7 +373,7 @@ public abstract class CarmenFeature implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder properties(@NonNull JsonObject properties);
+    public abstract Builder properties(@Nullable JsonObject properties);
 
     /**
      * A string representing the feature in the requested language.

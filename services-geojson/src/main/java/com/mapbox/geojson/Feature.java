@@ -66,7 +66,16 @@ public abstract class Feature implements GeoJson {
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    return gson.create().fromJson(json, Feature.class);
+    Feature feature = gson.create().fromJson(json, Feature.class);
+
+    // Even thought properties are Nullable,
+    // Feature object will be created with properties set to an empty object,
+    // so that addProperties() would work
+    if (feature.properties() != null) {
+      return feature;
+    }
+    return new AutoValue_Feature(TYPE, feature.bbox(),
+      feature.id(), feature.geometry(), new JsonObject());
   }
 
   /**
@@ -105,8 +114,9 @@ public abstract class Feature implements GeoJson {
    *   method
    * @since 1.0.0
    */
-  public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties) {
-    return new AutoValue_Feature(TYPE, null, null, geometry, properties);
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties) {
+    return new AutoValue_Feature(TYPE, null, null, geometry,
+      properties == null ? new JsonObject() : properties);
   }
 
   /**
@@ -120,9 +130,10 @@ public abstract class Feature implements GeoJson {
    *   method
    * @since 1.0.0
    */
-  public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
                                      @Nullable BoundingBox bbox) {
-    return new AutoValue_Feature(TYPE, bbox, null, geometry, properties);
+    return new AutoValue_Feature(TYPE, bbox, null, geometry,
+      properties == null ? new JsonObject() : properties);
   }
 
   /**
@@ -135,9 +146,10 @@ public abstract class Feature implements GeoJson {
    * @return {@link Feature}
    * @since 1.0.0
    */
-  public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
                                      @Nullable String id) {
-    return new AutoValue_Feature(TYPE, null, id, geometry, properties);
+    return new AutoValue_Feature(TYPE, null, id, geometry,
+      properties == null ? new JsonObject() : properties);
   }
 
   /**
@@ -225,7 +237,14 @@ public abstract class Feature implements GeoJson {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapter(Point.class, new PointSerializer());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
-    return gson.create().toJson(this);
+
+    // Empty properties -> should not appear in json string
+    Feature feature = this;
+    if (properties().size() == 0) {
+      feature = new AutoValue_Feature(TYPE, bbox(), id(), geometry(), null);
+    }
+
+    return gson.create().toJson(feature);
   }
 
   /**

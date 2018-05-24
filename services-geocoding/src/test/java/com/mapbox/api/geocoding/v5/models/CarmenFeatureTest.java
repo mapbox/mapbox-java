@@ -7,17 +7,24 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 
 import com.google.gson.JsonObject;
 import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.CoordinateContainer;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
+
+import org.junit.Assert;
 import org.junit.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class CarmenFeatureTest extends GeocodingTestUtils {
@@ -148,5 +155,28 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
     assertThat(feature.bbox().south(), equalTo(39.308357239));
     assertThat(feature.bbox().east(), equalTo(107.025123596));
     assertThat(feature.bbox().north(), equalTo(39.6012458800001));
+  }
+
+  @Test
+  public void testNullProperties() {
+    CarmenFeature feature = CarmenFeature.builder()
+      .geometry(Point.fromLngLat(-77, 38))
+      .build();
+    String jsonString = feature.toJson();
+    assertFalse(jsonString.contains("\"properties\":{}"));
+
+    // Feature (empty Properties) -> Json (null Properties) -> Equavalent Feature
+    CarmenFeature featureFromJson = CarmenFeature.fromJson(jsonString);
+    assertEquals(featureFromJson, feature);
+  }
+
+  @Test
+  public void testNullPropertiesJson() {
+    String jsonString = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-77.0, 38.0]}}";
+    CarmenFeature feature = CarmenFeature.fromJson(jsonString);
+
+    // Json( null Properties) -> Feature (empty Properties) -> Json(null Properties)
+    String fromFeatureJsonString = feature.toJson();
+    assertEquals(fromFeatureJsonString, jsonString);
   }
 }
