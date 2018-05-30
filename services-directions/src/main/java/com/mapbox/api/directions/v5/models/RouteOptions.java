@@ -240,6 +240,23 @@ public abstract class RouteOptions {
   public abstract String requestUuid();
 
   /**
+   * Indicates from which side of the road to approach a waypoint.
+   * Accepts  unrestricted (default) or  curb . If set to  unrestricted ,
+   * the route can approach waypoints from either side of the road.
+   * If set to curb, the route will be returned so that on arrival,
+   * the waypoint will be found on the side that corresponds with the  driving_side of the region
+   * in which the returned route is located.
+   * If provided, the list of approaches must be the same length as the list of waypoints.
+   * However, you can skip a coordinate and show its position in the list with the  ; separator.
+   *
+   * @return a string representing approaches for each waypoint
+   * @since 3.2.0
+   */
+
+  @Nullable
+  public abstract String approaches();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -456,7 +473,18 @@ public abstract class RouteOptions {
      * @since 3.0.0
      */
     @Nullable
-    public abstract Builder exclude(String exclude);
+    public abstract Builder exclude(@NonNull String exclude);
+
+    /**
+     * The same approaches the user originally made when the request was made.
+     *
+     * @param approaches unrestricted, curb or omitted (;)
+     * @return this builder for chaining options together
+     * @since 3.2.0
+     */
+
+    @Nullable
+    public abstract Builder approaches(String approaches);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.

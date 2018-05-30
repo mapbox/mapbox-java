@@ -85,7 +85,8 @@ public abstract class MapboxDirections extends
       voiceInstructions(),
       bannerInstructions(),
       voiceUnits(),
-      exclude());
+      exclude(),
+      approaches());
   }
 
   @Override
@@ -299,6 +300,9 @@ public abstract class MapboxDirections extends
   @Nullable
   abstract String exclude();
 
+  @Nullable
+  abstract String approaches();
+
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
    * {@link #baseUrl()}, {@link #profile()}, {@link #user()}, and {@link #geometries()}.
@@ -346,6 +350,7 @@ public abstract class MapboxDirections extends
     private double[] radiuses;
     private Point destination;
     private Point origin;
+    private String[] approaches;
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -678,6 +683,29 @@ public abstract class MapboxDirections extends
 
     abstract Builder coordinates(@NonNull List<Point> coordinates);
 
+
+    /**
+     * Indicates from which side of the road to approach a waypoint.
+     * Accepts  unrestricted (default), curb or null.
+     * If set to  unrestricted , the route can approach waypoints
+     * from either side of the road. If set to  curb , the route will be returned
+     * so that on arrival, the waypoint will be found on the side that corresponds with the
+     * driving_side of the region in which the returned route is located.
+     * If provided, the list of approaches must be the same length as the list of waypoints.
+     *
+     * @param approaches null if you'd like the default approaches,
+     *                   else one of the options found in
+     *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     * @return this builder for chaining options together
+     * @since 3.2.0
+     */
+    public Builder addApproaches(String... approaches) {
+      this.approaches = approaches;
+      return this;
+    }
+
+    abstract Builder approaches(@Nullable String approaches);
+
     abstract MapboxDirections autoBuild();
 
     /**
@@ -699,6 +727,18 @@ public abstract class MapboxDirections extends
       if (coordinates.size() < 2) {
         throw new ServicesException("An origin and destination are required before making the"
           + " directions API request.");
+      }
+
+      if (approaches != null) {
+        if (approaches.length != coordinates.size()) {
+          throw new ServicesException("Number of approach elements must match "
+            + "number of coordinates provided.");
+        }
+        String formattedApproaches = TextUtils.formatApproaches(approaches);
+        if (formattedApproaches == null) {
+          throw new ServicesException("All approaches values must be one of curb, unrestricted");
+        }
+        approaches(formattedApproaches);
       }
 
       coordinates(coordinates);

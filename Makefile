@@ -126,6 +126,10 @@ directions-fixtures:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.403561,37.777689;-122.405786,37.770369.json?access_token=$(MAPBOX_ACCESS_TOKEN)&steps=true&geometries=polyline&banner_instructions=true" \
         -o services-directions/src/test/resources/directions_v5_banner_instructions.json
 
+    # Directions: route with approaches in request
+	curl "https://api.mapbox.com/directions/v5/mapbox/driving/13.4301,52.5109;13.432507621760521,52.501725088556014?approaches=unrestricted;curb&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+        -o services-directions/src/test/resources/directions_v5_approaches.json
+
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-matching/src/test/resources/map_matching_v5_polyline.json
@@ -133,6 +137,10 @@ mapmatching-fixtures:
 	# Unmatchable MapMatching request
 		curl "https://api.mapbox.com/matching/v5/mapbox/driving/0,-40;0,-20?access_token=$(MAPBOX_ACCESS_TOKEN)" \
 			-o services-matching/src/test/resources/mapmatching_nosegment_v5_polyline.json
+
+	# MapMatching request with approaches
+		curl "https://api.mapbox.com/matching/v5/mapbox/driving/-117.1728265285492,32.71204416018209;-117.17334151268004,32.71254065549407?approaches=unrestricted;curb&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+			-o services-matching/src/test/resources/mapmatching_v5_approaches.json
 
 
 optimization-fixtures:
