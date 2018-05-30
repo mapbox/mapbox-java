@@ -60,6 +60,7 @@ subprojects {
     testCompile dependenciesList.junit
     testCompile dependenciesList.hamcrestJunit
     testCompile dependenciesList.mockito
+    testCompile dependenciesList.supportAnnotation
   }
 }
 
