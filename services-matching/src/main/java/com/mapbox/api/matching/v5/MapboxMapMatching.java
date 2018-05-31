@@ -90,7 +90,8 @@ public abstract class MapboxMapMatching extends
       bannerInstructions(),
       voiceInstructions(),
       voiceUnits(),
-      waypoints());
+      waypoints(),
+      approaches());
   }
 
   /**
@@ -219,6 +220,7 @@ public abstract class MapboxMapMatching extends
           .voiceUnits(voiceUnits())
           .requestUuid(PLACEHOLDER_UUID)
           .accessToken(accessToken())
+          .approaches(approaches())
           .baseUrl(baseUrl())
           .build()
       ).build());
@@ -293,6 +295,9 @@ public abstract class MapboxMapMatching extends
   @Nullable
   abstract String waypoints();
 
+  @Nullable
+  abstract String approaches();
+
   @NonNull
   @Override
   protected abstract String baseUrl();
@@ -325,6 +330,7 @@ public abstract class MapboxMapMatching extends
     private String[] timestamps;
     private Double[] radiuses;
     private Integer[] waypoints;
+    private String[] approaches;
 
     /**
      * Required to call when this is being built. If no access token provided,
@@ -619,6 +625,29 @@ public abstract class MapboxMapMatching extends
     public abstract Builder clientAppName(@NonNull String clientAppName);
 
     /**
+     * Optionally used to indicate how map matched routes consider
+     * rom which side of the road to approach a waypoint.
+     * Accepts  unrestricted (default), curb or null.
+     * If set to  unrestricted , the map matched route can approach waypoints
+     * from either side of the road. If set to  curb , the map matched route will be returned
+     * so that on arrival, the waypoint will be found on the side that corresponds with the
+     * driving_side of the region in which the returned route is located.
+     * If provided, the list of approaches must be the same length as the list of waypoints.
+     *
+     * @param approaches null if you'd like the default approaches,
+     *                   else one of the options found in
+     *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     * @return this builder for chaining options together
+     * @since 3.2.0
+     */
+    public Builder addApproaches(@Nullable String... approaches) {
+      this.approaches = approaches;
+      return this;
+    }
+
+    abstract Builder approaches(@Nullable String approaches);
+
+    /**
      * Optionally change the APIs base URL to something other then the default Mapbox one.
      *
      * @param baseUrl base url used as end point
@@ -675,6 +704,19 @@ public abstract class MapboxMapMatching extends
               "Waypoints index too large (no corresponding coordinate)");
           }
         }
+      }
+
+
+      if (approaches != null) {
+        if (approaches.length != coordinates.size()) {
+          throw new ServicesException("Number of approach elements must match "
+            + "number of coordinates provided.");
+        }
+        String formattedApproaches = TextUtils.formatApproaches(approaches);
+        if (formattedApproaches == null) {
+          throw new ServicesException("All approaches values must be one of curb, unrestricted");
+        }
+        approaches(formattedApproaches);
       }
 
       coordinates(formatCoordinates(coordinates));

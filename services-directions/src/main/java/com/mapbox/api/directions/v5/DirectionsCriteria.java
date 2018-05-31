@@ -206,6 +206,26 @@ public final class DirectionsCriteria {
    */
   public static final String DESTINATION_LAST = "last";
 
+  /**
+   * The routes can approach waypoints from either side of the road. <p>
+   *
+   * Used in MapMatching and Directions API.
+   *
+   * @since 3.2.0
+   */
+  public static final String APPROACH_UNRESTRICTED = "unrestricted";
+
+  /**
+   * The route will be returned so that on arrival,
+   * the waypoint will be found on the side that corresponds with the  driving_side of
+   * the region in which the returned route is located. <p>
+   *
+   * Used in MapMatching and Directions API.
+   *
+   * @since 3.2.0
+   */
+  public static final String APPROACH_CURB = "curb";
+
   private DirectionsCriteria() {
     //not called
   }
@@ -321,5 +341,19 @@ public final class DirectionsCriteria {
     DESTINATION_LAST
   })
   public @interface DestinationCriteria {
+  }
+
+
+  /**
+   * Retention policy for the approaches parameter in the MapMatching and Directions API.
+   *
+   * @since 3.2.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    APPROACH_UNRESTRICTED,
+    APPROACH_CURB
+  })
+  public @interface ApproachesCriteria {
   }
 }

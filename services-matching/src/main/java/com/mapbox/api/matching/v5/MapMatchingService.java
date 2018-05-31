@@ -57,6 +57,7 @@ public interface MapMatchingService {
    *                           marked-up text for voice guidance along the route.
    * @param voiceUnits         voice units
    * @param waypoints          Which input coordinates should be treated as waypoints.
+   * @param approaches         which side of the road to approach a waypoint.
    * @return the MapMatchingResponse in a Call wrapper
    * @since 2.0.0
    */
@@ -79,5 +80,6 @@ public interface MapMatchingService {
     @Query("banner_instructions") Boolean bannerInstructions,
     @Query("voice_instructions") Boolean voiceInstructions,
     @Query("voice_units") String voiceUnits,
-    @Query("waypoints") String waypoints);
+    @Query("waypoints") String waypoints,
+    @Query("approaches") String approaches);
 }

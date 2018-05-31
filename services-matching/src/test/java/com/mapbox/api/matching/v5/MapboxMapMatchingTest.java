@@ -23,9 +23,14 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -33,6 +38,7 @@ public class MapboxMapMatchingTest extends TestUtils {
 
   private static final String MAP_MATCHING_FIXTURE = "map_matching_v5_polyline.json";
   private static final String MAP_MATCHING_ERROR_FIXTURE = "mapmatching_nosegment_v5_polyline.json";
+  private static final String MAP_MATCHING_APPROACHES = "mapmatching_v5_approaches.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -47,6 +53,8 @@ public class MapboxMapMatchingTest extends TestUtils {
           String resource = MAP_MATCHING_FIXTURE;
           if (request.getPath().contains("0,-40;0,-20")) { // no matching segment
             resource = MAP_MATCHING_ERROR_FIXTURE;
+          } else if (request.getPath().contains("approaches")) {
+            resource = MAP_MATCHING_APPROACHES;
           }
         try {
           String response = loadJsonFixture(resource);
@@ -514,4 +522,78 @@ public class MapboxMapMatchingTest extends TestUtils {
     assertThat(response.body().code(), containsString("NoSegment"));
   }
 
+  @Test
+  public void sanityApproachesInstructions() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(1.0, 1.0))
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(3.0, 3.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .addApproaches(APPROACH_UNRESTRICTED, null, "", APPROACH_CURB)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapMatching);
+    assertTrue(mapMatching.cloneCall().request().url().toString()
+      .contains("approaches=unrestricted;;;curb"));
+  }
+
+  @Test
+  public void sanityApproachesOptional() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(1.0, 1.0))
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(3.0, 3.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapMatching);
+    assertFalse(mapMatching.cloneCall().request().url().toString()
+      .contains("approaches"));
+  }
+
+  @Test
+  public void build_exceptionThrownWhenNumApproachesDoesNotMatchCoordinates() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Number of approach elements must match"));
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .addApproaches(APPROACH_UNRESTRICTED)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void build_exceptionThrownWhenInvalidApproaches() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("All approaches values must be one of curb, unrestricted"));
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .addApproaches(APPROACH_UNRESTRICTED, "restricted")
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void testApproaches() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
+      .coordinate(Point.fromLngLat(-117.1728265285492,32.71204416018209))
+      .coordinate(Point.fromLngLat(-117.17334151268004,32.71254065549407))
+      .addApproaches(APPROACH_UNRESTRICTED, APPROACH_CURB)
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    Response<MapMatchingResponse> response = mapMatching.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+  }
 }

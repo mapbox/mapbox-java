@@ -29,9 +29,12 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.GEOMETRY_POLYLINE;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -47,6 +50,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_V5_NO_ROUTE = "directions_v5_no_route.json";
   private static final String DIRECTIONS_V5_MAX_SPEED_ANNOTATION = "directions_v5_max_speed_annotation.json";
   private static final String DIRECTIONS_V5_BANNER_INSTRUCTIONS = "directions_v5_banner_instructions.json";
+  private static final String DIRECTIONS_V5_APPROACHES_REQUEST = "directions_v5_approaches.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -65,6 +69,8 @@ public class MapboxDirectionsTest extends TestUtils {
           resource = DIRECTIONS_ROTARY_FIXTURE;
         } else if (request.getPath().contains("annotations")) {
           resource = DIRECTIONS_V5_ANNOTATIONS_FIXTURE;
+        } else if (request.getPath().contains("approaches")) {
+          resource = DIRECTIONS_V5_APPROACHES_REQUEST;
         } else if (request.getPath().contains("-151.2302")) {
           resource = DIRECTIONS_V5_NO_ROUTE;
         } else if (request.getPath().contains("-122.403561,37.777689")) {
@@ -551,5 +557,65 @@ public class MapboxDirectionsTest extends TestUtils {
     assertNotNull(component.active());
     assertNotNull(component.directions());
     assertEquals(2, component.directions().size());
+  }
+
+  @Test
+  public void sanityApproachesInstructions() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(1.0, 1.0))
+      .addWaypoint(Point.fromLngLat(2.0, 2.0))
+      .addWaypoint(Point.fromLngLat(3.0, 3.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addApproaches(APPROACH_UNRESTRICTED, null, "", APPROACH_CURB)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapboxDirections);
+    assertTrue(mapboxDirections.cloneCall().request().url().toString()
+      .contains("approaches=unrestricted;;;curb"));
+  }
+  @Test
+  public void build_exceptionThrownWhenNumApproachesDoesNotMatchCoordinates() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Number of approach elements must match"));
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(2.0, 2.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addApproaches(APPROACH_UNRESTRICTED)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void build_exceptionThrownWhenInvalidApproaches() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("All approaches values must be one of curb, unrestricted"));
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(2.0, 2.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addApproaches(APPROACH_UNRESTRICTED, "restricted")
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void testApproaches() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .profile(PROFILE_DRIVING)
+      .origin(Point.fromLngLat(13.4301,52.5109))
+      .destination(Point.fromLngLat(13.432508,52.501725))
+      .addApproaches(APPROACH_UNRESTRICTED, APPROACH_CURB)
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    mapboxDirections.setCallFactory(null);
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
   }
 }
