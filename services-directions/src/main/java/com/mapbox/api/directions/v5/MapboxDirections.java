@@ -206,6 +206,7 @@ public abstract class MapboxDirections extends
           .coordinates(coordinates())
           .continueStraight(continueStraight())
           .annotations(annotation())
+          .approaches(approaches())
           .bearings(bearing())
           .alternatives(alternatives())
           .language(language())

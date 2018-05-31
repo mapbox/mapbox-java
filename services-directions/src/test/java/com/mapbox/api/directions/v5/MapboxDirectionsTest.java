@@ -7,6 +7,7 @@ import com.mapbox.api.directions.v5.models.BannerInstructions;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
@@ -617,5 +618,23 @@ public class MapboxDirectionsTest extends TestUtils {
     Response<DirectionsResponse> response = mapboxDirections.executeCall();
     assertEquals(200, response.code());
     assertEquals("Ok", response.body().code());
+  }
+
+  @Test
+  public void testRouteOptionsApproaches() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .profile(PROFILE_DRIVING)
+      .origin(Point.fromLngLat(13.4301,52.5109))
+      .destination(Point.fromLngLat(13.432508,52.501725))
+      .addApproaches(APPROACH_UNRESTRICTED, APPROACH_CURB)
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    mapboxDirections.setCallFactory(null);
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    RouteOptions routeOptions = response.body().routes().get(0).routeOptions();
+
+    assertEquals("unrestricted;curb", routeOptions.approaches());
   }
 }
