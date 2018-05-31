@@ -1,6 +1,7 @@
 package com.mapbox.api.matching.v5;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
@@ -595,5 +596,22 @@ public class MapboxMapMatchingTest extends TestUtils {
     Response<MapMatchingResponse> response = mapMatching.executeCall();
     assertEquals(200, response.code());
     assertEquals("Ok", response.body().code());
+  }
+
+  @Test
+  public void testRouteOptionsApproaches() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
+      .coordinate(Point.fromLngLat(-117.1728265285492,32.71204416018209))
+      .coordinate(Point.fromLngLat(-117.17334151268004,32.71254065549407))
+      .addApproaches(APPROACH_UNRESTRICTED, APPROACH_CURB)
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    Response<MapMatchingResponse> response = mapMatching.executeCall();
+    RouteOptions routeOptions = response.body().matchings().get(0).routeOptions();
+
+    assertEquals("unrestricted;curb", routeOptions.approaches());
   }
 }

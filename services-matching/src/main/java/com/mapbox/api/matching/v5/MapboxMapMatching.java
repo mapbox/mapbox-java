@@ -208,6 +208,7 @@ public abstract class MapboxMapMatching extends
           .profile(profile())
           .coordinates(formatCoordinates(coordinates()))
           .annotations(annotations())
+          .approaches(approaches())
           .language(language())
           .radiuses(radiuses())
           .user(user())
