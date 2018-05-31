@@ -2,6 +2,15 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.2.0
+- Added sub - to BannerInstructions (#823)
+- Added directions & active - to BannerText (#823)
+- Properties passed to Feature.fromGeometry and CarmenFeature.properties should be Nullable (#815)
+- Move TurfAssertions.getCoord() to TurfMeta.getCoord() to follow Turf.js (#818)
+- Semicolon should be used as radiuses and timestamps delimiters (#821)
+- Added approaches request paramenter to Directions and MapMatching (#827)
+
+
 ### v3.1.0
 - Added voiceLocale to DirectionsRoute  (#804)
 - Added line-slice-along() and degreesToRadians() to Turf functions(#800)
