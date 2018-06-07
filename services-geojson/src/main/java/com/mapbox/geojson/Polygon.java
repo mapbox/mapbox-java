@@ -59,7 +59,8 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class Polygon implements CoordinateContainer<List<List<Point>>>, Serializable {
+public abstract class Polygon extends CoordinateContainer<List<List<Point>>>
+  implements Serializable {
 
   private static final String TYPE = "Polygon";
 

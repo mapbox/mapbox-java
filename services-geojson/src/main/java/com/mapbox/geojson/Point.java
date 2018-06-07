@@ -52,7 +52,8 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class Point implements CoordinateContainer<List<Double>>, Serializable {
+public abstract class Point extends CoordinateContainer<List<Double>>
+  implements Serializable {
 
   private static final String TYPE = "Point";
 

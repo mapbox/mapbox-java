@@ -8,7 +8,7 @@ package com.mapbox.geojson;
  * @param <T> a generic allowing varying dimensions for each GeoJson geometry
  * @since 3.0.0
  */
-public interface CoordinateContainer<T> extends Geometry {
+public abstract class CoordinateContainer<T> extends Geometry {
 
   /**
    * the coordinates which define the geometry. Typically a list of points but for some geometry
@@ -17,5 +17,5 @@ public interface CoordinateContainer<T> extends Geometry {
    * @return the {@link Point}s which make up the coordinates defining the geometry
    * @since 3.0.0
    */
-  T coordinates();
+  public abstract T coordinates();
 }

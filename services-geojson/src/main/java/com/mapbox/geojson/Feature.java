@@ -46,7 +46,7 @@ import com.mapbox.geojson.gson.PointSerializer;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class Feature implements GeoJson {
+public abstract class Feature extends GeoJson {
 
   private static final String TYPE = "Feature";
 
