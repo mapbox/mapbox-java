@@ -104,6 +104,15 @@ public abstract class RouteOptions {
   public abstract String language();
 
   /**
+   * Whether the language that was used during the request is supported by API voice.
+   *
+   * @return boolean object representing whether the voice language is supported by API voice
+   * @since 3.3.0
+   */
+  @Nullable
+  public abstract Boolean languageSupported();
+
+  /**
    * The same radiuses were used during the request that resulted in this root directions response.
    *
    * @return a string representing the radiuses
@@ -334,6 +343,16 @@ public abstract class RouteOptions {
      * @since 3.0.0
      */
     public abstract Builder language(String language);
+
+    /**
+     * Whether the voice language is supported by API voice. This corresponds to whether the
+     * returned language value on the route was null. If it was null, then the language is not supported.
+     *
+     * @param languageSupported whether the language is supported by API voice
+     * @return this builder for chaining options together
+     * @since 3.3.0
+     */
+    public abstract Builder languageSupported(Boolean languageSupported);
 
     /**
      * The radiuses in string format that were used during the original request.
