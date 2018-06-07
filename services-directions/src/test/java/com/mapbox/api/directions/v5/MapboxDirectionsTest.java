@@ -33,6 +33,7 @@ import retrofit2.Response;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.GEOMETRY_POLYLINE;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_CYCLING;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
@@ -52,6 +53,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_V5_MAX_SPEED_ANNOTATION = "directions_v5_max_speed_annotation.json";
   private static final String DIRECTIONS_V5_BANNER_INSTRUCTIONS = "directions_v5_banner_instructions.json";
   private static final String DIRECTIONS_V5_APPROACHES_REQUEST = "directions_v5_approaches.json";
+  private static final String DIRECTIONS_V5_WAYPOINT_NAMES_FIXTURE = "directions_v5_waypoint_names.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -70,7 +72,9 @@ public class MapboxDirectionsTest extends TestUtils {
           resource = DIRECTIONS_ROTARY_FIXTURE;
         } else if (request.getPath().contains("annotations")) {
           resource = DIRECTIONS_V5_ANNOTATIONS_FIXTURE;
-        } else if (request.getPath().contains("approaches")) {
+        } else if (request.getPath().contains("waypoint_names")) {
+          resource = DIRECTIONS_V5_WAYPOINT_NAMES_FIXTURE;
+        }else if (request.getPath().contains("approaches")) {
           resource = DIRECTIONS_V5_APPROACHES_REQUEST;
         } else if (request.getPath().contains("-151.2302")) {
           resource = DIRECTIONS_V5_NO_ROUTE;
@@ -575,6 +579,7 @@ public class MapboxDirectionsTest extends TestUtils {
     assertTrue(mapboxDirections.cloneCall().request().url().toString()
       .contains("approaches=unrestricted;;;curb"));
   }
+
   @Test
   public void build_exceptionThrownWhenNumApproachesDoesNotMatchCoordinates() throws Exception {
     thrown.expect(ServicesException.class);
@@ -637,4 +642,88 @@ public class MapboxDirectionsTest extends TestUtils {
 
     assertEquals("unrestricted;curb", routeOptions.approaches());
   }
+
+  @Test
+  public void sanityWaypointNamesInstructions() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(1.0, 1.0))
+      .addWaypoint(Point.fromLngLat(2.0, 2.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addWaypointNames("Home", "Store", "Work")
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertNotNull(mapboxDirections);
+    assertTrue(mapboxDirections.cloneCall().request().url().toString()
+      .contains("waypoint_names=Home;Store;Work"));
+  }
+
+  @Test
+  public void build_exceptionThrownWhenWaypointNamesDoNotMatchCoordinates() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Number of waypoint names must match"));
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(2.0, 2.0))
+      .addWaypoint(Point.fromLngLat(2.0, 2.0))
+      .addWaypoint(Point.fromLngLat(3.0, 3.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addWaypointNames("Home", "Work")
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void build_exceptionThrownWhenWaypointNamesExceedLimit() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Waypoint names exceed 500 character limit"));
+
+    StringBuffer longWpName = new StringBuffer();
+    for (int i = 0; i < 124; i++) {
+      longWpName.append("Home");
+    }
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(2.0, 2.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addWaypointNames(longWpName.toString(), "Work")
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+
+    assertTrue(mapboxDirections.cloneCall().request().url().toString()
+      .contains("waypoint_names=Home"));
+
+    // one more char results in exception
+    mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(2.0, 2.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addWaypointNames(longWpName.toString(), "Work1")
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void testWithWaypointNames() throws Exception {
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .steps(true)
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .addWaypointNames("Home", "Work")
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    mapboxDirections.setCallFactory(null);
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+  }
+
 }
