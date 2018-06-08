@@ -41,10 +41,10 @@ import java.util.List;
  * geoid, with the height varying by up to 5 m (but generally between 2 and 3 meters) higher or
  * lower relative to a surface parallel to Earth's mean sea level.
  * <p>
- * A sample GeoJson Point's provided below (in it's serialized state).
+ * A sample GeoJson Point's provided below (in its serialized state).
  * <pre>
  * {
- *   "TYPE": "Point",
+ *   "type": "Point",
  *   "coordinates": [100.0, 0.0]
  * }
  * </pre>
