@@ -210,6 +210,7 @@ public abstract class MapboxDirections extends
           .bearings(bearing())
           .alternatives(alternatives())
           .language(language())
+          .languageSupported(route.voiceLanguage() != null)
           .radiuses(radius())
           .user(user())
           .voiceInstructions(voiceInstructions())
