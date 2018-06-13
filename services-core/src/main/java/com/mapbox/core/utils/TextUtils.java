@@ -182,4 +182,21 @@ public final class TextUtils {
     }
     return TextUtils.join(";", approaches);
   }
+
+  /**
+   * Converts String array with waypoint_names values
+   * to a string ready for API consumption.
+   *
+   * @param waypointNames a string representing approaches to each coordinate.
+   * @return a formatted string.
+   * @since 3.3.0
+   */
+  public static String formatWaypointNames(String[] waypointNames) {
+    for (int i = 0; i < waypointNames.length; i++) {
+      if (waypointNames[i] == null) {
+        waypointNames[i] = "";
+      }
+    }
+    return TextUtils.join(";", waypointNames);
+  }
 }

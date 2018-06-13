@@ -130,6 +130,10 @@ directions-fixtures:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/13.4301,52.5109;13.432507621760521,52.501725088556014?approaches=unrestricted;curb&access_token=$(MAPBOX_ACCESS_TOKEN)" \
         -o services-directions/src/test/resources/directions_v5_approaches.json
 
+    # Directions: includes waypoint_names
+	curl "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?steps=true&voice_instructions=true&banner_instructions=true&voice_units=imperial&waypoint_names=Home;Work&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+        -o services-directions/src/test/resources/directions_v5_waypoint_names.json
+
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-matching/src/test/resources/map_matching_v5_polyline.json
@@ -142,6 +146,9 @@ mapmatching-fixtures:
 		curl "https://api.mapbox.com/matching/v5/mapbox/driving/-117.1728265285492,32.71204416018209;-117.17334151268004,32.71254065549407?approaches=unrestricted;curb&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 			-o services-matching/src/test/resources/mapmatching_v5_approaches.json
 
+	# MapMatching request with waypoint_names:
+		curl "https://api.mapbox.com/matching/v5/mapbox/driving/2.344003915786743,48.85805170891599;2.346750497817993,48.85727523615161;2.348681688308716,48.85936462637049;2.349550724029541,48.86084691113991;2.349550724029541,48.8608892614883;2.349625825881958,48.86102337068847;2.34982967376709,48.86125629633996?steps=true&tidy=true&waypoints=0;6&waypoint_names=Home;Work&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+			-o services-matching/src/test/resources/mapmatching_v5_waypoint_names.json
 
 optimization-fixtures:
 	# request an optimized car trip with no additional options

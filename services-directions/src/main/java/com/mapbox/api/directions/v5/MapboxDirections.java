@@ -86,7 +86,8 @@ public abstract class MapboxDirections extends
       bannerInstructions(),
       voiceUnits(),
       exclude(),
-      approaches());
+      approaches(),
+      waypointNames());
   }
 
   @Override
@@ -204,6 +205,7 @@ public abstract class MapboxDirections extends
         RouteOptions.builder()
           .profile(profile())
           .coordinates(coordinates())
+          .waypointNames(waypointNames())
           .continueStraight(continueStraight())
           .annotations(annotation())
           .approaches(approaches())
@@ -304,6 +306,9 @@ public abstract class MapboxDirections extends
   @Nullable
   abstract String approaches();
 
+  @Nullable
+  abstract String waypointNames();
+
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
    * {@link #baseUrl()}, {@link #profile()}, {@link #user()}, and {@link #geometries()}.
@@ -352,6 +357,7 @@ public abstract class MapboxDirections extends
     private Point destination;
     private Point origin;
     private String[] approaches;
+    private String[] waypointNames;
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -707,6 +713,22 @@ public abstract class MapboxDirections extends
 
     abstract Builder approaches(@Nullable String approaches);
 
+    /**
+     * Custom names for waypoints used for the arrival instruction,
+     * each separated by  ; . Values can be any string and total number of all characters cannot
+     * exceed 500. If provided, the list of waypointNames must be the same length as the list of
+     * coordinates, but you can skip a coordinate and show its position with the  ; separator.
+     * @param waypointNames Custom names for waypoints used for the arrival instruction.
+     * @return this builder for chaining options together
+     * @since 3.3.0
+     */
+    public Builder addWaypointNames(@Nullable String... waypointNames) {
+      this.waypointNames = waypointNames;
+      return this;
+    }
+
+    abstract Builder waypointNames(@Nullable String waypointNames);
+
     abstract MapboxDirections autoBuild();
 
     /**
@@ -728,6 +750,18 @@ public abstract class MapboxDirections extends
       if (coordinates.size() < 2) {
         throw new ServicesException("An origin and destination are required before making the"
           + " directions API request.");
+      }
+
+      if (waypointNames != null) {
+        if (waypointNames.length != coordinates.size()) {
+          throw new ServicesException("Number of waypoint names must match "
+            + " the number of waypoints provided.");
+        }
+        final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
+        if (!waypointNamesStr.isEmpty() && waypointNamesStr.length() > 500) {
+          throw new ServicesException("Waypoint names exceed 500 character limit.");
+        }
+        waypointNames(waypointNamesStr);
       }
 
       if (approaches != null) {

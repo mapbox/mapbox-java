@@ -257,6 +257,18 @@ public abstract class RouteOptions {
   public abstract String approaches();
 
   /**
+   * Custom names for waypoints used for the arrival instruction in banners and voice instructions,
+   * each separated by  ; . Values can be any string and total number of all characters cannot
+   * exceed 500. If provided, the list of waypoint_names must be the same length as the list of
+   * coordinates, but you can skip a coordinate and show its position with the  ; separator.
+   * @return  a string representing names for each waypoint
+   * @since 3.3.0
+   */
+  @Nullable
+  public abstract String waypointNames();
+
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -485,6 +497,17 @@ public abstract class RouteOptions {
 
     @Nullable
     public abstract Builder approaches(String approaches);
+
+    /**
+     * The same approaches the user originally made when the request was made.
+     *
+     * @param waypointNames unrestricted, curb or omitted (;)
+     * @return this builder for chaining options together
+     * @since 3.3.0
+     */
+
+    @Nullable
+    public abstract Builder waypointNames(@Nullable String waypointNames);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.

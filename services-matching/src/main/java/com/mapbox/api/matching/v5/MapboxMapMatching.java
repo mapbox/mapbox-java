@@ -91,6 +91,7 @@ public abstract class MapboxMapMatching extends
       voiceInstructions(),
       voiceUnits(),
       waypoints(),
+      waypointNames(),
       approaches());
   }
 
@@ -222,6 +223,7 @@ public abstract class MapboxMapMatching extends
           .requestUuid(PLACEHOLDER_UUID)
           .accessToken(accessToken())
           .approaches(approaches())
+          .waypointNames(waypointNames())
           .baseUrl(baseUrl())
           .build()
       ).build());
@@ -297,6 +299,9 @@ public abstract class MapboxMapMatching extends
   abstract String waypoints();
 
   @Nullable
+  abstract String waypointNames();
+
+  @Nullable
   abstract String approaches();
 
   @NonNull
@@ -331,6 +336,7 @@ public abstract class MapboxMapMatching extends
     private String[] timestamps;
     private Double[] radiuses;
     private Integer[] waypoints;
+    private String[] waypointNames;
     private String[] approaches;
 
     /**
@@ -649,6 +655,23 @@ public abstract class MapboxMapMatching extends
     abstract Builder approaches(@Nullable String approaches);
 
     /**
+     * Custom names for waypoints used for the arrival instruction,
+     * each separated by  ; . Values can be any string and total number of all characters cannot
+     * exceed 500. If provided, the list of waypointNames must be the same length as the list of
+     * waypoints, but you can skip a coordinate and show its position with the  ; separator.
+     *
+     * @param waypointNames Custom names for waypoints used for the arrival instruction.
+     * @returnthis builder for chaining options together
+     * @since 3.3.0
+     */
+    public Builder addWaypointNames(@Nullable String... waypointNames) {
+      this.waypointNames = waypointNames;
+      return this;
+    }
+
+    abstract Builder waypointNames(@Nullable String waypointNames);
+
+    /**
      * Optionally change the APIs base URL to something other then the default Mapbox one.
      *
      * @param baseUrl base url used as end point
@@ -707,6 +730,17 @@ public abstract class MapboxMapMatching extends
         }
       }
 
+      if (waypointNames != null) {
+        if (waypointNames.length != waypoints.length) {
+          throw new ServicesException("Number of waypoint names  must match "
+            + " the number of waypoints provided.");
+        }
+        final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
+        if (!waypointNamesStr.isEmpty() && waypointNamesStr.length() > 500) {
+          throw new ServicesException("Waypoint names exceed 500 character limit.");
+        }
+        waypointNames(waypointNamesStr);
+      }
 
       if (approaches != null) {
         if (approaches.length != coordinates.size()) {
