@@ -103,11 +103,11 @@ public abstract class MapboxStaticMap {
 
     List<String> annotations = new ArrayList<>();
     if (staticMarkerAnnotations() != null) {
-      String[] markerStringArray = new String[staticMarkerAnnotations().size()];
+      List<String> markerStrings = new ArrayList<>(staticMarkerAnnotations().size());
       for (StaticMarkerAnnotation marker : staticMarkerAnnotations()) {
-        markerStringArray[staticMarkerAnnotations().indexOf(marker)] = marker.url();
+        markerStrings.add(marker.url());
       }
-      annotations.addAll(Arrays.asList(markerStringArray));
+      annotations.addAll(markerStrings);
     }
 
     if (staticPolylineAnnotations() != null) {
