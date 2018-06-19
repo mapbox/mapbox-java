@@ -63,7 +63,7 @@ public class StaticMarkerAnnotationTest {
         Color.BLUE.getGreen(),
         Color.BLUE.getBlue())
       .build();
-    assertTrue(staticMarkerAnnotation.url().contains("pin-m-0000FF(1.000000,2.000000)"));
+    assertTrue(staticMarkerAnnotation.url().contains("pin-m+0000FF(1.000000,2.000000)"));
   }
 
   @Test
