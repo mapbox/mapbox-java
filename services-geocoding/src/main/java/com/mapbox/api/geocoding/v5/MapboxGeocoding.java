@@ -95,7 +95,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       autocomplete(),
       bbox(),
       limit(),
-      languages());
+      languages(),
+      reverseMode());
   }
 
   private Call<List<GeocodingResponse>> getBatchCall() {
@@ -119,7 +120,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       autocomplete(),
       bbox(),
       limit(),
-      languages());
+      languages(),
+      reverseMode());
 
     return batchCall;
   }
@@ -202,6 +204,9 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
   @Nullable
   abstract String languages();
+
+  @Nullable
+  abstract String reverseMode();
 
   @Nullable
   abstract String clientAppName();
@@ -500,6 +505,20 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
     public abstract Builder languages(String languages);
 
     /**
+     * Set the factors that are used to sort nearby results.
+     * Options avaliable to pass in include, {@link GeocodingCriteria#REVERSE_MODE_DISTANCE} for
+     * nearest feature result (default) or {@link GeocodingCriteria#REVERSE_MODE_SCORE}
+     * the notability of features within approximately 1 kilometer of the queried point
+     * along with proximity.
+     *
+     * @param reverseMode limit geocoding results based on the reverseMode
+     * @return this builder for chaining options together
+     * @since 3.3.0
+     */
+    public abstract Builder reverseMode(
+      @Nullable @GeocodingCriteria.GeocodingReverseModeCriteria String reverseMode);
+
+    /**
      * Required to call when this is being built. If no access token provided,
      * {@link ServicesException} will be thrown.
      *
@@ -552,6 +571,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
         throw new ServicesException("A query with at least one character or digit is required.");
       }
 
+      if (geocoding.reverseMode() != null
+        && geocoding.limit() != null && !geocoding.limit().equals("1")) {
+        throw new ServicesException("Limit must be combined with a single type parameter");
+      }
       return geocoding;
     }
   }
