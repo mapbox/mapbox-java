@@ -50,12 +50,12 @@ public abstract class StaticMarkerAnnotation {
         Locale.US, "url-%s(%f,%f)", iconUrl(), lnglat().longitude(), lnglat().latitude());
     }
 
-    if (color() != null && label() != null && !TextUtils.isEmpty(label())) {
+    if (color() != null && !TextUtils.isEmpty(label())) {
       url = String.format(Locale.US, "%s-%s+%s", name(), label(), color());
-    } else if (label() != null && !TextUtils.isEmpty(label())) {
+    } else if (!TextUtils.isEmpty(label())) {
       url = String.format(Locale.US, "%s-%s", name(), label());
     } else if (color() != null) {
-      url = String.format(Locale.US, "%s-%s", name(), color());
+      url = String.format(Locale.US, "%s+%s", name(), color());
     } else {
       url = name();
     }
