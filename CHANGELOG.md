@@ -2,6 +2,13 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.3.0
+- add reverseMode parameter to Geocoding Service (#843)
+- doc changes (#840) (#835)
+- static map request format #836 (#839)
+- add waypoint names (#831)
+- add approaches to RouteOptions (#830)
+
 ### v3.2.0
 - Added sub - to BannerInstructions (#823)
 - Added directions & active - to BannerText (#823)
@@ -9,7 +16,6 @@ Mapbox welcomes participation and contributions from everyone.
 - Move TurfAssertions.getCoord() to TurfMeta.getCoord() to follow Turf.js (#818)
 - Semicolon should be used as radiuses and timestamps delimiters (#821)
 - Added approaches request paramenter to Directions and MapMatching (#827)
-
 
 ### v3.1.0
 - Added voiceLocale to DirectionsRoute  (#804)

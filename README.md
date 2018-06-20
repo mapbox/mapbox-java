@@ -44,7 +44,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.mapbox.mapboxsdk:mapbox-sdk-services:3.3.0-SNAPSHOT'
+    compile 'com.mapbox.mapboxsdk:mapbox-sdk-services:3.4.0-SNAPSHOT'
 }
 ```
 
