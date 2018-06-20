@@ -220,4 +220,38 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
       .build();
     assertTrue(mapboxGeocoding.cloneCall().request().header("User-Agent").contains("APP"));
   }
+
+  @Test
+  public void reverseMode_getsAddedToUrlCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl("https://foobar.com")
+      .query(Point.fromLngLat(-73.989,40.733))
+      .reverseMode(GeocodingCriteria.REVERSE_MODE_SCORE)
+      .build();
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("reverseMode=score"));
+
+    mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl("https://foobar.com")
+      .query(Point.fromLngLat(-73.989,40.733))
+      .reverseMode(GeocodingCriteria.REVERSE_MODE_DISTANCE)
+      .build();
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("reverseMode=distance"));
+  }
+
+  @Test
+  public void reverseMode_onlyLimit1_Allowed() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(startsWith("Limit must be combined with a single type"));
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl("https://foobar.com")
+      .query(Point.fromLngLat(-73.989,40.733))
+      .reverseMode(GeocodingCriteria.REVERSE_MODE_SCORE)
+      .limit(2)
+      .build();
+  }
 }

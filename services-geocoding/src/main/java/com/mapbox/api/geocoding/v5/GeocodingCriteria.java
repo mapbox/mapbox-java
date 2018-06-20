@@ -96,6 +96,20 @@ public final class GeocodingCriteria {
    */
   public static final String TYPE_POI_LANDMARK = "poi.landmark";
 
+  /**
+   * Filter results by distance.
+   *
+   * @since 3.3.0
+   */
+  public static final String REVERSE_MODE_DISTANCE = "distance";
+
+  /**
+   * Filter results by score.
+   *
+   * @since 3.3.0
+   */
+  public static final String REVERSE_MODE_SCORE = "score";
+
   private GeocodingCriteria() {
     // Empty private constructor
   }
@@ -132,5 +146,19 @@ public final class GeocodingCriteria {
     TYPE_POI_LANDMARK
   })
   public @interface GeocodingTypeCriteria {
+  }
+
+
+  /**
+   * Retention policy for reverseMode filter result types.
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    REVERSE_MODE_DISTANCE,
+    REVERSE_MODE_SCORE
+  })
+  public @interface GeocodingReverseModeCriteria {
   }
 }
