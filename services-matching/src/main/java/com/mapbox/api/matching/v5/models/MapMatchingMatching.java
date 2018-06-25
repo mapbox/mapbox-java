@@ -1,12 +1,13 @@
 package com.mapbox.api.matching.v5.models;
 
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 
 import java.io.Serializable;
@@ -103,6 +104,19 @@ public abstract class MapMatchingMatching implements Serializable {
   public abstract RouteOptions routeOptions();
 
   /**
+   * String of the language to be used for voice instructions.  Defaults to en, and
+   * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
+   * via {@link com.mapbox.api.matching.v5.MapboxMapMatching#language()} is not compatible
+   * with API Voice.
+   *
+   * @return String compatible with voice instructions, null otherwise
+   * @since 3.4.0
+   */
+  @Nullable
+  @SerializedName("voiceLocale")
+  public abstract String voiceLanguage();
+
+  /**
    * Convert the current {@link MapMatchingMatching} to its builder holding the currently assigned
    * values. This allows you to modify a single variable and then rebuild the object resulting in
    * an updated and modified {@link MapMatchingMatching}.
@@ -128,6 +142,7 @@ public abstract class MapMatchingMatching implements Serializable {
       .duration(duration())
       .distance(distance())
       .routeOptions(routeOptions())
+      .voiceLanguage(voiceLanguage())
       .build();
   }
 
@@ -223,7 +238,19 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract MapMatchingMatching.Builder routeOptions(@Nullable RouteOptions routeOptions);
+    public abstract Builder routeOptions(@Nullable RouteOptions routeOptions);
+
+    /**
+     * String of the language to be used for voice instructions.  Defaults to en, and
+     * can be any accepted instruction language.  Should be <tt>null</tt> when the language provided
+     * via {@link com.mapbox.api.matching.v5.MapboxMapMatching#language()} is not
+     * compatible with API Voice.
+     *
+     * @param voiceLanguage String compatible with voice instructions, null otherwise
+     * @return this builder for chaining options together
+     * @since 3.4.0
+     */
+    public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
 
     /**
      * Build a new {@link MapMatchingMatching} object.

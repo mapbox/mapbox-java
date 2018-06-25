@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
@@ -126,7 +127,8 @@ public abstract class DirectionsRoute implements Serializable {
 
   /**
    * String of the language to be used for voice instructions.  Defaults to en, and
-   * can be any accepted instruction language.
+   * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
+   * via {@link MapboxDirections#language()} is not compatible with API Voice.
    *
    * @return String compatible with voice instructions, null otherwise
    * @since 3.1.0
