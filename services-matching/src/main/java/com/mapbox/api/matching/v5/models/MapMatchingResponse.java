@@ -2,9 +2,12 @@ package com.mapbox.api.matching.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 
 import java.io.Serializable;
 import java.util.List;
@@ -97,6 +100,21 @@ public abstract class MapMatchingResponse implements Serializable {
    */
   public static TypeAdapter<MapMatchingResponse> typeAdapter(Gson gson) {
     return new AutoValue_MapMatchingResponse.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a GeoJson Map Matching response
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static MapMatchingResponse fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(MapMatchingAdapterFactory.create());
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, MapMatchingResponse.class);
   }
 
   /**
