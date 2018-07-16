@@ -661,7 +661,7 @@ public abstract class MapboxMapMatching extends
      * waypoints, but you can skip a coordinate and show its position with the  ; separator.
      *
      * @param waypointNames Custom names for waypoints used for the arrival instruction.
-     * @returnthis builder for chaining options together
+     * @return this builder for chaining options together
      * @since 3.3.0
      */
     public Builder addWaypointNames(@Nullable String... waypointNames) {
