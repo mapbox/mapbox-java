@@ -4,18 +4,21 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.Point;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class DirectionsWaypointTest extends TestUtils {
 
@@ -88,5 +91,35 @@ public class DirectionsWaypointTest extends TestUtils {
     assertNotNull(waypoint.location());
     assertEquals(1.0, waypoint.location().longitude(), DELTA);
     assertEquals(2.0, waypoint.location().latitude(), DELTA);
+  }
+
+  @Test
+  public void testToFromJson() {
+
+    DirectionsWaypoint waypoint = DirectionsWaypoint.builder()
+      .name("Kirkjubøarvegur")
+      .rawLocation(new double[]{-6.80897, 62.000075})
+      .build();
+
+    String jsonString = waypoint.toJson();
+    DirectionsWaypoint waypointFromJson = DirectionsWaypoint.fromJson(jsonString);
+
+    assertEquals(waypoint, waypointFromJson);
+  }
+
+  @Test
+  public void testFromJson() {
+    String waypointJsonString =
+      "{\"name\": \"Kirkjubøarvegur\", " +
+        "\"location\": [ -6.80897, 62.000075] }";
+    DirectionsWaypoint waypoint = DirectionsWaypoint.fromJson(waypointJsonString);
+
+    Point location = waypoint.location();
+    Assert.assertEquals(-6.80897, location.longitude(), 0.0001);
+    Assert.assertEquals(62.000075, location.latitude(), 0.0001);
+
+    String jsonStr = waypoint.toJson();
+
+    compareJson(waypointJsonString, jsonStr);
   }
 }

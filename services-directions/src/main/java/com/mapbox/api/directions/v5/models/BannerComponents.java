@@ -4,11 +4,12 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.MapboxDirections;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -20,7 +21,8 @@ import java.util.List;
  * @since 3.0.0
  */
 @AutoValue
-public abstract class BannerComponents implements Serializable, Comparable<BannerComponents> {
+public abstract class BannerComponents extends DirectionsJsonObject
+  implements Comparable<BannerComponents> {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -145,6 +147,20 @@ public abstract class BannerComponents implements Serializable, Comparable<Banne
    */
   public static TypeAdapter<BannerComponents> typeAdapter(Gson gson) {
     return new AutoValue_BannerComponents.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a BannerComponents
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static BannerComponents fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, BannerComponents.class);
   }
 
   /**

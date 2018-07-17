@@ -4,9 +4,10 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 
-import java.io.Serializable;
 
 /**
  * Object representing max speeds along a route.
@@ -14,7 +15,7 @@ import java.io.Serializable;
  * @since 3.0.0
  */
 @AutoValue
-public abstract class MaxSpeed implements Serializable {
+public abstract class MaxSpeed extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -83,6 +84,20 @@ public abstract class MaxSpeed implements Serializable {
    */
   public static TypeAdapter<MaxSpeed> typeAdapter(Gson gson) {
     return new AutoValue_MaxSpeed.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a MaxSpeed
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static MaxSpeed fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, MaxSpeed.class);
   }
 
   /**
