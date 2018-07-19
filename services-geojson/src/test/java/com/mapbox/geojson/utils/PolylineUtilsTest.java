@@ -150,7 +150,7 @@ public class PolylineUtilsTest extends TestUtils {
 
   private List<Point> createPointListFromResourceFile(String fileName) throws IOException {
     String inputPoints = loadJsonFixture(fileName);
-    String[] coords = inputPoints.split(",");
+    String[] coords = inputPoints.split(",", -1);
 
     final List<Point> pointList = new ArrayList<>();
     for(int i= 0;i <= coords.length-2;i = i+2) {

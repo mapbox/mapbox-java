@@ -8,6 +8,7 @@ dependencies {
 
     // AutoValue
     compileOnly dependenciesList.autoValue
+    compileOnly dependenciesList.autoValueGson
 
     // Test Dependencies
     testImplementation dependenciesList.okhttp3Mockwebserver

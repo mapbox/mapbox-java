@@ -132,7 +132,8 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
       .country(Locale.CANADA)
       .query(Point.fromLngLat(-77.03655, 38.89770))
       .build();
-    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("country=US,CA"));
+    assertEquals("US,CA",
+      mapboxGeocoding.cloneCall().request().url().queryParameter("country"));
   }
 
   @Test
@@ -143,8 +144,8 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
       .query("1600 pennsylvania ave nw")
       .proximity(Point.fromLngLat(-77.03655, 38.89770))
       .build();
-    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
-      .contains("proximity=-77.03655,38.8977"));
+    assertEquals("-77.03655,38.8977",
+      mapboxGeocoding.cloneCall().request().url().queryParameter("proximity"));
   }
 
   @Test
@@ -155,8 +156,8 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
       .geocodingTypes(GeocodingCriteria.TYPE_COUNTRY, GeocodingCriteria.TYPE_DISTRICT)
       .query("1600 pennsylvania ave nw")
       .build();
-    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
-      .contains("types=country,district"));
+    assertEquals("country,district",
+      mapboxGeocoding.cloneCall().request().url().queryParameter("types"));
   }
 
   @Test
@@ -182,8 +183,8 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
       )
       .query("1600 pennsylvania ave nw")
       .build();
-    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
-      .contains("bbox=-77.083056,38.908611,-76.997778,38.959167"));
+    assertEquals("-77.083056,38.908611,-76.997778,38.959167",
+      mapboxGeocoding.cloneCall().request().url().queryParameter("bbox"));
   }
 
   @Test
@@ -206,7 +207,8 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
       .languages(Locale.ENGLISH, Locale.FRANCE)
       .query("1600 pennsylvania ave nw")
       .build();
-    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("language=en,fr"));
+    assertEquals("en,fr",
+      mapboxGeocoding.cloneCall().request().url().queryParameter("language"));
   }
 
   @Test

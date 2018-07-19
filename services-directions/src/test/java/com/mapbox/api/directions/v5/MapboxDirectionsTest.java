@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -299,8 +300,8 @@ public class MapboxDirectionsTest extends TestUtils {
       .overview(DirectionsCriteria.OVERVIEW_FULL)
       .accessToken(ACCESS_TOKEN)
       .build();
-    assertTrue(directions.cloneCall().request().url().toString()
-      .contains("annotations=congestion,duration"));
+    assertEquals("congestion,duration",
+      directions.cloneCall().request().url().queryParameter("annotations"));
   }
 
   @Test
@@ -312,7 +313,8 @@ public class MapboxDirectionsTest extends TestUtils {
       .addBearing(2d, 90d)
       .accessToken(ACCESS_TOKEN)
       .build();
-    assertTrue(directions.cloneCall().request().url().toString().contains("bearings=45,90;2,90"));
+    assertEquals("45,90;2,90",
+      directions.cloneCall().request().url().queryParameter("bearings"));
   }
 
   @Test
@@ -323,7 +325,8 @@ public class MapboxDirectionsTest extends TestUtils {
       .radiuses(23, 30)
       .accessToken(ACCESS_TOKEN)
       .build();
-    assertTrue(directions.cloneCall().request().url().toString().contains("radiuses=23;30"));
+    assertEquals("23;30",
+      directions.cloneCall().request().url().queryParameter("radiuses"));
   }
 
   @Test
@@ -458,8 +461,8 @@ public class MapboxDirectionsTest extends TestUtils {
       .radiuses(100, Double.POSITIVE_INFINITY, 100)
       .build();
 
-    assertThat(client.cloneCall().request().url().toString(),
-      containsString("radiuses=100;unlimited;100"));
+    assertEquals("100;unlimited;100",
+      client.cloneCall().request().url().queryParameter("radiuses"));
   }
 
   @Test
@@ -576,8 +579,9 @@ public class MapboxDirectionsTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .build();
     assertNotNull(mapboxDirections);
-    assertTrue(mapboxDirections.cloneCall().request().url().toString()
-      .contains("approaches=unrestricted;;;curb"));
+
+    assertEquals("unrestricted;;;curb",
+      mapboxDirections.cloneCall().request().url().queryParameter("approaches"));
   }
 
   @Test
@@ -640,7 +644,9 @@ public class MapboxDirectionsTest extends TestUtils {
     Response<DirectionsResponse> response = mapboxDirections.executeCall();
     RouteOptions routeOptions = response.body().routes().get(0).routeOptions();
 
-    assertEquals("unrestricted;curb", routeOptions.approaches());
+
+    String approaches = routeOptions.approaches();
+    assertEquals("unrestricted;curb", approaches);
   }
 
   @Test
@@ -654,8 +660,8 @@ public class MapboxDirectionsTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .build();
     assertNotNull(mapboxDirections);
-    assertTrue(mapboxDirections.cloneCall().request().url().toString()
-      .contains("waypoint_names=Home;Store;Work"));
+    assertEquals("Home;Store;Work",
+      mapboxDirections.cloneCall().request().url().queryParameter("waypoint_names"));
   }
 
   @Test
@@ -680,7 +686,7 @@ public class MapboxDirectionsTest extends TestUtils {
     thrown.expectMessage(
       startsWith("Waypoint names exceed 500 character limit"));
 
-    StringBuffer longWpName = new StringBuffer();
+    StringBuilder longWpName = new StringBuilder();
     for (int i = 0; i < 124; i++) {
       longWpName.append("Home");
     }
