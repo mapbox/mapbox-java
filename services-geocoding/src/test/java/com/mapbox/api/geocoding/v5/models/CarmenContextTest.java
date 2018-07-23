@@ -3,6 +3,7 @@ package com.mapbox.api.geocoding.v5.models;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -31,7 +32,7 @@ public class CarmenContextTest extends GeocodingTestUtils {
       .baseUrl(mockUrl.toString())
       .build();
     GeocodingResponse response = mapboxGeocoding.executeCall().body();
-    assert response != null;
+    assertNotNull(response);
     assertThat(response.features().get(0).context().get(0).id(), equalTo("neighborhood.291451"));
   }
 
@@ -43,7 +44,7 @@ public class CarmenContextTest extends GeocodingTestUtils {
       .baseUrl(mockUrl.toString())
       .build();
     GeocodingResponse response = mapboxGeocoding.executeCall().body();
-    assert response != null;
+    assertNotNull(response);
     assertThat(response.features().get(0).context().get(0).text(), equalTo("Downtown"));
   }
 
@@ -55,7 +56,7 @@ public class CarmenContextTest extends GeocodingTestUtils {
       .baseUrl(mockUrl.toString())
       .build();
     GeocodingResponse response = mapboxGeocoding.executeCall().body();
-    assert response != null;
+    assertNotNull(response);
     assertThat(response.features().get(0).context().get(3).shortCode(), equalTo("US-DC"));
   }
 
@@ -67,7 +68,7 @@ public class CarmenContextTest extends GeocodingTestUtils {
       .baseUrl(mockUrl.toString())
       .build();
     GeocodingResponse response = mapboxGeocoding.executeCall().body();
-    assert response != null;
+    assertNotNull(response);
     assertThat(response.features().get(0).context().get(2).wikidata(), equalTo("Q148"));
   }
 

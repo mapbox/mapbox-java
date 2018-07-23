@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import com.google.gson.JsonObject;
 import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
@@ -62,7 +63,7 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
       .build();
 
     GeocodingResponse response = mapboxGeocoding.executeCall().body();
-    assert response != null;
+    assertNotNull(response);
     CarmenFeature feature = response.features().get(0);
     assertThat(feature.geometry(), notNullValue());
     assertTrue(feature.geometry() instanceof Point);
@@ -114,7 +115,7 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
       .baseUrl(mockUrl.toString())
       .build();
     GeocodingResponse response = mapboxGeocoding.executeCall().body();
-    assert response != null;
+    assertNotNull(response);
     CarmenFeature feature = response.features().get(0);
     compareJson(json, feature.toJson());
   }
@@ -130,8 +131,7 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
     Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
     assertEquals(200, response.code());
     GeocodingResponse object = response.body();
-    assert object != null;
-
+    assertNotNull(object);
     CarmenFeature feature = object.features().get(0);
 
     assertEquals(1, object.query().size());

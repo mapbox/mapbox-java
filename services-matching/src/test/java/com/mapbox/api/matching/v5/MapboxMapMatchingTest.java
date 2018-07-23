@@ -298,8 +298,8 @@ public class MapboxMapMatchingTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .radiuses(1d, 2d, 3d)
       .build();
-    assertTrue(mapMatching.cloneCall().request().url().toString()
-      .contains("radiuses=1.0;2.0;3.0"));
+    assertEquals("1.0;2.0;3.0",
+      mapMatching.cloneCall().request().url().queryParameter("radiuses"));
   }
 
   @Test
@@ -340,8 +340,8 @@ public class MapboxMapMatchingTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .timestamps("1", "2", "3")
       .build();
-    assertTrue(mapMatching.cloneCall().request().url().toString()
-      .contains("timestamps=1;2;3"));
+    assertEquals("1;2;3",
+      mapMatching.cloneCall().request().url().queryParameter("timestamps"));
   }
 
   @Test
@@ -356,8 +356,8 @@ public class MapboxMapMatchingTest extends TestUtils {
         DirectionsCriteria.ANNOTATION_DISTANCE,
         DirectionsCriteria.ANNOTATION_CONGESTION
       ).build();
-    assertTrue(mapMatching.cloneCall().request().url().toString()
-      .contains("annotations=distance,congestion"));
+    assertEquals("distance,congestion",
+      mapMatching.cloneCall().request().url().queryParameter("annotations"));
   }
 
   @Test
@@ -543,8 +543,8 @@ public class MapboxMapMatchingTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .build();
     assertNotNull(mapMatching);
-    assertTrue(mapMatching.cloneCall().request().url().toString()
-      .contains("approaches=unrestricted;;;curb"));
+    assertEquals("unrestricted;;;curb",
+      mapMatching.cloneCall().request().url().queryParameter("approaches"));
   }
 
   @Test
@@ -635,8 +635,8 @@ public class MapboxMapMatchingTest extends TestUtils {
       .addWaypointNames("Home", "Store", "Work")
       .build();
     assertNotNull(mapMatching);
-    assertTrue(mapMatching.cloneCall().request().url().toString()
-      .contains("waypoint_names=Home;Store;Work"));
+    assertEquals("Home;Store;Work",
+      mapMatching.cloneCall().request().url().queryParameter("waypoint_names"));
   }
 
   @Test
@@ -664,7 +664,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     thrown.expectMessage(
       startsWith("Waypoint names exceed 500 character limit"));
 
-    StringBuffer longWpName = new StringBuffer();
+    StringBuilder longWpName = new StringBuilder();
     for (int i = 0; i < 124; i++) {
       longWpName.append("Home");
     }

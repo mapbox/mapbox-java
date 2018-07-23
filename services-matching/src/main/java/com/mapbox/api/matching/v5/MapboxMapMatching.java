@@ -232,10 +232,10 @@ public abstract class MapboxMapMatching extends
   }
 
   private static List<Point> formatCoordinates(String coordinates) {
-    String[] coordPairs = coordinates.split(";");
+    String[] coordPairs = coordinates.split(";", -1);
     List<Point> coordinatesFormatted = new ArrayList<>();
     for (String coordPair : coordPairs) {
-      String[] coords = coordPair.split(",");
+      String[] coords = coordPair.split(",", -1);
       coordinatesFormatted.add(
         Point.fromLngLat(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
 
