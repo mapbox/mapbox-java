@@ -5,11 +5,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
-
-import java.io.Serializable;
 
 /**
  * Gives maneuver information about one {@link LegStep}.
@@ -17,7 +17,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class StepManeuver implements Serializable {
+public abstract class StepManeuver extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -165,6 +165,20 @@ public abstract class StepManeuver implements Serializable {
    */
   public static TypeAdapter<StepManeuver> typeAdapter(Gson gson) {
     return new AutoValue_StepManeuver.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a StepManeuver
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static StepManeuver fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, StepManeuver.class);
   }
 
   /**

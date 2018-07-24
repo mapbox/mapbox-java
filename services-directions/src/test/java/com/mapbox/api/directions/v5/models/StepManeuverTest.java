@@ -5,7 +5,11 @@ import static org.junit.Assert.assertNotNull;
 
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
+
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Arrays;
 
 public class StepManeuverTest extends TestUtils {
 
@@ -29,5 +33,44 @@ public class StepManeuverTest extends TestUtils {
     StepManeuver stepManeuver = StepManeuver.builder().rawLocation(new double[] {2.0, 1.0}).build();
     byte[] serialized = TestUtils.serialize(stepManeuver);
     assertEquals(stepManeuver, deserialize(serialized, StepManeuver.class));
+  }
+
+  @Test
+  public void testToFromJson2() {
+    StepManeuver stepManeuver = StepManeuver.builder()
+      .rawLocation(new double[]{13.424671, 52.508812})
+      .type("turn")
+      .modifier("left")
+      .bearingBefore(299.0)
+      .bearingAfter(202.0)
+      .instruction("Turn left onto Adalbertstraße")
+      .exit(5)
+      .build();
+
+    String jsonString = stepManeuver.toJson();
+    StepManeuver stepManeuverFromJson = StepManeuver.fromJson(jsonString);
+
+    Assert.assertEquals(stepManeuver, stepManeuverFromJson);
+  }
+
+  @Test
+  public void testFromJson() {
+    String stepManeuverJsonString =
+      "{\"bearing_before\": 299," +
+        "\"bearing_after\": 202, " +
+        "\"type\": \"turn\", " +
+        "\"modifier\": \"left\", " +
+        "\"location\": [ 13.424671,52.508812]," +
+        "\"instruction\": \"Turn left onto Adalbertstraße\"}";
+
+    StepManeuver stepManeuver = StepManeuver.fromJson(stepManeuverJsonString);
+
+    Point location = stepManeuver.location();
+    Assert.assertEquals(13.424671, location.longitude(), 0.0001);
+    Assert.assertEquals(52.508812, location.latitude(), 0.0001);
+
+    String jsonStr = stepManeuver.toJson();
+
+    compareJson(stepManeuverJsonString, jsonStr);
   }
 }

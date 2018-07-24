@@ -4,6 +4,8 @@ import com.mapbox.core.TestUtils;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -125,5 +127,52 @@ public class BannerComponentTest extends TestUtils {
       .build();
 
     assertEquals(0, bannerComponents1.compareTo(bannerComponents2));
+  }
+
+  @Test
+  public void testToFromJsonLaneType() {
+
+    BannerComponents bannerComponents = BannerComponents.builder()
+      .text("test")
+      .type("lane")
+      .directions(Arrays.asList("left", "straight"))
+      .active(true)
+      .build();
+
+    String jsonString = bannerComponents.toJson();
+    BannerComponents bannerComponentsFromJson = BannerComponents.fromJson(jsonString);
+
+    assertEquals(bannerComponents, bannerComponentsFromJson);
+  }
+
+  @Test
+  public void testToFromJsonLaneIcon() {
+
+    BannerComponents bannerComponents = BannerComponents.builder()
+      .text("I 95")
+      .type("icon")
+      .imageBaseUrl("https://s3.amazonaws.com/mapbox/shields/v3/i-95")
+      .build();
+
+    String jsonString = bannerComponents.toJson();
+    BannerComponents bannerComponentsFromJson = BannerComponents.fromJson(jsonString);
+
+    assertEquals(bannerComponents, bannerComponentsFromJson);
+  }
+
+  @Test
+  public void testToFromJsonLaneText() {
+
+    BannerComponents bannerComponents = BannerComponents.builder()
+      .text("North")
+      .type("text")
+      .abbreviation("N")
+      .abbreviationPriority(0)
+      .build();
+
+    String jsonString = bannerComponents.toJson();
+    BannerComponents bannerComponentsFromJson = BannerComponents.fromJson(jsonString);
+
+    assertEquals(bannerComponents, bannerComponentsFromJson);
   }
 }

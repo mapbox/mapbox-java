@@ -7,6 +7,8 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
@@ -92,5 +94,136 @@ public class BannerTextTest extends TestUtils {
 
     assertNotNull(bannerText.modifier());
     assertNotNull(bannerText.type());
+  }
+
+  @Test
+  public void testToFromJson1() {
+
+    List<BannerComponents> bannerComponents =
+      Arrays.asList(BannerComponents.builder()
+        .text("You will arrive at your destination")
+        .type("text")
+        .build()
+      );
+
+    BannerText bannerText = BannerText.builder()
+      .text("You will arrive at your destination")
+      .components(bannerComponents)
+      .type("arrive")
+      .modifier("straight")
+      .build();
+
+    String jsonString = bannerText.toJson();
+    BannerText bannerTextFromJson = BannerText.fromJson(jsonString);
+
+    assertEquals(bannerText, bannerTextFromJson);
+  }
+
+  @Test
+  public void testToFromJson2() {
+
+    List<BannerComponents> bannerComponents =
+      Arrays.asList(
+        BannerComponents.builder()
+          .text("")
+          .type("lane")
+          .directions(Arrays.asList("left"))
+          .active(true)
+          .build(),
+        BannerComponents.builder()
+          .text("")
+          .type("lane")
+          .directions(Arrays.asList("left", "straight"))
+          .active(true)
+          .build(),
+        BannerComponents.builder()
+          .text("")
+          .type("lane")
+          .directions(Arrays.asList("right"))
+          .active(false)
+          .build());
+
+    BannerText bannerText = BannerText.builder()
+      .text("")
+      .components(bannerComponents)
+      .build();
+
+    String jsonString = bannerText.toJson();
+    BannerText bannerTextFromJson = BannerText.fromJson(jsonString);
+
+    assertEquals(bannerText, bannerTextFromJson);
+  }
+
+  @Test
+  public void testToFromJson3() {
+
+    List<BannerComponents> bannerComponents =
+      Arrays.asList(
+        BannerComponents.builder()
+          .text("Baltimore")
+          .type("text")
+          .build(),
+        BannerComponents.builder()
+          .text("/")
+          .type("text")
+          .directions(Arrays.asList("left", "straight"))
+          .active(true)
+          .build(),
+        BannerComponents.builder()
+          .text("Northern Virginia")
+          .type("text")
+          .build());
+
+    BannerText bannerText = BannerText.builder()
+      .text("Baltimore / Northern Virginia")
+      .type("turn")
+      .modifier("left")
+      .components(bannerComponents)
+      .build();
+
+    String jsonString = bannerText.toJson();
+    BannerText bannerTextFromJson = BannerText.fromJson(jsonString);
+
+    assertEquals(bannerText, bannerTextFromJson);
+  }
+
+
+  @Test
+  public void testToFromJson4() {
+
+    List<BannerComponents> bannerComponents =
+      Arrays.asList(
+        BannerComponents.builder()
+          .text("I 495")
+          .imageBaseUrl("https://s3.amazonaws.com/mapbox/shields/v3/i-495")
+          .type("icon")
+          .build(),
+        BannerComponents.builder()
+          .text("North")
+          .type("text")
+          .abbreviation("N")
+          .abbreviationPriority(0)
+          .build(),
+        BannerComponents.builder()
+          .text("/")
+          .type("delimeter")
+          .build(),
+        BannerComponents.builder()
+          .text("I 95")
+          .imageBaseUrl("https://s3.amazonaws.com/mapbox/shields/v3/i-95")
+          .type("icon")
+          .build());
+
+    BannerText bannerText = BannerText.builder()
+      .text("I 495 North / I 95")
+      .type("turn")
+      .modifier("left")
+      .components(bannerComponents)
+      .build();
+
+    String jsonString = bannerText.toJson();
+    BannerText bannerTextFromJson = BannerText.fromJson(jsonString);
+
+    assertEquals(bannerText, bannerTextFromJson);
   }
 }
