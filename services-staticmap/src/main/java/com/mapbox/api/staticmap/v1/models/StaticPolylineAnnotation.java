@@ -47,7 +47,7 @@ public abstract class StaticPolylineAnnotation {
 
     sb.append("path");
     if (strokeWidth() != null) {
-      sb.append("-").append(strokeColor());
+      sb.append("-").append(strokeWidth());
     }
     if (strokeColor() != null) {
       sb.append("+").append(strokeColor());
