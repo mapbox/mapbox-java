@@ -5,19 +5,20 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-  implementation project(":services-geocoding")
-  implementation project(":services-optimization")
-  implementation project(":services-geojson")
-  implementation project(":services-matching")
-  implementation project(":services-staticmap")
-  implementation project(":services-speech")
+    implementation project(":services-geocoding")
+    implementation project(":services-optimization")
+    implementation project(":services-geojson")
+    implementation project(":services-matching")
+    implementation project(":services-staticmap")
+    implementation project(":services-speech")
+    implementation project(":services-tilequery")
 }
 
 buildConfig {
-  packageName = 'com.mapbox.sample'
-  buildConfigField 'String', 'MAPBOX_ACCESS_TOKEN', System.getenv("MAPBOX_ACCESS_TOKEN")
+    packageName = 'com.mapbox.sample'
+    buildConfigField 'String', 'MAPBOX_ACCESS_TOKEN', System.getenv("MAPBOX_ACCESS_TOKEN")
 }
 
 sonarqube {
-  skipProject = true
+    skipProject = true
 }
