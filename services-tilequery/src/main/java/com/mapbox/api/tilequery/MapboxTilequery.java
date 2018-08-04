@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
+import com.mapbox.api.tilequery.models.TilequeryAdapterFactory;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
@@ -31,7 +32,8 @@ public abstract class MapboxTilequery extends MapboxService<FeatureCollection, T
 
   @Override
   protected GsonBuilder getGsonBuilder() {
-    return new GsonBuilder();
+    return new GsonBuilder()
+      .registerTypeAdapterFactory(TilequeryAdapterFactory.create());
   }
 
   @Override
