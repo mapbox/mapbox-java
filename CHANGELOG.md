@@ -2,6 +2,13 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.4.0 - August 6, 2018
+- Fixed typo in static map annotations and added tests for map annotations (#855)
+- Added toJson and fromJson to Directions models (#854)
+- Upgraded dependencies (#853)
+- Missing space (#846)
+- Add voiceLanguage to MapMatchingMatching (#847)
+
 ### v3.3.0
 - add reverseMode parameter to Geocoding Service (#843)
 - doc changes (#840) (#835)
