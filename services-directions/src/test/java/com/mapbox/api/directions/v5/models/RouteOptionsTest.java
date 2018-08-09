@@ -190,4 +190,28 @@ public class RouteOptionsTest extends TestUtils {
 
     assertEquals(DirectionsCriteria.OVERVIEW_SIMPLIFIED, route.routeOptions().overview());
   }
+
+  @Test
+  public void toJson_fromJson() throws Exception {
+    Response<DirectionsResponse> response = MapboxDirections.builder()
+      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+      .baseUrl(mockUrl.toString())
+      .accessToken(ACCESS_TOKEN)
+      .origin(Point.fromLngLat(1.0, 1.0))
+      .destination(Point.fromLngLat(5.0, 5.0))
+      .profile(DirectionsCriteria.PROFILE_WALKING)
+      .continueStraight(false)
+      .language(Locale.CANADA)
+      .overview(DirectionsCriteria.OVERVIEW_SIMPLIFIED)
+      .alternatives(true)
+      .build()
+      .executeCall();
+
+    RouteOptions routeOptions = response.body().routes().get(0).routeOptions();
+
+    String jsonString = routeOptions.toJson();
+    RouteOptions routeOptionsFromJson = RouteOptions.fromJson(jsonString);
+
+    assertEquals(routeOptions, routeOptionsFromJson);
+  }
 }
