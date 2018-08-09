@@ -2,6 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.4.1 - August 9, 2018
+- DirectionsRoute#fromJson RuntimeException (#864)
+
+
 ### v3.4.0 - August 6, 2018
 - Fixed typo in static map annotations and added tests for map annotations (#855)
 - Added toJson and fromJson to Directions models (#854)
