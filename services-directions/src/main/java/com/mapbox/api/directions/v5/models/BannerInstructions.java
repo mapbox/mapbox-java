@@ -3,10 +3,10 @@ package com.mapbox.api.directions.v5.models;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.MapboxDirections;
-
-import java.io.Serializable;
 
 /**
  * Visual instruction information related to a particular {@link LegStep} useful for making UI
@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @since 3.0.0
  */
 @AutoValue
-public abstract class BannerInstructions implements Serializable {
+public abstract class BannerInstructions extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -57,6 +57,29 @@ public abstract class BannerInstructions implements Serializable {
   @Nullable
   public abstract BannerText secondary();
 
+
+  /**
+   * Additional information that is included if we feel the driver needs a heads up about something.
+   * Can include information about the next maneuver (the one after the upcoming one),
+   * if the step is short - can be null, or can be lane information.
+   * If we have lane information, that trumps information about the next maneuver.
+   * @return {@link BannerText} representing the sub visual information
+   * @since 3.2.0
+   */
+  @Nullable
+  public abstract BannerText sub();
+
+  /**
+   * Convert the current {@link BannerInstructions} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link BannerInstructions}.
+   *
+   * @return a {@link BannerInstructions.Builder} with the same values set to match the ones defined
+   *   in this {@link BannerInstructions}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
+
   /**
    * Gson type adapter for parsing Gson to this class.
    *
@@ -66,6 +89,21 @@ public abstract class BannerInstructions implements Serializable {
    */
   public static TypeAdapter<BannerInstructions> typeAdapter(Gson gson) {
     return new AutoValue_BannerInstructions.GsonTypeAdapter(gson);
+  }
+
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a BannerInstructions
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static BannerInstructions fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, BannerInstructions.class);
   }
 
   /**
@@ -104,6 +142,18 @@ public abstract class BannerInstructions implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder secondary(@Nullable BannerText secondary);
+
+    /**
+     * Additional information that is included
+     * if we feel the driver needs a heads up about something.
+     * Can include information about the next maneuver (the one after the upcoming one),
+     * if the step is short - can be null, or can be lane information.
+     * If we have lane information, that trumps information about the next maneuver.
+     * @param sub {@link BannerText} representing the sub visual information
+     * @return {@link BannerText} representing the sub visual information
+     * @since 3.2.0
+     */
+    public abstract Builder sub(@Nullable BannerText sub);
 
     /**
      * Build a new {@link BannerInstructions} object.

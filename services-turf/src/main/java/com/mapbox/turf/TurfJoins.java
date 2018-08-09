@@ -83,7 +83,8 @@ public final class TurfJoins {
    * @return points that land within at least one polygon.
    * @since 1.3.0
    */
-  public static FeatureCollection within(FeatureCollection points, FeatureCollection polygons) {
+  public static FeatureCollection pointsWithinPolygon(FeatureCollection points,
+                                                      FeatureCollection polygons) {
     ArrayList<Feature> features = new ArrayList<>();
     for (int i = 0; i < polygons.features().size(); i++) {
       for (int j = 0; j < points.features().size(); j++) {

@@ -3,11 +3,11 @@ package com.mapbox.api.directions.v5.models;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
-
-import java.io.Serializable;
 
 /**
  * An input coordinate snapped to the roads network.
@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class DirectionsWaypoint implements Serializable {
+public abstract class DirectionsWaypoint extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -59,6 +59,17 @@ public abstract class DirectionsWaypoint implements Serializable {
   abstract double[] rawLocation();
 
   /**
+   * Convert the current {@link DirectionsWaypoint} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link DirectionsWaypoint}.
+   *
+   * @return a {@link DirectionsWaypoint.Builder} with the same values set to match the ones defined
+   *   in this {@link DirectionsWaypoint}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -67,6 +78,20 @@ public abstract class DirectionsWaypoint implements Serializable {
    */
   public static TypeAdapter<DirectionsWaypoint> typeAdapter(Gson gson) {
     return new AutoValue_DirectionsWaypoint.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a DirectionsWaypoint
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static DirectionsWaypoint fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, DirectionsWaypoint.class);
   }
 
   /**

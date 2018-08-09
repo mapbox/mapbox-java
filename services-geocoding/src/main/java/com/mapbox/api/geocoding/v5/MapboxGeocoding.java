@@ -4,6 +4,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
@@ -21,17 +22,16 @@ import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.GeometryDeserializer;
 import com.mapbox.geojson.gson.PointDeserializer;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * This class gives you access to both Mapbox forward and reverse geocoding.
@@ -57,51 +57,34 @@ import java.util.Locale;
  * {@link GeocodingResponse}s. Each query in a batch request counts individually against your
  * account's rate limits.
  *
- * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/geocoder/">Android
+ * @see <a href="https://www.mapbox.com/android-docs/java-sdk/overview/geocoder/">Android
  *   Geocoding documentation</a>
  * @since 1.0.0
  */
 @AutoValue
-public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
-
+public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, GeocodingService> {
   private Call<List<GeocodingResponse>> batchCall;
-  private Call<GeocodingResponse> call;
-  private GeocodingService service;
 
-  private GeocodingService getService() {
-    // No need to recreate it
-    if (service != null) {
-      return service;
-    }
-
-    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(baseUrl())
-      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
-        .registerTypeAdapter(Point.class, new PointDeserializer())
-        .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
-        .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
-        .create()));
-    if (getCallFactory() != null) {
-      retrofitBuilder.callFactory(getCallFactory());
-    } else {
-      retrofitBuilder.client(getOkHttpClient());
-    }
-    service = retrofitBuilder.build().create(GeocodingService.class);
-    return service;
+  protected MapboxGeocoding() {
+    super(GeocodingService.class);
   }
 
-  private Call<GeocodingResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
+  @Override
+  protected GsonBuilder getGsonBuilder() {
+    return new GsonBuilder()
+      .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
+      .registerTypeAdapter(Point.class, new PointDeserializer())
+      .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+  }
 
+  @Override
+  protected Call<GeocodingResponse> initializeCall() {
     if (mode().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
       throw new IllegalArgumentException("Use getBatchCall() for batch calls.");
     }
 
-    call = getService().getCall(
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       mode(),
       query(),
@@ -112,9 +95,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       autocomplete(),
       bbox(),
       limit(),
-      languages());
-
-    return call;
+      languages(),
+      reverseMode());
   }
 
   private Call<List<GeocodingResponse>> getBatchCall() {
@@ -138,22 +120,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
       autocomplete(),
       bbox(),
       limit(),
-      languages());
+      languages(),
+      reverseMode());
 
     return batchCall;
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
-   * Geocoding API.
-   *
-   * @return the Geocoding v5 response once the call completes successfully
-   * @throws IOException Signals that an I/O exception of some sort has occurred.
-   * @since 1.0.0
-   */
-  @Override
-  public Response<GeocodingResponse> executeCall() throws IOException {
-    return getCall().execute();
   }
 
   /**
@@ -168,17 +138,6 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     return getBatchCall().execute();
   }
 
-  /**
-   * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
-   * to the Geocoding API. Use this method to make a geocoding request on the Main Thread.
-   *
-   * @param callback a {@link Callback} which is used once the {@link GeocodingResponse} is created.
-   * @since 1.0.0
-   */
-  @Override
-  public void enqueueCall(Callback<GeocodingResponse> callback) {
-    getCall().enqueue(callback);
-  }
 
   /**
    * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a batch response
@@ -198,30 +157,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
    *
    * @since 1.0.0
    */
-  @Override
-  public void cancelCall() {
-    getCall().cancel();
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
-   * the user dismisses the calling activity or no longer needs the returned results.
-   *
-   * @since 1.0.0
-   */
   public void cancelBatchCall() {
     getBatchCall().cancel();
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
-   *
-   * @return cloned call
-   * @since 1.0.0
-   */
-  @Override
-  public Call<GeocodingResponse> cloneCall() {
-    return getCall().clone();
   }
 
   /**
@@ -244,7 +181,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
   abstract String accessToken();
 
   @NonNull
-  abstract String baseUrl();
+  @Override
+  protected abstract String baseUrl();
 
   @Nullable
   abstract String country();
@@ -266,6 +204,9 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
 
   @Nullable
   abstract String languages();
+
+  @Nullable
+  abstract String reverseMode();
 
   @Nullable
   abstract String clientAppName();
@@ -564,6 +505,20 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
     public abstract Builder languages(String languages);
 
     /**
+     * Set the factors that are used to sort nearby results.
+     * Options avaliable to pass in include, {@link GeocodingCriteria#REVERSE_MODE_DISTANCE} for
+     * nearest feature result (default) or {@link GeocodingCriteria#REVERSE_MODE_SCORE}
+     * the notability of features within approximately 1 kilometer of the queried point
+     * along with proximity.
+     *
+     * @param reverseMode limit geocoding results based on the reverseMode
+     * @return this builder for chaining options together
+     * @since 3.3.0
+     */
+    public abstract Builder reverseMode(
+      @Nullable @GeocodingCriteria.GeocodingReverseModeCriteria String reverseMode);
+
+    /**
      * Required to call when this is being built. If no access token provided,
      * {@link ServicesException} will be thrown.
      *
@@ -616,6 +571,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse> {
         throw new ServicesException("A query with at least one character or digit is required.");
       }
 
+      if (geocoding.reverseMode() != null
+        && geocoding.limit() != null && !geocoding.limit().equals("1")) {
+        throw new ServicesException("Limit must be combined with a single type parameter");
+      }
       return geocoding;
     }
   }

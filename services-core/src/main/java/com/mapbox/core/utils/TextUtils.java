@@ -161,4 +161,42 @@ public final class TextUtils {
     }
     return TextUtils.join(";", distributionsFormatted);
   }
+
+  /**
+   * Converts String array with approaches values
+   * to a string ready for API consumption.
+   * An approache could be unrestricted, curb or null.
+   *
+   * @param approaches a string representing approaches to each coordinate.
+   * @return a formatted string.
+   * @since 3.2.0
+   */
+  public static String formatApproaches(String[] approaches) {
+    for (int i = 0; i < approaches.length; i++) {
+      if (approaches[i] == null) {
+        approaches[i] = "";
+      } else if (!approaches[i].equals("unrestricted")
+        && !approaches[i].equals("curb") && !approaches[i].isEmpty()) {
+        return null;
+      }
+    }
+    return TextUtils.join(";", approaches);
+  }
+
+  /**
+   * Converts String array with waypoint_names values
+   * to a string ready for API consumption.
+   *
+   * @param waypointNames a string representing approaches to each coordinate.
+   * @return a formatted string.
+   * @since 3.3.0
+   */
+  public static String formatWaypointNames(String[] waypointNames) {
+    for (int i = 0; i < waypointNames.length; i++) {
+      if (waypointNames[i] == null) {
+        waypointNames[i] = "";
+      }
+    }
+    return TextUtils.join(";", waypointNames);
+  }
 }

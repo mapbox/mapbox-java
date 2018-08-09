@@ -2,6 +2,60 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v3.4.0 - August 6, 2018
+- Fixed typo in static map annotations and added tests for map annotations (#855)
+- Added toJson and fromJson to Directions models (#854)
+- Upgraded dependencies (#853)
+- Missing space (#846)
+- Add voiceLanguage to MapMatchingMatching (#847)
+
+### v3.3.0
+- add reverseMode parameter to Geocoding Service (#843)
+- doc changes (#840) (#835)
+- static map request format #836 (#839)
+- add waypoint names (#831)
+- add approaches to RouteOptions (#830)
+
+### v3.2.0
+- Added sub - to BannerInstructions (#823)
+- Added directions & active - to BannerText (#823)
+- Properties passed to Feature.fromGeometry and CarmenFeature.properties should be Nullable (#815)
+- Move TurfAssertions.getCoord() to TurfMeta.getCoord() to follow Turf.js (#818)
+- Semicolon should be used as radiuses and timestamps delimiters (#821)
+- Added approaches request paramenter to Directions and MapMatching (#827)
+
+### v3.1.0
+- Added voiceLocale to DirectionsRoute  (#804)
+- Added line-slice-along() and degreesToRadians() to Turf functions(#800)
+- Removed java.awt.Color dependency in static map (#793)
+- Add missing RouteOptions params for MapMatching (#792)
+- Added BoundingBox.fromLngLats() for consistency (#789)
+- added toBuilder() to model classes (#787)
+
+### v3.0.1
+- Adjust maxspeed annotation [#777](https://github.com/mapbox/mapbox-java/pull/777)
+
+### v3.0.0
+- Added MapMatching Error reporting #758
+- MapMaptchingMatching to DirectionsRoute #759
+- Add Abbreviations and type to BannerComponent #762
+- Add voiceUnits to MapMatching #764
+- Implemented Comparable in BannerComponents #768
+- Adds a bbox() utility method for Geometry #769
+- Adds a method to Geometry to load from json #770
+- Add MaxSpeed Annotation to Directions API #772
+
+### v3.0.0-beta.4
+- Rework dependency tree, add api instead of implementation
+- Remove unprintable chars in api request
+- Make GeometryCollection a Geometry as specified in the spec at sections 1.4 and 3.1.8
+- Add Degrees and Driving Side to BannerText
+- Add tunnel and restricted to possible values of exclude criteria
+- Turf functions name changes
+- Make getOkHttpClient synchronized
+- Add type and modifier to BannerText
+- Add baseUrl to RouteOptions
+
 ### v3.0.0-beta.3
 
 - Added back fromLngLats() that take double arrays for coordinates [#722](https://github.com/mapbox/mapbox-java/pull/722)

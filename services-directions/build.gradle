@@ -1,27 +1,19 @@
 apply plugin: 'java-library'
 
 dependencies {
-
-  compile project(":services-core")
-  compile project(":services-geojson")
-
-  // Retrofit
-  compile dependenciesList.retrofit
-  compile dependenciesList.retrofit2Gson
+  api project(":services-core")
+  api project(":services-geojson")
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
-
-  // OkHttp
-  compile dependenciesList.okhttp3Logging
 
   // AutoValue
   compileOnly dependenciesList.autoValue
   compileOnly dependenciesList.autoValueGson
 
   // Test Dependencies
-  testCompile dependenciesList.okhttp3Mockwebserver
-  testCompile project(path: ':services-core', configuration: 'testOutput')
+  testImplementation dependenciesList.okhttp3Mockwebserver
+  testImplementation project(path: ':services-core', configuration: 'testOutput')
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"

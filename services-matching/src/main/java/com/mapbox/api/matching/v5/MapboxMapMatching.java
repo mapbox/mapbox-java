@@ -4,6 +4,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
@@ -12,7 +13,10 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.matching.v5.models.MapMatchingAdapterFactory;
+import com.mapbox.api.matching.v5.models.MapMatchingError;
+import com.mapbox.api.matching.v5.models.MapMatchingMatching;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
@@ -21,16 +25,22 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
+
+import com.sun.xml.internal.ws.spi.db.BindingContextFactory;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Converter;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+
 
 /**
  * The Mapbox map matching interface (v5)
@@ -40,52 +50,29 @@ import java.util.Locale;
  * be displayed on a map or used for other analysis.
  *
  * @see <a href="https://www.mapbox.com/api-documentation/#map-matching">Map matching API
- *   documentation</a>
+ * documentation</a>
  * @since 2.0.0
  */
 @AutoValue
-public abstract class MapboxMapMatching extends MapboxService<MapMatchingResponse> {
+public abstract class MapboxMapMatching extends
+  MapboxService<MapMatchingResponse, MapMatchingService> {
 
-  private Call<MapMatchingResponse> call;
-  private MapMatchingService service;
+  private static final String PLACEHOLDER_UUID = "mapmatching";
 
-  private MapMatchingService getService() {
-    // No need to recreate it
-    if (service != null) {
-      return service;
-    }
-
-    // Retrofit instance
-    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(baseUrl())
-      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(MapMatchingAdapterFactory.create())
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-        .create()));
-    if (getCallFactory() != null) {
-      retrofitBuilder.callFactory(getCallFactory());
-    } else {
-      retrofitBuilder.client(getOkHttpClient());
-    }
-
-    // MapMatching service
-    service = retrofitBuilder.build().create(MapMatchingService.class);
-    return service;
+  protected MapboxMapMatching() {
+    super(MapMatchingService.class);
   }
 
-  /**
-   * Used internally.
-   *
-   * @return call
-   * @since 2.0.0
-   */
-  public Call<MapMatchingResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
+  @Override
+  protected GsonBuilder getGsonBuilder() {
+    return new GsonBuilder()
+      .registerTypeAdapterFactory(MapMatchingAdapterFactory.create())
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+  }
 
-    call = getService().getCall(
+  @Override
+  protected Call<MapMatchingResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -102,10 +89,10 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
       roundaboutExits(),
       bannerInstructions(),
       voiceInstructions(),
-      waypoints()
-    );
-
-    return call;
+      voiceUnits(),
+      waypoints(),
+      waypointNames(),
+      approaches());
   }
 
   /**
@@ -118,7 +105,28 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
    */
   @Override
   public Response<MapMatchingResponse> executeCall() throws IOException {
-    return getCall().execute();
+
+    Response<MapMatchingResponse> response = getCall().execute();
+    if (response.isSuccessful()) {
+      if (response.body() != null && !response.body().matchings().isEmpty()) {
+        return Response.success(
+          response.body()
+            .toBuilder()
+            .matchings(generateRouteOptions(response))
+            .build(),
+          new okhttp3.Response.Builder()
+            .code(200)
+            .message("OK")
+            .protocol(response.raw().protocol())
+            .headers(response.headers())
+            .request(response.raw().request())
+            .build());
+      }
+    } else {
+      errorDidOccur(null, response);
+    }
+
+    return response;
   }
 
   /**
@@ -130,31 +138,111 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
    * @since 1.0.0
    */
   @Override
-  public void enqueueCall(Callback<MapMatchingResponse> callback) {
-    getCall().enqueue(callback);
+  public void enqueueCall(final Callback<MapMatchingResponse> callback) {
+    getCall().enqueue(new Callback<MapMatchingResponse>() {
+      @Override
+      public void onResponse(Call<MapMatchingResponse> call,
+                             Response<MapMatchingResponse> response) {
+        if (!response.isSuccessful()) {
+          errorDidOccur(callback, response);
+
+        } else if (callback != null) {
+          if (response.body() == null || response.body().matchings().isEmpty()) {
+            // If null just pass the original object back since there's nothing to modify.
+            callback.onResponse(call, response);
+
+          } else {
+            Response<MapMatchingResponse> newResponse =
+              Response.success(
+                response
+                  .body()
+                  .toBuilder()
+                  .matchings(generateRouteOptions(response))
+                  .build(),
+                new okhttp3.Response.Builder()
+                  .code(200)
+                  .message("OK")
+                  .protocol(response.raw().protocol())
+                  .headers(response.headers())
+                  .request(response.raw().request())
+                  .build());
+
+            callback.onResponse(call, newResponse);
+          }
+        }
+      }
+
+
+      @Override
+      public void onFailure(Call<MapMatchingResponse> call, Throwable throwable) {
+        callback.onFailure(call, throwable);
+      }
+    });
   }
 
-  /**
-   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
-   * the user dismisses the calling activity or no longer needs the returned results.
-   *
-   * @since 1.0.0
-   */
-  @Override
-  public void cancelCall() {
-    getCall().cancel();
+
+  private void errorDidOccur(@Nullable Callback<MapMatchingResponse> callback,
+                             @NonNull Response<MapMatchingResponse> response) {
+    // Response gave an error, we try to LOGGER any messages into the LOGGER here.
+    Converter<ResponseBody, MapMatchingError> errorConverter =
+      getRetrofit().responseBodyConverter(MapMatchingError.class, new Annotation[0]);
+    if (callback == null) {
+      BindingContextFactory.LOGGER.log(
+        Level.WARNING, "Failed to complete your request and callback is null");
+    } else {
+      try {
+        callback.onFailure(getCall(),
+          new Throwable(errorConverter.convert(response.errorBody()).message()));
+      } catch (IOException ioException) {
+        BindingContextFactory.LOGGER.log(
+          Level.WARNING, "Failed to complete your request. ", ioException);
+      }
+    }
   }
 
-  /**
-   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
-   *
-   * @return cloned call
-   * @since 1.0.0
-   */
-  @Override
-  public Call<MapMatchingResponse> cloneCall() {
-    return getCall().clone();
+  private List<MapMatchingMatching> generateRouteOptions(Response<MapMatchingResponse> response) {
+    List<MapMatchingMatching> matchings = response.body().matchings();
+    List<MapMatchingMatching> modifiedMatchings = new ArrayList<>();
+    for (MapMatchingMatching matching : matchings) {
+      modifiedMatchings.add(matching.toBuilder().routeOptions(
+        RouteOptions.builder()
+          .profile(profile())
+          .coordinates(formatCoordinates(coordinates()))
+          .annotations(annotations())
+          .approaches(approaches())
+          .language(language())
+          .radiuses(radiuses())
+          .user(user())
+          .voiceInstructions(voiceInstructions())
+          .bannerInstructions(bannerInstructions())
+          .roundaboutExits(roundaboutExits())
+          .geometries(geometries())
+          .overview(overview())
+          .steps(steps())
+          .voiceUnits(voiceUnits())
+          .requestUuid(PLACEHOLDER_UUID)
+          .accessToken(accessToken())
+          .approaches(approaches())
+          .waypointNames(waypointNames())
+          .baseUrl(baseUrl())
+          .build()
+      ).build());
+    }
+    return modifiedMatchings;
   }
+
+  private static List<Point> formatCoordinates(String coordinates) {
+    String[] coordPairs = coordinates.split(";", -1);
+    List<Point> coordinatesFormatted = new ArrayList<>();
+    for (String coordPair : coordPairs) {
+      String[] coords = coordPair.split(",", -1);
+      coordinatesFormatted.add(
+        Point.fromLngLat(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
+
+    }
+    return coordinatesFormatted;
+  }
+
 
   @Nullable
   abstract String clientAppName();
@@ -205,11 +293,20 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
   abstract Boolean voiceInstructions();
 
   @Nullable
+  abstract String voiceUnits();
+
+  @Nullable
   abstract String waypoints();
 
+  @Nullable
+  abstract String waypointNames();
+
+  @Nullable
+  abstract String approaches();
 
   @NonNull
-  abstract String baseUrl();
+  @Override
+  protected abstract String baseUrl();
 
   /**
    * Build a new {@link MapboxMapMatching} object with the initial values set for
@@ -239,6 +336,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     private String[] timestamps;
     private Double[] radiuses;
     private Integer[] waypoints;
+    private String[] waypointNames;
+    private String[] approaches;
 
     /**
      * Required to call when this is being built. If no access token provided,
@@ -326,8 +425,8 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     /**
      * Optionally, set which input coordinates should be treated as waypoints.
      * <p>
-     * Most useful in combination with  steps=true and requests based on traces with high sample rates.
-     * Can be an index corresponding to any of the input coordinates,
+     * Most useful in combination with  steps=true and requests based on traces
+     * with high sample rates. Can be an index corresponding to any of the input coordinates,
      * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
      * {@link #steps()}
      * </p>
@@ -369,8 +468,9 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     public abstract Builder overview(@Nullable @OverviewCriteria String overview);
 
     /**
-     * Setting this will determine Whether or not to return banner objects associated with the `routeSteps`.
-     * Should be used in conjunction with `steps`. Can be set to either true or false to enable or
+     * Setting this will determine Whether or not to return banner objects associated with
+     * the `routeSteps`. Should be used in conjunction with `steps`.
+     * Can be set to either true or false to enable or
      * disable respectively. null can also optionally be
      * passed in to set the default behavior to match what the API does by default.
      *
@@ -392,6 +492,16 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      */
     public abstract Builder voiceInstructions(@Nullable Boolean voiceInstructions);
 
+    /**
+     * Specify what unit you'd like voice and banner instructions to use.
+     *
+     * @param voiceUnits either Imperial (default) or Metric
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder voiceUnits(
+      @Nullable @DirectionsCriteria.VoiceUnitCriteria String voiceUnits
+    );
 
     /**
      * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
@@ -409,15 +519,14 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE},
      * {@link DirectionsCriteria#ANNOTATION_DURATION},
      * {@link DirectionsCriteria#ANNOTATION_DURATION} and
-     * {@link DirectionsCriteria#ANNOTATION_CONGESTION}. Several annotation can be used by
-     * separating them with {@code ,}.
+     * {@link DirectionsCriteria#ANNOTATION_CONGESTION}.
      *
      * @param annotations string referencing one of the annotation direction criteria's. The strings
      *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
-     *   documentation</a>
+     * documentation</a>
      * @since 2.1.0
      */
     public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
@@ -432,7 +541,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
     /**
      * Timestamps corresponding to each coordinate provided in the request; must be numbers in Unix
      * time (seconds since the Unix epoch) converted to a String. There must be as many timestamps
-     * as there are coordinates in the request, each separated by {@code ;} .
+     * as there are coordinates in the request.
      *
      * @param timestamps timestamp corresponding to the coordinate added at the identical index
      * @return this builder for chaining options together
@@ -489,7 +598,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     *   Languages</a>
+     * Languages</a>
      * @since 3.0.0
      */
     public Builder language(@Nullable Locale language) {
@@ -508,7 +617,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
-     *   Languages</a>
+     * Languages</a>
      * @since 2.2.0
      */
     public abstract Builder language(String language);
@@ -521,6 +630,46 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
      * @since 1.0.0
      */
     public abstract Builder clientAppName(@NonNull String clientAppName);
+
+    /**
+     * Optionally used to indicate how map matched routes consider
+     * rom which side of the road to approach a waypoint.
+     * Accepts  unrestricted (default), curb or null.
+     * If set to  unrestricted , the map matched route can approach waypoints
+     * from either side of the road. If set to  curb , the map matched route will be returned
+     * so that on arrival, the waypoint will be found on the side that corresponds with the
+     * driving_side of the region in which the returned route is located.
+     * If provided, the list of approaches must be the same length as the list of waypoints.
+     *
+     * @param approaches null if you'd like the default approaches,
+     *                   else one of the options found in
+     *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     * @return this builder for chaining options together
+     * @since 3.2.0
+     */
+    public Builder addApproaches(@Nullable String... approaches) {
+      this.approaches = approaches;
+      return this;
+    }
+
+    abstract Builder approaches(@Nullable String approaches);
+
+    /**
+     * Custom names for waypoints used for the arrival instruction,
+     * each separated by  ; . Values can be any string and total number of all characters cannot
+     * exceed 500. If provided, the list of waypointNames must be the same length as the list of
+     * waypoints, but you can skip a coordinate and show its position with the  ; separator.
+     *
+     * @param waypointNames Custom names for waypoints used for the arrival instruction.
+     * @return this builder for chaining options together
+     * @since 3.3.0
+     */
+    public Builder addWaypointNames(@Nullable String... waypointNames) {
+      this.waypointNames = waypointNames;
+      return this;
+    }
+
+    abstract Builder waypointNames(@Nullable String waypointNames);
 
     /**
      * Optionally change the APIs base URL to something other then the default Mapbox one.
@@ -573,7 +722,7 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
             "Waypoints must contain indices of the first and last coordinates"
           );
         }
-        for (int i = 1; i < waypoints.length -1; i++) {
+        for (int i = 1; i < waypoints.length - 1; i++) {
           if (waypoints[i] < 0 || waypoints[i] >= coordinates.size()) {
             throw new ServicesException(
               "Waypoints index too large (no corresponding coordinate)");
@@ -581,10 +730,34 @@ public abstract class MapboxMapMatching extends MapboxService<MapMatchingRespons
         }
       }
 
+      if (waypointNames != null) {
+        if (waypointNames.length != waypoints.length) {
+          throw new ServicesException("Number of waypoint names  must match "
+            + " the number of waypoints provided.");
+        }
+        final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
+        if (!waypointNamesStr.isEmpty() && waypointNamesStr.length() > 500) {
+          throw new ServicesException("Waypoint names exceed 500 character limit.");
+        }
+        waypointNames(waypointNamesStr);
+      }
+
+      if (approaches != null) {
+        if (approaches.length != coordinates.size()) {
+          throw new ServicesException("Number of approach elements must match "
+            + "number of coordinates provided.");
+        }
+        String formattedApproaches = TextUtils.formatApproaches(approaches);
+        if (formattedApproaches == null) {
+          throw new ServicesException("All approaches values must be one of curb, unrestricted");
+        }
+        approaches(formattedApproaches);
+      }
+
       coordinates(formatCoordinates(coordinates));
-      timestamps(TextUtils.join(",", timestamps));
+      timestamps(TextUtils.join(";", timestamps));
       annotations(TextUtils.join(",", annotations));
-      radiuses(TextUtils.join(",", radiuses));
+      radiuses(TextUtils.join(";", radiuses));
       waypoints(TextUtils.join(";", waypoints));
 
       // Generate build so that we can check that values are valid.

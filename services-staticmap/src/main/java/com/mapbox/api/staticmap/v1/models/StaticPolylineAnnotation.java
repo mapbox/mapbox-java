@@ -12,7 +12,6 @@ import com.google.auto.value.AutoValue;
 import com.mapbox.api.staticmap.v1.MapboxStaticMap;
 import com.mapbox.geojson.utils.PolylineUtils;
 
-import java.awt.Color;
 import java.util.List;
 
 /**
@@ -37,9 +36,9 @@ public abstract class StaticPolylineAnnotation {
   }
 
   /**
-   * <em>Used Internally</em>
+   * <em>Used Internally.</em>
    *
-   * @return a String representing the marker part of the URL
+   * @return a String representing the marker part of the URL.
    * @since 2.1.0
    */
   @RestrictTo(LIBRARY)
@@ -48,16 +47,16 @@ public abstract class StaticPolylineAnnotation {
 
     sb.append("path");
     if (strokeWidth() != null) {
-      sb.append("-").append(strokeColor());
+      sb.append("-").append(strokeWidth());
     }
     if (strokeColor() != null) {
-      sb.append("+").append(toHexString(strokeColor()));
+      sb.append("+").append(strokeColor());
     }
     if (strokeOpacity() != null) {
       sb.append("-").append(strokeOpacity());
     }
     if (fillColor() != null) {
-      sb.append("+").append(toHexString(fillColor()));
+      sb.append("+").append(fillColor());
     }
     if (fillOpacity() != null) {
       sb.append("-").append(fillOpacity());
@@ -70,19 +69,30 @@ public abstract class StaticPolylineAnnotation {
   abstract Double strokeWidth();
 
   @Nullable
-  abstract Color strokeColor();
+  abstract String strokeColor();
 
   @Nullable
   abstract Float strokeOpacity();
 
   @Nullable
-  abstract Color fillColor();
+  abstract String fillColor();
 
   @Nullable
   abstract Float fillOpacity();
 
   @NonNull
   abstract String polyline();
+
+  /**
+   * Convert the current {@link StaticPolylineAnnotation} to its builder holding the currently
+   * assigned values. This allows you to modify a single variable and then rebuild
+   * the object resulting in an updated and modified {@link StaticPolylineAnnotation}.
+   *
+   * @return a {@link StaticPolylineAnnotation.Builder} with the same values set to match the ones
+   *   defined in this {@link StaticPolylineAnnotation}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
 
   /**
    * Builder used for passing in custom parameters.
@@ -104,11 +114,24 @@ public abstract class StaticPolylineAnnotation {
     /**
      * Set the line outer stroke color.
      *
-     * @param strokeColor {@link Color} denoting the stroke color
+     * @param strokeColor string representing hex color for the stroke color
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder strokeColor(@Nullable Color strokeColor);
+    public abstract Builder strokeColor(@Nullable String strokeColor);
+
+    /**
+     * Set the line outer stroke color.
+     *
+     * @param red the value of the stroke color
+     * @param green the value of the stroke color
+     * @param blue the value of the stroke color
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public Builder strokeColor(int red, int green, int blue) {
+      return strokeColor(toHexString(red, green, blue));
+    }
 
     /**
      * Value between 0, completely transparent, and 1, opaque for the line stroke.
@@ -117,16 +140,30 @@ public abstract class StaticPolylineAnnotation {
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder strokeOpacity(@Nullable @FloatRange(from = 0, to = 1) Float strokeOpacity);
+    public abstract Builder strokeOpacity(
+      @Nullable @FloatRange(from = 0, to = 1) Float strokeOpacity);
 
     /**
      * Set the inner line fill color.
      *
-     * @param color {@link Color} denoting the marker icon color
+     * @param color string representing hex color for the fill color
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder fillColor(@Nullable Color color);
+    public abstract Builder fillColor(@Nullable String color);
+
+    /**
+     * Set the inner line fill color.
+     *
+     * @param red the value of the fill color
+     * @param green the value of the fill color
+     * @param blue the value of the fill color
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public Builder fillColor(int red, int green, int blue) {
+      return fillColor(toHexString(red, green, blue));
+    }
 
     /**
      * Value between 0, completely transparent, and 1, opaque for the line fill.

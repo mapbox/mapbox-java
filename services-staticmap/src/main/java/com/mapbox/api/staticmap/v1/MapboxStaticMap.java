@@ -103,11 +103,11 @@ public abstract class MapboxStaticMap {
 
     List<String> annotations = new ArrayList<>();
     if (staticMarkerAnnotations() != null) {
-      String[] markerStringArray = new String[staticMarkerAnnotations().size()];
+      List<String> markerStrings = new ArrayList<>(staticMarkerAnnotations().size());
       for (StaticMarkerAnnotation marker : staticMarkerAnnotations()) {
-        markerStringArray[staticMarkerAnnotations().indexOf(marker)] = marker.url();
+        markerStrings.add(marker.url());
       }
-      annotations.addAll(Arrays.asList(markerStringArray));
+      annotations.addAll(markerStrings);
     }
 
     if (staticPolylineAnnotations() != null) {
@@ -358,7 +358,7 @@ public abstract class MapboxStaticMap {
      * GeoJSON object which represents a specific annotation which will be placed on the static map.
      * The GeoJSON must be value.
      *
-     * @param geoJson a formatted string ready to be added to the stiatic map image URL
+     * @param geoJson a formatted string ready to be added to the static map image URL
      * @return this builder for chaining options together
      * @since 2.1.0
      */

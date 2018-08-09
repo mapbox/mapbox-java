@@ -2,6 +2,7 @@ package com.mapbox.turf;
 
 import static com.mapbox.core.internal.Preconditions.checkNotNull;
 
+import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
@@ -71,8 +72,8 @@ public final class TurfMisc {
       throw new TurfException("Start and stop points in Turf lineSlice cannot equal each other.");
     }
 
-    Feature startVertex = pointOnLine(startPt, coords);
-    Feature stopVertex = pointOnLine(stopPt, coords);
+    Feature startVertex = nearestPointOnLine(startPt, coords);
+    Feature stopVertex = nearestPointOnLine(stopPt, coords);
     List<Feature> ends = new ArrayList<>();
     if ((int) startVertex.getNumberProperty(INDEX_KEY)
       <= (int) stopVertex.getNumberProperty(INDEX_KEY)) {
@@ -93,6 +94,120 @@ public final class TurfMisc {
   }
 
   /**
+   * Takes a {@link LineString}, a specified distance along the line to a start {@link Point},
+   * and a specified distance along the line to a stop point
+   * and returns a subsection of the line in-between those points.
+   *
+   * This can be useful for extracting only the part of a route between two distances.
+   *
+   * @param line input line
+   * @param startDist distance along the line to starting point
+   * @param stopDist distance along the line to ending point
+   * @param units one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   *              can be degrees, radians, miles, or kilometers
+   * @return sliced line
+   * @throws TurfException signals that a Turf exception of some sort has occurred.
+   * @see <a href="http://turfjs.org/docs/#lineslicealong">Turf Line slice documentation</a>
+   * @since 3.1.0
+   */
+  @NonNull
+  public static LineString lineSliceAlong(@NonNull Feature line,
+                                          @FloatRange(from = 0) double startDist,
+                                          @FloatRange(from = 0) double stopDist,
+                                          @NonNull @TurfConstants.TurfUnitCriteria String units) {
+
+    checkNotNull(line.geometry(), "Feature.geometry() == null");
+    if (!line.geometry().type().equals("LineString")) {
+      throw new TurfException("input must be a LineString Feature or Geometry");
+    }
+
+    return lineSliceAlong((LineString)line.geometry(), startDist, stopDist, units);
+  }
+
+  /**
+   * Takes a {@link LineString}, a specified distance along the line to a start {@link Point},
+   * and a specified distance along the line to a stop point,
+   * returns a subsection of the line in-between those points.
+   *
+   * This can be useful for extracting only the part of a route between two distances.
+   *
+   * @param line input line
+   * @param startDist distance along the line to starting point
+   * @param stopDist distance along the line to ending point
+   * @param units one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   *              can be degrees, radians, miles, or kilometers
+   * @return sliced line
+   * @throws TurfException signals that a Turf exception of some sort has occurred.
+   * @see <a href="http://turfjs.org/docs/#lineslicealong">Turf Line slice documentation</a>
+   * @since 3.1.0
+   */
+  @NonNull
+  public static LineString lineSliceAlong(@NonNull LineString line,
+                                          @FloatRange(from = 0) double startDist,
+                                          @FloatRange(from = 0) double stopDist,
+                                          @NonNull @TurfConstants.TurfUnitCriteria String units) {
+
+    List<Point> coords = line.coordinates();
+
+    if (coords.size() < 2) {
+      throw new TurfException("Turf lineSlice requires a LineString Geometry made up of "
+        + "at least 2 coordinates. The LineString passed in only contains " + coords.size() + ".");
+    } else if (startDist == stopDist) {
+      throw new TurfException("Start and stop distance in Turf lineSliceAlong "
+        + "cannot equal each other.");
+    }
+
+    List<Point> slice = new ArrayList<>(2);
+
+    double travelled = 0;
+    for (int i = 0; i < coords.size(); i++) {
+
+      if (startDist >= travelled && i == coords.size() - 1) {
+        break;
+
+      } else if (travelled > startDist && slice.size() == 0) {
+        double overshot = startDist - travelled;
+        if (overshot == 0) {
+          slice.add(coords.get(i));
+          return LineString.fromLngLats(slice);
+        }
+        double direction = TurfMeasurement.bearing(coords.get(i), coords.get(i - 1)) - 180;
+        Point interpolated = TurfMeasurement.destination(coords.get(i), overshot, direction, units);
+        slice.add(interpolated);
+      }
+
+      if (travelled >= stopDist) {
+        double overshot = stopDist - travelled;
+        if (overshot == 0) {
+          slice.add(coords.get(i));
+          return LineString.fromLngLats(slice);
+        }
+        double direction = TurfMeasurement.bearing(coords.get(i), coords.get(i - 1)) - 180;
+        Point interpolated = TurfMeasurement.destination(coords.get(i), overshot, direction, units);
+        slice.add(interpolated);
+        return LineString.fromLngLats(slice);
+      }
+
+      if (travelled >= startDist) {
+        slice.add(coords.get(i));
+      }
+
+      if (i == coords.size() - 1) {
+        return LineString.fromLngLats(slice);
+      }
+
+      travelled += TurfMeasurement.distance(coords.get(i), coords.get(i + 1), units);
+    }
+
+    if (travelled < startDist) {
+      throw new TurfException("Start position is beyond line");
+    }
+
+    return LineString.fromLngLats(slice);
+  }
+
+
+  /**
    * Takes a {@link Point} and a {@link LineString} and calculates the closest Point on the
    * LineString.
    *
@@ -102,11 +217,11 @@ public final class TurfMisc {
    * @since 1.3.0
    */
   @NonNull
-  public static Feature pointOnLine(@NonNull Point pt, @NonNull List<Point> coords) {
+  public static Feature nearestPointOnLine(@NonNull Point pt, @NonNull List<Point> coords) {
 
     if (coords.size() < 2) {
-      throw new TurfException("Turf pointOnLine requires a List of Points made up of at least 2 "
-        + "coordinates.");
+      throw new TurfException("Turf nearestPointOnLine requires a List of Points "
+        + "made up of at least 2 coordinates.");
     }
 
     Feature closestPt = Feature.fromGeometry(

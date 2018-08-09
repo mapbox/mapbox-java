@@ -5,7 +5,9 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.geojson.Point;
@@ -28,7 +30,7 @@ import java.util.List;
  * @since 3.0.0
  */
 @AutoValue
-public abstract class RouteOptions {
+public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * Build a new instance of this RouteOptions class optionally settling values.
@@ -39,6 +41,16 @@ public abstract class RouteOptions {
   public static Builder builder() {
     return new AutoValue_RouteOptions.Builder();
   }
+
+  /**
+   * The same base URL which was used during the request that resulted in this root directions
+   * response.
+   *
+   * @return string value representing the base URL
+   * @since 3.0.0
+   */
+  @NonNull
+  public abstract String baseUrl();
 
   /**
    * The same user which was used during the request that resulted in this root directions response.
@@ -65,8 +77,8 @@ public abstract class RouteOptions {
    * these coordinates are different than the direction responses {@link DirectionsWaypoint}s in
    * that these are the non-snapped coordinates.
    *
-   * @return a list of {@link Point}s which represent the route origin, destination, and optionally,
-   *   waypoints
+   * @return a list of {@link Point}s which represent the route origin, destination,
+   *   and optionally, waypoints
    * @since 3.0.0
    */
   @NonNull
@@ -86,8 +98,8 @@ public abstract class RouteOptions {
    * The same language which was used during the request that resulted in this root directions
    * response.
    *
-   * @return the language as a string used during the request, if english, this will most likely be
-   *   empty
+   * @return the language as a string used during the request,
+   *   if english, this will most likely be empty
    * @since 3.0.0
    */
   @Nullable
@@ -117,12 +129,51 @@ public abstract class RouteOptions {
    * The same continueStraight setting which was used during the request that resulted in this root
    * directions response.
    *
-   * @return a boolean value representing whether or not continueStraight was enabled or not during
-   *   the initial request
+   * @return a boolean value representing whether or not continueStraight was enabled or
+   *   not during the initial request
    * @since 3.0.0
    */
   @Nullable
   public abstract Boolean continueStraight();
+
+  /**
+   * This is set to true if you want to enable instructions while exiting roundabouts
+   * and rotaries.
+   *
+   * @return a boolean value representing whether or not roundaboutExits was enabled or disabled
+   *   during the initial route request
+   * @since 3.1.0
+   */
+  @Nullable
+  public abstract Boolean roundaboutExits();
+
+  /**
+   * Geometry type used to make the initial directions request.
+   *
+   * @return String geometry type used to make the initial directions request.
+   * @since 3.1.0
+   */
+  public abstract String geometries();
+
+  /**
+   * Type of returned overview geometry that was used to make the initial directions request.
+   *
+   * @return null or one of the options found in
+   *   {@link DirectionsCriteria.OverviewCriteria}
+   * @since 3.1.0
+   */
+  @Nullable
+  public abstract String overview();
+
+  /**
+   * Boolean value used to determine whether to return steps and turn-by-turn instructions in the
+   * initial directions request.
+   *
+   * @return true if you'd like step information, false otherwise
+   * @since 3.1.0
+   */
+  @Nullable
+  public abstract Boolean steps();
 
   /**
    * The same annotations in String format which were used during the request that resulted in this
@@ -191,6 +242,35 @@ public abstract class RouteOptions {
   public abstract String requestUuid();
 
   /**
+   * Indicates from which side of the road to approach a waypoint.
+   * Accepts  unrestricted (default) or  curb . If set to  unrestricted ,
+   * the route can approach waypoints from either side of the road.
+   * If set to curb, the route will be returned so that on arrival,
+   * the waypoint will be found on the side that corresponds with the  driving_side of the region
+   * in which the returned route is located.
+   * If provided, the list of approaches must be the same length as the list of waypoints.
+   * However, you can skip a coordinate and show its position in the list with the  ; separator.
+   *
+   * @return a string representing approaches for each waypoint
+   * @since 3.2.0
+   */
+
+  @Nullable
+  public abstract String approaches();
+
+  /**
+   * Custom names for waypoints used for the arrival instruction in banners and voice instructions,
+   * each separated by  ; . Values can be any string and total number of all characters cannot
+   * exceed 500. If provided, the list of waypoint_names must be the same length as the list of
+   * coordinates, but you can skip a coordinate and show its position with the  ; separator.
+   * @return  a string representing names for each waypoint
+   * @since 3.3.0
+   */
+  @Nullable
+  public abstract String waypointNames();
+
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -202,12 +282,36 @@ public abstract class RouteOptions {
   }
 
   /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a RouteOptions
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static RouteLeg fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, RouteLeg.class);
+  }
+
+  /**
    * This builder can be used to set the values describing the {@link RouteOptions}.
    *
    * @since 3.0.0
    */
   @AutoValue.Builder
   public abstract static class Builder {
+
+    /**
+     * The base URL that was used during the request time and resulted in this responses
+     * result.
+     *
+     * @param baseUrl base URL used for original request
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder baseUrl(@NonNull String baseUrl);
 
     /**
      * The user value that was used during the request.
@@ -289,6 +393,50 @@ public abstract class RouteOptions {
     public abstract Builder continueStraight(Boolean continueStraight);
 
     /**
+     * This is set to true if you want to enable instructions while exiting roundabouts
+     * and rotaries.
+     *
+     * @param roundaboutExits true if you'd like extra roundabout instructions
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder roundaboutExits(@Nullable Boolean roundaboutExits);
+
+    /**
+     * alter the default geometry being returned for the directions route. A null value will reset
+     * this field to the APIs default value vs this SDKs default value of
+     * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
+     *
+     * @param geometries null if you'd like the default geometry, else one of the options found in
+     *                   {@link DirectionsCriteria.GeometriesCriteria}.
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder geometries(@DirectionsCriteria.GeometriesCriteria String geometries);
+
+    /**
+     * Type of returned overview geometry that was used to make the initial directions request.
+     *
+     * @param overview null or one of the options found in
+     *                 {@link DirectionsCriteria.OverviewCriteria}
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder overview(
+      @Nullable @DirectionsCriteria.OverviewCriteria String overview
+    );
+
+    /**
+     * Boolean value used to determine whether to return steps and turn-by-turn instructions in the
+     * initial directions request.
+     *
+     * @param steps true if you'd like step information, false otherwise
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder steps(@Nullable Boolean steps);
+
+    /**
      * The annotation which were used during the request process.
      *
      * @param annotations in string format and separated by commas if more than one annotation was
@@ -317,7 +465,8 @@ public abstract class RouteOptions {
     public abstract Builder bannerInstructions(Boolean bannerInstructions);
 
     /**
-     * Whether or not the units used inside the voice instruction's string are in imperial or metric.
+     * Whether or not the units used inside the voice instruction's string are
+     * in imperial or metric.
      *
      * @param voiceUnits string matching either imperial or metric
      * @return this builder for chaining options together
@@ -352,7 +501,29 @@ public abstract class RouteOptions {
      * @since 3.0.0
      */
     @Nullable
-    public abstract Builder exclude(String exclude);
+    public abstract Builder exclude(@NonNull String exclude);
+
+    /**
+     * The same approaches the user originally made when the request was made.
+     *
+     * @param approaches unrestricted, curb or omitted (;)
+     * @return this builder for chaining options together
+     * @since 3.2.0
+     */
+
+    @Nullable
+    public abstract Builder approaches(String approaches);
+
+    /**
+     * The same approaches the user originally made when the request was made.
+     *
+     * @param waypointNames unrestricted, curb or omitted (;)
+     * @return this builder for chaining options together
+     * @since 3.3.0
+     */
+
+    @Nullable
+    public abstract Builder waypointNames(@Nullable String waypointNames);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.

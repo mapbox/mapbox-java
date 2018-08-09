@@ -7,15 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.geojson.BoundingBox;
-import com.mapbox.geojson.Geometry;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.PointDeserializer;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -27,7 +19,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class DirectionsResponse implements Serializable {
+public abstract class DirectionsResponse extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -35,26 +27,9 @@ public abstract class DirectionsResponse implements Serializable {
    * @return this classes {@link Builder} for creating a new instance
    * @since 3.0.0
    */
+  @NonNull
   public static Builder builder() {
     return new AutoValue_DirectionsResponse.Builder();
-  }
-
-  /**
-   * Create a new instance of this class by passing in a formatted valid JSON String.
-   *
-   * @param json a formatted valid JSON string defining a GeoJson Directions Response
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @since 3.0.0
-   */
-  public static DirectionsResponse fromJson(String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gson.create().fromJson(json, DirectionsResponse.class);
   }
 
   /**
@@ -120,8 +95,8 @@ public abstract class DirectionsResponse implements Serializable {
 
   /**
    * Convert the current {@link DirectionsResponse} to its builder holding the currently assigned
-   * values. This allows you to modify a single variable and then rebuild the project resulting in
-   * an updated and modifier {@link DirectionsResponse}.
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link DirectionsResponse}.
    *
    * @return a {@link DirectionsResponse.Builder} with the same values set to match the ones defined
    *   in this {@link DirectionsResponse}
@@ -138,6 +113,20 @@ public abstract class DirectionsResponse implements Serializable {
    */
   public static TypeAdapter<DirectionsResponse> typeAdapter(Gson gson) {
     return new AutoValue_DirectionsResponse.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a GeoJson Directions Response
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static DirectionsResponse fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, DirectionsResponse.class);
   }
 
   /**

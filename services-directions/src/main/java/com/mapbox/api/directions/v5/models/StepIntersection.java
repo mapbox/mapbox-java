@@ -4,11 +4,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
  * @since 1.3.0
  */
 @AutoValue
-public abstract class StepIntersection implements Serializable {
+public abstract class StepIntersection extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -70,6 +71,7 @@ public abstract class StepIntersection implements Serializable {
    * <li><strong>ferry</strong>: the road continues on a ferry</li>
    * <li><strong>restricted</strong>: the road continues on with access restrictions</li>
    * <li><strong>motorway</strong>: the road continues on a motorway</li>
+   * <li><strong>tunnel</strong>: the road continues on a tunnel</li>
    * </ul>
    *
    * @return a string list containing the classes of the road exiting the intersection
@@ -125,6 +127,17 @@ public abstract class StepIntersection implements Serializable {
   public abstract List<IntersectionLanes> lanes();
 
   /**
+   * Convert the current {@link StepIntersection} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link StepIntersection}.
+   *
+   * @return a {@link StepIntersection.Builder} with the same values set to match the ones defined
+   *   in this {@link StepIntersection}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -133,6 +146,20 @@ public abstract class StepIntersection implements Serializable {
    */
   public static TypeAdapter<StepIntersection> typeAdapter(Gson gson) {
     return new AutoValue_StepIntersection.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a StepIntersection
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static StepIntersection fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, StepIntersection.class);
   }
 
   /**

@@ -26,7 +26,7 @@ public class TurfClassificationTest extends TestUtils {
     for (Feature feature : pts.features()) {
       pointList.add((Point) (feature.geometry()));
     }
-    Point closestPt = TurfClassification.nearest(pt, pointList);
+    Point closestPt = TurfClassification.nearestPoint(pt, pointList);
 
     Assert.assertNotNull(closestPt);
     Assert.assertEquals(closestPt.type(), "Point");

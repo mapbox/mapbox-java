@@ -8,15 +8,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.geojson.BoundingBox;
-import com.mapbox.geojson.Geometry;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.PointDeserializer;
+import com.mapbox.api.directions.v5.MapboxDirections;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,7 +18,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class DirectionsRoute implements Serializable {
+public abstract class DirectionsRoute extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -35,24 +28,6 @@ public abstract class DirectionsRoute implements Serializable {
    */
   public static Builder builder() {
     return new AutoValue_DirectionsRoute.Builder();
-  }
-
-  /**
-   * Create a new instance of this class by passing in a formatted valid JSON String.
-   *
-   * @param json a formatted valid JSON string defining a GeoJson Directions Route
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @since 3.0.0
-   */
-  public static DirectionsRoute fromJson(String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gson.create().fromJson(json, DirectionsRoute.class);
   }
 
   /**
@@ -123,10 +98,23 @@ public abstract class DirectionsRoute implements Serializable {
   @Nullable
   public abstract RouteOptions routeOptions();
 
+
+  /**
+   * String of the language to be used for voice instructions.  Defaults to en, and
+   * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
+   * via {@link MapboxDirections#language()} is not compatible with API Voice.
+   *
+   * @return String compatible with voice instructions, null otherwise
+   * @since 3.1.0
+   */
+  @Nullable
+  @SerializedName("voiceLocale")
+  public abstract String voiceLanguage();
+
   /**
    * Convert the current {@link DirectionsRoute} to its builder holding the currently assigned
-   * values. This allows you to modify a single variable and then rebuild the project resulting in
-   * an updated and modifier {@link DirectionsRoute}.
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link DirectionsRoute}.
    *
    * @return a {@link DirectionsRoute.Builder} with the same values set to match the ones defined
    *   in this {@link DirectionsRoute}
@@ -143,6 +131,20 @@ public abstract class DirectionsRoute implements Serializable {
    */
   public static TypeAdapter<DirectionsRoute> typeAdapter(Gson gson) {
     return new AutoValue_DirectionsRoute.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a GeoJson Directions Route
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static DirectionsRoute fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, DirectionsRoute.class);
   }
 
   /**
@@ -218,6 +220,16 @@ public abstract class DirectionsRoute implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder routeOptions(@Nullable RouteOptions routeOptions);
+
+    /**
+     * String of the language to be used for voice instructions.  Defaults to en, and
+     * can be any accepted instruction language.
+     *
+     * @param voiceLanguage String compatible with voice instructions, null otherwise
+     * @return this builder for chaining options together
+     * @since 3.1.0
+     */
+    public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
 
     /**
      * Build a new {@link DirectionsRoute} object.

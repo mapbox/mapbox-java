@@ -21,17 +21,17 @@ static def getGitRevision() {
 dependencies {
 
   // Gson
-  compile dependenciesList.gson
+  api dependenciesList.gson
 
   // Retrofit
-  compile dependenciesList.retrofit
-  compile dependenciesList.retrofit2Gson
+  api dependenciesList.retrofit
+  api dependenciesList.retrofit2Gson
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
 
   // OkHttp
-  compile dependenciesList.okhttp3Logging
+  api dependenciesList.okhttp3Logging
 
   // AutoValue
   compileOnly dependenciesList.autoValue
@@ -44,3 +44,4 @@ dependencies {
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/jacoco.gradle"
 apply from: "${rootDir}/gradle/mvn-push.gradle"
+apply from: "${rootDir}/gradle/dependencies-graph.gradle"

@@ -1,5 +1,6 @@
 package com.mapbox.api.optimization.v1.models;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -19,12 +20,12 @@ import java.util.List;
 public abstract class OptimizationResponse implements Serializable {
 
   /**
-   * This method returns a new instance of the {@link Builder} class which provides a way to create
-   * a new instance of this class.
+   * Create a new instance of this class by using the {@link Builder} class.
    *
    * @return this classes {@link Builder} for creating a new instance
    * @since 3.0.0
    */
+  @NonNull
   public static Builder builder() {
     return new AutoValue_OptimizationResponse.Builder();
   }
@@ -76,6 +77,17 @@ public abstract class OptimizationResponse implements Serializable {
    */
   @Nullable
   public abstract List<DirectionsRoute> trips();
+
+  /**
+   * Convert the current {@link OptimizationResponse} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the object resulting in
+   * an updated and modified {@link OptimizationResponse}.
+   *
+   * @return a {@link OptimizationResponse.Builder} with the same values set to match the ones
+   *   defined in this {@link OptimizationResponse}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
 
   /**
    * Gson type adapter for parsing Gson to this class.

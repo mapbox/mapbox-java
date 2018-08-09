@@ -1,16 +1,9 @@
 package com.mapbox.api.directions.v5;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
@@ -21,23 +14,30 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.VoiceUnitCriteria;
 import com.mapbox.api.directions.v5.models.DirectionsError;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.RouteOptions;
-import com.mapbox.core.exceptions.ServicesException;
-import com.mapbox.geojson.Point;
 import com.mapbox.core.MapboxService;
-import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.constants.Constants;
+import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.core.utils.ApiCallHelper;
+import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
+import com.mapbox.geojson.Point;
+import com.sun.xml.internal.ws.spi.db.BindingContextFactory;
+
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Converter;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * The Directions API allows the calculation of routes between coordinates. The fastest route can be
@@ -50,54 +50,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * origin.
  * </p>
  *
- * @see <a href="https://www.mapbox.com/android-docs/mapbox-services/overview/directions/">Android
+ * @see <a href="https://www.mapbox.com/android-docs/java-sdk/overview/directions/">Android
  *   Directions documentation</a>
  * @see <a href="https://www.mapbox.com/api-documentation/#directions">Directions API
  *   documentation</a>
  * @since 1.0.0
  */
 @AutoValue
-public abstract class MapboxDirections extends MapboxService<DirectionsResponse> {
+public abstract class MapboxDirections extends
+  MapboxService<DirectionsResponse, DirectionsService> {
 
-  private static final Logger LOGGER = Logger.getLogger(MapboxDirections.class.getName());
-
-  private okhttp3.Call.Factory callFactory;
-  private Call<DirectionsResponse> call;
-  private DirectionsService service;
-  private Retrofit retrofit;
-
-  private DirectionsService getService() {
-    // No need to recreate it
-    if (service != null) {
-      return service;
-    }
-
-    // Retrofit instance
-    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-      .baseUrl(baseUrl())
-      .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
-        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
-        .create()
-      ));
-    retrofit = retrofitBuilder.build();
-    if (getCallFactory() != null) {
-      retrofitBuilder.callFactory(getCallFactory());
-    } else {
-      retrofitBuilder.client(getOkHttpClient());
-    }
-
-    // Directions service
-    service = retrofitBuilder.build().create(DirectionsService.class);
-    return service;
+  protected MapboxDirections() {
+    super(DirectionsService.class);
   }
 
-  private Call<DirectionsResponse> getCall() {
-    // No need to recreate it
-    if (call != null) {
-      return call;
-    }
-
-    call = getService().getCall(
+  @Override
+  protected Call<DirectionsResponse> initializeCall() {
+    return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -116,10 +85,15 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       voiceInstructions(),
       bannerInstructions(),
       voiceUnits(),
-      exclude());
+      exclude(),
+      approaches(),
+      waypointNames());
+  }
 
-    // Done
-    return call;
+  @Override
+  protected GsonBuilder getGsonBuilder() {
+    return super.getGsonBuilder()
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
   }
 
   /**
@@ -132,12 +106,27 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
    */
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
-    Response<DirectionsResponse> response = getCall().execute();
-    if (!response.isSuccessful()) {
+    Response<DirectionsResponse> response = super.executeCall();
+    if (response.isSuccessful()) {
+      if (response.body() != null && !response.body().routes().isEmpty()) {
+        return Response.success(
+          response.body()
+            .toBuilder()
+            .routes(generateRouteOptions(response))
+            .build(),
+          new okhttp3.Response.Builder()
+            .code(200)
+            .message("OK")
+            .protocol(response.raw().protocol())
+            .headers(response.headers())
+            .request(response.raw().request())
+            .build());
+      }
+    } else {
       errorDidOccur(null, response);
     }
-    return Response.success(response.body().toBuilder().routes(
-      generateRouteOptions(response)).build());
+
+    return response;
   }
 
   /**
@@ -155,15 +144,31 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
         if (!response.isSuccessful()) {
           errorDidOccur(callback, response);
-          return;
-        } else if (response.body() == null || response.body().routes().isEmpty()) {
-          // If null just pass the original object back since there's nothing to modify.
-          callback.onResponse(call, response);
-          return;
+
+        } else if (callback != null) {
+          if (response.body() == null || response.body().routes().isEmpty()) {
+            // If null just pass the original object back since there's nothing to modify.
+            callback.onResponse(call, response);
+
+          } else {
+            Response<DirectionsResponse> newResponse =
+              Response.success(
+                response
+                  .body()
+                  .toBuilder()
+                  .routes(generateRouteOptions(response))
+                  .build(),
+                new okhttp3.Response.Builder()
+                  .code(200)
+                  .message("OK")
+                  .protocol(response.raw().protocol())
+                  .headers(response.headers())
+                  .request(response.raw().request())
+                  .build());
+
+            callback.onResponse(call, newResponse);
+          }
         }
-        DirectionsResponse newResponse = response.body().toBuilder().routes(
-          generateRouteOptions(response)).build();
-        callback.onResponse(call, Response.success(newResponse));
       }
 
       @Override
@@ -177,15 +182,18 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
                              @NonNull Response<DirectionsResponse> response) {
     // Response gave an error, we try to LOGGER any messages into the LOGGER here.
     Converter<ResponseBody, DirectionsError> errorConverter =
-      retrofit.responseBodyConverter(DirectionsError.class, new Annotation[0]);
+      getRetrofit().responseBodyConverter(DirectionsError.class, new Annotation[0]);
     if (callback == null) {
-      return;
-    }
-    try {
-      callback.onFailure(call,
-        new Throwable(errorConverter.convert(response.errorBody()).message()));
-    } catch (IOException ioException) {
-      LOGGER.log(Level.WARNING, "Failed to complete your request. ", ioException);
+      BindingContextFactory.LOGGER.log(
+        Level.WARNING, "Failed to complete your request and callback is null");
+    } else {
+      try {
+        callback.onFailure(getCall(),
+          new Throwable(errorConverter.convert(response.errorBody()).message()));
+      } catch (IOException ioException) {
+        BindingContextFactory.LOGGER.log(
+          Level.WARNING, "Failed to complete your request. ", ioException);
+      }
     }
   }
 
@@ -197,8 +205,10 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
         RouteOptions.builder()
           .profile(profile())
           .coordinates(coordinates())
+          .waypointNames(waypointNames())
           .continueStraight(continueStraight())
           .annotations(annotation())
+          .approaches(approaches())
           .bearings(bearing())
           .alternatives(alternatives())
           .language(language())
@@ -206,10 +216,15 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
           .user(user())
           .voiceInstructions(voiceInstructions())
           .bannerInstructions(bannerInstructions())
+          .roundaboutExits(roundaboutExits())
+          .geometries(geometries())
+          .overview(overview())
+          .steps(steps())
           .exclude(exclude())
           .voiceUnits(voiceUnits())
           .accessToken(accessToken())
           .requestUuid(response.body().uuid())
+          .baseUrl(baseUrl())
           .build()
       ).build());
     }
@@ -227,28 +242,6 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     return TextUtils.join(";", coordinatesFormatted.toArray());
   }
 
-  /**
-   * Wrapper method for Retrofits {@link Call#cancel()} call, important to manually cancel call if
-   * the user dismisses the calling activity or no longer needs the returned results.
-   *
-   * @since 1.0.0
-   */
-  @Override
-  public void cancelCall() {
-    getCall().cancel();
-  }
-
-  /**
-   * Wrapper method for Retrofits {@link Call#clone()} call, useful for getting call information.
-   *
-   * @return cloned call
-   * @since 1.0.0
-   */
-  @Override
-  public Call<DirectionsResponse> cloneCall() {
-    return getCall().clone();
-  }
-
   @NonNull
   abstract String user();
 
@@ -259,7 +252,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   abstract List<Point> coordinates();
 
   @NonNull
-  abstract String baseUrl();
+  @Override
+  protected abstract String baseUrl();
 
   @Nullable
   abstract String accessToken();
@@ -309,27 +303,11 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
   @Nullable
   abstract String exclude();
 
-  /**
-   * Gets the call factory for creating {@link Call} instances.
-   *
-   * @return the call factory, or the default OkHttp client if it's null.
-   * @since 2.0.0
-   */
-  @Override
-  public okhttp3.Call.Factory getCallFactory() {
-    return callFactory;
-  }
+  @Nullable
+  abstract String approaches();
 
-  /**
-   * Specify a custom call factory for creating {@link Call} instances.
-   *
-   * @param callFactory implementation
-   * @since 2.0.0
-   */
-  @Override
-  public void setCallFactory(okhttp3.Call.Factory callFactory) {
-    this.callFactory = callFactory;
-  }
+  @Nullable
+  abstract String waypointNames();
 
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
@@ -378,6 +356,8 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
     private double[] radiuses;
     private Point destination;
     private Point origin;
+    private String[] approaches;
+    private String[] waypointNames;
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -710,6 +690,45 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
 
     abstract Builder coordinates(@NonNull List<Point> coordinates);
 
+
+    /**
+     * Indicates from which side of the road to approach a waypoint.
+     * Accepts  unrestricted (default), curb or null.
+     * If set to  unrestricted , the route can approach waypoints
+     * from either side of the road. If set to  curb , the route will be returned
+     * so that on arrival, the waypoint will be found on the side that corresponds with the
+     * driving_side of the region in which the returned route is located.
+     * If provided, the list of approaches must be the same length as the list of waypoints.
+     *
+     * @param approaches null if you'd like the default approaches,
+     *                   else one of the options found in
+     *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     * @return this builder for chaining options together
+     * @since 3.2.0
+     */
+    public Builder addApproaches(String... approaches) {
+      this.approaches = approaches;
+      return this;
+    }
+
+    abstract Builder approaches(@Nullable String approaches);
+
+    /**
+     * Custom names for waypoints used for the arrival instruction,
+     * each separated by  ; . Values can be any string and total number of all characters cannot
+     * exceed 500. If provided, the list of waypointNames must be the same length as the list of
+     * coordinates, but you can skip a coordinate and show its position with the  ; separator.
+     * @param waypointNames Custom names for waypoints used for the arrival instruction.
+     * @return this builder for chaining options together
+     * @since 3.3.0
+     */
+    public Builder addWaypointNames(@Nullable String... waypointNames) {
+      this.waypointNames = waypointNames;
+      return this;
+    }
+
+    abstract Builder waypointNames(@Nullable String waypointNames);
+
     abstract MapboxDirections autoBuild();
 
     /**
@@ -731,6 +750,30 @@ public abstract class MapboxDirections extends MapboxService<DirectionsResponse>
       if (coordinates.size() < 2) {
         throw new ServicesException("An origin and destination are required before making the"
           + " directions API request.");
+      }
+
+      if (waypointNames != null) {
+        if (waypointNames.length != coordinates.size()) {
+          throw new ServicesException("Number of waypoint names must match "
+            + " the number of waypoints provided.");
+        }
+        final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
+        if (!waypointNamesStr.isEmpty() && waypointNamesStr.length() > 500) {
+          throw new ServicesException("Waypoint names exceed 500 character limit.");
+        }
+        waypointNames(waypointNamesStr);
+      }
+
+      if (approaches != null) {
+        if (approaches.length != coordinates.size()) {
+          throw new ServicesException("Number of approach elements must match "
+            + "number of coordinates provided.");
+        }
+        String formattedApproaches = TextUtils.formatApproaches(approaches);
+        if (formattedApproaches == null) {
+          throw new ServicesException("All approaches values must be one of curb, unrestricted");
+        }
+        approaches(formattedApproaches);
       }
 
       coordinates(coordinates);

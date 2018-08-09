@@ -28,7 +28,7 @@ public class TurfClassification {
    * @since 3.0.0
    */
   @NonNull
-  public static Point nearest(@NonNull Point targetPoint, @NonNull List<Point> points) {
+  public static Point nearestPoint(@NonNull Point targetPoint, @NonNull List<Point> points) {
     if (points.isEmpty()) {
       return targetPoint;
     }

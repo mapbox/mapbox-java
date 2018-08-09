@@ -116,6 +116,13 @@ public final class DirectionsCriteria {
   public static final String ANNOTATION_CONGESTION = "congestion";
 
   /**
+   * The posted speed limit, between each pair of coordinates.
+   *
+   * @since 2.1.0
+   */
+  public static final String ANNOTATION_MAXSPEED = "maxspeed";
+
+  /**
    * Exclude all tolls along the returned directions route.
    *
    * @since 3.0.0
@@ -135,6 +142,20 @@ public final class DirectionsCriteria {
    * @since 3.0.0
    */
   public static final String EXCLUDE_FERRY = "ferry";
+
+  /**
+   * Exclude all tunnels along the returned directions route.
+   *
+   * @since 3.0.0
+   */
+  public static final String EXCLUDE_TUNNEL = "tunnel";
+
+  /**
+   * Exclude all roads with access restrictions along the returned directions route.
+   *
+   * @since 3.0.0
+   */
+  public static final String EXCLUDE_RESTRICTED = "restricted";
 
   /**
    * Change the units to imperial for voice and visual information. Note that this won't change
@@ -184,6 +205,26 @@ public final class DirectionsCriteria {
    * @since 3.0.0
    */
   public static final String DESTINATION_LAST = "last";
+
+  /**
+   * The routes can approach waypoints from either side of the road. <p>
+   *
+   * Used in MapMatching and Directions API.
+   *
+   * @since 3.2.0
+   */
+  public static final String APPROACH_UNRESTRICTED = "unrestricted";
+
+  /**
+   * The route will be returned so that on arrival,
+   * the waypoint will be found on the side that corresponds with the  driving_side of
+   * the region in which the returned route is located. <p>
+   *
+   * Used in MapMatching and Directions API.
+   *
+   * @since 3.2.0
+   */
+  public static final String APPROACH_CURB = "curb";
 
   private DirectionsCriteria() {
     //not called
@@ -241,7 +282,8 @@ public final class DirectionsCriteria {
     ANNOTATION_CONGESTION,
     ANNOTATION_DISTANCE,
     ANNOTATION_DURATION,
-    ANNOTATION_SPEED
+    ANNOTATION_SPEED,
+    ANNOTATION_MAXSPEED
   })
   public @interface AnnotationCriteria {
   }
@@ -255,7 +297,9 @@ public final class DirectionsCriteria {
   @StringDef( {
     EXCLUDE_FERRY,
     EXCLUDE_MOTORWAY,
-    EXCLUDE_TOLL
+    EXCLUDE_TOLL,
+    EXCLUDE_TUNNEL,
+    EXCLUDE_RESTRICTED
   })
   public @interface ExcludeCriteria {
   }
@@ -297,5 +341,19 @@ public final class DirectionsCriteria {
     DESTINATION_LAST
   })
   public @interface DestinationCriteria {
+  }
+
+
+  /**
+   * Retention policy for the approaches parameter in the MapMatching and Directions API.
+   *
+   * @since 3.2.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    APPROACH_UNRESTRICTED,
+    APPROACH_CURB
+  })
+  public @interface ApproachesCriteria {
   }
 }

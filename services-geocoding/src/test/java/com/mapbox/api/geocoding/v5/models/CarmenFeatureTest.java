@@ -2,20 +2,30 @@ package com.mapbox.api.geocoding.v5.models;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import com.google.gson.JsonObject;
 import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.CoordinateContainer;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
+
+import org.junit.Assert;
 import org.junit.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class CarmenFeatureTest extends GeocodingTestUtils {
@@ -53,7 +63,7 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
       .build();
 
     GeocodingResponse response = mapboxGeocoding.executeCall().body();
-    assert response != null;
+    assertNotNull(response);
     CarmenFeature feature = response.features().get(0);
     assertThat(feature.geometry(), notNullValue());
     assertTrue(feature.geometry() instanceof Point);
@@ -81,8 +91,8 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
     assertThat(feature.type(), equalTo("Feature"));
     assertEquals(5, feature.context().size());
     assertThat(feature.geometry().type(), equalTo("Point"));
-    assertThat(feature.geometry().coordinates().toString(), equalTo("[-77.036543, "
-      + "38.897702]"));
+    assertThat(((CoordinateContainer) feature.geometry()).coordinates().toString(),
+      equalTo("[-77.036543, 38.897702]"));
     assertThat(feature.address(), equalTo("1600"));
     assertThat(feature.id(), equalTo("address.3982178573139850"));
     assertEquals(1, feature.placeType().size());
@@ -105,7 +115,7 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
       .baseUrl(mockUrl.toString())
       .build();
     GeocodingResponse response = mapboxGeocoding.executeCall().body();
-    assert response != null;
+    assertNotNull(response);
     CarmenFeature feature = response.features().get(0);
     compareJson(json, feature.toJson());
   }
@@ -121,8 +131,7 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
     Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
     assertEquals(200, response.code());
     GeocodingResponse object = response.body();
-    assert object != null;
-
+    assertNotNull(object);
     CarmenFeature feature = object.features().get(0);
 
     assertEquals(1, object.query().size());
@@ -132,8 +141,8 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
 
     assertEquals(3, feature.context().size());
     assertThat(feature.geometry().type(), equalTo("Point"));
-    assertThat(feature.geometry().coordinates().toString(), equalTo("[106.820552, "
-      + "39.458115]"));
+    assertThat(((CoordinateContainer) feature.geometry()).coordinates().toString(),
+      equalTo("[106.820552, 39.458115]"));
     assertThat(feature.id(), equalTo("place.10514057239276310"));
     assertThat(feature.relevance(), equalTo(0.99));
     assertThat(feature.placeName(), equalTo("中国内蒙古乌海市海南区"));
@@ -146,5 +155,28 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
     assertThat(feature.bbox().south(), equalTo(39.308357239));
     assertThat(feature.bbox().east(), equalTo(107.025123596));
     assertThat(feature.bbox().north(), equalTo(39.6012458800001));
+  }
+
+  @Test
+  public void testNullProperties() {
+    CarmenFeature feature = CarmenFeature.builder()
+      .geometry(Point.fromLngLat(-77, 38))
+      .build();
+    String jsonString = feature.toJson();
+    assertFalse(jsonString.contains("\"properties\":{}"));
+
+    // Feature (empty Properties) -> Json (null Properties) -> Equavalent Feature
+    CarmenFeature featureFromJson = CarmenFeature.fromJson(jsonString);
+    assertEquals(featureFromJson, feature);
+  }
+
+  @Test
+  public void testNullPropertiesJson() {
+    String jsonString = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-77.0, 38.0]}}";
+    CarmenFeature feature = CarmenFeature.fromJson(jsonString);
+
+    // Json( null Properties) -> Feature (empty Properties) -> Json(null Properties)
+    String fromFeatureJsonString = feature.toJson();
+    assertEquals(fromFeatureJsonString, jsonString);
   }
 }

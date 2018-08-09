@@ -1,11 +1,8 @@
 apply plugin: 'java-library'
 
 dependencies {
-
-  compile project(":services-core")
-
   // Gson
-  compile dependenciesList.gson
+  api dependenciesList.gson
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
@@ -15,11 +12,12 @@ dependencies {
   compileOnly dependenciesList.autoValueGson
 
   // Test Dependencies
-  testCompile dependenciesList.okhttp3Mockwebserver
-  testCompile project(path: ':services-core', configuration: 'testOutput')
-  testCompile project(":services-turf")
+  testImplementation dependenciesList.okhttp3Mockwebserver
+  testImplementation project(path: ':services-core', configuration: 'testOutput')
+  testImplementation project(":services-turf")
 }
 
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/jacoco.gradle"
 apply from: "${rootDir}/gradle/mvn-push.gradle"
+apply from: "${rootDir}/gradle/dependencies-graph.gradle"

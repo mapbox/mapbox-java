@@ -1,12 +1,14 @@
 package com.mapbox.api.matching.v5.models;
 
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.RouteLeg;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 
 import java.io.Serializable;
 import java.util.List;
@@ -91,6 +93,60 @@ public abstract class MapMatchingMatching implements Serializable {
   public abstract double confidence();
 
   /**
+   * Holds onto the parameter information used when making the directions request. Useful for
+   * re-requesting a directions route using the same information previously used.
+   *
+   * @return a {@link RouteOptions}s object which holds onto critical information from the request
+   *   that cannot be derived directly from the directions route
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract RouteOptions routeOptions();
+
+  /**
+   * String of the language to be used for voice instructions.  Defaults to en, and
+   * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
+   * via {@link com.mapbox.api.matching.v5.MapboxMapMatching#language()} is not compatible
+   * with API Voice.
+   *
+   * @return String compatible with voice instructions, null otherwise
+   * @since 3.4.0
+   */
+  @Nullable
+  @SerializedName("voiceLocale")
+  public abstract String voiceLanguage();
+
+  /**
+   * Convert the current {@link MapMatchingMatching} to its builder holding the currently assigned
+   * values. This allows you to modify a single variable and then rebuild the object resulting in
+   * an updated and modified {@link MapMatchingMatching}.
+   *
+   * @return a {@link MapMatchingMatching.Builder} with the same values set to match the ones
+   *   defined in this {@link MapMatchingMatching}
+   * @since 3.0.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
+   * Map this MapMatchingMatching object to a {@link DirectionsRoute} object.
+   *
+   * @return a {@link DirectionsRoute} object
+   */
+  public DirectionsRoute toDirectionRoute() {
+
+    return DirectionsRoute.builder()
+      .legs(legs())
+      .geometry(geometry())
+      .weightName(weightName())
+      .weight(weight())
+      .duration(duration())
+      .distance(distance())
+      .routeOptions(routeOptions())
+      .voiceLanguage(voiceLanguage())
+      .build();
+  }
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -173,6 +229,28 @@ public abstract class MapMatchingMatching implements Serializable {
      * @since 3.0.0
      */
     public abstract Builder confidence(double confidence);
+
+    /**
+     * Holds onto the parameter information used when making the directions request.
+     *
+     * @param routeOptions a {@link RouteOptions}s object which holds onto critical information from
+     *                     the request that cannot be derived directly from the directions route
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public abstract Builder routeOptions(@Nullable RouteOptions routeOptions);
+
+    /**
+     * String of the language to be used for voice instructions.  Defaults to en, and
+     * can be any accepted instruction language.  Should be <tt>null</tt> when the language provided
+     * via {@link com.mapbox.api.matching.v5.MapboxMapMatching#language()} is not
+     * compatible with API Voice.
+     *
+     * @param voiceLanguage String compatible with voice instructions, null otherwise
+     * @return this builder for chaining options together
+     * @since 3.4.0
+     */
+    public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
 
     /**
      * Build a new {@link MapMatchingMatching} object.

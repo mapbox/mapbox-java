@@ -4,11 +4,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.MapboxDirections;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class LegStep implements Serializable {
+public abstract class LegStep extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -200,6 +201,17 @@ public abstract class LegStep implements Serializable {
   public abstract String exits();
 
   /**
+   * Convert the current {@link LegStep} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link LegStep}.
+   *
+   * @return a {@link LegStep.Builder} with the same values set to match the ones defined
+   *   in this {@link LegStep}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -208,6 +220,20 @@ public abstract class LegStep implements Serializable {
    */
   public static TypeAdapter<LegStep> typeAdapter(Gson gson) {
     return new AutoValue_LegStep.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a LegStep
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static LegStep fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, LegStep.class);
   }
 
   /**

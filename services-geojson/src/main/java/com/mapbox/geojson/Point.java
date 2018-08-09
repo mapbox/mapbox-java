@@ -9,20 +9,14 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,10 +41,10 @@ import java.util.List;
  * geoid, with the height varying by up to 5 m (but generally between 2 and 3 meters) higher or
  * lower relative to a surface parallel to Earth's mean sea level.
  * <p>
- * A sample GeoJson Point's provided below (in it's serialized state).
+ * A sample GeoJson Point's provided below (in its serialized state).
  * <pre>
  * {
- *   "TYPE": "Point",
+ *   "type": "Point",
  *   "coordinates": [100.0, 0.0]
  * }
  * </pre>
@@ -58,7 +52,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class Point implements Geometry<List<Double>>, Serializable {
+public abstract class Point implements CoordinateContainer<List<Double>>, Serializable {
 
   private static final String TYPE = "Point";
 

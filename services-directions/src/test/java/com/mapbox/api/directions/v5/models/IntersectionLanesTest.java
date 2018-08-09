@@ -7,6 +7,7 @@ import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class IntersectionLanesTest extends TestUtils {
 
@@ -27,5 +28,18 @@ public class IntersectionLanesTest extends TestUtils {
       .build();
     byte[] serialized = TestUtils.serialize(intersectionLanes);
     assertEquals(intersectionLanes, deserialize(serialized, IntersectionLanes.class));
+  }
+
+  @Test
+  public void testToFromJson() {
+    IntersectionLanes intersectionLanes = IntersectionLanes.builder()
+      .indications(Arrays.asList("straight","slight left"))
+      .valid(true)
+      .build();
+
+    String jsonString = intersectionLanes.toJson();
+    IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
+
+    assertEquals(intersectionLanes, intersectionLanesFromJson);
   }
 }

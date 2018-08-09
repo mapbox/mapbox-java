@@ -2,6 +2,7 @@ package com.mapbox.turf;
 
 import android.support.annotation.NonNull;
 
+import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.MultiPoint;
@@ -139,5 +140,20 @@ public final class TurfMeta {
       }
     }
     return coords;
+  }
+
+  /**
+   * Unwrap a coordinate {@link Point} from a Feature with a Point geometry.
+   *
+   * @param obj any value
+   * @return a coordinate
+   * @see <a href="http://turfjs.org/docs/#getcoord">Turf getCoord documentation</a>
+   * @since 3.2.0
+   */
+  public static Point getCoord(Feature obj) {
+    if (obj.geometry() instanceof Point) {
+      return (Point) obj.geometry();
+    }
+    throw new TurfException("A Feature with a Point geometry is required.");
   }
 }

@@ -3,6 +3,7 @@ package com.mapbox.api.geocoding.v5.models;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
@@ -83,7 +84,7 @@ public class GeocodingResponseTest extends GeocodingTestUtils {
     Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
     assertEquals(200, response.code());
     GeocodingResponse object = response.body();
-    assert object != null;
+    assertNotNull(object);
 
     assertEquals(4, object.query().size());
     assertThat(object.query().get(0), equalTo("sandy"));

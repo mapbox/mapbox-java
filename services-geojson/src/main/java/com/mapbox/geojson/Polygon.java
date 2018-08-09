@@ -59,7 +59,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class Polygon implements Geometry<List<List<Point>>>, Serializable {
+public abstract class Polygon implements CoordinateContainer<List<List<Point>>>, Serializable {
 
   private static final String TYPE = "Polygon";
 
@@ -357,6 +357,11 @@ public abstract class Polygon implements Geometry<List<List<Point>>>, Serializab
    * Checks to ensure that the LineStrings defining the polygon correctly and adhering to the linear
    * ring rules.
    *
+   * @param lineString {@link LineString} the polygon geometry
+   * @return true if number of coordinates are 4 or more, and first and last coordinates
+   *   are identical, else false
+   * @throws GeoJsonException if number of coordinates are less than 4,
+   *   or first and last coordinates are not identical
    * @since 3.0.0
    */
   private static boolean isLinearRing(LineString lineString) {

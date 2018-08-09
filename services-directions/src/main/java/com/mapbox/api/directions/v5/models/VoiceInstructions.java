@@ -3,9 +3,9 @@ package com.mapbox.api.directions.v5.models;
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-
-import java.io.Serializable;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 
 /**
  * This class provides information thats useful for properly making navigation announcements at the
@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @since 3.0.0
  */
 @AutoValue
-public abstract class VoiceInstructions implements Serializable {
+public abstract class VoiceInstructions extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -60,6 +60,17 @@ public abstract class VoiceInstructions implements Serializable {
   public abstract String ssmlAnnouncement();
 
   /**
+   * Convert the current {@link VoiceInstructions} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link VoiceInstructions}.
+   *
+   * @return a {@link VoiceInstructions.Builder} with the same values set to match the ones defined
+   *   in this {@link VoiceInstructions}
+   * @since 3.1.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -68,6 +79,20 @@ public abstract class VoiceInstructions implements Serializable {
    */
   public static TypeAdapter<VoiceInstructions> typeAdapter(Gson gson) {
     return new AutoValue_VoiceInstructions.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a VoiceInstructions
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.4.0
+   */
+  public static VoiceInstructions fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, VoiceInstructions.class);
   }
 
   /**

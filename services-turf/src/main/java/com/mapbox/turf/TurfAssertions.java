@@ -3,8 +3,8 @@ package com.mapbox.turf;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.GeoJson;
-import com.mapbox.geojson.Point;
 import com.mapbox.core.utils.TextUtils;
+import com.mapbox.geojson.Point;
 
 /**
  * Also called Assertions, these methods enforce expectations of a certain type or calculate various
@@ -26,12 +26,11 @@ public final class TurfAssertions {
    * @return a coordinate
    * @see <a href="http://turfjs.org/docs/#getcoord">Turf getCoord documentation</a>
    * @since 1.2.0
+   * @deprecated use {@link TurfMeta#getCoord(Feature)}
    */
+  @Deprecated
   public static Point getCoord(Feature obj) {
-    if (obj.geometry() instanceof Point) {
-      return (Point) obj.geometry();
-    }
-    throw new TurfException("A feature with a Point geometry is required.");
+    return TurfMeta.getCoord(obj);
   }
 
   /**
