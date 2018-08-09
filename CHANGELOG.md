@@ -66,10 +66,10 @@ Mapbox welcomes participation and contributions from everyone.
 - Added static initializer methods with parameters accepting single objects rather than list in GeoJSON classes - [#691](https://github.com/mapbox/mapbox-java/issues/691)
 - Annotations added to the `PolylineUtils` class. - [#687](https://github.com/mapbox/mapbox-java/pull/687)
 - Adds check to `PointOnLine` Turf method to ensure 2 or more non-identical `Point`s are used. - [#689](https://github.com/mapbox/mapbox-java/pull/689)
-- Added a missing return statement inside the internal `MapboxDirections` response code. - [#685](https://github.com/mapbox/mapbox-java/pull/685) 
+- Added a missing return statement inside the internal `MapboxDirections` response code. - [#685](https://github.com/mapbox/mapbox-java/pull/685)
 - User header agent constant is now using the generated BuildConfig file to add device information (Identical behavior to what was happening in 2.X). - [#679](https://github.com/mapbox/mapbox-java/pull/679)
 - Save access token in RouteOptions. - [#669](https://github.com/mapbox/mapbox-java/pull/669)
-- Resolved bug where the generated type adapter in `CarmenFeature` class wasn't being used causing the `SeralizedName` annotation to be ignored. - [#698](https://github.com/mapbox/mapbox-java/pull/698) 
+- Resolved bug where the generated type adapter in `CarmenFeature` class wasn't being used causing the `SeralizedName` annotation to be ignored. - [#698](https://github.com/mapbox/mapbox-java/pull/698)
 
 ### v3.0.0-beta.1
 
@@ -94,6 +94,53 @@ Mapbox welcomes participation and contributions from everyone.
 - Requesting `RoundaboutExit` is now possible and adds an additional instruction when traversing inside a roundabout or rotary.
 - Retrofit, OkHttp, and other dependencies updated to use the latest.
 - API service module split up in project to reflect individual Mapbox APIs.
+
+### v2.2.10
+
+- Updates OkHttp version to `3.10.0` [#727](https://github.com/mapbox/mapbox-java/pull/727)
+- Moves internal method previously used in OkHttp and places it directly into telemetry package [#727](https://github.com/mapbox/mapbox-java/pull/727)
+
+### v2.2.9
+
+- Deactivate location engine when shutting down telemetry service [#638](https://github.com/mapbox/mapbox-java/pull/638)
+- Add obtain location engine type javadoc [#635](https://github.com/mapbox/mapbox-java/pull/635)
+- Bump Lost version to 3.0.4 [#636](https://github.com/mapbox/mapbox-java/pull/636)
+- Downgrade minimum sdk version to 14 [#630](https://github.com/mapbox/mapbox-java/pull/630)
+
+### v2.2.8
+
+- Revert mapbox-android-core dependency PR [#627](https://github.com/mapbox/mapbox-java/pull/627)
+
+### v2.2.7
+
+- mapbox-android-core dependency [#622](https://github.com/mapbox/mapbox-java/pull/622)
+- Add telem audio type support [#604](https://github.com/mapbox/mapbox-java/pull/604)
+- Add telem cancel rating and comment track support [#617](https://github.com/mapbox/mapbox-java/pull/617)
+- Add telem percent time in foreground and in portrait track support [#616](https://github.com/mapbox/mapbox-java/pull/616)
+- Add telem absolute distance to destination support [#615](https://github.com/mapbox/mapbox-java/pull/615)
+- Add telem current location engine being used track support [#605](https://github.com/mapbox/mapbox-java/pull/605)
+- Get correct volume level [#600](https://github.com/mapbox/mapbox-java/pull/600)
+- Flush Navigation Events Manually [#601](https://github.com/mapbox/mapbox-java/pull/601)
+- NPE for BatteryStatus [#602](https://github.com/mapbox/mapbox-java/pull/602)
+
+### v2.2.6
+
+- Fix for Matrix source and destination returning null rather than the true value [#588](https://github.com/mapbox/mapbox-java/pull/588)
+- Add optional locationEngine dependencies [#502](https://github.com/mapbox/mapbox-java/pull/502)
+
+### v2.2.5
+
+- set sdkIdentifier and sdkVersion when pushing turnstile event [#574](https://github.com/mapbox/mapbox-java/pull/574)
+
+### v2.2.4
+
+- Bumped Navigation Events `EVENT_VERSION` variable to version 3 [#570](https://github.com/mapbox/mapbox-java/pull/570)
+- Adds missing event parameters to the NavigationEvent methods [#569](https://github.com/mapbox/mapbox-java/pull/569)
+- Adds newUserAgent to telemetry [#568](https://github.com/mapbox/mapbox-java/pull/568)
+- Fixes arrival timestamp formatting [#567](https://github.com/mapbox/mapbox-java/pull/567)
+- Omit null optional fields in Nav events [#566](https://github.com/mapbox/mapbox-java/pull/566)
+- Adds missing device attribute to Navigation events [#565](https://github.com/mapbox/mapbox-java/pull/565)
+- Adds roundaboutExits param to MapboxDirections [#562](https://github.com/mapbox/mapbox-java/pull/562)
 
 ### v2.2.3
 
