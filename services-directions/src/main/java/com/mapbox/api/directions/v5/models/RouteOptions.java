@@ -11,6 +11,7 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.util.List;
 
@@ -289,10 +290,11 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *   method
    * @since 3.4.0
    */
-  public static RouteLeg fromJson(String json) {
+  public static RouteOptions fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gson.create().fromJson(json, RouteLeg.class);
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    return gson.create().fromJson(json, RouteOptions.class);
   }
 
   /**
