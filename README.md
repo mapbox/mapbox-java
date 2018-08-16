@@ -50,7 +50,7 @@ dependencies {
 
 ## Sample code
 
-Check the [the Mapbox Java SDK's Android Test App](https://github.com/mapbox/mapbox-java/tree/master/mapbox/app) for examples or download the [Mapbox Demo App](https://play.google.com/store/apps/details?id=com.mapbox.mapboxandroiddemo) to see what's possible with the Mapbox Java SDK. You can also visit the [Mapbox Android examples page](https://www.mapbox.com/android-docs/java-sdk/examples) for additional code examples.
+View [the CLI samples](https://github.com/mapbox/mapbox-java/tree/master/samples/src/main/java/com/mapbox/samples) or download the [Mapbox Demo App](https://play.google.com/store/apps/details?id=com.mapbox.mapboxandroiddemo) to see what's possible with the Mapbox Java SDK. You can also visit the [Mapbox Android examples page](https://www.mapbox.com/android-docs/java-sdk/examples) for additional code examples.
 
 ## Contributing
 
