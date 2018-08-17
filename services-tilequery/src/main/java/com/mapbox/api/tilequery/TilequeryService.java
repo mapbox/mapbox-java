@@ -6,12 +6,30 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+/**
+ * Interface that defines the tilequery service.
+ *
+ * @since 3.5.0
+ */
 public interface TilequeryService {
 
+  /**
+   * Constructs the HTTP request for the specified parameters.
+   *
+   * @param mapIds Map ID(s)
+   * @param query query point
+   * @param accessToken Mapbox access token
+   * @param radius distance in meters to query for features
+   * @param limit the number of features
+   * @param dedupe whether results will be deduplicated
+   * @param geometry polygon, linestring, or point
+   * @param layers list of layers to query
+   * @return A retrofit Call object
+   * @since 3.5.0
+   */
   @GET("/v4/{mapIds}/tilequery/{query}.json")
   Call<FeatureCollection> getCall(
     @Path("mapIds") String mapIds,
@@ -23,6 +41,20 @@ public interface TilequeryService {
     @Query("geometry") String geometry,
     @Query("textType") String layers);
 
+  /**
+   * Constructs the HTTP request for the specified parameters.
+   *
+   * @param mapIds Map ID(s)
+   * @param query query point
+   * @param accessToken Mapbox access token
+   * @param radius distance in meters to query for features
+   * @param limit the number of features
+   * @param dedupe whether results will be deduplicated
+   * @param geometry polygon, linestring, or point
+   * @param layers list of layers to query
+   * @return A retrofit Call object
+   * @since 3.5.0
+   */
   @GET("/v4/{mapIds}/tilequery/{query}.json")
   Call<List<FeatureCollection>> getBatchCall(
     @Path("mapIds") String mapIds,
