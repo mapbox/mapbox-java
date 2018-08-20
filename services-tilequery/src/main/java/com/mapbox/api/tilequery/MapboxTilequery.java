@@ -5,14 +5,19 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
-import com.mapbox.api.tilequery.models.TilequeryAdapterFactory;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.gson.BoundingBoxDeserializer;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.GeometryDeserializer;
+import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +48,10 @@ public abstract class MapboxTilequery extends MapboxService<FeatureCollection, T
   @Override
   protected GsonBuilder getGsonBuilder() {
     return new GsonBuilder()
-      .registerTypeAdapterFactory(TilequeryAdapterFactory.create());
+      .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
+      .registerTypeAdapter(Point.class, new PointDeserializer())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
+      .registerTypeAdapter(Geometry.class, new GeometryDeserializer());
   }
 
   @Override
@@ -215,6 +223,10 @@ public abstract class MapboxTilequery extends MapboxService<FeatureCollection, T
       query(String.format(Locale.US, "%s,%s",
         TextUtils.formatCoordinate(point.longitude()),
         TextUtils.formatCoordinate(point.latitude())));
+
+      String str = String.format(Locale.US, "%s,%s",
+        TextUtils.formatCoordinate(point.longitude()),
+        TextUtils.formatCoordinate(point.latitude()));
       return this;
     }
 
