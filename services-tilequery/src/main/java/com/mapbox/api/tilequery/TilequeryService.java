@@ -39,7 +39,7 @@ public interface TilequeryService {
     @Query("limit") Integer limit,
     @Query("dedupe") Boolean dedupe,
     @Query("geometry") String geometry,
-    @Query("textType") String layers);
+    @Query("layers") String layers);
 
   /**
    * Constructs the HTTP request for the specified parameters.
@@ -64,5 +64,5 @@ public interface TilequeryService {
     @Query("limit") Integer limit,
     @Query("dedupe") Boolean dedupe,
     @Query("geometry") String geometry,
-    @Query("textType") String layers);
+    @Query("layers") String layers);
 }

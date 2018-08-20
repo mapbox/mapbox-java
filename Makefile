@@ -170,9 +170,13 @@ optimization-fixtures:
 		-o services-optimization/src/test/resources/optimized_trip_distributions.json
 
 tilequery-fixtures:
-	# Fetch features around Dupont Circle in Washington, DC
-	curl "https://api.mapbox.com/v4/mapbox.mapbox-streets-v7/tilequery/-77.04341,38.90962.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+	# Fetch features at Fort Mason, CA
+	curl "https://api.mapbox.com/v4/mapbox.mapbox-streets-v7/tilequery/-122.42901,37.806332.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-tilequery/src/test/resources/tilequery.json
+
+	# Fetch features at Fort Mason, CA
+	curl "https://api.mapbox.com/v4/mapbox.mapbox-streets-v7/tilequery/-122.42901,37.806332.json?access_token=$(MAPBOX_ACCESS_TOKEN)&" \
+		-o services-tilequery/src/test/resources/tilequery-all-params.json
 
 clean:
 	./gradlew clean

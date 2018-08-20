@@ -16,8 +16,12 @@ public class BasicTilequery {
     MapboxTilequery tilequery = MapboxTilequery.builder()
       .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
       .mapIds("mapbox.mapbox-streets-v7")
-      .query(Point.fromLngLat(-77.04341, 38.90962))
-      .radius(250)
+      .query(Point.fromLngLat(-122.42901, 37.806332))
+      .radius(500)
+      .limit(2)
+      .geometry("point")
+      .dedupe(true)
+      .layers("poi_label,building")
       .build();
 
     tilequery.enqueueCall(new Callback<FeatureCollection>() {
