@@ -30,7 +30,6 @@ import static org.junit.Assert.assertTrue;
 public class MapboxMatrixTest extends TestUtils {
 
   private static final String DIRECTIONS_MATRIX_3X3_FIXTURE = "directions_matrix_3x3.json";
-  private static final String DIRECTIONS_MATRIX_2x3_FIXTURE = "directions_matrix_2x3.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -88,6 +87,8 @@ public class MapboxMatrixTest extends TestUtils {
     assertNotNull(response.body());
     assertEquals(3, response.body().destinations().size());
     assertNotNull(response.body().destinations().get(0).name());
+    assertEquals(3, response.body().durations().size());
+    assertEquals(3, response.body().distances().size());
   }
 
   @Test
@@ -156,7 +157,8 @@ public class MapboxMatrixTest extends TestUtils {
     assertEquals(response.body().sources().size(), 3);
     assertEquals(response.body().sources().get(0).location().longitude(), -122.420019, DELTA);
     assertEquals(response.body().destinations().get(0).location().longitude(), -122.420019, DELTA);
-//    assertEquals(response.body().durations().get(0), 1888.3, DELTA);
+    assertEquals(response.body().durations().get(0)[1], 1888.3, DELTA);
+    assertEquals(response.body().distances().get(0)[1], 18549.9, DELTA);
     assertEquals(response.body().destinations().get(0).name(), "McAllister Street");
   }
 }

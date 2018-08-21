@@ -65,6 +65,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
       profile(),
       coordinates(),
       accessToken(),
+      annotations(),
       destinations(),
       sources());
   }
@@ -86,6 +87,9 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
 
   @Nullable
   abstract String sources();
+
+  @Nullable
+  abstract String annotations();
 
   @Nullable
   abstract String destinations();
@@ -126,6 +130,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
   public abstract static class Builder {
 
     private List<Point> coordinates = new ArrayList<>();
+    private Annotation[] annotations;
     private Integer[] destinations;
     private Integer[] sources;
 
@@ -193,6 +198,13 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
      * @since 2.1.0
      */
     public abstract Builder accessToken(@NonNull String accessToken);
+
+    public Builder annotations(@NonNull Annotation... annotations){
+      this.annotations = annotations;
+      return this;
+    }
+
+    abstract Builder annotations(@Nullable String annotations);
 
     /**
      * Optionally pass in indexes to generate an asymmetric matrix.
@@ -264,6 +276,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
 
       sources(TextUtils.join(";", sources));
       destinations(TextUtils.join(";", destinations));
+      annotations(TextUtils.join(",", annotations));
 
       // Generate build so that we can check that values are valid.
       MapboxMatrix matrix = autoBuild();
