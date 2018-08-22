@@ -35,6 +35,7 @@ public class MapboxMatrixTest extends TestUtils {
   private HttpUrl mockUrl;
 
   private ArrayList<Point> positions;
+  private Annotation[] annotations;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -62,6 +63,7 @@ public class MapboxMatrixTest extends TestUtils {
     positions.add(Point.fromLngLat(-122.42, 37.78));
     positions.add(Point.fromLngLat(-122.45, 37.91));
     positions.add(Point.fromLngLat(-122.48, 37.73));
+    annotations = new Annotation[] {Annotation.DISTANCE, Annotation.DURATION};
   }
 
   @After
@@ -78,6 +80,7 @@ public class MapboxMatrixTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_WALKING)
       .coordinates(positions)
+      .annotations(annotations)
       .baseUrl(mockUrl.toString())
       .build();
     Response<MatrixResponse> response = client.executeCall();
@@ -150,6 +153,7 @@ public class MapboxMatrixTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinates(positions)
+      .annotations(annotations)
       .baseUrl(mockUrl.toString())
       .build();
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
@@ -161,6 +165,7 @@ public class MapboxMatrixTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinates(positions)
+      .annotations(annotations)
       .baseUrl(mockUrl.toString())
       .build();
     Response<MatrixResponse> response = client.executeCall();
