@@ -186,7 +186,8 @@ public abstract class MatrixResponse implements Serializable {
      * duration between the same coordinate is always 0. If a distance can not be found, the result is
      * null.
      *
-     * @return an array of array with each entry being a distance value given in meters.
+     * @param distances an array of array with each entry being a distance value given in meters
+     * @return this builder for chaining options together
      * @since 3.4.2
      */
     public abstract Builder distances(@Nullable List<Double[]> distances);
