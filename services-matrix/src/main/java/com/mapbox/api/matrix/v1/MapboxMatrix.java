@@ -199,11 +199,20 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
      */
     public abstract Builder accessToken(@NonNull String accessToken);
 
+
+    /**
+     * Optionally pass in annotations to control to change which data to return.
+     *
+     * @param annotations 1 or more annotations
+     * @return this builder for chaining options together
+     * @since 2.1.0
+     */
     public Builder annotations(@NonNull Annotation... annotations){
       this.annotations = annotations;
       return this;
     }
 
+    // Required for matching with MapboxMatrix annotations() method.
     abstract Builder annotations(@Nullable String annotations);
 
     /**
