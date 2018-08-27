@@ -1,6 +1,7 @@
 package com.mapbox.geojson;
 
 import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.gson.GeometryGeoJson;
 
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class GeometryTest extends TestUtils {
   @Test
   public void fromJson() throws IOException {
     final String json = loadJsonFixture(SAMPLE_GEOMETRY_COLLECTION);
-    Geometry geo = Geometry.fromJson(json);
+    Geometry geo = GeometryGeoJson.fromJson(json);
     assertEquals(geo.type(), "GeometryCollection");
   }
 }

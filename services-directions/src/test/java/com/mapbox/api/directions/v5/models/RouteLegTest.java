@@ -71,6 +71,8 @@ public class RouteLegTest extends TestUtils {
       "heavy",
       "heavy");
 
+    List<LegStep> steps = new ArrayList<>();
+
     LegAnnotation annotation = LegAnnotation.builder()
       .congestion(new ArrayList<String>())
       .distance(distanceList)
@@ -84,7 +86,7 @@ public class RouteLegTest extends TestUtils {
       .distance(53.4)
       //.weight(14.3)
       .duration(14.3)
-      .steps(new ArrayList<>())
+      .steps(steps)
       .summary("")
       .build();
 
