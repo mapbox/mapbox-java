@@ -38,7 +38,7 @@ public abstract class MapboxStaticMap {
   private static final String BEFORE_LAYER = "before_layer";
   private static final String CAMERA_AUTO = "auto";
 
-  @Nullable
+  @NonNull
   abstract String accessToken();
 
   @NonNull

@@ -66,15 +66,25 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void build_accessTokenNotValidException() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Using Mapbox Services requires setting a valid access token."));
-    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+  public void build_noAccessTokenExceptionThrown() throws Exception {
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("Missing required properties: accessToken");
+   MapboxGeocoding.builder()
       .query("1600 pennsylvania ave nw")
       .baseUrl(mockUrl.toString())
       .build();
-    mapboxGeocoding.executeCall();
+  }
+
+  @Test
+  public void build_invalidAccessTokenExceptionThrown() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Using Mapbox Services requires setting a valid access token."));
+    MapboxGeocoding.builder()
+      .accessToken("")
+      .query("1600 pennsylvania ave nw")
+      .baseUrl(mockUrl.toString())
+      .build();
   }
 
   @Test

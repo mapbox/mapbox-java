@@ -247,7 +247,7 @@ public abstract class MapboxMapMatching extends
   @Nullable
   abstract String clientAppName();
 
-  @Nullable
+  @NonNull
   abstract String accessToken();
 
   @Nullable

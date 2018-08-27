@@ -79,15 +79,25 @@ public class MapboxOptimizationTest extends TestUtils {
   }
 
   @Test
-  public void build_doesThrowRequiredAccessTokenException() throws ServicesException {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Using Mapbox Services requires setting a valid access token"));
+  public void build_noAccessTokenExceptionThrown() throws Exception {
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("Missing required properties: accessToken");
     MapboxOptimization.builder()
       .coordinate(Point.fromLngLat(1.0, 1.0))
       .coordinate(Point.fromLngLat(1.0, 1.0))
       .build();
   }
 
+  @Test
+  public void build_invalidAccessTokenExceptionThrown() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("Using Mapbox Services requires setting a valid access token.");
+    MapboxOptimization.builder()
+      .accessToken("")
+      .coordinate(Point.fromLngLat(1.0, 1.0))
+      .coordinate(Point.fromLngLat(1.0, 1.0))
+      .build();
+  }
   @Test
   public void build_doesThrowTooManyCoordinatesException() throws ServicesException {
     int total = 13;

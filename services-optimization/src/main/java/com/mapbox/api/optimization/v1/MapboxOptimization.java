@@ -112,7 +112,7 @@ public abstract class MapboxOptimization
   @Nullable
   abstract String clientAppName();
 
-  @Nullable
+  @NonNull
   abstract String accessToken();
 
   @NonNull

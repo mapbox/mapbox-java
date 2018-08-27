@@ -177,7 +177,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
   @NonNull
   abstract String mode();
 
-  @Nullable
+  @NonNull
   abstract String accessToken();
 
   @NonNull

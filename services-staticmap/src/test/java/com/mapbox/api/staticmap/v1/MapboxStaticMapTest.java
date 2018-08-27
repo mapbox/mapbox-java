@@ -43,13 +43,22 @@ public class MapboxStaticMapTest extends TestUtils {
   }
 
   @Test
-  public void accessToken_exceptionGetsThrownWhenMissing() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage("Using Mapbox Services requires setting a valid access token.");
+  public void build_noAccessTokenExceptionThrown() throws Exception {
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("Missing required properties: accessToken");
     MapboxStaticMap.builder().build();
   }
 
   @Test
+  public void build_invalidAccessTokenExceptionThrown() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("Using Mapbox Services requires setting a valid access token.");
+    MapboxStaticMap.builder()
+      .accessToken("")
+      .build();
+  }
+
+    @Test
   public void baseUrl_settingShowsUpInTheRequestUrl() throws Exception {
     MapboxStaticMap staticMap = MapboxStaticMap.builder()
       .accessToken(ACCESS_TOKEN)
