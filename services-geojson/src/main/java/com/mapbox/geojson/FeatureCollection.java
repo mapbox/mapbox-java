@@ -37,7 +37,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class FeatureCollection implements GeoJson {
+public abstract class FeatureCollection extends GeoJson {
 
   private static final String TYPE = "FeatureCollection";
 

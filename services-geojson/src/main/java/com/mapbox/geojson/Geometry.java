@@ -13,7 +13,7 @@ import com.mapbox.geojson.gson.PointDeserializer;
  *
  * @since 1.0.0
  */
-public interface Geometry extends GeoJson {
+public abstract class Geometry extends GeoJson {
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String.

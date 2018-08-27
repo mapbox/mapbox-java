@@ -51,7 +51,8 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class LineString implements CoordinateContainer<List<Point>>, Serializable {
+public abstract class LineString extends CoordinateContainer<List<Point>>
+  implements Serializable {
 
   private static final String TYPE = "LineString";
 

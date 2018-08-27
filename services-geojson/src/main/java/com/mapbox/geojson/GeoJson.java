@@ -7,7 +7,7 @@ package com.mapbox.geojson;
  *
  * @since 1.0.0
  */
-public interface GeoJson {
+public abstract class GeoJson {
 
   /**
    * This describes the type of GeoJson geometry, Feature, or FeatureCollection this object is.
@@ -18,7 +18,7 @@ public interface GeoJson {
    *   {@code Feature}
    * @since 1.0.0
    */
-  String type();
+  public abstract String type();
 
   /**
    * This takes the currently defined values found inside the GeoJson instance and converts it to a
@@ -27,7 +27,7 @@ public interface GeoJson {
    * @return a JSON string which represents this Feature
    * @since 1.0.0
    */
-  String toJson();
+  public abstract String toJson();
 
   /**
    * A GeoJson object MAY have a member named "bbox" to include information on the coordinate range
@@ -40,5 +40,5 @@ public interface GeoJson {
    *   the contained geometries
    * @since 3.0.0
    */
-  BoundingBox bbox();
+  public abstract BoundingBox bbox();
 }

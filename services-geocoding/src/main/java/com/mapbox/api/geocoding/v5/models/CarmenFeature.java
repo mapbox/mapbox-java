@@ -42,7 +42,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class CarmenFeature implements GeoJson, Serializable {
+public abstract class CarmenFeature extends GeoJson implements Serializable {
 
   private static final String TYPE = "Feature";
 
