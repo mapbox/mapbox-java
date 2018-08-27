@@ -130,7 +130,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
   public abstract static class Builder {
 
     private List<Point> coordinates = new ArrayList<>();
-    private Annotation[] annotations;
+    private String[] annotations;
     private Integer[] destinations;
     private Integer[] sources;
 
@@ -207,7 +207,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public Builder annotations(@NonNull Annotation... annotations){
+    public Builder annotations(@NonNull String... annotations){
       this.annotations = annotations;
       return this;
     }

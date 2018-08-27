@@ -35,7 +35,7 @@ public class MapboxMatrixTest extends TestUtils {
   private HttpUrl mockUrl;
 
   private ArrayList<Point> positions;
-  private Annotation[] annotations;
+  private String[] annotations;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -63,7 +63,7 @@ public class MapboxMatrixTest extends TestUtils {
     positions.add(Point.fromLngLat(-122.42, 37.78));
     positions.add(Point.fromLngLat(-122.45, 37.91));
     positions.add(Point.fromLngLat(-122.48, 37.73));
-    annotations = new Annotation[] {Annotation.DISTANCE, Annotation.DURATION};
+    annotations = new String[] {DirectionsCriteria.ANNOTATION_DISTANCE, DirectionsCriteria.ANNOTATION_DURATION};
   }
 
   @After
