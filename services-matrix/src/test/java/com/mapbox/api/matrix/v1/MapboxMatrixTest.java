@@ -91,9 +91,20 @@ public class MapboxMatrixTest extends TestUtils {
   }
 
   @Test
-  public void requiredAccessToken() throws ServicesException {
+  public void build_noAccessTokenExceptionThrown() throws Exception {
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("Missing required properties: accessToken");
+    MapboxMatrix.builder()
+      .baseUrl(mockUrl.toString())
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .build();
+  }
+
+  @Test
+  public void build_invalidAccessTokenExceptionThrown() throws Exception {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Using Mapbox Services requires setting a valid access token"));
+    thrown.expectMessage("Using Mapbox Services requires setting a valid access token.");
     MapboxMatrix.builder()
       .accessToken("")
       .baseUrl(mockUrl.toString())

@@ -12,6 +12,7 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
 
+import org.hamcrest.core.StringStartsWith;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -130,13 +131,23 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test
   public void build_noAccessTokenExceptionThrown() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage("Using Mapbox Services requires setting a valid access token.");
-    MapboxDirections mapboxDirections = MapboxDirections.builder()
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage("Missing required properties: accessToken");
+    MapboxDirections.builder()
       .origin(Point.fromLngLat(1.0, 1.0))
       .destination(Point.fromLngLat(2.0, 2.0))
       .build();
-    mapboxDirections.executeCall();
+  }
+
+  @Test
+  public void build_invalidAccessTokenExceptionThrown() throws ServicesException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(StringStartsWith.startsWith("Using Mapbox Services requires setting a valid access token"));
+    MapboxDirections.builder()
+      .accessToken("")
+      .origin(Point.fromLngLat(1.0, 1.0))
+      .destination(Point.fromLngLat(2.0, 2.0))
+      .build();
   }
 
   @Test

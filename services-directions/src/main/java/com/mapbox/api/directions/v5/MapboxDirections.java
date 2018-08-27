@@ -255,7 +255,7 @@ public abstract class MapboxDirections extends
   @Override
   protected abstract String baseUrl();
 
-  @Nullable
+  @NonNull
   abstract String accessToken();
 
   @Nullable
