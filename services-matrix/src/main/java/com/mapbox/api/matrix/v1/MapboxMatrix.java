@@ -130,7 +130,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
   public abstract static class Builder {
 
     private List<Point> coordinates = new ArrayList<>();
-    private Annotation[] annotations;
+    private String[] annotations;
     private Integer[] destinations;
     private Integer[] sources;
 
@@ -180,9 +180,10 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
     /**
      * This selects which mode of transportation the user will be using to accurately give the
      * matrix durations. The options include driving, driving considering traffic, walking, and
-     * cycling. Using each of these profiles will result in different durations
+     * cycling. Using each of these profiles will result in different durations.
      *
-     * @param profile required to be one of the String values found in the {@link ProfileCriteria}
+     * @param profile required to be one of the String values found in the
+     *                {@link ProfileCriteria}
      * @return this builder for chaining options together
      * @since 2.1.0
      */
@@ -207,7 +208,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public Builder annotations(@NonNull Annotation... annotations){
+    public Builder annotations(@NonNull String... annotations) {
       this.annotations = annotations;
       return this;
     }

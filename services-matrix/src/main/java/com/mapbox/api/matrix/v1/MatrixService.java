@@ -23,7 +23,8 @@ public interface MatrixService {
    * @param profile      the profile directions should use
    * @param coordinates  the coordinates the route should follow
    * @param accessToken  Mapbox access token
-   * @param annotations  Used to specify the resulting matrices. Possible values are: duration (default),
+   * @param annotations  Used to specify the resulting matrices.
+   *                     Possible values are: duration (default),
    *                     distance, or both values separated by comma
    * @param destinations array of waypoint objects. Each waypoints is an input coordinate snapped to
    *                     the road and path network. The waypoints appear in the array in the order
