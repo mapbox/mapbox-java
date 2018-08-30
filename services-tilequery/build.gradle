@@ -1,0 +1,20 @@
+apply plugin: 'java-library'
+
+dependencies {
+    api project(":services-core")
+    api project(":services-geojson")
+
+    // Annotations
+    compileOnly dependenciesList.supportAnnotation
+
+    // AutoValue
+    compileOnly dependenciesList.autoValue
+    compileOnly dependenciesList.autoValueGson
+
+    // Test Dependencies
+    testImplementation dependenciesList.okhttp3Mockwebserver
+    testImplementation project(path: ':services-core', configuration: 'testOutput')
+}
+
+apply from: "${rootDir}/gradle/checkstyle.gradle"
+apply from: "${rootDir}/gradle/jacoco.gradle"

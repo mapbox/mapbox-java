@@ -1,22 +1,22 @@
 apply plugin: 'java-library'
 
 sourceSets {
-  main.java.srcDirs = ['../services-directions/src/main/java', '../services-geocoding/src/main/java',
-                       '../services-matching/src/main/java', '../services-matrix/src/main/java',
-                       '../services-optimization/src/main/java', '../services-staticmap/src/main/java',
-                        '../services-speech/src/main/java']
+    main.java.srcDirs = ['../services-directions/src/main/java', '../services-geocoding/src/main/java',
+                         '../services-matching/src/main/java', '../services-matrix/src/main/java',
+                         '../services-optimization/src/main/java', '../services-staticmap/src/main/java',
+                         '../services-speech/src/main/java', '../services-tilequery/src/main/java']
 }
 
 dependencies {
-  api project(":services-core")
-  api project(":services-geojson")
+    api project(":services-core")
+    api project(":services-geojson")
 
-  // Annotations
-  compileOnly dependenciesList.supportAnnotation
+    // Annotations
+    compileOnly dependenciesList.supportAnnotation
 
-  // AutoValue
-  compileOnly dependenciesList.autoValue
-  compileOnly dependenciesList.autoValueGson
+    // AutoValue
+    compileOnly dependenciesList.autoValue
+    compileOnly dependenciesList.autoValueGson
 }
 
 apply from: "${rootDir}/gradle/mvn-push.gradle"
