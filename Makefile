@@ -118,19 +118,19 @@ directions-fixtures:
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.03067988107114,37.331808179989494;-122.03178702099605,37.3302383113533?voice_units=imperial&roundabout_exits=true&geometries=polyline&overview=full&steps=true&voice_instructions=true&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-directions/src/test/resources/directions_v5_banner_text.json
 
-    # Directions: route with maxspeed
+	# Directions: route with maxspeed
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/9.950072,52.150015;7.569915,52.916751?alternatives=true&geometries=polyline6&overview=full&steps=true&bearings=%3B&continue_straight=true&annotations=maxspeed&language=en&access_token=$(MAPBOX_ACCESS_TOKEN)" \
         -o services-directions/src/test/resources/directions_v5_max_speed_annotation.json
 
-    # Directions: route with sub (and lane data) in BannerInstructions
+	# Directions: route with sub (and lane data) in BannerInstructions
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/-122.403561,37.777689;-122.405786,37.770369.json?access_token=$(MAPBOX_ACCESS_TOKEN)&steps=true&geometries=polyline&banner_instructions=true" \
         -o services-directions/src/test/resources/directions_v5_banner_instructions.json
 
-    # Directions: route with approaches in request
+	# Directions: route with approaches in request
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving/13.4301,52.5109;13.432507621760521,52.501725088556014?approaches=unrestricted;curb&access_token=$(MAPBOX_ACCESS_TOKEN)" \
         -o services-directions/src/test/resources/directions_v5_approaches.json
 
-    # Directions: includes waypoint_names
+	# Directions: includes waypoint_names
 	curl "https://api.mapbox.com/directions/v5/mapbox/cycling/-122.42,37.78;-77.03,38.91?steps=true&voice_instructions=true&banner_instructions=true&voice_units=imperial&waypoint_names=Home;Work&access_token=$(MAPBOX_ACCESS_TOKEN)" \
         -o services-directions/src/test/resources/directions_v5_waypoint_names.json
 
@@ -150,11 +150,11 @@ mapmatching-fixtures:
 		curl "https://api.mapbox.com/matching/v5/mapbox/driving/2.344003915786743,48.85805170891599;2.346750497817993,48.85727523615161;2.348681688308716,48.85936462637049;2.349550724029541,48.86084691113991;2.349550724029541,48.8608892614883;2.349625825881958,48.86102337068847;2.34982967376709,48.86125629633996?steps=true&tidy=true&waypoints=0;6&waypoint_names=Home;Work&banner_instructions=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 			-o services-matching/src/test/resources/mapmatching_v5_waypoint_names.json
 
-    # MapMatching with valid voiceLanguage
+	# MapMatching with valid voiceLanguage
 	    curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&language=en&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		    -o services-matching/src/test/resources/map_matching_v5_voice_language.json
 
-    # MapMatching with invalid voiceLanguage
+	# MapMatching with invalid voiceLanguage
 	    curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&language=he&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		    -o services-matching/src/test/resources/map_matching_v5_invalid_voice_language.json
 
@@ -169,6 +169,18 @@ optimization-fixtures:
 	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219;13.418555,52.523215?roundtrip=true&distributions=3,1&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-optimization/src/test/resources/optimized_trip_distributions.json
 
+tilequery-fixtures:
+	# Fetch features at Fort Mason, CA
+	curl "https://api.mapbox.com/v4/mapbox.mapbox-streets-v7/tilequery/-122.42901,37.806332.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o services-tilequery/src/test/resources/tilequery.json
+
+	# Fetch features at Fort Mason, CA
+	curl "https://api.mapbox.com/v4/mapbox.mapbox-streets-v7/tilequery/-122.42901,37.806332.json?access_token=$(MAPBOX_ACCESS_TOKEN)&" \
+		-o services-tilequery/src/test/resources/tilequery-all-params.json
+
+    # batch request for several National parks
+	curl "https://api.mapbox.com/v4/mapbox.mapbox-streets-v7/tilequery/-122.42901, 37.806332.json?access_token=$(MAPBOX_ACCESS_TOKEN)&radius=500&layers=poi_label,building&dedupe=true&geometry=point&limit=2" \
+		-o services-tilequery/src/test/resources/tilequery_batch.json
+
 clean:
 	./gradlew clean
-
