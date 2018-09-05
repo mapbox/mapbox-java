@@ -7,7 +7,9 @@ import static org.junit.Assert.assertNull;
 
 import com.mapbox.core.TestUtils;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +18,9 @@ import java.util.List;
 public class MultiPointTest extends TestUtils {
 
   private static final String SAMPLE_MULTIPOINT = "sample-multipoint.json";
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void sanity() throws Exception {
@@ -105,5 +110,11 @@ public class MultiPointTest extends TestUtils {
     final String json = loadJsonFixture(SAMPLE_MULTIPOINT);
     MultiPoint geo = MultiPoint.fromJson(json);
     compareJson(json, geo.toJson());
+  }
+
+  @Test
+  public void fromJson_coordinatesPresent() throws Exception {
+    thrown.expect(NullPointerException.class);
+    MultiPoint.fromJson("{\"type\":\"MultiPoint\",\"coordinates\":null}");
   }
 }

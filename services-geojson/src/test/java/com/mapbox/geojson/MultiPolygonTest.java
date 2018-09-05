@@ -7,7 +7,9 @@ import static org.junit.Assert.assertNull;
 
 import com.mapbox.core.TestUtils;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +17,9 @@ import java.util.List;
 
 public class MultiPolygonTest extends TestUtils {
   private static final String SAMPLE_MULTIPOLYGON = "sample-multipolygon.json";
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void sanity() throws Exception {
@@ -150,5 +155,11 @@ public class MultiPolygonTest extends TestUtils {
     final String json = loadJsonFixture(SAMPLE_MULTIPOLYGON);
     MultiPolygon geo = MultiPolygon.fromJson(json);
     compareJson(json, geo.toJson());
+  }
+
+  @Test
+  public void fromJson_coordinatesPresent() throws Exception {
+    thrown.expect(NullPointerException.class);
+    MultiPolygon.fromJson("{\"type\":\"MultiPolygon\",\"coordinates\":null}");
   }
 }
