@@ -323,7 +323,7 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
    * @return a list of points
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   @Override
   public abstract List<List<Point>> coordinates();
 

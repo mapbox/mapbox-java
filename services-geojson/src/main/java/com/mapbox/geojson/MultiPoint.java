@@ -130,7 +130,7 @@ public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Se
    * @return a list of points
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   @Override
   public abstract List<Point> coordinates();
 
