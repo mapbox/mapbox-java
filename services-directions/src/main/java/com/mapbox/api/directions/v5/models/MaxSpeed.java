@@ -112,6 +112,7 @@ public abstract class MaxSpeed extends DirectionsJsonObject {
      * Number indicating the posted speed limit.
      *
      * @param speed indicating the posted speed limit
+     * @return a {@link Builder} object
      * @since 3.0.0
      */
     public abstract Builder speed(@Nullable Integer speed);
@@ -120,6 +121,7 @@ public abstract class MaxSpeed extends DirectionsJsonObject {
      * String indicating the unit of speed, either as `km/h` or `mph`.
      *
      * @param unit either as `km/h` or `mph`
+     * @return a {@link Builder} object
      * @since 3.0.0
      */
     public abstract Builder unit(@Nullable String unit);
@@ -128,6 +130,7 @@ public abstract class MaxSpeed extends DirectionsJsonObject {
      * Boolean is true if the speed limit is not known, otherwise null.
      *
      * @param unknown true if speed limit is not known, otherwise null
+     * @return a {@link Builder} object
      * @since 3.0.0
      */
     public abstract Builder unknown(@Nullable Boolean unknown);
@@ -136,6 +139,7 @@ public abstract class MaxSpeed extends DirectionsJsonObject {
      * Boolean is `true` if the speed limit is unlimited, otherwise null.
      *
      * @param none true if speed limit is unlimited, otherwise null
+     * @return a {@link Builder} object
      * @since 3.0.0
      */
     public abstract Builder none(@Nullable Boolean none);

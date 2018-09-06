@@ -18,7 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 
 /**
- * The Speech API is a text-to-speech APi with a server-side caching layer in front of AWS Polly.
+ * The Speech API is a text-to-speech API with a server-side caching layer in front of AWS Polly.
  * The only requirements are text to dictate, and a Mapbox access token. For 3-step-ahead
  * client-side caching, cache directory is required.
  *
