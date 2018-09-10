@@ -7,7 +7,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.mapbox.core.TestUtils;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +19,9 @@ import java.util.List;
 public class PointTest extends TestUtils {
 
   private static final String SAMPLE_POINT = "sample-point.json";
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void sanity() throws Exception {
@@ -60,7 +66,7 @@ public class PointTest extends TestUtils {
   }
 
   @Test
-  public void bbox_doesNotSerializeWhenNotPresent() throws Exception {
+  public void bbox_doesSerializeWhenNotPresent() throws Exception {
     Point point = Point.fromLngLat(1.0, 2.0);
     compareJson(point.toJson(),
       "{\"type\":\"Point\",\"coordinates\":[1.0, 2.0]}");
@@ -125,5 +131,11 @@ public class PointTest extends TestUtils {
     final String json = loadJsonFixture(SAMPLE_POINT);
     Point geo = Point.fromJson(json);
     compareJson(json, geo.toJson());
+  }
+
+  @Test
+  public void fromJson_coordinatesPresent() throws Exception {
+    thrown.expect(NullPointerException.class);
+    Point.fromJson("{\"type\":\"Point\",\"coordinates\":null}");
   }
 }

@@ -165,7 +165,8 @@ public abstract class Feature implements GeoJson {
    */
   public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
                                      @Nullable String id, @Nullable BoundingBox bbox) {
-    return new AutoValue_Feature(TYPE, bbox, id, geometry, properties);
+    return new AutoValue_Feature(TYPE, bbox, id, geometry,
+      properties == null ? new JsonObject() : properties);
   }
 
   /**

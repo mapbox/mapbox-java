@@ -120,4 +120,10 @@ public class LineStringTest extends TestUtils {
     LineString geo = LineString.fromJson(json);
     compareJson(json, geo.toJson());
   }
+
+  @Test
+  public void fromJson_coordinatesPresent() throws Exception {
+    thrown.expect(NullPointerException.class);
+    LineString.fromJson("{\"type\":\"LineString\",\"coordinates\":null}");
+  }
 }

@@ -264,4 +264,10 @@ public class PolygonTest extends TestUtils {
     Polygon geo = Polygon.fromJson(json);
     compareJson(json, geo.toJson());
   }
+
+  @Test
+  public void fromJson_coordinatesPresent() throws Exception {
+    thrown.expect(NullPointerException.class);
+    Polygon.fromJson("{\"type\":\"Polygon\",\"coordinates\":null}");
+  }
 }
