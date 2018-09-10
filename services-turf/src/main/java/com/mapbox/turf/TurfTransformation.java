@@ -68,6 +68,7 @@ public final class TurfTransformation {
     for (int i = 0; i < steps; i++) {
       coordinates.add(TurfMeasurement.destination(center, radius, i * 360d / steps, units));
     }
+    coordinates.add(coordinates.get(0));
 
     List<List<Point>> coordinate = new ArrayList<>();
     coordinate.add(coordinates);
