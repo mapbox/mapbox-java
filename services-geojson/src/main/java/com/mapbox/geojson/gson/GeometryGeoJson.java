@@ -3,12 +3,13 @@ package com.mapbox.geojson.gson;
 import android.support.annotation.NonNull;
 
 import com.google.gson.GsonBuilder;
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.Point;
 
 /**
  * This is a utility class that helps create a Geometry instance from a JSON string.
- * @since 3.5.0
+ * @since 4.0.0
  */
 public class GeometryGeoJson {
 
@@ -18,12 +19,13 @@ public class GeometryGeoJson {
    * @param json a formatted valid JSON string defining a GeoJson Geometry
    * @return a new instance of Geometry class defined by the values passed inside
    *   this static factory method
-   * @since 3.5.0
+   * @since 4.0.0
    */
   public static Geometry fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
     return gson.create().fromJson(json, Geometry.class);
   }

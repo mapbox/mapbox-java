@@ -1,0 +1,38 @@
+{
+  "type": "FeatureCollection",
+  "bbox": [100, 0, 105, 1],
+  "features": [
+    {
+      "type": "Feature",
+      "id": "id0",
+      "bbox": [102, 0, 105, 1],
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [102.0, 0.0], [103.0, 1.0], [104.0, 0.0], [105.0, 1.0]
+        ]
+      },
+      "properties": {
+        "prop0": "value0",
+        "prop1": "value1"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "id1",
+      "bbox": [100, 0, 101, 1],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [100.0, 0.0], [101.0, 0.0], [101.0, 1.0], [100.0, 1.0], [100.0, 0.0]
+          ]
+        ]
+      },
+      "properties": {
+        "prop0": "value0",
+        "prop1": "value1"
+      }
+    }
+  ]
+}

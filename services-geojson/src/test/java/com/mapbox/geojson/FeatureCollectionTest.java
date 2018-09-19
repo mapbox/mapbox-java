@@ -15,6 +15,7 @@ import java.util.List;
 public class FeatureCollectionTest extends TestUtils {
 
   private static final String SAMPLE_FEATURECOLLECTION = "sample-featurecollection.json";
+  private static final String SAMPLE_FEATURECOLLECTION_BBOX = "sample-feature-collection-with-bbox.json";
 
   @Test
   public void sanity() throws Exception {
@@ -116,7 +117,7 @@ public class FeatureCollectionTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_FEATURECOLLECTION);
+    final String json = loadJsonFixture(SAMPLE_FEATURECOLLECTION_BBOX);
     FeatureCollection geo = FeatureCollection.fromJson(json);
     compareJson(json, geo.toJson());
   }

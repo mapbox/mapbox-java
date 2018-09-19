@@ -1,8 +1,10 @@
 {
   "type": "GeometryCollection",
+  "bbox": [120, 40, -120, -40],
   "geometries": [
     {
       "type": "Point",
+      "bbox": [110, 30, -110, -30],
       "coordinates": [
         100,
         0
@@ -10,6 +12,7 @@
     },
     {
       "type": "LineString",
+      "bbox": [110, 30, -110, -30],
       "coordinates": [
         [
           101,

@@ -1,0 +1,17 @@
+{
+  "id" : "id0",
+  "bbox": [-120.0, -60.0, 120.0, 60.0],
+  "geometry": {
+    "bbox": [-110.0, -50.0, 110.0, 50.0],
+    "coordinates": [
+      100.0,
+      0.0
+    ],
+    "type": "Point"
+  },
+  "type": "Feature",
+  "properties": {
+    "prop0": "value0",
+    "prop1": "value1"
+  }
+}
