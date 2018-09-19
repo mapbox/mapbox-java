@@ -1,6 +1,13 @@
 ## Changelog for Mapbox Java and Android Services
 
 Mapbox welcomes participation and contributions from everyone.
+### v4.0.0 - September 19, 2018
+- downgrade to java 7 #876
+- The first and last positions should be equivalent in polygon ring Bug Ready For Review refactor #886
+- Fix circle generation in TurfTransformation #885
+- coordinates() should have @NotNull annotation in Geometry implementations #882
+- Tilequery API #879
+- all accesToken fields should be annotated with @nonnull #875
 
 ### v3.4.1 - August 9, 2018
 - DirectionsRoute#fromJson RuntimeException (#864)
