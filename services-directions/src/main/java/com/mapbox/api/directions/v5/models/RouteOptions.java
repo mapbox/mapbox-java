@@ -7,6 +7,7 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
@@ -134,6 +135,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *   not during the initial request
    * @since 3.0.0
    */
+  @SerializedName("continue_straight")
   @Nullable
   public abstract Boolean continueStraight();
 
@@ -145,6 +147,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *   during the initial route request
    * @since 3.1.0
    */
+  @SerializedName("roundabout_exits")
   @Nullable
   public abstract Boolean roundaboutExits();
 
@@ -201,6 +204,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return true if the original request included voice instructions
    * @since 3.0.0
    */
+  @SerializedName("voice_instructions")
   @Nullable
   public abstract Boolean voiceInstructions();
 
@@ -210,6 +214,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return true if the original request included banner instructions
    * @since 3.0.0
    */
+  @SerializedName("banner_instructions")
   @Nullable
   public abstract Boolean bannerInstructions();
 
@@ -219,6 +224,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return a string matching either imperial or metric
    * @since 3.0.0
    */
+  @SerializedName("voice_units")
   @Nullable
   public abstract String voiceUnits();
 
@@ -228,6 +234,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return a string representing the Mapbox access token
    * @since 3.0.0
    */
+  @SerializedName("access_token")
   @NonNull
   public abstract String accessToken();
 
@@ -239,6 +246,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return a string containing the request UUID
    * @since 3.0.0
    */
+  @SerializedName("uuid")
   @NonNull
   public abstract String requestUuid();
 
@@ -267,6 +275,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return  a string representing names for each waypoint
    * @since 3.3.0
    */
+  @SerializedName("waypoint_names")
   @Nullable
   public abstract String waypointNames();
 

@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -213,5 +214,94 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions routeOptionsFromJson = RouteOptions.fromJson(jsonString);
 
     assertEquals(routeOptions, routeOptionsFromJson);
+  }
+
+  @Test
+  public void fromJson() {
+    String jsonString = "{" +
+      "\"profile\": \"auto\"," +
+      "\"user\": \"mapbox\"," +
+      "\"baseUrl\": \"https://api.mapbox.com\"," +
+      "\"coordinates\": [[-3.707788,40.395039],[-3.712179,40.401819]]," +
+      "\"access_token\": \"ACCESS_TOKEN\"," +
+      "\"geometries\": \"polyline6\"," +
+      "\"overview\": \"full\"," +
+      "\"steps\": true," +
+      "\"bearings\": \";\"," +
+      "\"continue_straight\": true," +
+      "\"annotations\": \"congestion,distance\"," +
+      "\"language\": \"en\"," +
+      "\"roundabout_exits\": true," +
+      "\"voice_instructions\": true," +
+      "\"banner_instructions\": true," +
+      "\"voice_units\": \"imperial\"," +
+      "\"uuid\": \"uuid1\"" +
+      "}";
+
+    RouteOptions routeOptions = RouteOptions.fromJson(jsonString);
+
+    assertEquals("auto", routeOptions.profile());
+    assertEquals("mapbox", routeOptions.user());
+    assertEquals("https://api.mapbox.com", routeOptions.baseUrl());
+    assertEquals(2, routeOptions.coordinates().size());
+    assertEquals("ACCESS_TOKEN", routeOptions.accessToken());
+    assertEquals("polyline6", routeOptions.geometries());
+    assertEquals("full", routeOptions.overview());
+    assertEquals(true, routeOptions.steps());
+    assertEquals(";", routeOptions.bearings());
+    assertEquals(true, routeOptions.continueStraight());
+    assertEquals("congestion,distance", routeOptions.annotations());
+    assertEquals("en", routeOptions.language());
+    assertEquals(true, routeOptions.roundaboutExits());
+    assertEquals(true, routeOptions.voiceInstructions());
+    assertEquals(true, routeOptions.bannerInstructions());
+    assertEquals("imperial", routeOptions.voiceUnits());
+    assertEquals("uuid1", routeOptions.requestUuid());
+  }
+
+  @Test
+  public void toJson() {
+    RouteOptions routeOptions = RouteOptions.builder()
+      .profile("auto")
+      .user("mapbox")
+      .coordinates(Arrays.asList(Point.fromLngLat(-3.707788, 40.395039),
+        Point.fromLngLat(-3.712179, 40.401819)))
+      .accessToken("ACCESS_TOKEN")
+      .baseUrl("https://api.mapbox.com")
+      .geometries("polyline6")
+      .overview("full")
+      .steps(true)
+      .bearings(";")
+      .continueStraight(true)
+      .annotations("congestion,distance")
+      .language("en")
+      .roundaboutExits(true)
+      .voiceInstructions(true)
+      .bannerInstructions(true)
+      .voiceUnits("imperial")
+      .requestUuid("uuid1")
+      .build();
+
+    String jsonString = routeOptions.toJson();
+
+    String expectedJsonString = "{" +
+      "\"profile\": \"auto\"," +
+      "\"user\": \"mapbox\"," +
+      "\"baseUrl\": \"https://api.mapbox.com\"," +
+      "\"coordinates\": [[-3.707788,40.395039],[-3.712179,40.401819]]," +
+      "\"access_token\": \"ACCESS_TOKEN\"," +
+      "\"geometries\": \"polyline6\"," +
+      "\"overview\": \"full\"," +
+      "\"steps\": true," +
+      "\"bearings\": \";\"," +
+      "\"continue_straight\": true," +
+      "\"annotations\": \"congestion,distance\"," +
+      "\"language\": \"en\"," +
+      "\"roundabout_exits\": true," +
+      "\"voice_instructions\": true," +
+      "\"banner_instructions\": true," +
+      "\"voice_units\": \"imperial\"," +
+      "\"uuid\": \"uuid1\"}";
+    compareJson(expectedJsonString, jsonString);
   }
 }
