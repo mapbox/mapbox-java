@@ -66,7 +66,8 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
       coordinates(),
       accessToken(),
       destinations(),
-      sources());
+      sources(),
+      annotations());
   }
 
   @Nullable
@@ -89,6 +90,9 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
 
   @Nullable
   abstract String destinations();
+
+  @Nullable
+  abstract String annotations();
 
   @NonNull
   @Override
@@ -128,6 +132,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
     private List<Point> coordinates = new ArrayList<>();
     private Integer[] destinations;
     private Integer[] sources;
+    private String[] annotations;
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -157,6 +162,22 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
 
     // Required for matching with MapboxMatrix coordinates() method.
     abstract Builder coordinates(@NonNull String coordinates);
+
+    /**
+     * Optionally pass in annotations to specify the resulting matrices. Possible values are:
+     * duration (default),  distance , or both values separated by comma.
+     *
+     * @param annotations "duration", "distance", or "duration,distance"
+     * @return this builder for chaining options together
+     * @since 2.1.0
+     */
+    public Builder annotations(@Nullable String... annotations) {
+      this.annotations = annotations;
+      return this;
+    }
+
+    // Required for matching with MapboxMatrix annotations() method.
+    abstract Builder annotations(@Nullable String annotations);
 
     /**
      * This will add a single {@link Point} to the coordinate list which is used to determine the
@@ -264,6 +285,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
 
       sources(TextUtils.join(";", sources));
       destinations(TextUtils.join(";", destinations));
+      annotations(TextUtils.join(",", annotations));
 
       // Generate build so that we can check that values are valid.
       MapboxMatrix matrix = autoBuild();

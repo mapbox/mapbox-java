@@ -1,6 +1,9 @@
 ## Changelog for Mapbox Java and Android Services
 
 Mapbox welcomes participation and contributions from everyone.
+### v4.0.1 - September 27, 2018
+- Allows for annotations to be passed to the MatrixService and returns distances matrix in addition to durations matrix
+
 ### v4.0.0 - September 19, 2018
 - downgrade to java 7 #876
 - The first and last positions should be equivalent in polygon ring Bug Ready For Review refactor #886
