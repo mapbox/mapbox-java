@@ -31,6 +31,9 @@ public interface MatrixService {
    *                     the road and path network. The waypoints appear in the array in the order
    *                     of the input coordinates, or in the order as specified in the sources query
    *                     parameter
+   * @param annotations  Used to specify the resulting matrices. Possible values are:  duration
+   *                     (default),  distance , or both values separated by comma.
+   *
    * @return the {@link MatrixResponse} in a Call wrapper
    * @since 2.1.0
    */
@@ -43,6 +46,7 @@ public interface MatrixService {
     @Path("coordinates") String coordinates,
     @Query("access_token") String accessToken,
     @Query("destinations") String destinations,
-    @Query("sources") String sources
+    @Query("sources") String sources,
+    @Query("annotations") String annotations
   );
 }
