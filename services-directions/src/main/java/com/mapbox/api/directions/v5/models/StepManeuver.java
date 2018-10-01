@@ -3,13 +3,19 @@ package com.mapbox.api.directions.v5.models;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.geojson.Point;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Gives maneuver information about one {@link LegStep}.
@@ -18,6 +24,159 @@ import com.mapbox.geojson.Point;
  */
 @AutoValue
 public abstract class StepManeuver extends DirectionsJsonObject {
+
+  /**
+   * A basic turn in the direction of the modifier.
+   *
+   * @since 4.1.0
+   */
+  public static final String TURN = "turn";
+
+  /**
+   * The road name changes (after a mandatory turn).
+   *
+   * @since 4.1.0
+   */
+  public static final String NEW_NAME = "new name";
+
+  /**
+   * Indicates departure from a leg.
+   * The  modifier value indicates the position of the departure point
+   * in relation to the current direction of travel.
+   *
+   * @since 4.1.0
+   */
+  public static final String DEPART = "depart";
+
+  /**
+   * Indicates arrival to a destination of a leg.
+   * The modifier value indicates the position of the arrival point
+   * in relation to the current direction of travel.
+   *
+   * @since 4.1.0
+   */
+  public static final String ARRIVE = "arrive";
+
+  /**
+   * Merge onto a street.
+   *
+   * @since 4.1.0
+   */
+  public static final String MERGE = "merge";
+
+  /**
+   * Take a ramp to enter a highway.
+   * @since 4.1.0
+   */
+  public static final String ON_RAMP = "on ramp";
+
+  /**
+   * Take a ramp to exit a highway.
+   *
+   * @since 4.1.0
+   */
+  public static final String OFF_RAMP = "off ramp";
+
+  /**
+   * Take the left or right side of a fork.
+   *
+   * @since 4.1.0
+   */
+  public static final String FORK  = "fork";
+
+  /**
+   * Road ends in a T intersection.
+   *
+   * @since 4.1.0
+   */
+  public static final String END_OF_ROAD  = "end of road";
+
+  /**
+   * Continue on a street after a turn.
+   *
+   * @since 4.1.0
+   */
+  public static final String CONTINUE  = "continue";
+
+  /**
+   * Traverse roundabout.
+   * Has an additional property  exit in the route step that contains
+   * the exit number. The  modifier specifies the direction of entering the roundabout.
+   *
+   * @since 4.1.0
+   */
+  public static final String ROUNDABOUT  = "roundabout";
+
+  /**
+   * A traffic circle. While very similar to a larger version of a roundabout,
+   * it does not necessarily follow roundabout rules for right of way.
+   * It can offer {@link LegStep#rotaryName()}  parameters,
+   * {@link LegStep#rotaryPronunciation()} ()}  parameters, or both,
+   *  in addition to the {@link #exit()} property.
+   *
+   * @since 4.1.0
+   */
+  public static final String ROTARY  = "rotary";
+
+  /**
+   * A small roundabout that is treated as an intersection.
+   *
+   * @since 4.1.0
+   */
+  public static final String ROUNDABOUT_TURN  = "roundabout turn";
+
+  /**
+   * Indicates a change of driving conditions, for example changing the  mode
+   * from driving to ferry.
+   *
+   * @since 4.1.0
+   */
+  public static final String NOTIFICATION  = "notification";
+
+  /**
+   * Indicates the exit maneuver from a roundabout.
+   * Will not appear in results unless you supply true to the {@link #exit()} query
+   * parameter in the request.
+   *
+   * @since 4.1.0
+   */
+  public static final String EXIT_ROUNDABOUT  = "exit roundabout";
+
+  /**
+   * Indicates the exit maneuver from a rotary.
+   * Will not appear in results unless you supply true
+   * to the {@link MapboxDirections#roundaboutExits()}  query parameter in the request.
+   *
+   * @since 4.1.0
+   */
+  public static final String EXIT_ROTARY  = "exit rotary";
+
+  /**
+   * Maneuver types.
+   *
+   * @since 4.1.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+    TURN,
+    NEW_NAME,
+    DEPART,
+    ARRIVE,
+    MERGE,
+    ON_RAMP,
+    OFF_RAMP,
+    FORK,
+    END_OF_ROAD,
+    CONTINUE,
+    ROUNDABOUT,
+    ROTARY,
+    ROUNDABOUT_TURN,
+    NOTIFICATION,
+    EXIT_ROUNDABOUT,
+    EXIT_ROTARY
+  })
+  public @interface StepManeuverType {
+  }
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -89,34 +248,13 @@ public abstract class StepManeuver extends DirectionsJsonObject {
   public abstract String instruction();
 
   /**
-   * This indicates the type of maneuver. It can be any of these listed:
-   * <br>
-   * <ul>
-   * <li>turn - a basic turn into direction of the modifier</li>
-   * <li>new name - the road name changes (after a mandatory turn)</li>
-   * <li>depart - indicates departure from a leg</li>
-   * <li>arrive - indicates arrival to a destination of a leg</li>
-   * <li>merge - merge onto a street</li>
-   * <li>on ramp - take a ramp to enter a highway</li>
-   * <li>off ramp - take a ramp to exit a highway</li>
-   * <li>fork - take the left/right side of a fork</li>
-   * <li>end of road - road ends in a T intersection</li>
-   * <li>continue - continue on a street after a turn</li>
-   * <li>roundabout - traverse roundabout, has additional property {@link #exit()} in RouteStep
-   * containing the exit number. The modifier specifies the direction of entering the roundabout.
-   * </li>
-   * <li>rotary - a traffic circle. While very similar to a larger version of a roundabout, it does
-   * not necessarily follow roundabout rules for right of way. It can offer
-   * {@link LegStep#rotaryName()} and/or {@link LegStep#rotaryPronunciation()} parameters in
-   * addition to the {@link #exit()} property.</li>
-   * <li>roundabout turn - small roundabout that is treated as an intersection</li>
-   * <li>notification - change of driving conditions, e.g. change of mode from driving to ferry</li>
-   * </ul>
-   *
+   * This indicates the type of maneuver.
+   * @see StepManeuverType
    * @return String with type of maneuver
    * @since 1.0.0
    */
   @Nullable
+  @StepManeuverType
   public abstract String type();
 
   /**
@@ -241,10 +379,11 @@ public abstract class StepManeuver extends DirectionsJsonObject {
      * options.
      *
      * @param type String with type of maneuver
+     * @see StepManeuverType
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder type(@Nullable String type);
+    public abstract Builder type(@Nullable @StepManeuverType String type);
 
     /**
      * This indicates the mode of the maneuver. If type is of turn, the modifier indicates the
