@@ -1,7 +1,6 @@
 package com.mapbox.api.directions.v5;
 
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -46,7 +45,15 @@ public interface DirectionsService {
    * @param voiceUnits         voice units
    * @param exclude            exclude tolls, motorways or more along your route
    * @param approaches         which side of the road to approach a waypoint
-   * @param waypointNames     custom names for waypoints used for the arrival instruction.
+   * @param waypointNames      custom names for waypoints used for the arrival instruction.
+   * @param bicycleType        The type of bicycle, either `Road`, `Hybrid`, `City`, `Cross`,
+   *                           `Mountain`.
+   * @param cyclingSpeed       Cycling speed is the average travel speed along smooth, flat roads.
+   * @param useRoads           A cyclist's propensity to use roads alongside other vehicles
+   * @param useHills           A cyclist's desire to tackle hills in their routes
+   * @param useFerry           This value indicates the willingness to take ferries
+   * @param avoidBadSurfaces   This value is meant to represent how much a cyclist wants to avoid
+   *                           roads with poor surfaces
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */
@@ -72,6 +79,12 @@ public interface DirectionsService {
     @Query("voice_units") String voiceUnits,
     @Query("exclude") String exclude,
     @Query("approaches") String approaches,
-    @Query("waypoint_names") String waypointNames
+    @Query("waypoint_names") String waypointNames,
+    @Query("bicycle_type") String bicycleType,
+    @Query("cycling_speed") Float cyclingSpeed,
+    @Query("use_roads") Float useRoads,
+    @Query("use_hills") Float useHills,
+    @Query("use_ferry") Float useFerry,
+    @Query("avoid_bad_surfaces") Float avoidBadSurfaces
   );
 }

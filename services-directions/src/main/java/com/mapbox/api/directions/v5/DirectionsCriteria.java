@@ -226,6 +226,41 @@ public final class DirectionsCriteria {
    */
   public static final String APPROACH_CURB = "curb";
 
+  /**
+   * Bicycle type for road bike.
+   *
+   * @since 4.1.0
+   */
+  public static final String ROAD = "Road";
+
+  /**
+   * Bicycle type for hybrid bike.
+   *
+   * @since 4.1.0
+   */
+  public static final String HYBRID = "Hybrid";
+
+  /**
+   * Bicycle type for city bike.
+   *
+   * @since 4.1.0
+   */
+  public static final String CITY = "City";
+
+  /**
+   * Bicycle type for cross bike.
+   *
+   * @since 4.1.0
+   */
+  public static final String CROSS = "Cross";
+
+  /**
+   * Bicycle type for mountain bike.
+   *
+   * @since 4.1.0
+   */
+  public static final String MOUNTAIN = "Mountain";
+
   private DirectionsCriteria() {
     //not called
   }
@@ -355,5 +390,21 @@ public final class DirectionsCriteria {
     APPROACH_CURB
   })
   public @interface ApproachesCriteria {
+  }
+
+  /**
+   * Retention policy for the bicycle type parameter in the Directions API.
+   *
+   * @since 4.1.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+          ROAD,
+          HYBRID,
+          CITY,
+          CROSS,
+          MOUNTAIN
+  })
+  public @interface BicycleType {
   }
 }

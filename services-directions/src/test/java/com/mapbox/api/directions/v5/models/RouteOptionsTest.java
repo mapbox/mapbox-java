@@ -24,6 +24,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
+import static com.mapbox.api.directions.v5.DirectionsCriteria.ROAD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -190,6 +191,119 @@ public class RouteOptionsTest extends TestUtils {
     DirectionsRoute route = response.body().routes().get(0);
 
     assertEquals(DirectionsCriteria.OVERVIEW_SIMPLIFIED, route.routeOptions().overview());
+  }
+
+  @Test
+  public void directionsRequestResult_doesContainBicycleType() throws Exception {
+    Response<DirectionsResponse> response = MapboxDirections.builder()
+            .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+            .baseUrl(mockUrl.toString())
+            .accessToken(ACCESS_TOKEN)
+            .origin(Point.fromLngLat(1.0, 1.0))
+            .destination(Point.fromLngLat(5.0, 5.0))
+            .profile(DirectionsCriteria.PROFILE_WALKING)
+            .continueStraight(false)
+            .language(Locale.CANADA)
+            .bicycleType(ROAD)
+            .alternatives(true).build().executeCall();
+    DirectionsRoute route = response.body().routes().get(0);
+
+    assertEquals(ROAD, route.routeOptions().bicycleType());
+  }
+
+  @Test
+  public void directionsRequestResult_doesContainCyclingSpeed() throws Exception {
+    Float cyclingSpeed = 10f;
+    Response<DirectionsResponse> response = MapboxDirections.builder()
+            .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+            .baseUrl(mockUrl.toString())
+            .accessToken(ACCESS_TOKEN)
+            .origin(Point.fromLngLat(1.0, 1.0))
+            .destination(Point.fromLngLat(5.0, 5.0))
+            .profile(DirectionsCriteria.PROFILE_WALKING)
+            .continueStraight(false)
+            .language(Locale.CANADA)
+            .cyclingSpeed(cyclingSpeed)
+            .alternatives(true).build().executeCall();
+    DirectionsRoute route = response.body().routes().get(0);
+
+    assertEquals(cyclingSpeed, route.routeOptions().cyclingSpeed());
+  }
+
+  @Test
+  public void directionsRequestResult_doesContainUseRoads() throws Exception {
+    Float useRoads = .5f;
+    Response<DirectionsResponse> response = MapboxDirections.builder()
+            .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+            .baseUrl(mockUrl.toString())
+            .accessToken(ACCESS_TOKEN)
+            .origin(Point.fromLngLat(1.0, 1.0))
+            .destination(Point.fromLngLat(5.0, 5.0))
+            .profile(DirectionsCriteria.PROFILE_WALKING)
+            .continueStraight(false)
+            .language(Locale.CANADA)
+            .useRoads(useRoads)
+            .alternatives(true).build().executeCall();
+    DirectionsRoute route = response.body().routes().get(0);
+
+    assertEquals(useRoads, route.routeOptions().useRoads());
+  }
+
+  @Test
+  public void directionsRequestResult_doesContainUseHills() throws Exception {
+    Float useHills = .5f;
+    Response<DirectionsResponse> response = MapboxDirections.builder()
+            .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+            .baseUrl(mockUrl.toString())
+            .accessToken(ACCESS_TOKEN)
+            .origin(Point.fromLngLat(1.0, 1.0))
+            .destination(Point.fromLngLat(5.0, 5.0))
+            .profile(DirectionsCriteria.PROFILE_WALKING)
+            .continueStraight(false)
+            .language(Locale.CANADA)
+            .useHills(useHills)
+            .alternatives(true).build().executeCall();
+    DirectionsRoute route = response.body().routes().get(0);
+
+    assertEquals(useHills, route.routeOptions().useHills());
+  }
+
+  @Test
+  public void directionsRequestResult_doesContainUseFerry() throws Exception {
+    Float useFerry = .5f;
+    Response<DirectionsResponse> response = MapboxDirections.builder()
+            .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+            .baseUrl(mockUrl.toString())
+            .accessToken(ACCESS_TOKEN)
+            .origin(Point.fromLngLat(1.0, 1.0))
+            .destination(Point.fromLngLat(5.0, 5.0))
+            .profile(DirectionsCriteria.PROFILE_WALKING)
+            .continueStraight(false)
+            .language(Locale.CANADA)
+            .useFerry(useFerry)
+            .alternatives(true).build().executeCall();
+    DirectionsRoute route = response.body().routes().get(0);
+
+    assertEquals(useFerry, route.routeOptions().useFerry());
+  }
+
+  @Test
+  public void directionsRequestResult_doesContainAvoidBadSurfaces() throws Exception {
+    Float avoidBadSurfaces = .5f;
+    Response<DirectionsResponse> response = MapboxDirections.builder()
+            .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+            .baseUrl(mockUrl.toString())
+            .accessToken(ACCESS_TOKEN)
+            .origin(Point.fromLngLat(1.0, 1.0))
+            .destination(Point.fromLngLat(5.0, 5.0))
+            .profile(DirectionsCriteria.PROFILE_WALKING)
+            .continueStraight(false)
+            .language(Locale.CANADA)
+            .avoidBadSurfaces(avoidBadSurfaces)
+            .alternatives(true).build().executeCall();
+    DirectionsRoute route = response.body().routes().get(0);
+
+    assertEquals(avoidBadSurfaces, route.routeOptions().avoidBadSurfaces());
   }
 
   @Test

@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -272,12 +273,99 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * each separated by  ; . Values can be any string and total number of all characters cannot
    * exceed 500. If provided, the list of waypoint_names must be the same length as the list of
    * coordinates, but you can skip a coordinate and show its position with the  ; separator.
-   * @return  a string representing names for each waypoint
+   *
+   * @return a string representing names for each waypoint
    * @since 3.3.0
    */
   @SerializedName("waypoint_names")
   @Nullable
   public abstract String waypointNames();
+
+  /**
+   * The type of bicycle, either `Road`, `Hybrid`, `City`, `Cross`, `Mountain`. The default type is
+   * Hybrid.
+   *
+   * @return the type of bicycle
+   * @since 4.1.0
+   */
+  @SerializedName("bicycle_type")
+  @Nullable
+  public abstract String bicycleType();
+
+  /**
+   * Cycling speed is the average travel speed along smooth, flat roads. This is meant to be the
+   * speed a rider can comfortably maintain over the desired distance of the route. It can be
+   * modified (in the costing method) by surface type in conjunction with bicycle type and
+   * (coming soon) by hilliness of the road section. When no speed is specifically provided, the
+   * default speed is determined by the bicycle type and are as follows: Road = 25 KPH (15.5 MPH),
+   * Cross = 20 KPH (13 MPH), Hybrid/City = 18 KPH (11.5 MPH), and Mountain = 16 KPH (10 MPH).
+   *
+   * @return the cycling speed in kmh
+   * @since 4.1.0
+   */
+  @SerializedName("cycling_speed")
+  @Nullable
+  public abstract Float cyclingSpeed();
+
+  /**
+   * A cyclist's propensity to use roads alongside other vehicles. This is a range of values from 0
+   * to 1, where 0 attempts to avoid roads and stay on cycleways and paths, and 1 indicates the
+   * rider is more comfortable riding on roads. Based on the use_roads factor, roads with certain
+   * classifications and higher speeds are penalized in an attempt to avoid them when finding the
+   * best path. The default value is 0.5.
+   *
+   * @return a cyclist's propensity to use roads alongside other vehicles
+   * @since 4.1.0
+   */
+  @SerializedName("use_roads")
+  @Nullable
+  public abstract Float useRoads();
+
+  /**
+   * A cyclist's desire to tackle hills in their routes. This is a range of values from 0 to 1,
+   * where 0 attempts to avoid hills and steep grades even if it means a longer (time and
+   * distance) path, while 1 indicates the rider does not fear hills and steeper grades. Based on
+   * the use_hills factor, penalties are applied to roads based on elevation change and grade.
+   * These penalties help the path avoid hilly roads in favor of flatter roads or less steep
+   * grades where available. Note that it is not always possible to find alternate paths to avoid
+   * hills (for example when route locations are in mountainous areas). The default value is 0.5.
+   *
+   * @return a cyclist's desire to tackle hills in their routes
+   * @since 4.1.0
+   */
+  @SerializedName("use_hills")
+  @Nullable
+  public abstract Float useHills();
+
+  /**
+   * This value indicates the willingness to take ferries. This is a range of values between 0 and
+   * 1. Values near 0 attempt to avoid ferries and values near 1 will favor ferries. Note that
+   * sometimes ferries are required to complete a route so values of 0 are not guaranteed to avoid
+   * ferries entirely.
+   * The default value is 0.5.
+   *
+   * @return the willingness to take ferries
+   * @since 4.1.0
+   */
+  @SerializedName("use_ferry")
+  @Nullable
+  public abstract Float useFerry();
+
+  /**
+   * This value is meant to represent how much a cyclist wants to avoid roads with poor surfaces
+   * relative to the bicycle type being used. This is a range of values between 0 and 1. When the
+   * value is 0, there is no penalization of roads with different surface types; only bicycle
+   * speed on each surface is taken into account. As the value approaches 1, roads with poor
+   * surfaces for the bike are penalized heavier so that they are only taken if they
+   * significantly improve travel time. When the value is equal to 1, all bad surfaces are
+   * completely disallowed from routing, including start and end points. The default value is 0.25.
+   *
+   * @return how much a cyclist wants to avoid roads with poor surfaces
+   * @since 4.1.0
+   */
+  @SerializedName("avoid_bad_surfaces")
+  @Nullable
+  public abstract Float avoidBadSurfaces();
 
 
   /**
@@ -521,7 +609,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.2.0
      */
-
     @Nullable
     public abstract Builder approaches(String approaches);
 
@@ -532,9 +619,98 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.3.0
      */
-
     @Nullable
     public abstract Builder waypointNames(@Nullable String waypointNames);
+
+    /**
+     * The type of bicycle, either `Road`, `Hybrid`, `City`, `Cross`, `Mountain`. The default type
+     * is Hybrid.
+     *
+     * @param bicycleType the type of bicycle
+     * @return this builder for chaining options together
+     * @since 4.1.0
+     */
+    @Nullable
+    public abstract Builder bicycleType(@Nullable String bicycleType);
+
+    /**
+     * Cycling speed is the average travel speed along smooth, flat roads. This is meant to be the
+     * speed a rider can comfortably maintain over the desired distance of the route. It can be
+     * modified (in the costing method) by surface type in conjunction with bicycle type and
+     * (coming soon) by hilliness of the road section. When no speed is specifically provided,
+     * the default speed is determined by the bicycle type and are as follows: Road = 25 KPH (15
+     * .5 MPH), Cross = 20 KPH (13 MPH), Hybrid/City = 18 KPH (11.5 MPH), and Mountain = 16 KPH
+     * (10 MPH).
+     *
+     * @param cyclingSpeed in kmh
+     * @return this builder for chaining options together
+     * @since 4.1.0
+     */
+    @Nullable
+    public abstract Builder cyclingSpeed(
+            @Nullable @FloatRange(from = 5, to = 60) Float cyclingSpeed);
+
+    /**
+     * A cyclist's propensity to use roads alongside other vehicles. This is a range of values from
+     * 0 to 1, where 0 attempts to avoid roads and stay on cycleways and paths, and 1 indicates
+     * the rider is more comfortable riding on roads. Based on the use_roads factor, roads with
+     * certain classifications and higher speeds are penalized in an attempt to avoid them when
+     * finding the best path. The default value is 0.5.
+     *
+     * @param useRoads a cyclist's propensity to use roads alongside other vehicles
+     * @return this builder for chaining options together
+     * @since 4.1.0
+     */
+    @Nullable
+    public abstract Builder useRoads(@Nullable @FloatRange(from = 0.0, to = 1.0) Float useRoads);
+
+    /**
+     * A cyclist's desire to tackle hills in their routes. This is a range of values from 0 to 1,
+     * where 0 attempts to avoid hills and steep grades even if it means a longer (time and
+     * distance) path, while 1 indicates the rider does not fear hills and steeper grades. Based
+     * on the use_hills factor, penalties are applied to roads based on elevation change and
+     * grade. These penalties help the path avoid hilly roads in favor of flatter roads or less
+     * steep grades where available. Note that it is not always possible to find alternate paths
+     * to avoid hills (for example when route locations are in mountainous areas). The default
+     * value is 0.5.
+     *
+     * @param useHills a cyclist's desire to tackle hills in their routes
+     * @return this builder for chaining options together
+     * @since 4.1.0
+     */
+    @Nullable
+    public abstract Builder useHills(@Nullable @FloatRange(from = 0.0, to = 1.0) Float useHills);
+
+    /**
+     * This value indicates the willingness to take ferries. This is a range of values between 0 and
+     * 1. Values near 0 attempt to avoid ferries and values near 1 will favor ferries. Note that
+     * sometimes ferries are required to complete a route so values of 0 are not guaranteed to
+     * avoid ferries entirely. The default value is 0.5.
+     *
+     * @param useFerry the willingness to take ferries
+     * @return this builder for chaining options together
+     * @since 4.1.0
+     */
+    @Nullable
+    public abstract Builder useFerry(@Nullable @FloatRange(from = 0.0, to = 1.0) Float useFerry);
+
+    /**
+     * This value is meant to represent how much a cyclist wants to avoid roads with poor surfaces
+     * relative to the bicycle type being used. This is a range of values between 0 and 1. When
+     * the value is 0, there is no penalization of roads with different surface types; only
+     * bicycle speed on each surface is taken into account. As the value approaches 1, roads with
+     * poor surfaces for the bike are penalized heavier so that they are only taken if they
+     * significantly improve travel time. When the value is equal to 1, all bad surfaces are
+     * completely disallowed from routing, including start and end points. The default value is 0
+     * .25.
+     *
+     * @param avoidBadSurfaces how much a cyclist wants to avoid roads with poor surfaces
+     * @return this builder for chaining options together
+     * @since 4.1.0
+     */
+    @Nullable
+    public abstract Builder avoidBadSurfaces(
+            @Nullable @FloatRange(from = 0.0, to = 1.0) Float avoidBadSurfaces);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.
