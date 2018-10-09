@@ -73,6 +73,6 @@ jobs:
       - deploy:
           name: Publish Java Services To Maven Central
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "pg-4.1.0-snapshot-release" ]; then
             make publish ;
             fi
