@@ -12,12 +12,14 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.mapbox.geojson.gson.CoordinateTypeAdapter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.shifter.CoordinateShifterManager;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -72,6 +74,8 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
   public static Point fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
+    gson.registerTypeAdapter(new TypeToken<List<Double>>(){}.getType(),
+            new CoordinateTypeAdapter());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     return gson.create().fromJson(json, Point.class);
   }
@@ -92,7 +96,9 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
   public static Point fromLngLat(
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude) {
-    List<Double> coordinates = Arrays.asList(longitude, latitude);
+
+    List<Double> coordinates =
+      CoordinateShifterManager.getCoordinateShifter().shiftLonLat(longitude, latitude);
     return new AutoValue_Point(TYPE, null, coordinates);
   }
 
@@ -115,7 +121,9 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     @Nullable BoundingBox bbox) {
-    List<Double> coordinates = Arrays.asList(longitude, latitude);
+
+    List<Double> coordinates =
+      CoordinateShifterManager.getCoordinateShifter().shiftLonLat(longitude, latitude);
     return new AutoValue_Point(TYPE, bbox, coordinates);
   }
 
@@ -139,9 +147,9 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     double altitude) {
-    List<Double> coordinates = Double.isNaN(altitude)
-      ? Arrays.asList(longitude, latitude) :
-      Arrays.asList(longitude, latitude, altitude);
+
+    List<Double> coordinates =
+      CoordinateShifterManager.getCoordinateShifter().shiftLonLatAlt(longitude, latitude, altitude);
     return new AutoValue_Point(TYPE, null, coordinates);
   }
 
@@ -166,9 +174,9 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     double altitude, @Nullable BoundingBox bbox) {
-    List<Double> coordinates = Double.isNaN(altitude)
-      ? Arrays.asList(longitude, latitude) :
-      Arrays.asList(longitude, latitude, altitude);
+
+    List<Double> coordinates =
+      CoordinateShifterManager.getCoordinateShifter().shiftLonLatAlt(longitude, latitude, altitude);
     return new AutoValue_Point(TYPE, bbox, coordinates);
   }
 
@@ -284,6 +292,8 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(new TypeToken<List<Double>>(){}.getType(),
+            new CoordinateTypeAdapter());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
     return gson.create().toJson(this);
   }
