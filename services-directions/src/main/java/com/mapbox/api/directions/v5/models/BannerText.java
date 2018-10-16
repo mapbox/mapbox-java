@@ -52,34 +52,14 @@ public abstract class BannerText extends DirectionsJsonObject {
   public abstract List<BannerComponents> components();
 
   /**
-   * This indicates the type of maneuver. It can be any of these listed:
-   * <br>
-   * <ul>
-   * <li>turn - a basic turn into direction of the modifier</li>
-   * <li>new name - the road name changes (after a mandatory turn)</li>
-   * <li>depart - indicates departure from a leg</li>
-   * <li>arrive - indicates arrival to a destination of a leg</li>
-   * <li>merge - merge onto a street</li>
-   * <li>on ramp - take a ramp to enter a highway</li>
-   * <li>off ramp - take a ramp to exit a highway</li>
-   * <li>fork - take the left/right side of a fork</li>
-   * <li>end of road - road ends in a T intersection</li>
-   * <li>continue - continue on a street after a turn</li>
-   * <li>roundabout - traverse roundabout, has additional property exit in RouteStep
-   * containing the exit number. The modifier specifies the direction of entering the roundabout.
-   * </li>
-   * <li>rotary - a traffic circle. While very similar to a larger version of a roundabout, it does
-   * not necessarily follow roundabout rules for right of way. It can offer
-   * {@link LegStep#rotaryName()} and/or {@link LegStep#rotaryPronunciation()} parameters in
-   * addition to the exit property.</li>
-   * <li>roundabout turn - small roundabout that is treated as an intersection</li>
-   * <li>notification - change of driving conditions, e.g. change of mode from driving to ferry</li>
-   * </ul>
+   * This indicates the type of maneuver.
    *
    * @return String with type of maneuver
+   * @see com.mapbox.api.directions.v5.models.StepManeuver.StepManeuverType
    * @since 3.0.0
    */
   @Nullable
+  @StepManeuver.StepManeuverType
   public abstract String type();
 
   /**
@@ -185,9 +165,10 @@ public abstract class BannerText extends DirectionsJsonObject {
      *
      * @param type String with type of maneuver
      * @return this builder for chaining options together
+     * @see com.mapbox.api.directions.v5.models.StepManeuver.StepManeuverType
      * @since 3.0.0
      */
-    public abstract Builder type(@Nullable String type);
+    public abstract Builder type(@Nullable @StepManeuver.StepManeuverType  String type);
 
     /**
      * This indicates the mode of the maneuver. If type is of turn, the modifier indicates the
