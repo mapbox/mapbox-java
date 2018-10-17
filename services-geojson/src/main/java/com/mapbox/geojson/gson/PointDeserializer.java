@@ -41,13 +41,7 @@ public class PointDeserializer implements JsonDeserializer<Point> {
    */
   @Override
   public Point deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-    JsonArray rawCoordinates;
-
-    if (json.isJsonObject()) {
-      rawCoordinates = json.getAsJsonObject().getAsJsonArray("coordinates");
-    } else {
-      rawCoordinates = json.getAsJsonArray();
-    }
+    JsonArray rawCoordinates = json.getAsJsonArray();
 
     double longitude = rawCoordinates.get(0).getAsDouble();
     double latitude = rawCoordinates.get(1).getAsDouble();

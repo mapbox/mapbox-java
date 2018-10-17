@@ -139,7 +139,9 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     double altitude) {
-    List<Double> coordinates = Arrays.asList(longitude, latitude, altitude);
+    List<Double> coordinates = Double.isNaN(altitude)
+      ? Arrays.asList(longitude, latitude) :
+      Arrays.asList(longitude, latitude, altitude);
     return new AutoValue_Point(TYPE, null, coordinates);
   }
 
@@ -164,7 +166,9 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
     @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
     @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
     double altitude, @Nullable BoundingBox bbox) {
-    List<Double> coordinates = Arrays.asList(longitude, latitude, altitude);
+    List<Double> coordinates = Double.isNaN(altitude)
+      ? Arrays.asList(longitude, latitude) :
+      Arrays.asList(longitude, latitude, altitude);
     return new AutoValue_Point(TYPE, bbox, coordinates);
   }
 
