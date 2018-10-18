@@ -1,0 +1,20 @@
+# Configuration for probot-stale - https://github.com/probot/stale
+
+exemptProjects: false
+exemptMilestones: false
+
+staleLabel: Archived
+
+limitPerRun: 1
+
+pulls:
+  daysUntilStale: 60
+  closeComment: >
+    This pull request has been automatically detected as stale because it has not had
+    recent activity and will be archived. Thank you for your contributions.
+
+issues:
+  daysUntilStale: 180
+  closeComment: >
+    This issue has been automatically detected as stale because it has not had
+    recent activity and will be archived. Thank you for your contributions.
