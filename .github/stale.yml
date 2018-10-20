@@ -9,7 +9,7 @@ limitPerRun: 1
 
 pulls:
   daysUntilStale: 60
-  daysUntilClose: 0
+  daysUntilClose: -1
   staleComment: false
   closeComment: >
     This pull request has been automatically detected as stale because it has not had
@@ -17,7 +17,7 @@ pulls:
 
 issues:
   daysUntilStale: 180
-  daysUntilClose: 0
+  daysUntilClose: -1
   staleComment: false
   closeComment: >
     This issue has been automatically detected as stale because it has not had
