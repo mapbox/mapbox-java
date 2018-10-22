@@ -4,7 +4,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.mapbox.core.TestUtils;
-import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
 
 import org.junit.Rule;
@@ -14,9 +13,8 @@ import org.junit.rules.ExpectedException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
+
 
 public class PointDeserializerTest extends TestUtils {
 
