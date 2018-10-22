@@ -1,15 +1,20 @@
 package com.mapbox.geojson.shifter;
 
+import com.google.gson.JsonParser;
 import com.mapbox.geojson.BoundingBox;
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 
 import static com.mapbox.core.TestUtils.DELTA;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +51,7 @@ public class ShifterTest {
   };
 
   @Test
-  public void basic_shift() throws Exception {
+  public void point_basic_shift() throws Exception {
 
     Point southwest = Point.fromLngLat(2.0, 2.0);
     Point northeast = Point.fromLngLat(4.0, 4.0);
@@ -68,8 +73,19 @@ public class ShifterTest {
     assertEquals(southwestManualShifted, southwestShifted);
     assertEquals(northeastManualShifted, northeastShifted);
 
+    CoordinateShifterManager.setCoordinateShifter(null);
+  }
+
+  @Test
+  public void bbox_basic_shift() throws Exception {
+
+    CoordinateShifter shifter = new TestCoordinateShifter();
+
     BoundingBox boundingBoxFromDouble = BoundingBox.fromLngLats(2.0, 2.0, 4.0, 4.0);
-    BoundingBox boundingBoxFromPoints = BoundingBox.fromPoints(southwestShifted, northeastShifted);
+
+    BoundingBox boundingBoxFromPoints =
+            BoundingBox.fromPoints(Point.fromLngLat(2.0, 2.0),
+                                   Point.fromLngLat(4.0, 4.0));
 
     assertEquals(boundingBoxFromDouble, boundingBoxFromPoints);
 
@@ -77,7 +93,7 @@ public class ShifterTest {
   }
 
   @Test
-  public void toJson() throws Exception {
+  public void point_toJson() throws Exception {
 
     // set shifter
     CoordinateShifterManager.setCoordinateShifter(new TestCoordinateShifter());
@@ -91,7 +107,7 @@ public class ShifterTest {
   }
 
   @Test
-  public void fromJson() throws Exception {
+  public void point_fromJson() throws Exception {
 
     // set shifter
     CoordinateShifterManager.setCoordinateShifter(new TestCoordinateShifter());
@@ -104,4 +120,30 @@ public class ShifterTest {
 
     CoordinateShifterManager.setCoordinateShifter(null);
   }
+
+  @Test
+  public void linestring_basic_shift_with_bbox() {
+    // set shifter
+    CoordinateShifterManager.setCoordinateShifter(new TestCoordinateShifter());
+
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
+    LineString lineString = LineString.fromLngLats(points, bbox);
+
+    String jsonString = lineString.toJson();
+    compareJson("{\"coordinates\":[[1,1],[2,2],[3,3]],"
+                    + "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}",
+            jsonString);
+
+    CoordinateShifterManager.setCoordinateShifter(null);
+  }
+
+  public void compareJson(String expectedJson, String actualJson) {
+    JsonParser parser = new JsonParser();
+    assertThat(parser.parse(actualJson), Matchers.equalTo(parser.parse(expectedJson)));
+  }
+
 }
