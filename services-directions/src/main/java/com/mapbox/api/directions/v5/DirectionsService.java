@@ -54,6 +54,7 @@ public interface DirectionsService {
    * @param useFerry           This value indicates the willingness to take ferries
    * @param avoidBadSurfaces   This value is meant to represent how much a cyclist wants to avoid
    *                           roads with poor surfaces
+   * @param waypointTypes      types for waypoints
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */
@@ -85,6 +86,7 @@ public interface DirectionsService {
     @Query("use_roads") Float useRoads,
     @Query("use_hills") Float useHills,
     @Query("use_ferry") Float useFerry,
-    @Query("avoid_bad_surfaces") Float avoidBadSurfaces
+    @Query("avoid_bad_surfaces") Float avoidBadSurfaces,
+    @Query("waypoint_types") String waypointTypes
   );
 }

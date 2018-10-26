@@ -199,4 +199,24 @@ public final class TextUtils {
     }
     return TextUtils.join(";", waypointNames);
   }
+
+  /**
+   * Converts String array with waypoint types values
+   * to a string ready for API consumption.
+   * A waypoint type could be break, through or null.
+   *
+   * @param waypointTypes a string representing waypoint types to each coordinate.
+   * @return a formatted string.
+   */
+  public static String formatWaypointTypes(String[] waypointTypes) {
+    for (int i = 0; i < waypointTypes.length; i++) {
+      if (waypointTypes[i] == null) {
+        waypointTypes[i] = "";
+      } else if (!waypointTypes[i].equals("break")
+              && !waypointTypes[i].equals("through") && !waypointTypes[i].isEmpty()) {
+        return null;
+      }
+    }
+    return TextUtils.join(";", waypointTypes);
+  }
 }

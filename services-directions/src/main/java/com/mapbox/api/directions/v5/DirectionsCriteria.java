@@ -261,6 +261,16 @@ public final class DirectionsCriteria {
    */
   public static final String MOUNTAIN = "Mountain";
 
+  /**
+   * Break waypoint type.
+   */
+  public static final String BREAK = "break";
+
+  /**
+   * Through waypoint type.
+   */
+  public static final String THROUGH = "through";
+
   private DirectionsCriteria() {
     //not called
   }
@@ -406,5 +416,16 @@ public final class DirectionsCriteria {
           MOUNTAIN
   })
   public @interface BicycleType {
+  }
+
+  /**
+   * Retention policy for the waypoint type parameter in the Directions API.
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+          BREAK,
+          THROUGH
+  })
+  public @interface WaypointType {
   }
 }

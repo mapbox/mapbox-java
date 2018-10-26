@@ -94,7 +94,8 @@ public abstract class MapboxDirections extends
       useRoads(),
       useHills(),
       useFerry(),
-      avoidBadSurfaces());
+      avoidBadSurfaces(),
+      waypointTypes());
   }
 
   @Override
@@ -219,6 +220,7 @@ public abstract class MapboxDirections extends
           .useHills(useHills())
           .useFerry(useFerry())
           .avoidBadSurfaces(avoidBadSurfaces())
+          .waypointTypes(waypointTypes())
           .continueStraight(continueStraight())
           .annotations(annotation())
           .approaches(approaches())
@@ -409,6 +411,10 @@ public abstract class MapboxDirections extends
   @Nullable
   abstract Float avoidBadSurfaces();
 
+  @SerializedName("waypoint_types")
+  @Nullable
+  abstract String waypointTypes();
+
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
    * {@link #baseUrl()}, {@link #profile()}, {@link #user()}, and {@link #geometries()}.
@@ -458,6 +464,7 @@ public abstract class MapboxDirections extends
     private Point origin;
     private String[] approaches;
     private String[] waypointNames;
+    private String[] waypointTypes;
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -920,6 +927,26 @@ public abstract class MapboxDirections extends
     public abstract Builder avoidBadSurfaces(
             @Nullable @FloatRange(from = 0.0, to = 1.0) Float avoidBadSurfaces);
 
+    /**
+     * Type of location, accepts  break (default), through or null. A break is a stop,
+     * so the first and last locations must be of type break. A through location is one
+     * that the route path travels through, and is useful to force a route to go through location.
+     * The path is not allowed to reverse direction at the through locations.
+     * If no type is provided, the type is assumed to be a break.
+     * If provided, the list of waypoint types must be the same length as the list of waypoints.
+     *
+     * @param waypointTypes null if you'd like the default waypoint types,
+     *                      else one of the options found in
+     *                      {@link com.mapbox.api.directions.v5.DirectionsCriteria.WaypointType}.
+     * @return this builder for chaining options together
+     */
+    public Builder addWaypointTypes(@Nullable String... waypointTypes) {
+      this.waypointTypes = waypointTypes;
+      return this;
+    }
+
+    abstract Builder waypointTypes(@Nullable String waypointTypes);
+
     abstract MapboxDirections autoBuild();
 
     /**
@@ -965,6 +992,18 @@ public abstract class MapboxDirections extends
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
         approaches(formattedApproaches);
+      }
+
+      if (waypointTypes != null) {
+        if (waypointTypes.length != coordinates.size()) {
+          throw new ServicesException("Number of waypoint types elements must match "
+            + "number of coordinates provided.");
+        }
+        String formattedWaypointTypes = TextUtils.formatWaypointTypes(waypointTypes);
+        if (formattedWaypointTypes == null) {
+          throw new ServicesException("All waypoint types values must be one of break, through");
+        }
+        waypointTypes(formattedWaypointTypes);
       }
 
       coordinates(coordinates);

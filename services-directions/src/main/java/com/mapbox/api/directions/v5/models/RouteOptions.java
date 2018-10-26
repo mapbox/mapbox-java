@@ -367,6 +367,20 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   @Nullable
   public abstract Float avoidBadSurfaces();
 
+  /**
+   * Type of location, accepts  break (default), through or null. A break is a stop,
+   * so the first and last locations must be of type break. A through location is one
+   * that the route path travels through, and is useful to force a route to go through location.
+   * The path is not allowed to reverse direction at the through locations.
+   * If no type is provided, the type is assumed to be a break.
+   * If provided, the list of waypoint types must be the same length as the list of waypoints.
+   * However, you can skip a coordinate and show its position in the list with the ; separator.
+   *
+   * @return a string representing waypoint types for each waypoint
+   */
+  @SerializedName("waypoint_types")
+  @Nullable
+  public abstract String waypointTypes();
 
   /**
    * Gson type adapter for parsing Gson to this class.
@@ -711,6 +725,15 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @Nullable
     public abstract Builder avoidBadSurfaces(
             @Nullable @FloatRange(from = 0.0, to = 1.0) Float avoidBadSurfaces);
+
+    /**
+     * The same waypoint types the user originally made when the request was made.
+     *
+     * @param waypointTypes break, through or omitted (;)
+     * @return this builder for chaining options together
+     */
+    @Nullable
+    public abstract Builder waypointTypes(@Nullable String waypointTypes);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.
