@@ -26,8 +26,6 @@ import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 
-import com.sun.xml.internal.ws.spi.db.BindingContextFactory;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -187,14 +186,14 @@ public abstract class MapboxMapMatching extends
     Converter<ResponseBody, MapMatchingError> errorConverter =
       getRetrofit().responseBodyConverter(MapMatchingError.class, new Annotation[0]);
     if (callback == null) {
-      BindingContextFactory.LOGGER.log(
+      Logger.getLogger(MapboxMapMatching.class.getName()).log(
         Level.WARNING, "Failed to complete your request and callback is null");
     } else {
       try {
         callback.onFailure(getCall(),
           new Throwable(errorConverter.convert(response.errorBody()).message()));
       } catch (IOException ioException) {
-        BindingContextFactory.LOGGER.log(
+        Logger.getLogger(MapboxMapMatching.class.getName()).log(
           Level.WARNING, "Failed to complete your request. ", ioException);
       }
     }
