@@ -12,6 +12,7 @@ import com.mapbox.core.utils.TextUtils;
 import java.util.logging.Logger;
 
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -54,6 +55,12 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
   @Nullable
   abstract Cache cache();
 
+  @Nullable
+  abstract Interceptor interceptor();
+
+  @Nullable
+  abstract Interceptor networkInterceptor();
+
   @NonNull
   abstract String accessToken();
 
@@ -74,6 +81,12 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
       }
       if (cache() != null) {
         httpClient.cache(cache());
+      }
+      if (interceptor() != null) {
+        httpClient.addInterceptor(interceptor());
+      }
+      if (networkInterceptor() != null) {
+        httpClient.addNetworkInterceptor(networkInterceptor());
       }
 
       okHttpClient = httpClient.build();
@@ -166,6 +179,22 @@ public abstract class MapboxSpeech extends MapboxService<ResponseBody, SpeechSer
      * @since 3.0.0
      */
     public abstract Builder cache(Cache cache);
+
+    /**
+     * Adds an optional interceptor to set in the OkHttp client.
+     *
+     * @param interceptor to set for OkHttp
+     * @return this builder for chaining options together
+     */
+    public abstract Builder interceptor(Interceptor interceptor);
+
+    /**
+     * Adds an optional network interceptor to set in the OkHttp client.
+     *
+     * @param interceptor to set for OkHttp
+     * @return this builder for chaining options together
+     */
+    public abstract Builder networkInterceptor(Interceptor interceptor);
 
     abstract MapboxSpeech autoBuild();
 
