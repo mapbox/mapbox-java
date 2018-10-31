@@ -48,12 +48,16 @@ graphs:
 	./gradlew :services-turf:generateDependencyGraphMapboxLibraries
 
 directions-matrix-fixtures:
+	# request a symmetric 1x3 matrix for pedestrians
+	curl "https://api.mapbox.com/directions-matrix/v1/mapbox/walking/-122.42,37.78;-122.45,37.91;-122.48,37.73?sources=1&annotations=distance,duration&approaches=curb;curb;curb&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o services-matrix/src/test/resources/directions_matrix_1x3.json
+
 	# request a symmetric 3x3 matrix for cars
 	curl "https://api.mapbox.com/directions-matrix/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-matrix/src/test/resources/directions_matrix_3x3.json
 
 	# request an asymmetric 2x3 matrix for bicycles
-	curl "https://api.mapbox.com/directions-matrix/v1/mapbox/cycling/-122.42,37.78;-122.45,37.91;-122.48,37.73?sources=0;2&destinations=all&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+	curl "https://api.mapbox.com/directions-matrix/v1/mapbox/cycling/-122.42,37.78;-122.45,37.91;-122.48,37.73?sources=0;2&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-matrix/src/test/resources/directions_matrix_2x3.json
 
 geocoding-fixtures:

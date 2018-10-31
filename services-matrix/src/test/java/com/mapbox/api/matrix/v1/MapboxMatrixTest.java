@@ -22,6 +22,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
+import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_DISTANCE;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_DURATION;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -29,13 +32,14 @@ import static org.junit.Assert.assertTrue;
 
 public class MapboxMatrixTest extends TestUtils {
 
-  private static final String DIRECTIONS_MATRIX_3X3_FIXTURE = "directions_matrix_3x3.json";
+  private static final String DIRECTIONS_MATRIX_WALKING_1X3_FIXTURE = "directions_matrix_1x3.json";
+  private static final String DIRECTIONS_MATRIX_CYCLING_2X3_FIXTURE = "directions_matrix_2x3.json";
+  private static final String DIRECTIONS_MATRIX_DRIVING_3X3_FIXTURE = "directions_matrix_3x3.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
 
   private ArrayList<Point> positions;
-  private String[] annotations;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -49,7 +53,17 @@ public class MapboxMatrixTest extends TestUtils {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         try {
-          String response = loadJsonFixture(DIRECTIONS_MATRIX_3X3_FIXTURE);
+          String resource;
+          if (request.getPath().contains("walking")) {
+            resource = DIRECTIONS_MATRIX_WALKING_1X3_FIXTURE;
+
+          } else if (request.getPath().contains("cycling")) {
+            resource = DIRECTIONS_MATRIX_CYCLING_2X3_FIXTURE;
+
+          } else { // driving
+            resource = DIRECTIONS_MATRIX_DRIVING_3X3_FIXTURE;
+          }
+          String response = loadJsonFixture(resource);
           return new MockResponse().setBody(response);
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
@@ -63,7 +77,6 @@ public class MapboxMatrixTest extends TestUtils {
     positions.add(Point.fromLngLat(-122.42, 37.78));
     positions.add(Point.fromLngLat(-122.45, 37.91));
     positions.add(Point.fromLngLat(-122.48, 37.73));
-    annotations = new String[] {DirectionsCriteria.ANNOTATION_DISTANCE, DirectionsCriteria.ANNOTATION_DURATION};
   }
 
   @After
@@ -78,9 +91,8 @@ public class MapboxMatrixTest extends TestUtils {
   public void testCallSanity() throws ServicesException, IOException {
     MapboxMatrix client = MapboxMatrix.builder()
       .accessToken(ACCESS_TOKEN)
-      .profile(DirectionsCriteria.PROFILE_WALKING)
+      .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinates(positions)
-      .annotations(annotations)
       .baseUrl(mockUrl.toString())
       .build();
     Response<MatrixResponse> response = client.executeCall();
@@ -91,7 +103,6 @@ public class MapboxMatrixTest extends TestUtils {
     assertEquals(3, response.body().destinations().size());
     assertNotNull(response.body().destinations().get(0).name());
     assertEquals(3, response.body().durations().size());
-    assertEquals(3, response.body().distances().size());
   }
 
   @Test
@@ -153,28 +164,62 @@ public class MapboxMatrixTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinates(positions)
-      .annotations(annotations)
       .baseUrl(mockUrl.toString())
       .build();
     assertTrue(service.executeCall().raw().request().header("User-Agent").contains("APP"));
   }
 
   @Test
-  public void testResponse() throws ServicesException, IOException {
+  public void request_containsAnnotations() throws ServicesException, IOException {
+    MapboxMatrix client = MapboxMatrix.builder()
+            .accessToken(ACCESS_TOKEN)
+            .profile(DirectionsCriteria.PROFILE_WALKING)
+            .coordinates(positions)
+            .addAnnotations(ANNOTATION_DISTANCE, ANNOTATION_DURATION)
+            .sources(0, 2)
+            .build();
+
+    assertTrue(client.cloneCall()
+            .request().url().toString()
+            .contains("annotations=distance"));
+  }
+
+  @Test
+  public void request_containsApproaches() throws ServicesException, IOException {
+    MapboxMatrix client = MapboxMatrix.builder()
+            .accessToken(ACCESS_TOKEN)
+            .profile(DirectionsCriteria.PROFILE_WALKING)
+            .coordinates(positions)
+            .addApproaches(APPROACH_CURB, APPROACH_CURB, APPROACH_CURB)
+            .build();
+
+    String c = client.cloneCall().request().url().toString();
+
+
+    assertTrue(c.contains("approaches=curb"));
+  }
+
+  @Test
+  public void annotationsAndApproaches() throws ServicesException, IOException {
     MapboxMatrix client = MapboxMatrix.builder()
       .accessToken(ACCESS_TOKEN)
-      .profile(DirectionsCriteria.PROFILE_DRIVING)
+      .profile(DirectionsCriteria.PROFILE_WALKING)
       .coordinates(positions)
-      .annotations(annotations)
+      .addAnnotations(ANNOTATION_DISTANCE, ANNOTATION_DURATION)
+      .addApproaches(APPROACH_CURB, APPROACH_CURB, APPROACH_CURB)
+      .sources(0,2)
       .baseUrl(mockUrl.toString())
       .build();
-    Response<MatrixResponse> response = client.executeCall();
 
-    assertEquals(response.body().sources().size(), 3);
-    assertEquals(response.body().sources().get(0).location().longitude(), -122.420019, DELTA);
-    assertEquals(response.body().destinations().get(0).location().longitude(), -122.420019, DELTA);
-    assertEquals(response.body().durations().get(0)[1], 1888.3, DELTA);
-    assertEquals(response.body().distances().get(0)[1], 18549.9, DELTA);
-    assertEquals(response.body().destinations().get(0).name(), "McAllister Street");
+    Response<MatrixResponse> response = client.executeCall();
+    assertEquals(200, response.code());
+    assertEquals(1, response.body().sources().size());
+    assertEquals(1, response.body().distances().size());
+    assertEquals(1, response.body().durations().size());
+    assertEquals(-122.461997, response.body().sources().get(0).location().longitude(), DELTA);
+    assertEquals(-122.420019, response.body().destinations().get(0).location().longitude(),  DELTA);
+    assertEquals(19711.7, response.body().durations().get(0)[2], DELTA);
+    assertEquals(27192.3, response.body().distances().get(0)[2], DELTA);
+    assertEquals("McAllister Street", response.body().destinations().get(0).name());
   }
 }

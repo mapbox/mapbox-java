@@ -66,6 +66,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
       coordinates(),
       accessToken(),
       annotations(),
+      approaches(),
       destinations(),
       sources());
   }
@@ -90,6 +91,9 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
 
   @Nullable
   abstract String annotations();
+
+  @Nullable
+  abstract String approaches();
 
   @Nullable
   abstract String destinations();
@@ -131,6 +135,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
 
     private List<Point> coordinates = new ArrayList<>();
     private String[] annotations;
+    private String[] approaches;
     private Integer[] destinations;
     private Integer[] sources;
 
@@ -206,15 +211,39 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
      *
      * @param annotations 1 or more annotations
      * @return this builder for chaining options together
-     * @since 2.1.0
+     * @since 4.1.0
      */
-    public Builder annotations(@NonNull String... annotations) {
+    public Builder addAnnotations(
+            @Nullable @DirectionsCriteria.AnnotationCriteria String... annotations) {
       this.annotations = annotations;
       return this;
     }
 
     // Required for matching with MapboxMatrix annotations() method.
     abstract Builder annotations(@Nullable String annotations);
+
+    /**
+     * A semicolon-separated list indicating the side of the road from
+     * which to approach waypoints in a requested route.
+     * Accepts  unrestricted (default, route can arrive at the waypoint from either
+     * side of the road) or  curb (route will arrive at the waypoint on
+     * the  driving_side of the region).
+     * If provided, the number of approaches must be the same as the number of waypoints.
+     * However, you can skip a coordinate and show its position in the list with the ; separator.
+     *
+     * @param approaches null if you'd like the default approaches,
+     *                   else one of the options found in
+     *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     * @return this builder for chaining options together
+     * @since 4.1.0
+     */
+    public Builder addApproaches(@Nullable String... approaches) {
+      this.approaches = approaches;
+      return this;
+    }
+
+    abstract Builder approaches(
+            @Nullable @DirectionsCriteria.ApproachesCriteria String approaches);
 
     /**
      * Optionally pass in indexes to generate an asymmetric matrix.
@@ -287,6 +316,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
       sources(TextUtils.join(";", sources));
       destinations(TextUtils.join(";", destinations));
       annotations(TextUtils.join(",", annotations));
+      approaches(TextUtils.join(";", approaches));
 
       // Generate build so that we can check that values are valid.
       MapboxMatrix matrix = autoBuild();

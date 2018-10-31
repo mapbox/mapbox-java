@@ -85,13 +85,13 @@ public abstract class MatrixResponse implements Serializable {
   public abstract List<Double[]> durations();
 
   /**
-   * Distances as a list of arrays representing the matrix in row-major order. distances[i][j] gives
-   * the travel distance from the i-th source to the j-th destination. All values are in meters. The
-   * duration between the same coordinate is always 0. If a distance can not be found, the result is
-   * null.
+   * Distances as a list of arrays representing the matrix in row-major order.
+   * distances[i][j] gives the travel distance from the i-th source to the j-th destination.
+   * All values are in meters. The duration between the same coordinate is always 0.
+   * If a distance can not be found, the result is null.
    *
    * @return an array of array with each entry being a distance value given in meters.
-   * @since 3.4.2
+   * @since 4.1.0
    */
   @Nullable
   public abstract List<Double[]> distances();
@@ -181,14 +181,14 @@ public abstract class MatrixResponse implements Serializable {
     public abstract Builder durations(@Nullable List<Double[]> durations);
 
     /**
-     * Distances as a list of arrays representing the matrix in row-major order. distances[i][j] gives
-     * the travel distance from the i-th source to the j-th destination. All values are in meters. The
-     * duration between the same coordinate is always 0. If a distance can not be found, the result is
-     * null.
+     * Distances as a list of arrays representing the matrix in row-major order.
+     * distances[i][j] gives the travel distance from the i-th source to the j-th destination.
+     * All values are in meters. The duration between the same coordinate is always 0.
+     * If a distance can not be found, the result is null.
      *
      * @param distances an array of array with each entry being a distance value given in meters
      * @return this builder for chaining options together
-     * @since 3.4.2
+     * @since 4.1.0
      */
     public abstract Builder distances(@Nullable List<Double[]> distances);
 
