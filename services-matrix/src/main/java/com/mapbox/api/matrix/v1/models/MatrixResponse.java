@@ -1,14 +1,15 @@
 package com.mapbox.api.matrix.v1.models;
 
-import android.support.annotation.NonNull;
+import java.io.Serializable;
+import java.util.List;
+
 import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.models.DirectionsWaypoint;
 
-import java.io.Serializable;
-import java.util.List;
+import android.support.annotation.NonNull;
 
 /**
  * This contains the Matrix API response information which can be used to display the results.
@@ -82,6 +83,18 @@ public abstract class MatrixResponse implements Serializable {
    */
   @Nullable
   public abstract List<Double[]> durations();
+
+  /**
+   * Distances as a list of arrays representing the matrix in row-major order.
+   * distances[i][j] gives the travel distance from the i-th source to the j-th destination.
+   * All values are in meters. The duration between the same coordinate is always 0.
+   * If a distance can not be found, the result is null.
+   *
+   * @return an array of array with each entry being a distance value given in meters.
+   * @since 4.1.0
+   */
+  @Nullable
+  public abstract List<Double[]> distances();
 
   /**
    * Convert the current {@link MatrixResponse} to its builder holding the currently assigned
@@ -166,6 +179,18 @@ public abstract class MatrixResponse implements Serializable {
      * @since 2.1.0
      */
     public abstract Builder durations(@Nullable List<Double[]> durations);
+
+    /**
+     * Distances as a list of arrays representing the matrix in row-major order.
+     * distances[i][j] gives the travel distance from the i-th source to the j-th destination.
+     * All values are in meters. The duration between the same coordinate is always 0.
+     * If a distance can not be found, the result is null.
+     *
+     * @param distances an array of array with each entry being a distance value given in meters
+     * @return this builder for chaining options together
+     * @since 4.1.0
+     */
+    public abstract Builder distances(@Nullable List<Double[]> distances);
 
     /**
      * Build a new {@link MatrixResponse} object.
