@@ -65,8 +65,8 @@ public abstract class MapboxRouteTileVersions extends MapboxService<RouteTileVer
   }
 
   /**
-   * Returns the builder which created this instance of {@link MapboxRouteTileVersions} and allows for
-   * modification and building a new route tile versions request with new information.
+   * Returns the builder which created this instance of {@link MapboxRouteTileVersions} and
+   * allows for modification and building a new route tile versions request with new information.
    *
    * @return {@link Builder} with the same variables set as this route tile versions object
    * @since 4.1.0

@@ -1,5 +1,7 @@
 package com.mapbox.api.routetiles.v1.versions.models;
 
+import android.support.annotation.NonNull;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -22,7 +24,8 @@ public abstract class RouteTileVersionsResponse {
    * @return list of available versions
    * @since 4.1.0
    */
-  public abstract List<String> versions();
+  @NonNull
+  public abstract List<String> availableVersions();
 
   /**
    * Build a new {@link RouteTileVersionsResponse} object.

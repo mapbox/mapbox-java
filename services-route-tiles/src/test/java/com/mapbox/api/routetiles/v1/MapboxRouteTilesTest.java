@@ -14,11 +14,15 @@ import java.io.File;
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
+import okhttp3.ResponseBody;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Okio;
+import retrofit2.Response;
+
+import static org.junit.Assert.assertEquals;
 
 public class MapboxRouteTilesTest extends TestUtils {
   private MockWebServer server;
@@ -33,7 +37,7 @@ public class MapboxRouteTilesTest extends TestUtils {
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         okio.Buffer buffer = new okio.Buffer();
         try {
-          buffer.writeAll(Okio.source(new File("2018-10-31T15_28_22.155Z.tar")));
+          buffer.writeAll(Okio.source(new File("src/test/resources/2018-10-31T15_28_22.155Z.tar")));
         } catch (IOException ioException) {
           throw new RuntimeException(ioException);
         }
@@ -55,13 +59,27 @@ public class MapboxRouteTilesTest extends TestUtils {
 
   @Test
   public void sanity() throws Exception {
+    MapboxRouteTiles mapboxRouteTiles = getBasicMapboxRouteTiles();
+
+    Assert.assertNotNull(mapboxRouteTiles);
+  }
+
+  @Test
+  public void responseIsOk() throws Exception {
+    MapboxRouteTiles mapboxRouteTiles = getBasicMapboxRouteTiles();
+
+    mapboxRouteTiles.setCallFactory(null);
+    Response<ResponseBody> response = mapboxRouteTiles.executeCall();
+    assertEquals(200, response.code());
+  }
+
+  private MapboxRouteTiles getBasicMapboxRouteTiles() {
     BoundingBox boundingBox = BoundingBox.fromLngLats(1, 1, 1, 1);
-    MapboxRouteTiles mapboxRouteTiles = MapboxRouteTiles.builder()
-      .version("")
+    return MapboxRouteTiles.builder()
+      .baseUrl(mockUrl.toString())
+      .version("sdfsdf")
       .accessToken(ACCESS_TOKEN)
       .boundingBox(boundingBox)
       .build();
-
-    Assert.assertNotNull(mapboxRouteTiles);
   }
 }

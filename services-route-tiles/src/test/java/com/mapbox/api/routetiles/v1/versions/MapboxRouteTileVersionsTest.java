@@ -1,5 +1,6 @@
 package com.mapbox.api.routetiles.v1.versions;
 
+import com.mapbox.api.routetiles.v1.versions.models.RouteTileVersionsResponse;
 import com.mapbox.core.TestUtils;
 
 import org.junit.After;
@@ -15,6 +16,9 @@ import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import retrofit2.Response;
+
+import static org.junit.Assert.assertEquals;
 
 public class MapboxRouteTileVersionsTest extends TestUtils {
   private MockWebServer server;
@@ -49,10 +53,35 @@ public class MapboxRouteTileVersionsTest extends TestUtils {
 
   @Test
   public void sanity() throws Exception {
-    MapboxRouteTileVersions mapboxRouteTileVersions = MapboxRouteTileVersions.builder()
-      .accessToken(ACCESS_TOKEN)
-      .build();
+    MapboxRouteTileVersions mapboxRouteTileVersions = getBasicMapboxRouteTileVersions();
 
     Assert.assertNotNull(mapboxRouteTileVersions);
+  }
+
+  @Test
+  public void responseIsOk() throws Exception {
+    MapboxRouteTileVersions mapboxRouteTileVersions = getBasicMapboxRouteTileVersions();
+
+    mapboxRouteTileVersions.setCallFactory(null);
+    Response<RouteTileVersionsResponse> response = mapboxRouteTileVersions.executeCall();
+
+    assertEquals(200, response.code());
+  }
+
+  @Test
+  public void responseContainsAvailableVersion() throws Exception {
+    MapboxRouteTileVersions mapboxRouteTileVersions = getBasicMapboxRouteTileVersions();
+    mapboxRouteTileVersions.setCallFactory(null);
+
+    Response<RouteTileVersionsResponse> response = mapboxRouteTileVersions.executeCall();
+
+    assertEquals("2018-10-16", response.body().availableVersions().get(0));
+  }
+
+  private MapboxRouteTileVersions getBasicMapboxRouteTileVersions() {
+    return MapboxRouteTileVersions.builder()
+      .baseUrl(mockUrl.toString())
+      .accessToken(ACCESS_TOKEN)
+      .build();
   }
 }
