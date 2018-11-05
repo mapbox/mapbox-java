@@ -87,9 +87,10 @@ public class LineStringTest extends TestUtils {
     points.add(Point.fromLngLat(3.0, 3.0));
     BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
-    compareJson(lineString.toJson(),
-      "{\"coordinates\":[[1,1],[2,2],[3,3]],"
-        + "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}");
+    String lineStringJson = lineString.toJson();
+    compareJson("{\"coordinates\":[[1,1],[2,2],[3,3]],"
+        + "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}",
+            lineStringJson);
   }
 
   @Test
