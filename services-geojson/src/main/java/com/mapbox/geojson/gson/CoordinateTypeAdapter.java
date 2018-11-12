@@ -3,7 +3,6 @@ package com.mapbox.geojson.gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.mapbox.geojson.shifter.CoordinateShifterManager;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -22,15 +21,11 @@ public class CoordinateTypeAdapter extends TypeAdapter<List<Double>> {
 
     out.beginArray();
 
-    // Unshift coordinates
-    List<Double> unshiftedCoordinates =
-            CoordinateShifterManager.getCoordinateShifter().unshiftPoint(value);
-
-    BigDecimal lon = BigDecimal.valueOf(unshiftedCoordinates.get(0));
+    BigDecimal lon = BigDecimal.valueOf(value.get(0));
     String lonString = lon.setScale(7, RoundingMode.HALF_UP)
             .stripTrailingZeros().toPlainString();
 
-    BigDecimal lat = BigDecimal.valueOf(unshiftedCoordinates.get(1));
+    BigDecimal lat = BigDecimal.valueOf(value.get(1));
     String latString = lat.setScale(7, RoundingMode.HALF_UP)
             .stripTrailingZeros().toPlainString();
 
@@ -39,7 +34,7 @@ public class CoordinateTypeAdapter extends TypeAdapter<List<Double>> {
 
     // Includes altitude
     if (value.size() > 2) {
-      out.value(unshiftedCoordinates.get(2));
+      out.value(value.get(2));
     }
     out.endArray();
   }
@@ -53,11 +48,6 @@ public class CoordinateTypeAdapter extends TypeAdapter<List<Double>> {
     }
     in.endArray();
 
-    if (coordinates.size() > 2) {
-      return CoordinateShifterManager.getCoordinateShifter()
-              .shiftLonLatAlt(coordinates.get(0), coordinates.get(1), coordinates.get(2));
-    }
-    return CoordinateShifterManager.getCoordinateShifter()
-            .shiftLonLat(coordinates.get(0), coordinates.get(1));
+    return coordinates;
   }
 }
