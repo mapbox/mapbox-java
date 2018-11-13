@@ -1,6 +1,16 @@
 ## Changelog for Mapbox Java and Android Services
 
 Mapbox welcomes participation and contributions from everyone.
+### v4.1.0 - November 12, 2018
+- Added wrappers for route tile APIs Feature #913
+- Add annotations, approaches request parameter & distances to the response object #911
+- Add interceptor and network interceptor support to Mapbox Speech #910
+- Remove dependency on BindingContextFactory #909
+- Archive stale issues and pull request #906
+- Added StepManeuver.Type for ease of use #898
+- Route options should be serialized/deserialized using backend names #895
+- BoundingBox deserialization #891
+
 ### v4.0.0 - September 19, 2018
 - downgrade to java 7 #876
 - The first and last positions should be equivalent in polygon ring Bug Ready For Review refactor #886
