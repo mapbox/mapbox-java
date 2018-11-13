@@ -6,10 +6,12 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.shifter.CoordinateShifterManager;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 /**
  * Required to handle the special case where the altitude might be a Double.NaN, which isn't a valid
@@ -44,11 +46,15 @@ public class PointSerializer implements JsonSerializer<Point> {
   public JsonElement serialize(Point src, Type typeOfSrc, JsonSerializationContext context) {
     JsonArray rawCoordinates = new JsonArray();
 
-    BigDecimal lon = BigDecimal.valueOf(src.longitude());
+    // Unshift coordinates
+    List<Double> unshiftedCoordinates =
+            CoordinateShifterManager.getCoordinateShifter().unshiftPoint(src);
+
+    BigDecimal lon = BigDecimal.valueOf(unshiftedCoordinates.get(0));
     String lonString = lon.setScale(7, RoundingMode.HALF_UP)
       .stripTrailingZeros().toPlainString();
 
-    BigDecimal lat = BigDecimal.valueOf(src.latitude());
+    BigDecimal lat = BigDecimal.valueOf(unshiftedCoordinates.get(1));
     String latString = lat.setScale(7, RoundingMode.HALF_UP)
             .stripTrailingZeros().toPlainString();
 
@@ -57,7 +63,7 @@ public class PointSerializer implements JsonSerializer<Point> {
 
     // Includes altitude
     if (src.hasAltitude()) {
-      rawCoordinates.add(new JsonPrimitive(src.altitude()));
+      rawCoordinates.add(new JsonPrimitive(unshiftedCoordinates.get(2)));
     }
 
     return rawCoordinates;
