@@ -41,7 +41,12 @@ jobs:
           path: mapbox/app/build/reports
           destination: reports
       - store_test_results:
-          path: mapbox/app/build/test-results
+          path: mapbox/app/build/test-results    
+      - run:
+          name: Post code coverage report to Codecov.io
+          command: |
+            bash <(curl -s https://codecov.io/bash)
+
 
 # ------------------------------------------------------------------------------
   release:
