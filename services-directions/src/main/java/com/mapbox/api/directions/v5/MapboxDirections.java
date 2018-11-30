@@ -421,10 +421,6 @@ public abstract class MapboxDirections extends
      * @since 3.0.0
      */
     public Builder addWaypoint(@NonNull Point waypoint) {
-      if (coordinates.size() > 23) {
-        throw new ServicesException("A max of 25 coordinates including the origin and destination"
-          + "values can be used inside your request.");
-      }
       coordinates.add(waypoint);
       return this;
     }
