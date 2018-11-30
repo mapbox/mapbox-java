@@ -119,17 +119,6 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void addWaypoint_maxWaypointsAdded() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage("A max of 25 coordinates including the origin and destination");
-    MapboxDirections.Builder mapboxDirectionsBuilder = MapboxDirections.builder();
-    for (int i = 0; i < 25; i++) {
-      mapboxDirectionsBuilder.addWaypoint(Point.fromLngLat(i, i + 1));
-    }
-    mapboxDirectionsBuilder.accessToken(ACCESS_TOKEN).build().executeCall();
-  }
-
-  @Test
   public void build_noAccessTokenExceptionThrown() throws Exception {
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("Missing required properties: accessToken");
