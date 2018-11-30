@@ -15,6 +15,7 @@
   </a>
   <a href="https://codecov.io/gh/mapbox/mapbox-java">
     <img src="https://codecov.io/gh/mapbox/mapbox-java/branch/master/graph/badge.svg">
+    </a>
 </p>
 <br>
 
