@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * CoordinateShifterManager keeps track of currently set CoordinateShifter.
  *
- * @since 4.1.0
+ * @since 4.1.1
  */
 public final class CoordinateShifterManager {
 
@@ -42,7 +42,7 @@ public final class CoordinateShifterManager {
    * Currently set CoordinateShifterManager.
    *
    * @return Currently set CoordinateShifterManager
-   * @since 4.1.0
+   * @since 4.1.1
    */
   public static CoordinateShifter getCoordinateShifter() {
     return coordinateShifter;
@@ -52,7 +52,7 @@ public final class CoordinateShifterManager {
    * Sets CoordinateShifterManager.
    *
    * @param coordinateShifter CoordinateShifterManager to be set
-   * @since 4.1.0
+   * @since 4.1.1
    */
   public static void setCoordinateShifter(CoordinateShifter coordinateShifter) {
     CoordinateShifterManager.coordinateShifter =
