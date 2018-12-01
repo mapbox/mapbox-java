@@ -1,6 +1,11 @@
 ## Changelog for Mapbox Java and Android Services
 
 Mapbox welcomes participation and contributions from everyone.
+
+### v4.1.1 - November 30, 2018
+- Remove waypoint limit check #928
+- Adding code coverage report generation and upload to Codecov #925
+
 ### v4.1.0 - November 12, 2018
 - Added wrappers for route tile APIs Feature #913
 - Add annotations, approaches request parameter & distances to the response object #911
