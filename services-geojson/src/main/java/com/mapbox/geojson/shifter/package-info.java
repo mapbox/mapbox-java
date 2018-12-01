@@ -1,4 +1,4 @@
 /**
- * Contains Utility for univerally applying shiftign algorithm to all Geometry.
+ * Contains Utility for universally applying a shifting algorithm to all Geometry types.
  */
 package com.mapbox.geojson.shifter;
