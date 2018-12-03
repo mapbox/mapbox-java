@@ -7,8 +7,10 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.shifter.CoordinateShifterManager;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Serializer used for converting the {@link BoundingBox} object inside a GeoJson object to a JSON
@@ -43,18 +45,23 @@ public class BoundingBoxSerializer implements JsonSerializer<BoundingBox> {
 
     // Southwest
     Point point = src.southwest();
-    bbox.add(new JsonPrimitive(point.longitude()));
-    bbox.add(new JsonPrimitive(point.latitude()));
+    List<Double> unshiftedCoordinates =
+            CoordinateShifterManager.getCoordinateShifter().unshiftPoint(point);
+
+    bbox.add(new JsonPrimitive(unshiftedCoordinates.get(0)));
+    bbox.add(new JsonPrimitive(unshiftedCoordinates.get(1)));
     if (point.hasAltitude()) {
-      bbox.add(new JsonPrimitive(point.altitude()));
+      bbox.add(new JsonPrimitive(unshiftedCoordinates.get(2)));
     }
 
     // Northeast
     point = src.northeast();
-    bbox.add(new JsonPrimitive(point.longitude()));
-    bbox.add(new JsonPrimitive(point.latitude()));
+    unshiftedCoordinates =
+            CoordinateShifterManager.getCoordinateShifter().unshiftPoint(point);
+    bbox.add(new JsonPrimitive(unshiftedCoordinates.get(0)));
+    bbox.add(new JsonPrimitive(unshiftedCoordinates.get(1)));
     if (point.hasAltitude()) {
-      bbox.add(new JsonPrimitive(point.altitude()));
+      bbox.add(new JsonPrimitive(unshiftedCoordinates.get(2)));
     }
 
     return bbox;
