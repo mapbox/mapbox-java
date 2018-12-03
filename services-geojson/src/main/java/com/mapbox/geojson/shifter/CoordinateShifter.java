@@ -8,7 +8,7 @@ import java.util.List;
  * ShifterManager allows the movement of all Point objects according to a custom algorithm.
  * Once set, it will be applied to all Point objects created through this method.
  *
- * @since 4.1.1
+ * @since 4.2.0
  */
 public interface CoordinateShifter {
 
@@ -18,7 +18,7 @@ public interface CoordinateShifter {
    * @param lon unshifted longitude
    * @param lat unshifted latitude
    * @return shifted longitude, shifted latitude in the form of a List of Double values
-   * @since 4.1.1
+   * @since 4.2.0
    */
   List<Double> shiftLonLat(double lon, double lat);
 
@@ -30,7 +30,7 @@ public interface CoordinateShifter {
    * @param altitude  unshifted altitude
    * @return shifted longitude, shifted latitude, shifted altitude in the form of a
    *         List of Double values
-   * @since 4.1.1
+   * @since 4.2.0
    */
   List<Double> shiftLonLatAlt(double lon, double lat, double altitude);
 
@@ -40,7 +40,7 @@ public interface CoordinateShifter {
    * @param shiftedPoint shifted point
    * @return unshifted longitude, shifted latitude,
    *         and altitude (if present) in the form of List of Double
-   * @since 4.1.1
+   * @since 4.2.0
    */
   List<Double> unshiftPoint(Point shiftedPoint);
 
@@ -51,7 +51,7 @@ public interface CoordinateShifter {
    * @param shiftedCoordinates shifted point
    * @return unshifted longitude, shifted latitude,
    *         and altitude (if present) in the form of List of Double
-   * @since 4.1.1
+   * @since 4.2.0
    */
   List<Double> unshiftPoint(List<Double> shiftedCoordinates);
 }

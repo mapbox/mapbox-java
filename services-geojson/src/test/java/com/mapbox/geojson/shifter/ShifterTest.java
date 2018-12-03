@@ -79,7 +79,18 @@ public class ShifterTest {
   @Test
   public void bbox_basic_shift() throws Exception {
 
+    Point southwest = Point.fromLngLat(2.0, 2.0);
+    Point northeast = Point.fromLngLat(4.0, 4.0);
+
     CoordinateShifter shifter = new TestCoordinateShifter();
+
+    // Manually shifted
+    List<Double> shifted = shifter.shiftLonLat(southwest.longitude(), southwest.latitude());
+    Point southwestManualShifted = Point.fromLngLat(shifted.get(0), shifted.get(1));
+    shifted = shifter.shiftLonLat(northeast.longitude(), northeast.latitude());
+    Point northeastManualShifted = Point.fromLngLat(shifted.get(0), shifted.get(1));
+
+    CoordinateShifterManager.setCoordinateShifter(shifter);
 
     BoundingBox boundingBoxFromDouble = BoundingBox.fromLngLats(2.0, 2.0, 4.0, 4.0);
 
@@ -87,7 +98,10 @@ public class ShifterTest {
             BoundingBox.fromPoints(Point.fromLngLat(2.0, 2.0),
                                    Point.fromLngLat(4.0, 4.0));
 
+
     assertEquals(boundingBoxFromDouble, boundingBoxFromPoints);
+    assertEquals(southwestManualShifted, boundingBoxFromPoints.southwest());
+    assertEquals(northeastManualShifted, boundingBoxFromPoints.northeast());
 
     CoordinateShifterManager.setCoordinateShifter(null);
   }
