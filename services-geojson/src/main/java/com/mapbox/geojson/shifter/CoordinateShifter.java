@@ -29,7 +29,7 @@ public interface CoordinateShifter {
    * @param lat unshifted latitude
    * @param altitude  unshifted altitude
    * @return shifted longitude, shifted latitude, shifted altitude in the form of a
-   * List of Double values
+   *         List of Double values
    * @since 4.1.1
    */
   List<Double> shiftLonLatAlt(double lon, double lat, double altitude);
