@@ -2,6 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v4.2.0 - December 4, 2018
+- Adding Shifter implementation #922
+- Fix v4.1.1 release
+
 ### v4.1.1 - November 30, 2018
 - Remove waypoint limit check #928
 - Adding code coverage report generation and upload to Codecov #925
