@@ -5,18 +5,16 @@ import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 
-import static com.mapbox.core.TestUtils.DELTA;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 public class ShifterTest {
 
@@ -48,7 +46,14 @@ public class ShifterTest {
       return Arrays.asList(coordinates.get(0) - 3,
               coordinates.get(1) - 5);
     }
-  };
+  }
+
+  @Test
+  public void basic_coordinate_shifter_manager_creation() throws Exception {
+    CoordinateShifterManager coordinateShifterManager = new CoordinateShifterManager();
+    assertNotNull(coordinateShifterManager);
+  }
+
 
   @Test
   public void point_basic_shift() throws Exception {

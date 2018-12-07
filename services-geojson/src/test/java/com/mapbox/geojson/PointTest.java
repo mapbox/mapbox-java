@@ -42,9 +42,17 @@ public class PointTest extends TestUtils {
   }
 
   @Test
-  public void altitude_doesReturnCorrectValue() throws Exception {
-    Point point = Point.fromLngLat(1.0, 2.0, 5.0);
+  public void altitude_doesReturnCorrectValueFromDoubleArray() throws Exception {
+    double[] coords = new double[] {1.0, 2.0, 5.0};
+    Point point = Point.fromLngLat(coords);
     assertEquals(5, point.altitude(), DELTA);
+  }
+
+  @Test
+  public void point_isNullWithWrongLengthDoubleArray() throws Exception {
+    double[] coords = new double[] {1.0};
+    Point point = Point.fromLngLat(coords);
+    assertNull(point);
   }
 
   @Test

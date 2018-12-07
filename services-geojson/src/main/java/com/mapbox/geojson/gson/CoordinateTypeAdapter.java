@@ -3,7 +3,6 @@ package com.mapbox.geojson.gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-
 import com.mapbox.geojson.shifter.CoordinateShifterManager;
 import com.mapbox.geojson.utils.GeoJsonUtils;
 
