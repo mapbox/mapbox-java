@@ -28,10 +28,6 @@ public class TestUtils {
     assertThat(parser.parse(actualJson), Matchers.equalTo(parser.parse(expectedJson)));
   }
 
-  public void checkEqual(double expected, double actual, double delta) {
-    assertEquals(expected, actual, delta);
-  }
-
   protected String loadJsonFixture(String filename) throws IOException {
     ClassLoader classLoader = getClass().getClassLoader();
     InputStream inputStream = classLoader.getResourceAsStream(filename);

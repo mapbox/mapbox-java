@@ -7,6 +7,8 @@ import com.mapbox.geojson.Point;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class PointSerializerTest extends TestUtils {
 
   private static final String POINT_FIXTURE = "sample-point.json";
@@ -23,7 +25,7 @@ public class PointSerializerTest extends TestUtils {
   @Test
   public void point_hasAltitudeValueNoBoundingBoxAltCheck() throws Exception {
     Point point = Point.fromLngLat(100, 0, 200);
-    checkEqual(200, point.altitude(), 0);
+    assertEquals(200, point.altitude(), 0);
   }
 
   @Test
