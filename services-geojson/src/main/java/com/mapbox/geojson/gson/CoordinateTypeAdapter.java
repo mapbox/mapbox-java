@@ -5,10 +5,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import com.mapbox.geojson.shifter.CoordinateShifterManager;
+import com.mapbox.geojson.utils.GeoJsonUtils;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,16 +26,8 @@ public class CoordinateTypeAdapter extends TypeAdapter<List<Double>> {
     List<Double> unshiftedCoordinates =
             CoordinateShifterManager.getCoordinateShifter().unshiftPoint(value);
 
-    BigDecimal lon = BigDecimal.valueOf(unshiftedCoordinates.get(0));
-    String lonString = lon.setScale(7, RoundingMode.HALF_UP)
-            .stripTrailingZeros().toPlainString();
-
-    BigDecimal lat = BigDecimal.valueOf(unshiftedCoordinates.get(1));
-    String latString = lat.setScale(7, RoundingMode.HALF_UP)
-            .stripTrailingZeros().toPlainString();
-
-    out.value(Double.valueOf(lonString));
-    out.value(Double.valueOf(latString));
+    out.value(GeoJsonUtils.trim(unshiftedCoordinates.get(0)));
+    out.value(GeoJsonUtils.trim(unshiftedCoordinates.get(1)));
 
     // Includes altitude
     if (value.size() > 2) {

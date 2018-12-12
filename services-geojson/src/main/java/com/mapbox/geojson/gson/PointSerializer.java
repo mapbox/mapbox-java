@@ -7,10 +7,9 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.shifter.CoordinateShifterManager;
+import com.mapbox.geojson.utils.GeoJsonUtils;
 
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -50,16 +49,8 @@ public class PointSerializer implements JsonSerializer<Point> {
     List<Double> unshiftedCoordinates =
             CoordinateShifterManager.getCoordinateShifter().unshiftPoint(src);
 
-    BigDecimal lon = BigDecimal.valueOf(unshiftedCoordinates.get(0));
-    String lonString = lon.setScale(7, RoundingMode.HALF_UP)
-      .stripTrailingZeros().toPlainString();
-
-    BigDecimal lat = BigDecimal.valueOf(unshiftedCoordinates.get(1));
-    String latString = lat.setScale(7, RoundingMode.HALF_UP)
-            .stripTrailingZeros().toPlainString();
-
-    rawCoordinates.add(new JsonPrimitive(Double.valueOf(lonString)));
-    rawCoordinates.add(new JsonPrimitive(Double.valueOf(latString)));
+    rawCoordinates.add(new JsonPrimitive(GeoJsonUtils.trim(unshiftedCoordinates.get(0))));
+    rawCoordinates.add(new JsonPrimitive(GeoJsonUtils.trim(unshiftedCoordinates.get(1))));
 
     // Includes altitude
     if (src.hasAltitude()) {
