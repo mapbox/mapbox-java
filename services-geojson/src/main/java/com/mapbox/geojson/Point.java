@@ -8,17 +8,23 @@ import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.CoordinateTypeAdapter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.GeometryTypeAdapter;
+import com.mapbox.geojson.gson.PointDeserializer;
+import com.mapbox.geojson.gson.PointSerializer;
 import com.mapbox.geojson.shifter.CoordinateShifterManager;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -53,10 +59,15 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class Point implements CoordinateContainer<List<Double>>, Serializable {
+public final class Point implements CoordinateContainer<List<Double>>, Serializable {
 
   private static final String TYPE = "Point";
+
+  private final String type;
+
+  private final BoundingBox bbox;
+
+  private final List<Double> coordinates;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -73,7 +84,7 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
    */
   public static Point fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointDeserializer());
     gson.registerTypeAdapter(new TypeToken<List<Double>>(){}.getType(),
             new CoordinateTypeAdapter());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
@@ -99,7 +110,7 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
 
     List<Double> coordinates =
       CoordinateShifterManager.getCoordinateShifter().shiftLonLat(longitude, latitude);
-    return new AutoValue_Point(TYPE, null, coordinates);
+    return new Point(TYPE, null, coordinates);
   }
 
   /**
@@ -124,7 +135,7 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
 
     List<Double> coordinates =
       CoordinateShifterManager.getCoordinateShifter().shiftLonLat(longitude, latitude);
-    return new AutoValue_Point(TYPE, bbox, coordinates);
+    return new Point(TYPE, bbox, coordinates);
   }
 
   /**
@@ -151,7 +162,7 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
     List<Double> coordinates =
       CoordinateShifterManager.getCoordinateShifter().shiftLonLatAlt(longitude, latitude, altitude);
 
-    return new AutoValue_Point(TYPE, null, coordinates);
+    return new Point(TYPE, null, coordinates);
   }
 
   /**
@@ -178,7 +189,7 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
 
     List<Double> coordinates =
       CoordinateShifterManager.getCoordinateShifter().shiftLonLatAlt(longitude, latitude, altitude);
-    return new AutoValue_Point(TYPE, bbox, coordinates);
+    return new Point(TYPE, bbox, coordinates);
   }
 
   static Point fromLngLat(@NonNull double[] coords) {
@@ -189,6 +200,18 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
       return  Point.fromLngLat(coords[0], coords[1], coords[2]);
     }
     return null;
+  }
+
+  Point(String type, @Nullable BoundingBox bbox, List<Double> coordinates) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    this.type = type;
+    this.bbox = bbox;
+    if (coordinates == null) {
+      throw new NullPointerException("Null coordinates");
+    }
+    this.coordinates = coordinates;
   }
 
   /**
@@ -255,7 +278,9 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type()  {
+    return type;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -269,7 +294,9 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
    */
   @Nullable
   @Override
-  public abstract BoundingBox bbox();
+  public BoundingBox bbox()  {
+    return bbox;
+  }
 
   /**
    * Provide a single double array containing the longitude, latitude, and optionally an
@@ -281,7 +308,9 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
    */
   @NonNull
   @Override
-  public abstract List<Double> coordinates();
+  public List<Double> coordinates()  {
+    return coordinates;
+  }
 
   /**
    * This takes the currently defined values found inside this instance and converts it to a GeoJson
@@ -293,6 +322,7 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapter(Geometry.class, new GeometryTypeAdapter());
     gson.registerTypeAdapter(new TypeToken<List<Double>>(){}.getType(),
             new CoordinateTypeAdapter());
     gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
@@ -307,6 +337,144 @@ public abstract class Point implements CoordinateContainer<List<Double>>, Serial
    * @since 3.0.0
    */
   public static TypeAdapter<Point> typeAdapter(Gson gson) {
-    return new AutoValue_Point.GsonTypeAdapter(gson);
+    return new Point.GsonTypeAdapter(gson);
+  }
+
+  @Override
+  public String toString() {
+//    return "Point{"
+//            + "type=" + type + ", "
+//            + "bbox=" + bbox + ", "
+//            + "coordinates=" + coordinates
+//            + "}";
+      return "" + coordinates;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
+    }
+    if (o instanceof Point) {
+      Point that = (Point) o;
+      return (this.type.equals(that.type()))
+              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
+              && (this.coordinates.equals(that.coordinates()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int h$ = 1;
+    h$ *= 1000003;
+    h$ ^= type.hashCode();
+    h$ *= 1000003;
+    h$ ^= (bbox == null) ? 0 : bbox.hashCode();
+    h$ *= 1000003;
+    h$ ^= coordinates.hashCode();
+    return h$;
+  }
+
+  public static final class GsonTypeAdapter extends TypeAdapter<Point> {
+    private volatile TypeAdapter<String> string_adapter;
+    private volatile TypeAdapter<BoundingBox> boundingBox_adapter;
+    private volatile TypeAdapter<List<Double>> list__double_adapter;
+    private final Gson gson;
+    public GsonTypeAdapter(Gson gson) {
+      this.gson = gson;
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    public void write(JsonWriter jsonWriter, Point object) throws IOException {
+      if (object == null) {
+        jsonWriter.nullValue();
+        return;
+      }
+      jsonWriter.beginObject();
+      jsonWriter.name("type");
+      if (object.type() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<String> string_adapter = this.string_adapter;
+        if (string_adapter == null) {
+          this.string_adapter = string_adapter = gson.getAdapter(String.class);
+        }
+        string_adapter.write(jsonWriter, object.type());
+      }
+      jsonWriter.name("bbox");
+      if (object.bbox() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<BoundingBox> boundingBox_adapter = this.boundingBox_adapter;
+        if (boundingBox_adapter == null) {
+          this.boundingBox_adapter = boundingBox_adapter = gson.getAdapter(BoundingBox.class);
+        }
+        boundingBox_adapter.write(jsonWriter, object.bbox());
+      }
+      jsonWriter.name("coordinates");
+      if (object.coordinates() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<List<Double>> list__double_adapter = this.list__double_adapter;
+        if (list__double_adapter == null) {
+          this.list__double_adapter = list__double_adapter =
+            (TypeAdapter<List<Double>>) gson.getAdapter(TypeToken.getParameterized(List.class, Double.class));
+        }
+        list__double_adapter.write(jsonWriter, object.coordinates());
+      }
+      jsonWriter.endObject();
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    public Point read(JsonReader jsonReader) throws IOException {
+      if (jsonReader.peek() == JsonToken.NULL) {
+        jsonReader.nextNull();
+        return null;
+      }
+      jsonReader.beginObject();
+      String type = null;
+      BoundingBox bbox = null;
+      List<Double> coordinates = null;
+      while (jsonReader.hasNext()) {
+        String _name = jsonReader.nextName();
+        if (jsonReader.peek() == JsonToken.NULL) {
+          jsonReader.nextNull();
+          continue;
+        }
+        switch (_name) {
+          case "type": {
+            TypeAdapter<String> string_adapter = this.string_adapter;
+            if (string_adapter == null) {
+              this.string_adapter = string_adapter = gson.getAdapter(String.class);
+            }
+            type = string_adapter.read(jsonReader);
+            break;
+          }
+          case "bbox": {
+            TypeAdapter<BoundingBox> boundingBox_adapter = this.boundingBox_adapter;
+            if (boundingBox_adapter == null) {
+              this.boundingBox_adapter = boundingBox_adapter = gson.getAdapter(BoundingBox.class);
+            }
+            bbox = boundingBox_adapter.read(jsonReader);
+            break;
+          }
+          case "coordinates": {
+            TypeAdapter<List<Double>> list__double_adapter = this.list__double_adapter;
+            if (list__double_adapter == null) {
+              this.list__double_adapter = list__double_adapter =
+                      (TypeAdapter<List<Double>>) gson.getAdapter(TypeToken.getParameterized(List.class, Double.class));
+            }
+            coordinates = list__double_adapter.read(jsonReader);
+            break;
+          }
+          default: {
+            jsonReader.skipValue();
+          }
+        }
+      }
+      jsonReader.endObject();
+      return new Point(type == null ? "Point" : type, bbox, coordinates);
+    }
   }
 }

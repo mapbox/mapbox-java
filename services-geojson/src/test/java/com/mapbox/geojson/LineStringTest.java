@@ -94,6 +94,26 @@ public class LineStringTest extends TestUtils {
   }
 
   @Test
+  public void bbox_doesDeserializeWhenPresent() throws Exception {
+    LineString lineString = LineString.fromJson("{\"coordinates\":[[1,2],[2,3],[3,4]],"
+            + "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}");
+
+    assertNotNull(lineString);
+    assertNotNull(lineString.bbox());
+    assertEquals(1.0, lineString.bbox().southwest().longitude(), DELTA);
+    assertEquals(2.0, lineString.bbox().southwest().latitude(), DELTA);
+    assertEquals(3.0, lineString.bbox().northeast().longitude(), DELTA);
+    assertEquals(4.0, lineString.bbox().northeast().latitude(), DELTA);
+    assertNotNull(lineString.coordinates());
+    assertEquals(1, lineString.coordinates().get(0).longitude(), DELTA);
+    assertEquals(2, lineString.coordinates().get(0).latitude(), DELTA);
+    assertEquals(2, lineString.coordinates().get(1).longitude(), DELTA);
+    assertEquals(3, lineString.coordinates().get(1).latitude(), DELTA);
+    assertEquals(3, lineString.coordinates().get(2).longitude(), DELTA);
+    assertEquals(4, lineString.coordinates().get(2).latitude(), DELTA);
+  }
+
+  @Test
   public void testSerializable() throws Exception {
     List<Point> points = new ArrayList<>();
     points.add(Point.fromLngLat(1.0, 1.0));
@@ -119,7 +139,8 @@ public class LineStringTest extends TestUtils {
   public void toJson() throws IOException {
     final String json = loadJsonFixture(SAMPLE_LINESTRING_FIXTURE);
     LineString geo = LineString.fromJson(json);
-    compareJson(json, geo.toJson());
+    String geoJsonString = geo.toJson();
+    compareJson(geoJsonString, json);
   }
 
   @Test

@@ -4,9 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Point;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Deserialize the coordinates inside the json into {@link Point}s capturing the same information.
@@ -27,9 +30,8 @@ public class PointDeserializer implements JsonDeserializer<Point> {
   }
 
   /**
-   * Deserialize the coordinates inside the json into {@link Point}s capturing the same information.
-   * Otherwise when deserializing, you'll most likely see this error: Required to handle the
-   * "Expected BEGIN_OBJECT but was BEGIN_ARRAY".
+   * Deserialize Point object or coordinates
+   * inside the json into {@link Point}s capturing the same information.
    *
    * @param json    a class representing an element of Json
    * @param typeOfT common superinterface for all types in the Java
@@ -41,7 +43,28 @@ public class PointDeserializer implements JsonDeserializer<Point> {
    */
   @Override
   public Point deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-    JsonArray rawCoordinates = json.getAsJsonArray();
+
+    JsonElement jsonElement = json;
+    BoundingBox boundingBox = null;
+
+    if (json.isJsonObject()) {
+      JsonObject jsonObject = json.getAsJsonObject();
+      jsonElement = jsonObject.get("type");
+      if (jsonElement.isJsonNull()) {
+        throw new NullPointerException();
+      }
+
+      jsonElement = jsonObject.get("bbox");
+      if (jsonElement != null && !jsonElement.isJsonNull()) {
+        boundingBox = context.deserialize(jsonElement, BoundingBox.class);
+      }
+      jsonElement = jsonObject.get("coordinates");
+      if (jsonElement.isJsonNull()) {
+        throw new NullPointerException();
+      }
+    }
+
+    JsonArray rawCoordinates = jsonElement.getAsJsonArray();
 
     double longitude = rawCoordinates.get(0).getAsDouble();
     double latitude = rawCoordinates.get(1).getAsDouble();
@@ -49,10 +72,10 @@ public class PointDeserializer implements JsonDeserializer<Point> {
     // Includes altitude
     if (rawCoordinates.size() > 2) {
       double altitude = rawCoordinates.get(2).getAsDouble();
-      return Point.fromLngLat(longitude, latitude, altitude);
+      return Point.fromLngLat(longitude, latitude, altitude, boundingBox);
     }
 
     // It doesn't have altitude
-    return Point.fromLngLat(longitude, latitude);
+    return Point.fromLngLat(longitude, latitude, boundingBox);
   }
 }

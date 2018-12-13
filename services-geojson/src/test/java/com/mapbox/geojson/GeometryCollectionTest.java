@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GeometryCollectionTest extends TestUtils {
@@ -133,8 +134,22 @@ public class GeometryCollectionTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_GEOMETRYCOLLECTION);
-    GeometryCollection geo = GeometryCollection.fromJson(json);
-    compareJson(json, geo.toJson());
+    final String jsonOriginal = loadJsonFixture(SAMPLE_GEOMETRYCOLLECTION);
+
+    List<Geometry> geometries = new ArrayList<>(2);
+    geometries.add(Point.fromLngLat(100, 0,
+          BoundingBox.fromLngLats(-110, -30,110, 30)));
+    geometries.add(LineString.fromLngLats(
+          Arrays.asList(Point.fromLngLat(101, 0),
+                        Point.fromLngLat(102, 1)),
+            BoundingBox.fromLngLats(-110, -30,110, 30)));
+
+    GeometryCollection geometryCollection =
+      GeometryCollection.fromGeometries(geometries,
+              BoundingBox.fromLngLats(-120, -40,120, 40));
+
+    String jsonString = geometryCollection.toJson();
+    compareJson(jsonOriginal, jsonString);
+
   }
 }

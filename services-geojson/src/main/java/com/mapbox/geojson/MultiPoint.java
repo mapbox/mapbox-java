@@ -2,15 +2,20 @@ package com.mapbox.geojson;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +40,15 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Serializable {
+public final class MultiPoint implements CoordinateContainer<List<Point>>, Serializable {
 
   private static final String TYPE = "MultiPoint";
+
+  private final String type;
+
+  private final BoundingBox bbox;
+
+  private final List<Point> coordinates;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -55,6 +65,7 @@ public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Se
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     return gson.create().fromJson(json, MultiPoint.class);
   }
 
@@ -70,7 +81,7 @@ public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Se
    * @since 3.0.0
    */
   public static MultiPoint fromLngLats(@NonNull List<Point> points) {
-    return new AutoValue_MultiPoint(TYPE, null, points);
+    return new MultiPoint(TYPE, null, points);
   }
 
   /**
@@ -86,7 +97,7 @@ public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Se
    * @since 3.0.0
    */
   public static MultiPoint fromLngLats(@NonNull List<Point> points, @Nullable BoundingBox bbox) {
-    return new AutoValue_MultiPoint(TYPE, bbox, points);
+    return new MultiPoint(TYPE, bbox, points);
   }
 
   static MultiPoint fromLngLats(@NonNull double[][] coordinates) {
@@ -95,7 +106,19 @@ public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Se
       converted.add(Point.fromLngLat(coordinates[i]));
     }
 
-    return new AutoValue_MultiPoint(TYPE, null, converted);
+    return new MultiPoint(TYPE, null, converted);
+  }
+
+  MultiPoint(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    this.type = type;
+    this.bbox = bbox;
+    if (coordinates == null) {
+      throw new NullPointerException("Null coordinates");
+    }
+    this.coordinates = coordinates;
   }
 
   /**
@@ -108,7 +131,9 @@ public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Se
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return type;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -122,7 +147,7 @@ public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Se
    */
   @Nullable
   @Override
-  public abstract BoundingBox bbox();
+  public BoundingBox bbox() { return bbox; }
 
   /**
    * provides the list of {@link Point}s that make up the MultiPoint geometry.
@@ -132,7 +157,9 @@ public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Se
    */
   @NonNull
   @Override
-  public abstract List<Point> coordinates();
+  public List<Point> coordinates() {
+    return coordinates;
+  }
 
   /**
    * This takes the currently defined values found inside this instance and converts it to a GeoJson
@@ -157,6 +184,141 @@ public abstract class MultiPoint implements CoordinateContainer<List<Point>>, Se
    * @since 3.0.0
    */
   public static TypeAdapter<MultiPoint> typeAdapter(Gson gson) {
-    return new AutoValue_MultiPoint.GsonTypeAdapter(gson);
+    return new MultiPoint.GsonTypeAdapter(gson);
+  }
+
+  @Override
+  public String toString() {
+    return "MultiPoint{"
+            + "type=" + type + ", "
+            + "bbox=" + bbox + ", "
+            + "coordinates=" + coordinates
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
+    }
+    if (o instanceof MultiPoint) {
+      MultiPoint that = (MultiPoint) o;
+      return (this.type.equals(that.type()))
+              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
+              && (this.coordinates.equals(that.coordinates()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int h$ = 1;
+    h$ *= 1000003;
+    h$ ^= type.hashCode();
+    h$ *= 1000003;
+    h$ ^= (bbox == null) ? 0 : bbox.hashCode();
+    h$ *= 1000003;
+    h$ ^= coordinates.hashCode();
+    return h$;
+  }
+
+  public static final class GsonTypeAdapter extends TypeAdapter<MultiPoint> {
+    private volatile TypeAdapter<String> string_adapter;
+    private volatile TypeAdapter<BoundingBox> boundingBox_adapter;
+    private volatile TypeAdapter<List<Point>> list__point_adapter;
+    private final Gson gson;
+    public GsonTypeAdapter(Gson gson) {
+      this.gson = gson;
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    public void write(JsonWriter jsonWriter, MultiPoint object) throws IOException {
+      if (object == null) {
+        jsonWriter.nullValue();
+        return;
+      }
+      jsonWriter.beginObject();
+      jsonWriter.name("type");
+      if (object.type() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<String> string_adapter = this.string_adapter;
+        if (string_adapter == null) {
+          this.string_adapter = string_adapter = gson.getAdapter(String.class);
+        }
+        string_adapter.write(jsonWriter, object.type());
+      }
+      jsonWriter.name("bbox");
+      if (object.bbox() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<BoundingBox> boundingBox_adapter = this.boundingBox_adapter;
+        if (boundingBox_adapter == null) {
+          this.boundingBox_adapter = boundingBox_adapter = gson.getAdapter(BoundingBox.class);
+        }
+        boundingBox_adapter.write(jsonWriter, object.bbox());
+      }
+      jsonWriter.name("coordinates");
+      if (object.coordinates() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<List<Point>> list__point_adapter = this.list__point_adapter;
+        if (list__point_adapter == null) {
+          this.list__point_adapter = list__point_adapter = (TypeAdapter<List<Point>>) gson.getAdapter(TypeToken.getParameterized(List.class, Point.class));
+        }
+        list__point_adapter.write(jsonWriter, object.coordinates());
+      }
+      jsonWriter.endObject();
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    public MultiPoint read(JsonReader jsonReader) throws IOException {
+      if (jsonReader.peek() == JsonToken.NULL) {
+        jsonReader.nextNull();
+        return null;
+      }
+      jsonReader.beginObject();
+      String type = null;
+      BoundingBox bbox = null;
+      List<Point> coordinates = null;
+      while (jsonReader.hasNext()) {
+        String _name = jsonReader.nextName();
+        if (jsonReader.peek() == JsonToken.NULL) {
+          jsonReader.nextNull();
+          continue;
+        }
+        switch (_name) {
+          case "type": {
+            TypeAdapter<String> string_adapter = this.string_adapter;
+            if (string_adapter == null) {
+              this.string_adapter = string_adapter = gson.getAdapter(String.class);
+            }
+            type = string_adapter.read(jsonReader);
+            break;
+          }
+          case "bbox": {
+            TypeAdapter<BoundingBox> boundingBox_adapter = this.boundingBox_adapter;
+            if (boundingBox_adapter == null) {
+              this.boundingBox_adapter = boundingBox_adapter = gson.getAdapter(BoundingBox.class);
+            }
+            bbox = boundingBox_adapter.read(jsonReader);
+            break;
+          }
+          case "coordinates": {
+            TypeAdapter<List<Point>> list__point_adapter = this.list__point_adapter;
+            if (list__point_adapter == null) {
+              this.list__point_adapter = list__point_adapter = (TypeAdapter<List<Point>>) gson.getAdapter(TypeToken.getParameterized(List.class, Point.class));
+            }
+            coordinates = list__point_adapter.read(jsonReader);
+            break;
+          }
+          default: {
+            jsonReader.skipValue();
+          }
+        }
+      }
+      jsonReader.endObject();
+      return new MultiPoint(type, bbox, coordinates);
+    }
   }
 }

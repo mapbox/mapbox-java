@@ -2,6 +2,7 @@ package com.mapbox.geojson.gson;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.shifter.CoordinateShifterManager;
 import com.mapbox.geojson.utils.GeoJsonUtils;
@@ -18,6 +19,11 @@ import java.util.List;
 public class CoordinateTypeAdapter extends TypeAdapter<List<Double>> {
   @Override
   public void write(JsonWriter out, List<Double> value) throws IOException {
+
+    if (value == null) {
+      out.nullValue();
+      return;
+    }
 
     out.beginArray();
 
@@ -37,6 +43,13 @@ public class CoordinateTypeAdapter extends TypeAdapter<List<Double>> {
 
   @Override
   public List<Double> read(JsonReader in) throws IOException {
+
+    if (in.peek() == JsonToken.NULL) {
+      //in.nextNull();
+      //return null;
+      throw new NullPointerException();
+    }
+
     List<Double> coordinates = new ArrayList<Double>();
     in.beginArray();
     while (in.hasNext()) {

@@ -2,15 +2,20 @@ package com.mapbox.geojson;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.BoundingBoxSerializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.gson.PointDeserializer;
 import com.mapbox.geojson.gson.PointSerializer;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,11 +55,16 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class MultiLineString
+public final class MultiLineString
   implements CoordinateContainer<List<List<Point>>>, Serializable {
 
   private static final String TYPE = "MultiLineString";
+
+  private final String type;
+
+  private final BoundingBox bbox;
+
+  private final List<List<Point>> coordinates;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -70,6 +80,7 @@ public abstract class MultiLineString
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     return gson.create().fromJson(json, MultiLineString.class);
   }
 
@@ -88,7 +99,7 @@ public abstract class MultiLineString
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_MultiLineString(TYPE, null, coordinates);
+    return new MultiLineString(TYPE, null, coordinates);
   }
 
   /**
@@ -109,7 +120,7 @@ public abstract class MultiLineString
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
+    return new MultiLineString(TYPE, bbox, coordinates);
   }
 
   /**
@@ -123,7 +134,7 @@ public abstract class MultiLineString
    */
   public static MultiLineString fromLineString(@NonNull LineString lineString) {
     List<List<Point>> coordinates = Arrays.asList(lineString.coordinates());
-    return new AutoValue_MultiLineString(TYPE, null, coordinates);
+    return new MultiLineString(TYPE, null, coordinates);
   }
 
   /**
@@ -139,7 +150,7 @@ public abstract class MultiLineString
   public static MultiLineString fromLineString(@NonNull LineString lineString,
                                                @Nullable BoundingBox bbox) {
     List<List<Point>> coordinates = Arrays.asList(lineString.coordinates());
-    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
+    return new MultiLineString(TYPE, bbox, coordinates);
   }
 
   /**
@@ -154,7 +165,7 @@ public abstract class MultiLineString
    * @since 3.0.0
    */
   public static MultiLineString fromLngLats(@NonNull List<List<Point>> points) {
-    return new AutoValue_MultiLineString(TYPE, null, points);
+    return new MultiLineString(TYPE, null, points);
   }
 
   /**
@@ -171,7 +182,7 @@ public abstract class MultiLineString
    */
   public static MultiLineString fromLngLats(@NonNull List<List<Point>> points,
                                             @Nullable BoundingBox bbox) {
-    return new AutoValue_MultiLineString(TYPE, bbox, points);
+    return new MultiLineString(TYPE, bbox, points);
   }
 
   static MultiLineString fromLngLats(double[][][] coordinates) {
@@ -184,7 +195,19 @@ public abstract class MultiLineString
       multiLine.add(lineString);
     }
 
-    return new AutoValue_MultiLineString(TYPE, null, multiLine);
+    return new MultiLineString(TYPE, null, multiLine);
+  }
+
+  MultiLineString(String type, @Nullable BoundingBox bbox, List<List<Point>> coordinates) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    this.type = type;
+    this.bbox = bbox;
+    if (coordinates == null) {
+      throw new NullPointerException("Null coordinates");
+    }
+    this.coordinates = coordinates;
   }
 
   /**
@@ -197,7 +220,9 @@ public abstract class MultiLineString
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return type;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -211,7 +236,9 @@ public abstract class MultiLineString
    */
   @Nullable
   @Override
-  public abstract BoundingBox bbox();
+  public BoundingBox bbox() {
+    return bbox;
+  }
 
   /**
    * Provides the list of list of {@link Point}s that make up the MultiLineString geometry.
@@ -221,7 +248,9 @@ public abstract class MultiLineString
    */
   @NonNull
   @Override
-  public abstract List<List<Point>> coordinates();
+  public List<List<Point>> coordinates() {
+    return coordinates;
+  }
 
   /**
    * Returns a list of LineStrings which are currently making up this MultiLineString.
@@ -261,6 +290,141 @@ public abstract class MultiLineString
    * @since 3.0.0
    */
   public static TypeAdapter<MultiLineString> typeAdapter(Gson gson) {
-    return new AutoValue_MultiLineString.GsonTypeAdapter(gson);
+    return new MultiLineString.GsonTypeAdapter(gson);
+  }
+
+  @Override
+  public String toString() {
+    return "MultiLineString{"
+            + "type=" + type + ", "
+            + "bbox=" + bbox + ", "
+            + "coordinates=" + coordinates
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
+    }
+    if (o instanceof MultiLineString) {
+      MultiLineString that = (MultiLineString) o;
+      return (this.type.equals(that.type()))
+              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
+              && (this.coordinates.equals(that.coordinates()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int h$ = 1;
+    h$ *= 1000003;
+    h$ ^= type.hashCode();
+    h$ *= 1000003;
+    h$ ^= (bbox == null) ? 0 : bbox.hashCode();
+    h$ *= 1000003;
+    h$ ^= coordinates.hashCode();
+    return h$;
+  }
+
+  public static final class GsonTypeAdapter extends TypeAdapter<MultiLineString> {
+    private volatile TypeAdapter<String> string_adapter;
+    private volatile TypeAdapter<BoundingBox> boundingBox_adapter;
+    private volatile TypeAdapter<List<List<Point>>> list__list__point_adapter;
+    private final Gson gson;
+    public GsonTypeAdapter(Gson gson) {
+      this.gson = gson;
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    public void write(JsonWriter jsonWriter, MultiLineString object) throws IOException {
+      if (object == null) {
+        jsonWriter.nullValue();
+        return;
+      }
+      jsonWriter.beginObject();
+      jsonWriter.name("type");
+      if (object.type() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<String> string_adapter = this.string_adapter;
+        if (string_adapter == null) {
+          this.string_adapter = string_adapter = gson.getAdapter(String.class);
+        }
+        string_adapter.write(jsonWriter, object.type());
+      }
+      jsonWriter.name("bbox");
+      if (object.bbox() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<BoundingBox> boundingBox_adapter = this.boundingBox_adapter;
+        if (boundingBox_adapter == null) {
+          this.boundingBox_adapter = boundingBox_adapter = gson.getAdapter(BoundingBox.class);
+        }
+        boundingBox_adapter.write(jsonWriter, object.bbox());
+      }
+      jsonWriter.name("coordinates");
+      if (object.coordinates() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<List<List<Point>>> list__list__point_adapter = this.list__list__point_adapter;
+        if (list__list__point_adapter == null) {
+          this.list__list__point_adapter = list__list__point_adapter = (TypeAdapter<List<List<Point>>>) gson.getAdapter(TypeToken.getParameterized(List.class, TypeToken.getParameterized(List.class, Point.class).getType()));
+        }
+        list__list__point_adapter.write(jsonWriter, object.coordinates());
+      }
+      jsonWriter.endObject();
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    public MultiLineString read(JsonReader jsonReader) throws IOException {
+      if (jsonReader.peek() == JsonToken.NULL) {
+        jsonReader.nextNull();
+        return null;
+      }
+      jsonReader.beginObject();
+      String type = null;
+      BoundingBox bbox = null;
+      List<List<Point>> coordinates = null;
+      while (jsonReader.hasNext()) {
+        String _name = jsonReader.nextName();
+        if (jsonReader.peek() == JsonToken.NULL) {
+          jsonReader.nextNull();
+          continue;
+        }
+        switch (_name) {
+          case "type": {
+            TypeAdapter<String> string_adapter = this.string_adapter;
+            if (string_adapter == null) {
+              this.string_adapter = string_adapter = gson.getAdapter(String.class);
+            }
+            type = string_adapter.read(jsonReader);
+            break;
+          }
+          case "bbox": {
+            TypeAdapter<BoundingBox> boundingBox_adapter = this.boundingBox_adapter;
+            if (boundingBox_adapter == null) {
+              this.boundingBox_adapter = boundingBox_adapter = gson.getAdapter(BoundingBox.class);
+            }
+            bbox = boundingBox_adapter.read(jsonReader);
+            break;
+          }
+          case "coordinates": {
+            TypeAdapter<List<List<Point>>> list__list__point_adapter = this.list__list__point_adapter;
+            if (list__list__point_adapter == null) {
+              this.list__list__point_adapter = list__list__point_adapter = (TypeAdapter<List<List<Point>>>) gson.getAdapter(TypeToken.getParameterized(List.class, TypeToken.getParameterized(List.class, Point.class).getType()));
+            }
+            coordinates = list__list__point_adapter.read(jsonReader);
+            break;
+          }
+          default: {
+            jsonReader.skipValue();
+          }
+        }
+      }
+      jsonReader.endObject();
+      return new MultiLineString(type, bbox, coordinates);
+    }
   }
 }

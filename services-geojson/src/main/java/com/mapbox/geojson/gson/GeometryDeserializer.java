@@ -51,7 +51,7 @@ public class GeometryDeserializer implements JsonDeserializer<Geometry> {
 
     try {
       // Use the current context to deserialize it
-      Type classType = Class.forName("com.mapbox.geojson.AutoValue_" + geometryType);
+      Type classType = Class.forName("com.mapbox.geojson." + geometryType);
       return context.deserialize(json, classType);
     } catch (ClassNotFoundException classNotFoundException) {
       // Unknown geometry
