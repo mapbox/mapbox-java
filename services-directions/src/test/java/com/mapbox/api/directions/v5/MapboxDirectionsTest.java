@@ -8,6 +8,7 @@ import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.api.directions.v5.models.StepManeuver;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
@@ -37,6 +38,7 @@ import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRIC
 import static com.mapbox.api.directions.v5.DirectionsCriteria.GEOMETRY_POLYLINE;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_CYCLING;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING_TRAFFIC;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
@@ -56,6 +58,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_V5_BANNER_INSTRUCTIONS = "directions_v5_banner_instructions.json";
   private static final String DIRECTIONS_V5_APPROACHES_REQUEST = "directions_v5_approaches.json";
   private static final String DIRECTIONS_V5_WAYPOINT_NAMES_FIXTURE = "directions_v5_waypoint_names.json";
+  private static final String DIRECTIONS_V5_WAYPOINT_TARGETS_FIXTURE = "directions_v5_waypoint_targets.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -76,6 +79,8 @@ public class MapboxDirectionsTest extends TestUtils {
           resource = DIRECTIONS_V5_ANNOTATIONS_FIXTURE;
         } else if (request.getPath().contains("waypoint_names")) {
           resource = DIRECTIONS_V5_WAYPOINT_NAMES_FIXTURE;
+        } else if (request.getPath().contains("waypoint_targets")) {
+            resource = DIRECTIONS_V5_WAYPOINT_TARGETS_FIXTURE;
         }else if (request.getPath().contains("approaches")) {
           resource = DIRECTIONS_V5_APPROACHES_REQUEST;
         } else if (request.getPath().contains("-151.2302")) {
@@ -699,6 +704,30 @@ public class MapboxDirectionsTest extends TestUtils {
     Response<DirectionsResponse> response = mapboxDirections.executeCall();
     assertEquals(200, response.code());
     assertEquals("Ok", response.body().code());
+  }
+
+  @Test
+  public void testWithWaypointTargets() throws Exception {
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .profile(PROFILE_DRIVING_TRAFFIC)
+            .origin(Point.fromLngLat(-6.80904429026134,62.00015328799685))
+            .destination(Point.fromLngLat(-6.800065040588378,62.00012400993553))
+            .steps(true)
+            .addWaypointTargets(null, Point.fromLngLat(-6.799936294555664,61.99987216574813))
+            .accessToken(ACCESS_TOKEN)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    assertNotNull(mapboxDirections);
+    assertNotNull(mapboxDirections.cloneCall().request().url().queryParameter("waypoint_targets"));
+
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+    assertEquals("left",
+            response.body().routes().get(0).legs().get(0).steps().get(0).maneuver().modifier());
+
   }
 
 }
