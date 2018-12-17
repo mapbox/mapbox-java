@@ -117,23 +117,6 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
   @Test
-  public void build_throwsExceptionWhenCoordsOverOneHundred() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Maximum of 100 coordinates are allowed for this API."));
-    List<Point> coordinates = new ArrayList<>();
-    for (int i = 0; i < 101; i++) {
-      coordinates.add(Point.fromLngLat(1.0 + i, 2.0 + i));
-    }
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinates(coordinates)
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .build();
-    mapMatching.executeCall();
-  }
-
-  @Test
   public void build_throwsExceptionWhenNotMatchingRadiusesForEachCoord() throws Exception {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(

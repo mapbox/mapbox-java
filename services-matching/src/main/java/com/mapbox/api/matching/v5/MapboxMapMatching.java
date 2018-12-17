@@ -697,10 +697,6 @@ public abstract class MapboxMapMatching extends
           + " request.");
       }
 
-      if (coordinates.size() > 100) {
-        throw new ServicesException("Maximum of 100 coordinates are allowed for this API.");
-      }
-
       if (radiuses != null && radiuses.length != coordinates.size()) {
         throw new ServicesException(
           "There must be as many radiuses as there are coordinates.");
