@@ -651,39 +651,6 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
   @Test
-  public void build_exceptionThrownWhenWaypointNamesExceedLimit() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Waypoint names exceed 500 character limit"));
-
-    StringBuilder longWpName = new StringBuilder();
-    for (int i = 0; i < 124; i++) {
-      longWpName.append("Home");
-    }
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(4.0, 4.0))
-      .waypoints(0, 1)
-      .addWaypointNames(longWpName.toString(), "Work")
-      .build();
-
-    assertTrue(mapMatching.cloneCall().request().url().toString()
-      .contains("waypoint_names=Home"));
-
-    // one more char results in exception
-    mapMatching = MapboxMapMatching.builder()
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(4.0, 4.0))
-      .waypoints(0, 1)
-      .addWaypointNames(longWpName.toString(), "Work1") // waypoint ar too long
-      .build();
-  }
-
-  @Test
   public void testWithWaypointNames() throws Exception {
 
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()

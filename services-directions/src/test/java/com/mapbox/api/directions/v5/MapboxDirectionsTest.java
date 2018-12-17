@@ -681,37 +681,6 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void build_exceptionThrownWhenWaypointNamesExceedLimit() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Waypoint names exceed 500 character limit"));
-
-    StringBuilder longWpName = new StringBuilder();
-    for (int i = 0; i < 124; i++) {
-      longWpName.append("Home");
-    }
-    MapboxDirections mapboxDirections = MapboxDirections.builder()
-      .origin(Point.fromLngLat(2.0, 2.0))
-      .destination(Point.fromLngLat(4.0, 4.0))
-      .addWaypointNames(longWpName.toString(), "Work")
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .build();
-
-    assertTrue(mapboxDirections.cloneCall().request().url().toString()
-      .contains("waypoint_names=Home"));
-
-    // one more char results in exception
-    mapboxDirections = MapboxDirections.builder()
-      .origin(Point.fromLngLat(2.0, 2.0))
-      .destination(Point.fromLngLat(4.0, 4.0))
-      .addWaypointNames(longWpName.toString(), "Work1")
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .build();
-  }
-
-  @Test
   public void testWithWaypointNames() throws Exception {
 
     MapboxDirections mapboxDirections = MapboxDirections.builder()
