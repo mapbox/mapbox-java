@@ -1,10 +1,7 @@
 package com.mapbox.core;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import com.google.gson.JsonParser;
+
 import org.hamcrest.Matchers;
 
 import java.io.ByteArrayInputStream;
@@ -15,6 +12,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class TestUtils {
 
