@@ -754,9 +754,6 @@ public abstract class MapboxDirections extends
             + " the number of waypoints provided.");
         }
         final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
-        if (!waypointNamesStr.isEmpty() && waypointNamesStr.length() > 500) {
-          throw new ServicesException("Waypoint names exceed 500 character limit.");
-        }
         waypointNames(waypointNamesStr);
       }
 
