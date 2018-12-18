@@ -87,7 +87,8 @@ public abstract class MapboxDirections extends
       voiceUnits(),
       exclude(),
       approaches(),
-      waypointNames());
+      waypointNames(),
+      waypointTargets());
   }
 
   @Override
@@ -206,6 +207,7 @@ public abstract class MapboxDirections extends
           .profile(profile())
           .coordinates(coordinates())
           .waypointNames(waypointNames())
+          .waypointTargets(waypointTargets())
           .continueStraight(continueStraight())
           .annotations(annotation())
           .approaches(approaches())
@@ -232,14 +234,38 @@ public abstract class MapboxDirections extends
   }
 
   private static String formatCoordinates(List<Point> coordinates) {
-    List<String> coordinatesFormatted = new ArrayList<>();
+    String[] coordinatesFormatted = new String[coordinates.size()];
+    int index = 0;
     for (Point point : coordinates) {
-      coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
+      coordinatesFormatted[index++] = String.format(Locale.US, "%s,%s",
         TextUtils.formatCoordinate(point.longitude()),
-        TextUtils.formatCoordinate(point.latitude())));
+        TextUtils.formatCoordinate(point.latitude()));
     }
 
-    return TextUtils.join(";", coordinatesFormatted.toArray());
+    return TextUtils.join(";", coordinatesFormatted);
+  }
+
+  /**
+   * Converts array of Points with waypoint_targets values
+   * to a string ready for API consumption.
+   *
+   * @param waypointTargets a string representing approaches to each coordinate.
+   * @return a formatted string.
+   * @since 4.3.0
+   */
+  private static String formatWaypointTargets(Point[] waypointTargets) {
+    String[] coordinatesFormatted = new String[waypointTargets.length];
+    int index = 0;
+    for (Point target : waypointTargets) {
+      if (target == null) {
+        coordinatesFormatted[index++] = "";
+      } else {
+        coordinatesFormatted[index++] = String.format(Locale.US, "%s,%s",
+                TextUtils.formatCoordinate(target.longitude()),
+                TextUtils.formatCoordinate(target.latitude()));
+      }
+    }
+    return TextUtils.join(";", coordinatesFormatted);
   }
 
   @NonNull
@@ -309,6 +335,9 @@ public abstract class MapboxDirections extends
   @Nullable
   abstract String waypointNames();
 
+  @Nullable
+  abstract String waypointTargets();
+
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
    * {@link #baseUrl()}, {@link #profile()}, {@link #user()}, and {@link #geometries()}.
@@ -358,6 +387,7 @@ public abstract class MapboxDirections extends
     private Point origin;
     private String[] approaches;
     private String[] waypointNames;
+    private Point[] waypointTargets;
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -713,7 +743,7 @@ public abstract class MapboxDirections extends
      * Custom names for waypoints used for the arrival instruction,
      * each separated by  ; . Values can be any string and total number of all characters cannot
      * exceed 500. If provided, the list of waypointNames must be the same length as the list of
-     * coordinates, but you can skip a coordinate and show its position with the  ; separator.
+     * coordinates, but you can skip a coordinate and show its position with the ; separator.
      * @param waypointNames Custom names for waypoints used for the arrival instruction.
      * @return this builder for chaining options together
      * @since 3.3.0
@@ -724,6 +754,23 @@ public abstract class MapboxDirections extends
     }
 
     abstract Builder waypointNames(@Nullable String waypointNames);
+
+    /**
+     * A list of coordinate points used to specify drop-off locations
+     * that are distinct from the locations specified in coordinates.
+     * The number of waypoint targets must be the same as the number of coordinates,
+     * but you can skip a coordinate with a null value.
+     * Must be used with steps=true.
+     * @param waypointTargets list of coordinate points for drop-off locations
+     * @return this builder for chaining options together
+     * @since 4.3.0
+     */
+    public Builder addWaypointTargets(@Nullable Point... waypointTargets) {
+      this.waypointTargets = waypointTargets;
+      return this;
+    }
+
+    abstract Builder waypointTargets(@Nullable String waypointTargets);
 
     abstract MapboxDirections autoBuild();
 
@@ -757,6 +804,15 @@ public abstract class MapboxDirections extends
         waypointNames(waypointNamesStr);
       }
 
+      if (waypointTargets != null) {
+        if (waypointTargets.length != coordinates.size()) {
+          throw new ServicesException("Number of waypoint targets must match "
+                  + " the number of waypoints provided.");
+        }
+
+        waypointTargets(formatWaypointTargets(waypointTargets));
+      }
+
       if (approaches != null) {
         if (approaches.length != coordinates.size()) {
           throw new ServicesException("Number of approach elements must match "
@@ -783,4 +839,5 @@ public abstract class MapboxDirections extends
       return directions;
     }
   }
+
 }

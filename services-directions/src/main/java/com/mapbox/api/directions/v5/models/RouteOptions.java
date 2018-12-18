@@ -255,10 +255,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Accepts  unrestricted (default) or  curb . If set to  unrestricted ,
    * the route can approach waypoints from either side of the road.
    * If set to curb, the route will be returned so that on arrival,
-   * the waypoint will be found on the side that corresponds with the  driving_side of the region
+   * the waypoint will be found on the side that corresponds with the driving_side of the region
    * in which the returned route is located.
    * If provided, the list of approaches must be the same length as the list of waypoints.
-   * However, you can skip a coordinate and show its position in the list with the  ; separator.
+   * However, you can skip a coordinate and show its position in the list with the ; separator.
    *
    * @return a string representing approaches for each waypoint
    * @since 3.2.0
@@ -271,7 +271,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Custom names for waypoints used for the arrival instruction in banners and voice instructions,
    * each separated by  ; . Values can be any string and total number of all characters cannot
    * exceed 500. If provided, the list of waypoint_names must be the same length as the list of
-   * coordinates, but you can skip a coordinate and show its position with the  ; separator.
+   * coordinates, but you can skip a coordinate and show its position with the ; separator.
    * @return  a string representing names for each waypoint
    * @since 3.3.0
    */
@@ -279,6 +279,22 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   @Nullable
   public abstract String waypointNames();
 
+
+  /**
+   * A semicolon-separated list of coordinate pairs used to specify drop-off
+   * locations that are distinct from the locations specified in coordinates.
+   * If this parameter is provided, the Directions API will compute the side of the street,
+   * left or right, for each target based on the waypoint_targets and the driving direction.
+   * The maneuver.modifier, banner and voice instructions will be updated with the computed
+   * side of street. The number of waypoint targets must be the same as the number of coordinates,
+   * but you can skip a coordinate pair and show its position in the list with the ; separator.
+   * Must be used with steps=true.
+   * @return  a string representing coordinate pairs for drop-off locations
+   * @since 4.3.0
+   */
+  @SerializedName("waypoint_targets")
+  @Nullable
+  public abstract String waypointTargets();
 
   /**
    * Gson type adapter for parsing Gson to this class.
@@ -526,7 +542,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder approaches(String approaches);
 
     /**
-     * The same approaches the user originally made when the request was made.
+     * The same waypoint names the user originally made when the request was made.
      *
      * @param waypointNames unrestricted, curb or omitted (;)
      * @return this builder for chaining options together
@@ -535,6 +551,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
     @Nullable
     public abstract Builder waypointNames(@Nullable String waypointNames);
+
+    /**
+     * The same waypoint targets the user originally made when the request was made.
+     *
+     * @param waypointTargets list of coordinate pairs for drop-off locations (;)
+     * @return this builder for chaining options together
+     * @since 4.3.0
+     */
+
+    @Nullable
+    public abstract Builder waypointTargets(@Nullable String waypointTargets);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.
