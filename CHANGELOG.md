@@ -2,6 +2,13 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v4.3.0 - December 18, 2018
+- Do not use BigDecimal for rounding (#938)[https://github.com/mapbox/mapbox-java/pull/938]
+- Remove coordinate limit from MapboxMapMatching (#940)[https://github.com/mapbox/mapbox-java/pull/940]
+- Remove character waypoint names limit from mapbox map matching (#941)[https://github.com/mapbox/mapbox-java/pull/941]
+- Adding additional tests to files related to coordinate shifting (#936)[https://github.com/mapbox/mapbox-java/pull/936]
+- Added waypoint targets to MapboxDirections request (#942)[https://github.com/mapbox/mapbox-java/pull/942]
+
 ### v4.2.0 - December 4, 2018
 - Adding Shifter implementation #922
 - Fix v4.1.1 release
