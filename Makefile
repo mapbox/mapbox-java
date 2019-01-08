@@ -166,6 +166,10 @@ mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?steps=true&overview=full&geometries=polyline6&roundabout_exits=true&voice_instructions=true&language=he&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 	    -o services-matching/src/test/resources/map_matching_v5_invalid_voice_language.json
 
+	# MapMatching with post request
+	curl -d "coordinates=2.344003915786743,48.85805170891599;2.346750497817993,48.85727523615161;2.348681688308716,48.85936462637049;2.349550724029541,48.86084691113991;2.349550724029541,48.8608892614883;2.349625825881958,48.86102337068847;2.34982967376709,48.86125629633996&steps=true&tidy=true&waypoints=0;6" "https://api.mapbox.com/matching/v5/mapbox/driving?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+	    -o services-matching/src/test/resources/map_matching_v5_post.json
+
 optimization-fixtures:
 	# request an optimized car trip with no additional options
 	curl "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/-122.42,37.78;-122.45,37.91;-122.48,37.73?access_token=$(MAPBOX_ACCESS_TOKEN)" \
