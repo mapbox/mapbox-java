@@ -52,7 +52,7 @@ import retrofit2.Response;
  *
  * @see <a href="https://www.mapbox.com/android-docs/java-sdk/overview/directions/">Android
  *   Directions documentation</a>
- * @see <a href="https://www.mapbox.com/api-documentation/#directions">Directions API
+ * @see <a href="https://www.mapbox.com/api-documentation/navigation/#directions">Directions API
  *   documentation</a>
  * @since 1.0.0
  */
@@ -532,7 +532,7 @@ public abstract class MapboxDirections extends
      * @param language a Locale value representing the language you'd like the instructions to be
      *                 written in when returned
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#instructions-languages">Supported
      *   Languages</a>
      * @since 2.2.0
      */
@@ -567,7 +567,7 @@ public abstract class MapboxDirections extends
      *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#route-leg-object">RouteLeg object
      *   documentation</a>
      * @since 2.1.0
      */

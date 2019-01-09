@@ -40,7 +40,7 @@ import retrofit2.Call;
  * volumes contact us.
  * <p>
  *
- * @see <a href="https://www.mapbox.com/api-documentation/#matrix">API documentation</a>
+ * @see <a href="https://www.mapbox.com/api-documentation/navigation/#matrix">API documentation</a>
  * @since 2.1.0
  */
 @AutoValue

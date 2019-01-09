@@ -467,7 +467,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      *
      * @param languages one or more locale's specifying the language you'd like results to support
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Supported languages
+     * @see <a href="https://www.mapbox.com/api-documentation/search/#language-coverage">Supported languages
      *   </a>
      * @since 2.0.0
      */
@@ -498,7 +498,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      *
      * @param languages a String specifying the language or languages you'd like results to support
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#request-format">Supported languages
+     * @see <a href="https://www.mapbox.com/api-documentation/search/#language-coverage">Supported languages
      *   </a>
      * @since 2.0.0
      */

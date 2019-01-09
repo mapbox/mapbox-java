@@ -15,7 +15,7 @@ import java.io.Serializable;
  * (if avaliable) a wikidata, short_code, and Maki key.
  *
  * @see <a href="https://github.com/mapbox/carmen/blob/master/carmen-geojson.md">Carmen Geojson information</a>
- * @see <a href="https://www.mapbox.com/api-documentation/#geocoding">Mapbox geocoder documentation</a>
+ * @see <a href="https://www.mapbox.com/api-documentation/search/#geocoding">Mapbox geocoder documentation</a>
  * @since 1.0.0
  */
 @AutoValue
