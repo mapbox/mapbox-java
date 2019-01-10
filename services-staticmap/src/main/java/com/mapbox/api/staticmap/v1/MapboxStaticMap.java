@@ -29,7 +29,7 @@ import java.util.Locale;
  * This class helps make a valid request and gets the information correctly formatted for Picaso or
  * Glide libraries which help download the image and place it into an Image View.
  *
- * @see <a href=https://www.mapbox.com/api-documentation/#static>API Documentation</a>
+ * @see <a href=https://www.mapbox.com/api-documentation/maps/#static>API Documentation</a>
  * @since 1.0.0
  */
 @AutoValue
@@ -421,4 +421,3 @@ public abstract class MapboxStaticMap {
     }
   }
 }
-

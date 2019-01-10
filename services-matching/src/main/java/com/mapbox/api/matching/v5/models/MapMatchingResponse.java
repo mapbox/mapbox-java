@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Mapbox map matching API response and convenience getter methods for optional properties.
  *
- * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-a-match">Map Matching API Documentation</a>
+ * @see <a href="https://www.mapbox.com/api-documentation/navigation/#map-matching">Map Matching API Documentation</a>
  * @since 2.0.0
  */
 @AutoValue

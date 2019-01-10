@@ -48,7 +48,7 @@ import java.util.logging.Logger;
  * OpenStreetMap road and path network using the Directions API. This produces clean paths that can
  * be displayed on a map or used for other analysis.
  *
- * @see <a href="https://www.mapbox.com/api-documentation/#map-matching">Map matching API
+ * @see <a href="https://www.mapbox.com/api-documentation/navigation/#map-matching">Map matching API
  * documentation</a>
  * @since 2.0.0
  */
@@ -524,7 +524,7 @@ public abstract class MapboxMapMatching extends
      *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#route-leg-object">RouteLeg object
      * documentation</a>
      * @since 2.1.0
      */
@@ -596,7 +596,7 @@ public abstract class MapboxMapMatching extends
      * @param language a Locale value representing the language you'd like the instructions to be
      *                 written in when returned
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#instructions-languages">Supported
      * Languages</a>
      * @since 3.0.0
      */
@@ -615,7 +615,7 @@ public abstract class MapboxMapMatching extends
      * @param language a String value representing the language you'd like the instructions to be
      *                 written in when returned
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#instructions-languages">Supported
      * Languages</a>
      * @since 2.2.0
      */

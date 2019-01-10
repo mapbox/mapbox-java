@@ -32,7 +32,7 @@ import retrofit2.Response;
  * The Mapbox Tilequery API allows you to retrieve data about specific features from a
  * vector tileset, based on a given latitude and longitude.
  *
- * @see <a href="https://www.mapbox.com/api-documentation/#tilequery">Tilequery API
+ * @see <a href="https://www.mapbox.com/api-documentation/maps/#tilequery">Tilequery API
  * documentation</a>
  *
  * @since 3.5.0

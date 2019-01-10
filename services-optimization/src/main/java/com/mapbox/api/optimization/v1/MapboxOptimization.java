@@ -43,7 +43,7 @@ import retrofit2.Call;
  *
  * @see <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">Traveling Salesperson
  *   Problem</a>
- * @see <a href="https://www.mapbox.com/api-documentation/#optimized-trips">API documentation</a>
+ * @see <a href="https://www.mapbox.com/api-documentation/navigation/#optimization">API documentation</a>
  * @since 2.1.0
  */
 @AutoValue
@@ -231,7 +231,7 @@ public abstract class MapboxOptimization
      *
      * @param roundTrip true if you'd like the route to return to the origin, else false
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#retrieve-an-optimization">Possible
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#retrieve-an-optimization">Possible
      *   roundtrip combinations</a>
      * @since 2.1.0
      */
@@ -369,7 +369,7 @@ public abstract class MapboxOptimization
      *                    restricted to one or multiple values inside the {@link AnnotationCriteria}
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#routeleg-object">RouteLeg object
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#route-leg-object">RouteLeg object
      *   documentation</a>
      * @since 2.1.0
      */
@@ -389,7 +389,7 @@ public abstract class MapboxOptimization
      * @param language a Locale value representing the language you'd like the instructions to be
      *                 written in when returned
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#instructions-languages">Supported
      *   Languages</a>
      * @since 3.0.0
      */
@@ -409,7 +409,7 @@ public abstract class MapboxOptimization
      * @param language a String value representing the language you'd like the instructions to be
      *                 written in when returned
      * @return this builder for chaining options together
-     * @see <a href="https://www.mapbox.com/api-documentation/#instructions-languages">Supported
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#instructions-languages">Supported
      *   Languages</a>
      * @since 2.2.0
      */
