@@ -1,5 +1,4 @@
 apply plugin: 'java-library'
-apply plugin: "com.vanniktech.android.junit.jacoco"
 
 sourceSets {
     main.java.srcDirs = ['../services-directions/src/main/java', '../services-geocoding/src/main/java',
@@ -20,6 +19,3 @@ dependencies {
     compileOnly dependenciesList.autoValue
     compileOnly dependenciesList.autoValueGson
 }
-
-apply from: "${rootDir}/gradle/mvn-push.gradle"
-apply from: "${rootDir}/gradle/dependencies-graph.gradle"

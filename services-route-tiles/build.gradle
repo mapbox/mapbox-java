@@ -1,5 +1,4 @@
 apply plugin: 'java-library'
-apply plugin: "com.vanniktech.android.junit.jacoco"
 
 dependencies {
     api project(":services-core")
@@ -17,6 +16,3 @@ dependencies {
     testImplementation project(path: ':services-core', configuration: 'testOutput')
     compile project(path: ':services-geojson')
 }
-
-apply from: "${rootDir}/gradle/checkstyle.gradle"
-apply from: "${rootDir}/gradle/jacoco.gradle"
