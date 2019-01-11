@@ -1,5 +1,8 @@
 apply plugin: 'java-library'
-apply plugin: "com.vanniktech.android.junit.jacoco"
+
+// Re-apply runtime required subproject gradle scripts and classpaths,
+// so that Maps SDK doesn't rely on them being served from the top level build.gradle
+apply from: "../gradle/dependencies.gradle"
 
 dependencies {
   // Gson
@@ -17,8 +20,3 @@ dependencies {
   testImplementation project(path: ':services-core', configuration: 'testOutput')
   testImplementation project(":services-turf")
 }
-
-apply from: "${rootDir}/gradle/checkstyle.gradle"
-apply from: "${rootDir}/gradle/jacoco.gradle"
-apply from: "${rootDir}/gradle/mvn-push.gradle"
-apply from: "${rootDir}/gradle/dependencies-graph.gradle"

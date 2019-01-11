@@ -1,6 +1,18 @@
 apply plugin: 'java'
 apply plugin: 'de.fuerstenau.buildconfig'
 
+buildscript {
+    apply from: "../gradle/dependencies.gradle"
+
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2' }
+    }
+
+    dependencies {
+        classpath pluginDependencies.buildConfig
+    }
+}
+
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
