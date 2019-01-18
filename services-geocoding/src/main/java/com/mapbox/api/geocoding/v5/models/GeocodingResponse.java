@@ -131,7 +131,7 @@ public abstract class GeocodingResponse implements Serializable {
   }
 
   /**
-   * Gson TYPE adapter for parsing Gson t«o this class.
+   * Gson TYPE adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
    * @return the TYPE adapter for this class

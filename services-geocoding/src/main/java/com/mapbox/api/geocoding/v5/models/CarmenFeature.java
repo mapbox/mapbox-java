@@ -241,8 +241,9 @@ public abstract class CarmenFeature implements GeoJson, Serializable {
 
   /**
    * A string analogous to the {@link #text()} field that more closely matches the query than
-   * results in the specified language. For example, querying "Köln, Germany" with language set to
-   * English might return a feature with the {@link #text()} "Cologne" and this would be "Köln".
+   * results in the specified language. For example, querying &quot;K&#246;ln, Germany&quot; with
+   * language set to English might return a feature with the {@link #text()} &quot;Cologne&quot;
+   * and this would be &quot;K&#246;ln&quot;.
    *
    * @return a string containing the matching text
    * @since 2.2.0
@@ -253,9 +254,9 @@ public abstract class CarmenFeature implements GeoJson, Serializable {
 
   /**
    * A string analogous to the {@link #placeName()} field that more closely matches the query than
-   * results in the specified language. For example, querying "Köln, Germany" with language set to
-   * English might return a feature with the {@link #placeName()} "Cologne, Germany" and this would
-   * return "Köln, North Rhine-Westphalia, Germany".
+   * results in the specified language. For example, querying "K&#246;ln, Germany" with language
+   * set to English might return a feature with the {@link #placeName()} "Cologne, Germany"
+   * and this would return "K&#246;ln, North Rhine-Westphalia, Germany".
    *
    * @return a string containing the matching place name
    * @since 2.2.0
@@ -452,8 +453,9 @@ public abstract class CarmenFeature implements GeoJson, Serializable {
 
     /**
      * A string analogous to the {@link #text()} field that more closely matches the query than
-     * results in the specified language. For example, querying "Köln, Germany" with language set to
-     * English might return a feature with the {@link #text()} "Cologne" and this would be "Köln".
+     * results in the specified language. For example, querying "K&#246;ln, Germany" with language
+     * set to English might return a feature with the {@link #text()} "Cologne" and this
+     * would be "K&#246;ln".
      *
      * @param matchingText a string containing the matching text
      * @return this builder for chaining options together
@@ -463,9 +465,9 @@ public abstract class CarmenFeature implements GeoJson, Serializable {
 
     /**
      * A string analogous to the {@link #placeName()} field that more closely matches the query than
-     * results in the specified language. For example, querying "Köln, Germany" with language set to
-     * English might return a feature with the {@link #placeName()} "Cologne, Germany" and this
-     * would return "Köln, North Rhine-Westphalia, Germany".
+     * results in the specified language. For example, querying "K&#246;ln, Germany" with language
+     * set to English might return a feature with the {@link #placeName()} "Cologne, Germany"
+     * and this would return "K&#246;ln, North Rhine-Westphalia, Germany".
      *
      * @param matchingPlaceName a string containing the matching place name
      * @return this builder for chaining options together

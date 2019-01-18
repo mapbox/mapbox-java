@@ -9,7 +9,7 @@ jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: mbgl/de3c86c2ff:android-ndk-r16
+      - image: mbgl/android-ndk-r19:8e91a7ebab
     environment:
       JVM_OPTS: -Xmx3200m
       BUILDTYPE: Debug
@@ -54,7 +54,7 @@ jobs:
       only:
       - master
     docker:
-      - image: mbgl/de3c86c2ff:android-ndk-r16
+      - image: mbgl/android-ndk-r19:8e91a7ebab
     working_directory: ~/code
     environment:
     environment:
