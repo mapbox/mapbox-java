@@ -74,9 +74,9 @@ public class TurfConstants {
   public static final String UNIT_DEGREES = "degrees";
 
   /**
-   * The inch (abbreviation: in or ″) is a unit of length in the (British) imperial and United
-   * States customary systems of measurement now formally equal to  1/36th yard but usually
-   * understood as  1/12th of a foot.
+   * The inch (abbreviation: in or &quot;) is a unit of length in the (British) imperial and United
+   * States customary systems of measurement now formally equal to 1/36th yard but usually
+   * understood as 1/12th of a foot.
    *
    * @since 1.2.0
    */
