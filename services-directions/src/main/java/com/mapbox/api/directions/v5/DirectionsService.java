@@ -74,6 +74,8 @@ public interface DirectionsService {
     @Query("exclude") String exclude,
     @Query("approaches") String approaches,
     @Query("waypoint_names") String waypointNames,
-    @Query("waypoint_targets") String waypointTargets
+    @Query("waypoint_targets") String waypointTargets,
+    // todo change from route_id to save_Route when endpoint is updated per convo with Greg
+    @Query("route_id") Boolean saveRoute
   );
 }

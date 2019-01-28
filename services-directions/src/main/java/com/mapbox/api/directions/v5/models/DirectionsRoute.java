@@ -32,6 +32,8 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
     return new AutoValue_DirectionsRoute.Builder();
   }
 
+  public abstract String routeId();
+
   /**
    * The distance traveled from origin to destination.
    *
@@ -233,6 +235,8 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @since 3.1.0
      */
     public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
+
+    abstract Builder routeId(String routeId);
 
     /**
      * Build a new {@link DirectionsRoute} object.
