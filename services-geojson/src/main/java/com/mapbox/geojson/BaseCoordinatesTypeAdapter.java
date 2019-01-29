@@ -1,8 +1,10 @@
-package com.mapbox.geojson.gson;
+package com.mapbox.geojson;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.geojson.shifter.CoordinateShifterManager;
 import com.mapbox.geojson.utils.GeoJsonUtils;
 
@@ -11,16 +13,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Adapter to read and write coordinates for Point class.
+ *  Base class for converting {@code T} instance of coordinates to JSON and
+ *  JSON to instance of {@code T}.
  *
- * @since 4.1.0
- * @deprecated this class is deprecated, {@link com.mapbox.geojson.PointAsCoordinatesTypeAdapter}
- *   should be used to serialize/deserialize coordinates as Points.
+ * @param <T> Type of coordinates
+ * @since 4.6.0
  */
-@Deprecated
-public class CoordinateTypeAdapter extends TypeAdapter<List<Double>> {
-  @Override
-  public void write(JsonWriter out, List<Double> value) throws IOException {
+abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
+
+
+  protected void writePoint(JsonWriter out, Point value) throws  IOException {
+    writePointList(out, value.coordinates());
+  }
+
+  protected Point readPoint(JsonReader in) throws IOException {
+
+    List<Double> coordinates = readPointList(in);
+    if (coordinates != null && coordinates.size() > 1) {
+      return new Point("Point",null, coordinates);
+    }
+
+    throw new GeoJsonException(" Point coordinates should be non-null double array");
+  }
+
+
+  protected void writePointList(JsonWriter out, List<Double> value) throws IOException {
+
+    if (value == null) {
+      return;
+    }
 
     out.beginArray();
 
@@ -38,8 +59,12 @@ public class CoordinateTypeAdapter extends TypeAdapter<List<Double>> {
     out.endArray();
   }
 
-  @Override
-  public List<Double> read(JsonReader in) throws IOException {
+  protected List<Double> readPointList(JsonReader in) throws IOException {
+
+    if (in.peek() == JsonToken.NULL) {
+      throw new NullPointerException();
+    }
+
     List<Double> coordinates = new ArrayList<Double>();
     in.beginArray();
     while (in.hasNext()) {
@@ -54,4 +79,5 @@ public class CoordinateTypeAdapter extends TypeAdapter<List<Double>> {
     return CoordinateShifterManager.getCoordinateShifter()
             .shiftLonLat(coordinates.get(0), coordinates.get(1));
   }
+
 }

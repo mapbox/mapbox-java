@@ -18,4 +18,5 @@ public interface CoordinateContainer<T> extends Geometry {
    * @since 3.0.0
    */
   T coordinates();
+
 }

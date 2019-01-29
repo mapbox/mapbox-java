@@ -4,11 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.GeometryCollection;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
@@ -16,15 +14,13 @@ import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
-import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
 
 /**
- * A GeoJson type adapter factory for convenience when using AutoValue and handling
- * serialization/deserialization. The majority of this class gets generated during compilation time.
+ * A GeoJson type adapter factory for convenience for
+ * serialization/deserialization.
  *
  * @since 3.0.0
  */
-@GsonTypeAdapterFactory
 public abstract class GeoJsonAdapterFactory implements TypeAdapterFactory {
 
   /**
@@ -38,15 +34,19 @@ public abstract class GeoJsonAdapterFactory implements TypeAdapterFactory {
     return new GeoJsonAdapterFactoryIml();
   }
 
+  /**
+   * GeoJsonAdapterFactory implementation.
+   *
+   * @since 3.0.0
+   */
   public static final class GeoJsonAdapterFactoryIml extends GeoJsonAdapterFactory {
     @Override
     @SuppressWarnings("unchecked")
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
       Class<?> rawType = type.getRawType();
-      /*if (BoundingBox.class.isAssignableFrom(rawType)) {
+      if (BoundingBox.class.isAssignableFrom(rawType)) {
         return (TypeAdapter<T>) BoundingBox.typeAdapter(gson);
-      } else */
-      if (Feature.class.isAssignableFrom(rawType)) {
+      } else if (Feature.class.isAssignableFrom(rawType)) {
         return (TypeAdapter<T>) Feature.typeAdapter(gson);
       } else if (FeatureCollection.class.isAssignableFrom(rawType)) {
         return (TypeAdapter<T>) FeatureCollection.typeAdapter(gson);
@@ -62,6 +62,8 @@ public abstract class GeoJsonAdapterFactory implements TypeAdapterFactory {
         return (TypeAdapter<T>) MultiPolygon.typeAdapter(gson);
       } else if (Polygon.class.isAssignableFrom(rawType)) {
         return (TypeAdapter<T>) Polygon.typeAdapter(gson);
+      } else if (Point.class.isAssignableFrom(rawType)) {
+        return (TypeAdapter<T>) Point.typeAdapter(gson);
       }
       return null;
     }

@@ -9,7 +9,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.PointDeserializer;
+import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
 import java.util.List;
 
@@ -129,7 +129,7 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
   public static DirectionsResponse fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
+    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     return gson.create().fromJson(json, DirectionsResponse.class);
   }
 

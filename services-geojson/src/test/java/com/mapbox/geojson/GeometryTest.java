@@ -17,10 +17,18 @@ public class GeometryTest extends TestUtils {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_GEOMETRY_COLLECTION);
+    final String json =
+            "    { \"type\": \"GeometryCollection\"," +
+                    "            \"bbox\": [120, 40, -120, -40]," +
+                    "      \"geometries\": [" +
+                    "      { \"type\": \"Point\"," +
+                    "              \"bbox\": [110, 30, -110, -30]," +
+                    "        \"coordinates\": [100, 0]}," +
+                    "      { \"type\": \"LineString\"," +
+                    "              \"bbox\": [110, 30, -110, -30]," +
+                    "        \"coordinates\": [[101, 0], [102, 1]]}]}";
     Geometry geo = GeometryGeoJson.fromJson(json);
-    //assertEquals(geo.type(), "GeometryCollection");
-    int i = 0;
+    assertEquals(geo.type(), "GeometryCollection");
   }
 
   @Test

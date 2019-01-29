@@ -172,7 +172,7 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
 
   @Test
   public void testNullPropertiesJson() {
-    String jsonString = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-77.0, 38.0]}}";
+    String jsonString = "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-77.0,38.0]}}";
     CarmenFeature feature = CarmenFeature.fromJson(jsonString);
 
     // Json( null Properties) -> Feature (empty Properties) -> Json(null Properties)

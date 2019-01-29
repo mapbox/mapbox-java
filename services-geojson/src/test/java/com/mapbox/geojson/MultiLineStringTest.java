@@ -125,7 +125,9 @@ public class MultiLineStringTest extends TestUtils {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_MULTILINESTRING);
+    final String json = "{\"type\": \"MultiLineString\", " +
+            "\"coordinates\": [[[100, 0],[101, 1]],[[102, 2],[103, 3]]] }";
+
     MultiLineString geo = MultiLineString.fromJson(json);
     assertEquals("MultiLineString", geo.type());
     assertEquals(geo.coordinates().get(0).get(0).longitude(), 100.0, DELTA);
@@ -135,7 +137,8 @@ public class MultiLineStringTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_MULTILINESTRING);
+    final String json = "{\"type\": \"MultiLineString\", " +
+            "\"coordinates\": [[[100, 0],[101, 1]],[[102, 2],[103, 3]]] }";
     MultiLineString geo = MultiLineString.fromJson(json);
     compareJson(json, geo.toJson());
   }

@@ -7,17 +7,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.mapbox.geojson.gson.BoundingBoxTypeAdapter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.GeometryTypeAdapter;
-import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.PointSerializer;
 
 import java.io.IOException;
 
@@ -57,6 +52,7 @@ public final class Feature implements GeoJson {
 
   private final String type;
 
+  @JsonAdapter(BoundingBoxTypeAdapter.class)
   private final BoundingBox bbox;
 
   private final String id;
@@ -78,12 +74,8 @@ public final class Feature implements GeoJson {
   public static Feature fromJson(@NonNull String json) {
 
     GsonBuilder gson = new GsonBuilder();
-
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapterFactory(GeometryAdapterFactory.create());
 
     Feature feature = gson.create().fromJson(json, Feature.class);
 
@@ -277,9 +269,11 @@ public final class Feature implements GeoJson {
   @Override
   public String toJson() {
 
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Geometry.class, new GeometryTypeAdapter());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    Gson gson = new GsonBuilder()
+            .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
+            .registerTypeAdapterFactory(GeometryAdapterFactory.create())
+            .create();
+
 
     // Empty properties -> should not appear in json string
     Feature feature = this;
@@ -287,7 +281,7 @@ public final class Feature implements GeoJson {
       feature = new Feature(TYPE, bbox(), id(), geometry(), null);
     }
 
-    return gson.create().toJson(feature);
+    return gson.toJson(feature);
   }
 
   /**
@@ -456,48 +450,56 @@ public final class Feature implements GeoJson {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (o == this) {
+  public boolean equals(Object obj) {
+    if (obj == this) {
       return true;
     }
-    if (o instanceof Feature) {
-      Feature that = (Feature) o;
+    if (obj instanceof Feature) {
+      Feature that = (Feature) obj;
       return (this.type.equals(that.type()))
               && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
               && ((this.id == null) ? (that.id() == null) : this.id.equals(that.id()))
-              && ((this.geometry == null) ? (that.geometry() == null) : this.geometry.equals(that.geometry()))
-              && ((this.properties == null) ? (that.properties() == null) : this.properties.equals(that.properties()));
+              && ((this.geometry == null)
+                   ? (that.geometry() == null) : this.geometry.equals(that.geometry()))
+              && ((this.properties == null)
+                   ? (that.properties() == null) : this.properties.equals(that.properties()));
     }
     return false;
   }
 
   @Override
   public int hashCode() {
-    int h$ = 1;
-    h$ *= 1000003;
-    h$ ^= type.hashCode();
-    h$ *= 1000003;
-    h$ ^= (bbox == null) ? 0 : bbox.hashCode();
-    h$ *= 1000003;
-    h$ ^= (id == null) ? 0 : id.hashCode();
-    h$ *= 1000003;
-    h$ ^= (geometry == null) ? 0 : geometry.hashCode();
-    h$ *= 1000003;
-    h$ ^= (properties == null) ? 0 : properties.hashCode();
-    return h$;
+    int hashCode = 1;
+    hashCode *= 1000003;
+    hashCode ^= type.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (id == null) ? 0 : id.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (geometry == null) ? 0 : geometry.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (properties == null) ? 0 : properties.hashCode();
+    return hashCode;
   }
 
-  public static final class GsonTypeAdapter extends TypeAdapter<Feature> {
-    private volatile TypeAdapter<String> string_adapter;
-    private volatile TypeAdapter<BoundingBox> boundingBox_adapter;
-    private volatile TypeAdapter<Geometry> geometry_adapter;
-    private volatile TypeAdapter<JsonObject> jsonObject_adapter;
+  /**
+   * TypeAdapter to serialize/deserialize Feature objects.
+   *
+   * @since 4.6.0
+   */
+  static final class GsonTypeAdapter extends TypeAdapter<Feature> {
+    private volatile TypeAdapter<String> stringTypeAdapter;
+    private volatile TypeAdapter<BoundingBox> boundingBoxTypeAdapter;
+    private volatile TypeAdapter<Geometry> geometryTypeAdapter;
+    private volatile TypeAdapter<JsonObject> jsonObjectTypeAdapter;
     private final Gson gson;
-    public GsonTypeAdapter(Gson gson) {
+
+    GsonTypeAdapter(Gson gson) {
       this.gson = gson;
     }
+
     @Override
-    @SuppressWarnings("unchecked")
     public void write(JsonWriter jsonWriter, Feature object) throws IOException {
       if (object == null) {
         jsonWriter.nullValue();
@@ -508,56 +510,61 @@ public final class Feature implements GeoJson {
       if (object.type() == null) {
         jsonWriter.nullValue();
       } else {
-        TypeAdapter<String> string_adapter = this.string_adapter;
-        if (string_adapter == null) {
-          this.string_adapter = string_adapter = gson.getAdapter(String.class);
+        TypeAdapter<String> stringTypeAdapter = this.stringTypeAdapter;
+        if (stringTypeAdapter == null) {
+          stringTypeAdapter = gson.getAdapter(String.class);
+          this.stringTypeAdapter = stringTypeAdapter;
         }
-        string_adapter.write(jsonWriter, object.type());
+        stringTypeAdapter.write(jsonWriter, object.type());
       }
       jsonWriter.name("bbox");
       if (object.bbox() == null) {
         jsonWriter.nullValue();
       } else {
-        TypeAdapter<BoundingBox> boundingBox_adapter = this.boundingBox_adapter;
-        if (boundingBox_adapter == null) {
-          this.boundingBox_adapter = boundingBox_adapter = gson.getAdapter(BoundingBox.class);
+        TypeAdapter<BoundingBox> boundingBoxTypeAdapter = this.boundingBoxTypeAdapter;
+        if (boundingBoxTypeAdapter == null) {
+          boundingBoxTypeAdapter = gson.getAdapter(BoundingBox.class);
+          this.boundingBoxTypeAdapter = boundingBoxTypeAdapter;
         }
-        boundingBox_adapter.write(jsonWriter, object.bbox());
+        boundingBoxTypeAdapter.write(jsonWriter, object.bbox());
       }
       jsonWriter.name("id");
       if (object.id() == null) {
         jsonWriter.nullValue();
       } else {
-        TypeAdapter<String> string_adapter = this.string_adapter;
-        if (string_adapter == null) {
-          this.string_adapter = string_adapter = gson.getAdapter(String.class);
+        TypeAdapter<String> stringTypeAdapter = this.stringTypeAdapter;
+        if (stringTypeAdapter == null) {
+          stringTypeAdapter = gson.getAdapter(String.class);
+          this.stringTypeAdapter = stringTypeAdapter;
         }
-        string_adapter.write(jsonWriter, object.id());
+        stringTypeAdapter.write(jsonWriter, object.id());
       }
       jsonWriter.name("geometry");
       if (object.geometry() == null) {
         jsonWriter.nullValue();
       } else {
-        TypeAdapter<Geometry> geometry_adapter = this.geometry_adapter;
-        if (geometry_adapter == null) {
-          this.geometry_adapter = geometry_adapter = gson.getAdapter(Geometry.class);
+        TypeAdapter<Geometry> geometryTypeAdapter = this.geometryTypeAdapter;
+        if (geometryTypeAdapter == null) {
+          geometryTypeAdapter = gson.getAdapter(Geometry.class);
+          this.geometryTypeAdapter = geometryTypeAdapter;
         }
-        geometry_adapter.write(jsonWriter, object.geometry());
+        geometryTypeAdapter.write(jsonWriter, object.geometry());
       }
       jsonWriter.name("properties");
       if (object.properties() == null) {
         jsonWriter.nullValue();
       } else {
-        TypeAdapter<JsonObject> jsonObject_adapter = this.jsonObject_adapter;
-        if (jsonObject_adapter == null) {
-          this.jsonObject_adapter = jsonObject_adapter = gson.getAdapter(JsonObject.class);
+        TypeAdapter<JsonObject> jsonObjectTypeAdapter = this.jsonObjectTypeAdapter;
+        if (jsonObjectTypeAdapter == null) {
+          jsonObjectTypeAdapter = gson.getAdapter(JsonObject.class);
+          this.jsonObjectTypeAdapter = jsonObjectTypeAdapter;
         }
-        jsonObject_adapter.write(jsonWriter, object.properties());
+        jsonObjectTypeAdapter.write(jsonWriter, object.properties());
       }
       jsonWriter.endObject();
     }
+
     @Override
-    @SuppressWarnings("unchecked")
     public Feature read(JsonReader jsonReader) throws IOException {
       if (jsonReader.peek() == JsonToken.NULL) {
         jsonReader.nextNull();
@@ -570,55 +577,60 @@ public final class Feature implements GeoJson {
       Geometry geometry = null;
       JsonObject properties = null;
       while (jsonReader.hasNext()) {
-        String _name = jsonReader.nextName();
+        String name = jsonReader.nextName();
         if (jsonReader.peek() == JsonToken.NULL) {
           jsonReader.nextNull();
           continue;
         }
-        switch (_name) {
-          case "type": {
-            TypeAdapter<String> string_adapter = this.string_adapter;
-            if (string_adapter == null) {
-              this.string_adapter = string_adapter = gson.getAdapter(String.class);
+        switch (name) {
+          case "type":
+            TypeAdapter<String> strTypeAdapter = this.stringTypeAdapter;
+            if (strTypeAdapter == null) {
+              strTypeAdapter = gson.getAdapter(String.class);
+              this.stringTypeAdapter = strTypeAdapter;
             }
-            type = string_adapter.read(jsonReader);
+            type = strTypeAdapter.read(jsonReader);
             break;
-          }
-          case "bbox": {
-            TypeAdapter<BoundingBox> boundingBox_adapter = this.boundingBox_adapter;
-            if (boundingBox_adapter == null) {
-              this.boundingBox_adapter = boundingBox_adapter = gson.getAdapter(BoundingBox.class);
+
+          case "bbox":
+            TypeAdapter<BoundingBox> boundingBoxTypeAdapter = this.boundingBoxTypeAdapter;
+            if (boundingBoxTypeAdapter == null) {
+              boundingBoxTypeAdapter = gson.getAdapter(BoundingBox.class);
+              this.boundingBoxTypeAdapter = boundingBoxTypeAdapter;
             }
-            bbox = boundingBox_adapter.read(jsonReader);
+            bbox = boundingBoxTypeAdapter.read(jsonReader);
             break;
-          }
-          case "id": {
-            TypeAdapter<String> string_adapter = this.string_adapter;
-            if (string_adapter == null) {
-              this.string_adapter = string_adapter = gson.getAdapter(String.class);
+
+          case "id":
+            strTypeAdapter = this.stringTypeAdapter;
+            if (strTypeAdapter == null) {
+              strTypeAdapter = gson.getAdapter(String.class);
+              this.stringTypeAdapter = strTypeAdapter;
             }
-            id = string_adapter.read(jsonReader);
+            id = strTypeAdapter.read(jsonReader);
             break;
-          }
-          case "geometry": {
-            TypeAdapter<Geometry> geometry_adapter = this.geometry_adapter;
-            if (geometry_adapter == null) {
-              this.geometry_adapter = geometry_adapter = gson.getAdapter(Geometry.class);
+
+          case "geometry":
+            TypeAdapter<Geometry> geometryTypeAdapter = this.geometryTypeAdapter;
+            if (geometryTypeAdapter == null) {
+              geometryTypeAdapter = gson.getAdapter(Geometry.class);
+              this.geometryTypeAdapter = geometryTypeAdapter;
             }
-            geometry = geometry_adapter.read(jsonReader);
+            geometry = geometryTypeAdapter.read(jsonReader);
             break;
-          }
-          case "properties": {
-            TypeAdapter<JsonObject> jsonObject_adapter = this.jsonObject_adapter;
-            if (jsonObject_adapter == null) {
-              this.jsonObject_adapter = jsonObject_adapter = gson.getAdapter(JsonObject.class);
+
+          case "properties":
+            TypeAdapter<JsonObject> jsonObjectTypeAdapter = this.jsonObjectTypeAdapter;
+            if (jsonObjectTypeAdapter == null) {
+              jsonObjectTypeAdapter = gson.getAdapter(JsonObject.class);
+              this.jsonObjectTypeAdapter = jsonObjectTypeAdapter;
             }
-            properties = jsonObject_adapter.read(jsonReader);
+            properties = jsonObjectTypeAdapter.read(jsonReader);
             break;
-          }
-          default: {
+
+          default:
             jsonReader.skipValue();
-          }
+
         }
       }
       jsonReader.endObject();

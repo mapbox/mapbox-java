@@ -13,7 +13,10 @@ import java.lang.reflect.Type;
  * that Gson shows when trying to deserialize a list of {@link Geometry}.
  *
  * @since 1.0.0
+ * @deprecated  this class is deprecated, {@link com.mapbox.geojson.GeometryAdapterFactory}
+ *   should be used to serialize/deserialize Geometries.
  */
+@Deprecated
 public class GeometryDeserializer implements JsonDeserializer<Geometry> {
 
   /**

@@ -9,9 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.geojson.constants.GeoJsonConstants;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.BoundingBoxTypeAdapter;
 
 import java.io.Serializable;
 
@@ -46,8 +44,7 @@ public class BoundingBox implements Serializable {
    */
   public static BoundingBox fromJson(String json) {
     Gson gson = new GsonBuilder()
-      .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
-      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter())
       .create();
     return gson.fromJson(json, BoundingBox.class);
   }
@@ -176,6 +173,7 @@ public class BoundingBox implements Serializable {
     }
     this.northeast = northeast;
   }
+
   /**
    * Provides the {@link Point} which represents the southwest corner of this bounding box when the
    * map is facing due north.
@@ -252,7 +250,7 @@ public class BoundingBox implements Serializable {
    * @since 3.0.0
    */
   public static TypeAdapter<BoundingBox> typeAdapter(Gson gson) {
-    return null; //new BoundingBox.GsonTypeAdapter(gson);
+    return new BoundingBoxTypeAdapter();
   }
 
   /**
@@ -264,7 +262,7 @@ public class BoundingBox implements Serializable {
    */
   public final String toJson() {
     Gson gson = new GsonBuilder()
-      .registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter())
       .create();
     return gson.toJson(this, BoundingBox.class);
   }
@@ -278,12 +276,12 @@ public class BoundingBox implements Serializable {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (o == this) {
+  public boolean equals(Object obj) {
+    if (obj == this) {
       return true;
     }
-    if (o instanceof BoundingBox) {
-      BoundingBox that = (BoundingBox) o;
+    if (obj instanceof BoundingBox) {
+      BoundingBox that = (BoundingBox) obj;
       return (this.southwest.equals(that.southwest()))
               && (this.northeast.equals(that.northeast()));
     }
@@ -292,11 +290,11 @@ public class BoundingBox implements Serializable {
 
   @Override
   public int hashCode() {
-    int h$ = 1;
-    h$ *= 1000003;
-    h$ ^= southwest.hashCode();
-    h$ *= 1000003;
-    h$ ^= northeast.hashCode();
-    return h$;
+    int hashCode = 1;
+    hashCode *= 1000003;
+    hashCode ^= southwest.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= northeast.hashCode();
+    return hashCode;
   }
 }

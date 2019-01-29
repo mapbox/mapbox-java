@@ -17,7 +17,10 @@ import java.util.List;
  * double value as per JSON specification.
  *
  * @since 1.0.0
+ * @deprecated  this class is deprecated, {@link com.mapbox.geojson.PointAsCoordinatesTypeAdapter}
+ *   should be used to serialize/deserialize coordinates as Points.
  */
+@Deprecated
 public class PointSerializer implements JsonSerializer<Point> {
 
   /**

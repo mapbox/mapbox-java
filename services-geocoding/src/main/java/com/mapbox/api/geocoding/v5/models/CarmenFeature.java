@@ -13,12 +13,9 @@ import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.GeoJson;
 import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.GeometryAdapterFactory;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.GeometryTypeAdapter;
-import com.mapbox.geojson.gson.PointDeserializer;
+import com.mapbox.geojson.gson.BoundingBoxTypeAdapter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -55,10 +52,10 @@ public abstract class CarmenFeature implements GeoJson, Serializable {
    */
   @NonNull
   public static CarmenFeature fromJson(@NonNull String json) {
+
     Gson gson = new GsonBuilder()
-      .registerTypeAdapter(Point.class, new PointDeserializer())
-      .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
-      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
+      .registerTypeAdapterFactory(GeometryAdapterFactory.create())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter())
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .create();
     CarmenFeature feature = gson.fromJson(json, CarmenFeature.class);
@@ -296,9 +293,10 @@ public abstract class CarmenFeature implements GeoJson, Serializable {
   @Override
   @SuppressWarnings("unused")
   public String toJson() {
+
     Gson gson = new GsonBuilder()
-      .registerTypeAdapter(Geometry.class, new GeometryTypeAdapter())
-      .registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer())
+      .registerTypeAdapterFactory(GeometryAdapterFactory.create())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter())
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .create();
 

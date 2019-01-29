@@ -125,7 +125,16 @@ public class GeometryCollectionTest extends TestUtils {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_GEOMETRYCOLLECTION);
+    final String json =
+            "    { \"type\": \"GeometryCollection\"," +
+                    "            \"bbox\": [120, 40, -120, -40]," +
+                    "      \"geometries\": [" +
+                    "      { \"type\": \"Point\"," +
+                    "              \"bbox\": [110, 30, -110, -30]," +
+                    "        \"coordinates\": [100, 0]}," +
+                    "      { \"type\": \"LineString\"," +
+                    "              \"bbox\": [110, 30, -110, -30]," +
+                    "        \"coordinates\": [[101, 0], [102, 1]]}]}";
     GeometryCollection geo = GeometryCollection.fromJson(json);
     assertEquals(geo.type(), "GeometryCollection");
     assertEquals(geo.geometries().get(0).type(), "Point");
@@ -134,7 +143,16 @@ public class GeometryCollectionTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String jsonOriginal = loadJsonFixture(SAMPLE_GEOMETRYCOLLECTION);
+    final String jsonOriginal =
+            "    { \"type\": \"GeometryCollection\"," +
+            "            \"bbox\": [-120, -40, 120, 40]," +
+            "      \"geometries\": [" +
+            "      { \"type\": \"Point\"," +
+            "              \"bbox\": [-110, -30, 110, 30]," +
+            "        \"coordinates\": [100, 0]}," +
+            "      { \"type\": \"LineString\"," +
+            "              \"bbox\": [-110, -30, 110, 30]," +
+            "        \"coordinates\": [[101, 0], [102, 1]]}]}";
 
     List<Geometry> geometries = new ArrayList<>(2);
     geometries.add(Point.fromLngLat(100, 0,

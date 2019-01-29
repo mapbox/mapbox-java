@@ -127,7 +127,8 @@ public class LineStringTest extends TestUtils {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_LINESTRING_FIXTURE);
+    final String json = "{\"type\": \"LineString\"," +
+            "  \"coordinates\": [[ 100, 0], [101, 1]]} ";
     LineString geo = LineString.fromJson(json);
     assertEquals(geo.type(), "LineString");
     assertEquals(geo.coordinates().get(0).longitude(), 100.0, 0.0);
@@ -137,7 +138,8 @@ public class LineStringTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_LINESTRING_FIXTURE);
+    final String json = "{\"type\": \"LineString\"," +
+            "  \"coordinates\": [[ 100, 0], [101, 1]]} ";
     LineString geo = LineString.fromJson(json);
     String geoJsonString = geo.toJson();
     compareJson(geoJsonString, json);

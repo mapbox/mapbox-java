@@ -18,7 +18,10 @@ import java.util.List;
  * element which can be read by GSON and added to the final JSON output.
  *
  * @since 3.0.0
+ * @deprecated this class is deprecated, {@link com.mapbox.geojson.gson.BoundingBoxTypeAdapter}
+ *   should be used to serialize/deserialize coordinates as Points.
  */
+@Deprecated
 public class BoundingBoxSerializer implements JsonSerializer<BoundingBox> {
 
   /**

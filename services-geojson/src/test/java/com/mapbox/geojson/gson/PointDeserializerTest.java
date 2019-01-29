@@ -34,7 +34,7 @@ public class PointDeserializerTest extends TestUtils {
 
   @Test
   public void point_doesNotDeserializeObject() throws Exception {
-    thrown.expect(NullPointerException.class);
+    thrown.expect(JsonSyntaxException.class);
 
     String jsonString = "{ \"coordinates\": [100.0, 0.0, 200.0]}";
     GsonBuilder gsonBuilder = new GsonBuilder()
