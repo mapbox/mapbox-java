@@ -71,6 +71,29 @@ public abstract class MapboxMapMatching extends
 
   @Override
   protected Call<MapMatchingResponse> initializeCall() {
+    if (usePostMethod()) {
+      return getService().postCall(
+              ApiCallHelper.getHeaderUserAgent(clientAppName()),
+              user(),
+              profile(),
+              coordinates(),
+              accessToken(),
+              geometries(),
+              radiuses(),
+              steps(),
+              overview(),
+              timestamps(),
+              annotations(),
+              language(),
+              tidy(),
+              roundaboutExits(),
+              bannerInstructions(),
+              voiceInstructions(),
+              voiceUnits(),
+              waypoints(),
+              waypointNames(),
+              approaches());
+    }
     return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
@@ -242,6 +265,8 @@ public abstract class MapboxMapMatching extends
     return coordinatesFormatted;
   }
 
+  @NonNull
+  abstract Boolean usePostMethod();
 
   @Nullable
   abstract String clientAppName();
@@ -319,7 +344,8 @@ public abstract class MapboxMapMatching extends
       .baseUrl(Constants.BASE_API_URL)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
-      .user(DirectionsCriteria.PROFILE_DEFAULT_USER);
+      .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
+      .usePostMethod(false);
   }
 
   /**
@@ -337,6 +363,29 @@ public abstract class MapboxMapMatching extends
     private Integer[] waypoints;
     private String[] waypointNames;
     private String[] approaches;
+
+    /**
+     * Use POST method to request data.
+     * The default is to use GET.
+     * @return this builder for chaining options together
+     * @since 4.4.0
+     */
+    public Builder post() {
+      usePostMethod(true);
+      return this;
+    }
+
+    /**
+     * Use GET method to request data.
+     * @return this builder for chaining options together
+     * @since 4.4.0
+     */
+    public Builder get() {
+      usePostMethod(false);
+      return this;
+    }
+
+    abstract Builder usePostMethod(@NonNull Boolean usePost);
 
     /**
      * Required to call when this is being built. If no access token provided,
