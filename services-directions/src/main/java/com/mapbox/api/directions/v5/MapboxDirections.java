@@ -89,7 +89,7 @@ public abstract class MapboxDirections extends
       approaches(),
       waypointNames(),
       waypointTargets(),
-      saveRoute());
+      enableRefresh());
   }
 
   @Override
@@ -340,7 +340,7 @@ public abstract class MapboxDirections extends
   abstract String waypointTargets();
 
   @Nullable
-  abstract Boolean saveRoute();
+  abstract Boolean enableRefresh();
 
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
@@ -776,7 +776,7 @@ public abstract class MapboxDirections extends
 
     abstract Builder waypointTargets(@Nullable String waypointTargets);
 
-    abstract Builder saveRoute();
+    abstract Builder enableRefresh();
 
     abstract MapboxDirections autoBuild();
 

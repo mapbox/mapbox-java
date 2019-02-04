@@ -25,14 +25,14 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
     return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       routeId(),
-      annotations(),
+      routeIndex(),
       accessToken()
     );
   }
 
   abstract String routeId();
 
-  abstract String annotations();
+  abstract String routeIndex();
 
   abstract String accessToken();
 
@@ -57,17 +57,12 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
       return this;
     }
 
-    abstract MapboxDirections.Builder annotation(@Nullable String annotation);
+    abstract MapboxDirections.Builder routeIndex(@Nullable String routeIndex);
 
     public abstract MapboxDirections.Builder accessToken(@NonNull String accessToken);
 
     public abstract MapboxDirections.Builder clientAppName(@NonNull String clientAppName);
 
-    abstract MapboxDirectionsRefresh autoBuild();
-
-    public MapboxDirectionsRefresh build() {
-      annotation(TextUtils.join(",", annotations));
-      return autoBuild();
-    }
+    abstract MapboxDirectionsRefresh build();
   }
 }
