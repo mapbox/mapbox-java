@@ -5,12 +5,10 @@ import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.utils.ApiCallHelper;
-import com.mapbox.core.utils.TextUtils;
 
 import retrofit2.Call;
 
@@ -24,15 +22,18 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
   protected Call<DirectionsRefreshResponse> initializeCall() {
     return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
-      routeId(),
+      requestId(),
       routeIndex(),
+      legIndex(),
       accessToken()
     );
   }
 
-  abstract String routeId();
+  abstract String requestId();
 
   abstract String routeIndex();
+
+  abstract String legIndex();
 
   abstract String accessToken();
 
@@ -49,7 +50,7 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
   public abstract static class Builder {
     private String[] annotations;
 
-    public abstract Builder routeId(String routeId);
+    public abstract Builder requestId(String requestId);
 
     // todo nullable?
     public Builder annotations(@Nullable @DirectionsCriteria.AnnotationCriteria String... annotations) {
@@ -57,11 +58,13 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
       return this;
     }
 
-    abstract MapboxDirections.Builder routeIndex(@Nullable String routeIndex);
+    abstract Builder routeIndex(@Nullable String routeIndex);
 
-    public abstract MapboxDirections.Builder accessToken(@NonNull String accessToken);
+    abstract Builder legIndex(@Nullable String legIndex);
 
-    public abstract MapboxDirections.Builder clientAppName(@NonNull String clientAppName);
+    public abstract Builder accessToken(@NonNull String accessToken);
+
+    public abstract Builder clientAppName(@NonNull String clientAppName);
 
     abstract MapboxDirectionsRefresh build();
   }

@@ -13,17 +13,19 @@ public interface DirectionsRefreshService {
   /**
    *
    * @param userAgent
-   * @param routeId
+   * @param requestId
    * @param routeIndex
+   * @param legIndex
    * @param accessToken
    * @return
    * @since 4.4.0
    */
-  @GET("directions-refresh/v1/{route_id}/{route_index}")
+  @GET("directions-refresh/v1/{request_id}/{route_index}/{leg_index}")
   Call<DirectionsRefreshResponse> getCall(
     @Header("User-Agent") String userAgent,
-    @Path("route_id") String routeId,
+    @Path("request_id") String requestId,
     @Path("route_index") String routeIndex,
+    @Path("leg_index") String legIndex,
     @Query("access_token") String accessToken
   );
 }
