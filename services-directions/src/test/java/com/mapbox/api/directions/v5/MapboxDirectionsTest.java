@@ -8,7 +8,6 @@ import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.api.directions.v5.models.RouteOptions;
-import com.mapbox.api.directions.v5.models.StepManeuver;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
@@ -22,12 +21,14 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.Call;
+import okhttp3.EventListener;
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -730,4 +731,52 @@ public class MapboxDirectionsTest extends TestUtils {
 
   }
 
+  @Test
+  public void testWithInterceptor() throws Exception {
+    Interceptor interceptor = new Interceptor() {
+      @Override
+      public okhttp3.Response intercept(Chain chain) throws IOException {
+        return null;
+      }
+    };
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .steps(true)
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .addWaypointNames("Home", "Work")
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .interceptor(interceptor)
+      .build();
+
+    assertEquals(interceptor, mapboxDirections.interceptor());
+  }
+
+  @Test
+  public void testWithEventListener() throws Exception {
+    EventListener eventListener = new EventListener() {
+      @Override
+      public void callStart(Call call) {
+        super.callStart(call);
+      }
+    };
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .steps(true)
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .addWaypointNames("Home", "Work")
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .eventListener(eventListener)
+      .build();
+
+
+    assertEquals(eventListener, mapboxDirections.eventListener());
+  }
 }

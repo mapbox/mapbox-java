@@ -33,7 +33,11 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import okhttp3.EventListener;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Converter;
@@ -51,9 +55,9 @@ import retrofit2.Response;
  * </p>
  *
  * @see <a href="https://www.mapbox.com/android-docs/java-sdk/overview/directions/">Android
- *   Directions documentation</a>
+ * Directions documentation</a>
  * @see <a href="https://www.mapbox.com/api-documentation/navigation/#directions">Directions API
- *   documentation</a>
+ * documentation</a>
  * @since 1.0.0
  */
 @AutoValue
@@ -179,6 +183,29 @@ public abstract class MapboxDirections extends
     });
   }
 
+  @Override
+  protected synchronized OkHttpClient getOkHttpClient() {
+    if (okHttpClient == null) {
+      OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+      if (isEnableDebug()) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        httpClient.addInterceptor(logging);
+      }
+      Interceptor interceptor = interceptor();
+      if (interceptor != null) {
+        httpClient.addInterceptor(interceptor);
+      }
+      EventListener eventListener = eventListener();
+      if (eventListener != null) {
+        httpClient.eventListener(eventListener);
+      }
+
+      okHttpClient = httpClient.build();
+    }
+    return okHttpClient;
+  }
+
   private void errorDidOccur(@Nullable Callback<DirectionsResponse> callback,
                              @NonNull Response<DirectionsResponse> response) {
     // Response gave an error, we try to LOGGER any messages into the LOGGER here.
@@ -261,8 +288,8 @@ public abstract class MapboxDirections extends
         coordinatesFormatted[index++] = "";
       } else {
         coordinatesFormatted[index++] = String.format(Locale.US, "%s,%s",
-                TextUtils.formatCoordinate(target.longitude()),
-                TextUtils.formatCoordinate(target.latitude()));
+          TextUtils.formatCoordinate(target.longitude()),
+          TextUtils.formatCoordinate(target.latitude()));
       }
     }
     return TextUtils.join(";", coordinatesFormatted);
@@ -337,6 +364,12 @@ public abstract class MapboxDirections extends
 
   @Nullable
   abstract String waypointTargets();
+
+  @Nullable
+  abstract Interceptor interceptor();
+
+  @Nullable
+  abstract EventListener eventListener();
 
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
@@ -533,7 +566,7 @@ public abstract class MapboxDirections extends
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/navigation/#instructions-languages">Supported
-     *   Languages</a>
+     * Languages</a>
      * @since 2.2.0
      */
     public Builder language(@Nullable Locale language) {
@@ -568,7 +601,7 @@ public abstract class MapboxDirections extends
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/navigation/#route-leg-object">RouteLeg object
-     *   documentation</a>
+     * documentation</a>
      * @since 2.1.0
      */
     public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
@@ -714,8 +747,23 @@ public abstract class MapboxDirections extends
      */
     public abstract Builder baseUrl(String baseUrl);
 
-    abstract Builder coordinates(@NonNull List<Point> coordinates);
+    /**
+     * Adds an optional interceptor to set in the OkHttp client.
+     *
+     * @param interceptor to set for OkHttp
+     * @return this builder for chaining options together
+     */
+    public abstract Builder interceptor(Interceptor interceptor);
 
+    /**
+     * Adds an optional event listener to set in the OkHttp client.
+     *
+     * @param eventListener to set for OkHttp
+     * @return this builder for chaining options together
+     */
+    public abstract Builder eventListener(EventListener eventListener);
+
+    abstract Builder coordinates(@NonNull List<Point> coordinates);
 
     /**
      * Indicates from which side of the road to approach a waypoint.
@@ -744,6 +792,7 @@ public abstract class MapboxDirections extends
      * each separated by  ; . Values can be any string and total number of all characters cannot
      * exceed 500. If provided, the list of waypointNames must be the same length as the list of
      * coordinates, but you can skip a coordinate and show its position with the ; separator.
+     *
      * @param waypointNames Custom names for waypoints used for the arrival instruction.
      * @return this builder for chaining options together
      * @since 3.3.0
@@ -761,6 +810,7 @@ public abstract class MapboxDirections extends
      * The number of waypoint targets must be the same as the number of coordinates,
      * but you can skip a coordinate with a null value.
      * Must be used with steps=true.
+     *
      * @param waypointTargets list of coordinate points for drop-off locations
      * @return this builder for chaining options together
      * @since 4.3.0
@@ -807,7 +857,7 @@ public abstract class MapboxDirections extends
       if (waypointTargets != null) {
         if (waypointTargets.length != coordinates.size()) {
           throw new ServicesException("Number of waypoint targets must match "
-                  + " the number of waypoints provided.");
+            + " the number of waypoints provided.");
         }
 
         waypointTargets(formatWaypointTargets(waypointTargets));
