@@ -231,6 +231,19 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void waypoints_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .addWaypoint(Point.fromLngLat(4.56, 7.89))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .addWaypoints(0,2)
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    String semicolon = "%3B";
+    assertTrue(directions.cloneCall().request().url().toString().contains("waypoints=0" + semicolon + "2"));
+  }
+
+  @Test
   public void alternatives_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
@@ -653,6 +666,53 @@ public class MapboxDirectionsTest extends TestUtils {
 
     String approaches = routeOptions.approaches();
     assertEquals("unrestricted;curb", approaches);
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenLessThanTwoWaypointsProvided() {
+    MapboxDirections.builder()
+            .origin(Point.fromLngLat(2.0, 2.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .addWaypoints(0)
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenWaypointsDoNotStartWith0() {
+    MapboxDirections.builder()
+            .origin(Point.fromLngLat(2.0, 2.0))
+            .addWaypoint(Point.fromLngLat(3.0, 3.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .addWaypoints(1, 2)
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenWaypointDoNotEndWithLast() {
+    MapboxDirections.builder()
+            .origin(Point.fromLngLat(2.0, 2.0))
+            .addWaypoint(Point.fromLngLat(3.0, 3.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .addWaypoints(0, 1)
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenMiddleWaypointsAreWrong() {
+    MapboxDirections.builder()
+            .origin(Point.fromLngLat(2.0, 2.0))
+            .addWaypoint(Point.fromLngLat(3.0, 3.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .addWaypoints(0, 3, 2)
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .build();
   }
 
   @Test
