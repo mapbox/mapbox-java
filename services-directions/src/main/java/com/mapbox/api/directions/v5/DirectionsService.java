@@ -46,6 +46,7 @@ public interface DirectionsService {
    * @param voiceUnits         voice units
    * @param exclude            exclude tolls, motorways or more along your route
    * @param approaches         which side of the road to approach a waypoint
+   * @param waypoints          which input coordinates should be treated as waypoints
    * @param waypointNames      custom names for waypoints used for the arrival instruction
    * @param waypointTargets    list of coordinate pairs for drop-off locations
    * @return the {@link DirectionsResponse} in a Call wrapper
@@ -73,6 +74,7 @@ public interface DirectionsService {
     @Query("voice_units") String voiceUnits,
     @Query("exclude") String exclude,
     @Query("approaches") String approaches,
+    @Query("waypoints") String waypoints,
     @Query("waypoint_names") String waypointNames,
     @Query("waypoint_targets") String waypointTargets
   );

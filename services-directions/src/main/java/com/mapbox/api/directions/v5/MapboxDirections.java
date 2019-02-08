@@ -1,6 +1,7 @@
 package com.mapbox.api.directions.v5;
 
 import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -91,6 +92,7 @@ public abstract class MapboxDirections extends
       voiceUnits(),
       exclude(),
       approaches(),
+      waypoints(),
       waypointNames(),
       waypointTargets());
   }
@@ -360,6 +362,9 @@ public abstract class MapboxDirections extends
   abstract String approaches();
 
   @Nullable
+  abstract String waypoints();
+
+  @Nullable
   abstract String waypointNames();
 
   @Nullable
@@ -419,6 +424,7 @@ public abstract class MapboxDirections extends
     private Point destination;
     private Point origin;
     private String[] approaches;
+    private Integer[] waypoints;
     private String[] waypointNames;
     private Point[] waypointTargets;
 
@@ -788,6 +794,26 @@ public abstract class MapboxDirections extends
     abstract Builder approaches(@Nullable String approaches);
 
     /**
+     * Optionally, set which input coordinates should be treated as waypoints.
+     * <p>
+     * Most useful in combination with  steps=true and requests based on traces
+     * with high sample rates. Can be an index corresponding to any of the input coordinates,
+     * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
+     * {@link #steps()}
+     * </p>
+     *
+     * @param waypoints integer array of coordinate indices to be used as waypoints
+     * @return this builder for chaining options together
+     * @since 4.4.0
+     */
+    public Builder addWaypoints(@Nullable @IntRange(from = 0) Integer... waypoints) {
+      this.waypoints = waypoints;
+      return this;
+    }
+
+    abstract Builder waypoints(@Nullable String waypoints);
+
+    /**
      * Custom names for waypoints used for the arrival instruction,
      * each separated by  ; . Values can be any string and total number of all characters cannot
      * exceed 500. If provided, the list of waypointNames must be the same length as the list of
@@ -845,6 +871,24 @@ public abstract class MapboxDirections extends
           + " directions API request.");
       }
 
+      if (waypoints != null) {
+        if (waypoints.length < 2) {
+          throw new ServicesException(
+                  "Waypoints must be a list of at least two indexes separated by ';'");
+        }
+        if (waypoints[0] != 0 || waypoints[waypoints.length - 1] != coordinates.size() - 1) {
+          throw new ServicesException(
+                  "Waypoints must contain indices of the first and last coordinates"
+          );
+        }
+        for (int i = 1; i < waypoints.length - 1; i++) {
+          if (waypoints[i] < 0 || waypoints[i] >= coordinates.size()) {
+            throw new ServicesException(
+                    "Waypoints index too large (no corresponding coordinate)");
+          }
+        }
+      }
+
       if (waypointNames != null) {
         if (waypointNames.length != coordinates.size()) {
           throw new ServicesException("Number of waypoint names must match "
@@ -879,6 +923,7 @@ public abstract class MapboxDirections extends
       bearing(TextUtils.formatBearing(bearings));
       annotation(TextUtils.join(",", annotations));
       radius(TextUtils.formatRadiuses(radiuses));
+      waypoints(TextUtils.join(";", waypoints));
 
       MapboxDirections directions = autoBuild();
 
