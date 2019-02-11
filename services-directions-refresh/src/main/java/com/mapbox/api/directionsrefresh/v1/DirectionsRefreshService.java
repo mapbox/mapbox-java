@@ -20,7 +20,7 @@ public interface DirectionsRefreshService {
    * @return
    * @since 4.4.0
    */
-  @GET("directions-refresh/v1/{request_id}/{route_index}/{leg_index}")
+  @GET("directions-refresh/v5/mapbox/driving-traffic/{request_id}/{route_index}/{leg_index}")
   Call<DirectionsRefreshResponse> getCall(
     @Header("User-Agent") String userAgent,
     @Path("request_id") String requestId,

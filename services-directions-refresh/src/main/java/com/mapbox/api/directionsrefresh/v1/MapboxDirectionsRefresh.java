@@ -4,16 +4,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.GsonBuilder;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshAdapterFactory;
 import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
 import com.mapbox.core.MapboxService;
-import com.mapbox.core.constants.Constants;
 import com.mapbox.core.utils.ApiCallHelper;
 
 import retrofit2.Call;
 
 @AutoValue
-public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRefreshResponse, DirectionsRefreshService> {
+public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRefreshResponse,
+  DirectionsRefreshService> {
 
   protected MapboxDirectionsRefresh() {
     super(DirectionsRefreshService.class);
@@ -37,11 +40,24 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
 
   abstract String accessToken();
 
+  @Nullable
   abstract String clientAppName();
 
+  @Override
+  protected GsonBuilder getGsonBuilder() {
+    return super.getGsonBuilder()
+      .registerTypeAdapterFactory(DirectionsRefreshAdapterFactory.create())
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+  }
+
+  @NonNull
+  @Override
+  protected abstract String baseUrl();
+
   public static Builder builder() {
+    //todo update once live in production
     return new AutoValue_MapboxDirectionsRefresh.Builder()
-      .baseUrl(Constants.BASE_API_URL);
+      .baseUrl("https://api-directions-refresh-internal.tilestream.net");
   }
 
   public abstract Builder toBuilder();
@@ -58,14 +74,16 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
       return this;
     }
 
-    abstract Builder routeIndex(@Nullable String routeIndex);
+    public abstract Builder routeIndex(@NonNull String routeIndex);
 
-    abstract Builder legIndex(@Nullable String legIndex);
+    public abstract Builder legIndex(@NonNull String legIndex);
 
     public abstract Builder accessToken(@NonNull String accessToken);
 
     public abstract Builder clientAppName(@NonNull String clientAppName);
 
-    abstract MapboxDirectionsRefresh build();
+    public abstract Builder baseUrl(String baseUrl);
+
+    public abstract MapboxDirectionsRefresh build();
   }
 }

@@ -74,6 +74,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   @Nullable
   public abstract LegAnnotation annotation();
 
+  @Nullable
   public abstract String legIndex();
 
   /**

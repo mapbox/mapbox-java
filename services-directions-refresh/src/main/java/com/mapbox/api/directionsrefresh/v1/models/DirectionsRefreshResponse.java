@@ -1,16 +1,17 @@
 package com.mapbox.api.directionsrefresh.v1.models;
 
+import android.support.annotation.NonNull;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.models.DirectionsJsonObject;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 
-import java.io.Serializable;
-
 @AutoValue
-public abstract class DirectionsRefreshResponse implements Serializable {
+public abstract class DirectionsRefreshResponse extends DirectionsJsonObject {
 
   public abstract String code();
 
@@ -18,6 +19,7 @@ public abstract class DirectionsRefreshResponse implements Serializable {
 
   public abstract DirectionsRoute route();
 
+  @NonNull
   public static Builder builder() {
     return new AutoValue_DirectionsRefreshResponse.Builder();
   }
@@ -32,6 +34,8 @@ public abstract class DirectionsRefreshResponse implements Serializable {
       .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     return gsonBuilder.create().fromJson(json, DirectionsRefreshResponse.class);
   }
+
+  public abstract Builder toBuilder();
 
   @AutoValue.Builder
   public abstract static class Builder {

@@ -776,7 +776,7 @@ public abstract class MapboxDirections extends
 
     abstract Builder waypointTargets(@Nullable String waypointTargets);
 
-    abstract Builder enableRefresh();
+    public abstract Builder enableRefresh(Boolean enableRefresh);
 
     abstract MapboxDirections autoBuild();
 

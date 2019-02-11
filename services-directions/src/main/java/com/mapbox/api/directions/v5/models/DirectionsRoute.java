@@ -32,6 +32,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
     return new AutoValue_DirectionsRoute.Builder();
   }
 
+  @Nullable
   public abstract String routeIndex();
 
   /**

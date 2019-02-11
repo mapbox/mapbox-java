@@ -2,9 +2,14 @@ apply plugin: 'java-library'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(path: ':services-core')
+    api project(":services-core")
+
+    // Annotations
+    compileOnly dependenciesList.supportAnnotation
+
+    // AutoValue
+    compileOnly dependenciesList.autoValue
+    compileOnly dependenciesList.autoValueGson
     compile project(path: ':services')
 }
 
-sourceCompatibility = "6"
-targetCompatibility = "6"
