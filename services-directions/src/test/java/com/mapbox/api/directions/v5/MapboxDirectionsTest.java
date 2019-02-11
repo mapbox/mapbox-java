@@ -8,7 +8,6 @@ import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.api.directions.v5.models.RouteOptions;
-import com.mapbox.api.directions.v5.models.StepManeuver;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
@@ -22,12 +21,14 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.Call;
+import okhttp3.EventListener;
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -227,6 +228,19 @@ public class MapboxDirectionsTest extends TestUtils {
       .build();
     assertTrue(directions.cloneCall().request().url().toString()
       .contains("1.234,2.345;90.01,50.23;13.493,9.958"));
+  }
+
+  @Test
+  public void waypoints_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .addWaypoint(Point.fromLngLat(4.56, 7.89))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .addViaWayPoints(0, 2)
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    String semicolon = "%3B";
+    assertTrue(directions.cloneCall().request().url().toString().contains("waypoints=0" + semicolon + "2"));
   }
 
   @Test
@@ -654,6 +668,53 @@ public class MapboxDirectionsTest extends TestUtils {
     assertEquals("unrestricted;curb", approaches);
   }
 
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenLessThanTwoWaypointsProvided() {
+    MapboxDirections.builder()
+            .origin(Point.fromLngLat(2.0, 2.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .addViaWayPoints(0)
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenWaypointsDoNotStartWith0() {
+    MapboxDirections.builder()
+            .origin(Point.fromLngLat(2.0, 2.0))
+            .addWaypoint(Point.fromLngLat(3.0, 3.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .addViaWayPoints(1, 2)
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenWaypointDoNotEndWithLast() {
+    MapboxDirections.builder()
+            .origin(Point.fromLngLat(2.0, 2.0))
+            .addWaypoint(Point.fromLngLat(3.0, 3.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .addViaWayPoints(0, 1)
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenMiddleWaypointsAreWrong() {
+    MapboxDirections.builder()
+            .origin(Point.fromLngLat(2.0, 2.0))
+            .addWaypoint(Point.fromLngLat(3.0, 3.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .addViaWayPoints(0, 3, 2)
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .build();
+  }
+
   @Test
   public void sanityWaypointNamesInstructions() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
@@ -730,4 +791,52 @@ public class MapboxDirectionsTest extends TestUtils {
 
   }
 
+  @Test
+  public void testWithInterceptor() throws Exception {
+    Interceptor interceptor = new Interceptor() {
+      @Override
+      public okhttp3.Response intercept(Chain chain) throws IOException {
+        return null;
+      }
+    };
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .steps(true)
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .addWaypointNames("Home", "Work")
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .interceptor(interceptor)
+      .build();
+
+    assertEquals(interceptor, mapboxDirections.interceptor());
+  }
+
+  @Test
+  public void testWithEventListener() throws Exception {
+    EventListener eventListener = new EventListener() {
+      @Override
+      public void callStart(Call call) {
+        super.callStart(call);
+      }
+    };
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .steps(true)
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .addWaypointNames("Home", "Work")
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .eventListener(eventListener)
+      .build();
+
+
+    assertEquals(eventListener, mapboxDirections.eventListener());
+  }
 }

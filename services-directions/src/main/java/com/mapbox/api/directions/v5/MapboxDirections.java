@@ -1,6 +1,7 @@
 package com.mapbox.api.directions.v5;
 
 import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -33,7 +34,11 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import okhttp3.EventListener;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Converter;
@@ -51,9 +56,9 @@ import retrofit2.Response;
  * </p>
  *
  * @see <a href="https://www.mapbox.com/android-docs/java-sdk/overview/directions/">Android
- *   Directions documentation</a>
+ * Directions documentation</a>
  * @see <a href="https://www.mapbox.com/api-documentation/navigation/#directions">Directions API
- *   documentation</a>
+ * documentation</a>
  * @since 1.0.0
  */
 @AutoValue
@@ -87,6 +92,7 @@ public abstract class MapboxDirections extends
       voiceUnits(),
       exclude(),
       approaches(),
+      viaWayPoints(),
       waypointNames(),
       waypointTargets(),
       enableRefresh());
@@ -180,6 +186,29 @@ public abstract class MapboxDirections extends
     });
   }
 
+  @Override
+  protected synchronized OkHttpClient getOkHttpClient() {
+    if (okHttpClient == null) {
+      OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+      if (isEnableDebug()) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        httpClient.addInterceptor(logging);
+      }
+      Interceptor interceptor = interceptor();
+      if (interceptor != null) {
+        httpClient.addInterceptor(interceptor);
+      }
+      EventListener eventListener = eventListener();
+      if (eventListener != null) {
+        httpClient.eventListener(eventListener);
+      }
+
+      okHttpClient = httpClient.build();
+    }
+    return okHttpClient;
+  }
+
   private void errorDidOccur(@Nullable Callback<DirectionsResponse> callback,
                              @NonNull Response<DirectionsResponse> response) {
     // Response gave an error, we try to LOGGER any messages into the LOGGER here.
@@ -262,8 +291,8 @@ public abstract class MapboxDirections extends
         coordinatesFormatted[index++] = "";
       } else {
         coordinatesFormatted[index++] = String.format(Locale.US, "%s,%s",
-                TextUtils.formatCoordinate(target.longitude()),
-                TextUtils.formatCoordinate(target.latitude()));
+          TextUtils.formatCoordinate(target.longitude()),
+          TextUtils.formatCoordinate(target.latitude()));
       }
     }
     return TextUtils.join(";", coordinatesFormatted);
@@ -334,6 +363,9 @@ public abstract class MapboxDirections extends
   abstract String approaches();
 
   @Nullable
+  abstract String viaWayPoints();
+
+  @Nullable
   abstract String waypointNames();
 
   @Nullable
@@ -341,6 +373,12 @@ public abstract class MapboxDirections extends
 
   @Nullable
   abstract Boolean enableRefresh();
+
+  @Nullable
+  abstract Interceptor interceptor();
+
+  @Nullable
+  abstract EventListener eventListener();
 
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
@@ -390,6 +428,7 @@ public abstract class MapboxDirections extends
     private Point destination;
     private Point origin;
     private String[] approaches;
+    private Integer[] viaWayPoints;
     private String[] waypointNames;
     private Point[] waypointTargets;
 
@@ -537,7 +576,7 @@ public abstract class MapboxDirections extends
      *                 written in when returned
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/navigation/#instructions-languages">Supported
-     *   Languages</a>
+     * Languages</a>
      * @since 2.2.0
      */
     public Builder language(@Nullable Locale language) {
@@ -572,7 +611,7 @@ public abstract class MapboxDirections extends
      *                    or null which will result in no annotations being used
      * @return this builder for chaining options together
      * @see <a href="https://www.mapbox.com/api-documentation/navigation/#route-leg-object">RouteLeg object
-     *   documentation</a>
+     * documentation</a>
      * @since 2.1.0
      */
     public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
@@ -718,8 +757,23 @@ public abstract class MapboxDirections extends
      */
     public abstract Builder baseUrl(String baseUrl);
 
-    abstract Builder coordinates(@NonNull List<Point> coordinates);
+    /**
+     * Adds an optional interceptor to set in the OkHttp client.
+     *
+     * @param interceptor to set for OkHttp
+     * @return this builder for chaining options together
+     */
+    public abstract Builder interceptor(Interceptor interceptor);
 
+    /**
+     * Adds an optional event listener to set in the OkHttp client.
+     *
+     * @param eventListener to set for OkHttp
+     * @return this builder for chaining options together
+     */
+    public abstract Builder eventListener(EventListener eventListener);
+
+    abstract Builder coordinates(@NonNull List<Point> coordinates);
 
     /**
      * Indicates from which side of the road to approach a waypoint.
@@ -744,10 +798,31 @@ public abstract class MapboxDirections extends
     abstract Builder approaches(@Nullable String approaches);
 
     /**
+     * Optionally, set which input coordinates should be treated as via way points.
+     * <p>
+     * Most useful in combination with  steps=true and requests based on traces
+     * with high sample rates. Can be an index corresponding to any of the input coordinates,
+     * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
+     * {@link #steps()}
+     * </p>
+     *
+     * @param viaWayPoints integer array of coordinate indices to be used as via way points
+     * @return this builder for chaining options together
+     * @since 4.4.0
+     */
+    public Builder addViaWayPoints(@Nullable @IntRange(from = 0) Integer... viaWayPoints) {
+      this.viaWayPoints = viaWayPoints;
+      return this;
+    }
+
+    abstract Builder viaWayPoints(@Nullable String viaWayPoints);
+
+    /**
      * Custom names for waypoints used for the arrival instruction,
      * each separated by  ; . Values can be any string and total number of all characters cannot
      * exceed 500. If provided, the list of waypointNames must be the same length as the list of
      * coordinates, but you can skip a coordinate and show its position with the ; separator.
+     *
      * @param waypointNames Custom names for waypoints used for the arrival instruction.
      * @return this builder for chaining options together
      * @since 3.3.0
@@ -765,6 +840,7 @@ public abstract class MapboxDirections extends
      * The number of waypoint targets must be the same as the number of coordinates,
      * but you can skip a coordinate with a null value.
      * Must be used with steps=true.
+     *
      * @param waypointTargets list of coordinate points for drop-off locations
      * @return this builder for chaining options together
      * @since 4.3.0
@@ -801,6 +877,25 @@ public abstract class MapboxDirections extends
           + " directions API request.");
       }
 
+      if (viaWayPoints != null) {
+        if (viaWayPoints.length < 2) {
+          throw new ServicesException(
+            "Via way points must be a list of at least two indexes separated by ';'");
+        }
+        if (viaWayPoints[0] != 0
+          || viaWayPoints[viaWayPoints.length - 1] != coordinates.size() - 1) {
+          throw new ServicesException(
+            "Via way points must contain indices of the first and last coordinates"
+          );
+        }
+        for (int i = 1; i < viaWayPoints.length - 1; i++) {
+          if (viaWayPoints[i] < 0 || viaWayPoints[i] >= coordinates.size()) {
+            throw new ServicesException(
+              "Via way points index too large (no corresponding coordinate)");
+          }
+        }
+      }
+
       if (waypointNames != null) {
         if (waypointNames.length != coordinates.size()) {
           throw new ServicesException("Number of waypoint names must match "
@@ -813,7 +908,7 @@ public abstract class MapboxDirections extends
       if (waypointTargets != null) {
         if (waypointTargets.length != coordinates.size()) {
           throw new ServicesException("Number of waypoint targets must match "
-                  + " the number of waypoints provided.");
+            + " the number of waypoints provided.");
         }
 
         waypointTargets(formatWaypointTargets(waypointTargets));
@@ -835,6 +930,7 @@ public abstract class MapboxDirections extends
       bearing(TextUtils.formatBearing(bearings));
       annotation(TextUtils.join(",", annotations));
       radius(TextUtils.formatRadiuses(radiuses));
+      viaWayPoints(TextUtils.join(";", viaWayPoints));
 
       MapboxDirections directions = autoBuild();
 

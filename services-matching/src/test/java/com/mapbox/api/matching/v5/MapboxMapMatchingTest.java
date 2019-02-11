@@ -678,4 +678,31 @@ public class MapboxMapMatchingTest extends TestUtils {
     assertEquals(200, response.code());
     assertEquals("Ok", response.body().code());
   }
+
+  @Test
+  public void testUsePostMethod() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+        .accessToken(ACCESS_TOKEN)
+        .baseUrl(mockUrl.toString())
+        .profile(PROFILE_DRIVING)
+        .steps(true)
+        .tidy(true)
+        .waypoints("0;6")
+        .coordinates(Arrays.asList(
+            Point.fromLngLat(2.344003915786743,48.85805170891599),
+            Point.fromLngLat(2.346750497817993,48.85727523615161),
+            Point.fromLngLat(2.348681688308716,48.85936462637049),
+            Point.fromLngLat(2.349550724029541,48.86084691113991),
+            Point.fromLngLat(2.349550724029541,48.8608892614883),
+            Point.fromLngLat(2.349625825881958,48.86102337068847),
+            Point.fromLngLat(2.34982967376709,48.86125629633996)))
+        .post()
+        .build();
+    Response<MapMatchingResponse> response = mapMatching.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+
+    assertNotNull(response.body().matchings());
+    assertEquals(1, response.body().matchings().size());
+  }
 }

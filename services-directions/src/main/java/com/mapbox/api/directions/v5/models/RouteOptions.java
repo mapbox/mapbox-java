@@ -268,6 +268,22 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String approaches();
 
   /**
+   * Indicates which input coordinates should be treated as via way points.
+   * <p>
+   * Most useful in combination with  steps=true and requests based on traces
+   * with high sample rates. Can be an index corresponding to any of the input coordinates,
+   * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
+   * {@link #steps()}
+   * </p>
+   *
+   * @return a string representing indices to be used as via way points
+   * @since 4.4.0
+   */
+  @SerializedName("waypoints")
+  @Nullable
+  public abstract String viaWayPoints();
+
+  /**
    * Custom names for waypoints used for the arrival instruction in banners and voice instructions,
    * each separated by  ; . Values can be any string and total number of all characters cannot
    * exceed 500. If provided, the list of waypoint_names must be the same length as the list of
@@ -540,6 +556,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
     @Nullable
     public abstract Builder approaches(String approaches);
+
+    /**
+     * The same via way points the user originally made when the request was made.
+     *
+     * @param indices to be used as via way points
+     * @return this builder for chaining options together
+     * @since 4.4.0
+     */
+
+    @Nullable
+    public abstract Builder viaWayPoints(@Nullable String indices);
 
     /**
      * The same waypoint names the user originally made when the request was made.
