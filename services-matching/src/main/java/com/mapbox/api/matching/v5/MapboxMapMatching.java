@@ -90,7 +90,7 @@ public abstract class MapboxMapMatching extends
               bannerInstructions(),
               voiceInstructions(),
               voiceUnits(),
-              waypoints(),
+              waypointIndices(),
               waypointNames(),
               approaches());
     }
@@ -112,7 +112,7 @@ public abstract class MapboxMapMatching extends
       bannerInstructions(),
       voiceInstructions(),
       voiceUnits(),
-      waypoints(),
+      waypointIndices(),
       waypointNames(),
       approaches());
   }
@@ -245,6 +245,7 @@ public abstract class MapboxMapMatching extends
           .requestUuid(PLACEHOLDER_UUID)
           .accessToken(accessToken())
           .approaches(approaches())
+          .waypointIndices(waypointIndices())
           .waypointNames(waypointNames())
           .baseUrl(baseUrl())
           .build()
@@ -320,7 +321,7 @@ public abstract class MapboxMapMatching extends
   abstract String voiceUnits();
 
   @Nullable
-  abstract String waypoints();
+  abstract String waypointIndices();
 
   @Nullable
   abstract String waypointNames();
@@ -360,7 +361,7 @@ public abstract class MapboxMapMatching extends
     private String[] annotations;
     private String[] timestamps;
     private Double[] radiuses;
-    private Integer[] waypoints;
+    private Integer[] waypointIndices;
     private String[] waypointNames;
     private String[] approaches;
 
@@ -482,14 +483,34 @@ public abstract class MapboxMapMatching extends
      * @param waypoints integer array of coordinate indices to be used as waypoints
      * @return this builder for chaining options together
      * @since 3.0.0
+     * @deprecated you should now use {@link #waypointIndices(Integer[])}
      */
+    @Deprecated
     public Builder waypoints(@Nullable @IntRange(from = 0) Integer... waypoints) {
-      this.waypoints = waypoints;
+      this.waypointIndices = waypoints;
       return this;
     }
 
-    // Required for matching with MapboxMapMatching waypoints() method.
-    abstract Builder waypoints(@Nullable String waypoints);
+    /**
+     * Optionally, set which input coordinates should be treated as waypoints / separate legs.
+     * Note: coordinate indices not added here act as silent waypoints
+     * <p>
+     * Most useful in combination with  steps=true and requests based on traces
+     * with high sample rates. Can be an index corresponding to any of the input coordinates,
+     * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
+     * {@link #steps()}
+     * </p>
+     *
+     * @param waypointIndices integer array of coordinate indices to be used as waypoints
+     * @return this builder for chaining options together
+     * @since 3.0.0
+     */
+    public Builder waypointIndices(@Nullable @IntRange(from = 0) Integer... waypointIndices) {
+      this.waypointIndices = waypointIndices;
+      return this;
+    }
+
+    abstract Builder waypointIndices(@Nullable String waypointIndices);
 
     /**
      * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
@@ -756,18 +777,19 @@ public abstract class MapboxMapMatching extends
           "There must be as many timestamps as there are coordinates.");
       }
 
-      if (waypoints != null) {
-        if (waypoints.length < 2) {
+      if (waypointIndices != null) {
+        if (waypointIndices.length < 2) {
           throw new ServicesException(
             "Waypoints must be a list of at least two indexes separated by ';'");
         }
-        if (waypoints[0] != 0 || waypoints[waypoints.length - 1] != coordinates.size() - 1) {
+        if (waypointIndices[0] != 0
+              || waypointIndices[waypointIndices.length - 1] != coordinates.size() - 1) {
           throw new ServicesException(
             "Waypoints must contain indices of the first and last coordinates"
           );
         }
-        for (int i = 1; i < waypoints.length - 1; i++) {
-          if (waypoints[i] < 0 || waypoints[i] >= coordinates.size()) {
+        for (int i = 1; i < waypointIndices.length - 1; i++) {
+          if (waypointIndices[i] < 0 || waypointIndices[i] >= coordinates.size()) {
             throw new ServicesException(
               "Waypoints index too large (no corresponding coordinate)");
           }
@@ -775,10 +797,6 @@ public abstract class MapboxMapMatching extends
       }
 
       if (waypointNames != null) {
-        if (waypointNames.length != waypoints.length) {
-          throw new ServicesException("Number of waypoint names  must match "
-            + " the number of waypoints provided.");
-        }
         final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
         waypointNames(waypointNamesStr);
       }
@@ -799,7 +817,7 @@ public abstract class MapboxMapMatching extends
       timestamps(TextUtils.join(";", timestamps));
       annotations(TextUtils.join(",", annotations));
       radiuses(TextUtils.join(";", radiuses));
-      waypoints(TextUtils.join(";", waypoints));
+      waypointIndices(TextUtils.join(";", waypointIndices));
 
       // Generate build so that we can check that values are valid.
       MapboxMapMatching mapMatching = autoBuild();
