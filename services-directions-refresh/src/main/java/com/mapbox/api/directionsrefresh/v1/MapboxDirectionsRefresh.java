@@ -10,6 +10,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshAdapterFactory;
 import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
 import com.mapbox.core.MapboxService;
+import com.mapbox.core.constants.Constants;
 import com.mapbox.core.utils.ApiCallHelper;
 
 import retrofit2.Call;
@@ -22,6 +23,7 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
     super(DirectionsRefreshService.class);
   }
 
+  @Override
   protected Call<DirectionsRefreshResponse> initializeCall() {
     return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
@@ -55,9 +57,10 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
   protected abstract String baseUrl();
 
   public static Builder builder() {
-    //todo update once live in production
     return new AutoValue_MapboxDirectionsRefresh.Builder()
-      .baseUrl("https://api-directions-refresh-internal.tilestream.net");
+      .baseUrl(Constants.BASE_API_URL)
+      .routeIndex(0)
+      .legIndex(0);
   }
 
   public abstract Builder toBuilder();

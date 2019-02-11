@@ -10,6 +10,6 @@ dependencies {
     // AutoValue
     compileOnly dependenciesList.autoValue
     compileOnly dependenciesList.autoValueGson
-    compile project(path: ':services')
+    implementation project(":services")
 }
 

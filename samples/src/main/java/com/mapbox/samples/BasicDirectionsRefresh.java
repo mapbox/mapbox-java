@@ -22,31 +22,23 @@ public class BasicDirectionsRefresh {
     simpleMapboxDirectionsRefreshRequest(requestId);
   }
 
-  /**
-   * Demonstrates how to make the most basic directions request.
-   *
-   * @throws IOException signals that an I/O exception of some sort has occurred
-   */
   private static String simpleMapboxDirectionsRequest() throws IOException {
-    MapboxDirections.Builder builder = MapboxDirections.builder();
+    MapboxDirections directions = MapboxDirections.builder()
+      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
+      .enableRefresh(true)
+      .origin(Point.fromLngLat(-95.6332, 29.7890))
+      .destination(Point.fromLngLat(-95.3591, 29.7576))
+      .overview(OVERVIEW_FULL)
+      .annotations(ANNOTATION_CONGESTION).build();
 
-    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
-    builder.enableRefresh(true);
-    builder.origin(Point.fromLngLat(-95.6332, 29.7890));
-    builder.destination(Point.fromLngLat(-95.3591, 29.7576));
-    builder.overview(OVERVIEW_FULL);
-    builder.annotations(ANNOTATION_CONGESTION);
-
-    Response<DirectionsResponse> response = builder.build().executeCall();
-
+    Response<DirectionsResponse> response = directions.executeCall();
     String requestId = response.body().routes().get(0).routeOptions().requestUuid();
-
     System.out.println("Directions response: " + response + " " + requestId);
 
     return requestId;
   }
-  private static void simpleMapboxDirectionsRefreshRequest(String requestId) {
 
+  private static void simpleMapboxDirectionsRefreshRequest(String requestId) {
     MapboxDirectionsRefresh refresh =
       MapboxDirectionsRefresh.builder()
         .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
