@@ -92,7 +92,7 @@ public abstract class MapboxDirections extends
       voiceUnits(),
       exclude(),
       approaches(),
-      waypoints(),
+      viaWayPoints(),
       waypointNames(),
       waypointTargets());
   }
@@ -362,7 +362,7 @@ public abstract class MapboxDirections extends
   abstract String approaches();
 
   @Nullable
-  abstract String waypoints();
+  abstract String viaWayPoints();
 
   @Nullable
   abstract String waypointNames();
@@ -424,7 +424,7 @@ public abstract class MapboxDirections extends
     private Point destination;
     private Point origin;
     private String[] approaches;
-    private Integer[] waypoints;
+    private Integer[] viaWayPoints;
     private String[] waypointNames;
     private Point[] waypointTargets;
 
@@ -794,7 +794,7 @@ public abstract class MapboxDirections extends
     abstract Builder approaches(@Nullable String approaches);
 
     /**
-     * Optionally, set which input coordinates should be treated as waypoints.
+     * Optionally, set which input coordinates should be treated as via way points.
      * <p>
      * Most useful in combination with  steps=true and requests based on traces
      * with high sample rates. Can be an index corresponding to any of the input coordinates,
@@ -802,16 +802,16 @@ public abstract class MapboxDirections extends
      * {@link #steps()}
      * </p>
      *
-     * @param waypoints integer array of coordinate indices to be used as waypoints
+     * @param viaWayPoints integer array of coordinate indices to be used as via way points
      * @return this builder for chaining options together
      * @since 4.4.0
      */
-    public Builder addWaypoints(@Nullable @IntRange(from = 0) Integer... waypoints) {
-      this.waypoints = waypoints;
+    public Builder addViaWayPoints(@Nullable @IntRange(from = 0) Integer... viaWayPoints) {
+      this.viaWayPoints = viaWayPoints;
       return this;
     }
 
-    abstract Builder waypoints(@Nullable String waypoints);
+    abstract Builder viaWayPoints(@Nullable String viaWayPoints);
 
     /**
      * Custom names for waypoints used for the arrival instruction,
@@ -871,20 +871,21 @@ public abstract class MapboxDirections extends
           + " directions API request.");
       }
 
-      if (waypoints != null) {
-        if (waypoints.length < 2) {
+      if (viaWayPoints != null) {
+        if (viaWayPoints.length < 2) {
           throw new ServicesException(
-                  "Waypoints must be a list of at least two indexes separated by ';'");
+                  "Via way points must be a list of at least two indexes separated by ';'");
         }
-        if (waypoints[0] != 0 || waypoints[waypoints.length - 1] != coordinates.size() - 1) {
+        if (viaWayPoints[0] != 0
+              || viaWayPoints[viaWayPoints.length - 1] != coordinates.size() - 1) {
           throw new ServicesException(
-                  "Waypoints must contain indices of the first and last coordinates"
+                  "Via way points must contain indices of the first and last coordinates"
           );
         }
-        for (int i = 1; i < waypoints.length - 1; i++) {
-          if (waypoints[i] < 0 || waypoints[i] >= coordinates.size()) {
+        for (int i = 1; i < viaWayPoints.length - 1; i++) {
+          if (viaWayPoints[i] < 0 || viaWayPoints[i] >= coordinates.size()) {
             throw new ServicesException(
-                    "Waypoints index too large (no corresponding coordinate)");
+                    "Via way points index too large (no corresponding coordinate)");
           }
         }
       }
@@ -923,7 +924,7 @@ public abstract class MapboxDirections extends
       bearing(TextUtils.formatBearing(bearings));
       annotation(TextUtils.join(",", annotations));
       radius(TextUtils.formatRadiuses(radiuses));
-      waypoints(TextUtils.join(";", waypoints));
+      viaWayPoints(TextUtils.join(";", viaWayPoints));
 
       MapboxDirections directions = autoBuild();
 
