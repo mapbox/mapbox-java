@@ -74,9 +74,6 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   @Nullable
   public abstract LegAnnotation annotation();
 
-  @Nullable
-  public abstract String legIndex();
-
   /**
    * Convert the current {@link RouteLeg} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
@@ -86,6 +83,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
    *   in this {@link RouteLeg}
    * @since 3.1.0
    */
+
   public abstract Builder toBuilder();
 
   /**
@@ -167,8 +165,6 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder annotation(@Nullable LegAnnotation annotation);
-
-    public abstract Builder legIndex(String legIndex);
 
     /**
      * Build a new {@link RouteLeg} object.
