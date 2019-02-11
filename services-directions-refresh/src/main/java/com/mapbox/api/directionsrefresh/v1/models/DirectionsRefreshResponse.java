@@ -1,6 +1,7 @@
 package com.mapbox.api.directionsrefresh.v1.models;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -13,10 +14,13 @@ import com.mapbox.api.directions.v5.models.DirectionsRoute;
 @AutoValue
 public abstract class DirectionsRefreshResponse extends DirectionsJsonObject {
 
+  @Nullable //todo change to @NonNull
   public abstract String code();
 
+  @Nullable
   public abstract String message();
 
+  @Nullable
   public abstract DirectionsRoute route();
 
   @NonNull
