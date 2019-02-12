@@ -32,8 +32,8 @@ public interface DirectionsRefreshService {
   Call<DirectionsRefreshResponse> getCall(
     @Header("User-Agent") String userAgent,
     @Path("request_id") String requestId,
-    @Path("route_index") String routeIndex,
-    @Path("leg_index") String legIndex,
+    @Path("route_index") int routeIndex,
+    @Path("leg_index") int legIndex,
     @Query("access_token") String accessToken
   );
 }

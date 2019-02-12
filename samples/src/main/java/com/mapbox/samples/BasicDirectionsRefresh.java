@@ -45,8 +45,8 @@ public class BasicDirectionsRefresh {
       MapboxDirectionsRefresh.builder()
         .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
         .requestId(requestId)
-        .routeIndex(String.valueOf(0))
-        .legIndex(String.valueOf(0))
+        .routeIndex(0)
+        .legIndex(0)
         .build();
 
     refresh.enqueueCall(new Callback<DirectionsRefreshResponse>() {

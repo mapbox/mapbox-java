@@ -25,7 +25,7 @@ import retrofit2.Call;
 public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRefreshResponse,
   DirectionsRefreshService> {
 
-  private static final String ZERO = String.valueOf(0);
+  private static final int ZERO = 0;
 
   protected MapboxDirectionsRefresh() {
     super(DirectionsRefreshService.class);
@@ -44,9 +44,9 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
 
   abstract String requestId();
 
-  abstract String routeIndex();
+  abstract int routeIndex();
 
-  abstract String legIndex();
+  abstract int legIndex();
 
   abstract String accessToken();
 
@@ -85,7 +85,6 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
    */
   @AutoValue.Builder
   public abstract static class Builder {
-    private String[] annotations;
 
     /**
      * Specified here is the uuid of the initial directions request. The original request must
@@ -105,7 +104,7 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
      * @return this builder
      * @since 4.4.0
      */
-    public abstract Builder routeIndex(@NonNull String routeIndex);
+    public abstract Builder routeIndex(@NonNull int routeIndex);
 
     /**
      * Index of leg of which to start. The response will include the annotations of the specified
@@ -115,7 +114,7 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
      * @return this builder
      * @since 4.4.0
      */
-    public abstract Builder legIndex(@NonNull String legIndex);
+    public abstract Builder legIndex(@NonNull int legIndex);
 
     /**
      * Required to call when this is being built. If no access token provided,
