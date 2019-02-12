@@ -1,4 +1,4 @@
-package com.mapbox.api.directionsrefresh.v5;
+package com.mapbox.api.directionsrefresh.v1;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directionsrefresh.v5.models.DirectionsRefreshAdapterFactory;
-import com.mapbox.api.directionsrefresh.v5.models.DirectionsRefreshResponse;
+import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshAdapterFactory;
+import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.utils.ApiCallHelper;

@@ -3,4 +3,4 @@
  *
  * @since 4.4.0
  */
-package com.mapbox.api.directionsrefresh.v5.models;
+package com.mapbox.api.directionsrefresh.v1.models;

@@ -2,8 +2,8 @@ package com.mapbox.samples;
 
 import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directionsrefresh.v5.MapboxDirectionsRefresh;
-import com.mapbox.api.directionsrefresh.v5.models.DirectionsRefreshResponse;
+import com.mapbox.api.directionsrefresh.v1.MapboxDirectionsRefresh;
+import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.sample.BuildConfig;
 

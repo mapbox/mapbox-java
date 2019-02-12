@@ -1,6 +1,6 @@
-package com.mapbox.api.directionsrefresh.v5;
+package com.mapbox.api.directionsrefresh.v1;
 
-import com.mapbox.api.directionsrefresh.v5.models.DirectionsRefreshResponse;
+import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
 import com.mapbox.core.TestUtils;
 
 import org.hamcrest.junit.ExpectedException;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class MapboxDirectionsRefreshTest extends TestUtils {
 
-  private static final String DIRECTIONS_REFRESH_V5_FIXTURE = "directions_refresh_v5.json";
+  private static final String DIRECTIONS_REFRESH_V1_FIXTURE = "directions_refresh_v1.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -36,7 +36,7 @@ public class MapboxDirectionsRefreshTest extends TestUtils {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
 
-        String resource = DIRECTIONS_REFRESH_V5_FIXTURE;
+        String resource = DIRECTIONS_REFRESH_V1_FIXTURE;
 
         try {
           String body = loadJsonFixture(resource);
