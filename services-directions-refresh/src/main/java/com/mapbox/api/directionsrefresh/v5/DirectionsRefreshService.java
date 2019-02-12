@@ -1,6 +1,6 @@
-package com.mapbox.api.directionsrefresh.v1;
+package com.mapbox.api.directionsrefresh.v5;
 
-import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
+import com.mapbox.api.directionsrefresh.v5.models.DirectionsRefreshResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

@@ -1,4 +1,4 @@
-package com.mapbox.api.directionsrefresh.v1;
+package com.mapbox.api.directionsrefresh.v5;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshAdapterFactory;
-import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
+import com.mapbox.api.directionsrefresh.v5.models.DirectionsRefreshAdapterFactory;
+import com.mapbox.api.directionsrefresh.v5.models.DirectionsRefreshResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.utils.ApiCallHelper;
@@ -24,6 +24,8 @@ import retrofit2.Call;
 @AutoValue
 public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRefreshResponse,
   DirectionsRefreshService> {
+
+  private static final String ZERO = String.valueOf(0);
 
   protected MapboxDirectionsRefresh() {
     super(DirectionsRefreshService.class);
@@ -51,6 +53,10 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
   @Nullable
   abstract String clientAppName();
 
+  @NonNull
+  @Override
+  protected abstract String baseUrl();
+
   @Override
   protected GsonBuilder getGsonBuilder() {
     return super.getGsonBuilder()
@@ -67,8 +73,8 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
   public static Builder builder() {
     return new AutoValue_MapboxDirectionsRefresh.Builder()
       .baseUrl(Constants.BASE_API_URL)
-      .routeIndex(0)
-      .legIndex(0);
+      .routeIndex(ZERO)
+      .legIndex(ZERO);
   }
 
   /**

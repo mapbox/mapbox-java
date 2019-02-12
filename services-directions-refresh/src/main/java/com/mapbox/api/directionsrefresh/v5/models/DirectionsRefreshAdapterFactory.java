@@ -1,4 +1,4 @@
-package com.mapbox.api.directionsrefresh.v1.models;
+package com.mapbox.api.directionsrefresh.v5.models;
 
 import com.google.gson.TypeAdapterFactory;
 import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;

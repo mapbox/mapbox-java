@@ -1,4 +1,4 @@
-package com.mapbox.api.directionsrefresh.v1.models;
+package com.mapbox.api.directionsrefresh.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
