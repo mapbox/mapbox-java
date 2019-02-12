@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -185,6 +186,8 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
      */
     public abstract Builder routes(@NonNull List<DirectionsRoute> routes);
 
+    abstract List<DirectionsRoute> routes();
+
     /**
      * A universally unique identifier (UUID) for identifying and executing a similar specific route
      * in the future.
@@ -195,12 +198,20 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
      */
     public abstract Builder uuid(@Nullable String uuid);
 
+    abstract DirectionsResponse autoBuild();
+
     /**
      * Build a new {@link DirectionsResponse} object.
      *
      * @return a new {@link DirectionsResponse} using the provided values in this builder
      * @since 3.0.0
      */
-    public abstract DirectionsResponse build();
+    public DirectionsResponse build() {
+      for (int i = 0; i < routes().size(); i++) {
+        routes().set(i, routes().get(i).toBuilder().routeIndex(String.valueOf(i)).build());
+      }
+
+      return autoBuild();
+    }
   }
 }

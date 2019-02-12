@@ -33,6 +33,15 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   }
 
   /**
+   * The index of this route in the original network response.
+   *
+   * @return string of an int value representing the index
+   * @since 4.4.0
+   */
+  @Nullable
+  public abstract String routeIndex();
+
+  /**
    * The distance traveled from origin to destination.
    *
    * @return a double number with unit meters
@@ -233,6 +242,8 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @since 3.1.0
      */
     public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
+
+    abstract Builder routeIndex(String routeIndex);
 
     /**
      * Build a new {@link DirectionsRoute} object.

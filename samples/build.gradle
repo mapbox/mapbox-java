@@ -24,6 +24,7 @@ dependencies {
     implementation project(":services-staticmap")
     implementation project(":services-speech")
     implementation project(":services-tilequery")
+    implementation project(":services-directions-refresh")
 }
 
 buildConfig {

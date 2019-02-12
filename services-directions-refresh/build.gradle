@@ -1,0 +1,19 @@
+apply plugin: 'java-library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api project(":services-core")
+
+    // Annotations
+    compileOnly dependenciesList.supportAnnotation
+
+    // AutoValue
+    compileOnly dependenciesList.autoValue
+    compileOnly dependenciesList.autoValueGson
+    implementation project(":services")
+
+    // Test Dependencies
+    testImplementation dependenciesList.okhttp3Mockwebserver
+    testImplementation project(path: ':services-core', configuration: 'testOutput')
+}
+

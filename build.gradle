@@ -65,18 +65,19 @@ subprojects {
 }
 
 def TESTABLE_MODULES = ["services",
-                      "services-core",
-                      "services-directions",
-                      "services-geocoding",
-                      "services-geojson",
-                      "services-matching",
-                      "services-matrix",
-                      "services-optimization",
-                      "services-route-tiles",
-                      "services-speech",
-                      "services-staticmap",
-                      "services-tilequery",
-                      "services-turf"]
+                        "services-core",
+                        "services-directions",
+                        "services-geocoding",
+                        "services-geojson",
+                        "services-matching",
+                        "services-matrix",
+                        "services-optimization",
+                        "services-route-tiles",
+                        "services-speech",
+                        "services-staticmap",
+                        "services-tilequery",
+                        "services-turf",
+                        "services-directions-refresh"]
 
 def RELEASE_MODULES = ["services",
                        "services-core",
@@ -85,9 +86,9 @@ def RELEASE_MODULES = ["services",
 
 subprojects { subproject ->
   if (TESTABLE_MODULES.contains(subproject.name)) {
-      subproject.apply plugin: "com.vanniktech.android.junit.jacoco"
-      subproject.apply from: "${rootDir}/gradle/jacoco.gradle"
-      subproject.apply from: "${rootDir}/gradle/checkstyle.gradle"
+    subproject.apply plugin: "com.vanniktech.android.junit.jacoco"
+    subproject.apply from: "${rootDir}/gradle/jacoco.gradle"
+    subproject.apply from: "${rootDir}/gradle/checkstyle.gradle"
   }
 
   if (RELEASE_MODULES.contains(subproject.name)) {

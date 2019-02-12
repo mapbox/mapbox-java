@@ -51,6 +51,7 @@ public interface DirectionsService {
    *                           Note: coordinate indices not added here act as silent waypoints
    * @param waypointNames      custom names for waypoints used for the arrival instruction
    * @param waypointTargets    list of coordinate pairs for drop-off locations
+   * @param enableRefresh      whether the routes should be refreshable
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */
@@ -78,6 +79,7 @@ public interface DirectionsService {
     @Query("approaches") String approaches,
     @Query("waypoints") String waypointIndices,
     @Query("waypoint_names") String waypointNames,
-    @Query("waypoint_targets") String waypointTargets
+    @Query("waypoint_targets") String waypointTargets,
+    @Query("enable_refresh") Boolean enableRefresh
   );
 }
