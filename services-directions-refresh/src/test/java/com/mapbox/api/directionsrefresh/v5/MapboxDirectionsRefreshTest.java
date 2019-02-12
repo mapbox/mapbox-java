@@ -1,5 +1,6 @@
 package com.mapbox.api.directionsrefresh.v5;
 
+import com.mapbox.api.directionsrefresh.v5.models.DirectionsRefreshResponse;
 import com.mapbox.core.TestUtils;
 
 import org.hamcrest.junit.ExpectedException;
@@ -15,6 +16,10 @@ import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import retrofit2.Response;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class MapboxDirectionsRefreshTest extends TestUtils {
 
@@ -31,7 +36,6 @@ public class MapboxDirectionsRefreshTest extends TestUtils {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
 
-        // Switch response on geometry parameter (only false supported, so nice and simple)
         String resource = DIRECTIONS_REFRESH_V5_FIXTURE;
 
         try {
@@ -62,5 +66,37 @@ public class MapboxDirectionsRefreshTest extends TestUtils {
       .build();
 
     Assert.assertNotNull(mapboxDirectionsRefresh);
+  }
+
+  @Test
+  public void testResponse() throws IOException {
+    MapboxDirectionsRefresh mapboxDirectionsRefresh = MapboxDirectionsRefresh.builder()
+      .accessToken(ACCESS_TOKEN)
+      .requestId("")
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    Response<DirectionsRefreshResponse> response = mapboxDirectionsRefresh.executeCall();
+    DirectionsRefreshResponse directionsRefreshResponse = response.body();
+
+    assertEquals(200, response.code());
+    assertEquals("Ok", directionsRefreshResponse.code());
+    assertNotNull(directionsRefreshResponse.route().legs());
+    assertNotNull(directionsRefreshResponse.route().legs().get(0).annotation());
+  }
+
+  @Test
+  public void testRoute() throws IOException {
+    MapboxDirectionsRefresh mapboxDirectionsRefresh = MapboxDirectionsRefresh.builder()
+      .accessToken(ACCESS_TOKEN)
+      .requestId("")
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    Response<DirectionsRefreshResponse> response = mapboxDirectionsRefresh.executeCall();
+    DirectionsRefreshResponse directionsRefreshResponse = response.body();
+
+    assertNotNull(directionsRefreshResponse.route().legs());
+    assertNotNull(directionsRefreshResponse.route().legs().get(0).annotation());
   }
 }
