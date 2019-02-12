@@ -231,12 +231,12 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void waypoints_doesGetFormattedInUrlCorrectly() throws Exception {
+  public void waypoints_doesGetFormattedInUrlCorrectly() {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
       .addWaypoint(Point.fromLngLat(4.56, 7.89))
       .origin(Point.fromLngLat(1.234, 2.345))
-      .addViaWayPoints(0, 2)
+      .addWaypointIndices(0, 2)
       .accessToken(ACCESS_TOKEN)
       .build();
     String semicolon = "%3B";
@@ -673,7 +673,7 @@ public class MapboxDirectionsTest extends TestUtils {
     MapboxDirections.builder()
             .origin(Point.fromLngLat(2.0, 2.0))
             .destination(Point.fromLngLat(4.0, 4.0))
-            .addViaWayPoints(0)
+            .addWaypointIndices(0)
             .baseUrl("https://foobar.com")
             .accessToken(ACCESS_TOKEN)
             .build();
@@ -685,7 +685,7 @@ public class MapboxDirectionsTest extends TestUtils {
             .origin(Point.fromLngLat(2.0, 2.0))
             .addWaypoint(Point.fromLngLat(3.0, 3.0))
             .destination(Point.fromLngLat(4.0, 4.0))
-            .addViaWayPoints(1, 2)
+            .addWaypointIndices(1, 2)
             .baseUrl("https://foobar.com")
             .accessToken(ACCESS_TOKEN)
             .build();
@@ -697,7 +697,7 @@ public class MapboxDirectionsTest extends TestUtils {
             .origin(Point.fromLngLat(2.0, 2.0))
             .addWaypoint(Point.fromLngLat(3.0, 3.0))
             .destination(Point.fromLngLat(4.0, 4.0))
-            .addViaWayPoints(0, 1)
+            .addWaypointIndices(0, 1)
             .baseUrl("https://foobar.com")
             .accessToken(ACCESS_TOKEN)
             .build();
@@ -709,7 +709,7 @@ public class MapboxDirectionsTest extends TestUtils {
             .origin(Point.fromLngLat(2.0, 2.0))
             .addWaypoint(Point.fromLngLat(3.0, 3.0))
             .destination(Point.fromLngLat(4.0, 4.0))
-            .addViaWayPoints(0, 3, 2)
+            .addWaypointIndices(0, 3, 2)
             .baseUrl("https://foobar.com")
             .accessToken(ACCESS_TOKEN)
             .build();
@@ -728,22 +728,6 @@ public class MapboxDirectionsTest extends TestUtils {
     assertNotNull(mapboxDirections);
     assertEquals("Home;Store;Work",
       mapboxDirections.cloneCall().request().url().queryParameter("waypoint_names"));
-  }
-
-  @Test
-  public void build_exceptionThrownWhenWaypointNamesDoNotMatchCoordinates() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Number of waypoint names must match"));
-    MapboxDirections mapboxDirections = MapboxDirections.builder()
-      .origin(Point.fromLngLat(2.0, 2.0))
-      .addWaypoint(Point.fromLngLat(2.0, 2.0))
-      .addWaypoint(Point.fromLngLat(3.0, 3.0))
-      .destination(Point.fromLngLat(4.0, 4.0))
-      .addWaypointNames("Home", "Work")
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .build();
   }
 
   @Test

@@ -380,72 +380,60 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
 
-  @Test
-  public void build_exceptionThrownWhenLessThanTwoWayPointsProvided() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Waypoints must be a list of at least two indexes separated by"));
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenLessThanTwoSeparatesLegsProvided() {
+    MapboxMapMatching.builder()
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
-      .waypoints(0)
+      .waypointIndices(0)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenSeparatesLegsDoNotStartWith0() {
+    MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(3.0, 3.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .waypointIndices(1, 2)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenSeparatesLegsDoNotEndWithLast() {
+    MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(3.0, 3.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .waypointIndices(0, 1)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test(expected = ServicesException.class)
+  public void build_exceptionThrownWhenMiddleSeparatesLegsAreWrong() {
+    MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(3.0, 3.0))
+      .coordinate(Point.fromLngLat(4.0, 4.0))
+      .waypointIndices(0, 3, 2)
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
   }
 
   @Test
-  public void build_exceptionThrownWhenWaypointsDoNotStartWith0() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Waypoints must contain indices of the first and last coordinates"));
+  public void sanitySeparatesLegs() {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(3.0, 3.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
-      .waypoints(1, 2)
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .build();
-  }
-
-  @Test
-  public void build_exceptionThrownWhenWaypointDoNotEndWithLast() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Waypoints must contain indices of the first and last coordinates"));
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(3.0, 3.0))
-      .coordinate(Point.fromLngLat(4.0, 4.0))
-      .waypoints(0, 1)
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .build();
-  }
-
-  @Test
-  public void build_exceptionThrownWhenMiddleWaypointsAreWrong() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Waypoints index too large (no corresponding coordinate)"));
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(3.0, 3.0))
-      .coordinate(Point.fromLngLat(4.0, 4.0))
-      .waypoints(0, 3, 2)
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .build();
-  }
-
-  @Test
-  public void sanityWaypoints() throws Exception {
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(3.0, 3.0))
-      .coordinate(Point.fromLngLat(4.0, 4.0))
-      .waypoints(0, 1, 2)
+      .waypointIndices(0, 1, 2)
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -616,38 +604,19 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
   @Test
-  public void sanityWaypointNamesInstructions() throws Exception {
+  public void sanityWaypointNamesInstructions() {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .coordinate(Point.fromLngLat(1.0, 1.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
-      .waypoints(0,1,2)
+      .waypointIndices(0, 1 ,2)
       .addWaypointNames("Home", "Store", "Work")
       .build();
     assertNotNull(mapMatching);
     assertEquals("Home;Store;Work",
       mapMatching.cloneCall().request().url().queryParameter("waypoint_names"));
-  }
-
-  @Test
-  public void build_exceptionThrownWhenWaypointNamesDoNotMatchWaypoints() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(
-      startsWith("Number of waypoint names  must match"));
-
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(2.5, 2.5))
-      .coordinate(Point.fromLngLat(3.0, 3.0))
-      .coordinate(Point.fromLngLat(3.5, 3.5))
-      .coordinate(Point.fromLngLat(4.0, 4.0))
-      .waypoints(0, 3, 4)
-      .addWaypointNames("Home", "Work")
-      .build();
   }
 
   @Test
@@ -667,7 +636,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .steps(true)
       .tidy(true)
       .bannerInstructions(true)
-      .waypoints(0,6)
+      .waypointIndices(0, 6)
       .addWaypointNames("Home", "Work")
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -687,7 +656,7 @@ public class MapboxMapMatchingTest extends TestUtils {
         .profile(PROFILE_DRIVING)
         .steps(true)
         .tidy(true)
-        .waypoints("0;6")
+        .waypointIndices("0;6")
         .coordinates(Arrays.asList(
             Point.fromLngLat(2.344003915786743,48.85805170891599),
             Point.fromLngLat(2.346750497817993,48.85727523615161),

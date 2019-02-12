@@ -59,8 +59,9 @@ public interface MapMatchingService {
    * @param voiceInstructions  whether or not to return
    *                           marked-up text for voice guidance along the route.
    * @param voiceUnits         voice units
-   * @param waypoints          Which input coordinates should be treated as waypoints.
-   * @param waypointNames     wustom names for waypoints used for the arrival instruction.
+   * @param waypointIndices    which input coordinates should be treated as waypoints/separate legs.
+   *                           Note: coordinate indices not added here act as silent waypoints
+   * @param waypointNames      custom names for waypoints used for the arrival instruction.
    * @param approaches         which side of the road to approach a waypoint.
    * @return the MapMatchingResponse in a Call wrapper
    * @since 2.0.0
@@ -84,7 +85,7 @@ public interface MapMatchingService {
     @Query("banner_instructions") Boolean bannerInstructions,
     @Query("voice_instructions") Boolean voiceInstructions,
     @Query("voice_units") String voiceUnits,
-    @Query("waypoints") String waypoints,
+    @Query("waypoints") String waypointIndices,
     @Query("waypoint_names") String waypointNames,
     @Query("approaches") String approaches);
 
@@ -130,8 +131,9 @@ public interface MapMatchingService {
    * @param voiceInstructions  whether or not to return
    *                           marked-up text for voice guidance along the route.
    * @param voiceUnits         voice units
-   * @param waypoints          Which input coordinates should be treated as waypoints.
-   * @param waypointNames     wustom names for waypoints used for the arrival instruction.
+   * @param waypointIndices    which input coordinates should be treated as waypoints/separate legs.
+   *                           Note: coordinate indices not added here act as silent waypoints
+   * @param waypointNames      custom names for waypoints used for the arrival instruction.
    * @param approaches         which side of the road to approach a waypoint.
    * @return the MapMatchingResponse in a Call wrapper
    * @since 4.4.0
@@ -156,7 +158,7 @@ public interface MapMatchingService {
           @Field("banner_instructions") Boolean bannerInstructions,
           @Field("voice_instructions") Boolean voiceInstructions,
           @Field("voice_units") String voiceUnits,
-          @Field("waypoints") String waypoints,
+          @Field("waypoints") String waypointIndices,
           @Field("waypoint_names") String waypointNames,
           @Field("approaches") String approaches);
 }

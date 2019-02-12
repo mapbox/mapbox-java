@@ -13,11 +13,8 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.VoiceUnitCriteria;
-import com.mapbox.api.directions.v5.models.DirectionsError;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
@@ -27,21 +24,16 @@ import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import okhttp3.EventListener;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Converter;
 import retrofit2.Response;
 
 /**
@@ -92,7 +84,7 @@ public abstract class MapboxDirections extends
       voiceUnits(),
       exclude(),
       approaches(),
-      viaWayPoints(),
+      waypointIndices(),
       waypointNames(),
       waypointTargets(),
       enableRefresh());
@@ -115,26 +107,8 @@ public abstract class MapboxDirections extends
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
     Response<DirectionsResponse> response = super.executeCall();
-    if (response.isSuccessful()) {
-      if (response.body() != null && !response.body().routes().isEmpty()) {
-        return Response.success(
-          response.body()
-            .toBuilder()
-            .routes(generateRouteOptions(response))
-            .build(),
-          new okhttp3.Response.Builder()
-            .code(200)
-            .message("OK")
-            .protocol(response.raw().protocol())
-            .headers(response.headers())
-            .request(response.raw().request())
-            .build());
-      }
-    } else {
-      errorDidOccur(null, response);
-    }
-
-    return response;
+    DirectionsResponseFactory factory = new DirectionsResponseFactory(this);
+    return factory.generate(response);
   }
 
   /**
@@ -150,33 +124,9 @@ public abstract class MapboxDirections extends
     getCall().enqueue(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-        if (!response.isSuccessful()) {
-          errorDidOccur(callback, response);
-
-        } else if (callback != null) {
-          if (response.body() == null || response.body().routes().isEmpty()) {
-            // If null just pass the original object back since there's nothing to modify.
-            callback.onResponse(call, response);
-
-          } else {
-            Response<DirectionsResponse> newResponse =
-              Response.success(
-                response
-                  .body()
-                  .toBuilder()
-                  .routes(generateRouteOptions(response))
-                  .build(),
-                new okhttp3.Response.Builder()
-                  .code(200)
-                  .message("OK")
-                  .protocol(response.raw().protocol())
-                  .headers(response.headers())
-                  .request(response.raw().request())
-                  .build());
-
-            callback.onResponse(call, newResponse);
-          }
-        }
+        DirectionsResponseFactory factory = new DirectionsResponseFactory(MapboxDirections.this);
+        Response<DirectionsResponse> generatedResponse = factory.generate(response);
+        callback.onResponse(call, generatedResponse);
       }
 
       @Override
@@ -207,60 +157,6 @@ public abstract class MapboxDirections extends
       okHttpClient = httpClient.build();
     }
     return okHttpClient;
-  }
-
-  private void errorDidOccur(@Nullable Callback<DirectionsResponse> callback,
-                             @NonNull Response<DirectionsResponse> response) {
-    // Response gave an error, we try to LOGGER any messages into the LOGGER here.
-    Converter<ResponseBody, DirectionsError> errorConverter =
-      getRetrofit().responseBodyConverter(DirectionsError.class, new Annotation[0]);
-    if (callback == null) {
-      Logger.getLogger(MapboxDirections.class.getName()).log(
-        Level.WARNING, "Failed to complete your request and callback is null");
-    } else {
-      try {
-        callback.onFailure(getCall(),
-          new Throwable(errorConverter.convert(response.errorBody()).message()));
-      } catch (IOException ioException) {
-        Logger.getLogger(MapboxDirections.class.getName()).log(
-          Level.WARNING, "Failed to complete your request. ", ioException);
-      }
-    }
-  }
-
-  private List<DirectionsRoute> generateRouteOptions(Response<DirectionsResponse> response) {
-    List<DirectionsRoute> routes = response.body().routes();
-    List<DirectionsRoute> modifiedRoutes = new ArrayList<>();
-    for (DirectionsRoute route : routes) {
-      modifiedRoutes.add(route.toBuilder().routeOptions(
-        RouteOptions.builder()
-          .profile(profile())
-          .coordinates(coordinates())
-          .waypointNames(waypointNames())
-          .waypointTargets(waypointTargets())
-          .continueStraight(continueStraight())
-          .annotations(annotation())
-          .approaches(approaches())
-          .bearings(bearing())
-          .alternatives(alternatives())
-          .language(language())
-          .radiuses(radius())
-          .user(user())
-          .voiceInstructions(voiceInstructions())
-          .bannerInstructions(bannerInstructions())
-          .roundaboutExits(roundaboutExits())
-          .geometries(geometries())
-          .overview(overview())
-          .steps(steps())
-          .exclude(exclude())
-          .voiceUnits(voiceUnits())
-          .accessToken(accessToken())
-          .requestUuid(response.body().uuid())
-          .baseUrl(baseUrl())
-          .build()
-      ).build());
-    }
-    return modifiedRoutes;
   }
 
   private static String formatCoordinates(List<Point> coordinates) {
@@ -363,7 +259,7 @@ public abstract class MapboxDirections extends
   abstract String approaches();
 
   @Nullable
-  abstract String viaWayPoints();
+  abstract String waypointIndices();
 
   @Nullable
   abstract String waypointNames();
@@ -428,7 +324,7 @@ public abstract class MapboxDirections extends
     private Point destination;
     private Point origin;
     private String[] approaches;
-    private Integer[] viaWayPoints;
+    private Integer[] waypointIndices;
     private String[] waypointNames;
     private Point[] waypointTargets;
 
@@ -798,7 +694,8 @@ public abstract class MapboxDirections extends
     abstract Builder approaches(@Nullable String approaches);
 
     /**
-     * Optionally, set which input coordinates should be treated as via way points.
+     * Optionally, set which input coordinates should be treated as waypoints / separate legs.
+     * Note: coordinate indices not added here act as silent waypoints
      * <p>
      * Most useful in combination with  steps=true and requests based on traces
      * with high sample rates. Can be an index corresponding to any of the input coordinates,
@@ -806,16 +703,16 @@ public abstract class MapboxDirections extends
      * {@link #steps()}
      * </p>
      *
-     * @param viaWayPoints integer array of coordinate indices to be used as via way points
+     * @param waypointIndices integer array of coordinate indices to be used as waypoints
      * @return this builder for chaining options together
      * @since 4.4.0
      */
-    public Builder addViaWayPoints(@Nullable @IntRange(from = 0) Integer... viaWayPoints) {
-      this.viaWayPoints = viaWayPoints;
+    public Builder addWaypointIndices(@Nullable @IntRange(from = 0) Integer... waypointIndices) {
+      this.waypointIndices = waypointIndices;
       return this;
     }
 
-    abstract Builder viaWayPoints(@Nullable String viaWayPoints);
+    abstract Builder waypointIndices(@Nullable String waypointIndices);
 
     /**
      * Custom names for waypoints used for the arrival instruction,
@@ -884,30 +781,26 @@ public abstract class MapboxDirections extends
           + " directions API request.");
       }
 
-      if (viaWayPoints != null) {
-        if (viaWayPoints.length < 2) {
+      if (waypointIndices != null) {
+        if (waypointIndices.length < 2) {
           throw new ServicesException(
-            "Via way points must be a list of at least two indexes separated by ';'");
+                  "Waypoints must be a list of at least two indexes separated by ';'");
         }
-        if (viaWayPoints[0] != 0
-          || viaWayPoints[viaWayPoints.length - 1] != coordinates.size() - 1) {
+        if (waypointIndices[0] != 0 || waypointIndices[waypointIndices.length - 1]
+                != coordinates.size() - 1) {
           throw new ServicesException(
-            "Via way points must contain indices of the first and last coordinates"
+                  "Waypoints must contain indices of the first and last coordinates"
           );
         }
-        for (int i = 1; i < viaWayPoints.length - 1; i++) {
-          if (viaWayPoints[i] < 0 || viaWayPoints[i] >= coordinates.size()) {
+        for (int i = 1; i < waypointIndices.length - 1; i++) {
+          if (waypointIndices[i] < 0 || waypointIndices[i] >= coordinates.size()) {
             throw new ServicesException(
-              "Via way points index too large (no corresponding coordinate)");
+                    "Waypoints index too large (no corresponding coordinate)");
           }
         }
       }
 
       if (waypointNames != null) {
-        if (waypointNames.length != coordinates.size()) {
-          throw new ServicesException("Number of waypoint names must match "
-            + " the number of waypoints provided.");
-        }
         final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
         waypointNames(waypointNamesStr);
       }
@@ -937,7 +830,7 @@ public abstract class MapboxDirections extends
       bearing(TextUtils.formatBearing(bearings));
       annotation(TextUtils.join(",", annotations));
       radius(TextUtils.formatRadiuses(radiuses));
-      viaWayPoints(TextUtils.join(";", viaWayPoints));
+      waypointIndices(TextUtils.join(";", waypointIndices));
 
       MapboxDirections directions = autoBuild();
 
