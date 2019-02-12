@@ -852,6 +852,13 @@ public abstract class MapboxDirections extends
 
     abstract Builder waypointTargets(@Nullable String waypointTargets);
 
+    /**
+     * Whether the routes should be refreshable via the directions refresh API.
+     *
+     * @param enableRefresh whether the routes should be refreshable
+     * @return this builder
+     * @since 4.4.0
+     */
     public abstract Builder enableRefresh(Boolean enableRefresh);
 
     abstract MapboxDirections autoBuild();

@@ -127,7 +127,7 @@ public abstract class DirectionsRefreshResponse extends DirectionsJsonObject {
      * {@link com.mapbox.api.directions.v5.models.RouteLeg}s, which only contain lists of the
      * refreshed annotations.
      *
-     * @param directionsRoute
+     * @param directionsRoute route containing annotation data
      * @return this builder
      * @since 4.4.0
      */

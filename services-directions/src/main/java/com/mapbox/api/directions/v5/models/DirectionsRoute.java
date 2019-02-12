@@ -32,6 +32,12 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
     return new AutoValue_DirectionsRoute.Builder();
   }
 
+  /**
+   * The index of this route in the original network response.
+   *
+   * @return string of an int value representing the index
+   * @since 4.4.0
+   */
   @Nullable
   public abstract String routeIndex();
 

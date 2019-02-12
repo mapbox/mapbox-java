@@ -186,6 +186,8 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
      */
     public abstract Builder routes(@NonNull List<DirectionsRoute> routes);
 
+    abstract List<DirectionsRoute> routes();
+
     /**
      * A universally unique identifier (UUID) for identifying and executing a similar specific route
      * in the future.
@@ -197,10 +199,6 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
     public abstract Builder uuid(@Nullable String uuid);
 
     abstract DirectionsResponse autoBuild();
-
-    abstract List<DirectionsRoute> routes();
-
-    abstract String uuid();
 
     /**
      * Build a new {@link DirectionsResponse} object.

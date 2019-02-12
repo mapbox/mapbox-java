@@ -49,6 +49,7 @@ public interface DirectionsService {
    * @param viaWayPoints       which input coordinates should be treated as via waypoints
    * @param waypointNames      custom names for waypoints used for the arrival instruction
    * @param waypointTargets    list of coordinate pairs for drop-off locations
+   * @param enableRefresh      whether the routes should be refreshable
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */

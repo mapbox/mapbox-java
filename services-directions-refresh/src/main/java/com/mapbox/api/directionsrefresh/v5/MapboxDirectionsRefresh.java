@@ -65,7 +65,7 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
   }
 
   /**
-   * Build a new {@link MapboxDirectionsRefresh} builder with default initial values
+   * Build a new {@link MapboxDirectionsRefresh} builder with default initial values.
    *
    * @return a {@link Builder} for creating a default {@link MapboxDirectionsRefresh}
    * @since 4.4.0
