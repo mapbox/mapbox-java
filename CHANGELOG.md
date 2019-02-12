@@ -2,6 +2,17 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v4.4.0 - February 12, 2018
+- Add waypointIndices to MapboxDirections, update MapboxMapMaptching to have waypointIndices instead of waypoints
+  [#959](https://github.com/mapbox/mapbox-java/pull/959),
+  [#961](https://github.com/mapbox/mapbox-java/pull/961),
+  [#962](https://github.com/mapbox/mapbox-java/pull/962),
+  [#963](https://github.com/mapbox/mapbox-java/pull/963)
+- Add Interceptor and EventListener to MapboxDirections [#958](https://github.com/mapbox/mapbox-java/pull/958)
+- Directions Refresh new implementation [#955](https://github.com/mapbox/mapbox-java/pull/955)
+- Update gradle tools versions [#954](https://github.com/mapbox/mapbox-java/pull/954)
+- Add getting mapmatching through POST method [#948](https://github.com/mapbox/mapbox-java/pull/948)
+
 ### v4.3.0 - December 18, 2018
 - Do not use BigDecimal for rounding (#938)[https://github.com/mapbox/mapbox-java/pull/938]
 - Remove coordinate limit from MapboxMapMatching (#940)[https://github.com/mapbox/mapbox-java/pull/940]
