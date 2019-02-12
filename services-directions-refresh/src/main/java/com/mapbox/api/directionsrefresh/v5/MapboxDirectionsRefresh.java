@@ -65,6 +65,17 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
   }
 
   /**
+   * Convert the current {@link MapboxDirectionsRefresh} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link MapboxDirectionsRefresh}.
+   *
+   * @return a {@link MapboxDirectionsRefresh.Builder} with the same values set to match the ones defined
+   *   in this {@link MapboxDirectionsRefresh}
+   * @since 4.4.0
+   */
+  public abstract Builder toBuilder();
+
+  /**
    * Build a new {@link MapboxDirectionsRefresh} builder with default initial values.
    *
    * @return a {@link Builder} for creating a default {@link MapboxDirectionsRefresh}
