@@ -13,11 +13,8 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.VoiceUnitCriteria;
-import com.mapbox.api.directions.v5.models.DirectionsError;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
@@ -27,21 +24,16 @@ import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import okhttp3.EventListener;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Converter;
 import retrofit2.Response;
 
 /**
@@ -114,26 +106,8 @@ public abstract class MapboxDirections extends
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
     Response<DirectionsResponse> response = super.executeCall();
-    if (response.isSuccessful()) {
-      if (response.body() != null && !response.body().routes().isEmpty()) {
-        return Response.success(
-          response.body()
-            .toBuilder()
-            .routes(generateRouteOptions(response))
-            .build(),
-          new okhttp3.Response.Builder()
-            .code(200)
-            .message("OK")
-            .protocol(response.raw().protocol())
-            .headers(response.headers())
-            .request(response.raw().request())
-            .build());
-      }
-    } else {
-      errorDidOccur(null, response);
-    }
-
-    return response;
+    DirectionsResponseFactory factory = new DirectionsResponseFactory(this);
+    return factory.generate(response);
   }
 
   /**
@@ -149,33 +123,9 @@ public abstract class MapboxDirections extends
     getCall().enqueue(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-        if (!response.isSuccessful()) {
-          errorDidOccur(callback, response);
-
-        } else if (callback != null) {
-          if (response.body() == null || response.body().routes().isEmpty()) {
-            // If null just pass the original object back since there's nothing to modify.
-            callback.onResponse(call, response);
-
-          } else {
-            Response<DirectionsResponse> newResponse =
-              Response.success(
-                response
-                  .body()
-                  .toBuilder()
-                  .routes(generateRouteOptions(response))
-                  .build(),
-                new okhttp3.Response.Builder()
-                  .code(200)
-                  .message("OK")
-                  .protocol(response.raw().protocol())
-                  .headers(response.headers())
-                  .request(response.raw().request())
-                  .build());
-
-            callback.onResponse(call, newResponse);
-          }
-        }
+        DirectionsResponseFactory factory = new DirectionsResponseFactory(MapboxDirections.this);
+        Response<DirectionsResponse> generatedResponse = factory.generate(response);
+        callback.onResponse(call, generatedResponse);
       }
 
       @Override
@@ -206,61 +156,6 @@ public abstract class MapboxDirections extends
       okHttpClient = httpClient.build();
     }
     return okHttpClient;
-  }
-
-  private void errorDidOccur(@Nullable Callback<DirectionsResponse> callback,
-                             @NonNull Response<DirectionsResponse> response) {
-    // Response gave an error, we try to LOGGER any messages into the LOGGER here.
-    Converter<ResponseBody, DirectionsError> errorConverter =
-      getRetrofit().responseBodyConverter(DirectionsError.class, new Annotation[0]);
-    if (callback == null) {
-      Logger.getLogger(MapboxDirections.class.getName()).log(
-        Level.WARNING, "Failed to complete your request and callback is null");
-    } else {
-      try {
-        callback.onFailure(getCall(),
-          new Throwable(errorConverter.convert(response.errorBody()).message()));
-      } catch (IOException ioException) {
-        Logger.getLogger(MapboxDirections.class.getName()).log(
-          Level.WARNING, "Failed to complete your request. ", ioException);
-      }
-    }
-  }
-
-  private List<DirectionsRoute> generateRouteOptions(Response<DirectionsResponse> response) {
-    List<DirectionsRoute> routes = response.body().routes();
-    List<DirectionsRoute> modifiedRoutes = new ArrayList<>();
-    for (DirectionsRoute route : routes) {
-      modifiedRoutes.add(route.toBuilder().routeOptions(
-        RouteOptions.builder()
-          .profile(profile())
-          .coordinates(coordinates())
-          .waypointIndices(waypointIndices())
-          .waypointNames(waypointNames())
-          .waypointTargets(waypointTargets())
-          .continueStraight(continueStraight())
-          .annotations(annotation())
-          .approaches(approaches())
-          .bearings(bearing())
-          .alternatives(alternatives())
-          .language(language())
-          .radiuses(radius())
-          .user(user())
-          .voiceInstructions(voiceInstructions())
-          .bannerInstructions(bannerInstructions())
-          .roundaboutExits(roundaboutExits())
-          .geometries(geometries())
-          .overview(overview())
-          .steps(steps())
-          .exclude(exclude())
-          .voiceUnits(voiceUnits())
-          .accessToken(accessToken())
-          .requestUuid(response.body().uuid())
-          .baseUrl(baseUrl())
-          .build()
-      ).build());
-    }
-    return modifiedRoutes;
   }
 
   private static String formatCoordinates(List<Point> coordinates) {

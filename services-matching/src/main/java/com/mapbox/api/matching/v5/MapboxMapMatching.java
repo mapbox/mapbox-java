@@ -13,10 +13,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
-import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.matching.v5.models.MapMatchingAdapterFactory;
-import com.mapbox.api.matching.v5.models.MapMatchingError;
-import com.mapbox.api.matching.v5.models.MapMatchingMatching;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
@@ -26,20 +23,14 @@ import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Converter;
-import retrofit2.Response;
-
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * The Mapbox map matching interface (v5)
@@ -55,8 +46,6 @@ import java.util.logging.Logger;
 @AutoValue
 public abstract class MapboxMapMatching extends
   MapboxService<MapMatchingResponse, MapMatchingService> {
-
-  private static final String PLACEHOLDER_UUID = "mapmatching";
 
   protected MapboxMapMatching() {
     super(MapMatchingService.class);
@@ -129,26 +118,8 @@ public abstract class MapboxMapMatching extends
   public Response<MapMatchingResponse> executeCall() throws IOException {
 
     Response<MapMatchingResponse> response = getCall().execute();
-    if (response.isSuccessful()) {
-      if (response.body() != null && !response.body().matchings().isEmpty()) {
-        return Response.success(
-          response.body()
-            .toBuilder()
-            .matchings(generateRouteOptions(response))
-            .build(),
-          new okhttp3.Response.Builder()
-            .code(200)
-            .message("OK")
-            .protocol(response.raw().protocol())
-            .headers(response.headers())
-            .request(response.raw().request())
-            .build());
-      }
-    } else {
-      errorDidOccur(null, response);
-    }
-
-    return response;
+    MatchingResponseFactory factory = new MatchingResponseFactory(MapboxMapMatching.this);
+    return factory.generate(response);
   }
 
   /**
@@ -165,33 +136,9 @@ public abstract class MapboxMapMatching extends
       @Override
       public void onResponse(Call<MapMatchingResponse> call,
                              Response<MapMatchingResponse> response) {
-        if (!response.isSuccessful()) {
-          errorDidOccur(callback, response);
-
-        } else if (callback != null) {
-          if (response.body() == null || response.body().matchings().isEmpty()) {
-            // If null just pass the original object back since there's nothing to modify.
-            callback.onResponse(call, response);
-
-          } else {
-            Response<MapMatchingResponse> newResponse =
-              Response.success(
-                response
-                  .body()
-                  .toBuilder()
-                  .matchings(generateRouteOptions(response))
-                  .build(),
-                new okhttp3.Response.Builder()
-                  .code(200)
-                  .message("OK")
-                  .protocol(response.raw().protocol())
-                  .headers(response.headers())
-                  .request(response.raw().request())
-                  .build());
-
-            callback.onResponse(call, newResponse);
-          }
-        }
+        MatchingResponseFactory factory = new MatchingResponseFactory(MapboxMapMatching.this);
+        Response<MapMatchingResponse> generatedResponse = factory.generate(response);
+        callback.onResponse(call, generatedResponse);
       }
 
 
@@ -200,70 +147,6 @@ public abstract class MapboxMapMatching extends
         callback.onFailure(call, throwable);
       }
     });
-  }
-
-
-  private void errorDidOccur(@Nullable Callback<MapMatchingResponse> callback,
-                             @NonNull Response<MapMatchingResponse> response) {
-    // Response gave an error, we try to LOGGER any messages into the LOGGER here.
-    Converter<ResponseBody, MapMatchingError> errorConverter =
-      getRetrofit().responseBodyConverter(MapMatchingError.class, new Annotation[0]);
-    if (callback == null) {
-      Logger.getLogger(MapboxMapMatching.class.getName()).log(
-        Level.WARNING, "Failed to complete your request and callback is null");
-    } else {
-      try {
-        callback.onFailure(getCall(),
-          new Throwable(errorConverter.convert(response.errorBody()).message()));
-      } catch (IOException ioException) {
-        Logger.getLogger(MapboxMapMatching.class.getName()).log(
-          Level.WARNING, "Failed to complete your request. ", ioException);
-      }
-    }
-  }
-
-  private List<MapMatchingMatching> generateRouteOptions(Response<MapMatchingResponse> response) {
-    List<MapMatchingMatching> matchings = response.body().matchings();
-    List<MapMatchingMatching> modifiedMatchings = new ArrayList<>();
-    for (MapMatchingMatching matching : matchings) {
-      modifiedMatchings.add(matching.toBuilder().routeOptions(
-        RouteOptions.builder()
-          .profile(profile())
-          .coordinates(formatCoordinates(coordinates()))
-          .annotations(annotations())
-          .approaches(approaches())
-          .language(language())
-          .radiuses(radiuses())
-          .user(user())
-          .voiceInstructions(voiceInstructions())
-          .bannerInstructions(bannerInstructions())
-          .roundaboutExits(roundaboutExits())
-          .geometries(geometries())
-          .overview(overview())
-          .steps(steps())
-          .voiceUnits(voiceUnits())
-          .requestUuid(PLACEHOLDER_UUID)
-          .accessToken(accessToken())
-          .approaches(approaches())
-          .waypointIndices(waypointIndices())
-          .waypointNames(waypointNames())
-          .baseUrl(baseUrl())
-          .build()
-      ).build());
-    }
-    return modifiedMatchings;
-  }
-
-  private static List<Point> formatCoordinates(String coordinates) {
-    String[] coordPairs = coordinates.split(";", -1);
-    List<Point> coordinatesFormatted = new ArrayList<>();
-    for (String coordPair : coordPairs) {
-      String[] coords = coordPair.split(",", -1);
-      coordinatesFormatted.add(
-        Point.fromLngLat(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
-
-    }
-    return coordinatesFormatted;
   }
 
   @NonNull
