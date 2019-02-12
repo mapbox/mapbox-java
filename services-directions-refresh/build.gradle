@@ -11,5 +11,9 @@ dependencies {
     compileOnly dependenciesList.autoValue
     compileOnly dependenciesList.autoValueGson
     implementation project(":services")
+
+    // Test Dependencies
+    testImplementation dependenciesList.okhttp3Mockwebserver
+    testImplementation project(path: ':services-core', configuration: 'testOutput')
 }
 
