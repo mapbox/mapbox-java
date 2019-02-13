@@ -131,6 +131,7 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
      * {@link com.mapbox.core.exceptions.ServicesException} will be thrown.
      *
      * @param accessToken Mapbox access token
+     * @return this builder
      * @since 4.4.0
      */
     public abstract Builder accessToken(@NonNull String accessToken);
