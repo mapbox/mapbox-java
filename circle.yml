@@ -78,6 +78,6 @@ jobs:
       - deploy:
           name: Publish Java Services To Maven Central
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "release-4.4.1" ]; then
             make publish ;
             fi
