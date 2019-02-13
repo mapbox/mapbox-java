@@ -208,7 +208,7 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
      */
     public DirectionsResponse build() {
       for (int i = 0; i < routes().size(); i++) {
-        routes().set(i, routes().get(i).toBuilder().routeIndex(i).build());
+        routes().set(i, routes().get(i).toBuilder().routeIndex(String.valueOf(i)).build());
       }
 
       return autoBuild();
