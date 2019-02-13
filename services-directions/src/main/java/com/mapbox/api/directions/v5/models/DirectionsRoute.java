@@ -39,7 +39,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
    * @since 4.4.0
    */
   @Nullable
-  public abstract String routeIndex();
+  public abstract Integer routeIndex();
 
   /**
    * The distance traveled from origin to destination.
@@ -243,7 +243,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      */
     public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
 
-    abstract Builder routeIndex(String routeIndex);
+    abstract Builder routeIndex(Integer routeIndex);
 
     /**
      * Build a new {@link DirectionsRoute} object.
