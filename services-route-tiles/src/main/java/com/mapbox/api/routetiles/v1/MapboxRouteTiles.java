@@ -12,6 +12,7 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.geojson.BoundingBox;
 
+import java.util.Locale;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -39,8 +40,13 @@ public abstract class MapboxRouteTiles extends MapboxService<ResponseBody, Route
   }
 
   private String formatBoundingBox(BoundingBox boundingBox) {
-    return String.format("%f,%f;%f,%f",
-      boundingBox.west(), boundingBox.south(), boundingBox.east(), boundingBox.north());
+    return String.format(Locale.US,
+      "%f,%f;%f,%f",
+      boundingBox.west(),
+      boundingBox.south(),
+      boundingBox.east(),
+      boundingBox.north()
+    );
   }
 
   @Nullable
