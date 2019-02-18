@@ -793,7 +793,7 @@ public abstract class MapboxDirections extends
      * Use POST method to request data.
      * The default is to use GET.
      * @return this builder for chaining options together
-     * @since 4.4.0
+     * @since 4.6.0
      */
     public Builder post() {
       usePostMethod(true);
@@ -803,7 +803,7 @@ public abstract class MapboxDirections extends
     /**
      * Use GET method to request data.
      * @return this builder for chaining options together
-     * @since 4.4.0
+     * @since 4.6.0
      */
     public Builder get() {
       usePostMethod(false);
