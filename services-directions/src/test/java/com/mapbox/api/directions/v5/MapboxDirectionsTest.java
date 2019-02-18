@@ -823,4 +823,27 @@ public class MapboxDirectionsTest extends TestUtils {
 
     assertEquals(eventListener, mapboxDirections.eventListener());
   }
+
+  @Test
+  public void testPost() throws IOException {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .steps(true)
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .addWaypointNames("Home", "Work")
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .post()
+      .build();
+
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+
+    assertNotNull(response.body().routes());
+    assertEquals(1, response.body().routes().size());
+  }
 }

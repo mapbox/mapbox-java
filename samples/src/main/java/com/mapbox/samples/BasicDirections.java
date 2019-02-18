@@ -5,11 +5,12 @@ import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.sample.BuildConfig;
+
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.io.IOException;
 
 /**
  * Shows how to make a directions request using some of the parameters offered.
@@ -19,10 +20,11 @@ public class BasicDirections {
   public static void main(String[] args) throws IOException {
     simpleMapboxDirectionsRequest();
     asyncMapboxDirectionsRequest();
+    simpleMapboxDirectionsPostRequest();
   }
 
   /**
-   * Demonstrates how to make the most basic directions request.
+   * Demonstrates how to make the most basic GET directions request.
    *
    * @throws IOException signals that an I/O exception of some sort has occurred
    */
@@ -39,7 +41,28 @@ public class BasicDirections {
     Response<DirectionsResponse> response = builder.build().executeCall();
 
     // 3. Log information from the response
-    System.out.printf("Check that the response is successful %b", response.isSuccessful());
+    System.out.printf("Check that the GET response is successful %b", response.isSuccessful());
+    System.out.printf("%nGet the first routes distance from origin to destination: %f",
+      response.body().routes().get(0).distance());
+  }
+
+  /**
+   * Demonstrates how to make the most basic POST directions request.
+   *
+   * @throws IOException signals that an I/O exception of some sort has occurred
+   */
+  private static void simpleMapboxDirectionsPostRequest() throws IOException {
+
+    MapboxDirections.Builder builder = MapboxDirections.builder();
+
+    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
+    builder.origin(Point.fromLngLat(-95.6332, 29.7890));
+    builder.destination(Point.fromLngLat(-95.3591, 29.7576));
+    builder.post();
+
+    Response<DirectionsResponse> response = builder.build().executeCall();
+
+    System.out.printf("%nCheck that the POST response is successful %b", response.isSuccessful());
     System.out.printf("%nGet the first routes distance from origin to destination: %f",
       response.body().routes().get(0).distance());
   }
