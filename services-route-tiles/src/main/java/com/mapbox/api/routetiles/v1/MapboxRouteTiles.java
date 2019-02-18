@@ -13,7 +13,11 @@ import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.geojson.BoundingBox;
 
 import java.util.Locale;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 
 /**
@@ -39,14 +43,27 @@ public abstract class MapboxRouteTiles extends MapboxService<ResponseBody, Route
     );
   }
 
-  private String formatBoundingBox(BoundingBox boundingBox) {
-    return String.format(Locale.US,
-      "%f,%f;%f,%f",
-      boundingBox.west(),
-      boundingBox.south(),
-      boundingBox.east(),
-      boundingBox.north()
-    );
+  @Override
+  protected synchronized OkHttpClient getOkHttpClient() {
+    if (okHttpClient == null) {
+      OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+      if (isEnableDebug()) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        httpClient.addInterceptor(logging);
+      }
+      Interceptor interceptor = interceptor();
+      if (interceptor != null) {
+        httpClient.addInterceptor(interceptor);
+      }
+      Interceptor networkInterceptor = networkInterceptor();
+      if (networkInterceptor != null) {
+        httpClient.addNetworkInterceptor(networkInterceptor);
+      }
+
+      okHttpClient = httpClient.build();
+    }
+    return okHttpClient;
   }
 
   @Nullable
@@ -60,6 +77,12 @@ public abstract class MapboxRouteTiles extends MapboxService<ResponseBody, Route
 
   @NonNull
   abstract String accessToken();
+
+  @Nullable
+  abstract Interceptor interceptor();
+
+  @Nullable
+  abstract Interceptor networkInterceptor();
 
   @Override
   protected abstract String baseUrl();
@@ -142,6 +165,22 @@ public abstract class MapboxRouteTiles extends MapboxService<ResponseBody, Route
      */
     public abstract Builder clientAppName(@NonNull String clientAppName);
 
+    /**
+     * Adds an optional interceptor to set in the OkHttp client.
+     *
+     * @param interceptor to set for OkHttp
+     * @return this builder for chaining options together
+     */
+    public abstract Builder interceptor(Interceptor interceptor);
+
+    /**
+     * Adds an optional network interceptor to set in the OkHttp client.
+     *
+     * @param interceptor to set for OkHttp
+     * @return this builder for chaining options together
+     */
+    public abstract Builder networkInterceptor(Interceptor interceptor);
+
     abstract MapboxRouteTiles autoBuild();
 
     /**
@@ -161,5 +200,15 @@ public abstract class MapboxRouteTiles extends MapboxService<ResponseBody, Route
 
       return mapboxRouteTiles;
     }
+  }
+
+  private String formatBoundingBox(BoundingBox boundingBox) {
+    return String.format(Locale.US,
+      "%f,%f;%f,%f",
+      boundingBox.west(),
+      boundingBox.south(),
+      boundingBox.east(),
+      boundingBox.north()
+    );
   }
 }
