@@ -60,6 +60,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_V5_APPROACHES_REQUEST = "directions_v5_approaches.json";
   private static final String DIRECTIONS_V5_WAYPOINT_NAMES_FIXTURE = "directions_v5_waypoint_names.json";
   private static final String DIRECTIONS_V5_WAYPOINT_TARGETS_FIXTURE = "directions_v5_waypoint_targets.json";
+  private static final String DIRECTIONS_V5_POST = "directions_v5_post.json";
 
   private MockWebServer server;
   private HttpUrl mockUrl;
@@ -92,6 +93,8 @@ public class MapboxDirectionsTest extends TestUtils {
           resource = DIRECTIONS_TRAFFIC_FIXTURE;
         } else if (request.getPath().contains("geometries=polyline6")) {
           resource = DIRECTIONS_V5_PRECISION6_FIXTURE;
+        } else if (request.getMethod().equals("POST")) {
+          resource = DIRECTIONS_V5_POST;
         }
 
         try {
@@ -822,5 +825,29 @@ public class MapboxDirectionsTest extends TestUtils {
 
 
     assertEquals(eventListener, mapboxDirections.eventListener());
+  }
+
+  @Test
+  public void testPost() throws IOException {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .steps(true)
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .addWaypointNames("Home", "Work")
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .post()
+      .build();
+
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    System.out.print(response.raw().request().url());
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+
+    assertNotNull(response.body().routes());
+    assertEquals(1, response.body().routes().size());
   }
 }

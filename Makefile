@@ -1,6 +1,9 @@
 # Used for Map Matching
 MAP_MATCHING_COORDINATES = 13.418946862220764,52.50055852688439;13.419011235237122,52.50113000479732;13.419756889343262,52.50171780290061;13.419885635375975,52.50237416816131;13.420631289482117,52.50294888790448
 
+# Used for directions
+DIRECTIONS_POST_COORDINATES = 2.344003915786743,48.85805170891599;2.346750497817993,48.85727523615161;2.348681688308716,48.85936462637049;2.349550724029541,48.86084691113991;2.349550724029541,48.8608892614883;2.349625825881958,48.86102337068847;2.34982967376709,48.86125629633996
+
 build-config:
 	./gradlew compileBuildConfig
 
@@ -141,6 +144,10 @@ directions-fixtures:
 	# Directions: includes waypoint_targets
 	curl "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/-6.80904429026134,62.00015328799685;-6.800065040588378,62.00012400993553?waypoint_targets=;-6.799936294555664,61.99987216574813&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-directions/src/test/resources/directions_v5_waypoint_targets.json
+
+    # Directions: post request
+	curl -d "coordinates=$(DIRECTIONS_POST_COORDINATES)&steps=true&waypoints=0;6&waypoint_names=Home;Work&banner_instructions=true" "https://api.mapbox.com/directions/v5/mapbox/driving?access_token=$(MAPBOX_ACCESS_TOKEN)" \
+	    -o services-directions/src/test/resources/directions_v5_post.json
 
 mapmatching-fixtures:
 	curl "https://api.mapbox.com/matching/v5/mapbox/driving/$(MAP_MATCHING_COORDINATES)?geometries=polyline&language=sv&steps=true&access_token=$(MAPBOX_ACCESS_TOKEN)" \

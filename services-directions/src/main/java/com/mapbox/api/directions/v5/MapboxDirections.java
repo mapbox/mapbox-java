@@ -63,6 +63,33 @@ public abstract class MapboxDirections extends
 
   @Override
   protected Call<DirectionsResponse> initializeCall() {
+    if (usePostMethod()) {
+      return getService().postCall(
+        ApiCallHelper.getHeaderUserAgent(clientAppName()),
+        user(),
+        profile(),
+        formatCoordinates(coordinates()),
+        accessToken(),
+        alternatives(),
+        geometries(),
+        overview(),
+        radius(),
+        steps(),
+        bearing(),
+        continueStraight(),
+        annotation(),
+        language(),
+        roundaboutExits(),
+        voiceInstructions(),
+        bannerInstructions(),
+        voiceUnits(),
+        exclude(),
+        approaches(),
+        waypointIndices(),
+        waypointNames(),
+        waypointTargets(),
+        enableRefresh());
+    }
     return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
@@ -276,6 +303,9 @@ public abstract class MapboxDirections extends
   @Nullable
   abstract EventListener eventListener();
 
+  @NonNull
+  abstract Boolean usePostMethod();
+
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
    * {@link #baseUrl()}, {@link #profile()}, {@link #user()}, and {@link #geometries()}.
@@ -288,7 +318,8 @@ public abstract class MapboxDirections extends
       .baseUrl(Constants.BASE_API_URL)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
-      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6);
+      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+      .usePostMethod(false);
   }
 
   /**
@@ -757,6 +788,29 @@ public abstract class MapboxDirections extends
      * @since 4.4.0
      */
     public abstract Builder enableRefresh(Boolean enableRefresh);
+
+    /**
+     * Use POST method to request data.
+     * The default is to use GET.
+     * @return this builder for chaining options together
+     * @since 4.6.0
+     */
+    public Builder post() {
+      usePostMethod(true);
+      return this;
+    }
+
+    /**
+     * Use GET method to request data.
+     * @return this builder for chaining options together
+     * @since 4.6.0
+     */
+    public Builder get() {
+      usePostMethod(false);
+      return this;
+    }
+
+    abstract Builder usePostMethod(@NonNull Boolean usePost);
 
     abstract MapboxDirections autoBuild();
 
