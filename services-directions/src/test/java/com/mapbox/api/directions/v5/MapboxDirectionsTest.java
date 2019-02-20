@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import okhttp3.Call;
 import okhttp3.EventListener;
@@ -843,11 +844,100 @@ public class MapboxDirectionsTest extends TestUtils {
       .build();
 
     Response<DirectionsResponse> response = mapboxDirections.executeCall();
-    System.out.print(response.raw().request().url());
     assertEquals(200, response.code());
     assertEquals("Ok", response.body().code());
 
     assertNotNull(response.body().routes());
     assertEquals(1, response.body().routes().size());
+  }
+
+  @Test
+  public void testCallForUrlLength_longUrl() {
+    MapboxDirections.Builder builder = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .steps(true)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString());
+    addWaypoints(builder, 400);
+
+    retrofit2.Call<DirectionsResponse> call = builder.build().initializeCall();
+
+    assertEquals("POST", call.request().method());
+  }
+
+  @Test
+  public void testCallForUrlLength_shortUrl() {
+    MapboxDirections.Builder builder = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .steps(true)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString());
+    addWaypoints(builder, 10);
+
+    retrofit2.Call<DirectionsResponse> call = builder.build().initializeCall();
+
+    assertEquals("GET", call.request().method());
+  }
+
+  @Test
+  public void testPostIsUsed() {
+    MapboxDirections.Builder builder = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .steps(true)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .post();
+
+    retrofit2.Call<DirectionsResponse> call = builder.build().initializeCall();
+
+    assertEquals("POST", call.request().method());
+  }
+
+  @Test
+  public void testGetIsUsed() {
+    MapboxDirections.Builder builder = MapboxDirections.builder()
+      .profile(PROFILE_CYCLING)
+      .steps(true)
+      .origin(Point.fromLngLat(-122.42,37.78))
+      .destination(Point.fromLngLat(-77.03,38.91))
+      .voiceInstructions(true)
+      .voiceUnits(DirectionsCriteria.IMPERIAL)
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .get();
+
+    retrofit2.Call<DirectionsResponse> call = builder.build().initializeCall();
+
+    assertEquals("GET", call.request().method());
+  }
+
+  private void addWaypoints(MapboxDirections.Builder builder, int number) {
+    for (int i = 0; i < number; i++) {
+      builder.addWaypoint(Point.fromLngLat(getRandomLng(), getRandomLat()));
+    }
+  }
+
+  private double getRandomLng() {
+    Random random = new Random();
+    double lng = random.nextDouble() % 360;
+    return lng - 180;
+  }
+
+  private double getRandomLat() {
+    Random random = new Random();
+    double lat = random.nextDouble() % 180;
+    return lat - 90;
   }
 }

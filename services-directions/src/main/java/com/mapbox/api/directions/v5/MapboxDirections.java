@@ -56,6 +56,7 @@ import retrofit2.Response;
 @AutoValue
 public abstract class MapboxDirections extends
   MapboxService<DirectionsResponse, DirectionsService> {
+  private static final int MAX_URL_SIZE = 1024 * 8;
 
   protected MapboxDirections() {
     super(DirectionsService.class);
@@ -63,34 +64,55 @@ public abstract class MapboxDirections extends
 
   @Override
   protected Call<DirectionsResponse> initializeCall() {
-    if (usePostMethod()) {
-      return getService().postCall(
-        ApiCallHelper.getHeaderUserAgent(clientAppName()),
-        user(),
-        profile(),
-        formatCoordinates(coordinates()),
-        accessToken(),
-        alternatives(),
-        geometries(),
-        overview(),
-        radius(),
-        steps(),
-        bearing(),
-        continueStraight(),
-        annotation(),
-        language(),
-        roundaboutExits(),
-        voiceInstructions(),
-        bannerInstructions(),
-        voiceUnits(),
-        exclude(),
-        approaches(),
-        waypointIndices(),
-        waypointNames(),
-        waypointTargets(),
-        enableRefresh());
+    if (usePostMethod() == null) {
+      return callForUrlLength();
     }
+
+    if (usePostMethod()) {
+      return post();
+    }
+
+    return get();
+  }
+
+  private Call<DirectionsResponse> callForUrlLength() {
+    Call<DirectionsResponse> get = get();
+    if (get.request().url().toString().length() < MAX_URL_SIZE) {
+      return get;
+    }
+    return post();
+  }
+
+  private Call<DirectionsResponse> get() {
     return getService().getCall(
+      ApiCallHelper.getHeaderUserAgent(clientAppName()),
+      user(),
+      profile(),
+      formatCoordinates(coordinates()),
+      accessToken(),
+      alternatives(),
+      geometries(),
+      overview(),
+      radius(),
+      steps(),
+      bearing(),
+      continueStraight(),
+      annotation(),
+      language(),
+      roundaboutExits(),
+      voiceInstructions(),
+      bannerInstructions(),
+      voiceUnits(),
+      exclude(),
+      approaches(),
+      waypointIndices(),
+      waypointNames(),
+      waypointTargets(),
+      enableRefresh());
+  }
+
+  private Call<DirectionsResponse> post() {
+    return getService().postCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -303,7 +325,7 @@ public abstract class MapboxDirections extends
   @Nullable
   abstract EventListener eventListener();
 
-  @NonNull
+  @Nullable
   abstract Boolean usePostMethod();
 
   /**
@@ -318,8 +340,7 @@ public abstract class MapboxDirections extends
       .baseUrl(Constants.BASE_API_URL)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
-      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
-      .usePostMethod(false);
+      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6);
   }
 
   /**
@@ -812,6 +833,8 @@ public abstract class MapboxDirections extends
 
     abstract Builder usePostMethod(@NonNull Boolean usePost);
 
+    abstract Boolean usePostMethod();
+
     abstract MapboxDirections autoBuild();
 
     /**
@@ -838,18 +861,18 @@ public abstract class MapboxDirections extends
       if (waypointIndices != null) {
         if (waypointIndices.length < 2) {
           throw new ServicesException(
-                  "Waypoints must be a list of at least two indexes separated by ';'");
+            "Waypoints must be a list of at least two indexes separated by ';'");
         }
         if (waypointIndices[0] != 0 || waypointIndices[waypointIndices.length - 1]
-                != coordinates.size() - 1) {
+          != coordinates.size() - 1) {
           throw new ServicesException(
-                  "Waypoints must contain indices of the first and last coordinates"
+            "Waypoints must contain indices of the first and last coordinates"
           );
         }
         for (int i = 1; i < waypointIndices.length - 1; i++) {
           if (waypointIndices[i] < 0 || waypointIndices[i] >= coordinates.size()) {
             throw new ServicesException(
-                    "Waypoints index too large (no corresponding coordinate)");
+              "Waypoints index too large (no corresponding coordinate)");
           }
         }
       }
@@ -895,5 +918,4 @@ public abstract class MapboxDirections extends
       return directions;
     }
   }
-
 }
