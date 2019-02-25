@@ -60,30 +60,51 @@ public abstract class MapboxMapMatching extends
 
   @Override
   protected Call<MapMatchingResponse> initializeCall() {
-    if (usePostMethod()) {
-      return getService().postCall(
-              ApiCallHelper.getHeaderUserAgent(clientAppName()),
-              user(),
-              profile(),
-              coordinates(),
-              accessToken(),
-              geometries(),
-              radiuses(),
-              steps(),
-              overview(),
-              timestamps(),
-              annotations(),
-              language(),
-              tidy(),
-              roundaboutExits(),
-              bannerInstructions(),
-              voiceInstructions(),
-              voiceUnits(),
-              waypointIndices(),
-              waypointNames(),
-              approaches());
+    if (usePostMethod() == null) {
+      return callForUrlLength();
     }
+
+    if (usePostMethod()) {
+      return post();
+    }
+
+    return get();
+  }
+
+  private Call<MapMatchingResponse> callForUrlLength() {
+    Call<MapMatchingResponse> get = get();
+    if (get.request().url().toString().length() < MAX_URL_SIZE) {
+      return get;
+    }
+    return post();
+  }
+
+  private Call<MapMatchingResponse> get() {
     return getService().getCall(
+      ApiCallHelper.getHeaderUserAgent(clientAppName()),
+      user(),
+      profile(),
+      coordinates(),
+      accessToken(),
+      geometries(),
+      radiuses(),
+      steps(),
+      overview(),
+      timestamps(),
+      annotations(),
+      language(),
+      tidy(),
+      roundaboutExits(),
+      bannerInstructions(),
+      voiceInstructions(),
+      voiceUnits(),
+      waypointIndices(),
+      waypointNames(),
+      approaches());
+  }
+
+  private Call<MapMatchingResponse> post() {
+    return getService().postCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
@@ -149,7 +170,7 @@ public abstract class MapboxMapMatching extends
     });
   }
 
-  @NonNull
+  @Nullable
   abstract Boolean usePostMethod();
 
   @Nullable
@@ -228,8 +249,7 @@ public abstract class MapboxMapMatching extends
       .baseUrl(Constants.BASE_API_URL)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
-      .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
-      .usePostMethod(false);
+      .user(DirectionsCriteria.PROFILE_DEFAULT_USER);
   }
 
   /**
@@ -666,7 +686,7 @@ public abstract class MapboxMapMatching extends
             "Waypoints must be a list of at least two indexes separated by ';'");
         }
         if (waypointIndices[0] != 0
-              || waypointIndices[waypointIndices.length - 1] != coordinates.size() - 1) {
+          || waypointIndices[waypointIndices.length - 1] != coordinates.size() - 1) {
           throw new ServicesException(
             "Waypoints must contain indices of the first and last coordinates"
           );

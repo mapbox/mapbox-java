@@ -56,7 +56,6 @@ import retrofit2.Response;
 @AutoValue
 public abstract class MapboxDirections extends
   MapboxService<DirectionsResponse, DirectionsService> {
-  private static final int MAX_URL_SIZE = 1024 * 8;
 
   protected MapboxDirections() {
     super(DirectionsService.class);
