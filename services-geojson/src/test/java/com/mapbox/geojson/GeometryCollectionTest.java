@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GeometryCollectionTest extends TestUtils {
@@ -124,7 +125,16 @@ public class GeometryCollectionTest extends TestUtils {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_GEOMETRYCOLLECTION);
+    final String json =
+            "    { \"type\": \"GeometryCollection\"," +
+                    "            \"bbox\": [120, 40, -120, -40]," +
+                    "      \"geometries\": [" +
+                    "      { \"type\": \"Point\"," +
+                    "              \"bbox\": [110, 30, -110, -30]," +
+                    "        \"coordinates\": [100, 0]}," +
+                    "      { \"type\": \"LineString\"," +
+                    "              \"bbox\": [110, 30, -110, -30]," +
+                    "        \"coordinates\": [[101, 0], [102, 1]]}]}";
     GeometryCollection geo = GeometryCollection.fromJson(json);
     assertEquals(geo.type(), "GeometryCollection");
     assertEquals(geo.geometries().get(0).type(), "Point");
@@ -133,8 +143,31 @@ public class GeometryCollectionTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_GEOMETRYCOLLECTION);
-    GeometryCollection geo = GeometryCollection.fromJson(json);
-    compareJson(json, geo.toJson());
+    final String jsonOriginal =
+            "    { \"type\": \"GeometryCollection\"," +
+            "            \"bbox\": [-120, -40, 120, 40]," +
+            "      \"geometries\": [" +
+            "      { \"type\": \"Point\"," +
+            "              \"bbox\": [-110, -30, 110, 30]," +
+            "        \"coordinates\": [100, 0]}," +
+            "      { \"type\": \"LineString\"," +
+            "              \"bbox\": [-110, -30, 110, 30]," +
+            "        \"coordinates\": [[101, 0], [102, 1]]}]}";
+
+    List<Geometry> geometries = new ArrayList<>(2);
+    geometries.add(Point.fromLngLat(100, 0,
+          BoundingBox.fromLngLats(-110, -30,110, 30)));
+    geometries.add(LineString.fromLngLats(
+          Arrays.asList(Point.fromLngLat(101, 0),
+                        Point.fromLngLat(102, 1)),
+            BoundingBox.fromLngLats(-110, -30,110, 30)));
+
+    GeometryCollection geometryCollection =
+      GeometryCollection.fromGeometries(geometries,
+              BoundingBox.fromLngLats(-120, -40,120, 40));
+
+    String jsonString = geometryCollection.toJson();
+    compareJson(jsonOriginal, jsonString);
+
   }
 }

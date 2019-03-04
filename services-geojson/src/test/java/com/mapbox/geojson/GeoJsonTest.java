@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 public class GeoJsonTest extends TestUtils {
 
   private static final String GEOJSON_FIXTURE = "sample-geojson-result.json";
@@ -37,6 +39,28 @@ public class GeoJsonTest extends TestUtils {
     features.add(Feature.fromGeometry(negRound));
 
     FeatureCollection featureCollection = FeatureCollection.fromFeatures(features);
-    compareJson(loadJsonFixture(GEOJSON_FIXTURE), featureCollection.toJson());
+
+    List<Feature> featureCollectionRounded =
+            FeatureCollection.fromJson(featureCollection.toJson()).features();
+    Point roundDown2 = (Point)featureCollectionRounded.get(0).geometry();
+    Point noRound2 = (Point)featureCollectionRounded.get(1).geometry();
+    Point matchRound2 = (Point)featureCollectionRounded.get(2).geometry();
+    Point roundLat2 = (Point)featureCollectionRounded.get(3).geometry();
+    Point roundLon2 = (Point)featureCollectionRounded.get(4).geometry();
+    Point largeRound2 = (Point)featureCollectionRounded.get(5).geometry();
+    Point negRound2 = (Point)featureCollectionRounded.get(6).geometry();
+
+    assertEquals(1.1234568, roundDown2.longitude(), DELTA);
+    assertEquals(1.1234568, roundDown2.latitude(), DELTA);
+    assertEquals(noRound, noRound2);
+    assertEquals(matchRound, matchRound2);
+    assertEquals(roundLat.longitude(), roundLat2.longitude(), DELTA);
+    assertEquals(1.1234568, roundLat2.latitude(), DELTA);
+    assertEquals(1.1234568, roundLon2.longitude(), DELTA);
+    assertEquals(roundLon.latitude(), roundLon2.latitude(), DELTA);
+    assertEquals(105.1234568, largeRound2.longitude(), DELTA);
+    assertEquals(largeRound.latitude(), largeRound2.latitude(), DELTA);
+    assertEquals(-105.1234568, negRound2.longitude(), DELTA);
+    assertEquals(negRound.latitude(), negRound2.latitude(), DELTA);
   }
 }

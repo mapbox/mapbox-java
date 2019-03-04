@@ -230,7 +230,8 @@ public class PolygonTest extends TestUtils {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_POLYGON);
+    final String json = "{\"type\": \"Polygon\", " +
+            "\"coordinates\": [[[100, 0], [101, 0], [101, 1], [100, 1],[100, 0]]]}";
     Polygon geo = Polygon.fromJson(json);
     assertEquals("Polygon", geo.type());
     assertEquals(100.0, geo.coordinates().get(0).get(0).longitude(), DELTA);
@@ -240,7 +241,9 @@ public class PolygonTest extends TestUtils {
 
   @Test
   public void fromJsonHoles() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_POLYGON_HOLES);
+    final String json = "{\"type\": \"Polygon\", " +
+            "\"coordinates\": [[[100, 0], [101, 0], [101, 1], [100, 1],[100, 0]], " +
+            " [[100.8, 0.8],[100.8, 0.2],[100.2, 0.2],[100.2, 0.8],[100.8, 0.8]]]}";
     Polygon geo = Polygon.fromJson(json);
     assertEquals("Polygon", geo.type());
     assertEquals(100.0, geo.coordinates().get(0).get(0).longitude(), DELTA);
@@ -253,14 +256,17 @@ public class PolygonTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_POLYGON);
+    final String json = "{\"type\": \"Polygon\", " +
+            "\"coordinates\": [[[100, 0], [101, 0], [101, 1], [100, 1],[100, 0]]]}";
     Polygon geo = Polygon.fromJson(json);
     compareJson(json, geo.toJson());
   }
 
   @Test
   public void toJsonHoles() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_POLYGON_HOLES);
+    final String json = "{\"type\": \"Polygon\", " +
+            "\"coordinates\": [[[100, 0], [101, 0], [101, 1], [100, 1],[100, 0]], " +
+            " [[100.8, 0.8],[100.8, 0.2],[100.2, 0.2],[100.2, 0.8],[100.8, 0.8]]]}";
     Polygon geo = Polygon.fromJson(json);
     compareJson(json, geo.toJson());
   }

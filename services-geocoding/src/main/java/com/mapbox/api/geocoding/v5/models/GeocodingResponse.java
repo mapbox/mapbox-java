@@ -7,13 +7,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Geometry;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.GeometryTypeAdapter;
-import com.mapbox.geojson.gson.PointDeserializer;
+import com.mapbox.geojson.GeometryAdapterFactory;
+import com.mapbox.geojson.gson.BoundingBoxTypeAdapter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -41,9 +36,8 @@ public abstract class GeocodingResponse implements Serializable {
   @NonNull
   public static GeocodingResponse fromJson(@NonNull String json) {
     Gson gson = new GsonBuilder()
-      .registerTypeAdapter(Point.class, new PointDeserializer())
-      .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
-      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
+      .registerTypeAdapterFactory(GeometryAdapterFactory.create())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter())
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .create();
     return gson.fromJson(json, GeocodingResponse.class);
@@ -123,8 +117,8 @@ public abstract class GeocodingResponse implements Serializable {
   @NonNull
   public String toJson() {
     Gson gson = new GsonBuilder()
-      .registerTypeAdapter(Geometry.class, new GeometryTypeAdapter())
-      .registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer())
+      .registerTypeAdapterFactory(GeometryAdapterFactory.create())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter())
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .create();
     return gson.toJson(this, GeocodingResponse.class);

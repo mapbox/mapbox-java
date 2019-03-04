@@ -18,7 +18,6 @@ import java.util.List;
 
 public class FeatureTest extends TestUtils {
 
-  private static final String SAMPLE_FEATURE = "sample-feature.json";
   private static final String SAMPLE_FEATURE_POINT = "sample-feature-point-all.json";
 
   @Test
@@ -48,7 +47,9 @@ public class FeatureTest extends TestUtils {
     points.add(Point.fromLngLat(2.0, 3.0));
     LineString lineString = LineString.fromLngLats(points);
     Feature feature = Feature.fromGeometry(lineString);
-    compareJson(feature.toJson(),
+
+    String featureJsonString = feature.toJson();
+    compareJson(featureJsonString,
       "{\"type\":\"Feature\",\"geometry\":{\"type\":"
         + "\"LineString\",\"coordinates\":[[1,2],[2,3]]}}");
   }
@@ -85,7 +86,7 @@ public class FeatureTest extends TestUtils {
   }
 
   @Test
-  public void test_point_feature_fromJson() throws IOException {
+  public void point_feature_fromJson() throws IOException {
     final String json =  "{ \"type\": \"Feature\"," +
       "\"geometry\": { \"type\": \"Point\", \"coordinates\": [ 125.6, 10.1] }," +
       "\"properties\": {\"name\": \"Dinagat Islands\" }}";
@@ -98,7 +99,7 @@ public class FeatureTest extends TestUtils {
   }
 
   @Test
-  public void test_linestring_feature_fromJson() throws IOException {
+  public void linestring_feature_fromJson() throws IOException {
       final String json =  "{ \"type\": \"Feature\"," +
       "\"geometry\": { \"type\": \"LineString\", "+
       " \"coordinates\": [[ 102.0, 20],[103.0, 3.0],[104.0, 4.0], [105.0, 5.0]]}," +
@@ -116,7 +117,7 @@ public class FeatureTest extends TestUtils {
   }
 
   @Test
-  public void test_point_feature_toJson() throws IOException {
+  public void point_feature_toJson() throws IOException {
     JsonObject properties = new JsonObject();
     properties.addProperty("name", "Dinagat Islands");
     Feature geo = Feature.fromGeometry(Point.fromLngLat(125.6, 10.1),
@@ -126,6 +127,27 @@ public class FeatureTest extends TestUtils {
     String expectedJson = "{ \"type\": \"Feature\"," +
       "\"geometry\": { \"type\": \"Point\", \"coordinates\": [ 125.6, 10.1] }," +
               "\"properties\": {\"name\": \"Dinagat Islands\" }}";
+
+    compareJson(expectedJson, geoJsonString);
+  }
+
+  @Test
+  public void linestring_feature_toJson() throws IOException {
+    JsonObject properties = new JsonObject();
+    properties.addProperty("name", "Dinagat Islands");
+
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(2.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+
+    Feature geo = Feature.fromGeometry(lineString, properties);
+    String geoJsonString = geo.toJson();
+
+    String expectedJson = "{ \"type\": \"Feature\"," +
+            "\"geometry\": { \"type\": \"LineString\", \"coordinates\": [[1,1],[2,2],[3,3]]}," +
+            "\"properties\": {\"name\": \"Dinagat Islands\" }}";
 
     compareJson(expectedJson, geoJsonString);
   }
@@ -163,19 +185,34 @@ public class FeatureTest extends TestUtils {
 
   @Test
   public void testNullPropertiesJson() {
-    String jsonString = "{\"type\":\"Feature\",\"bbox\":[1.0,2.0,3.0,4.0],\"geometry\":"
+    final String jsonString =
+      "{\"type\":\"Feature\"," +
+      " \"bbox\":[1.0,2.0,3.0,4.0]," +
+      " \"geometry\":"
       + "{\"type\":\"LineString\",\"coordinates\":[[1.0,2.0],[2.0,3.0]]}}";
+
     Feature feature = Feature.fromJson(jsonString);
 
     // Json( null Properties) -> Feature (empty Properties) -> Json(null Properties)
     String fromFeatureJsonString = feature.toJson();
-    assertEquals(fromFeatureJsonString, jsonString);
+    compareJson(fromFeatureJsonString, jsonString);
   }
 
 
   @Test
-  public void test_fromJson_toJson() throws IOException {
-    final String jsonString = loadJsonFixture(SAMPLE_FEATURE_POINT);
+  public void pointFeature_fromJson_toJson() throws IOException {
+    final String jsonString =
+      "{\"id\" : \"id0\"," +
+       " \"bbox\": [-120.0, -60.0, 120.0, 60.0]," +
+       " \"geometry\": {" +
+          "    \"bbox\": [-110.0, -50.0, 110.0, 50.0]," +
+          "    \"coordinates\": [ 100.0, 0.0], " +
+          "     \"type\": \"Point\"}," +
+       "\"type\": \"Feature\"," +
+       "\"properties\": {\"prop0\": \"value0\", \"prop1\": \"value1\"}" +
+       "}";
+
+
     Feature featureFromJson = Feature.fromJson(jsonString);
     String jsonStringFromFeature = featureFromJson.toJson();
 

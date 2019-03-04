@@ -5,12 +5,11 @@ import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.geojson.constants.GeoJsonConstants;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.gson.BoundingBoxTypeAdapter;
 
 import java.io.Serializable;
 
@@ -29,8 +28,11 @@ import java.io.Serializable;
  *
  * @since 3.0.0
  */
-@AutoValue
-public abstract class BoundingBox implements Serializable {
+public class BoundingBox implements Serializable {
+
+  private final Point southwest;
+
+  private final Point northeast;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String.
@@ -42,7 +44,7 @@ public abstract class BoundingBox implements Serializable {
    */
   public static BoundingBox fromJson(String json) {
     Gson gson = new GsonBuilder()
-      .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter())
       .create();
     return gson.fromJson(json, BoundingBox.class);
   }
@@ -59,7 +61,7 @@ public abstract class BoundingBox implements Serializable {
    * @since 3.0.0
    */
   public static BoundingBox fromPoints(@NonNull Point southwest, @NonNull Point northeast) {
-    return new AutoValue_BoundingBox(southwest, northeast);
+    return new BoundingBox(southwest, northeast);
   }
 
   /**
@@ -130,7 +132,7 @@ public abstract class BoundingBox implements Serializable {
     @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double south,
     @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double east,
     @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double north) {
-    return new AutoValue_BoundingBox(Point.fromLngLat(west, south), Point.fromLngLat(east, north));
+    return new BoundingBox(Point.fromLngLat(west, south), Point.fromLngLat(east, north));
   }
 
   /**
@@ -156,9 +158,20 @@ public abstract class BoundingBox implements Serializable {
     @FloatRange(from = MIN_LONGITUDE, to = GeoJsonConstants.MAX_LONGITUDE) double east,
     @FloatRange(from = MIN_LATITUDE, to = GeoJsonConstants.MAX_LATITUDE) double north,
     double northEastAltitude) {
-    return new AutoValue_BoundingBox(
+    return new BoundingBox(
       Point.fromLngLat(west, south, southwestAltitude),
       Point.fromLngLat(east, north, northEastAltitude));
+  }
+
+  BoundingBox(Point southwest, Point northeast) {
+    if (southwest == null) {
+      throw new NullPointerException("Null southwest");
+    }
+    this.southwest = southwest;
+    if (northeast == null) {
+      throw new NullPointerException("Null northeast");
+    }
+    this.northeast = northeast;
   }
 
   /**
@@ -169,7 +182,9 @@ public abstract class BoundingBox implements Serializable {
    * @since 3.0.0
    */
   @NonNull
-  public abstract Point southwest();
+  public Point southwest() {
+    return southwest;
+  }
 
   /**
    * Provides the {@link Point} which represents the northeast corner of this bounding box when the
@@ -179,7 +194,9 @@ public abstract class BoundingBox implements Serializable {
    * @since 3.0.0
    */
   @NonNull
-  public abstract Point northeast();
+  public Point northeast() {
+    return northeast;
+  }
 
   /**
    * Convenience method for getting the bounding box most westerly point (longitude) as a double
@@ -233,7 +250,7 @@ public abstract class BoundingBox implements Serializable {
    * @since 3.0.0
    */
   public static TypeAdapter<BoundingBox> typeAdapter(Gson gson) {
-    return new AutoValue_BoundingBox.GsonTypeAdapter(gson);
+    return new BoundingBoxTypeAdapter();
   }
 
   /**
@@ -245,9 +262,39 @@ public abstract class BoundingBox implements Serializable {
    */
   public final String toJson() {
     Gson gson = new GsonBuilder()
-      .setPrettyPrinting()
-      .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter())
       .create();
     return gson.toJson(this, BoundingBox.class);
+  }
+
+  @Override
+  public String toString() {
+    return "BoundingBox{"
+            + "southwest=" + southwest + ", "
+            + "northeast=" + northeast
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj instanceof BoundingBox) {
+      BoundingBox that = (BoundingBox) obj;
+      return (this.southwest.equals(that.southwest()))
+              && (this.northeast.equals(that.northeast()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hashCode = 1;
+    hashCode *= 1000003;
+    hashCode ^= southwest.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= northeast.hashCode();
+    return hashCode;
   }
 }

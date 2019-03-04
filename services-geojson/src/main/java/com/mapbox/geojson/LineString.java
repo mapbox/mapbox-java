@@ -2,17 +2,15 @@ package com.mapbox.geojson;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.PointSerializer;
 import com.mapbox.geojson.utils.PolylineUtils;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,10 +48,15 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class LineString implements CoordinateContainer<List<Point>>, Serializable {
+public final class LineString implements CoordinateContainer<List<Point>>, Serializable {
 
   private static final String TYPE = "LineString";
+
+  private final String type;
+
+  private final BoundingBox bbox;
+
+  private final List<Point> coordinates;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -70,8 +73,6 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
   public static LineString fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     return gson.create().fromJson(json, LineString.class);
   }
 
@@ -85,7 +86,7 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull MultiPoint multiPoint) {
-    return new AutoValue_LineString(TYPE, null, multiPoint.coordinates());
+    return new LineString(TYPE, null, multiPoint.coordinates());
   }
 
   /**
@@ -103,7 +104,7 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull List<Point> points) {
-    return new AutoValue_LineString(TYPE, null, points);
+    return new LineString(TYPE, null, points);
   }
 
   /**
@@ -122,7 +123,7 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull List<Point> points, @Nullable BoundingBox bbox) {
-    return new AutoValue_LineString(TYPE, bbox, points);
+    return new LineString(TYPE, bbox, points);
   }
 
   /**
@@ -136,7 +137,19 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
    * @since 3.0.0
    */
   public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
-    return new AutoValue_LineString(TYPE, bbox, multiPoint.coordinates());
+    return new LineString(TYPE, bbox, multiPoint.coordinates());
+  }
+
+  LineString(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    this.type = type;
+    this.bbox = bbox;
+    if (coordinates == null) {
+      throw new NullPointerException("Null coordinates");
+    }
+    this.coordinates = coordinates;
   }
 
   static LineString fromLngLats(double[][] coordinates) {
@@ -175,7 +188,9 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type()  {
+    return type;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -189,7 +204,9 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
    */
   @Nullable
   @Override
-  public abstract BoundingBox bbox();
+  public BoundingBox bbox()  {
+    return bbox;
+  }
 
   /**
    * Provides the list of {@link Point}s that make up the LineString geometry.
@@ -199,7 +216,9 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
    */
   @NonNull
   @Override
-  public abstract List<Point> coordinates();
+  public List<Point> coordinates()  {
+    return coordinates;
+  }
 
   /**
    * This takes the currently defined values found inside this instance and converts it to a GeoJson
@@ -211,8 +230,7 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     return gson.create().toJson(this);
   }
 
@@ -237,6 +255,70 @@ public abstract class LineString implements CoordinateContainer<List<Point>>, Se
    * @since 3.0.0
    */
   public static TypeAdapter<LineString> typeAdapter(Gson gson) {
-    return new AutoValue_LineString.GsonTypeAdapter(gson);
+    return new LineString.GsonTypeAdapter(gson);
+  }
+
+  @Override
+  public String toString() {
+    return "LineString{"
+            + "type=" + type + ", "
+            + "bbox=" + bbox + ", "
+            + "coordinates=" + coordinates
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj instanceof LineString) {
+      LineString that = (LineString) obj;
+      return (this.type.equals(that.type()))
+              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
+              && (this.coordinates.equals(that.coordinates()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hashCode = 1;
+    hashCode *= 1000003;
+    hashCode ^= type.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= coordinates.hashCode();
+    return hashCode;
+  }
+
+  /**
+   * TypeAdapter for LineString geometry.
+   *
+   * @since 4.6.0
+   */
+  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<LineString, List<Point>> {
+
+    GsonTypeAdapter(Gson gson) {
+      super(gson, new ListOfPointCoordinatesTypeAdapter());
+    }
+
+    @Override
+    public void write(JsonWriter jsonWriter, LineString object) throws IOException {
+      writeCoordinateContainer(jsonWriter, object);
+    }
+
+    @Override
+    public LineString read(JsonReader jsonReader) throws IOException {
+      return (LineString) readCoordinateContainer(jsonReader);
+    }
+
+    @Override
+    CoordinateContainer<List<Point>> createCoordinateContainer(String type,
+                                                               BoundingBox bbox,
+                                                               List<Point> coordinates) {
+      return new LineString(type == null ? "LineString" : type, bbox, coordinates);
+    }
   }
 }

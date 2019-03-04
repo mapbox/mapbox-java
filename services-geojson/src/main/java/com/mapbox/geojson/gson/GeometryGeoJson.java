@@ -3,9 +3,8 @@ package com.mapbox.geojson.gson;
 import android.support.annotation.NonNull;
 
 import com.google.gson.GsonBuilder;
-import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Geometry;
-import com.mapbox.geojson.Point;
+import com.mapbox.geojson.GeometryAdapterFactory;
 
 /**
  * This is a utility class that helps create a Geometry instance from a JSON string.
@@ -22,11 +21,11 @@ public class GeometryGeoJson {
    * @since 4.0.0
    */
   public static Geometry fromJson(@NonNull String json) {
+
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapterFactory(GeometryAdapterFactory.create());
+
     return gson.create().fromJson(json, Geometry.class);
   }
 }

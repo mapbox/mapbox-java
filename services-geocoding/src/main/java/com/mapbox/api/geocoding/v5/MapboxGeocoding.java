@@ -17,11 +17,9 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.BoundingBox;
-import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.GeometryAdapterFactory;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.PointDeserializer;
+import com.mapbox.geojson.gson.BoundingBoxTypeAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,11 +69,11 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
   @Override
   protected GsonBuilder getGsonBuilder() {
+
     return new GsonBuilder()
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
-      .registerTypeAdapter(Point.class, new PointDeserializer())
-      .registerTypeAdapter(Geometry.class, new GeometryDeserializer())
-      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+      .registerTypeAdapterFactory(GeometryAdapterFactory.create())
+      .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter());
   }
 
   @Override

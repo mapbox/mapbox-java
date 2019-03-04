@@ -94,7 +94,8 @@ public class MultiPointTest extends TestUtils {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_MULTIPOINT);
+    final String json = "{ \"type\": \"MultiPoint\"," +
+            "\"coordinates\": [ [100, 0], [101, 1] ] } ";
     MultiPoint geo = MultiPoint.fromJson(json);
     assertEquals(geo.type(), "MultiPoint");
     assertEquals(geo.coordinates().get(0).longitude(), 100.0, DELTA);
@@ -107,7 +108,8 @@ public class MultiPointTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_MULTIPOINT);
+    final String json = "{ \"type\": \"MultiPoint\"," +
+            "\"coordinates\": [ [100, 0], [101, 1] ] } ";
     MultiPoint geo = MultiPoint.fromJson(json);
     compareJson(json, geo.toJson());
   }

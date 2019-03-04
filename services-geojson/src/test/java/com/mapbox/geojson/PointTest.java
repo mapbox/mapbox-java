@@ -13,7 +13,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PointTest extends TestUtils {
@@ -97,15 +99,27 @@ public class PointTest extends TestUtils {
 
   @Test
   public void bbox_doesSerializeWhenPresent() throws Exception {
-    List<Point> points = new ArrayList<>();
-    points.add(Point.fromLngLat(1.0, 1.0));
-    points.add(Point.fromLngLat(2.0, 2.0));
-    points.add(Point.fromLngLat(3.0, 3.0));
     BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
-    LineString lineString = LineString.fromLngLats(points, bbox);
-    compareJson(lineString.toJson(),
-      "{\"coordinates\":[[1,1],[2,2],[3,3]],"
-        + "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}");
+    Point point = Point.fromLngLat(2.0, 2.0, bbox);
+    compareJson(point.toJson(),
+      "{\"coordinates\": [2,2],"
+        + "\"type\":\"Point\",\"bbox\":[1.0,2.0,3.0,4.0]}");
+  }
+
+  @Test
+  public void bbox_doesDeserializeWhenPresent() throws Exception {
+    Point point = Point.fromJson("{\"coordinates\": [2,3],"
+            + "\"type\":\"Point\",\"bbox\":[1.0,2.0,3.0,4.0]}");
+
+    assertNotNull(point);
+    assertNotNull(point.bbox());
+    assertEquals(1.0, point.bbox().southwest().longitude(), DELTA);
+    assertEquals(2.0, point.bbox().southwest().latitude(), DELTA);
+    assertEquals(3.0, point.bbox().northeast().longitude(), DELTA);
+    assertEquals(4.0, point.bbox().northeast().latitude(), DELTA);
+    assertNotNull(point.coordinates());
+    assertEquals(2, point.longitude(), DELTA);
+    assertEquals(3, point.latitude(), DELTA);
   }
 
   @Test
@@ -122,7 +136,8 @@ public class PointTest extends TestUtils {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_POINT);
+    final String json =
+            "{ \"type\": \"Point\", \"coordinates\": [ 100, 0] }";
     Point geo = Point.fromJson(json);
     assertEquals(geo.type(), "Point");
     assertEquals(geo.longitude(), 100.0, DELTA);
@@ -136,7 +151,8 @@ public class PointTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_POINT);
+    final String json =
+      "{ \"type\": \"Point\", \"coordinates\": [ 100, 0] }";
     Point geo = Point.fromJson(json);
     compareJson(json, geo.toJson());
   }

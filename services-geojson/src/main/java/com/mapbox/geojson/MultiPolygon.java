@@ -2,15 +2,14 @@ package com.mapbox.geojson;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.PointSerializer;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,11 +67,16 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class MultiPolygon
+public final class MultiPolygon
   implements CoordinateContainer<List<List<List<Point>>>>, Serializable {
 
   private static final String TYPE = "MultiPolygon";
+
+  private final String type;
+
+  private final BoundingBox bbox;
+
+  private final List<List<List<Point>>> coordinates;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -87,7 +91,6 @@ public abstract class MultiPolygon
   public static MultiPolygon fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
     return gson.create().fromJson(json, MultiPolygon.class);
   }
 
@@ -106,7 +109,7 @@ public abstract class MultiPolygon
     for (Polygon polygon : polygons) {
       coordinates.add(polygon.coordinates());
     }
-    return new AutoValue_MultiPolygon(TYPE, null, coordinates);
+    return new MultiPolygon(TYPE, null, coordinates);
   }
 
   /**
@@ -127,7 +130,7 @@ public abstract class MultiPolygon
     for (Polygon polygon : polygons) {
       coordinates.add(polygon.coordinates());
     }
-    return new AutoValue_MultiPolygon(TYPE, bbox, coordinates);
+    return new MultiPolygon(TYPE, bbox, coordinates);
   }
 
   /**
@@ -142,7 +145,7 @@ public abstract class MultiPolygon
    */
   public static MultiPolygon fromPolygon(@NonNull Polygon polygon) {
     List<List<List<Point>>> coordinates = Arrays.asList(polygon.coordinates());
-    return new AutoValue_MultiPolygon(TYPE, null, coordinates);
+    return new MultiPolygon(TYPE, null, coordinates);
   }
 
   /**
@@ -158,7 +161,7 @@ public abstract class MultiPolygon
    */
   public static MultiPolygon fromPolygon(@NonNull Polygon polygon, @Nullable BoundingBox bbox) {
     List<List<List<Point>>> coordinates = Arrays.asList(polygon.coordinates());
-    return new AutoValue_MultiPolygon(TYPE, bbox, coordinates);
+    return new MultiPolygon(TYPE, bbox, coordinates);
   }
 
   /**
@@ -171,7 +174,7 @@ public abstract class MultiPolygon
    * @since 3.0.0
    */
   public static MultiPolygon fromLngLats(@NonNull List<List<List<Point>>> points) {
-    return new AutoValue_MultiPolygon(TYPE, null, points);
+    return new MultiPolygon(TYPE, null, points);
   }
 
   /**
@@ -186,7 +189,7 @@ public abstract class MultiPolygon
    */
   public static MultiPolygon fromLngLats(@NonNull List<List<List<Point>>> points,
                                          @Nullable BoundingBox bbox) {
-    return new AutoValue_MultiPolygon(TYPE, bbox, points);
+    return new MultiPolygon(TYPE, bbox, points);
   }
 
   static MultiPolygon fromLngLats(@NonNull double[][][][] coordinates) {
@@ -203,7 +206,19 @@ public abstract class MultiPolygon
       converted.add(innerOneList);
     }
 
-    return new AutoValue_MultiPolygon(TYPE, null, converted);
+    return new MultiPolygon(TYPE, null, converted);
+  }
+
+  MultiPolygon(String type, @Nullable BoundingBox bbox, List<List<List<Point>>> coordinates) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    this.type = type;
+    this.bbox = bbox;
+    if (coordinates == null) {
+      throw new NullPointerException("Null coordinates");
+    }
+    this.coordinates = coordinates;
   }
 
   /**
@@ -231,7 +246,9 @@ public abstract class MultiPolygon
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type()  {
+    return type;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -245,7 +262,9 @@ public abstract class MultiPolygon
    */
   @Nullable
   @Override
-  public abstract BoundingBox bbox();
+  public BoundingBox bbox()  {
+    return bbox;
+  }
 
   /**
    * Provides the list of list of list of {@link Point}s that make up the MultiPolygon geometry.
@@ -255,7 +274,9 @@ public abstract class MultiPolygon
    */
   @NonNull
   @Override
-  public abstract List<List<List<Point>>> coordinates();
+  public List<List<List<Point>>> coordinates()  {
+    return coordinates;
+  }
 
   /**
    * This takes the currently defined values found inside this instance and converts it to a GeoJson
@@ -267,8 +288,7 @@ public abstract class MultiPolygon
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     return gson.create().toJson(this);
   }
 
@@ -280,6 +300,70 @@ public abstract class MultiPolygon
    * @since 3.0.0
    */
   public static TypeAdapter<MultiPolygon> typeAdapter(Gson gson) {
-    return new AutoValue_MultiPolygon.GsonTypeAdapter(gson);
+    return new MultiPolygon.GsonTypeAdapter(gson);
+  }
+
+  @Override
+  public String toString() {
+    return "Polygon{"
+            + "type=" + type + ", "
+            + "bbox=" + bbox + ", "
+            + "coordinates=" + coordinates
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj instanceof MultiPolygon) {
+      MultiPolygon that = (MultiPolygon) obj;
+      return (this.type.equals(that.type()))
+              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
+              && (this.coordinates.equals(that.coordinates()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hashCode = 1;
+    hashCode *= 1000003;
+    hashCode ^= type.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= coordinates.hashCode();
+    return hashCode;
+  }
+
+  /**
+   * TypeAdapter for MultiPolygon geometry.
+   *
+   * @since 4.6.0
+   */
+  static final class GsonTypeAdapter
+          extends BaseGeometryTypeAdapter<MultiPolygon, List<List<List<Point>>>> {
+
+    GsonTypeAdapter(Gson gson) {
+      super(gson, new ListofListofListOfPointCoordinatesTypeAdapter());
+    }
+
+    @Override
+    public void write(JsonWriter jsonWriter, MultiPolygon object) throws IOException {
+      writeCoordinateContainer(jsonWriter, object);
+    }
+
+    @Override
+    public MultiPolygon read(JsonReader jsonReader) throws IOException {
+      return (MultiPolygon) readCoordinateContainer(jsonReader);
+    }
+
+    @Override
+    CoordinateContainer<List<List<List<Point>>>>
+      createCoordinateContainer(String type, BoundingBox bbox, List<List<List<Point>>> coords) {
+      return new MultiPolygon(type == null ? "MultiPolygon" : type, bbox, coords);
+    }
   }
 }

@@ -13,7 +13,10 @@ import java.io.IOException;
  * instances of {@code Geometry}.
  *
  * @since 3.0.0
+ * @deprecated  this class is deprecated, {@link com.mapbox.geojson.GeometryAdapterFactory}
+ *   should be used to serialize/deserialize Geometries.
  */
+@Deprecated
 public class GeometryTypeAdapter extends TypeAdapter<Geometry> {
 
 

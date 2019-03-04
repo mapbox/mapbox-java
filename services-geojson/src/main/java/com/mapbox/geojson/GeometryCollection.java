@@ -3,17 +3,16 @@ package com.mapbox.geojson;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.PointSerializer;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -60,10 +59,15 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class GeometryCollection implements Geometry, Serializable {
+public final class GeometryCollection implements Geometry, Serializable {
 
   private static final String TYPE = "GeometryCollection";
+
+  private final String type;
+
+  private final BoundingBox bbox;
+
+  private final List<Geometry> geometries;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -76,11 +80,10 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    * @since 1.0.0
    */
   public static GeometryCollection fromJson(String json) {
+
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+    gson.registerTypeAdapterFactory(GeometryAdapterFactory.create());
     return gson.create().fromJson(json, GeometryCollection.class);
   }
 
@@ -93,7 +96,7 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    * @since 1.0.0
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries) {
-    return new AutoValue_GeometryCollection(TYPE, null, geometries);
+    return new GeometryCollection(TYPE, null, geometries);
   }
 
   /**
@@ -107,7 +110,7 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    */
   public static GeometryCollection fromGeometries(@NonNull List<Geometry> geometries,
                                                   @Nullable BoundingBox bbox) {
-    return new AutoValue_GeometryCollection(TYPE, bbox, geometries);
+    return new GeometryCollection(TYPE, bbox, geometries);
   }
 
   /**
@@ -120,7 +123,7 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    */
   public static GeometryCollection fromGeometry(@NonNull Geometry geometry) {
     List<Geometry> geometries = Arrays.asList(geometry);
-    return new AutoValue_GeometryCollection(TYPE, null, geometries);
+    return new GeometryCollection(TYPE, null, geometries);
   }
 
   /**
@@ -135,7 +138,29 @@ public abstract class GeometryCollection implements Geometry, Serializable {
   public static GeometryCollection fromGeometry(@NonNull Geometry geometry,
                                                 @Nullable BoundingBox bbox) {
     List<Geometry> geometries = Arrays.asList(geometry);
-    return new AutoValue_GeometryCollection(TYPE, bbox, geometries);
+    return new GeometryCollection(TYPE, bbox, geometries);
+  }
+
+  /**
+   * Create a new instance of this class by giving the collection a list of {@link Geometry} and
+   * bounding box.
+   *
+   * @param geometries a non-null list of geometry which makes up this collection
+   * @param bbox       optionally include a bbox definition as a double array
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *         method
+   * @since 4.6.0
+   */
+  GeometryCollection(String type, @Nullable BoundingBox bbox, List<Geometry> geometries) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    this.type = type;
+    this.bbox = bbox;
+    if (geometries == null) {
+      throw new NullPointerException("Null geometries");
+    }
+    this.geometries = geometries;
   }
 
   /**
@@ -148,7 +173,9 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return type;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -162,7 +189,9 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    */
   @Nullable
   @Override
-  public abstract BoundingBox bbox();
+  public BoundingBox bbox() {
+    return bbox;
+  }
 
   /**
    * This provides the list of geometry making up this Geometry Collection. Note that if the
@@ -173,7 +202,9 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    * @since 1.0.0
    */
   @NonNull
-  public abstract List<Geometry> geometries();
+  public List<Geometry> geometries() {
+    return geometries;
+  }
 
   /**
    * This takes the currently defined values found inside this instance and converts it to a GeoJson
@@ -185,8 +216,8 @@ public abstract class GeometryCollection implements Geometry, Serializable {
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
+    gson.registerTypeAdapterFactory(GeometryAdapterFactory.create());
     return gson.create().toJson(this);
   }
 
@@ -198,6 +229,157 @@ public abstract class GeometryCollection implements Geometry, Serializable {
    * @since 3.0.0
    */
   public static TypeAdapter<GeometryCollection> typeAdapter(Gson gson) {
-    return new AutoValue_GeometryCollection.GsonTypeAdapter(gson);
+    return new GeometryCollection.GsonTypeAdapter(gson);
+  }
+
+  @Override
+  public String toString() {
+    return "GeometryCollection{"
+            + "type=" + type + ", "
+            + "bbox=" + bbox + ", "
+            + "geometries=" + geometries
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj instanceof GeometryCollection) {
+      GeometryCollection that = (GeometryCollection) obj;
+      return (this.type.equals(that.type()))
+              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
+              && (this.geometries.equals(that.geometries()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hashCode = 1;
+    hashCode *= 1000003;
+    hashCode ^= type.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= geometries.hashCode();
+    return hashCode;
+  }
+
+  /**
+   * TypeAdapter to serialize/deserialize GeometryCollection objects.
+   *
+   * @since 4.6.0
+   */
+  static final class GsonTypeAdapter extends TypeAdapter<GeometryCollection> {
+    private volatile TypeAdapter<String> stringTypeAdapter;
+    private volatile TypeAdapter<BoundingBox> boundingBoxTypeAdapter;
+    private volatile TypeAdapter<List<Geometry>> listGeometryAdapter;
+    private final Gson gson;
+
+    GsonTypeAdapter(Gson gson) {
+      this.gson = gson;
+    }
+
+    @Override
+    public void write(JsonWriter jsonWriter, GeometryCollection object) throws IOException {
+      if (object == null) {
+        jsonWriter.nullValue();
+        return;
+      }
+      jsonWriter.beginObject();
+      jsonWriter.name("type");
+      if (object.type() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<String> stringTypeAdapter = this.stringTypeAdapter;
+        if (stringTypeAdapter == null) {
+          stringTypeAdapter = gson.getAdapter(String.class);
+          this.stringTypeAdapter = stringTypeAdapter;
+        }
+        stringTypeAdapter.write(jsonWriter, object.type());
+      }
+      jsonWriter.name("bbox");
+      if (object.bbox() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<BoundingBox> boundingBoxTypeAdapter = this.boundingBoxTypeAdapter;
+        if (boundingBoxTypeAdapter == null) {
+          boundingBoxTypeAdapter = gson.getAdapter(BoundingBox.class);
+          this.boundingBoxTypeAdapter = boundingBoxTypeAdapter;
+        }
+        boundingBoxTypeAdapter.write(jsonWriter, object.bbox());
+      }
+      jsonWriter.name("geometries");
+      if (object.geometries() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<List<Geometry>> listGeometryAdapter = this.listGeometryAdapter;
+        if (listGeometryAdapter == null) {
+          TypeToken typeToken = TypeToken.getParameterized(List.class, Geometry.class);
+          listGeometryAdapter =
+                  (TypeAdapter<List<Geometry>>) gson.getAdapter(typeToken);
+          this.listGeometryAdapter = listGeometryAdapter;
+        }
+        listGeometryAdapter.write(jsonWriter, object.geometries());
+      }
+      jsonWriter.endObject();
+    }
+
+    @Override
+    public GeometryCollection read(JsonReader jsonReader) throws IOException {
+      if (jsonReader.peek() == JsonToken.NULL) {
+        jsonReader.nextNull();
+        return null;
+      }
+      jsonReader.beginObject();
+      String type = null;
+      BoundingBox bbox = null;
+      List<Geometry> geometries = null;
+      while (jsonReader.hasNext()) {
+        String name = jsonReader.nextName();
+        if (jsonReader.peek() == JsonToken.NULL) {
+          jsonReader.nextNull();
+          continue;
+        }
+        switch (name) {
+          case "type":
+            TypeAdapter<String> stringTypeAdapter = this.stringTypeAdapter;
+            if (stringTypeAdapter == null) {
+              stringTypeAdapter = gson.getAdapter(String.class);
+              this.stringTypeAdapter = stringTypeAdapter;
+            }
+            type = stringTypeAdapter.read(jsonReader);
+            break;
+
+          case "bbox":
+            TypeAdapter<BoundingBox> boundingBoxTypeAdapter = this.boundingBoxTypeAdapter;
+            if (boundingBoxTypeAdapter == null) {
+              boundingBoxTypeAdapter = gson.getAdapter(BoundingBox.class);
+              this.boundingBoxTypeAdapter = boundingBoxTypeAdapter;
+            }
+            bbox = boundingBoxTypeAdapter.read(jsonReader);
+            break;
+
+          case "geometries":
+            TypeAdapter<List<Geometry>> listGeometryAdapter = this.listGeometryAdapter;
+            if (listGeometryAdapter == null) {
+              TypeToken typeToken = TypeToken.getParameterized(List.class, Geometry.class);
+              listGeometryAdapter =
+                      (TypeAdapter<List<Geometry>>) gson.getAdapter(typeToken);
+              this.listGeometryAdapter = listGeometryAdapter;
+            }
+            geometries = listGeometryAdapter.read(jsonReader);
+            break;
+
+          default:
+            jsonReader.skipValue();
+
+        }
+      }
+      jsonReader.endObject();
+      return new GeometryCollection(type == null ? "GeometryCollection" : type, bbox, geometries);
+    }
   }
 }

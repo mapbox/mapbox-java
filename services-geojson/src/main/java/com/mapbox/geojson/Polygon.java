@@ -4,18 +4,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.Size;
 
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.exception.GeoJsonException;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
-import com.mapbox.geojson.gson.PointSerializer;
+import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +55,15 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class Polygon implements CoordinateContainer<List<List<Point>>>, Serializable {
+public final class Polygon implements CoordinateContainer<List<List<Point>>>, Serializable {
 
   private static final String TYPE = "Polygon";
+
+  private final String type;
+
+  private final BoundingBox bbox;
+
+  private final List<List<Point>> coordinates;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -78,9 +80,6 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
   public static Polygon fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
     return gson.create().fromJson(json, Polygon.class);
   }
 
@@ -95,7 +94,7 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
    * @since 3.0.0
    */
   public static Polygon fromLngLats(@NonNull List<List<Point>> coordinates) {
-    return new AutoValue_Polygon(TYPE, null, coordinates);
+    return new Polygon(TYPE, null, coordinates);
   }
 
   /**
@@ -111,7 +110,7 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
    */
   public static Polygon fromLngLats(@NonNull List<List<Point>> coordinates,
                                     @Nullable BoundingBox bbox) {
-    return new AutoValue_Polygon(TYPE, bbox, coordinates);
+    return new Polygon(TYPE, bbox, coordinates);
   }
 
   /**
@@ -132,7 +131,7 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
       }
       converted.add(innerList);
     }
-    return new AutoValue_Polygon(TYPE, null, converted);
+    return new Polygon(TYPE, null, converted);
   }
 
   /**
@@ -154,13 +153,13 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null) {
-      return new AutoValue_Polygon(TYPE, null, coordinates);
+      return new Polygon(TYPE, null, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(TYPE, null, coordinates);
+    return new Polygon(TYPE, null, coordinates);
   }
 
   /**
@@ -184,13 +183,13 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null) {
-      return new AutoValue_Polygon(TYPE, bbox, coordinates);
+      return new Polygon(TYPE, bbox, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(TYPE, bbox, coordinates);
+    return new Polygon(TYPE, bbox, coordinates);
   }
 
   /**
@@ -215,13 +214,13 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null || inner.isEmpty()) {
-      return new AutoValue_Polygon(TYPE, null, coordinates);
+      return new Polygon(TYPE, null, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(TYPE, null, coordinates);
+    return new Polygon(TYPE, null, coordinates);
   }
 
   /**
@@ -247,13 +246,25 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
     coordinates.add(outer.coordinates());
     // If inner rings are set to null, return early.
     if (inner == null) {
-      return new AutoValue_Polygon(TYPE, bbox, coordinates);
+      return new Polygon(TYPE, bbox, coordinates);
     }
     for (LineString lineString : inner) {
       isLinearRing(lineString);
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_Polygon(TYPE, bbox, coordinates);
+    return new Polygon(TYPE, bbox, coordinates);
+  }
+
+  Polygon(String type, @Nullable BoundingBox bbox, List<List<Point>> coordinates) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    this.type = type;
+    this.bbox = bbox;
+    if (coordinates == null) {
+      throw new NullPointerException("Null coordinates");
+    }
+    this.coordinates = coordinates;
   }
 
   /**
@@ -299,7 +310,9 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type()  {
+    return type;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -313,7 +326,9 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
    */
   @Nullable
   @Override
-  public abstract BoundingBox bbox();
+  public BoundingBox bbox()  {
+    return bbox;
+  }
 
   /**
    * Provides the list of {@link Point}s that make up the Polygon geometry. The first list holds the
@@ -325,7 +340,9 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
    */
   @NonNull
   @Override
-  public abstract List<List<Point>> coordinates();
+  public List<List<Point>> coordinates()  {
+    return coordinates;
+  }
 
   /**
    * This takes the currently defined values found inside this instance and converts it to a GeoJson
@@ -337,8 +354,7 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     return gson.create().toJson(this);
   }
 
@@ -350,7 +366,7 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
    * @since 3.0.0
    */
   public static TypeAdapter<Polygon> typeAdapter(Gson gson) {
-    return new AutoValue_Polygon.GsonTypeAdapter(gson);
+    return new Polygon.GsonTypeAdapter(gson);
   }
 
   /**
@@ -373,5 +389,69 @@ public abstract class Polygon implements CoordinateContainer<List<List<Point>>>,
       throw new GeoJsonException("LinearRings require first and last coordinate to be identical.");
     }
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return "Polygon{"
+            + "type=" + type + ", "
+            + "bbox=" + bbox + ", "
+            + "coordinates=" + coordinates
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj instanceof Polygon) {
+      Polygon that = (Polygon) obj;
+      return (this.type.equals(that.type()))
+              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
+              && (this.coordinates.equals(that.coordinates()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hashCode = 1;
+    hashCode *= 1000003;
+    hashCode ^= type.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= coordinates.hashCode();
+    return hashCode;
+  }
+
+  /**
+   * TypeAdapter for Polygon geometry.
+   *
+   * @since 4.6.0
+   */
+  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<Polygon, List<List<Point>>> {
+
+    GsonTypeAdapter(Gson gson) {
+      super(gson, new ListOfListOfPointCoordinatesTypeAdapter());
+    }
+
+    @Override
+    public void write(JsonWriter jsonWriter, Polygon object) throws IOException {
+      writeCoordinateContainer(jsonWriter, object);
+    }
+
+    @Override
+    public Polygon read(JsonReader jsonReader) throws IOException {
+      return (Polygon) readCoordinateContainer(jsonReader);
+    }
+
+    @Override
+    CoordinateContainer<List<List<Point>>> createCoordinateContainer(String type,
+                                                                     BoundingBox bbox,
+                                                                     List<List<Point>> coords) {
+      return new Polygon(type == null ? "Polygon" : type, bbox, coords);
+    }
   }
 }

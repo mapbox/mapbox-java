@@ -2,15 +2,14 @@ package com.mapbox.geojson;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.PointSerializer;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,11 +49,16 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class MultiLineString
+public final class MultiLineString
   implements CoordinateContainer<List<List<Point>>>, Serializable {
 
   private static final String TYPE = "MultiLineString";
+
+  private final String type;
+
+  private final BoundingBox bbox;
+
+  private final List<List<Point>> coordinates;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -69,7 +73,6 @@ public abstract class MultiLineString
   public static MultiLineString fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
     return gson.create().fromJson(json, MultiLineString.class);
   }
 
@@ -88,7 +91,7 @@ public abstract class MultiLineString
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_MultiLineString(TYPE, null, coordinates);
+    return new MultiLineString(TYPE, null, coordinates);
   }
 
   /**
@@ -109,7 +112,7 @@ public abstract class MultiLineString
     for (LineString lineString : lineStrings) {
       coordinates.add(lineString.coordinates());
     }
-    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
+    return new MultiLineString(TYPE, bbox, coordinates);
   }
 
   /**
@@ -123,7 +126,7 @@ public abstract class MultiLineString
    */
   public static MultiLineString fromLineString(@NonNull LineString lineString) {
     List<List<Point>> coordinates = Arrays.asList(lineString.coordinates());
-    return new AutoValue_MultiLineString(TYPE, null, coordinates);
+    return new MultiLineString(TYPE, null, coordinates);
   }
 
   /**
@@ -139,7 +142,7 @@ public abstract class MultiLineString
   public static MultiLineString fromLineString(@NonNull LineString lineString,
                                                @Nullable BoundingBox bbox) {
     List<List<Point>> coordinates = Arrays.asList(lineString.coordinates());
-    return new AutoValue_MultiLineString(TYPE, bbox, coordinates);
+    return new MultiLineString(TYPE, bbox, coordinates);
   }
 
   /**
@@ -154,7 +157,7 @@ public abstract class MultiLineString
    * @since 3.0.0
    */
   public static MultiLineString fromLngLats(@NonNull List<List<Point>> points) {
-    return new AutoValue_MultiLineString(TYPE, null, points);
+    return new MultiLineString(TYPE, null, points);
   }
 
   /**
@@ -171,7 +174,7 @@ public abstract class MultiLineString
    */
   public static MultiLineString fromLngLats(@NonNull List<List<Point>> points,
                                             @Nullable BoundingBox bbox) {
-    return new AutoValue_MultiLineString(TYPE, bbox, points);
+    return new MultiLineString(TYPE, bbox, points);
   }
 
   static MultiLineString fromLngLats(double[][][] coordinates) {
@@ -184,7 +187,19 @@ public abstract class MultiLineString
       multiLine.add(lineString);
     }
 
-    return new AutoValue_MultiLineString(TYPE, null, multiLine);
+    return new MultiLineString(TYPE, null, multiLine);
+  }
+
+  MultiLineString(String type, @Nullable BoundingBox bbox, List<List<Point>> coordinates) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    this.type = type;
+    this.bbox = bbox;
+    if (coordinates == null) {
+      throw new NullPointerException("Null coordinates");
+    }
+    this.coordinates = coordinates;
   }
 
   /**
@@ -197,7 +212,9 @@ public abstract class MultiLineString
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return type;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -211,7 +228,9 @@ public abstract class MultiLineString
    */
   @Nullable
   @Override
-  public abstract BoundingBox bbox();
+  public BoundingBox bbox() {
+    return bbox;
+  }
 
   /**
    * Provides the list of list of {@link Point}s that make up the MultiLineString geometry.
@@ -221,7 +240,9 @@ public abstract class MultiLineString
    */
   @NonNull
   @Override
-  public abstract List<List<Point>> coordinates();
+  public List<List<Point>> coordinates() {
+    return coordinates;
+  }
 
   /**
    * Returns a list of LineStrings which are currently making up this MultiLineString.
@@ -248,8 +269,7 @@ public abstract class MultiLineString
   @Override
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
     return gson.create().toJson(this);
   }
 
@@ -261,6 +281,71 @@ public abstract class MultiLineString
    * @since 3.0.0
    */
   public static TypeAdapter<MultiLineString> typeAdapter(Gson gson) {
-    return new AutoValue_MultiLineString.GsonTypeAdapter(gson);
+    return new MultiLineString.GsonTypeAdapter(gson);
+  }
+
+  @Override
+  public String toString() {
+    return "MultiLineString{"
+            + "type=" + type + ", "
+            + "bbox=" + bbox + ", "
+            + "coordinates=" + coordinates
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj instanceof MultiLineString) {
+      MultiLineString that = (MultiLineString) obj;
+      return (this.type.equals(that.type()))
+              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
+              && (this.coordinates.equals(that.coordinates()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hashCode = 1;
+    hashCode *= 1000003;
+    hashCode ^= type.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= coordinates.hashCode();
+    return hashCode;
+  }
+
+  /**
+   * TypeAdapter for MultiLineString geometry.
+   *
+   * @since 4.6.0
+   */
+  static final class GsonTypeAdapter
+          extends BaseGeometryTypeAdapter<MultiLineString, List<List<Point>>> {
+
+    GsonTypeAdapter(Gson gson) {
+      super(gson, new ListOfListOfPointCoordinatesTypeAdapter());
+    }
+
+    @Override
+    public void write(JsonWriter jsonWriter, MultiLineString object) throws IOException {
+      writeCoordinateContainer(jsonWriter, object);
+    }
+
+    @Override
+    public MultiLineString read(JsonReader jsonReader) throws IOException {
+      return (MultiLineString) readCoordinateContainer(jsonReader);
+    }
+
+    @Override
+    CoordinateContainer<List<List<Point>>> createCoordinateContainer(String type,
+                                                                     BoundingBox bbox,
+                                                                     List<List<Point>> coords) {
+      return new MultiLineString(type == null ? "MultiLineString" : type, bbox, coords);
+    }
   }
 }

@@ -10,14 +10,10 @@ import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
-import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.GeometryAdapterFactory;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.PointDeserializer;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,11 +43,10 @@ public abstract class MapboxTilequery extends MapboxService<FeatureCollection, T
 
   @Override
   protected GsonBuilder getGsonBuilder() {
+
     return new GsonBuilder()
       .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
-      .registerTypeAdapter(Point.class, new PointDeserializer())
-      .registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer())
-      .registerTypeAdapter(Geometry.class, new GeometryDeserializer());
+      .registerTypeAdapterFactory(GeometryAdapterFactory.create());
   }
 
   @Override

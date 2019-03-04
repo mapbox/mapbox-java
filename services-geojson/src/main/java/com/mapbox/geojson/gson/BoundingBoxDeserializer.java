@@ -15,7 +15,10 @@ import java.lang.reflect.Type;
  * {@link BoundingBox} object for easier consumption in developers java applications.
  *
  * @since 3.0.0
+ * @deprecated this class is deprecated, {@link com.mapbox.geojson.gson.BoundingBoxTypeAdapter}
+ *   should be used to serialize/deserialize coordinates as Points.
  */
+@Deprecated
 public class BoundingBoxDeserializer implements JsonDeserializer<BoundingBox> {
 
   /**

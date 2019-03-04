@@ -3,7 +3,7 @@ package com.mapbox.api.directions.v5.models;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.gson.PointSerializer;
+import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
 import java.io.Serializable;
 
@@ -24,7 +24,7 @@ public class DirectionsJsonObject implements Serializable {
   public String toJson() {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
+    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     return gson.create().toJson(this);
   }
 }

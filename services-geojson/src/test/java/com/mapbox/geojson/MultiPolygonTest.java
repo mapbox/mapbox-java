@@ -142,7 +142,10 @@ public class MultiPolygonTest extends TestUtils {
 
   @Test
   public void fromJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_MULTIPOLYGON);
+    final String json = "{\"type\":\"MultiPolygon\",\"coordinates\": " +
+            "    [[[[102, 2], [103, 2], [103, 3], [102, 3], [102, 2]]]," +
+            "     [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]," +
+            "      [[100.2, 0.2], [100.2, 0.8], [100.8, 0.8], [100.8, 0.2], [100.2, 0.2]]]]}";
     MultiPolygon geo = MultiPolygon.fromJson(json);
     assertEquals(geo.type(), "MultiPolygon");
     assertEquals(geo.coordinates().get(0).get(0).get(0).longitude(), 102.0, DELTA);
@@ -152,7 +155,11 @@ public class MultiPolygonTest extends TestUtils {
 
   @Test
   public void toJson() throws IOException {
-    final String json = loadJsonFixture(SAMPLE_MULTIPOLYGON);
+    final String json = "{\"type\":\"MultiPolygon\",\"coordinates\": " +
+            "    [[[[102, 2], [103, 2], [103, 3], [102, 3], [102, 2]]]," +
+            "     [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]," +
+            "      [[100.2, 0.2], [100.2, 0.8], [100.8, 0.8], [100.8, 0.2], [100.2, 0.2]]]]}";
+
     MultiPolygon geo = MultiPolygon.fromJson(json);
     compareJson(json, geo.toJson());
   }

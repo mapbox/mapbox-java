@@ -2,17 +2,18 @@ package com.mapbox.geojson;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.geojson.gson.BoundingBoxDeserializer;
-import com.mapbox.geojson.gson.BoundingBoxSerializer;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import com.mapbox.geojson.gson.BoundingBoxTypeAdapter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
-import com.mapbox.geojson.gson.GeometryDeserializer;
-import com.mapbox.geojson.gson.PointDeserializer;
-import com.mapbox.geojson.gson.PointSerializer;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,10 +37,16 @@ import java.util.List;
  *
  * @since 1.0.0
  */
-@AutoValue
-public abstract class FeatureCollection implements GeoJson {
+public final class FeatureCollection implements GeoJson {
 
   private static final String TYPE = "FeatureCollection";
+
+  private final String type;
+
+  @JsonAdapter(BoundingBoxTypeAdapter.class)
+  private final BoundingBox bbox;
+
+  private final List<Feature> features;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -52,11 +59,10 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 1.0.0
    */
   public static FeatureCollection fromJson(@NonNull String json) {
+
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointDeserializer());
-    gson.registerTypeAdapter(Geometry.class, new GeometryDeserializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxDeserializer());
+    gson.registerTypeAdapterFactory(GeometryAdapterFactory.create());
     return gson.create().fromJson(json, FeatureCollection.class);
   }
 
@@ -71,7 +77,7 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 1.0.0
    */
   public static FeatureCollection fromFeatures(@NonNull Feature[] features) {
-    return new AutoValue_FeatureCollection(TYPE, null, Arrays.asList(features));
+    return new FeatureCollection(TYPE, null, Arrays.asList(features));
   }
 
   /**
@@ -84,7 +90,7 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 1.0.0
    */
   public static FeatureCollection fromFeatures(@NonNull List<Feature> features) {
-    return new AutoValue_FeatureCollection(TYPE, null, features);
+    return new FeatureCollection(TYPE, null, features);
   }
 
   /**
@@ -100,7 +106,7 @@ public abstract class FeatureCollection implements GeoJson {
    */
   public static FeatureCollection fromFeatures(@NonNull Feature[] features,
                                                @Nullable BoundingBox bbox) {
-    return new AutoValue_FeatureCollection(TYPE, bbox, Arrays.asList(features));
+    return new FeatureCollection(TYPE, bbox, Arrays.asList(features));
   }
 
   /**
@@ -116,7 +122,7 @@ public abstract class FeatureCollection implements GeoJson {
    */
   public static FeatureCollection fromFeatures(@NonNull List<Feature> features,
                                                @Nullable BoundingBox bbox) {
-    return new AutoValue_FeatureCollection(TYPE, bbox, features);
+    return new FeatureCollection(TYPE, bbox, features);
   }
 
   /**
@@ -129,7 +135,7 @@ public abstract class FeatureCollection implements GeoJson {
    */
   public static FeatureCollection fromFeature(@NonNull Feature feature) {
     List<Feature> featureList = Arrays.asList(feature);
-    return new AutoValue_FeatureCollection(TYPE, null, featureList);
+    return new FeatureCollection(TYPE, null, featureList);
   }
 
   /**
@@ -144,7 +150,16 @@ public abstract class FeatureCollection implements GeoJson {
   public static FeatureCollection fromFeature(@NonNull Feature feature,
                                               @Nullable BoundingBox bbox) {
     List<Feature> featureList = Arrays.asList(feature);
-    return new AutoValue_FeatureCollection(TYPE, bbox, featureList);
+    return new FeatureCollection(TYPE, bbox, featureList);
+  }
+
+  FeatureCollection(String type, @Nullable BoundingBox bbox, @Nullable List<Feature> features) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    this.type = type;
+    this.bbox = bbox;
+    this.features = features;
   }
 
   /**
@@ -157,7 +172,9 @@ public abstract class FeatureCollection implements GeoJson {
    */
   @NonNull
   @Override
-  public abstract String type();
+  public String type() {
+    return type;
+  }
 
   /**
    * A Feature Collection might have a member named {@code bbox} to include information on the
@@ -171,7 +188,9 @@ public abstract class FeatureCollection implements GeoJson {
    */
   @Nullable
   @Override
-  public abstract BoundingBox bbox();
+  public BoundingBox bbox() {
+    return bbox;
+  }
 
   /**
    * This provides the list of feature making up this Feature Collection. Note that if the
@@ -182,7 +201,9 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 1.0.0
    */
   @Nullable
-  public abstract List<Feature> features();
+  public List<Feature> features() {
+    return features;
+  }
 
   /**
    * This takes the currently defined values found inside this instance and converts it to a GeoJson
@@ -193,9 +214,10 @@ public abstract class FeatureCollection implements GeoJson {
    */
   @Override
   public String toJson() {
+
     GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapter(Point.class, new PointSerializer());
-    gson.registerTypeAdapter(BoundingBox.class, new BoundingBoxSerializer());
+    gson.registerTypeAdapterFactory(GeoJsonAdapterFactory.create());
+    gson.registerTypeAdapterFactory(GeometryAdapterFactory.create());
     return gson.create().toJson(this);
   }
 
@@ -207,6 +229,158 @@ public abstract class FeatureCollection implements GeoJson {
    * @since 3.0.0
    */
   public static TypeAdapter<FeatureCollection> typeAdapter(Gson gson) {
-    return new AutoValue_FeatureCollection.GsonTypeAdapter(gson);
+    return new FeatureCollection.GsonTypeAdapter(gson);
+  }
+
+  @Override
+  public String toString() {
+    return "FeatureCollection{"
+            + "type=" + type + ", "
+            + "bbox=" + bbox + ", "
+            + "features=" + features
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj instanceof FeatureCollection) {
+      FeatureCollection that = (FeatureCollection) obj;
+      return (this.type.equals(that.type()))
+              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
+              && ((this.features == null)
+                   ? (that.features() == null) : this.features.equals(that.features()));
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hashCode = 1;
+    hashCode *= 1000003;
+    hashCode ^= type.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
+    hashCode *= 1000003;
+    hashCode ^= (features == null) ? 0 : features.hashCode();
+    return hashCode;
+  }
+
+  /**
+   * TypeAdapter to serialize/deserialize FeatureCollection objects.
+   *
+   * @since 4.6.0
+   */
+  static final class GsonTypeAdapter extends TypeAdapter<FeatureCollection> {
+    private volatile TypeAdapter<String> stringAdapter;
+    private volatile TypeAdapter<BoundingBox> boundingBoxAdapter;
+    private volatile TypeAdapter<List<Feature>> listFeatureAdapter;
+    private final Gson gson;
+
+    GsonTypeAdapter(Gson gson) {
+      this.gson = gson;
+    }
+
+    @Override
+    public void write(JsonWriter jsonWriter, FeatureCollection object) throws IOException {
+      if (object == null) {
+        jsonWriter.nullValue();
+        return;
+      }
+      jsonWriter.beginObject();
+      jsonWriter.name("type");
+      if (object.type() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<String> stringAdapter = this.stringAdapter;
+        if (stringAdapter == null) {
+          stringAdapter = gson.getAdapter(String.class);
+          this.stringAdapter = stringAdapter;
+        }
+        stringAdapter.write(jsonWriter, object.type());
+      }
+      jsonWriter.name("bbox");
+      if (object.bbox() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<BoundingBox> boundingBoxTypeAdapter = this.boundingBoxAdapter;
+        if (boundingBoxTypeAdapter == null) {
+          boundingBoxTypeAdapter = gson.getAdapter(BoundingBox.class);
+          this.boundingBoxAdapter = boundingBoxTypeAdapter;
+        }
+        boundingBoxTypeAdapter.write(jsonWriter, object.bbox());
+      }
+      jsonWriter.name("features");
+      if (object.features() == null) {
+        jsonWriter.nullValue();
+      } else {
+        TypeAdapter<List<Feature>> listFeatureAdapter = this.listFeatureAdapter;
+        if (listFeatureAdapter == null) {
+          TypeToken typeToken = TypeToken.getParameterized(List.class, Feature.class);
+          listFeatureAdapter =
+            (TypeAdapter<List<Feature>>) gson.getAdapter(typeToken);
+          this.listFeatureAdapter = listFeatureAdapter;
+        }
+        listFeatureAdapter.write(jsonWriter, object.features());
+      }
+      jsonWriter.endObject();
+    }
+
+    @Override
+    public FeatureCollection read(JsonReader jsonReader) throws IOException {
+      if (jsonReader.peek() == JsonToken.NULL) {
+        jsonReader.nextNull();
+        return null;
+      }
+      jsonReader.beginObject();
+      String type = null;
+      BoundingBox bbox = null;
+      List<Feature> features = null;
+      while (jsonReader.hasNext()) {
+        String name = jsonReader.nextName();
+        if (jsonReader.peek() == JsonToken.NULL) {
+          jsonReader.nextNull();
+          continue;
+        }
+        switch (name) {
+          case "type":
+            TypeAdapter<String> stringAdapter = this.stringAdapter;
+            if (stringAdapter == null) {
+              stringAdapter = gson.getAdapter(String.class);
+              this.stringAdapter = stringAdapter;
+            }
+            type = stringAdapter.read(jsonReader);
+            break;
+
+          case "bbox":
+            TypeAdapter<BoundingBox> boundingBoxAdapter = this.boundingBoxAdapter;
+            if (boundingBoxAdapter == null) {
+              boundingBoxAdapter = gson.getAdapter(BoundingBox.class);
+              this.boundingBoxAdapter = boundingBoxAdapter;
+            }
+            bbox = boundingBoxAdapter.read(jsonReader);
+            break;
+
+          case "features":
+            TypeAdapter<List<Feature>> listFeatureAdapter = this.listFeatureAdapter;
+            if (listFeatureAdapter == null) {
+              TypeToken typeToken = TypeToken.getParameterized(List.class, Feature.class);
+              listFeatureAdapter =
+                (TypeAdapter<List<Feature>>) gson.getAdapter(typeToken);
+              this.listFeatureAdapter = listFeatureAdapter;
+            }
+            features = listFeatureAdapter.read(jsonReader);
+            break;
+
+          default:
+            jsonReader.skipValue();
+
+        }
+      }
+      jsonReader.endObject();
+      return new FeatureCollection(type, bbox, features);
+    }
   }
 }

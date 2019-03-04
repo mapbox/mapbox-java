@@ -14,7 +14,10 @@ import java.lang.reflect.Type;
  * "Expected BEGIN_OBJECT but was BEGIN_ARRAY".
  *
  * @since 1.0.0
+ * @deprecated  this class is deprecated, {@link com.mapbox.geojson.PointAsCoordinatesTypeAdapter}
+ *   should be used to serialize/deserialize coordinates as Points.
  */
+@Deprecated
 public class PointDeserializer implements JsonDeserializer<Point> {
 
   /**
