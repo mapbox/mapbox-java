@@ -1,4 +1,4 @@
-package com.mapbox.core;
+package com.mapbox.turf;
 
 import com.google.gson.JsonParser;
 

@@ -1,6 +1,5 @@
 package com.mapbox.turf;
 
-import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;

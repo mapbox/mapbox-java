@@ -1,7 +1,5 @@
 package com.mapbox.turf;
 
-import com.mapbox.core.TestUtils;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

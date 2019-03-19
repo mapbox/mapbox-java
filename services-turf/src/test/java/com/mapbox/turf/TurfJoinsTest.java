@@ -1,7 +1,6 @@
 package com.mapbox.turf;
 
 import com.mapbox.geojson.Feature;
-import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;

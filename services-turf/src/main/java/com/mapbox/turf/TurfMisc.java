@@ -1,7 +1,5 @@
 package com.mapbox.turf;
 
-import static com.mapbox.core.internal.Preconditions.checkNotNull;
-
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import com.mapbox.geojson.Feature;
@@ -41,7 +39,9 @@ public final class TurfMisc {
   @NonNull
   public static LineString lineSlice(@NonNull Point startPt, @NonNull Point stopPt,
                                      @NonNull Feature line) {
-    checkNotNull(line.geometry(), "Feature.geometry() == null");
+    if (line.geometry() == null) {
+      throw new NullPointerException("Feature.geometry() == null");
+    }
     if (!line.geometry().type().equals("LineString")) {
       throw new TurfException("input must be a LineString Feature or Geometry");
     }
@@ -115,8 +115,9 @@ public final class TurfMisc {
                                           @FloatRange(from = 0) double startDist,
                                           @FloatRange(from = 0) double stopDist,
                                           @NonNull @TurfConstants.TurfUnitCriteria String units) {
-
-    checkNotNull(line.geometry(), "Feature.geometry() == null");
+    if (line.geometry() == null) {
+      throw new NullPointerException("Feature.geometry() == null");
+    }
     if (!line.geometry().type().equals("LineString")) {
       throw new TurfException("input must be a LineString Feature or Geometry");
     }
