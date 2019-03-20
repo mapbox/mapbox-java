@@ -4,7 +4,6 @@ import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
-import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.MultiPolygon;
 
 import org.junit.Rule;

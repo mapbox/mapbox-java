@@ -2,7 +2,6 @@ package com.mapbox.turf;
 
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.Point;
-import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.FeatureCollection;
 
 import org.junit.Assert;

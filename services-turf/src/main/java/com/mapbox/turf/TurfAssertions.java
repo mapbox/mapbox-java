@@ -3,7 +3,6 @@ package com.mapbox.turf;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.GeoJson;
-import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 
 /**
@@ -43,7 +42,7 @@ public final class TurfAssertions {
    * @since 1.2.0
    */
   public static void geojsonType(GeoJson value, String type, String name) {
-    if (TextUtils.isEmpty(type) || TextUtils.isEmpty(name)) {
+    if (type == null || type.length() == 0 || name == null || name.length() == 0) {
       throw new TurfException("Type and name required");
     }
     if (value == null || !value.type().equals(type)) {
@@ -63,7 +62,7 @@ public final class TurfAssertions {
    * @since 1.2.0
    */
   public static void featureOf(Feature feature, String type, String name) {
-    if (TextUtils.isEmpty(name)) {
+    if (name == null || name.length() == 0) {
       throw new TurfException(".featureOf() requires a name");
     }
     if (feature == null || !feature.type().equals("Feature") || feature.geometry() == null) {
@@ -87,7 +86,7 @@ public final class TurfAssertions {
    * @since 1.2.0
    */
   public static void collectionOf(FeatureCollection featureCollection, String type, String name) {
-    if (TextUtils.isEmpty(name)) {
+    if (name == null || name.length() == 0) {
       throw new TurfException("collectionOf() requires a name");
     }
     if (featureCollection == null || !featureCollection.type().equals("FeatureCollection")

@@ -5,9 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.mapbox.core.TestUtils;
-import com.mapbox.core.constants.Constants;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -19,6 +16,9 @@ import java.util.List;
 public class LineStringTest extends TestUtils {
 
   private static final String SAMPLE_LINESTRING_FIXTURE = "sample-linestring.json";
+
+  private static final int PRECISION_6 = 6;
+  private static final int PRECISION_5 = 5;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -40,7 +40,7 @@ public class LineStringTest extends TestUtils {
     points.add(Point.fromLngLat(4.0,8.0));
     MultiPoint multiPoint = MultiPoint.fromLngLats(points);
     LineString lineString = LineString.fromLngLats(multiPoint);
-    assertEquals("_gayB_c`|@_wemJ_kbvD", lineString.toPolyline(Constants.PRECISION_6));
+    assertEquals("_gayB_c`|@_wemJ_kbvD", lineString.toPolyline(PRECISION_6));
   }
 
   @Test

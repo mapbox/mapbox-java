@@ -65,8 +65,8 @@ public abstract class LegStep extends DirectionsJsonObject {
   public abstract String name();
 
   /**
-   * Any road designations associated with the road or path leading from this step&apos;s
-   * maneuver to the next step&apos;s maneuver. Optionally included, if data is available.
+   * Any road designations associated with the road or path leading from this step&#39;s
+   * maneuver to the next step&#39;s maneuver. Optionally included, if data is available.
    * If multiple road designations are associated with the road, they are separated by semicolons.
    * A road designation typically consists of an alphabetic network code (identifying the road type
    * or numbering system), a space or hyphen, and a route number. You should not assume that

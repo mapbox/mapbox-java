@@ -5,8 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.mapbox.core.TestUtils;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,6 +16,9 @@ import java.util.List;
 public class MultiLineStringTest extends TestUtils {
 
   private static final String SAMPLE_MULTILINESTRING = "sample-multilinestring.json";
+
+  private static final int PRECISION_6 = 6;
+  private static final int PRECISION_5 = 5;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();

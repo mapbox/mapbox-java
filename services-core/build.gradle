@@ -49,10 +49,6 @@ dependencies {
   // OkHttp
   api dependenciesList.okhttp3Logging
 
-  // AutoValue
-  compileOnly dependenciesList.autoValue
-  compileOnly dependenciesList.autoValueGson
-
   // Test Dependencies
   testOutput sourceSets.test.output
 }

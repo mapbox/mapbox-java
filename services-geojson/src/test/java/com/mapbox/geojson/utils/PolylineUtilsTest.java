@@ -7,10 +7,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.mapbox.core.TestUtils;
-import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.TestUtils;
+
 import org.junit.Test;
 
 import java.io.IOException;
@@ -19,6 +19,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PolylineUtilsTest extends TestUtils {
+
+  private static final int PRECISION_6 = 6;
+  private static final int PRECISION_5 = 5;
 
   // Delta for Coordinates comparison
   private static final double DELTA = 0.000001;
@@ -34,7 +37,7 @@ public class PolylineUtilsTest extends TestUtils {
 
   @Test
   public void testDecodePath() {
-    List<Point> latLngs = decode(TEST_LINE, Constants.PRECISION_5);
+    List<Point> latLngs = decode(TEST_LINE, PRECISION_5);
 
     int expectedLength = 21;
     assertEquals("Wrong length.", expectedLength, latLngs.size());
@@ -46,15 +49,15 @@ public class PolylineUtilsTest extends TestUtils {
 
   @Test
   public void testEncodePath5() {
-    List<Point> path = decode(TEST_LINE, Constants.PRECISION_5);
-    String encoded = encode(path, Constants.PRECISION_5);
+    List<Point> path = decode(TEST_LINE, PRECISION_5);
+    String encoded = encode(path, PRECISION_5);
     assertEquals(TEST_LINE, encoded);
   }
 
   @Test
   public void testDecodeEncodePath6() {
-    List<Point> path = decode(TEST_LINE6, Constants.PRECISION_6);
-    String encoded = encode(path, Constants.PRECISION_6);
+    List<Point> path = decode(TEST_LINE6, PRECISION_6);
+    String encoded = encode(path, PRECISION_6);
     assertEquals(TEST_LINE6, encoded);
   }
 
@@ -65,8 +68,8 @@ public class PolylineUtilsTest extends TestUtils {
       Point.fromLngLat(2.2862036, 48.8267868),
       Point.fromLngLat(2.4, 48.9)
     );
-    String encoded = encode(originalPath, Constants.PRECISION_6);
-    List<Point> path = LineString.fromPolyline(encoded, Constants.PRECISION_6).coordinates();
+    String encoded = encode(originalPath, PRECISION_6);
+    List<Point> path = LineString.fromPolyline(encoded, PRECISION_6).coordinates();
 
     assertEquals(originalPath.size(), path.size());
     for (int i = 0; i < originalPath.size(); i++) {
@@ -78,8 +81,8 @@ public class PolylineUtilsTest extends TestUtils {
   @Test
   public void testFromPolylineAndDecode() {
 
-    List<Point> path1 = LineString.fromPolyline(TEST_LINE6, Constants.PRECISION_6).coordinates();
-    List<Point> path2 = decode(TEST_LINE6, Constants.PRECISION_6);
+    List<Point> path1 = LineString.fromPolyline(TEST_LINE6, PRECISION_6).coordinates();
+    List<Point> path2 = decode(TEST_LINE6, PRECISION_6);
 
     assertEquals(path1.size(), path2.size());
     for (int i = 0; i < path1.size(); i++) {
@@ -95,8 +98,8 @@ public class PolylineUtilsTest extends TestUtils {
       Point.fromLngLat(2.4, 48.9)
     );
 
-    String encoded = encode(originalPath, Constants.PRECISION_6);
-    List<Point> path =  decode(encoded, Constants.PRECISION_6);
+    String encoded = encode(originalPath, PRECISION_6);
+    List<Point> path =  decode(encoded, PRECISION_6);
     assertEquals(originalPath.size(), path.size());
 
     for (int i = 0; i < originalPath.size(); i++) {
@@ -108,20 +111,20 @@ public class PolylineUtilsTest extends TestUtils {
 
   @Test
   public void decode_neverReturnsNullButRatherAnEmptyList() throws Exception {
-    List<Point> path = decode("", Constants.PRECISION_5);
+    List<Point> path = decode("", PRECISION_5);
     assertNotNull(path);
     assertEquals(0, path.size());
   }
 
   @Test
   public void encode_neverReturnsNull() throws Exception {
-    String encodedString = encode(new ArrayList<Point>(), Constants.PRECISION_6);
+    String encodedString = encode(new ArrayList<Point>(), PRECISION_6);
     assertNotNull(encodedString);
   }
 
   @Test
   public void simplify_neverReturnsNullButRatherAnEmptyList() throws Exception {
-    List<Point> simplifiedPath = simplify(new ArrayList<Point>(), Constants.PRECISION_6);
+    List<Point> simplifiedPath = simplify(new ArrayList<Point>(), PRECISION_6);
     assertNotNull(simplifiedPath);
   }
 
@@ -130,14 +133,14 @@ public class PolylineUtilsTest extends TestUtils {
     final List<Point> path = new ArrayList<>();
     path.add(Point.fromLngLat(0, 0));
     path.add(Point.fromLngLat(10, 0));
-    List<Point> simplifiedPath = simplify(path, Constants.PRECISION_6, true);
+    List<Point> simplifiedPath = simplify(path, PRECISION_6, true);
     assertTrue("Returned list is different from input list", path == simplifiedPath);
   }
 
   @Test
   public void simplify_withHighestQuality() throws IOException{
     List<Point> path = createPointListFromResourceFile(SIMPLIFICATION_INPUT);
-    List<Point> simplifiedPath = simplify(path, Constants.PRECISION_5, true);
+    List<Point> simplifiedPath = simplify(path, PRECISION_5, true);
     List<Point> expectedSimplifiedPath = createPointListFromResourceFile(SIMPLIFICATION_EXPECTED_OUTPUT);
     assertTrue("Wrong number of points retained",simplifiedPath.size() == expectedSimplifiedPath.size());
     int counter = 0;
