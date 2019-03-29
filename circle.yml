@@ -31,12 +31,6 @@ jobs:
       - run:
           name: Run unit-test for all modules
           command: make test
-      - run:
-          name: SonarQube upload
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            make sonarqube ;
-            fi
       - store_artifacts:
           path: mapbox/app/build/reports
           destination: reports

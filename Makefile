@@ -10,10 +10,6 @@ build-config:
 checkstyle:
 	./gradlew checkstyleMain
 
-sonarqube:
-	./gradlew JacocoTestReport
-	./gradlew sonarqube
-
 test:
 	./gradlew test
 
