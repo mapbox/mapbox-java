@@ -2,10 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
-### v4.5.0 - February 13, 2018
+### v4.5.0 - February 13, 2019
 - Directions refresh was not being included in services artifact [#966](https://github.com/mapbox/mapbox-java/pull/966)
 
-### v4.4.0 - February 12, 2018
+### v4.4.0 - February 12, 2019
 - Add waypointIndices to MapboxDirections, update MapboxMapMaptching to have waypointIndices instead of waypoints
   [#959](https://github.com/mapbox/mapbox-java/pull/959),
   [#961](https://github.com/mapbox/mapbox-java/pull/961),
