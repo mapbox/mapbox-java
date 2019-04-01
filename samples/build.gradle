@@ -32,6 +32,3 @@ buildConfig {
     buildConfigField 'String', 'MAPBOX_ACCESS_TOKEN', System.getenv("MAPBOX_ACCESS_TOKEN")
 }
 
-sonarqube {
-    skipProject = true
-}

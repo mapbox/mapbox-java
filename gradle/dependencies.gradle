@@ -18,7 +18,6 @@ ext {
       jacoco     : '0.13.0',
       errorprone : '0.0.14',
       spotbugs   : '1.3',
-      sonarqube  : '2.5',
       buildConfig: '1.1.8',
       dependencyGraph: '0.4.0'
 
@@ -43,7 +42,6 @@ ext {
   pluginDependencies = [
       checkstyle : "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",
       spotbugs   : "gradle.plugin.com.github.spotbugs:gradlePlugin:${pluginVersion.spotbugs}",
-      sonarqube  : "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${pluginVersion.sonarqube}",
       errorprone : "net.ltgt.gradle:gradle-errorprone-plugin:${pluginVersion.errorprone}",
       buildConfig: "gradle.plugin.de.fuerstenau:BuildConfigPlugin:${pluginVersion.buildConfig}",
       dependencyGraph: "com.vanniktech:gradle-dependency-graph-generator-plugin:${pluginVersion.dependencyGraph}",
