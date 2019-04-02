@@ -25,6 +25,7 @@ dependencies {
     implementation project(":services-speech")
     implementation project(":services-tilequery")
     implementation project(":services-directions-refresh")
+    implementation project(":services-isochrone")
 }
 
 buildConfig {

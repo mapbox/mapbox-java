@@ -76,7 +76,8 @@ def TESTABLE_MODULES = ["services",
                         "services-staticmap",
                         "services-tilequery",
                         "services-turf",
-                        "services-directions-refresh"]
+                        "services-directions-refresh",
+                        "services-isochrone"]
 
 def RELEASE_MODULES = ["services",
                        "services-core",

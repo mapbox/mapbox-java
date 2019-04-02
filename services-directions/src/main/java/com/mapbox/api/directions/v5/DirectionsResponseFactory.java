@@ -9,6 +9,9 @@ import java.util.List;
 
 import retrofit2.Response;
 
+/**
+ * @since 4.4.0
+ */
 class DirectionsResponseFactory {
 
   private final MapboxDirections mapboxDirections;

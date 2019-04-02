@@ -165,7 +165,7 @@ public final class TextUtils {
   /**
    * Converts String array with approaches values
    * to a string ready for API consumption.
-   * An approache could be unrestricted, curb or null.
+   * An approach could be unrestricted, curb or null.
    *
    * @param approaches a string representing approaches to each coordinate.
    * @return a formatted string.
