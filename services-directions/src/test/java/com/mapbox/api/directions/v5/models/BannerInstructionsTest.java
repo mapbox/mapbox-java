@@ -29,8 +29,8 @@ public class BannerInstructionsTest extends TestUtils {
   public void testSerializable() throws Exception {
     BannerInstructions bannerInstructions = BannerInstructions.builder()
       .distanceAlongGeometry(100d)
-      .primary(BannerText.builder().build())
-      .secondary(BannerText.builder().build())
+      .primary(BannerText.builder().text("Banner primary sample text").build())
+      .secondary(BannerText.builder().text("Banner secondary sample text").build())
       .build();
     byte[] serialized = TestUtils.serialize(bannerInstructions);
     assertEquals(bannerInstructions, deserialize(serialized, BannerInstructions.class));

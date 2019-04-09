@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -41,6 +42,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
    * @return a single snippet of the full text instruction
    * @since 3.0.0
    */
+  @NonNull
   public abstract String text();
 
   /**
@@ -61,6 +63,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
    * @return String type from above list
    * @since 3.0.0
    */
+  @NonNull
   public abstract String type();
 
   /**
@@ -205,7 +208,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder text(String text);
+    public abstract Builder text(@NonNull String text);
 
     /**
      * String giving you more context about the component which may help in visual markup/display
@@ -227,7 +230,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder type(String type);
+    public abstract Builder type(@NonNull String type);
 
 
     /**
