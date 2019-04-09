@@ -10,6 +10,9 @@ import java.util.List;
 
 import retrofit2.Response;
 
+/**
+ * @since 4.4.0
+ */
 class MatchingResponseFactory {
 
   private static final String PLACEHOLDER_UUID = "mapmatching";

@@ -193,5 +193,15 @@ tilequery-fixtures:
 	curl "https://api.mapbox.com/v4/mapbox.mapbox-streets-v7/tilequery/-122.42901,37.806332.json?access_token=$(MAPBOX_ACCESS_TOKEN)&" \
 		-o services-tilequery/src/test/resources/tilequery-all-params.json
 
+isochrone-fixtures:
+
+	# Fetch isochrone driving information with polygon information. The query Point is in downtown Los Angeles.
+	curl "https://api.mapbox.com/isochrone/v1/mapbox/driving/-118.22258,33.99038?contours_minutes=5,30,55&contours_colors=6706ce,04e813,4286f4&polygons=true&access_token=$(MAPBOX_ACCESS_TOKEN)&" \
+		-o services-isochrone/src/test/resources/isochroneWithPolygons.json
+
+	# Fetch isochrone driving information without polygon information. The query Point is in downtown Los Angeles.
+	curl "https://api.mapbox.com/isochrone/v1/mapbox/driving/-118.22258,33.99038?contours_minutes=5,30,55&contours_colors=6706ce,04e813,4286f4&polygons=false&access_token=$(MAPBOX_ACCESS_TOKEN)&" \
+		-o services-isochrone/src/test/resources/isochroneNoPolygons.json
+
 clean:
 	./gradlew clean
