@@ -1,6 +1,18 @@
 ## Changelog for Mapbox Java and Android Services
 
 Mapbox welcomes participation and contributions from everyone.
+### v4.6.0 - April 11, 2019
+- Exclude *.java from being added to library jars [#992](https://github.com/mapbox/mapbox-java/pull/992)
+- Adjust @Nullable and @NonNull annotations to match what comes from Directions API [#990](https://github.com/mapbox/mapbox-java/pull/990)
+- Add Isochrone API support [#988](https://github.com/mapbox/mapbox-java/pull/988)
+- Remove sonarqube integration [#986](https://github.com/mapbox/mapbox-java/pull/986)
+- Remove android tooling [#984](https://github.com/mapbox/mapbox-java/pull/984)
+- Remove dependency of Turf library on services-core [#981](https://github.com/mapbox/mapbox-java/pull/981)
+- Update MapMatching to use a POST request if the url for a GET request is larger than the maximum allowed size  [#978](https://github.com/mapbox/mapbox-java/pull/978)
+- Update Directions to use a POST request if the url for a GET request is larger than the maximum allowed size [#977](https://github.com/mapbox/mapbox-java/pull/977)
+- Add Interceptor support for MapboxRouteTiles [#976](https://github.com/mapbox/mapbox-java/pull/976)
+- Add POST support to Directions [#975](https://github.com/mapbox/mapbox-java/pull/975)
+- Add explicit US locale to String.Format of bounding box [#973](https://github.com/mapbox/mapbox-java/pull/973)
 
 ### v4.5.0 - February 13, 2019
 - Directions refresh was not being included in services artifact [#966](https://github.com/mapbox/mapbox-java/pull/966)
