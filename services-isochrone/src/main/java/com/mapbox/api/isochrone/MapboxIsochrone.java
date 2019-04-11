@@ -51,21 +51,22 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
   @Override
   protected GsonBuilder getGsonBuilder() {
     return new GsonBuilder()
-        .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
-        .registerTypeAdapterFactory(GeometryAdapterFactory.create());
+      .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
+      .registerTypeAdapterFactory(GeometryAdapterFactory.create());
   }
 
   @Override
   protected Call<FeatureCollection> initializeCall() {
     return getService().getCall(
-        profile(),
-        coordinates(),
-        contoursMinutes(),
-        accessToken(),
-        contoursColors(),
-        polygons(),
-        denoise(),
-        generalize()
+      user(),
+      profile(),
+      coordinates(),
+      contoursMinutes(),
+      accessToken(),
+      contoursColors(),
+      polygons(),
+      denoise(),
+      generalize()
     );
   }
 
@@ -78,7 +79,8 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
    */
   public static Builder builder() {
     return new AutoValue_MapboxIsochrone.Builder()
-        .baseUrl(Constants.BASE_API_URL);
+      .baseUrl(Constants.BASE_API_URL)
+      .user(IsochroneCriteria.PROFILE_DEFAULT_USER);
   }
 
   @NonNull
@@ -87,6 +89,9 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
 
   @NonNull
   abstract String accessToken();
+
+  @NonNull
+  abstract String user();
 
   @NonNull
   abstract String profile();
@@ -145,6 +150,16 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
      */
     public abstract Builder accessToken(@NonNull String accessToken);
 
+    /**
+     * The username for the account that the Isochrone engine runs on. In most cases, this should
+     * always remain the default value of {@link IsochroneCriteria#PROFILE_DEFAULT_USER}.
+     *
+     * @param user a non-null string which will replace the default user used in the Isochrone
+     *             request
+     * @return this builder for chaining options together
+     * @since 4.7.0
+     */
+    public abstract Builder user(@NonNull String user);
 
     /**
      * A Mapbox Directions routing profile ID. Options are
@@ -168,8 +183,8 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
      */
     public Builder coordinates(@NonNull Point queryPoint) {
       coordinates(String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(queryPoint.longitude()),
-          TextUtils.formatCoordinate(queryPoint.latitude())));
+        TextUtils.formatCoordinate(queryPoint.longitude()),
+        TextUtils.formatCoordinate(queryPoint.latitude())));
       return this;
     }
 
@@ -197,7 +212,7 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
      * @since 4.6.0
      */
     public Builder addContoursMinutes(@NonNull @IntRange(from = 0, to = 60)
-                                          Integer... listOfMinuteValues) {
+                                        Integer... listOfMinuteValues) {
       this.contoursMinutes = listOfMinuteValues;
       return this;
     }
@@ -302,14 +317,14 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
       if (contoursMinutes != null) {
         if (contoursMinutes.length < 1) {
           throw new ServicesException("A query with at least one specified "
-              + "minute amount is required.");
+            + "minute amount is required.");
         }
 
         if (contoursMinutes.length >= 2) {
           for (int x = 0; x < contoursMinutes.length - 1; x++) {
             if (contoursMinutes[x] > contoursMinutes[x + 1]) {
               throw new ServicesException("The minutes must be listed"
-                  + " in order from the lowest number to the highest number.");
+                + " in order from the lowest number to the highest number.");
             }
           }
         }
@@ -321,39 +336,39 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
       }
 
       if (contoursColors != null
-          && contoursMinutes != null
-          && contoursColors.length != contoursMinutes.length) {
+        && contoursMinutes != null
+        && contoursColors.length != contoursMinutes.length) {
         throw new ServicesException("Number of color elements "
-            + "must match number of minute elements provided.");
+          + "must match number of minute elements provided.");
       }
 
       MapboxIsochrone isochrone = autoBuild();
 
       if (!MapboxUtils.isAccessTokenValid(isochrone.accessToken())) {
         throw new ServicesException("Using the Mapbox Isochrone API requires setting "
-            + "a valid access token.");
+          + "a valid access token.");
       }
 
       if (TextUtils.isEmpty(isochrone.coordinates())) {
         throw new ServicesException("A query with longitude and latitude values is "
-            + "required.");
+          + "required.");
       }
 
       if (TextUtils.isEmpty(isochrone.profile())) {
         throw new ServicesException("A query with a set Directions profile (cycling,"
-            + " walking, or driving) is required.");
+          + " walking, or driving) is required.");
       }
 
       if (TextUtils.isEmpty(isochrone.contoursMinutes())) {
         throw new ServicesException("A query with at least one specified minute amount"
-            + " is required.");
+          + " is required.");
       }
 
       if (isochrone.contoursColors() != null) {
         if (isochrone.contoursColors().contains("#")) {
           throw new ServicesException("Make sure that none of the contour color HEX"
-              + " values have a # in front of it. Provide a list of the HEX values "
-              + "without any # symbols.");
+            + " values have a # in front of it. Provide a list of the HEX values "
+            + "without any # symbols.");
         }
       }
       return isochrone;
