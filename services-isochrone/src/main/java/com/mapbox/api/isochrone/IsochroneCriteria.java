@@ -14,6 +14,13 @@ public class IsochroneCriteria {
 
 
   /**
+   * Mapbox default username.
+   *
+   * @since 4.7.0
+   */
+  public static final String PROFILE_DEFAULT_USER = "mapbox";
+
+  /**
    * For walking routing. This profile shows routes that are short and safe for cyclist, avoiding
    * highways and preferring streets with bike lanes.
    *
