@@ -13,6 +13,8 @@ Mapbox welcomes participation and contributions from everyone.
 - Add Interceptor support for MapboxRouteTiles [#976](https://github.com/mapbox/mapbox-java/pull/976)
 - Add POST support to Directions [#975](https://github.com/mapbox/mapbox-java/pull/975)
 - Add explicit US locale to String.Format of bounding box [#973](https://github.com/mapbox/mapbox-java/pull/973)
+- Removed the use of AutoValue from geoJson implementation
+  Deprecated PointDeserializer, PointSerializer, BoundingBoxDeserializer and BoundingBoxSerializer [#953](https://github.com/mapbox/mapbox-java/pull/953)
 
 ### v4.5.0 - February 13, 2019
 - Directions refresh was not being included in services artifact [#966](https://github.com/mapbox/mapbox-java/pull/966)
