@@ -358,7 +358,8 @@ public final class Feature implements GeoJson {
    * @since 1.0.0
    */
   public String getStringProperty(String key) {
-    return properties().get(key).getAsString();
+    JsonElement propertyKey = properties().get(key);
+    return propertyKey == null ? null : propertyKey.getAsString();
   }
 
   /**
@@ -369,7 +370,8 @@ public final class Feature implements GeoJson {
    * @since 1.0.0
    */
   public Number getNumberProperty(String key) {
-    return properties().get(key).getAsNumber();
+    JsonElement propertyKey = properties().get(key);
+    return propertyKey == null ? null : propertyKey.getAsNumber();
   }
 
   /**
@@ -380,7 +382,8 @@ public final class Feature implements GeoJson {
    * @since 1.0.0
    */
   public Boolean getBooleanProperty(String key) {
-    return properties().get(key).getAsBoolean();
+    JsonElement propertyKey = properties().get(key);
+    return propertyKey == null ? null : propertyKey.getAsBoolean();
   }
 
   /**
@@ -391,7 +394,8 @@ public final class Feature implements GeoJson {
    * @since 1.0.0
    */
   public Character getCharacterProperty(String key) {
-    return properties().get(key).getAsCharacter();
+    JsonElement propertyKey = properties().get(key);
+    return propertyKey == null ? null : propertyKey.getAsCharacter();
   }
 
   /**
