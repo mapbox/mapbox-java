@@ -218,4 +218,46 @@ public class FeatureTest extends TestUtils {
 
     compareJson(jsonString, jsonStringFromFeature);
   }
+
+  @Test
+  public void feature_getProperty_empty_property() throws IOException {
+    final String jsonString =
+            "{\"type\":\"Feature\"," +
+                    " \"geometry\":"
+                    + "{\"type\":\"LineString\",\"coordinates\":[[1.0,2.0],[2.0,3.0]]}}";
+
+    Feature feature = Feature.fromJson(jsonString);
+    Object value = feature.getStringProperty("does_not_exist");
+    assertNull(value);
+
+    value = feature.getBooleanProperty("does_not_exist");
+    assertNull(value);
+
+    value = feature.getNumberProperty("does_not_exist");
+    assertNull(value);
+
+    value = feature.getCharacterProperty("does_not_exist");
+    assertNull(value);
+  }
+
+  @Test
+  public void feature_property_doesnotexist() throws IOException {
+    final String jsonString =
+            "{ \"type\": \"Feature\"," +
+                    "\"geometry\": { \"type\": \"LineString\", \"coordinates\": [[1,1],[2,2],[3,3]]}," +
+                    "\"properties\": {\"some_name\": \"some_value\" }}";
+    Feature feature = Feature.fromJson(jsonString);
+    Object value = feature.getStringProperty("does_not_exist");
+    assertNull(value);
+
+    value = feature.getBooleanProperty("does_not_exist");
+    assertNull(value);
+
+    value = feature.getNumberProperty("does_not_exist");
+    assertNull(value);
+
+    value = feature.getCharacterProperty("does_not_exist");
+    assertNull(value);
+
+  }
 }
