@@ -3,6 +3,7 @@ package com.mapbox.api.geocoding.v5;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Point;
 
 import org.hamcrest.junit.ExpectedException;
@@ -184,6 +185,20 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
 
   @Test
   public void bbox_getsFormattedCorrectlyForUrl() throws Exception {
+    BoundingBox bbox = BoundingBox.fromLngLats(
+            -77.083056, 38.908611, -76.997778, 38.959167);
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+            .accessToken(ACCESS_TOKEN)
+            .baseUrl(mockUrl.toString())
+            .bbox(bbox)
+            .query("1600 pennsylvania ave nw")
+            .build();
+    assertEquals("-77.083056,38.908611,-76.997778,38.959167",
+            mapboxGeocoding.cloneCall().request().url().queryParameter("bbox"));
+  }
+
+  @Test
+  public void bbox_asPoints_getsFormattedCorrectlyForUrl() throws Exception {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())

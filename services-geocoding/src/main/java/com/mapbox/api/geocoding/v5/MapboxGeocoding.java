@@ -382,6 +382,21 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * limit results to within the bounding box only. If simple biasing is desired rather than a
      * strict region, use proximity instead.
      *
+     * @param bbox the bounding box as a {@link BoundingBox}
+     * @return this builder for chaining options together
+     * @since 4.7.0
+     */
+    public Builder bbox(BoundingBox bbox) {
+      bbox(bbox.southwest().longitude(), bbox.southwest().latitude(),
+           bbox.northeast().longitude(), bbox.northeast().latitude());
+      return this;
+    }
+
+    /**
+     * Limit the results to a defined bounding box. Unlike {@link #proximity()}, this will strictly
+     * limit results to within the bounding box only. If simple biasing is desired rather than a
+     * strict region, use proximity instead.
+     *
      * @param northeast the northeast corner of the bounding box as a {@link Point}
      * @param southwest the southwest corner of the bounding box as a {@link Point}
      * @return this builder for chaining options together
