@@ -1,5 +1,6 @@
 package com.mapbox.geojson.gson;
 
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 
 import com.google.gson.GsonBuilder;
@@ -10,6 +11,7 @@ import com.mapbox.geojson.GeometryAdapterFactory;
  * This is a utility class that helps create a Geometry instance from a JSON string.
  * @since 4.0.0
  */
+@Keep
 public class GeometryGeoJson {
 
   /**

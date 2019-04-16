@@ -6,6 +6,7 @@ import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LATITUDE;
 import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
 
 import android.support.annotation.FloatRange;
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.gson.Gson;
@@ -51,6 +52,7 @@ import java.util.List;
  *
  * @since 1.0.0
  */
+@Keep
 public final class Point implements CoordinateContainer<List<Double>>, Serializable {
 
   private static final String TYPE = "Point";

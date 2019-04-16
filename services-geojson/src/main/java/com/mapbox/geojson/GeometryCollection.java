@@ -1,5 +1,6 @@
 package com.mapbox.geojson;
 
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -59,6 +60,7 @@ import java.util.List;
  *
  * @since 1.0.0
  */
+@Keep
 public final class GeometryCollection implements Geometry, Serializable {
 
   private static final String TYPE = "GeometryCollection";

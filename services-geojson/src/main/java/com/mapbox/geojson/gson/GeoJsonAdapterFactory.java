@@ -1,5 +1,7 @@
 package com.mapbox.geojson.gson;
 
+import android.support.annotation.Keep;
+
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
@@ -21,6 +23,7 @@ import com.mapbox.geojson.Polygon;
  *
  * @since 3.0.0
  */
+@Keep
 public abstract class GeoJsonAdapterFactory implements TypeAdapterFactory {
 
   /**

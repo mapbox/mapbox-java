@@ -1,5 +1,6 @@
 package com.mapbox.geojson;
 
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.gson.Gson;
@@ -34,6 +35,7 @@ import java.util.List;
  *
  * @since 1.0.0
  */
+@Keep
 public final class MultiPoint implements CoordinateContainer<List<Point>>, Serializable {
 
   private static final String TYPE = "MultiPoint";

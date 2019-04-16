@@ -1,5 +1,6 @@
 package com.mapbox.geojson;
 
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.gson.Gson;
@@ -46,6 +47,7 @@ import java.io.IOException;
  *
  * @since 1.0.0
  */
+@Keep
 public final class Feature implements GeoJson {
 
   private static final String TYPE = "Feature";
