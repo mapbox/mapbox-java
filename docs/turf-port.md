@@ -11,7 +11,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [x] turf-along
 - [ ] turf-area
 - [x] turf-bbox
-- [ ] turf-bbox-polygon
+- [x] turf-bbox-polygon
 - [x] turf-bearing
 - [ ] turf-center
 - [ ] turf-center-of-mass
