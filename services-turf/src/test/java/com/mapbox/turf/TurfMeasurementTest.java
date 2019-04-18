@@ -1,5 +1,6 @@
 package com.mapbox.turf;
 
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Geometry;
@@ -37,6 +38,9 @@ public class TurfMeasurementTest extends TestUtils {
   private static final String TURF_BBOX_POLYGON = "turf-bbox/polygon.geojson";
   private static final String TURF_BBOX_MULTILINESTRING = "turf-bbox/multilinestring.geojson";
   private static final String TURF_BBOX_MULTIPOLYGON = "turf-bbox/multipolygon.geojson";
+  private static final String TURF_BBOX_POLYGON_LINESTRING = "turf-bbox-polygon/linestring.geojson";
+  private static final String TURF_BBOX_POLYGON_MULTIPOLYGON = "turf-bbox-polygon/multipolygon.geojson";
+  private static final String TURF_BBOX_POLYGON_MULTI_POINT = "turf-bbox-polygon/multipoint.geojson";
   private static final String LINE_DISTANCE_MULTILINESTRING
     = "turf-line-distance/multilinestring.geojson";
 
@@ -339,5 +343,71 @@ public class TurfMeasurementTest extends TestUtils {
     assertEquals(-10, bbox[1], DELTA);
     assertEquals(130, bbox[2], DELTA);
     assertEquals(4, bbox[3], DELTA);
+  }
+
+  @Test
+  public void bboxPolygonFromLineString() throws IOException, TurfException {
+    // Create a LineString
+    LineString lineString = LineString.fromJson(loadJsonFixture(TURF_BBOX_POLYGON_LINESTRING));
+
+    // Use the LineString object to calculate its BoundingBox area
+    double[] bbox = TurfMeasurement.bbox(lineString);
+
+   // Use the BoundingBox coordinates to create an actual BoundingBox object
+    BoundingBox boundingBox = BoundingBox.fromPoints(
+        Point.fromLngLat(bbox[0], bbox[1]), Point.fromLngLat(bbox[2], bbox[3]));
+
+    // Use the BoundingBox object in the TurfMeasurement.bboxPolygon() method.
+    Polygon polygonRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
+
+    assertNotNull(polygonRepresentingBoundingBox);
+    assertEquals(0, polygonRepresentingBoundingBox.inner().size());
+    assertEquals(5, polygonRepresentingBoundingBox.coordinates().get(0).size());
+    assertEquals(Point.fromLngLat(102.0,-10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(0));
+    assertEquals(Point.fromLngLat(130,-10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(1));
+    assertEquals(Point.fromLngLat(130.0,4.0), polygonRepresentingBoundingBox.coordinates().get(0).get(2));
+    assertEquals(Point.fromLngLat(102.0,4.0), polygonRepresentingBoundingBox.coordinates().get(0).get(3));
+    assertEquals(Point.fromLngLat(102.0,-10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(4));
+  }
+
+  @Test
+  public void bboxPolygonFromMultiPolygon() throws IOException, TurfException {
+    // Create a MultiPolygon
+    MultiPolygon multiPolygon = MultiPolygon.fromJson(loadJsonFixture(TURF_BBOX_POLYGON_MULTIPOLYGON));
+
+    // Use the MultiPolygon object to calculate its BoundingBox area
+    double[] bbox = TurfMeasurement.bbox(multiPolygon);
+
+    // Use the BoundingBox coordinates to create an actual BoundingBox object
+    BoundingBox boundingBox = BoundingBox.fromPoints(
+      Point.fromLngLat(bbox[0], bbox[1]), Point.fromLngLat(bbox[2], bbox[3]));
+
+    // Use the BoundingBox object in the TurfMeasurement.bboxPolygon() method.
+    Polygon polygonRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
+
+    assertNotNull(polygonRepresentingBoundingBox);
+    assertEquals(0, polygonRepresentingBoundingBox.inner().size());
+    assertEquals(5, polygonRepresentingBoundingBox.coordinates().get(0).size());
+    assertEquals(Point.fromLngLat(100,0.0), polygonRepresentingBoundingBox.coordinates().get(0).get(4));
+  }
+
+  @Test
+  public void bboxPolygonFromMultiPoint() throws IOException, TurfException {
+    // Create a MultiPoint
+    MultiPoint multiPoint = MultiPoint.fromJson(loadJsonFixture(TURF_BBOX_POLYGON_MULTI_POINT));
+
+    // Use the MultiPoint object to calculate its BoundingBox area
+    double[] bbox = TurfMeasurement.bbox(multiPoint);
+
+    // Use the BoundingBox coordinates to create an actual BoundingBox object
+    BoundingBox boundingBox = BoundingBox.fromPoints(
+      Point.fromLngLat(bbox[0], bbox[1]), Point.fromLngLat(bbox[2], bbox[3]));
+
+    // Use the BoundingBox object in the TurfMeasurement.bboxPolygon() method.
+    Polygon polygonRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
+
+    assertNotNull(polygonRepresentingBoundingBox);
+    assertEquals(0, polygonRepresentingBoundingBox.inner().size());
+    assertEquals(5, polygonRepresentingBoundingBox.coordinates().get(0).size());
   }
 }

@@ -6,16 +6,18 @@ import static com.mapbox.turf.TurfConversion.radiansToDegrees;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.GeometryCollection;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.MultiPoint;
+import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
-import com.mapbox.geojson.MultiPolygon;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -394,5 +396,47 @@ public final class TurfMeasurement {
       }
     }
     return bbox;
+  }
+
+  /**
+   * Takes a {@link MultiPolygon} and measures each polygons perimeter in the specified units. if
+   * one of the polygons contains holes, the perimeter will also be included.
+   *
+   * @param multiPolygon geometry to measure
+   * @param units        one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   * @return total perimeter of the input polygons combined, in the units specified
+   * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
+   * @since 1.2.0
+   */
+
+  /**
+   * Takes a {@link MultiPolygon} and measures each polygons perimeter in the specified units. if
+   * one of the polygons contains holes, the perimeter will also be included.
+   *
+   * @param multiPolygon geometry to measure
+   * @param units        one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   * @return total perimeter of the input polygons combined, in the units specified
+   * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
+   * @since 1.2.0
+   */
+
+  /**
+   * Takes a {@link BoundingBox} and uses its coordinates to create a {@link Polygon}
+   * geometry.
+   *
+   * @param boundingBox a {@link BoundingBox} object to calculate with
+   * @return a {@link Polygon} object
+   * @see <a href="http://turfjs.org/docs/#bboxPolygon">Turf BoundingBox Polygon documentation</a>
+   * @since 4.7.0
+   */
+  public static Polygon bboxPolygon(@NonNull BoundingBox boundingBox) {
+    return Polygon.fromLngLats(
+        Arrays.asList(
+            Arrays.asList(
+                Point.fromLngLat(boundingBox.west(), boundingBox.south()),
+                Point.fromLngLat(boundingBox.east(), boundingBox.south()),
+                Point.fromLngLat(boundingBox.east(), boundingBox.north()),
+                Point.fromLngLat(boundingBox.west(), boundingBox.north()),
+                Point.fromLngLat(boundingBox.west(), boundingBox.south()))));
   }
 }
