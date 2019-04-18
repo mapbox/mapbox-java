@@ -59,7 +59,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 
 ## Feature Conversion
 - [ ] turf-combine
-- [ ] turf-explode
+- [x] turf-explode
 - [ ] turf-flatten
 - [ ] turf-line-to-polygon
 - [ ] turf-polygonize

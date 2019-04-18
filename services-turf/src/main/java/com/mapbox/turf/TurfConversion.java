@@ -3,9 +3,15 @@ package com.mapbox.turf;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import com.mapbox.turf.TurfConstants.TurfUnitCriteria;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -162,5 +168,37 @@ public final class TurfConversion {
       finalUnit = TurfConstants.UNIT_DEFAULT;
     }
     return radiansToLength(lengthToRadians(distance, originalUnit), finalUnit);
+  }
+
+  /**
+   * Takes a {@link FeatureCollection} and
+   * returns all positions as {@link Point} objects.
+   *
+   * @param featureCollection a {@link FeatureCollection} object
+   * @return a new {@link FeatureCollection} object with {@link Point} objects
+   * @since 4.8.0
+   */
+  public static FeatureCollection explode(@NonNull FeatureCollection featureCollection) {
+    List<Feature> finalFeatureList = new ArrayList<>();
+    for (Point singlePoint : TurfMeta.coordAll(featureCollection, true)) {
+      finalFeatureList.add(Feature.fromGeometry(singlePoint));
+    }
+    return FeatureCollection.fromFeatures(finalFeatureList);
+  }
+
+  /**
+   * Takes a {@link Feature}  and
+   * returns its position as a {@link Point} objects.
+   *
+   * @param feature a {@link Feature} object
+   * @return a new {@link FeatureCollection} object with {@link Point} objects
+   * @since 4.8.0
+   */
+  public static FeatureCollection explode(@NonNull Feature feature) {
+    List<Feature> finalFeatureList = new ArrayList<>();
+    for (Point singlePoint : TurfMeta.coordAll(feature, true)) {
+      finalFeatureList.add(Feature.fromGeometry(singlePoint));
+    }
+    return FeatureCollection.fromFeatures(finalFeatureList);
   }
 }
