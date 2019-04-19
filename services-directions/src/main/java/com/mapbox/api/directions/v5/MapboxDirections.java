@@ -107,7 +107,14 @@ public abstract class MapboxDirections extends
       waypointIndices(),
       waypointNames(),
       waypointTargets(),
-      enableRefresh());
+      enableRefresh(),
+      walkingOptions().walkingSpeed(),
+      walkingOptions().walkwayBias(),
+      walkingOptions().alleyBias(),
+      walkingOptions().ferryBias(),
+      walkingOptions().stepPenalty(),
+      walkingOptions().maxHikingDifficulty()
+      );
   }
 
   private Call<DirectionsResponse> post() {
@@ -135,7 +142,14 @@ public abstract class MapboxDirections extends
       waypointIndices(),
       waypointNames(),
       waypointTargets(),
-      enableRefresh());
+      enableRefresh(),
+      walkingOptions().walkingSpeed(),
+      walkingOptions().walkwayBias(),
+      walkingOptions().alleyBias(),
+      walkingOptions().ferryBias(),
+      walkingOptions().stepPenalty(),
+      walkingOptions().maxHikingDifficulty()
+    );
   }
 
   @Override
@@ -327,6 +341,9 @@ public abstract class MapboxDirections extends
   @Nullable
   abstract Boolean usePostMethod();
 
+  @Nullable
+  abstract WalkingOptions walkingOptions();
+
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
    * {@link #baseUrl()}, {@link #profile()}, {@link #user()}, and {@link #geometries()}.
@@ -400,6 +417,8 @@ public abstract class MapboxDirections extends
      * @since 1.0.0
      */
     public abstract Builder profile(@NonNull @ProfileCriteria String profile);
+
+    abstract String profile();
 
     /**
      * This sets the starting point on the map where the route will begin. It is one of the
@@ -830,6 +849,17 @@ public abstract class MapboxDirections extends
       return this;
     }
 
+    /**
+     * To be used to specify settings for use with the walking profile.
+     *
+     * @param walkingOptions options to use for walking profile
+     * @return this builder for chaining options together
+     * @since 4.6.0
+     */
+    public abstract Builder walkingOptions(@Nullable WalkingOptions walkingOptions);
+
+    abstract WalkingOptions walkingOptions();
+
     abstract Builder usePostMethod(@NonNull Boolean usePost);
 
     abstract Boolean usePostMethod();
@@ -900,6 +930,12 @@ public abstract class MapboxDirections extends
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
         approaches(formattedApproaches);
+      }
+
+      if (walkingOptions() == null) {
+        walkingOptions(WalkingOptions.builder().build());
+      } else if (!DirectionsCriteria.PROFILE_WALKING.equals(profile())) {
+        throw new ServicesException("Walking options are for use with the walking profile");
       }
 
       coordinates(coordinates);
