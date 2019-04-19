@@ -175,11 +175,11 @@ public interface DirectionsService {
     @Field("waypoint_names") String waypointNames,
     @Field("waypoint_targets") String waypointTargets,
     @Field("enable_refresh") Boolean enableRefresh,
-    @Query("walking_speed") Double walkingSpeed,
-    @Query("walkway_bias") Double walkwayBias,
-    @Query("alley_bias") Double alleyBias,
-    @Query("ferry_bias") Double ferryBias,
-    @Query("step_penalty") Integer stepPenalty,
-    @Query("maxHikingDifficulty") Integer maxHikingDifficulty
+    @Field("walking_speed") Double walkingSpeed,
+    @Field("walkway_bias") Double walkwayBias,
+    @Field("alley_bias") Double alleyBias,
+    @Field("ferry_bias") Double ferryBias,
+    @Field("step_penalty") Integer stepPenalty,
+    @Field("maxHikingDifficulty") Integer maxHikingDifficulty
   );
 }

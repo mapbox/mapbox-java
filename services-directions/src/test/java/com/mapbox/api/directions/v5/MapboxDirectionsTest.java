@@ -180,17 +180,6 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void build_walkingOptionsWithoutWalkingProfileFails() {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage("Walking options are for use with the walking profile");
-    MapboxDirections.builder()
-      .origin(Point.fromLngLat(1.0, 1.0))
-      .destination(Point.fromLngLat(2.0, 2.0))
-      .walkingOptions(WalkingOptions.builder().alleyBias(2d).build())
-      .build();
-  }
-
-  @Test
   public void build_walkingOptions() {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))

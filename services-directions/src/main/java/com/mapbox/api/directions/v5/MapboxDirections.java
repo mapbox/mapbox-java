@@ -934,8 +934,6 @@ public abstract class MapboxDirections extends
 
       if (walkingOptions() == null) {
         walkingOptions(WalkingOptions.builder().build());
-      } else if (!DirectionsCriteria.PROFILE_WALKING.equals(profile())) {
-        throw new ServicesException("Walking options are for use with the walking profile");
       }
 
       coordinates(coordinates);
