@@ -10,6 +10,7 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.MultiLineString;
+import com.mapbox.geojson.MultiPoint;
 import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
@@ -345,5 +346,74 @@ public final class TurfConversion {
       return Feature.fromGeometry(lineString, properties);
     }
     return null;
+  }
+
+  /**
+   * Combines a FeatureCollection of geometries and returns
+   * a {@link FeatureCollection} with "Multi-" geometries in it.
+   * If the original FeatureCollection parameter has {@link Point}(s)
+   * and/or {@link MultiPoint}s), the returned
+   * FeatureCollection will include a {@link MultiPoint} object.
+   *
+   * If the original FeatureCollection parameter has
+   * {@link LineString}(s) and/or {@link MultiLineString}s), the returned
+   * FeatureCollection will include a {@link MultiLineString} object.
+   *
+   * If the original FeatureCollection parameter has
+   * {@link Polygon}(s) and/or {@link MultiPolygon}s), the returned
+   * FeatureCollection will include a {@link MultiPolygon} object.
+   *
+   * @param originalFeatureCollection a {@link FeatureCollection}
+   *
+   * @return a {@link FeatureCollection} with a "Multi-" geometry
+   *    or "Multi-" geometries.
+   *
+   * @since 4.10.0
+   **/
+  public static FeatureCollection combine(@NonNull FeatureCollection originalFeatureCollection) {
+    if (originalFeatureCollection.features() == null) {
+      throw new TurfException("Your FeatureCollection is null.");
+    } else if (originalFeatureCollection.features().size() == 0) {
+      throw new TurfException("Your FeatureCollection doesn't have any Feature objects in it.");
+    }
+    List<Point> pointList = new ArrayList<>(0);
+    List<LineString> lineStringList = new ArrayList<>(0);
+    List<Polygon> polygonList = new ArrayList<>(0);
+    for (Feature singleFeature : originalFeatureCollection.features()) {
+      Geometry singleFeatureGeometry = singleFeature.geometry();
+      if (singleFeatureGeometry instanceof Point || singleFeatureGeometry instanceof MultiPoint) {
+        if (singleFeatureGeometry instanceof Point) {
+          pointList.add((Point) singleFeatureGeometry);
+        } else {
+          pointList.addAll(((MultiPoint) singleFeatureGeometry).coordinates());
+        }
+      } else if (singleFeatureGeometry instanceof LineString || singleFeatureGeometry
+        instanceof MultiLineString) {
+        if (singleFeatureGeometry instanceof LineString) {
+          lineStringList.add((LineString) singleFeatureGeometry);
+        } else {
+          lineStringList.addAll(((MultiLineString) singleFeatureGeometry).lineStrings());
+        }
+      } else if (singleFeatureGeometry instanceof Polygon || singleFeatureGeometry
+        instanceof MultiPolygon) {
+        if (singleFeatureGeometry instanceof Polygon) {
+          polygonList.add((Polygon) singleFeatureGeometry);
+        } else {
+          polygonList.addAll(((MultiPolygon) singleFeatureGeometry).polygons());
+        }
+      }
+    }
+    List<Feature> finalFeatureList = new ArrayList<>(0);
+    if (!pointList.isEmpty()) {
+      finalFeatureList.add(Feature.fromGeometry(MultiPoint.fromLngLats(pointList)));
+    }
+    if (!lineStringList.isEmpty()) {
+      finalFeatureList.add(Feature.fromGeometry(MultiLineString.fromLineStrings(lineStringList)));
+    }
+    if (!polygonList.isEmpty()) {
+      finalFeatureList.add(Feature.fromGeometry(MultiPolygon.fromPolygons(polygonList)));
+    }
+    return finalFeatureList.isEmpty() ? originalFeatureCollection
+      : FeatureCollection.fromFeatures(finalFeatureList);
   }
 }
