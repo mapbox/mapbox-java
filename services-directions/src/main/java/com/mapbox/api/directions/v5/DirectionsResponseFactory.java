@@ -76,6 +76,7 @@ class DirectionsResponseFactory {
           .accessToken(mapboxDirections.accessToken())
           .requestUuid(response.body().uuid())
           .baseUrl(mapboxDirections.baseUrl())
+          .walkingOptions(mapboxDirections.walkingOptions())
           .build()
       ).build());
     }

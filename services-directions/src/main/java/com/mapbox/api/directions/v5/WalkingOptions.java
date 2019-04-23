@@ -5,10 +5,13 @@ import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 
 /**
  * Class for specifying options for use with the walking profile.
- * @since 4.6.0
+ * @since 4.7.0
  */
 @AutoValue
 public abstract class WalkingOptions {
@@ -31,12 +34,50 @@ public abstract class WalkingOptions {
   @Nullable
   abstract Integer maxHikingDifficulty();
 
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a WalkingOptions object
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *    method
+   * @since 4.7.0
+   */
+  public static WalkingOptions fromJson(String json) {
+    GsonBuilder gsonBuilder = new GsonBuilder()
+      .registerTypeAdapterFactory(WalkingOptionsAdapterFactory.create());
+    return gsonBuilder.create().fromJson(json, WalkingOptions.class);
+  }
+
+  /**
+   * This takes the currently defined values found inside this instance and converts it to a json
+   * string.
+   *
+   * @return a Json string which represents this WalkingOptions object
+   * @since 4.7.0
+   */
+  public final String toJson() {
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapterFactory(WalkingOptionsAdapterFactory.create())
+      .create();
+    return gson.toJson(this, WalkingOptions.class);
+  }
+
+  /**
+   * Gson type adapter for parsing Gson to this class.
+   *
+   * @param gson the built {@link Gson} object
+   * @return the type adapter for this class
+   * @since 4.7.0
+   */
+  public static TypeAdapter<WalkingOptions> typeAdapter(Gson gson) {
+    return new AutoValue_WalkingOptions.GsonTypeAdapter(gson);
+  }
 
   /**
    * Build a new {@link WalkingOptions} object with no defaults.
    *
    * @return a {@link Builder} object for creating a {@link WalkingOptions} object
-   * @since 4.6.0
+   * @since 4.7.0
    */
   public static Builder builder() {
     return new AutoValue_WalkingOptions.Builder();
@@ -45,7 +86,7 @@ public abstract class WalkingOptions {
   /**
    * This builder is used to create a new object with specifications relating to walking directions.
    *
-   * @since 4.6.0
+   * @since 4.7.0
    */
   @AutoValue.Builder
   public abstract static class Builder {
@@ -56,7 +97,7 @@ public abstract class WalkingOptions {
      *
      * @param walkingSpeed in kilometers per hour
      * @return this builder
-     * @since 4.6.0
+     * @since 4.7.0
      */
     public abstract Builder walkingSpeed(
       @Nullable @FloatRange(from = 0.5, to = 25) Double walkingSpeed);
@@ -69,7 +110,7 @@ public abstract class WalkingOptions {
      *
      * @param walkwayBias factor to modify the cost of roads or paths that do not allow vehicles
      * @return this builder
-     * @since 4.6.0
+     * @since 4.7.0
      */
     public abstract Builder walkwayBias(
       @Nullable @FloatRange(from = 0.1, to = 100000.0) Double walkwayBias);
@@ -81,7 +122,7 @@ public abstract class WalkingOptions {
      *
      * @param alleyBias factor to modify the cost when alleys are encountered
      * @return this builder
-     * @since 4.6.0
+     * @since 4.7.0
      */
     public abstract Builder alleyBias(
       @Nullable @FloatRange(from = 0.1, to = 100000.0) Double alleyBias);
@@ -91,7 +132,7 @@ public abstract class WalkingOptions {
      *
      * @param ferryBias factor to modify the cost when ferries are encountered
      * @return this builder
-     * @since 4.6.0
+     * @since 4.7.0
      */
     public abstract Builder ferryBias(
       @Nullable @FloatRange(from = 0.1, to = 100000.0) Double ferryBias);
@@ -102,7 +143,7 @@ public abstract class WalkingOptions {
      *
      * @param stepPenalty in seconds added to each transistion with steps or stairs
      * @return this builder
-     * @since 4.6.0
+     * @since 4.7.0
      */
     public abstract Builder stepPenalty(
       @Nullable @IntRange(from = 0, to = 43200) Integer stepPenalty);
@@ -116,7 +157,7 @@ public abstract class WalkingOptions {
      *
      * @param maxHikingDifficulty maximum difficulty of hiking trails that is allowed
      * @return this builder
-     * @since 4.6.0
+     * @since 4.7.0
      */
     public abstract Builder maxHikingDifficulty(
       @Nullable @IntRange(from = 0, to = 6) Integer maxHikingDifficulty);
@@ -125,7 +166,7 @@ public abstract class WalkingOptions {
      * Builds a WalkingOptions object with specified configurations.
      *
      * @return WalkingOptions object
-     * @since 4.6.0
+     * @since 4.7.0
      */
     public abstract WalkingOptions build();
   }

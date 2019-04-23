@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.WalkingOptionsAdapterFactory;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
@@ -25,6 +26,7 @@ public class DirectionsJsonObject implements Serializable {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
+    gson.registerTypeAdapterFactory(WalkingOptionsAdapterFactory.create());
     return gson.create().toJson(this);
   }
 }

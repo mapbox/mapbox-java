@@ -854,7 +854,7 @@ public abstract class MapboxDirections extends
      *
      * @param walkingOptions options to use for walking profile
      * @return this builder for chaining options together
-     * @since 4.6.0
+     * @since 4.7.0
      */
     public abstract Builder walkingOptions(@Nullable WalkingOptions walkingOptions);
 
