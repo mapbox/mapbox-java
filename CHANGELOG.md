@@ -1,6 +1,13 @@
 ## Changelog for Mapbox Java and Android Services
 
 Mapbox welcomes participation and contributions from everyone.
+
+### v4.7.0 = April 22, 2019
+- Adding BoundingBoxPolygon turf method [#1006](https://github.com/mapbox/mapbox-java/pull/1006)
+- Feature.get*Property should return null for non-existent property [#1001](https://github.com/mapbox/mapbox-java/pull/1001)
+- added overloaded method bbox that takes in a BoundingBox  [#999](https://github.com/mapbox/mapbox-java/pull/999)
+- Adding userAgent parameter to Isochrone request retrofit call URL  [#997](https://github.com/mapbox/mapbox-java/pull/997)
+
 ### v4.6.0 - April 11, 2019
 - Exclude *.java from being added to library jars [#992](https://github.com/mapbox/mapbox-java/pull/992)
 - Adjust @Nullable and @NonNull annotations to match what comes from Directions API [#990](https://github.com/mapbox/mapbox-java/pull/990)
