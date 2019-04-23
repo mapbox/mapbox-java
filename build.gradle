@@ -17,6 +17,11 @@ buildscript {
     classpath pluginDependencies.errorprone
     classpath pluginDependencies.buildConfig
     classpath pluginDependencies.jacoco
+
+    // These plugins are for publishing to Bintray
+    classpath pluginDependencies.bintray
+    classpath pluginDependencies.maven
+    classpath pluginDependencies.artifactory
   }
 }
 
@@ -31,9 +36,9 @@ allprojects {
     google()
     mavenCentral()
     jcenter()
+    // For publishing to Bintray
+    maven { url 'https://mapbox.bintray.com/mapbox' }
   }
-  group = GROUP
-  version = VERSION_NAME
 }
 
 subprojects {
@@ -97,7 +102,7 @@ subprojects { subproject ->
   }
 
   if (RELEASE_MODULES.contains(subproject.name)) {
-    subproject.apply from: "${rootDir}/gradle/mvn-push.gradle"
+    subproject.apply from: "${rootDir}/gradle/gradle-bintray.gradle"
     subproject.apply from: "${rootDir}/gradle/dependencies-graph.gradle"
   }
 }
@@ -105,4 +110,3 @@ subprojects { subproject ->
 task clean(type: Delete) {
   delete rootProject.buildDir
 }
-

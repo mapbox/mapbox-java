@@ -41,8 +41,8 @@ If you want to test recent bugfixes or features that have not been packaged in a
 
 ```gradle
 repositories {
-    mavenCentral()
-    maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    jcenter()
+    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
 dependencies {
