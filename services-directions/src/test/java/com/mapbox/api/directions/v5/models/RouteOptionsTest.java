@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
+import com.mapbox.api.directions.v5.WalkingOptions;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Point;
@@ -205,6 +206,7 @@ public class RouteOptionsTest extends TestUtils {
       .language(Locale.CANADA)
       .overview(DirectionsCriteria.OVERVIEW_SIMPLIFIED)
       .alternatives(true)
+      .walkingOptions(walkingOptions())
       .build()
       .executeCall();
 
@@ -214,6 +216,17 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions routeOptionsFromJson = RouteOptions.fromJson(jsonString);
 
     assertEquals(routeOptions, routeOptionsFromJson);
+  }
+
+  private WalkingOptions walkingOptions() {
+    return WalkingOptions.builder()
+      .walkingSpeed(1.0)
+      .walkwayBias(2.0)
+      .alleyBias(3.0)
+      .ferryBias(4.0)
+      .stepPenalty(5)
+      .maxHikingDifficulty(6)
+      .build();
   }
 
   @Test

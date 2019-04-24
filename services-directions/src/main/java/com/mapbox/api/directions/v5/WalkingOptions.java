@@ -16,23 +16,70 @@ import com.google.gson.TypeAdapter;
 @AutoValue
 public abstract class WalkingOptions {
 
+  /**
+   * Walking speed in kilometers per hour. Must be between 0.5 and 25 km/hr. Defaults to 5.1
+   * km/hr (3.1 miles/hour).
+   *
+   * @return walkingSpeed in kilometers per hour
+   * @since 4.7.0
+   */
   @Nullable
-  abstract Double walkingSpeed();
+  public abstract Double walkingSpeed();
 
+  /**
+   * A factor that modifies the cost when encountering roads or paths that do not allow
+   * vehicles and are set aside for pedestrian use. Pedestrian routes generally attempt to
+   * favor using these walkways and sidewalks. The default walkway_factor is 0.9, indicating a
+   * slight preference.
+   *
+   * @return walkwayBias factor to modify the cost of roads or paths that do not allow vehicles
+   * @since 4.7.0
+   */
   @Nullable
-  abstract Double walkwayBias();
+  public abstract Double walkwayBias();
 
+  /**
+   * A factor that modifies (multiplies) the cost when alleys are encountered. Pedestrian
+   * routes generally want to avoid alleys or narrow service roads between buildings. The
+   * default alley_factor is 2.0.
+   *
+   * @return alleyBias factor to modify the cost when alleys are encountered
+   * @since 4.7.0
+   */
   @Nullable
-  abstract Double alleyBias();
+  public abstract Double alleyBias();
 
+  /**
+   * A factor that modifies (multiplies) the cost when ferries are encountered.
+   *
+   * @return ferryBias factor to modify the cost when ferries are encountered
+   * @since 4.7.0
+   */
   @Nullable
-  abstract Double ferryBias();
+  public abstract Double ferryBias();
 
+  /**
+   * A penalty in seconds added to each transition onto a path with steps or stairs. Higher
+   * values apply larger cost penalties to avoid paths that contain flights of steps.
+   *
+   * @return stepPenalty in seconds added to each transistion with steps or stairs
+   * @since 4.7.0
+   */
   @Nullable
-  abstract Integer stepPenalty();
+  public abstract Integer stepPenalty();
 
+  /**
+   * This value indicates the maximum difficulty of hiking trails that is allowed. Values
+   * between 0 and 6 are allowed. The values correspond to sac_scale values within
+   * OpenStreetMap. The default value is 1 which means that well cleared
+   * trails that are mostly flat or slightly sloped are allowed. Higher difficulty trails can
+   * be allowed by specifying a higher value.
+   *
+   * @return maxHikingDifficulty maximum difficulty of hiking trails that is allowed
+   * @since 4.7.0
+   */
   @Nullable
-  abstract Integer maxHikingDifficulty();
+  public abstract Integer maxHikingDifficulty();
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String.
