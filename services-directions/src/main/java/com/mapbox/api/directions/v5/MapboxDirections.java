@@ -108,12 +108,12 @@ public abstract class MapboxDirections extends
       waypointNames(),
       waypointTargets(),
       enableRefresh(),
-      walkingOptions().walkingSpeed(),
-      walkingOptions().walkwayBias(),
-      walkingOptions().alleyBias(),
-      walkingOptions().ferryBias(),
-      walkingOptions().stepPenalty(),
-      walkingOptions().maxHikingDifficulty()
+      walkingSpeed(),
+      walkwayBias(),
+      alleyBias(),
+      ferryBias(),
+      stepPenalty(),
+      maxHikingDifficulty()
       );
   }
 
@@ -143,12 +143,12 @@ public abstract class MapboxDirections extends
       waypointNames(),
       waypointTargets(),
       enableRefresh(),
-      walkingOptions().walkingSpeed(),
-      walkingOptions().walkwayBias(),
-      walkingOptions().alleyBias(),
-      walkingOptions().ferryBias(),
-      walkingOptions().stepPenalty(),
-      walkingOptions().maxHikingDifficulty()
+      walkingSpeed(),
+      walkwayBias(),
+      alleyBias(),
+      ferryBias(),
+      stepPenalty(),
+      maxHikingDifficulty()
     );
   }
 
@@ -344,6 +344,60 @@ public abstract class MapboxDirections extends
   @Nullable
   abstract WalkingOptions walkingOptions();
 
+  @Nullable
+  Double walkingSpeed() {
+    if (walkingOptions() == null) {
+      return null;
+    }
+
+    return walkingOptions().walkingSpeed();
+  }
+
+  @Nullable
+  Double walkwayBias() {
+    if (walkingOptions() == null) {
+      return null;
+    }
+
+    return walkingOptions().walkwayBias();
+  }
+
+  @Nullable
+  Double alleyBias() {
+    if (walkingOptions() == null) {
+      return null;
+    }
+
+    return walkingOptions().alleyBias();
+  }
+
+  @Nullable
+  Double ferryBias() {
+    if (walkingOptions() == null) {
+      return null;
+    }
+
+    return walkingOptions().ferryBias();
+  }
+
+  @Nullable
+  Integer stepPenalty() {
+    if (walkingOptions() == null) {
+      return null;
+    }
+
+    return walkingOptions().stepPenalty();
+  }
+
+  @Nullable
+  Integer maxHikingDifficulty() {
+    if (walkingOptions() == null) {
+      return null;
+    }
+
+    return walkingOptions().maxHikingDifficulty();
+  }
+
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
    * {@link #baseUrl()}, {@link #profile()}, {@link #user()}, and {@link #geometries()}.
@@ -417,8 +471,6 @@ public abstract class MapboxDirections extends
      * @since 1.0.0
      */
     public abstract Builder profile(@NonNull @ProfileCriteria String profile);
-
-    abstract String profile();
 
     /**
      * This sets the starting point on the map where the route will begin. It is one of the
@@ -930,10 +982,6 @@ public abstract class MapboxDirections extends
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
         approaches(formattedApproaches);
-      }
-
-      if (walkingOptions() == null) {
-        walkingOptions(WalkingOptions.builder().build());
       }
 
       coordinates(coordinates);
