@@ -4,6 +4,7 @@ import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LATITUDE;
 import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
 
 import android.support.annotation.FloatRange;
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,6 +29,7 @@ import java.io.Serializable;
  *
  * @since 3.0.0
  */
+@Keep
 public class BoundingBox implements Serializable {
 
   private final Point southwest;

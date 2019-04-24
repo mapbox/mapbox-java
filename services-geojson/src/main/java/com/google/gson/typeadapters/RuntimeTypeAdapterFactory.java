@@ -16,6 +16,8 @@
 
 package com.google.gson.typeadapters;
 
+import android.support.annotation.Keep;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -125,6 +127,7 @@ import com.google.gson.stream.JsonWriter;
  * @param <T> base type for this factory
  * @since 4.6.0
  */
+@Keep
 public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
   private final Class<?> baseType;
   private final String typeFieldName;

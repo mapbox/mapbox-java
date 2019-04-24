@@ -1,5 +1,7 @@
 package com.mapbox.geojson;
 
+import android.support.annotation.Keep;
+
 import com.google.gson.TypeAdapterFactory;
 
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
@@ -8,6 +10,7 @@ import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
  * A Geometry type adapter factory for convenience for serialization/deserialization.
  * @since 4.6.0
  */
+@Keep
 public abstract class GeometryAdapterFactory implements TypeAdapterFactory  {
 
   private static TypeAdapterFactory geometryTypeFactory;

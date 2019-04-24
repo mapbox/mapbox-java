@@ -1,5 +1,7 @@
 package com.mapbox.geojson;
 
+import android.support.annotation.Keep;
+
 /**
  * Each of the s geometries which make up GeoJson implement this interface and consume a varying
  * dimension of {@link Point} list. Since this is varying, each geometry object fulfills the
@@ -8,6 +10,7 @@ package com.mapbox.geojson;
  * @param <T> a generic allowing varying dimensions for each GeoJson geometry
  * @since 3.0.0
  */
+@Keep
 public interface CoordinateContainer<T> extends Geometry {
 
   /**

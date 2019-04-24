@@ -1,5 +1,7 @@
 package com.mapbox.geojson;
 
+import android.support.annotation.Keep;
+
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
@@ -11,6 +13,7 @@ import java.io.IOException;
  *
  * @since 4.6.0
  */
+@Keep
 public class PointAsCoordinatesTypeAdapter extends BaseCoordinatesTypeAdapter<Point> {
 
   @Override

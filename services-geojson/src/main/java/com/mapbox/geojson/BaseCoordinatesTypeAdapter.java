@@ -1,5 +1,7 @@
 package com.mapbox.geojson;
 
+import android.support.annotation.Keep;
+
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -19,6 +21,7 @@ import java.util.List;
  * @param <T> Type of coordinates
  * @since 4.6.0
  */
+@Keep
 abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
 
 

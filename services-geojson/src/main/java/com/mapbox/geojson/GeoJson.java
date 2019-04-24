@@ -1,5 +1,7 @@
 package com.mapbox.geojson;
 
+import android.support.annotation.Keep;
+
 /**
  * Generic implementation for all GeoJson objects defining common traits that each GeoJson object
  * has. This logic is carried over to {@link Geometry} which is an interface which all seven GeoJson
@@ -7,6 +9,7 @@ package com.mapbox.geojson;
  *
  * @since 1.0.0
  */
+@Keep
 public interface GeoJson {
 
   /**
