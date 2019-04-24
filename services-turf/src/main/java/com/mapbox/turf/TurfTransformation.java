@@ -1,5 +1,6 @@
 package com.mapbox.turf;
 
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
 import com.mapbox.geojson.Polygon;
@@ -62,14 +63,16 @@ public final class TurfTransformation {
    * @return a {@link Polygon} which represents the newly created circle
    * @since 3.0.0
    */
-  public static Polygon circle(@NonNull Point center, double radius, int steps,
+  public static Polygon circle(@NonNull Point center, double radius, @IntRange(from = 1) int steps,
                                @TurfConstants.TurfUnitCriteria String units) {
     List<Point> coordinates = new ArrayList<>();
     for (int i = 0; i < steps; i++) {
       coordinates.add(TurfMeasurement.destination(center, radius, i * 360d / steps, units));
     }
-    coordinates.add(coordinates.get(0));
 
+    if (coordinates.size() > 0) {
+      coordinates.add(coordinates.get(0));
+    }
     List<List<Point>> coordinate = new ArrayList<>();
     coordinate.add(coordinates);
     return Polygon.fromLngLats(coordinate);
