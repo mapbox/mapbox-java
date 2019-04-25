@@ -1,18 +1,26 @@
 package com.mapbox.turf;
 
+import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.GeometryCollection;
 import com.mapbox.geojson.LineString;
+import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
-import com.mapbox.geojson.MultiPolygon;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TurfMetaTest extends TestUtils {
 
@@ -83,5 +91,70 @@ public class TurfMetaTest extends TestUtils {
     String jsonFeature = "{type: 'Feature', geometry: {type: 'Point', coordinates: [1, 2]}}";
     assertEquals(TurfMeta.getCoord(Feature.fromJson(jsonFeature)),
       Point.fromLngLat(1, 2));
+  }
+
+  @Test
+  public void coordAllFeatureCollection() throws TurfException {
+    String multipolygonJson = "{type: 'MultiPolygon', coordinates: [[[[0, 0], [1, 1], [0, 1], [0, 0]]]]}";
+    String lineStringJson = "{type: 'LineString', coordinates: [[0, 0], [1, 1]]}";
+    FeatureCollection featureCollection = FeatureCollection.fromFeatures(
+      new Feature[] {
+        Feature.fromGeometry(MultiPolygon.fromJson(multipolygonJson)),
+        Feature.fromGeometry(LineString.fromJson(lineStringJson))}
+    );
+    assertNotNull(featureCollection);
+    assertEquals(5, TurfMeta.coordAll(featureCollection,true).size());
+    assertEquals(0, TurfMeta.coordAll(featureCollection,true).get(0).latitude(), DELTA);
+    assertEquals(0, TurfMeta.coordAll(featureCollection,true).get(0).longitude(), DELTA);
+    assertEquals(1, TurfMeta.coordAll(featureCollection,true).get(4).latitude(), DELTA);
+    assertEquals(1, TurfMeta.coordAll(featureCollection,true).get(4).longitude(), DELTA);
+  }
+
+  @Test
+  public void coordAllSingleFeature() throws TurfException {
+    String lineStringJson = "{type: 'LineString', coordinates: [[0, 0], [1, 1]]}";
+    FeatureCollection featureCollection = FeatureCollection.fromFeature(
+      Feature.fromGeometry(LineString.fromJson(lineStringJson))
+    );
+    assertNotNull(featureCollection);
+    assertEquals(2, TurfMeta.coordAll(featureCollection,true).size());
+    assertEquals(0, TurfMeta.coordAll(featureCollection,true).get(0).latitude(), DELTA);
+    assertEquals(0, TurfMeta.coordAll(featureCollection,true).get(0).longitude(), DELTA);
+    assertEquals(1, TurfMeta.coordAll(featureCollection,true).get(1).latitude(), DELTA);
+    assertEquals(1, TurfMeta.coordAll(featureCollection,true).get(1).longitude(), DELTA);
+  }
+
+  @Test
+  public void coordAllGeometryCollection() throws TurfException {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(2.0, 3.0));
+    LineString lineString = LineString.fromLngLats(points);
+    List<Geometry> geometries = new ArrayList<>();
+    geometries.add(points.get(0));
+    geometries.add(lineString);
+
+    BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
+    GeometryCollection geometryCollection = GeometryCollection.fromGeometries(geometries, bbox);
+
+    FeatureCollection featureCollection = FeatureCollection.fromFeature(
+      Feature.fromGeometry(geometryCollection)
+    );
+
+    assertNotNull(featureCollection);
+    assertNotNull(TurfMeta.coordAll(featureCollection,true));
+    assertEquals(3, TurfMeta.coordAll(featureCollection,true).size());
+    assertEquals(1.0, TurfMeta.coordAll(featureCollection,true).get(0).longitude(), DELTA);
+    assertEquals(2.0, TurfMeta.coordAll(featureCollection,true).get(0).latitude(), DELTA);
+  }
+
+  @Test
+  public void wrongFeatureGeometryForGetCoordThrowsException() throws TurfException {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("A Feature with a Point geometry is required."));
+    TurfMeta.getCoord(Feature.fromGeometry(LineString.fromLngLats(Arrays.asList(
+      Point.fromLngLat(0, 9),
+      Point.fromLngLat(0, 10)
+    ))));
   }
 }
