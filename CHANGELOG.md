@@ -1,8 +1,11 @@
 ## Changelog for Mapbox Java and Android Services
 
 Mapbox welcomes participation and contributions from everyone.
+### v4.7.0 - April 25, 2019
+- Added @Keep annotation to ease integration of geojson library [#1005](https://github.com/mapbox/mapbox-java/pull/1005)
+- Fix possible IndexOutOfBoundsException exception [#1013](https://github.com/mapbox/mapbox-java/pull/1013)
 
-### v4.7.0 = April 22, 2019
+### v4.7.0-alpha.1 - April 23, 2019
 - Adding BoundingBoxPolygon turf method [#1006](https://github.com/mapbox/mapbox-java/pull/1006)
 - Feature.get*Property should return null for non-existent property [#1001](https://github.com/mapbox/mapbox-java/pull/1001)
 - added overloaded method bbox that takes in a BoundingBox  [#999](https://github.com/mapbox/mapbox-java/pull/999)
