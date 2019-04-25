@@ -114,7 +114,7 @@ public abstract class MapboxDirections extends
       ferryBias(),
       stepPenalty(),
       maxHikingDifficulty()
-      );
+    );
   }
 
   private Call<DirectionsResponse> post() {
@@ -341,56 +341,60 @@ public abstract class MapboxDirections extends
 
   @Nullable
   Double walkingSpeed() {
-    if (walkingOptions() == null) {
-      return null;
+    if (hasWalkingOptions()) {
+      return walkingOptions().walkingSpeed();
     }
 
-    return walkingOptions().walkingSpeed();
+    return null;
   }
 
   @Nullable
   Double walkwayBias() {
-    if (walkingOptions() == null) {
-      return null;
+    if (hasWalkingOptions()) {
+      return walkingOptions().walkwayBias();
     }
 
-    return walkingOptions().walkwayBias();
+    return null;
   }
 
   @Nullable
   Double alleyBias() {
-    if (walkingOptions() == null) {
-      return null;
+    if (hasWalkingOptions()) {
+      return walkingOptions().alleyBias();
     }
 
-    return walkingOptions().alleyBias();
+    return null;
   }
 
   @Nullable
   Double ferryBias() {
-    if (walkingOptions() == null) {
-      return null;
+    if (hasWalkingOptions()) {
+      return walkingOptions().ferryBias();
     }
 
-    return walkingOptions().ferryBias();
+    return null;
   }
 
   @Nullable
   Integer stepPenalty() {
-    if (walkingOptions() == null) {
-      return null;
+    if (hasWalkingOptions()) {
+      return walkingOptions().stepPenalty();
     }
 
-    return walkingOptions().stepPenalty();
+    return null;
   }
 
   @Nullable
   Integer maxHikingDifficulty() {
-    if (walkingOptions() == null) {
-      return null;
+    if (hasWalkingOptions()) {
+      return walkingOptions().maxHikingDifficulty();
     }
 
-    return walkingOptions().maxHikingDifficulty();
+    return null;
+  }
+
+  private boolean hasWalkingOptions() {
+    return walkingOptions() != null;
   }
 
   /**
@@ -901,9 +905,9 @@ public abstract class MapboxDirections extends
      *
      * @param walkingOptions options to use for walking profile
      * @return this builder for chaining options together
-     * @since 4.7.0
+     * @since 4.8.0
      */
-    public abstract Builder walkingOptions(@Nullable WalkingOptions walkingOptions);
+    public abstract Builder walkingOptions(@NonNull WalkingOptions walkingOptions);
 
     abstract WalkingOptions walkingOptions();
 

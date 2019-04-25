@@ -7,7 +7,7 @@ import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
  * Required so that AutoValue can generate specific type adapters when needed inside the direction
  * packages.
  *
- * @since 4.7.0
+ * @since 4.8.0
  */
 @GsonTypeAdapterFactory
 public abstract class WalkingOptionsAdapterFactory implements TypeAdapterFactory {
@@ -17,7 +17,7 @@ public abstract class WalkingOptionsAdapterFactory implements TypeAdapterFactory
    * Builder.
    *
    * @return a new GSON TypeAdapterFactory
-   * @since 4.7.0
+   * @since 4.8.0
    */
   public static TypeAdapterFactory create() {
     return new AutoValueGson_WalkingOptionsAdapterFactory();

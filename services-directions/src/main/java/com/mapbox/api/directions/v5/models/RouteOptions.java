@@ -318,7 +318,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * To be used to specify settings for use with the walking profile.
    *
    * @return options to use for walking profile
-   * @since 4.7.0
+   * @since 4.8.0
    */
   @Nullable
   public abstract WalkingOptions walkingOptions();
@@ -604,9 +604,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *
      * @param walkingOptions options to use for walking profile
      * @return this builder for chaining options together
-     * @since 4.7.0
+     * @since 4.8.0
      */
-    public abstract Builder walkingOptions(@Nullable WalkingOptions walkingOptions);
+    public abstract Builder walkingOptions(@NonNull WalkingOptions walkingOptions);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.

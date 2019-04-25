@@ -11,7 +11,7 @@ import com.google.gson.TypeAdapter;
 
 /**
  * Class for specifying options for use with the walking profile.
- * @since 4.7.0
+ * @since 4.8.0
  */
 @AutoValue
 public abstract class WalkingOptions {
@@ -21,7 +21,7 @@ public abstract class WalkingOptions {
    * km/hr (3.1 miles/hour).
    *
    * @return walkingSpeed in kilometers per hour
-   * @since 4.7.0
+   * @since 4.8.0
    */
   @Nullable
   public abstract Double walkingSpeed();
@@ -33,7 +33,7 @@ public abstract class WalkingOptions {
    * slight preference.
    *
    * @return walkwayBias factor to modify the cost of roads or paths that do not allow vehicles
-   * @since 4.7.0
+   * @since 4.8.0
    */
   @Nullable
   public abstract Double walkwayBias();
@@ -44,7 +44,7 @@ public abstract class WalkingOptions {
    * default alley_factor is 2.0.
    *
    * @return alleyBias factor to modify the cost when alleys are encountered
-   * @since 4.7.0
+   * @since 4.8.0
    */
   @Nullable
   public abstract Double alleyBias();
@@ -53,7 +53,7 @@ public abstract class WalkingOptions {
    * A factor that modifies (multiplies) the cost when ferries are encountered.
    *
    * @return ferryBias factor to modify the cost when ferries are encountered
-   * @since 4.7.0
+   * @since 4.8.0
    */
   @Nullable
   public abstract Double ferryBias();
@@ -63,7 +63,7 @@ public abstract class WalkingOptions {
    * values apply larger cost penalties to avoid paths that contain flights of steps.
    *
    * @return stepPenalty in seconds added to each transistion with steps or stairs
-   * @since 4.7.0
+   * @since 4.8.0
    */
   @Nullable
   public abstract Integer stepPenalty();
@@ -76,7 +76,7 @@ public abstract class WalkingOptions {
    * be allowed by specifying a higher value.
    *
    * @return maxHikingDifficulty maximum difficulty of hiking trails that is allowed
-   * @since 4.7.0
+   * @since 4.8.0
    */
   @Nullable
   public abstract Integer maxHikingDifficulty();
@@ -87,7 +87,7 @@ public abstract class WalkingOptions {
    * @param json a formatted valid JSON string defining a WalkingOptions object
    * @return a new instance of this class defined by the values passed inside this static factory
    *    method
-   * @since 4.7.0
+   * @since 4.8.0
    */
   public static WalkingOptions fromJson(String json) {
     GsonBuilder gsonBuilder = new GsonBuilder()
@@ -100,7 +100,7 @@ public abstract class WalkingOptions {
    * string.
    *
    * @return a Json string which represents this WalkingOptions object
-   * @since 4.7.0
+   * @since 4.8.0
    */
   public final String toJson() {
     Gson gson = new GsonBuilder()
@@ -114,7 +114,7 @@ public abstract class WalkingOptions {
    *
    * @param gson the built {@link Gson} object
    * @return the type adapter for this class
-   * @since 4.7.0
+   * @since 4.8.0
    */
   public static TypeAdapter<WalkingOptions> typeAdapter(Gson gson) {
     return new AutoValue_WalkingOptions.GsonTypeAdapter(gson);
@@ -124,7 +124,7 @@ public abstract class WalkingOptions {
    * Build a new {@link WalkingOptions} object with no defaults.
    *
    * @return a {@link Builder} object for creating a {@link WalkingOptions} object
-   * @since 4.7.0
+   * @since 4.8.0
    */
   public static Builder builder() {
     return new AutoValue_WalkingOptions.Builder();
@@ -133,7 +133,7 @@ public abstract class WalkingOptions {
   /**
    * This builder is used to create a new object with specifications relating to walking directions.
    *
-   * @since 4.7.0
+   * @since 4.8.0
    */
   @AutoValue.Builder
   public abstract static class Builder {
@@ -144,7 +144,7 @@ public abstract class WalkingOptions {
      *
      * @param walkingSpeed in kilometers per hour
      * @return this builder
-     * @since 4.7.0
+     * @since 4.8.0
      */
     public abstract Builder walkingSpeed(
       @Nullable @FloatRange(from = 0.5, to = 25) Double walkingSpeed);
@@ -157,7 +157,7 @@ public abstract class WalkingOptions {
      *
      * @param walkwayBias factor to modify the cost of roads or paths that do not allow vehicles
      * @return this builder
-     * @since 4.7.0
+     * @since 4.8.0
      */
     public abstract Builder walkwayBias(
       @Nullable @FloatRange(from = 0.1, to = 100000.0) Double walkwayBias);
@@ -169,7 +169,7 @@ public abstract class WalkingOptions {
      *
      * @param alleyBias factor to modify the cost when alleys are encountered
      * @return this builder
-     * @since 4.7.0
+     * @since 4.8.0
      */
     public abstract Builder alleyBias(
       @Nullable @FloatRange(from = 0.1, to = 100000.0) Double alleyBias);
@@ -179,7 +179,7 @@ public abstract class WalkingOptions {
      *
      * @param ferryBias factor to modify the cost when ferries are encountered
      * @return this builder
-     * @since 4.7.0
+     * @since 4.8.0
      */
     public abstract Builder ferryBias(
       @Nullable @FloatRange(from = 0.1, to = 100000.0) Double ferryBias);
@@ -190,7 +190,7 @@ public abstract class WalkingOptions {
      *
      * @param stepPenalty in seconds added to each transistion with steps or stairs
      * @return this builder
-     * @since 4.7.0
+     * @since 4.8.0
      */
     public abstract Builder stepPenalty(
       @Nullable @IntRange(from = 0, to = 43200) Integer stepPenalty);
@@ -204,7 +204,7 @@ public abstract class WalkingOptions {
      *
      * @param maxHikingDifficulty maximum difficulty of hiking trails that is allowed
      * @return this builder
-     * @since 4.7.0
+     * @since 4.8.0
      */
     public abstract Builder maxHikingDifficulty(
       @Nullable @IntRange(from = 0, to = 6) Integer maxHikingDifficulty);
@@ -213,7 +213,7 @@ public abstract class WalkingOptions {
      * Builds a WalkingOptions object with specified configurations.
      *
      * @return WalkingOptions object
-     * @since 4.7.0
+     * @since 4.8.0
      */
     public abstract WalkingOptions build();
   }
