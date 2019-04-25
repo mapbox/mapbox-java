@@ -137,14 +137,6 @@ public interface DirectionsService {
    * @param waypointNames       custom names for waypoints used for the arrival instruction
    * @param waypointTargets     list of coordinate pairs for drop-off locations
    * @param enableRefresh       whether the routes should be refreshable
-   * @param walkingSpeed        walking speed in kilometers per hour
-   * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
-   *                            that do not allow vehicles and are set aside for pedestrian use
-   * @param alleyBias           a factor that modifies the cost when alleys are encountered
-   * @param ferryBias           a factor that modifies the cost when ferries are encountered
-   * @param stepPenalty         a penalty in seconds added to each transition onto a path with
-   *                            steps or stairs
-   * @param maxHikingDifficulty the maximum difficulty of hiking trails that is allowed
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 4.6.0
    */
@@ -174,12 +166,6 @@ public interface DirectionsService {
     @Field("waypoints") String waypointIndices,
     @Field("waypoint_names") String waypointNames,
     @Field("waypoint_targets") String waypointTargets,
-    @Field("enable_refresh") Boolean enableRefresh,
-    @Field("walking_speed") Double walkingSpeed,
-    @Field("walkway_bias") Double walkwayBias,
-    @Field("alley_bias") Double alleyBias,
-    @Field("ferry_bias") Double ferryBias,
-    @Field("step_penalty") Integer stepPenalty,
-    @Field("maxHikingDifficulty") Integer maxHikingDifficulty
+    @Field("enable_refresh") Boolean enableRefresh
   );
 }

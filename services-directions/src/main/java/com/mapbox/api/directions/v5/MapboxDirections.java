@@ -118,6 +118,7 @@ public abstract class MapboxDirections extends
   }
 
   private Call<DirectionsResponse> post() {
+    // todo add walking options
     return getService().postCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
@@ -142,13 +143,7 @@ public abstract class MapboxDirections extends
       waypointIndices(),
       waypointNames(),
       waypointTargets(),
-      enableRefresh(),
-      walkingSpeed(),
-      walkwayBias(),
-      alleyBias(),
-      ferryBias(),
-      stepPenalty(),
-      maxHikingDifficulty()
+      enableRefresh()
     );
   }
 
