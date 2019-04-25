@@ -125,7 +125,7 @@ public final class TurfMeta {
    * @since 2.0.0
    */
   @NonNull
-  public static List<Point> coordAll(@NonNull Polygon polygon, boolean excludeWrapCoord) {
+  public static List<Point> coordAll(@NonNull Polygon polygon, @NonNull boolean excludeWrapCoord) {
     return coordAll(new ArrayList<Point>(), polygon, excludeWrapCoord);
   }
 
@@ -142,7 +142,8 @@ public final class TurfMeta {
    */
   @NonNull
   private static List<Point> coordAll(@NonNull List<Point> coords,
-                                      @NonNull Polygon polygon, boolean excludeWrapCoord) {
+                                      @NonNull Polygon polygon,
+                                      @NonNull boolean excludeWrapCoord) {
     int wrapShrink = excludeWrapCoord ? 1 : 0;
     for (int i = 0; i < polygon.coordinates().size(); i++) {
       for (int j = 0; j < polygon.coordinates().get(i).size() - wrapShrink; j++) {
@@ -198,7 +199,7 @@ public final class TurfMeta {
    */
   @NonNull
   public static List<Point> coordAll(@NonNull MultiPolygon multiPolygon,
-                                     boolean excludeWrapCoord) {
+                                     @NonNull boolean excludeWrapCoord) {
     return coordAll(new ArrayList<Point>(), multiPolygon, excludeWrapCoord);
   }
 
@@ -216,7 +217,7 @@ public final class TurfMeta {
   @NonNull
   private static List<Point> coordAll(@NonNull List<Point> coords,
                                       @NonNull MultiPolygon multiPolygon,
-                                      boolean excludeWrapCoord) {
+                                      @NonNull boolean excludeWrapCoord) {
     int wrapShrink = excludeWrapCoord ? 1 : 0;
     for (int i = 0; i < multiPolygon.coordinates().size(); i++) {
       for (int j = 0; j < multiPolygon.coordinates().get(i).size(); j++) {
