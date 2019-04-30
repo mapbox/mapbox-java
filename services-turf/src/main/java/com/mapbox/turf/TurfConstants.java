@@ -164,6 +164,16 @@ public class TurfConstants {
   public @interface TurfUnitCriteria {
   }
 
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+      UNIT_DEGREES,
+      UNIT_RADIANS,
+      UNIT_KILOMETERS,
+      UNIT_MILES,
+  })
+  public @interface TurfLineChunkCriteria {
+  }
+
   /**
    * The default unit used in most Turf methods when no other unit is specified is kilometers.
    *

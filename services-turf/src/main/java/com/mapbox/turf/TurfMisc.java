@@ -2,12 +2,17 @@ package com.mapbox.turf;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
+import com.mapbox.geojson.MultiLineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.turf.models.LineIntersectsResult;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -67,7 +72,7 @@ public final class TurfMisc {
 
     if (coords.size() < 2) {
       throw new TurfException("Turf lineSlice requires a LineString made up of at least 2 "
-        + "coordinates.");
+          + "coordinates.");
     } else if (startPt.equals(stopPt)) {
       throw new TurfException("Start and stop points in Turf lineSlice cannot equal each other.");
     }
@@ -76,7 +81,7 @@ public final class TurfMisc {
     Feature stopVertex = nearestPointOnLine(stopPt, coords);
     List<Feature> ends = new ArrayList<>();
     if ((int) startVertex.getNumberProperty(INDEX_KEY)
-      <= (int) stopVertex.getNumberProperty(INDEX_KEY)) {
+        <= (int) stopVertex.getNumberProperty(INDEX_KEY)) {
       ends.add(startVertex);
       ends.add(stopVertex);
     } else {
@@ -97,14 +102,14 @@ public final class TurfMisc {
    * Takes a {@link LineString}, a specified distance along the line to a start {@link Point},
    * and a specified distance along the line to a stop point
    * and returns a subsection of the line in-between those points.
-   *
+   * <p>
    * This can be useful for extracting only the part of a route between two distances.
    *
-   * @param line input line
+   * @param line      input line
    * @param startDist distance along the line to starting point
-   * @param stopDist distance along the line to ending point
-   * @param units one of the units found inside {@link TurfConstants.TurfUnitCriteria}
-   *              can be degrees, radians, miles, or kilometers
+   * @param stopDist  distance along the line to ending point
+   * @param units     one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   *                  can be degrees, radians, miles, or kilometers
    * @return sliced line
    * @throws TurfException signals that a Turf exception of some sort has occurred.
    * @see <a href="http://turfjs.org/docs/#lineslicealong">Turf Line slice documentation</a>
@@ -122,21 +127,21 @@ public final class TurfMisc {
       throw new TurfException("input must be a LineString Feature or Geometry");
     }
 
-    return lineSliceAlong((LineString)line.geometry(), startDist, stopDist, units);
+    return lineSliceAlong((LineString) line.geometry(), startDist, stopDist, units);
   }
 
   /**
    * Takes a {@link LineString}, a specified distance along the line to a start {@link Point},
    * and a specified distance along the line to a stop point,
    * returns a subsection of the line in-between those points.
-   *
+   * <p>
    * This can be useful for extracting only the part of a route between two distances.
    *
-   * @param line input line
+   * @param line      input line
    * @param startDist distance along the line to starting point
-   * @param stopDist distance along the line to ending point
-   * @param units one of the units found inside {@link TurfConstants.TurfUnitCriteria}
-   *              can be degrees, radians, miles, or kilometers
+   * @param stopDist  distance along the line to ending point
+   * @param units     one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   *                  can be degrees, radians, miles, or kilometers
    * @return sliced line
    * @throws TurfException signals that a Turf exception of some sort has occurred.
    * @see <a href="http://turfjs.org/docs/#lineslicealong">Turf Line slice documentation</a>
@@ -152,10 +157,10 @@ public final class TurfMisc {
 
     if (coords.size() < 2) {
       throw new TurfException("Turf lineSlice requires a LineString Geometry made up of "
-        + "at least 2 coordinates. The LineString passed in only contains " + coords.size() + ".");
+          + "at least 2 coordinates. The LineString passed in only contains " + coords.size() + ".");
     } else if (startDist == stopDist) {
       throw new TurfException("Start and stop distance in Turf lineSliceAlong "
-        + "cannot equal each other.");
+          + "cannot equal each other.");
     }
 
     List<Point> slice = new ArrayList<>(2);
@@ -222,11 +227,11 @@ public final class TurfMisc {
 
     if (coords.size() < 2) {
       throw new TurfException("Turf nearestPointOnLine requires a List of Points "
-        + "made up of at least 2 coordinates.");
+          + "made up of at least 2 coordinates.");
     }
 
     Feature closestPt = Feature.fromGeometry(
-      Point.fromLngLat(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
+        Point.fromLngLat(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
     closestPt.addNumberProperty("dist", Double.POSITIVE_INFINITY);
 
     for (int i = 0; i < coords.size() - 1; i++) {
@@ -234,55 +239,55 @@ public final class TurfMisc {
       Feature stop = Feature.fromGeometry(coords.get(i + 1));
       //start
       start.addNumberProperty("dist", TurfMeasurement.distance(
-        pt, (Point) start.geometry(), TurfConstants.UNIT_MILES));
+          pt, (Point) start.geometry(), TurfConstants.UNIT_MILES));
       //stop
       stop.addNumberProperty("dist", TurfMeasurement.distance(
-        pt, (Point) stop.geometry(), TurfConstants.UNIT_MILES));
+          pt, (Point) stop.geometry(), TurfConstants.UNIT_MILES));
       //perpendicular
       double heightDistance = Math.max(
-        start.properties().get("dist").getAsDouble(),
-        stop.properties().get("dist").getAsDouble()
+          start.properties().get("dist").getAsDouble(),
+          stop.properties().get("dist").getAsDouble()
       );
       double direction = TurfMeasurement.bearing((Point) start.geometry(),
-        (Point) stop.geometry());
+          (Point) stop.geometry());
       Feature perpendicularPt1 = Feature.fromGeometry(
-        TurfMeasurement.destination(pt, heightDistance, direction + 90,
-          TurfConstants.UNIT_MILES));
+          TurfMeasurement.destination(pt, heightDistance, direction + 90,
+              TurfConstants.UNIT_MILES));
       Feature perpendicularPt2 = Feature.fromGeometry(
-        TurfMeasurement.destination(pt, heightDistance, direction - 90,
-          TurfConstants.UNIT_MILES));
+          TurfMeasurement.destination(pt, heightDistance, direction - 90,
+              TurfConstants.UNIT_MILES));
       LineIntersectsResult intersect = lineIntersects(
-        ((Point) perpendicularPt1.geometry()).longitude(),
-        ((Point) perpendicularPt1.geometry()).latitude(),
-        ((Point) perpendicularPt2.geometry()).longitude(),
-        ((Point) perpendicularPt2.geometry()).latitude(),
-        ((Point) start.geometry()).longitude(),
-        ((Point) start.geometry()).latitude(),
-        ((Point) stop.geometry()).longitude(),
-        ((Point) stop.geometry()).latitude()
+          ((Point) perpendicularPt1.geometry()).longitude(),
+          ((Point) perpendicularPt1.geometry()).latitude(),
+          ((Point) perpendicularPt2.geometry()).longitude(),
+          ((Point) perpendicularPt2.geometry()).latitude(),
+          ((Point) start.geometry()).longitude(),
+          ((Point) start.geometry()).latitude(),
+          ((Point) stop.geometry()).longitude(),
+          ((Point) stop.geometry()).latitude()
       );
 
       Feature intersectPt = null;
       if (intersect != null) {
         intersectPt = Feature.fromGeometry(
-          Point.fromLngLat(intersect.horizontalIntersection(), intersect.verticalIntersection()));
+            Point.fromLngLat(intersect.horizontalIntersection(), intersect.verticalIntersection()));
         intersectPt.addNumberProperty("dist", TurfMeasurement.distance(pt,
-          (Point) intersectPt.geometry(), TurfConstants.UNIT_MILES));
+            (Point) intersectPt.geometry(), TurfConstants.UNIT_MILES));
       }
 
       if ((double) start.getNumberProperty("dist")
-        < (double) closestPt.getNumberProperty("dist")) {
+          < (double) closestPt.getNumberProperty("dist")) {
         closestPt = start;
         closestPt.addNumberProperty(INDEX_KEY, i);
       }
       if ((double) stop.getNumberProperty("dist")
-        < (double) closestPt.getNumberProperty("dist")) {
+          < (double) closestPt.getNumberProperty("dist")) {
         closestPt = stop;
         closestPt.addNumberProperty(INDEX_KEY, i);
       }
       if (intersectPt != null
-        && (double) intersectPt.getNumberProperty("dist")
-        < (double) closestPt.getNumberProperty("dist")) {
+          && (double) intersectPt.getNumberProperty("dist")
+          < (double) closestPt.getNumberProperty("dist")) {
         closestPt = intersectPt;
         closestPt.addNumberProperty(INDEX_KEY, i);
       }
@@ -299,12 +304,12 @@ public final class TurfMisc {
     // (treating the lines as infinite) and booleans for whether line segment 1 or line
     // segment 2 contain the point
     LineIntersectsResult result = LineIntersectsResult.builder()
-      .onLine1(false)
-      .onLine2(false)
-      .build();
+        .onLine1(false)
+        .onLine2(false)
+        .build();
 
     double denominator = ((line2EndY - line2StartY) * (line1EndX - line1StartX))
-      - ((line2EndX - line2StartX) * (line1EndY - line1StartY));
+        - ((line2EndX - line2StartX) * (line1EndY - line1StartY));
     if (denominator == 0) {
       if (result.horizontalIntersection() != null && result.verticalIntersection() != null) {
         return result;
@@ -321,9 +326,9 @@ public final class TurfMisc {
 
     // if we cast these lines infinitely in both directions, they intersect here:
     result = result.toBuilder().horizontalIntersection(line1StartX
-      + (varA * (line1EndX - line1StartX))).build();
+        + (varA * (line1EndX - line1StartX))).build();
     result = result.toBuilder().verticalIntersection(line1StartY
-      + (varA * (line1EndY - line1StartY))).build();
+        + (varA * (line1EndY - line1StartY))).build();
 
     // if line1 is a segment and line2 is infinite, they intersect if:
     if (varA > 0 && varA < 1) {
@@ -339,5 +344,155 @@ public final class TurfMisc {
     } else {
       return null;
     }
+  }
+
+
+  /**
+   * Divides a {@link LineString} into chunks of a specified length. If the line is shorter than
+   * the segment length then the original line is returned.
+   *
+   * @param featureCollection  a {@link FeatureCollection} to break into
+   *                           separate {@link LineString} segments
+   * @param segmentLength      how long to make each segment
+   * @param units              units can be degrees, radians, miles, or kilometers
+   * @param reverseCoordinates reverses coordinates to start the first chunked segment at the end
+   * @return a {@link FeatureCollection} of {@link Feature} objects, each of which
+   * is a {@link LineString} geometry
+   * @since 4.8.0
+   */
+  public static FeatureCollection lineChunk(@NonNull FeatureCollection featureCollection,
+                                            double segmentLength,
+                                            @Nullable @TurfConstants.TurfLineChunkCriteria
+                                                String units,
+                                            boolean reverseCoordinates) {
+    if (featureCollection.features().size() == 0) {
+      throw new TurfException("FeatureCollection is empty. Please pass through a FeatureCollection"
+          + " that has Feature objects.");
+    }
+    if (segmentLength <= 0) {
+      throw new TurfException("segmentLength must be greater than 0");
+    }
+    List<Feature> lineSegmentFeatures = new ArrayList<>();
+    for (Feature singleFeature : featureCollection.features()) {
+      for (Feature singleChunkedFeature : lineChunk(singleFeature, segmentLength, units,
+          reverseCoordinates).features()) {
+        lineSegmentFeatures.add(singleChunkedFeature);
+      }
+    }
+    return FeatureCollection.fromFeatures(lineSegmentFeatures);
+  }
+
+  /**
+   * Divides a {@link LineString} into chunks of a specified length. If the line
+   * is shorter than the segment length then the original line is returned.
+   *
+   * @param feature            a {@link Feature} to break into separate
+   *                           {@link LineString} segments
+   * @param segmentLength      how long to make each segment
+   * @param units              units can be degrees, radians, miles, or kilometers
+   * @param reverseCoordinates reverses coordinates to start the first chunked
+   *                           segment at the end
+   * @return a {@link FeatureCollection} of {@link Feature} objects, each of which
+   * is a {@link LineString} geometry
+   * @since 4.8.0
+   */
+  public static FeatureCollection lineChunk(@NonNull Feature feature,
+                                            double segmentLength,
+                                            @Nullable @TurfConstants.TurfLineChunkCriteria
+                                                String units,
+                                            boolean reverseCoordinates) {
+    if (segmentLength <= 0) {
+      throw new TurfException("segmentLength must be greater than 0");
+    }
+    List<Feature> lineSegmentFeatures = new ArrayList<>();
+    if (feature.geometry() instanceof MultiLineString) {
+      MultiLineString multiLineString = (MultiLineString) feature.geometry();
+      for (LineString lineString : multiLineString.lineStrings()) {
+        lineSegmentFeatures.addAll(handleLineString(lineString, segmentLength,
+            units, reverseCoordinates).features());
+      }
+      return FeatureCollection.fromFeatures(lineSegmentFeatures);
+    } else if (feature.geometry() instanceof LineString) {
+      LineString singleLineString = (LineString) feature.geometry();
+      lineSegmentFeatures.addAll(handleLineString(singleLineString, segmentLength,
+          units, reverseCoordinates).features());
+      return FeatureCollection.fromFeatures(lineSegmentFeatures);
+    }
+    return FeatureCollection.fromFeatures(new Feature[]{feature});
+  }
+
+  /**
+   * @param lineString         {@link LineString} object to cut into smaller segments
+   * @param segmentLength      how long to make each segment
+   * @param units              units can be degrees, radians, miles, or kilometers
+   * @param reverseCoordinates reverses coordinates to start the first chunked segment
+   *                           at the end
+   * @return a {@link FeatureCollection} of {@link Feature} objects, each of which
+   * is a {@link LineString} geometry
+   * @since 4.8.0
+   */
+  private static FeatureCollection handleLineString(@NonNull LineString lineString,
+                                                    double segmentLength,
+                                                    @Nullable @TurfConstants.TurfLineChunkCriteria
+                                                        String units,
+                                                    boolean reverseCoordinates) {
+    List<Feature> lineSegmentFeatures = new ArrayList<>();
+    // reverses coordinates to start the first chunked segment at the end
+    if (reverseCoordinates) {
+      // TODO:
+      List<Point> pointList = new ArrayList<>();
+      for (int i = 0, j = lineString.coordinates().size() - 1; i < j; i++) {
+        pointList.add(i, lineString.coordinates().remove(j));
+      }
+    }
+    for (LineString singleLineString : sliceLineSegments(lineString, segmentLength, units != null
+        ? units : TurfConstants.UNIT_KILOMETERS)) {
+
+      lineSegmentFeatures.add(Feature.fromGeometry(singleLineString));
+    }
+    return FeatureCollection.fromFeatures(lineSegmentFeatures);
+  }
+
+  /*public static FeatureCollection lineChunk(@NonNull Geometry geometry,
+                                            @NonNull double segmentLength,
+                                            @Nullable @TurfConstants.TurfLineChunkCriteria
+                                            String units,
+                                            @Nullable boolean reverseCoordinates) {
+                                            //    return featureCollection(results);
+  }*/
+
+  /**
+   * Slice Line Segments
+   *
+   * @param lineString              {@link LineString} object to cut into smaller segments
+   * @param individualSegmentLength segmentLength how long to make each segment
+   * @param units                   units can be degrees, radians, miles, or kilometers
+   * @return a {@code List} of {@link LineString} objects
+   * @since 4.8.0
+   */
+  private static List<LineString> sliceLineSegments(@NonNull LineString lineString,
+                                                    double individualSegmentLength,
+                                                    @NonNull String units) {
+    double lineLength = TurfMeasurement.length(lineString, units);
+
+    // If the line is shorter than the segment length then the original line is returned.
+    if (lineLength <= individualSegmentLength) {
+      return Arrays.asList(lineString);
+    }
+
+    double numberOfSegments = lineLength / individualSegmentLength;
+
+    // No need to add 1 if numberOfSegments is an integer
+    if ((numberOfSegments % 1) != 0) {
+      numberOfSegments = Math.floor(numberOfSegments) + 1;
+    }
+
+    List<LineString> lineStringList = new ArrayList();
+    for (int i = 0; i < numberOfSegments; i++) {
+      lineStringList.add(lineSliceAlong(lineString,
+          individualSegmentLength * i, individualSegmentLength * (i + 1),
+          units));
+    }
+    return lineStringList;
   }
 }
