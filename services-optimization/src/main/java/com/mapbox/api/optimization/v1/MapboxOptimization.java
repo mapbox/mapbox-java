@@ -35,7 +35,7 @@ import retrofit2.Call;
  * is planning the route for deliveries in a city. Optimized trips can be retrieved for car driving,
  * bicycling and walking or hiking.
  * <p>
- * Under normal plans, a maximum of 12 coordinates can be passed in at once at a maximum 60 requests
+ * Under normal plans, a maximum of 75 coordinates can be passed in at once at a maximum 60 requests
  * per minute. For higher volumes, reach out through our contact page.
  * <p>
  * Note that for under 10 coordinates, the returned results will be optimal. For 10 and more
@@ -176,7 +176,7 @@ public abstract class MapboxOptimization
 
     /**
      * Add a list of {@link Point}'s which define the route which will become optimized. The minimum
-     * points is 2 and the maximum points allowed in totals 12. You can use this method in
+     * points is 2 and the maximum points allowed in totals 75. You can use this method in
      * conjunction with {@link #coordinate(Point)}.
      *
      * @param coordinates a List full of {@link Point}s which define the route
@@ -193,7 +193,7 @@ public abstract class MapboxOptimization
 
     /**
      * This will add a single {@link Point} to the coordinate list which is used to determine the
-     * most optimal route. This can be called up to 12 times until you hit the maximum allowed
+     * most optimal route. This can be called up to 75 times until you hit the maximum allowed
      * points. You can use this method in conjunction with {@link #coordinates(List)}.
      *
      * @param coordinate a {@link Point} which you'd like the optimized route to pass through
@@ -482,8 +482,8 @@ public abstract class MapboxOptimization
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException("At least two coordinates must be provided with your API"
           + "request.");
-      } else if (coordinates.size() > 12) {
-        throw new ServicesException("Maximum of 12 coordinates are allowed for this API.");
+      } else if (coordinates.size() > 75) {
+        throw new ServicesException("Maximum of 75 coordinates are allowed for this API.");
       }
 
       coordinates(formatCoordinates(coordinates));

@@ -100,14 +100,14 @@ public class MapboxOptimizationTest extends TestUtils {
   }
   @Test
   public void build_doesThrowTooManyCoordinatesException() throws ServicesException {
-    int total = 13;
+    int total = 80;
     List<Point> points = new ArrayList<>();
     for (int i = 0; i < total; i++) {
       // Fake too many positions
       points.add(Point.fromLngLat(1.0, 1.0));
     }
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Maximum of 12 coordinates are allowed for this API"));
+    thrown.expectMessage(startsWith("Maximum of 75 coordinates are allowed for this API"));
     MapboxOptimization.builder()
       .coordinates(points)
       .accessToken(ACCESS_TOKEN)
