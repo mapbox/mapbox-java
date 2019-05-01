@@ -26,7 +26,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [ ] turf-rhumb-bearing
 - [ ] turf-rhumb-destination
 - [ ] turf-rhumb-distance
-- [ ] turf-square
+- [x] turf-square
 - [ ] turf-great-circle
 
 ## Coordinate Mutation

@@ -501,4 +501,41 @@ public final class TurfMeasurement {
   public static Polygon envelope(GeoJson geoJson) {
     return bboxPolygon(bbox(geoJson));
   }
+
+
+  /**
+   * Takes a bounding box and calculates the minimum square bounding box
+   * that would contain the input.
+   *
+   * @param boundingBox extent in west, south, east, north order
+   * @return a square surrounding bbox
+   * @since 4.9.0
+   */
+  public static BoundingBox square(@NonNull BoundingBox boundingBox) {
+    double horizontalDistance = distance(boundingBox.southwest(),
+            Point.fromLngLat(boundingBox.east(), boundingBox.south())
+    );
+    double verticalDistance = distance(
+            Point.fromLngLat(boundingBox.west(), boundingBox.south()),
+            Point.fromLngLat(boundingBox.west(), boundingBox.north())
+    );
+
+    if (horizontalDistance >= verticalDistance) {
+      double verticalMidpoint = (boundingBox.south() + boundingBox.north()) / 2;
+      return BoundingBox.fromLngLats(
+              boundingBox.west(),
+              verticalMidpoint - ((boundingBox.east() - boundingBox.west()) / 2),
+              boundingBox.east(),
+              verticalMidpoint + ((boundingBox.east() - boundingBox.west()) / 2)
+      );
+    } else {
+      double horizontalMidpoint = (boundingBox.west() + boundingBox.east()) / 2;
+      return BoundingBox.fromLngLats(
+      horizontalMidpoint - ((boundingBox.north() - boundingBox.south()) / 2),
+              boundingBox.south(),
+              horizontalMidpoint + ((boundingBox.north() - boundingBox.south()) / 2),
+              boundingBox.north()
+      );
+    }
+  }
 }
