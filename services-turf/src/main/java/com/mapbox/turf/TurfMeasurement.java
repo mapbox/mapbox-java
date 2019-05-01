@@ -7,6 +7,9 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 
 import com.mapbox.geojson.BoundingBox;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.GeoJson;
 import com.mapbox.geojson.Geometry;
 import com.mapbox.geojson.GeometryCollection;
 import com.mapbox.geojson.LineString;
@@ -18,6 +21,7 @@ import com.mapbox.geojson.Polygon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -230,15 +234,14 @@ public final class TurfMeasurement {
     return destination(from, dist / 2, heading, TurfConstants.UNIT_MILES);
   }
 
-
   /**
    * Takes a line and returns a point at a specified distance along the line.
    *
    * @param line     that the point should be placed upon
    * @param distance along the linestring geometry which the point should be placed on
    * @param units    one of the units found inside {@link TurfConstants.TurfUnitCriteria}
-   * @return a {@link Point} which is on the linestring provided and at the distance from the origin
-   *   of that line to the end of the distance
+   * @return a {@link Point} which is on the linestring provided and at the distance from
+   *         the origin of that line to the end of the distance
    * @since 1.3.0
    */
   public static Point along(@NonNull LineString line, @FloatRange(from = 0) double distance,
@@ -338,6 +341,57 @@ public final class TurfMeasurement {
   }
 
   /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param geoJson a {@link GeoJson} object
+   * @return a double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
+   * @since 4.8.0
+   */
+  public static double[] bbox(GeoJson geoJson) {
+    BoundingBox boundingBox = geoJson.bbox();
+    if (boundingBox != null) {
+      return new double[] {
+        boundingBox.west(),
+        boundingBox.south(),
+        boundingBox.east(),
+        boundingBox.north()
+      };
+    }
+
+    if (geoJson instanceof Geometry) {
+      return bbox((Geometry) geoJson);
+    } else if (geoJson instanceof FeatureCollection) {
+      return bbox((FeatureCollection) geoJson);
+    } else if (geoJson instanceof Feature) {
+      return bbox((Feature) geoJson);
+    } else {
+      throw new UnsupportedOperationException("bbox type not supported for GeoJson instance");
+    }
+  }
+
+  /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param featureCollection a {@link FeatureCollection} object
+   * @return a double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
+   * @since 4.8.0
+   */
+  public static double[] bbox(FeatureCollection featureCollection) {
+    return bboxCalculator(TurfMeta.coordAll(featureCollection, false));
+  }
+
+  /**
+   * Takes a set of features, calculates the bbox of all input features, and returns a bounding box.
+   *
+   * @param feature a {@link Feature} object
+   * @return a double array defining the bounding box in this order {@code [minX, minY, maxX, maxY]}
+   * @since 4.8.0
+   */
+  public static double[] bbox(Feature feature) {
+    return bboxCalculator(TurfMeta.coordAll(feature, false));
+  }
+
+  /**
    * Takes an arbitrary {@link Geometry} and calculates a bounding box.
    *
    * @param geometry a {@link Geometry} object
@@ -399,28 +453,6 @@ public final class TurfMeasurement {
   }
 
   /**
-   * Takes a {@link MultiPolygon} and measures each polygons perimeter in the specified units. if
-   * one of the polygons contains holes, the perimeter will also be included.
-   *
-   * @param multiPolygon geometry to measure
-   * @param units        one of the units found inside {@link TurfConstants.TurfUnitCriteria}
-   * @return total perimeter of the input polygons combined, in the units specified
-   * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
-   * @since 1.2.0
-   */
-
-  /**
-   * Takes a {@link MultiPolygon} and measures each polygons perimeter in the specified units. if
-   * one of the polygons contains holes, the perimeter will also be included.
-   *
-   * @param multiPolygon geometry to measure
-   * @param units        one of the units found inside {@link TurfConstants.TurfUnitCriteria}
-   * @return total perimeter of the input polygons combined, in the units specified
-   * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
-   * @since 1.2.0
-   */
-
-  /**
    * Takes a {@link BoundingBox} and uses its coordinates to create a {@link Polygon}
    * geometry.
    *
@@ -431,12 +463,42 @@ public final class TurfMeasurement {
    */
   public static Polygon bboxPolygon(@NonNull BoundingBox boundingBox) {
     return Polygon.fromLngLats(
+      Collections.singletonList(
         Arrays.asList(
-            Arrays.asList(
-                Point.fromLngLat(boundingBox.west(), boundingBox.south()),
-                Point.fromLngLat(boundingBox.east(), boundingBox.south()),
-                Point.fromLngLat(boundingBox.east(), boundingBox.north()),
-                Point.fromLngLat(boundingBox.west(), boundingBox.north()),
-                Point.fromLngLat(boundingBox.west(), boundingBox.south()))));
+          Point.fromLngLat(boundingBox.west(), boundingBox.south()),
+          Point.fromLngLat(boundingBox.east(), boundingBox.south()),
+          Point.fromLngLat(boundingBox.east(), boundingBox.north()),
+          Point.fromLngLat(boundingBox.west(), boundingBox.north()),
+          Point.fromLngLat(boundingBox.west(), boundingBox.south()))));
+  }
+
+  /**
+   * Takes a bbox and uses its coordinates to create a {@link Polygon} geometry.
+   *
+   * @param bbox a double[] object to calculate with
+   * @return a {@link Polygon} object
+   * @see <a href="http://turfjs.org/docs/#bboxPolygon">Turf BoundingBox Polygon documentation</a>
+   * @since 4.9.0
+   */
+  public static Polygon bboxPolygon(@NonNull double[] bbox) {
+    return Polygon.fromLngLats(
+      Collections.singletonList(
+        Arrays.asList(
+          Point.fromLngLat(bbox[0], bbox[1]),
+          Point.fromLngLat(bbox[2], bbox[1]),
+          Point.fromLngLat(bbox[2], bbox[3]),
+          Point.fromLngLat(bbox[0], bbox[3]),
+          Point.fromLngLat(bbox[0], bbox[1]))));
+  }
+
+  /**
+   * Takes any number of features and returns a rectangular Polygon that encompasses all vertices.
+   *
+   * @param geoJson input features
+   * @return a rectangular Polygon feature that encompasses all vertices
+   * @since 4.9.0
+   */
+  public static Polygon envelope(GeoJson geoJson) {
+    return bboxPolygon(bbox(geoJson));
   }
 }
