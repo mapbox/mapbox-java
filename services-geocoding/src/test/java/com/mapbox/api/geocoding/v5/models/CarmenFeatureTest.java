@@ -2,7 +2,6 @@ package com.mapbox.api.geocoding.v5.models;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -13,20 +12,17 @@ import static org.junit.Assert.assertNotNull;
 import com.google.gson.JsonObject;
 import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.CoordinateContainer;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 
-import org.junit.Assert;
 import org.junit.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class CarmenFeatureTest extends GeocodingTestUtils {
 
@@ -178,5 +174,32 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
     // Json( null Properties) -> Feature (empty Properties) -> Json(null Properties)
     String fromFeatureJsonString = feature.toJson();
     assertEquals(fromFeatureJsonString, jsonString);
+  }
+
+  @Test
+  public void toFromJson() {
+    Map<String, String> texts = new HashMap<>();
+    texts.put("ru", "Соединённые Штаты Америки");
+    texts.put("fr", "États-Unis");
+
+    Map<String, String> placeNames = new HashMap<>();
+    placeNames.put("ru", "Соединённые Штаты Америки");
+    placeNames.put("fr", "États-Unis");
+
+    CarmenFeature carmenFeature = CarmenFeature.builder()
+            .id("id")
+            .placeType(Arrays.asList("country"))
+            .relevance(1.0)
+            .texts(texts)
+            .text(texts.get("ru"))
+            .placeNames(placeNames)
+            .placeName(placeNames.get("ru"))
+            .languages(Arrays.asList("ru", "fr"))
+            .language("ru")
+            .build();
+
+    String jsonString = carmenFeature.toJson();
+    CarmenFeature carmenFeatureFromJson = CarmenFeature.fromJson(jsonString);
+    assertEquals(carmenFeature, carmenFeatureFromJson);
   }
 }

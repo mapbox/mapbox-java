@@ -9,11 +9,18 @@ import static org.junit.Assert.assertThat;
 import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.Point;
+
+import junit.framework.TestCase;
+
 import org.junit.Test;
 import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GeocodingResponseTest extends GeocodingTestUtils {
 
@@ -98,5 +105,54 @@ public class GeocodingResponseTest extends GeocodingTestUtils {
     assertThat(object.type(), equalTo("FeatureCollection"));
     assertThat(object.features(), notNullValue());
     assertEquals(0, object.features().size());
+  }
+
+  @Test
+  public void toFromJson() {
+
+    Map<String, String> texts = new HashMap<>();
+    texts.put("ru", "округ Колумбия");
+    texts.put("fr", "district de Columbia");
+
+    CarmenContext carmenContext = CarmenContext.builder()
+            .id("123")
+            .shortCode("shortCode")
+            .text(texts)
+            .text(texts.get("ru"))
+            .languages(Arrays.asList("ru", "fr"))
+            .language("ru")
+            .build();
+
+    texts = new HashMap<>();
+    texts.put("ru", "Соединённые Штаты Америки");
+    texts.put("fr", "États-Unis");
+
+    Map<String, String> placeNames = new HashMap<>();
+    placeNames.put("ru", "Соединённые Штаты Америки");
+    placeNames.put("fr", "États-Unis");
+
+    CarmenFeature carmenFeature = CarmenFeature.builder()
+            .id("id")
+            .placeType(Arrays.asList("country"))
+            .relevance(1.0)
+            .texts(texts)
+            .text(texts.get("ru"))
+            .placeNames(placeNames)
+            .placeName(placeNames.get("ru"))
+            .languages(Arrays.asList("ru", "fr"))
+            .language("ru")
+            .context(Arrays.asList(carmenContext))
+            .build();
+
+    GeocodingResponse geocodingResponse = GeocodingResponse.builder()
+            .attribution("attribution")
+            .features(Arrays.asList(carmenFeature))
+            .query(Arrays.asList("query"))
+            .type("Feature")
+            .build();
+
+    String jsonString = geocodingResponse.toJson();
+    GeocodingResponse geocodingResponseFromJson = GeocodingResponse.fromJson(jsonString);
+    TestCase.assertEquals(geocodingResponse, geocodingResponseFromJson);
   }
 }

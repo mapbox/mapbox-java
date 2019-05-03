@@ -1,9 +1,13 @@
 package com.mapbox.api.geocoding.v5;
 
+import com.mapbox.api.geocoding.v5.models.CarmenContext;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.BoundingBox;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 
 import org.hamcrest.junit.ExpectedException;
@@ -15,6 +19,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
@@ -234,6 +239,40 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
       .build();
     assertEquals("en,fr",
       mapboxGeocoding.cloneCall().request().url().queryParameter("language"));
+  }
+
+  @Test
+  public void languages_readFromResponseCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+            .accessToken(ACCESS_TOKEN)
+            .baseUrl(mockUrl.toString())
+            .languages("ru,fr")
+            .query(Point.fromLngLat(-77.0366,38.8971))
+            .build();
+
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(200, response.code());
+    assertNotNull(response.body());
+    List<CarmenFeature> features = response.body().features();
+    assertNotNull(features);
+    CarmenFeature feature = features.get(0);
+    Map<String, String> texts = feature.texts();
+    assertNotNull(texts);
+    assertNotNull(texts.get("ru"));
+    assertNotNull(texts.get("fr"));
+    Map<String, String> placeNames = feature.texts();
+    assertNotNull(placeNames);
+    assertNotNull(placeNames.get("ru"));
+    assertNotNull(placeNames.get("fr"));
+    List<CarmenContext> contexts = feature.context();
+    assertNotNull(contexts);
+    assertEquals(5, contexts.size());
+    CarmenContext context = contexts.get(3);
+    List<String> languages = context.languages();
+    texts = context.texts();
+    for(String lang : languages) {
+      assertNotNull(texts.get(lang));
+    }
   }
 
   @Test

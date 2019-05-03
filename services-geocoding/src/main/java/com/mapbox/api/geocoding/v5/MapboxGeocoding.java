@@ -5,7 +5,6 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
 import com.mapbox.api.geocoding.v5.models.GeocodingAdapterFactory;
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,12 +59,77 @@ import retrofit2.Response;
  *   Geocoding documentation</a>
  * @since 1.0.0
  */
-@AutoValue
-public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, GeocodingService> {
+public class MapboxGeocoding extends MapboxService<GeocodingResponse, GeocodingService> {
+
   private Call<List<GeocodingResponse>> batchCall;
 
+  // All fileds should be made final after default constructor is removed
+  private String query;
+
+  private String mode;
+
+  private String accessToken;
+
+  private String baseUrl;
+
+  private String country;
+
+  private String proximity;
+
+  private String geocodingTypes;
+
+  private Boolean autocomplete;
+
+  private String bbox;
+
+  private String limit;
+
+  private String languages;
+
+  private String reverseMode;
+
+  private String clientAppName;
+
+  /**
+   * Default constructor.
+   *
+   * @deprecated As of 4.9.0
+   */
+  @Deprecated
   protected MapboxGeocoding() {
     super(GeocodingService.class);
+  }
+
+  private MapboxGeocoding(
+          String query,
+          String mode,
+          String accessToken,
+          String baseUrl,
+          @Nullable String country,
+          @Nullable String proximity,
+          @Nullable String geocodingTypes,
+          @Nullable Boolean autocomplete,
+          @Nullable String bbox,
+          @Nullable String limit,
+          @Nullable String languages,
+          @Nullable String reverseMode,
+          @Nullable String clientAppName) {
+
+    super(GeocodingService.class);
+
+    this.query = query;
+    this.mode = mode;
+    this.accessToken = accessToken;
+    this.baseUrl = baseUrl;
+    this.country = country;
+    this.proximity = proximity;
+    this.geocodingTypes = geocodingTypes;
+    this.autocomplete = autocomplete;
+    this.bbox = bbox;
+    this.limit = limit;
+    this.languages = languages;
+    this.reverseMode = reverseMode;
+    this.clientAppName = clientAppName;
   }
 
   @Override
@@ -170,44 +235,70 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
   }
 
   @NonNull
-  abstract String query();
+  String query() {
+    return query;
+  }
 
   @NonNull
-  abstract String mode();
+  String mode()  {
+    return mode;
+  }
 
   @NonNull
-  abstract String accessToken();
+  String accessToken()  {
+    return accessToken;
+  }
 
   @NonNull
   @Override
-  protected abstract String baseUrl();
+  protected String baseUrl()  {
+    return baseUrl;
+  }
 
   @Nullable
-  abstract String country();
+  String country()  {
+    return country;
+  }
 
   @Nullable
-  abstract String proximity();
+  String proximity()  {
+    return proximity;
+  }
 
   @Nullable
-  abstract String geocodingTypes();
+  String geocodingTypes()  {
+    return geocodingTypes;
+  }
 
   @Nullable
-  abstract Boolean autocomplete();
+  Boolean autocomplete()  {
+    return autocomplete;
+  }
 
   @Nullable
-  abstract String bbox();
+  String bbox()  {
+    return bbox;
+  }
 
   @Nullable
-  abstract String limit();
+  String limit()  {
+    return limit;
+  }
 
   @Nullable
-  abstract String languages();
+  String languages()  {
+    return languages;
+  }
 
   @Nullable
-  abstract String reverseMode();
+  String reverseMode()  {
+    return reverseMode;
+  }
 
   @Nullable
-  abstract String clientAppName();
+  String clientAppName()  {
+    return clientAppName;
+  }
 
 
   /**
@@ -218,9 +309,57 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
    * @since 3.0.0
    */
   public static Builder builder() {
-    return new AutoValue_MapboxGeocoding.Builder()
+    return new MapboxGeocoding.Builder()
       .baseUrl(Constants.BASE_API_URL)
       .mode(GeocodingCriteria.MODE_PLACES);
+  }
+
+  @Override
+  public String toString() {
+    return "MapboxGeocoding{"
+            + "query=" + query + ", "
+            + "mode=" + mode + ", "
+            + "accessToken=" + accessToken + ", "
+            + "baseUrl=" + baseUrl + ", "
+            + "country=" + country + ", "
+            + "proximity=" + proximity + ", "
+            + "geocodingTypes=" + geocodingTypes + ", "
+            + "autocomplete=" + autocomplete + ", "
+            + "bbox=" + bbox + ", "
+            + "limit=" + limit + ", "
+            + "languages=" + languages + ", "
+            + "reverseMode=" + reverseMode + ", "
+            + "clientAppName=" + clientAppName
+            + "}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    } else if (!(obj instanceof MapboxGeocoding)) {
+      return false;
+    }
+    MapboxGeocoding that = (MapboxGeocoding) obj;
+    return Objects.equals(query, that.query)
+            && Objects.equals(mode, that.mode)
+            && Objects.equals(accessToken, that.accessToken)
+            && Objects.equals(baseUrl, that.baseUrl)
+            && Objects.equals(country, that.country)
+            && Objects.equals(proximity, that.proximity)
+            && Objects.equals(geocodingTypes, that.geocodingTypes)
+            && Objects.equals(autocomplete, that.autocomplete)
+            && Objects.equals(bbox, that.bbox)
+            && Objects.equals(limit, that.limit)
+            && Objects.equals(languages, that.languages)
+            && Objects.equals(reverseMode, that.reverseMode)
+            && Objects.equals(clientAppName, that.clientAppName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(query, mode, accessToken, baseUrl, country, proximity,
+            geocodingTypes, autocomplete, bbox, limit, languages, reverseMode, clientAppName);
   }
 
   /**
@@ -237,10 +376,38 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
    *
    * @since 1.0.0
    */
-  @AutoValue.Builder
-  public abstract static class Builder {
+  public static class Builder {
 
     private List<String> countries = new ArrayList<>();
+
+    private String query;
+
+    private String mode;
+
+    private String accessToken;
+
+    private String baseUrl;
+
+    private String country;
+
+    private String proximity;
+
+    private String geocodingTypes;
+
+    private Boolean autocomplete;
+
+    private String bbox;
+
+    private String limit;
+
+    private String languages;
+
+    private String reverseMode;
+
+    private String clientAppName;
+
+    Builder() {
+    }
 
     /**
      * Perform a reverse geocode on the provided {@link Point}. Only one point can be passed in as
@@ -268,7 +435,13 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder query(@NonNull String query);
+    public Builder query(@NonNull String query) {
+      if (query == null) {
+        throw new NullPointerException("Null query");
+      }
+      this.query = query;
+      return this;
+    }
 
     /**
      * This sets the kind of geocoding result you desire, either ephemeral geocoding or batch
@@ -286,7 +459,13 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder mode(@NonNull @GeocodingCriteria.GeocodingModeCriteria String mode);
+    public Builder mode(@NonNull @GeocodingCriteria.GeocodingModeCriteria String mode) {
+      if (mode == null) {
+        throw new NullPointerException("Null mode");
+      }
+      this.mode = mode;
+      return this;
+    }
 
     /**
      * Bias local results base on a provided {@link Point}. This oftentimes increases accuracy in
@@ -302,7 +481,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       return this;
     }
 
-    abstract Builder proximity(String proximity);
+    Builder proximity(String proximity) {
+      this.proximity = proximity;
+      return this;
+    }
 
     /**
      * This optionally can be set to filter the results returned back after making your forward or
@@ -323,7 +505,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       return this;
     }
 
-    abstract Builder geocodingTypes(String geocodingTypes);
+    Builder geocodingTypes(String geocodingTypes) {
+      this.geocodingTypes = geocodingTypes;
+      return this;
+    }
 
     /**
      * Add a single country locale to restrict the results. This method can be called as many times
@@ -359,7 +544,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder country(String country);
+    public Builder country(String country) {
+      this.country = country;
+      return this;
+    }
 
     /**
      * This controls whether autocomplete results are included. Autocomplete results can partially
@@ -375,7 +563,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder autocomplete(Boolean autocomplete);
+    public Builder autocomplete(Boolean autocomplete) {
+      this.autocomplete = autocomplete;
+      return this;
+    }
 
     /**
      * Limit the results to a defined bounding box. Unlike {@link #proximity()}, this will strictly
@@ -443,7 +634,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder bbox(@NonNull String bbox);
+    public Builder bbox(@NonNull String bbox) {
+      this.bbox = bbox;
+      return this;
+    }
 
     /**
      * This optionally specifies the maximum number of results to return. For forward geocoding, the
@@ -460,7 +654,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       return this;
     }
 
-    abstract Builder limit(String limit);
+    Builder limit(String limit) {
+      this.limit = limit;
+      return this;
+    }
 
     /**
      * This optionally specifies the desired response language for user queries. For forward
@@ -515,7 +712,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      *   </a>
      * @since 2.0.0
      */
-    public abstract Builder languages(String languages);
+    public Builder languages(String languages)  {
+      this.languages = languages;
+      return this;
+    }
 
     /**
      * Set the factors that are used to sort nearby results.
@@ -528,8 +728,11 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @return this builder for chaining options together
      * @since 3.3.0
      */
-    public abstract Builder reverseMode(
-      @Nullable @GeocodingCriteria.GeocodingReverseModeCriteria String reverseMode);
+    public Builder reverseMode(
+      @Nullable @GeocodingCriteria.GeocodingReverseModeCriteria String reverseMode) {
+      this.reverseMode = reverseMode;
+      return this;
+    }
 
     /**
      * Required to call when this is being built. If no access token provided,
@@ -540,7 +743,13 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder accessToken(@NonNull String accessToken);
+    public Builder accessToken(@NonNull String accessToken)  {
+      if (accessToken == null) {
+        throw new NullPointerException("Null accessToken");
+      }
+      this.accessToken = accessToken;
+      return this;
+    }
 
     /**
      * Base package name or other simple string identifier. Used inside the calls user agent header.
@@ -549,7 +758,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder clientAppName(@NonNull String clientAppName);
+    public Builder clientAppName(@NonNull String clientAppName) {
+      this.clientAppName = clientAppName;
+      return this;
+    }
 
     /**
      * Optionally change the APIs base URL to something other then the default Mapbox one.
@@ -558,9 +770,46 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @return this builder for chaining options together
      * @since 1.0.0
      */
-    public abstract Builder baseUrl(@NonNull String baseUrl);
+    public Builder baseUrl(@NonNull String baseUrl) {
+      if (baseUrl == null) {
+        throw new NullPointerException("Null baseUrl");
+      }
+      this.baseUrl = baseUrl;
+      return this;
+    }
 
-    abstract MapboxGeocoding autoBuild();
+    MapboxGeocoding autoBuild()  {
+      String missing = "";
+      if (this.query == null) {
+        missing += " query";
+      }
+      if (this.mode == null) {
+        missing += " mode";
+      }
+      if (this.accessToken == null) {
+        missing += " accessToken";
+      }
+      if (this.baseUrl == null) {
+        missing += " baseUrl";
+      }
+      if (!missing.isEmpty()) {
+        throw new IllegalStateException("Missing required properties:" + missing);
+      }
+      return new MapboxGeocoding(
+              this.query,
+              this.mode,
+              this.accessToken,
+              this.baseUrl,
+              this.country,
+              this.proximity,
+              this.geocodingTypes,
+              this.autocomplete,
+              this.bbox,
+              this.limit,
+              this.languages,
+              this.reverseMode,
+              this.clientAppName);
+    }
 
     /**
      * Build a new {@link MapboxGeocoding} object.

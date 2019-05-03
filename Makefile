@@ -68,9 +68,14 @@ geocoding-fixtures:
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/-77.0366,38.8971.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-geocoding/src/test/resources/geocoding_reverse.json
 
+	# Multi-language support
+	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/-77.0366,38.8971.json?language=ru,fr&access_token=$(MAPBOX_ACCESS_TOKEN)" \
+		-o services-geocoding/src/test/resources/geocoding_reverse_ru_fr.json
+
 	# Not supported country
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places/1600+pennsylvania+ave+nw.json?country=aq&access_token=$(MAPBOX_ACCESS_TOKEN)" \
 		-o services-geocoding/src/test/resources/geocoding_country_not_supported.json
+
 
 geocoding-batch-fixtures:
 	curl "https://api.mapbox.com/geocoding/v5/mapbox.places-permanent/20001;20009;22209.json?access_token=$(MAPBOX_ACCESS_TOKEN)" \

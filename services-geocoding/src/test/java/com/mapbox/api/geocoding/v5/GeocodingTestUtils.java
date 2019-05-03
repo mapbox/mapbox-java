@@ -20,6 +20,7 @@ public class GeocodingTestUtils extends TestUtils {
   private static final String FORWARD_INVALID = "forward_invalid.json";
   private static final String FORWARD_VALID_ZH = "forward_valid_zh.json";
   private static final String FORWARD_BATCH_GEOCODING = "geocoding_batch.json";
+  protected static final String REVERSE_GEOCODING_MULTILANG = "geocoding_reverse_ru_fr.json";
 
   private MockWebServer server;
   protected HttpUrl mockUrl;
@@ -35,14 +36,17 @@ public class GeocodingTestUtils extends TestUtils {
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         try {
           String response;
-          if (request.getPath().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
+          String requestPath = request.getPath();
+          if (requestPath.contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
             response = loadJsonFixture(FORWARD_BATCH_GEOCODING);
-          } else if (request.getPath().contains("1600") && !request.getPath().contains("nw")) {
+          } else if (requestPath.contains("1600") && !requestPath.contains("nw")) {
             response = loadJsonFixture(FORWARD_VALID);
-          } else if (request.getPath().contains("nw")) {
+          } else if (requestPath.contains("nw")) {
             response = loadJsonFixture(FORWARD_GEOCODING);
-          } else if (request.getPath().contains("sandy")) {
+          } else if (requestPath.contains("sandy")) {
             response = loadJsonFixture(FORWARD_INVALID);
+          } else if (requestPath.contains("ru") && requestPath.contains("fr")) {
+            response = loadJsonFixture(REVERSE_GEOCODING_MULTILANG);
           } else {
             response = loadJsonFixture(FORWARD_VALID_ZH);
           }

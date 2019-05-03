@@ -14,6 +14,11 @@ import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockWebServer;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import retrofit2.Response;
 
 public class CarmenContextTest extends GeocodingTestUtils {
@@ -80,5 +85,28 @@ public class CarmenContextTest extends GeocodingTestUtils {
       .build();
     byte[] bytes = serialize(carmenContext);
     assertEquals(carmenContext, deserialize(bytes, CarmenContext.class));
+  }
+
+  @Test
+  public void toFromJson() throws Exception {
+
+    Map<String, String> texts = new HashMap<>();
+    texts.put("ru", "округ Колумбия");
+    texts.put("fr", "district de Columbia");
+
+    CarmenContext carmenContext = CarmenContext.builder()
+            .id("123")
+            .shortCode("shortCode")
+            .text(texts)
+            .text(texts.get("ru"))
+            .languages(Arrays.asList("ru", "fr"))
+            .language("ru")
+            .build();
+
+    String jsonString = carmenContext.toJson();
+
+    CarmenContext carmenContextFromJson = CarmenContext.fromJson(jsonString);
+    assertEquals(carmenContext, carmenContextFromJson);
+
   }
 }
