@@ -1,6 +1,11 @@
 ## Changelog for Mapbox Java and Android Services
 
 Mapbox welcomes participation and contributions from everyone.
+
+### v4.8.0-alpha.1 - May 7, 2019
+- Adding explode turf method [#1007](https://github.com/mapbox/mapbox-java/pull/1007)
+- Adding coordAll() versions for Feature, FeatureCollection, and Geometry parameters [#1009](https://github.com/mapbox/mapbox-java/pull/1009)
+
 ### v4.7.0 - April 25, 2019
 - Added @Keep annotation to ease integration of geojson library [#1005](https://github.com/mapbox/mapbox-java/pull/1005)
 - Fix possible IndexOutOfBoundsException exception [#1013](https://github.com/mapbox/mapbox-java/pull/1013)
