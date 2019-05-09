@@ -26,25 +26,23 @@ public abstract class WalkingOptions {
   public abstract Double walkingSpeed();
 
   /**
-   * A bias which determines whether the route should prefer/supress the use of roads or paths
-   * that are set aside for pedestrian use (walkways). Values less than 0 down -1 will generally
-   * supress more walkways while values greater than 0 up to 1 will generally prefer more
-   * walkways. The default walkwayBias is 0 which will neither prefer nor supress the use of
-   * walkways.
+   * A bias which determines whether the route should prefer or avoid the use of roads or paths
+   * that are set aside for pedestrian-only use (walkways). The allowed range of values is from
+   * -1 to 1, where -1 indicates indicates preference to avoid walkways, 1 indicates preference
+   * to favor walkways, and 0 indicates no preference (the default).
    *
-   * @return walkwayBias bias to prefer or supress walkways
+   * @return walkwayBias bias to prefer or avoid walkways
    * @since 4.8.0
    */
   @Nullable
   public abstract Double walkwayBias();
 
   /**
-   * A bias which determines whether the route should prefer/supress the use of alleys. Values
-   * less than 0 down -1 will generally supress more alleys while values greater than 0 up to 1
-   * will generally prefer more alleys. The default alleyBias is 0 which will neither prefer nor
-   * supress the use of alleys.
+   * A bias which determines whether the route should prefer or avoid the use of alleys. The
+   * allowed range of values is from -1 to 1, where -1 indicates indicates preference to avoid
+   * alleys, 1 indicates preference to favor alleys, and 0 indicates no preference (the default).
    *
-   * @return alleyBias bias to prefer or supress alleys
+   * @return alleyBias bias to prefer or avoid alleys
    * @since 4.8.0
    */
   @Nullable
@@ -119,11 +117,12 @@ public abstract class WalkingOptions {
       @Nullable @FloatRange(from = 0.14, to = 6.94) Double walkingSpeed);
 
     /**
-     * A factor that modifies the cost when encountering roads or paths that do not allow
-     * vehicles and are set aside for pedestrian use. Pedestrian routes generally attempt to
-     * favor using these walkways and sidewalks. The default walkway_factor is 0.
+     * A bias which determines whether the route should prefer or avoid the use of roads or paths
+     * that are set aside for pedestrian-only use (walkways). The allowed range of values is from
+     * -1 to 1, where -1 indicates indicates preference to avoid walkways, 1 indicates preference
+     * to favor walkways, and 0 indicates no preference (the default).
      *
-     * @param walkwayBias factor to modify the cost of roads or paths that do not allow vehicles
+     * @param walkwayBias bias to prefer or avoid walkways
      * @return this builder
      * @since 4.8.0
      */
@@ -131,11 +130,11 @@ public abstract class WalkingOptions {
       @Nullable @FloatRange(from = -1, to = 1) Double walkwayBias);
 
     /**
-     * A factor that modifies (multiplies) the cost when alleys are encountered. Pedestrian
-     * routes generally want to avoid alleys or narrow service roads between buildings. The
-     * default alley_factor is 0.
+     * A bias which determines whether the route should prefer or avoid the use of alleys. The
+     * allowed range of values is from -1 to 1, where -1 indicates indicates preference to avoid
+     * alleys, 1 indicates preference to favor alleys, and 0 indicates no preference (the default).
      *
-     * @param alleyBias factor to modify the cost when alleys are encountered
+     * @param alleyBias bias to prefer or avoid alleys
      * @return this builder
      * @since 4.8.0
      */
