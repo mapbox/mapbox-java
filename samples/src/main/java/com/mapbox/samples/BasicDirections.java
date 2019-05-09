@@ -2,6 +2,7 @@ package com.mapbox.samples;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
+import com.mapbox.api.directions.v5.WalkingOptions;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.sample.BuildConfig;
@@ -19,6 +20,7 @@ public class BasicDirections {
 
   public static void main(String[] args) throws IOException {
     simpleMapboxDirectionsRequest();
+    simpleMapboxDirectionsWalkingRequest();
     asyncMapboxDirectionsRequest();
     simpleMapboxDirectionsPostRequest();
   }
@@ -36,6 +38,35 @@ public class BasicDirections {
     builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
     builder.origin(Point.fromLngLat(-95.6332, 29.7890));
     builder.destination(Point.fromLngLat(-95.3591, 29.7576));
+
+    // 2. That's it! Now execute the command and get the response.
+    Response<DirectionsResponse> response = builder.build().executeCall();
+
+    // 3. Log information from the response
+    System.out.printf("Check that the GET response is successful %b", response.isSuccessful());
+    System.out.printf("%nGet the first routes distance from origin to destination: %f",
+      response.body().routes().get(0).distance());
+  }
+
+  /**
+   * Demonstrates how to make the most basic GET directions request using the walking profile.
+   *
+   * @throws IOException signals that an I/O exception of some sort has occurred
+   */
+  private static void simpleMapboxDirectionsWalkingRequest() throws IOException {
+
+    MapboxDirections.Builder builder = MapboxDirections.builder();
+
+    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
+    builder.origin(Point.fromLngLat(-95.6332, 29.7890));
+    builder.destination(Point.fromLngLat(-95.3591, 29.7576));
+    builder.profile("walking");
+    builder.walkingOptions(
+      WalkingOptions.builder()
+        .walkingSpeed(1.0)
+        .walkwayBias(0.6)
+        .alleyBias(0.7)
+        .build());
 
     // 2. That's it! Now execute the command and get the response.
     Response<DirectionsResponse> response = builder.build().executeCall();

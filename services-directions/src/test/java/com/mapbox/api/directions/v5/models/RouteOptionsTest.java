@@ -223,9 +223,6 @@ public class RouteOptionsTest extends TestUtils {
       .walkingSpeed(1.0)
       .walkwayBias(2.0)
       .alleyBias(3.0)
-      .ferryBias(4.0)
-      .stepPenalty(5)
-      .maxHikingDifficulty(6)
       .build();
   }
 

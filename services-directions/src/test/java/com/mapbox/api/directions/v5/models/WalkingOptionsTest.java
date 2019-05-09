@@ -8,8 +8,7 @@ package com.mapbox.api.directions.v5.models;
   import static org.junit.Assert.assertEquals;
 
 public class WalkingOptionsTest extends TestUtils {
- private static final String JSON = "{\"walkingSpeed\":1.0,\"walkwayBias\":2.0,\"alleyBias\":3.0," +
-   "\"ferryBias\":4.0,\"stepPenalty\":5,\"maxHikingDifficulty\":6}";
+ private static final String JSON = "{\"walkingSpeed\":1.0,\"walkwayBias\":2.0,\"alleyBias\":3.0}";
 
  @Test
  public void toJson_fromJson() {
@@ -35,9 +34,6 @@ public class WalkingOptionsTest extends TestUtils {
   assertEquals(Double.valueOf(1.0), walkingOptions.walkingSpeed());
   assertEquals(Double.valueOf(2.0), walkingOptions.walkwayBias());
   assertEquals(Double.valueOf(3.0), walkingOptions.alleyBias());
-  assertEquals(Double.valueOf(4.0), walkingOptions.ferryBias());
-  assertEquals(Integer.valueOf(5), walkingOptions.stepPenalty());
-  assertEquals(Integer.valueOf(6), walkingOptions.maxHikingDifficulty());
  }
 
  private WalkingOptions walkingOptions() {
@@ -45,9 +41,6 @@ public class WalkingOptionsTest extends TestUtils {
     .walkingSpeed(1.0)
     .walkwayBias(2.0)
     .alleyBias(3.0)
-    .ferryBias(4.0)
-    .stepPenalty(5)
-    .maxHikingDifficulty(6)
     .build();
  }
 }

@@ -110,10 +110,7 @@ public abstract class MapboxDirections extends
       enableRefresh(),
       walkingSpeed(),
       walkwayBias(),
-      alleyBias(),
-      ferryBias(),
-      stepPenalty(),
-      maxHikingDifficulty()
+      alleyBias()
     );
   }
 
@@ -361,33 +358,6 @@ public abstract class MapboxDirections extends
   Double alleyBias() {
     if (hasWalkingOptions()) {
       return walkingOptions().alleyBias();
-    }
-
-    return null;
-  }
-
-  @Nullable
-  Double ferryBias() {
-    if (hasWalkingOptions()) {
-      return walkingOptions().ferryBias();
-    }
-
-    return null;
-  }
-
-  @Nullable
-  Integer stepPenalty() {
-    if (hasWalkingOptions()) {
-      return walkingOptions().stepPenalty();
-    }
-
-    return null;
-  }
-
-  @Nullable
-  Integer maxHikingDifficulty() {
-    if (hasWalkingOptions()) {
-      return walkingOptions().maxHikingDifficulty();
     }
 
     return null;

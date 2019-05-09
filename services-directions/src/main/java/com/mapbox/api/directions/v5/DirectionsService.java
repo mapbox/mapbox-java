@@ -55,14 +55,10 @@ public interface DirectionsService {
    * @param waypointNames       custom names for waypoints used for the arrival instruction
    * @param waypointTargets     list of coordinate pairs for drop-off locations
    * @param enableRefresh       whether the routes should be refreshable
-   * @param walkingSpeed        walking speed in kilometers per hour
+   * @param walkingSpeed        walking speed
    * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
    *                            that do not allow vehicles and are set aside for pedestrian use
    * @param alleyBias           a factor that modifies the cost when alleys are encountered
-   * @param ferryBias           a factor that modifies the cost when ferries are encountered
-   * @param stepPenalty         a penalty in seconds added to each transition onto a path with
-   *                            steps or stairs
-   * @param maxHikingDifficulty the maximum difficulty of hiking trails that is allowed
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */
@@ -94,10 +90,7 @@ public interface DirectionsService {
     @Query("enable_refresh") Boolean enableRefresh,
     @Query("walking_speed") Double walkingSpeed,
     @Query("walkway_bias") Double walkwayBias,
-    @Query("alley_bias") Double alleyBias,
-    @Query("ferry_bias") Double ferryBias,
-    @Query("step_penalty") Integer stepPenalty,
-    @Query("maxHikingDifficulty") Integer maxHikingDifficulty
+    @Query("alley_bias") Double alleyBias
   );
 
   /**
