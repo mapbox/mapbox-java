@@ -221,8 +221,8 @@ public class RouteOptionsTest extends TestUtils {
   private WalkingOptions walkingOptions() {
     return WalkingOptions.builder()
       .walkingSpeed(1.0)
-      .walkwayBias(2.0)
-      .alleyBias(3.0)
+      .walkwayBias(0.6)
+      .alleyBias(0.7)
       .build();
   }
 
