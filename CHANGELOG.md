@@ -2,6 +2,9 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v4.8.0-alpha.2 - May 9, 2019
+- Added walking options [#991](https://github.com/mapbox/mapbox-java/pull/991)
+
 ### v4.8.0-alpha.1 - May 7, 2019
 - Adding explode turf method [#1007](https://github.com/mapbox/mapbox-java/pull/1007)
 - Adding coordAll() versions for Feature, FeatureCollection, and Geometry parameters [#1009](https://github.com/mapbox/mapbox-java/pull/1009)
