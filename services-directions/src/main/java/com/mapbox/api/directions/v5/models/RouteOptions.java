@@ -11,6 +11,8 @@ import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
+import com.mapbox.api.directions.v5.WalkingOptions;
+import com.mapbox.api.directions.v5.WalkingOptionsAdapterFactory;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
@@ -313,6 +315,15 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String waypointTargets();
 
   /**
+   * To be used to specify settings for use with the walking profile.
+   *
+   * @return options to use for walking profile
+   * @since 4.8.0
+   */
+  @Nullable
+  public abstract WalkingOptions walkingOptions();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -335,6 +346,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
+    gson.registerTypeAdapterFactory(WalkingOptionsAdapterFactory.create());
     return gson.create().fromJson(json, RouteOptions.class);
   }
 
@@ -553,7 +565,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.2.0
      */
-
     @Nullable
     public abstract Builder approaches(String approaches);
 
@@ -564,7 +575,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 4.4.0
      */
-
     @Nullable
     public abstract Builder waypointIndices(@Nullable String indices);
 
@@ -575,7 +585,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.3.0
      */
-
     @Nullable
     public abstract Builder waypointNames(@Nullable String waypointNames);
 
@@ -586,9 +595,18 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 4.3.0
      */
-
     @Nullable
     public abstract Builder waypointTargets(@Nullable String waypointTargets);
+
+
+    /**
+     * To be used to specify settings for use with the walking profile.
+     *
+     * @param walkingOptions options to use for walking profile
+     * @return this builder for chaining options together
+     * @since 4.8.0
+     */
+    public abstract Builder walkingOptions(@NonNull WalkingOptions walkingOptions);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.

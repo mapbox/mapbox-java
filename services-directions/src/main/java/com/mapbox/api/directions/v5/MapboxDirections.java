@@ -107,7 +107,11 @@ public abstract class MapboxDirections extends
       waypointIndices(),
       waypointNames(),
       waypointTargets(),
-      enableRefresh());
+      enableRefresh(),
+      walkingSpeed(),
+      walkwayBias(),
+      alleyBias()
+    );
   }
 
   private Call<DirectionsResponse> post() {
@@ -135,7 +139,11 @@ public abstract class MapboxDirections extends
       waypointIndices(),
       waypointNames(),
       waypointTargets(),
-      enableRefresh());
+      enableRefresh(),
+      walkingSpeed(),
+      walkwayBias(),
+      alleyBias()
+    );
   }
 
   @Override
@@ -326,6 +334,40 @@ public abstract class MapboxDirections extends
 
   @Nullable
   abstract Boolean usePostMethod();
+
+  @Nullable
+  abstract WalkingOptions walkingOptions();
+
+  @Nullable
+  Double walkingSpeed() {
+    if (!hasWalkingOptions()) {
+      return null;
+    }
+
+    return walkingOptions().walkingSpeed();
+  }
+
+  @Nullable
+  Double walkwayBias() {
+    if (!hasWalkingOptions()) {
+      return null;
+    }
+
+    return walkingOptions().walkwayBias();
+  }
+
+  @Nullable
+  Double alleyBias() {
+    if (!hasWalkingOptions()) {
+      return null;
+    }
+
+    return walkingOptions().alleyBias();
+  }
+
+  private boolean hasWalkingOptions() {
+    return walkingOptions() != null;
+  }
 
   /**
    * Build a new {@link MapboxDirections} object with the initial values set for
@@ -829,6 +871,17 @@ public abstract class MapboxDirections extends
       usePostMethod(false);
       return this;
     }
+
+    /**
+     * To be used to specify settings for use with the walking profile.
+     *
+     * @param walkingOptions options to use for walking profile
+     * @return this builder for chaining options together
+     * @since 4.8.0
+     */
+    public abstract Builder walkingOptions(@NonNull WalkingOptions walkingOptions);
+
+    abstract WalkingOptions walkingOptions();
 
     abstract Builder usePostMethod(@NonNull Boolean usePost);
 

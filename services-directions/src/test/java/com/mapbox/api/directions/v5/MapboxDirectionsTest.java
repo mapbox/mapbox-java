@@ -180,6 +180,18 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void build_walkingOptions() {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .accessToken(ACCESS_TOKEN)
+      .profile(DirectionsCriteria.PROFILE_WALKING)
+      .walkingOptions(WalkingOptions.builder().alleyBias(2d).build())
+      .build();
+    assertTrue(directions.cloneCall().request().url().toString().contains("alley_bias=2.0"));
+  }
+
+  @Test
   public void user_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
