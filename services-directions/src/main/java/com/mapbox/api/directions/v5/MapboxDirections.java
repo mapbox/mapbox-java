@@ -115,7 +115,6 @@ public abstract class MapboxDirections extends
   }
 
   private Call<DirectionsResponse> post() {
-    // todo add walking options
     return getService().postCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
@@ -140,7 +139,10 @@ public abstract class MapboxDirections extends
       waypointIndices(),
       waypointNames(),
       waypointTargets(),
-      enableRefresh()
+      enableRefresh(),
+      walkingSpeed(),
+      walkwayBias(),
+      alleyBias()
     );
   }
 
@@ -338,29 +340,29 @@ public abstract class MapboxDirections extends
 
   @Nullable
   Double walkingSpeed() {
-    if (hasWalkingOptions()) {
-      return walkingOptions().walkingSpeed();
+    if (!hasWalkingOptions()) {
+      return null;
     }
 
-    return null;
+    return walkingOptions().walkingSpeed();
   }
 
   @Nullable
   Double walkwayBias() {
-    if (hasWalkingOptions()) {
-      return walkingOptions().walkwayBias();
+    if (!hasWalkingOptions()) {
+      return null;
     }
 
-    return null;
+    return walkingOptions().walkwayBias();
   }
 
   @Nullable
   Double alleyBias() {
-    if (hasWalkingOptions()) {
-      return walkingOptions().alleyBias();
+    if (!hasWalkingOptions()) {
+      return null;
     }
 
-    return null;
+    return walkingOptions().alleyBias();
   }
 
   private boolean hasWalkingOptions() {

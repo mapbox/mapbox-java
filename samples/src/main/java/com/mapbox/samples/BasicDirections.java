@@ -72,7 +72,7 @@ public class BasicDirections {
     Response<DirectionsResponse> response = builder.build().executeCall();
 
     // 3. Log information from the response
-    System.out.printf("Check that the GET response is successful %b", response.isSuccessful());
+    System.out.printf("%nCheck that the GET response is successful %b", response.isSuccessful());
     System.out.printf("%nGet the first routes distance from origin to destination: %f",
       response.body().routes().get(0).distance());
   }

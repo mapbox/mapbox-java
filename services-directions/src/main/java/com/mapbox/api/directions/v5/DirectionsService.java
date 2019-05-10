@@ -130,6 +130,10 @@ public interface DirectionsService {
    * @param waypointNames       custom names for waypoints used for the arrival instruction
    * @param waypointTargets     list of coordinate pairs for drop-off locations
    * @param enableRefresh       whether the routes should be refreshable
+   * @param walkingSpeed        walking speed
+   * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
+   *                            that do not allow vehicles and are set aside for pedestrian use
+   * @param alleyBias           a factor that modifies the cost when alleys are encountered
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 4.6.0
    */
@@ -159,6 +163,9 @@ public interface DirectionsService {
     @Field("waypoints") String waypointIndices,
     @Field("waypoint_names") String waypointNames,
     @Field("waypoint_targets") String waypointTargets,
-    @Field("enable_refresh") Boolean enableRefresh
+    @Field("enable_refresh") Boolean enableRefresh,
+    @Field("walking_speed") Double walkingSpeed,
+    @Field("walkway_bias") Double walkwayBias,
+    @Field("alley_bias") Double alleyBias
   );
 }
