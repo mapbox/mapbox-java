@@ -245,7 +245,8 @@ public class RouteOptionsTest extends TestUtils {
       "\"voice_instructions\": true," +
       "\"banner_instructions\": true," +
       "\"voice_units\": \"imperial\"," +
-      "\"uuid\": \"uuid1\"" +
+      "\"uuid\": \"uuid1\"," +
+      "\"walkingOptions\": { \"walking_speed\": 1.0, \"walkway_bias\": 0.6, \"alley_bias\": 0.7 }" +
       "}";
 
     RouteOptions routeOptions = RouteOptions.fromJson(jsonString);
@@ -267,6 +268,9 @@ public class RouteOptionsTest extends TestUtils {
     assertEquals(true, routeOptions.bannerInstructions());
     assertEquals("imperial", routeOptions.voiceUnits());
     assertEquals("uuid1", routeOptions.requestUuid());
+    assertEquals(1.0, routeOptions.walkingOptions().walkingSpeed(), 0.1);
+    assertEquals(0.6, routeOptions.walkingOptions().walkwayBias(), 0.1);
+    assertEquals(0.7, routeOptions.walkingOptions().alleyBias(), 0.1);
   }
 
   @Test
@@ -290,6 +294,11 @@ public class RouteOptionsTest extends TestUtils {
       .bannerInstructions(true)
       .voiceUnits("imperial")
       .requestUuid("uuid1")
+      .walkingOptions(WalkingOptions.builder()
+        .walkingSpeed(1.0)
+        .walkwayBias(0.6)
+        .alleyBias(0.7)
+        .build())
       .build();
 
     String jsonString = routeOptions.toJson();
@@ -311,7 +320,9 @@ public class RouteOptionsTest extends TestUtils {
       "\"voice_instructions\": true," +
       "\"banner_instructions\": true," +
       "\"voice_units\": \"imperial\"," +
-      "\"uuid\": \"uuid1\"}";
+      "\"uuid\": \"uuid1\"," +
+      "\"walkingOptions\": { \"walking_speed\": 1.0, \"walkway_bias\": 0.6, \"alley_bias\": 0.7 }" +
+      "}";
     compareJson(expectedJsonString, jsonString);
   }
 }

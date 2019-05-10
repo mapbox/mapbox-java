@@ -180,15 +180,39 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void build_walkingOptions() {
+  public void build_walkingWalkingSpeedOptions() {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
       .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_WALKING)
-      .walkingOptions(WalkingOptions.builder().alleyBias(2d).build())
+      .walkingOptions(WalkingOptions.builder().walkingSpeed(1d).build())
       .build();
-    assertTrue(directions.cloneCall().request().url().toString().contains("alley_bias=2.0"));
+    assertTrue(directions.cloneCall().request().url().toString().contains("walking_speed=1.0"));
+  }
+
+  @Test
+  public void build_walkingWalkwayBiasOptions() {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .accessToken(ACCESS_TOKEN)
+      .profile(DirectionsCriteria.PROFILE_WALKING)
+      .walkingOptions(WalkingOptions.builder().walkwayBias(1d).build())
+      .build();
+    assertTrue(directions.cloneCall().request().url().toString().contains("walkway_bias=1.0"));
+  }
+
+  @Test
+  public void build_walkingAlleyBiasOptions() {
+    MapboxDirections directions = MapboxDirections.builder()
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .accessToken(ACCESS_TOKEN)
+      .profile(DirectionsCriteria.PROFILE_WALKING)
+      .walkingOptions(WalkingOptions.builder().alleyBias(1d).build())
+      .build();
+    assertTrue(directions.cloneCall().request().url().toString().contains("alley_bias=1.0"));
   }
 
   @Test
