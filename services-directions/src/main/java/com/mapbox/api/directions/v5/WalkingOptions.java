@@ -7,6 +7,7 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Class for specifying options for use with the walking profile.
@@ -22,6 +23,7 @@ public abstract class WalkingOptions {
    * @return walkingSpeed in meters per second
    * @since 4.8.0
    */
+  @SerializedName("walking_speed")
   @Nullable
   public abstract Double walkingSpeed();
 
@@ -34,6 +36,7 @@ public abstract class WalkingOptions {
    * @return walkwayBias bias to prefer or avoid walkways
    * @since 4.8.0
    */
+  @SerializedName("walkway_bias")
   @Nullable
   public abstract Double walkwayBias();
 
@@ -45,6 +48,7 @@ public abstract class WalkingOptions {
    * @return alleyBias bias to prefer or avoid alleys
    * @since 4.8.0
    */
+  @SerializedName("alley_bias")
   @Nullable
   public abstract Double alleyBias();
 

@@ -8,7 +8,7 @@ package com.mapbox.api.directions.v5.models;
   import static org.junit.Assert.assertEquals;
 
 public class WalkingOptionsTest extends TestUtils {
- private static final String JSON = "{\"walkingSpeed\":1.0,\"walkwayBias\":0.6,\"alleyBias\":0" +
+ private static final String JSON = "{\"walking_speed\":1.0,\"walkway_bias\":0.6,\"alley_bias\":0" +
    ".7}";
 
  @Test
