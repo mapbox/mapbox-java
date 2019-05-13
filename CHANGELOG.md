@@ -2,6 +2,7 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### v4.8.0 - May 10, 2019
 ### v4.8.0-alpha.3 - May 10, 2019
 - Added walking options serialize names adjustments [#1028](https://github.com/mapbox/mapbox-java/pull/1028)
 
