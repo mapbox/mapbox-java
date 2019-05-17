@@ -11,7 +11,7 @@ checkstyle:
 	./gradlew checkstyleMain
 
 test:
-	./gradlew test
+	./gradlew test -i
 
 build-release:
 	./gradlew assemble
