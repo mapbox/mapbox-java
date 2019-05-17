@@ -18,7 +18,6 @@ import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.shifter.CoordinateShifterManager;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -53,7 +52,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Keep
-public final class Point implements CoordinateContainer<List<Double>>, Serializable {
+public final class Point implements CoordinateContainer<List<Double>> {
 
   private static final String TYPE = "Point";
 

@@ -14,7 +14,6 @@ import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +56,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Keep
-public final class Polygon implements CoordinateContainer<List<List<Point>>>, Serializable {
+public final class Polygon implements CoordinateContainer<List<List<Point>>> {
 
   private static final String TYPE = "Polygon";
 

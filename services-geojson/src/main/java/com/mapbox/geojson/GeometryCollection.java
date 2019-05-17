@@ -14,7 +14,6 @@ import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -61,7 +60,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Keep
-public final class GeometryCollection implements Geometry, Serializable {
+public final class GeometryCollection implements Geometry {
 
   private static final String TYPE = "GeometryCollection";
 

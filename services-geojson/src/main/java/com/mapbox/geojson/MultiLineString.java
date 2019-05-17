@@ -11,7 +11,6 @@ import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +51,7 @@ import java.util.List;
  */
 @Keep
 public final class MultiLineString
-  implements CoordinateContainer<List<List<Point>>>, Serializable {
+  implements CoordinateContainer<List<List<Point>>> {
 
   private static final String TYPE = "MultiLineString";
 
