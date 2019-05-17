@@ -5,7 +5,9 @@ import static com.mapbox.turf.TurfConversion.radiansToDegrees;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.google.gson.JsonObject;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
@@ -241,7 +243,7 @@ public final class TurfMeasurement {
    * @param distance along the linestring geometry which the point should be placed on
    * @param units    one of the units found inside {@link TurfConstants.TurfUnitCriteria}
    * @return a {@link Point} which is on the linestring provided and at the distance from
-   *         the origin of that line to the end of the distance
+   *   the origin of that line to the end of the distance
    * @since 1.3.0
    */
   public static Point along(@NonNull LineString line, @FloatRange(from = 0) double distance,
@@ -500,5 +502,64 @@ public final class TurfMeasurement {
    */
   public static Polygon envelope(GeoJson geoJson) {
     return bboxPolygon(bbox(geoJson));
+  }
+
+  /**
+   * Takes a {@link Feature} or {@link FeatureCollection} and returns the absolute
+   * center point of all features.
+   *
+   * @param geoJson    GeoJSON to be centered
+   * @param properties Translate GeoJSON Properties to Point
+   * @param id         Translate GeoJSON Id to Point
+   * @param bbox       Translate GeoJSON BBox to Point
+   * @return Feature a Point feature at the absolute center point of all input features
+   * @since 4.9.0
+   */
+  public static Feature center(@NonNull GeoJson geoJson, @Nullable JsonObject properties,
+                               @Nullable String id, @Nullable BoundingBox bbox) {
+    double[] boundingbox = bbox(geoJson);
+    double lng = (boundingbox[0] + boundingbox[2]) / 2;
+    double lat = (boundingbox[1] + boundingbox[3]) / 2;
+    return Feature.fromGeometry(Point.fromLngLat(lng, lat), properties, id, bbox);
+  }
+
+  /**
+   * Takes a {@link Feature} or {@link FeatureCollection} and returns the absolute
+   * center point of all features.
+   *
+   * @param geoJson    GeoJSON to be centered
+   * @param properties Translate GeoJSON Properties to Point
+   * @param id         Translate GeoJSON Id to Point
+   * @return Feature a Point feature at the absolute center point of all input features
+   * @since 4.9.0
+   */
+  public static Feature center(@NonNull GeoJson geoJson, @Nullable JsonObject properties,
+                               @Nullable String id) {
+    return center(geoJson, properties, id, null);
+  }
+
+  /**
+   * Takes a {@link Feature} or {@link FeatureCollection} and returns the absolute
+   * center point of all features.
+   *
+   * @param geoJson    GeoJSON to be centered
+   * @param properties Translate GeoJSON Properties to Point
+   * @return Feature a Point feature at the absolute center point of all input features
+   * @since 4.9.0
+   */
+  public static Feature center(@NonNull GeoJson geoJson, @Nullable JsonObject properties) {
+    return center(geoJson, properties, null, null);
+  }
+
+  /**
+   * Takes a {@link Feature} or {@link FeatureCollection} and returns the absolute
+   * center point of all features.
+   *
+   * @param geoJson    GeoJSON to be centered
+   * @return Feature a Point feature at the absolute center point of all input features
+   * @since 4.9.0
+   */
+  public static Feature center(@NonNull GeoJson geoJson) {
+    return center(geoJson, null, null, null);
   }
 }

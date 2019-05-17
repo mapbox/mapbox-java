@@ -1,5 +1,6 @@
 package com.mapbox.turf;
 
+import com.google.gson.JsonObject;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
@@ -21,6 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.sampled.Line;
+
+import static com.mapbox.turf.TurfMeasurement.bbox;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -44,6 +48,21 @@ public class TurfMeasurementTest extends TestUtils {
   private static final String TURF_ENVELOPE_FEATURE_COLLECTION = "turf-envelope/feature-collection.geojson";
   private static final String LINE_DISTANCE_MULTILINESTRING
     = "turf-line-distance/multilinestring.geojson";
+  private static final String TURF_CENTER_FEATURE_COLLECTION_IN = "turf-center/in/feature-collection.geojson";
+  private static final String TURF_CENTER_IMBALANCED_POLYGON_IN = "turf-center/in/imbalanced-polygon.geojson";
+  private static final String TURF_CENTER_LINESTRING_IN = "turf-center/in/linestring.geojson";
+  private static final String TURF_CENTER_POINT_IN = "turf-center/in/point.geojson";
+  private static final String TURF_CENTER_POINTS_WITH_WEIGHTS_IN = "turf-center/in/points-with-weights.geojson";
+  private static final String TURF_CENTER_POLYGON_IN = "turf-center/in/polygon.geojson";
+  private static final String TURF_CENTER_POLYGON_WITHOUT_WEIGHTS_IN = "turf-center/in/polygon-without-weights.geojson";
+  private static final String TURF_CENTER_FEATURE_COLLECTION_OUT = "turf-center/out/feature-collection.geojson";
+  private static final String TURF_CENTER_IMBALANCED_POLYGON_OUT = "turf-center/out/imbalanced-polygon.geojson";
+  private static final String TURF_CENTER_LINESTRING_OUT = "turf-center/out/linestring.geojson";
+  private static final String TURF_CENTER_POINT_OUT = "turf-center/out/point.geojson";
+  private static final String TURF_CENTER_POINTS_WITH_WEIGHTS_OUT = "turf-center/out/points-with-weights.geojson";
+  private static final String TURF_CENTER_POLYGON_OUT = "turf-center/out/polygon.geojson";
+  private static final String TURF_CENTER_POLYGON_WITHOUT_WEIGHTS_OUT = "turf-center/out/polygon-without-weights.geojson";
+
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -252,7 +271,7 @@ public class TurfMeasurementTest extends TestUtils {
   @Test
   public void bboxFromPoint() throws IOException, TurfException {
     Feature feature = Feature.fromJson(loadJsonFixture(TURF_BBOX_POINT));
-    double[] bbox = TurfMeasurement.bbox((Point) feature.geometry());
+    double[] bbox = bbox((Point) feature.geometry());
 
     assertEquals(4, bbox.length);
     assertEquals(102, bbox[0], DELTA);
@@ -264,7 +283,7 @@ public class TurfMeasurementTest extends TestUtils {
   @Test
   public void bboxFromLine() throws TurfException, IOException {
     LineString lineString = LineString.fromJson(loadJsonFixture(TURF_BBOX_LINESTRING));
-    double[] bbox = TurfMeasurement.bbox(lineString);
+    double[] bbox = bbox(lineString);
 
     assertEquals(4, bbox.length);
     assertEquals(102, bbox[0], DELTA);
@@ -276,7 +295,7 @@ public class TurfMeasurementTest extends TestUtils {
   @Test
   public void bboxFromPolygon() throws TurfException, IOException {
     Feature feature = Feature.fromJson(loadJsonFixture(TURF_BBOX_POLYGON));
-    double[] bbox = TurfMeasurement.bbox((Polygon) feature.geometry());
+    double[] bbox = bbox((Polygon) feature.geometry());
 
     assertEquals(4, bbox.length);
     assertEquals(100, bbox[0], DELTA);
@@ -289,7 +308,7 @@ public class TurfMeasurementTest extends TestUtils {
   public void bboxFromMultiLineString() throws IOException, TurfException {
     MultiLineString multiLineString =
       MultiLineString.fromJson(loadJsonFixture(TURF_BBOX_MULTILINESTRING));
-    double[] bbox = TurfMeasurement.bbox(multiLineString);
+    double[] bbox = bbox(multiLineString);
 
     assertEquals(4, bbox.length);
     assertEquals(100, bbox[0], DELTA);
@@ -301,7 +320,7 @@ public class TurfMeasurementTest extends TestUtils {
   @Test
   public void bboxFromMultiPolygon() throws IOException, TurfException {
     MultiPolygon multiPolygon = MultiPolygon.fromJson(loadJsonFixture(TURF_BBOX_MULTIPOLYGON));
-    double[] bbox = TurfMeasurement.bbox(multiPolygon);
+    double[] bbox = bbox(multiPolygon);
 
     assertEquals(4, bbox.length);
     assertEquals(100, bbox[0], DELTA);
@@ -313,7 +332,7 @@ public class TurfMeasurementTest extends TestUtils {
   @Test
   public void bboxFromGeometry() throws IOException, TurfException {
     Geometry geometry = MultiPolygon.fromJson(loadJsonFixture(TURF_BBOX_MULTIPOLYGON));
-    double[] bbox = TurfMeasurement.bbox(geometry);
+    double[] bbox = bbox(geometry);
 
     assertEquals(4, bbox.length);
     assertEquals(100, bbox[0], DELTA);
@@ -326,7 +345,7 @@ public class TurfMeasurementTest extends TestUtils {
   public void bboxFromGeometryCollection() throws IOException, TurfException {
     // Check that geometry collection and direct bbox are equal
     MultiPolygon multiPolygon = MultiPolygon.fromJson(loadJsonFixture(TURF_BBOX_MULTIPOLYGON));
-    assertArrayEquals(TurfMeasurement.bbox(multiPolygon), TurfMeasurement.bbox(GeometryCollection.fromGeometry(multiPolygon)), DELTA);
+    assertArrayEquals(bbox(multiPolygon), bbox(GeometryCollection.fromGeometry(multiPolygon)), DELTA);
 
     // Check all geometry types
     List<Geometry> geometries = new ArrayList<>();
@@ -337,7 +356,7 @@ public class TurfMeasurementTest extends TestUtils {
     geometries.add(Feature.fromJson(loadJsonFixture(TURF_BBOX_POLYGON)).geometry());
     geometries.add(MultiPolygon.fromJson(loadJsonFixture(TURF_BBOX_MULTIPOLYGON)));
     geometries.add(GeometryCollection.fromGeometry(Point.fromLngLat(-1., -1.)));
-    double[] bbox = TurfMeasurement.bbox(GeometryCollection.fromGeometries(geometries));
+    double[] bbox = bbox(GeometryCollection.fromGeometries(geometries));
 
     assertEquals(4, bbox.length);
     assertEquals(-1, bbox[0], DELTA);
@@ -352,7 +371,7 @@ public class TurfMeasurementTest extends TestUtils {
     LineString lineString = LineString.fromJson(loadJsonFixture(TURF_BBOX_POLYGON_LINESTRING));
 
     // Use the LineString object to calculate its BoundingBox area
-    double[] bbox = TurfMeasurement.bbox(lineString);
+    double[] bbox = bbox(lineString);
 
     // Use the BoundingBox coordinates to create an actual BoundingBox object
     BoundingBox boundingBox = BoundingBox.fromPoints(
@@ -377,7 +396,7 @@ public class TurfMeasurementTest extends TestUtils {
     MultiPolygon multiPolygon = MultiPolygon.fromJson(loadJsonFixture(TURF_BBOX_POLYGON_MULTIPOLYGON));
 
     // Use the MultiPolygon object to calculate its BoundingBox area
-    double[] bbox = TurfMeasurement.bbox(multiPolygon);
+    double[] bbox = bbox(multiPolygon);
 
     // Use the BoundingBox coordinates to create an actual BoundingBox object
     BoundingBox boundingBox = BoundingBox.fromPoints(
@@ -398,7 +417,7 @@ public class TurfMeasurementTest extends TestUtils {
     MultiPoint multiPoint = MultiPoint.fromJson(loadJsonFixture(TURF_BBOX_POLYGON_MULTI_POINT));
 
     // Use the MultiPoint object to calculate its BoundingBox area
-    double[] bbox = TurfMeasurement.bbox(multiPoint);
+    double[] bbox = bbox(multiPoint);
 
     // Use the BoundingBox coordinates to create an actual BoundingBox object
     BoundingBox boundingBox = BoundingBox.fromPoints(
@@ -429,4 +448,85 @@ public class TurfMeasurementTest extends TestUtils {
     Polygon expected = Polygon.fromLngLats(polygonPoints);
     assertEquals("Polygon should match.", expected, polygon);
   }
+
+  @Test
+  public void centerFromFeatureCollection() throws IOException {
+    FeatureCollection featureCollection = FeatureCollection.fromJson(loadJsonFixture(TURF_CENTER_FEATURE_COLLECTION_IN));
+
+    JsonObject centerProperties = new JsonObject();
+    centerProperties.addProperty("marker-symbol", "star");
+    centerProperties.addProperty("marker-color", "#F00");
+
+    List<Feature> features = new ArrayList<>();
+    Feature actual = TurfMeasurement.center(featureCollection, centerProperties);
+    features.add(actual);
+
+    if (featureCollection.features() != null) {
+      features.addAll(featureCollection.features());
+    }
+    Polygon polygon = TurfMeasurement.bboxPolygon(bbox(featureCollection));
+    JsonObject innerProperties = new JsonObject();
+    innerProperties.addProperty("stroke", "#00F");
+    innerProperties.addProperty("stroke-width", 1);
+    for (List<Point> coordinate : polygon.coordinates()) {
+      for (Point point : coordinate) {
+        List<Point> points = new ArrayList<>();
+        points.add(point);
+        points.add(((Point) actual.geometry()));
+        features.add(Feature.fromGeometry(LineString.fromLngLats(points), innerProperties));
+      }
+    }
+
+    JsonObject polygonProperties = new JsonObject();
+    polygonProperties.addProperty("stroke", "#00F");
+    polygonProperties.addProperty("stroke-width", 1);
+    polygonProperties.addProperty("fill-opacity", 0);
+
+    double[] bbox = bbox(polygon);
+    features.add(Feature.fromGeometry(polygon, polygonProperties, BoundingBox.fromLngLats(bbox[0], bbox[1], bbox[2], bbox[3])));
+
+    FeatureCollection expected = FeatureCollection.fromJson(loadJsonFixture(TURF_CENTER_FEATURE_COLLECTION_OUT));
+    assertEquals("Features should match", expected, FeatureCollection.fromFeatures(features));
+  }
+
+  @Test
+  public void centerFromImbalancedPolygon() throws IOException {
+    FeatureCollection featureCollection = FeatureCollection.fromJson(loadJsonFixture(TURF_CENTER_IMBALANCED_POLYGON_IN));
+
+    JsonObject centerProperties = new JsonObject();
+    centerProperties.addProperty("marker-symbol", "star");
+    centerProperties.addProperty("marker-color", "#F00");
+
+    List<Feature> features = new ArrayList<>();
+    Feature actual = TurfMeasurement.center(featureCollection, centerProperties);
+    features.add(actual);
+
+    if(featureCollection.features()!=null) {
+      features.addAll(featureCollection.features());
+    }
+    Polygon polygon = TurfMeasurement.bboxPolygon(bbox(featureCollection));
+    JsonObject innerProperties = new JsonObject();
+    innerProperties.addProperty("stroke", "#00F");
+    innerProperties.addProperty("stroke-width", 1);
+    for (List<Point> coordinate : polygon.coordinates()) {
+      for (Point point : coordinate) {
+        List<Point> points = new ArrayList<>();
+        points.add(point);
+        points.add(((Point) actual.geometry()));
+        features.add(Feature.fromGeometry(LineString.fromLngLats(points), innerProperties));
+      }
+    }
+
+    JsonObject polygonProperties = new JsonObject();
+    polygonProperties.addProperty("stroke", "#00F");
+    polygonProperties.addProperty("stroke-width", 1);
+    polygonProperties.addProperty("fill-opacity", 0);
+
+    double[] bbox = bbox(polygon);
+    features.add(Feature.fromGeometry(polygon, polygonProperties, BoundingBox.fromLngLats(bbox[0], bbox[1], bbox[2], bbox[3])));
+
+    FeatureCollection expected = FeatureCollection.fromJson(loadJsonFixture(TURF_CENTER_IMBALANCED_POLYGON_OUT));
+    assertEquals("Features should match", expected, FeatureCollection.fromFeatures(features));
+  }
+
 }

@@ -264,8 +264,11 @@ public final class TurfMeta {
   public static List<Point> coordAll(@NonNull FeatureCollection featureCollection,
                                      @NonNull boolean excludeWrapCoord) {
     List<Point> finalCoordsList = new ArrayList<>();
-    for (Feature singleFeature : featureCollection.features()) {
-      addCoordAll(finalCoordsList, singleFeature, excludeWrapCoord);
+    List<Feature> features = featureCollection.features();
+    if(features!=null) {
+      for (Feature singleFeature : features) {
+        addCoordAll(finalCoordsList, singleFeature, excludeWrapCoord);
+      }
     }
     return finalCoordsList;
   }
