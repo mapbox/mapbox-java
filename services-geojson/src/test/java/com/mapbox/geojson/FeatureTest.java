@@ -220,6 +220,44 @@ public class FeatureTest extends TestUtils {
   }
 
   @Test
+  public void pointFeatureWithNumberId_fromJson_toJson() throws IOException {
+    final String jsonString =
+            "{\"id\" : 5," +
+                    " \"bbox\": [-120.0, -60.0, 120.0, 60.0]," +
+                    " \"geometry\": {" +
+                    "    \"bbox\": [-110.0, -50.0, 110.0, 50.0]," +
+                    "    \"coordinates\": [ 100.0, 0.0], " +
+                    "     \"type\": \"Point\"}," +
+                    "\"type\": \"Feature\"," +
+                    "\"properties\": {\"prop0\": \"value0\", \"prop1\": \"value1\"}" +
+                    "}";
+
+
+    Feature featureFromJson = Feature.fromJson(jsonString);
+    String jsonStringFromFeature = featureFromJson.toJson();
+
+    compareJson(jsonString, jsonStringFromFeature);
+  }
+
+  @Test
+  public void id_number() throws IOException {
+    final String jsonString =
+            "{\"id\" : 5," +
+                    " \"bbox\": [-120.0, -60.0, 120.0, 60.0]," +
+                    " \"geometry\": {" +
+                    "    \"bbox\": [-110.0, -50.0, 110.0, 50.0]," +
+                    "    \"coordinates\": [ 100.0, 0.0], " +
+                    "     \"type\": \"Point\"}," +
+                    "\"type\": \"Feature\"," +
+                    "\"properties\": {\"prop0\": \"value0\", \"prop1\": \"value1\"}" +
+                    "}";
+
+
+    Feature featureFromJson = Feature.fromJson(jsonString);
+    assertTrue(featureFromJson.id() instanceof Double);
+  }
+
+  @Test
   public void feature_getProperty_empty_property() throws IOException {
     final String jsonString =
             "{\"type\":\"Feature\"," +

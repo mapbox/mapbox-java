@@ -57,7 +57,7 @@ public final class Feature implements GeoJson {
   @JsonAdapter(BoundingBoxTypeAdapter.class)
   private final BoundingBox bbox;
 
-  private final String id;
+  private final Object id;
 
   private final Geometry geometry;
 
@@ -158,11 +158,28 @@ public final class Feature implements GeoJson {
    * @param id         common identifier of this feature
    * @return {@link Feature}
    * @since 1.0.0
+   * @deprecated since 5.0.0
    */
+  @Deprecated
   public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
                                      @Nullable String id) {
+    return fromGeometry(geometry, properties, (Object)id);
+  }
+
+  /**
+   * Create a new instance of this class by giving the feature a {@link Geometry}, optionally a
+   * set of properties, and a String which represents the objects id.
+   *
+   * @param geometry   a single geometry which makes up this feature object
+   * @param properties a {@link JsonObject} containing the feature properties
+   * @param id         common identifier of this feature
+   * @return {@link Feature}
+   * @since 5.0.0
+   */
+  public static Feature fromGeometry(@Nullable Geometry geometry, @Nullable JsonObject properties,
+                                     @Nullable Object id) {
     return new Feature(TYPE, null, id, geometry,
-      properties == null ? new JsonObject() : properties);
+            properties == null ? new JsonObject() : properties);
   }
 
   /**
@@ -175,14 +192,32 @@ public final class Feature implements GeoJson {
    * @param id         common identifier of this feature
    * @return {@link Feature}
    * @since 1.0.0
+   * @deprecated since 4.9.0
    */
+  @Deprecated
   public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
                                      @Nullable String id, @Nullable BoundingBox bbox) {
+    return fromGeometry(geometry, properties, (Object)id, bbox);
+  }
+
+  /**
+   * Create a new instance of this class by giving the feature a {@link Geometry}, optionally a
+   * set of properties, and a String which represents the objects id.
+   *
+   * @param geometry   a single geometry which makes up this feature object
+   * @param properties a {@link JsonObject} containing the feature properties
+   * @param bbox       optionally include a bbox definition as a double array
+   * @param id         common identifier of this feature
+   * @return {@link Feature}
+   * @since 4.9.0
+   */
+  public static Feature fromGeometry(@Nullable Geometry geometry, @NonNull JsonObject properties,
+                                     @Nullable Object id, @Nullable BoundingBox bbox) {
     return new Feature(TYPE, bbox, id, geometry,
       properties == null ? new JsonObject() : properties);
   }
 
-  Feature(String type, @Nullable BoundingBox bbox, @Nullable String id,
+  Feature(String type, @Nullable BoundingBox bbox, @Nullable Object id,
           @Nullable Geometry geometry, @Nullable JsonObject properties) {
     if (type == null) {
       throw new NullPointerException("Null type");
@@ -229,12 +264,13 @@ public final class Feature implements GeoJson {
    *
    * @return a String containing this features unique identification or null if one wasn't given
    *   during creation.
-   * @since 1.0.0
+   * @since 5.0.0
    */
   @Nullable
-  public String id() {
+  public Object id() {
     return id;
   }
+
 
   /**
    * The geometry which makes up this feature. A Geometry object represents points, curves, and
@@ -499,6 +535,7 @@ public final class Feature implements GeoJson {
     private volatile TypeAdapter<BoundingBox> boundingBoxTypeAdapter;
     private volatile TypeAdapter<Geometry> geometryTypeAdapter;
     private volatile TypeAdapter<JsonObject> jsonObjectTypeAdapter;
+    private volatile TypeAdapter<Double> doubleAdapter;
     private final Gson gson;
 
     GsonTypeAdapter(Gson gson) {
@@ -537,13 +574,20 @@ public final class Feature implements GeoJson {
       jsonWriter.name("id");
       if (object.id() == null) {
         jsonWriter.nullValue();
-      } else {
+      } else if (object.id() instanceof String) {
         TypeAdapter<String> stringTypeAdapter = this.stringTypeAdapter;
         if (stringTypeAdapter == null) {
           stringTypeAdapter = gson.getAdapter(String.class);
           this.stringTypeAdapter = stringTypeAdapter;
         }
-        stringTypeAdapter.write(jsonWriter, object.id());
+        stringTypeAdapter.write(jsonWriter, (String)object.id());
+      } else if (object.id instanceof Double) {
+        TypeAdapter<Double> doubleAdapter = this.doubleAdapter;
+        if (doubleAdapter == null) {
+          doubleAdapter = gson.getAdapter(Double.class);
+          this.doubleAdapter = doubleAdapter;
+        }
+        doubleAdapter.write(jsonWriter, (Double)object.id());
       }
       jsonWriter.name("geometry");
       if (object.geometry() == null) {
@@ -579,7 +623,7 @@ public final class Feature implements GeoJson {
       jsonReader.beginObject();
       String type = null;
       BoundingBox bbox = null;
-      String id = null;
+      Object id = null;
       Geometry geometry = null;
       JsonObject properties = null;
       while (jsonReader.hasNext()) {
@@ -608,12 +652,22 @@ public final class Feature implements GeoJson {
             break;
 
           case "id":
-            strTypeAdapter = this.stringTypeAdapter;
-            if (strTypeAdapter == null) {
-              strTypeAdapter = gson.getAdapter(String.class);
-              this.stringTypeAdapter = strTypeAdapter;
+
+            if (jsonReader.peek() == JsonToken.STRING) {
+              strTypeAdapter = this.stringTypeAdapter;
+              if (strTypeAdapter == null) {
+                strTypeAdapter = gson.getAdapter(String.class);
+                this.stringTypeAdapter = strTypeAdapter;
+              }
+              id = strTypeAdapter.read(jsonReader);
+            } else {
+              TypeAdapter<Double> doubleAdapter = this.doubleAdapter;
+              if (doubleAdapter == null) {
+                doubleAdapter = gson.getAdapter(Double.class);
+                this.doubleAdapter = doubleAdapter;
+              }
+              id = doubleAdapter.read(jsonReader);
             }
-            id = strTypeAdapter.read(jsonReader);
             break;
 
           case "geometry":
