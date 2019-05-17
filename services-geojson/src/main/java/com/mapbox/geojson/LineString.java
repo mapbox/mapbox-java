@@ -12,7 +12,6 @@ import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.utils.PolylineUtils;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +49,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Keep
-public final class LineString implements CoordinateContainer<List<Point>>, Serializable {
+public final class LineString implements CoordinateContainer<List<Point>> {
 
   private static final String TYPE = "LineString";
 

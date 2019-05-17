@@ -17,7 +17,6 @@ import com.mapbox.geojson.GeometryAdapterFactory;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.BoundingBoxTypeAdapter;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -39,7 +38,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @AutoValue
-public abstract class CarmenFeature implements GeoJson, Serializable {
+public abstract class CarmenFeature implements GeoJson {
 
   private static final String TYPE = "Feature";
 
