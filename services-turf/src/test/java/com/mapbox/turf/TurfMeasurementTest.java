@@ -41,6 +41,7 @@ public class TurfMeasurementTest extends TestUtils {
   private static final String TURF_BBOX_POLYGON_LINESTRING = "turf-bbox-polygon/linestring.geojson";
   private static final String TURF_BBOX_POLYGON_MULTIPOLYGON = "turf-bbox-polygon/multipolygon.geojson";
   private static final String TURF_BBOX_POLYGON_MULTI_POINT = "turf-bbox-polygon/multipoint.geojson";
+  private static final String TURF_ENVELOPE_FEATURE_COLLECTION = "turf-envelope/feature-collection.geojson";
   private static final String LINE_DISTANCE_MULTILINESTRING
     = "turf-line-distance/multilinestring.geojson";
 
@@ -353,9 +354,9 @@ public class TurfMeasurementTest extends TestUtils {
     // Use the LineString object to calculate its BoundingBox area
     double[] bbox = TurfMeasurement.bbox(lineString);
 
-   // Use the BoundingBox coordinates to create an actual BoundingBox object
+    // Use the BoundingBox coordinates to create an actual BoundingBox object
     BoundingBox boundingBox = BoundingBox.fromPoints(
-        Point.fromLngLat(bbox[0], bbox[1]), Point.fromLngLat(bbox[2], bbox[3]));
+      Point.fromLngLat(bbox[0], bbox[1]), Point.fromLngLat(bbox[2], bbox[3]));
 
     // Use the BoundingBox object in the TurfMeasurement.bboxPolygon() method.
     Polygon polygonRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
@@ -363,11 +364,11 @@ public class TurfMeasurementTest extends TestUtils {
     assertNotNull(polygonRepresentingBoundingBox);
     assertEquals(0, polygonRepresentingBoundingBox.inner().size());
     assertEquals(5, polygonRepresentingBoundingBox.coordinates().get(0).size());
-    assertEquals(Point.fromLngLat(102.0,-10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(0));
-    assertEquals(Point.fromLngLat(130,-10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(1));
-    assertEquals(Point.fromLngLat(130.0,4.0), polygonRepresentingBoundingBox.coordinates().get(0).get(2));
-    assertEquals(Point.fromLngLat(102.0,4.0), polygonRepresentingBoundingBox.coordinates().get(0).get(3));
-    assertEquals(Point.fromLngLat(102.0,-10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(4));
+    assertEquals(Point.fromLngLat(102.0, -10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(0));
+    assertEquals(Point.fromLngLat(130, -10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(1));
+    assertEquals(Point.fromLngLat(130.0, 4.0), polygonRepresentingBoundingBox.coordinates().get(0).get(2));
+    assertEquals(Point.fromLngLat(102.0, 4.0), polygonRepresentingBoundingBox.coordinates().get(0).get(3));
+    assertEquals(Point.fromLngLat(102.0, -10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(4));
   }
 
   @Test
@@ -388,7 +389,7 @@ public class TurfMeasurementTest extends TestUtils {
     assertNotNull(polygonRepresentingBoundingBox);
     assertEquals(0, polygonRepresentingBoundingBox.inner().size());
     assertEquals(5, polygonRepresentingBoundingBox.coordinates().get(0).size());
-    assertEquals(Point.fromLngLat(100,0.0), polygonRepresentingBoundingBox.coordinates().get(0).get(4));
+    assertEquals(Point.fromLngLat(100, 0.0), polygonRepresentingBoundingBox.coordinates().get(0).get(4));
   }
 
   @Test
@@ -409,5 +410,23 @@ public class TurfMeasurementTest extends TestUtils {
     assertNotNull(polygonRepresentingBoundingBox);
     assertEquals(0, polygonRepresentingBoundingBox.inner().size());
     assertEquals(5, polygonRepresentingBoundingBox.coordinates().get(0).size());
+  }
+
+  @Test
+  public void envelope() throws IOException {
+    FeatureCollection featureCollection = FeatureCollection.fromJson(loadJsonFixture(TURF_ENVELOPE_FEATURE_COLLECTION));
+    Polygon polygon = TurfMeasurement.envelope(featureCollection);
+
+    final List<Point> expectedPoints = new ArrayList<>();
+    expectedPoints.add(Point.fromLngLat(20, -10));
+    expectedPoints.add(Point.fromLngLat(130, -10));
+    expectedPoints.add(Point.fromLngLat(130, 4));
+    expectedPoints.add(Point.fromLngLat(20, 4));
+    expectedPoints.add(Point.fromLngLat(20, -10));
+    List<List<Point>> polygonPoints = new ArrayList<List<Point>>() {{
+      add(expectedPoints);
+    }};
+    Polygon expected = Polygon.fromLngLats(polygonPoints);
+    assertEquals("Polygon should match.", expected, polygon);
   }
 }

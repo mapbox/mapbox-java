@@ -18,7 +18,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [ ] turf-centroid
 - [x] turf-destination
 - [x] turf-distance
-- [ ] turf-envelope
+- [x] turf-envelope
 - [x] turf-length
 - [x] turf-midpoint
 - [ ] turf-point-on-feature
