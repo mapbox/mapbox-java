@@ -12,6 +12,9 @@ import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.utils.ApiCallHelper;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 
 /**
@@ -42,6 +45,25 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
     );
   }
 
+  @Override
+  protected synchronized OkHttpClient getOkHttpClient() {
+    if (okHttpClient == null) {
+      OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+      if (isEnableDebug()) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        httpClient.addInterceptor(logging);
+      }
+      Interceptor interceptor = interceptor();
+      if (interceptor != null) {
+        httpClient.addInterceptor(interceptor);
+      }
+
+      okHttpClient = httpClient.build();
+    }
+    return okHttpClient;
+  }
+
   abstract String requestId();
 
   abstract int routeIndex();
@@ -56,6 +78,9 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
   @NonNull
   @Override
   protected abstract String baseUrl();
+
+  @Nullable
+  abstract Interceptor interceptor();
 
   @Override
   protected GsonBuilder getGsonBuilder() {
@@ -101,7 +126,7 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
      * have specified enableRefresh.
      *
      * @param requestId id of the original directions request. This is found in the
-     * {@link com.mapbox.api.directions.v5.models.RouteOptions} object.
+     *                  {@link com.mapbox.api.directions.v5.models.RouteOptions} object.
      * @return this builder
      * @since 4.4.0
      */
@@ -153,6 +178,15 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
      * @since 4.4.0
      */
     public abstract Builder baseUrl(String baseUrl);
+
+    /**
+     * Adds an optional interceptor to set in the OkHttp client.
+     *
+     * @param interceptor to set for OkHttp
+     * @return this builder for chaining options together
+     * @since 4.9.0
+     */
+    public abstract Builder interceptor(Interceptor interceptor);
 
     /**
      * Returns an instance of {@link MapboxDirectionsRefresh} for interacting with the endpoint
