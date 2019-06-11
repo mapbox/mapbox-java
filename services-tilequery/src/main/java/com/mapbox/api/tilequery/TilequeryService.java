@@ -19,7 +19,7 @@ public interface TilequeryService {
   /**
    * Constructs the HTTP request for the specified parameters.
    *
-   * @param tileSetIds tile set ID(s)
+   * @param mapIds Map ID(s)
    * @param query query point
    * @param accessToken Mapbox access token
    * @param radius distance in meters to query for features
@@ -30,9 +30,9 @@ public interface TilequeryService {
    * @return A retrofit Call object
    * @since 3.5.0
    */
-  @GET("/v4/{tileSetIds}/tilequery/{query}.json")
+  @GET("/v4/{mapIds}/tilequery/{query}.json")
   Call<FeatureCollection> getCall(
-    @Path("tileSetIds") String tileSetIds,
+    @Path("mapIds") String mapIds,
     @Path("query") String query,
     @Query("access_token") String accessToken,
     @Query("radius") Integer radius,
@@ -44,7 +44,7 @@ public interface TilequeryService {
   /**
    * Constructs the HTTP request for the specified parameters.
    *
-   * @param tileSetIds tile set ID(s)
+   * @param mapIds Map ID(s)
    * @param query query point
    * @param accessToken Mapbox access token
    * @param radius distance in meters to query for features
@@ -55,9 +55,9 @@ public interface TilequeryService {
    * @return A retrofit Call object
    * @since 3.5.0
    */
-  @GET("/v4/{tileSetIds}/tilequery/{query}.json")
+  @GET("/v4/{mapIds}/tilequery/{query}.json")
   Call<List<FeatureCollection>> getBatchCall(
-    @Path("tileSetIds") String tileSetIds,
+    @Path("mapIds") String mapIds,
     @Path("query") String query,
     @Query("access_token") String accessToken,
     @Query("radius") Integer radius,
