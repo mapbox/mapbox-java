@@ -201,11 +201,11 @@ public abstract class MapboxTilequery extends MapboxService<FeatureCollection, T
      * The ID of the map being queried. If you need to composite multiple layers, the Tilequery
      * API endpoint can also support a comma-separated list of map IDs.
      *
-     * @param mapIds Map ID(s)
+     * @param tileSetIds tile set ID(s)
      * @return this builder for chaining options together
      * @since 3.5.0
      */
-    public abstract Builder mapIds(String mapIds);
+    public abstract Builder mapIds(String tileSetIds);
 
     /**
      * The longitude and latitude to be queried.
