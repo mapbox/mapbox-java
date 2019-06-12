@@ -27,7 +27,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
         MapboxTilequery client = MapboxTilequery.builder()
           .accessToken(ACCESS_TOKEN)
           .query("-122.42901,37.80633")
-          .mapIds("mapbox.mapbox-streets-v7")
+          .tilesetIds("mapbox.mapbox-streets-v7")
           .baseUrl(mockUrl.toString())
           .build();
         Response<FeatureCollection> response = client.executeCall();
@@ -40,7 +40,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery client = MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query(Point.fromLngLat(-122.42901,37.80633))
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .build();
 
@@ -56,7 +56,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     thrown.expectMessage("Missing required properties: accessToken");
     MapboxTilequery.builder()
       .query("-122.42901,37.80633")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .build();
   }
@@ -68,7 +68,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery.builder()
       .accessToken("")
       .query("-122.42901,37.80633")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .build();
   }
@@ -79,7 +79,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     thrown.expectMessage("Missing required properties: query");
     MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .build();
   }
@@ -91,7 +91,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query("")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .build();
   }
@@ -99,7 +99,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
   @Test
   public void build_noMapIdExceptionThrown() throws Exception {
     thrown.expect(IllegalStateException.class);
-    thrown.expectMessage("Missing required properties: mapIds");
+    thrown.expectMessage("Missing required properties: tilesetIds");
     MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query("-122.42901,37.80633")
@@ -112,7 +112,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery client = MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query("-122.42901,37.80633")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .build();
 
@@ -132,7 +132,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery client = MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query("-122.42901,37.80633")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .limit(50)
       .build();
@@ -145,7 +145,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery client = MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query("-122.42901,37.80633")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .radius(200)
       .build();
@@ -158,7 +158,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery client = MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query("-122.42901,37.80633")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .geometry(TilequeryCriteria.TILEQUERY_GEOMETRY_LINESTRING)
       .build();
@@ -172,7 +172,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery client = MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query("-122.42901,37.80633")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .dedupe(true)
       .build();
@@ -186,7 +186,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery client = MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query("-122.42901,37.80633")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .layers("poi_label")
       .build();
@@ -199,7 +199,7 @@ public class MapboxTilequeryTest extends TilequeryTestUtils {
     MapboxTilequery clientAppParams = MapboxTilequery.builder()
       .accessToken(ACCESS_TOKEN)
       .query("-122.42901,37.80633")
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .baseUrl(mockUrl.toString())
       .layers("poi_label")
       .geometry("point")
