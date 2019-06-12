@@ -359,11 +359,40 @@ public class TurfMeasurementTest extends TestUtils {
       Point.fromLngLat(bbox[0], bbox[1]), Point.fromLngLat(bbox[2], bbox[3]));
 
     // Use the BoundingBox object in the TurfMeasurement.bboxPolygon() method.
-    Polygon polygonRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
+    Feature featureRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
+
+    Polygon polygonRepresentingBoundingBox = (Polygon) featureRepresentingBoundingBox.geometry();
 
     assertNotNull(polygonRepresentingBoundingBox);
     assertEquals(0, polygonRepresentingBoundingBox.inner().size());
     assertEquals(5, polygonRepresentingBoundingBox.coordinates().get(0).size());
+    assertEquals(Point.fromLngLat(102.0, -10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(0));
+    assertEquals(Point.fromLngLat(130, -10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(1));
+    assertEquals(Point.fromLngLat(130.0, 4.0), polygonRepresentingBoundingBox.coordinates().get(0).get(2));
+    assertEquals(Point.fromLngLat(102.0, 4.0), polygonRepresentingBoundingBox.coordinates().get(0).get(3));
+    assertEquals(Point.fromLngLat(102.0, -10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(4));
+  }
+
+  @Test
+  public void bboxPolygonFromLineStringWithId() throws IOException, TurfException {
+    // Create a LineString
+    LineString lineString = LineString.fromJson(loadJsonFixture(TURF_BBOX_POLYGON_LINESTRING));
+
+    // Use the LineString object to calculate its BoundingBox area
+    double[] bbox = TurfMeasurement.bbox(lineString);
+
+    // Use the BoundingBox coordinates to create an actual BoundingBox object
+    BoundingBox boundingBox = BoundingBox.fromPoints(
+      Point.fromLngLat(bbox[0], bbox[1]), Point.fromLngLat(bbox[2], bbox[3]));
+
+    // Use the BoundingBox object in the TurfMeasurement.bboxPolygon() method.
+    Feature featureRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox, null, "TEST_ID");
+    Polygon polygonRepresentingBoundingBox = (Polygon) featureRepresentingBoundingBox.geometry();
+
+    assertNotNull(polygonRepresentingBoundingBox);
+    assertEquals(0, polygonRepresentingBoundingBox.inner().size());
+    assertEquals(5, polygonRepresentingBoundingBox.coordinates().get(0).size());
+    assertEquals("TEST_ID", featureRepresentingBoundingBox.id());
     assertEquals(Point.fromLngLat(102.0, -10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(0));
     assertEquals(Point.fromLngLat(130, -10.0), polygonRepresentingBoundingBox.coordinates().get(0).get(1));
     assertEquals(Point.fromLngLat(130.0, 4.0), polygonRepresentingBoundingBox.coordinates().get(0).get(2));
@@ -384,7 +413,9 @@ public class TurfMeasurementTest extends TestUtils {
       Point.fromLngLat(bbox[0], bbox[1]), Point.fromLngLat(bbox[2], bbox[3]));
 
     // Use the BoundingBox object in the TurfMeasurement.bboxPolygon() method.
-    Polygon polygonRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
+    Feature featureRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
+
+    Polygon polygonRepresentingBoundingBox = (Polygon) featureRepresentingBoundingBox.geometry();
 
     assertNotNull(polygonRepresentingBoundingBox);
     assertEquals(0, polygonRepresentingBoundingBox.inner().size());
@@ -405,7 +436,9 @@ public class TurfMeasurementTest extends TestUtils {
       Point.fromLngLat(bbox[0], bbox[1]), Point.fromLngLat(bbox[2], bbox[3]));
 
     // Use the BoundingBox object in the TurfMeasurement.bboxPolygon() method.
-    Polygon polygonRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
+    Feature featureRepresentingBoundingBox = TurfMeasurement.bboxPolygon(boundingBox);
+
+    Polygon polygonRepresentingBoundingBox = (Polygon) featureRepresentingBoundingBox.geometry();
 
     assertNotNull(polygonRepresentingBoundingBox);
     assertEquals(0, polygonRepresentingBoundingBox.inner().size());
