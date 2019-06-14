@@ -94,7 +94,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       bbox(),
       limit(),
       languages(),
-      reverseMode());
+      reverseMode(),
+      fuzzyMatch());
   }
 
   private Call<List<GeocodingResponse>> getBatchCall() {
@@ -119,7 +120,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       bbox(),
       limit(),
       languages(),
-      reverseMode());
+      reverseMode(),
+      fuzzyMatch());
 
     return batchCall;
   }
@@ -205,6 +207,9 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
   @Nullable
   abstract String reverseMode();
+
+  @Nullable
+  abstract Boolean fuzzyMatch();
 
   @Nullable
   abstract String clientAppName();
@@ -530,6 +535,20 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      */
     public abstract Builder reverseMode(
       @Nullable @GeocodingCriteria.GeocodingReverseModeCriteria String reverseMode);
+
+    /**
+     * Specify whether the Geocoding API should attempt approximate, as well as exact,
+     * matching when performing searches (true, default), or whether it should opt out
+     * of this behavior and only attempt exact matching (false). For example, the default
+     * setting might return Washington, DC for a query of <code>wahsington</code>, even
+     * though the query was misspelled.
+     *
+     * @param fuzzyMatch optionally set whether to allow the geocoding API to attempt
+     *                   exact matching or not.
+     * @return this builder for chaining options together
+     * @since 4.9.0
+     */
+    public abstract Builder fuzzyMatch(Boolean fuzzyMatch);
 
     /**
      * Required to call when this is being built. If no access token provided,
