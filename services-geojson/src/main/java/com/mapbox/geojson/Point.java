@@ -276,9 +276,9 @@ public final class Point implements CoordinateContainer<List<Double>> {
   }
 
   /**
-   * A Feature Collection might have a member named {@code bbox} to include information on the
-   * coordinate range for it's {@link Feature}s. The value of the bbox member MUST be a list of
-   * size 2*n where n is the number of dimensions represented in the contained feature geometries,
+   * A FeatureCollection might have a member named {@code bbox} to include information on the
+   * coordinate range for its {@link Feature}s. The value of the bbox member MUST be a list of
+   * size 2*n where n is the number of dimensions represented in the contained Feature geometries,
    * with all axes of the most southwesterly point followed by all axes of the more northeasterly
    * point. The axes order of a bbox follows the axes order of geometries.
    *
@@ -292,11 +292,11 @@ public final class Point implements CoordinateContainer<List<Double>> {
   }
 
   /**
-   * Provide a single double array containing the longitude, latitude, and optionally an
+   * Provides a single double array containing the longitude, latitude, and optionally an
    * altitude/elevation. {@link #longitude()}, {@link #latitude()}, and {@link #altitude()} are all
-   * avaliable which make getting specific coordinates more direct.
+   * available which makes getting specific coordinates more direct.
    *
-   * @return a double array which holds this points coordinates
+   * @return a double array which holds this Point's coordinates
    * @since 3.0.0
    */
   @NonNull

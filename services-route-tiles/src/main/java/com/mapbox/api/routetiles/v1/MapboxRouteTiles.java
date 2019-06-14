@@ -21,8 +21,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 
 /**
- * The Route Tiles API allows the download of route tiles for the purpose of offline routing. To
- * get a list of the versions, use the {@link MapboxRouteTileVersions} API.
+ * The Route Tiles API allows the download of route tiles for the purpose of offline
+ * routing. To get a list of the versions, use the
+ * {@link MapboxRouteTileVersions} API.
  *
  * @since 4.1.0
  */

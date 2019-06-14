@@ -10,6 +10,8 @@ import com.google.gson.GsonBuilder;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
 import com.mapbox.api.geocoding.v5.models.GeocodingAdapterFactory;
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.api.geocoding.v5.models.RoutableDestination;
+import com.mapbox.api.geocoding.v5.models.RoutingInfo;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
@@ -73,6 +75,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
     return new GsonBuilder()
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .registerTypeAdapterFactory(GeometryAdapterFactory.create())
+      .registerTypeAdapter(RoutableDestination.class, new RoutingDestinationTypeAdapter())
+      .registerTypeAdapter(RoutingInfo.class, new RoutingInfoDeserializer())
       .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter());
   }
 
@@ -95,7 +99,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       limit(),
       languages(),
       reverseMode(),
-      fuzzyMatch());
+      fuzzyMatch(),
+      routing());
   }
 
   private Call<List<GeocodingResponse>> getBatchCall() {
@@ -121,8 +126,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       limit(),
       languages(),
       reverseMode(),
-      fuzzyMatch());
-
+      fuzzyMatch(),
+      routing());
     return batchCall;
   }
 
@@ -210,6 +215,9 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
   @Nullable
   abstract Boolean fuzzyMatch();
+
+  @Nullable
+  abstract Boolean routing();
 
   @Nullable
   abstract String clientAppName();
@@ -395,7 +403,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      */
     public Builder bbox(BoundingBox bbox) {
       bbox(bbox.southwest().longitude(), bbox.southwest().latitude(),
-           bbox.northeast().longitude(), bbox.northeast().latitude());
+        bbox.northeast().longitude(), bbox.northeast().latitude());
       return this;
     }
 
@@ -551,6 +559,24 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @since 4.9.0
      */
     public abstract Builder fuzzyMatch(Boolean fuzzyMatch);
+
+    /**
+     * Specify whether to request additional metadata about the recommended navigation
+     * destination corresponding to the feature (true) or not (false, default).
+     * Only applicable for address features.
+     * <p>
+     * For example, if routablePoints=true the response could include data about a point
+     * on the road the feature fronts. Response features may include an array containing
+     * one or more routable points. Routable points cannot always be determined.
+     * Consuming applications should fall back to using the normal geometry of the feature
+     * if a separate routable point is not returned.
+     *
+     * @param routing optionally set whether to request additional metadata about
+     *                the recommended navigation destination corresponding to the feature.
+     * @return this builder for chaining options together
+     * @since 4.10.0
+     */
+    public abstract Builder routing(Boolean routing);
 
     /**
      * Required to call when this is being built. If no access token provided,

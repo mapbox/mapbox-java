@@ -36,16 +36,16 @@ public final class DirectionsCriteria {
   public static final String PROFILE_DRIVING = "driving";
 
   /**
-   * For pedestrian and hiking routing. This profile shows the shortest path by using sidewalks
-   * and trails.
+   * For pedestrian and hiking routing. This profile shows the shortest path by
+   * using sidewalks and trails.
    *
    * @since 1.0.0
    */
   public static final String PROFILE_WALKING = "walking";
 
   /**
-   * For bicycle routing. This profile shows routes that are short and safe for cyclist, avoiding
-   * highways and preferring streets with bike lanes.
+   * For bicycle routing. This profile shows routes that are short and safe
+   * for cyclist, avoiding highways and preferring streets with bike lanes.
    *
    * @since 1.0.0
    */

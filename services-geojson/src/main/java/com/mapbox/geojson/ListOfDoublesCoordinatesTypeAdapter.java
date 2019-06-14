@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Type Adapter to serialize/deserialize Poinr into/from for double array.
+ * Type Adapter to serialize/deserialize Point into/from a double array.
  *
  * @since 4.6.0
  */

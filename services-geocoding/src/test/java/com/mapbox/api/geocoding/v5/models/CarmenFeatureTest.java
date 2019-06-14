@@ -1,32 +1,28 @@
 package com.mapbox.api.geocoding.v5.models;
 
+import com.google.gson.JsonObject;
+import com.mapbox.api.geocoding.v5.GeocodingCriteria;
+import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
+import com.mapbox.api.geocoding.v5.MapboxGeocoding;
+import com.mapbox.geojson.CoordinateContainer;
+import com.mapbox.geojson.Point;
+
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.Locale;
+
+import retrofit2.Response;
+
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-
-import com.google.gson.JsonObject;
-import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
-import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.core.TestUtils;
-import com.mapbox.geojson.CoordinateContainer;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
-
-import org.junit.Assert;
-import org.junit.Test;
-import retrofit2.Response;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import static org.junit.Assert.assertNull;
 
 public class CarmenFeatureTest extends GeocodingTestUtils {
 
@@ -155,6 +151,79 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
     assertThat(feature.bbox().south(), equalTo(39.308357239));
     assertThat(feature.bbox().east(), equalTo(107.025123596));
     assertThat(feature.bbox().north(), equalTo(39.6012458800001));
+  }
+
+  @Test
+  public void routing_routingInfoIsNullWithMissingAddressType() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("1600 pennsylvania ave nw")
+        .routing(true)
+        .baseUrl(mockUrl.toString())
+        .build();
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertNotNull(response.body().features().get(0));
+    assertNull(response.body().features().get(0).routablePoints());
+  }
+
+  @Test
+  public void routing_routingInfoPresentBasedOnQueryLocation() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("1600 pennsylvania ave nw")
+        .routing(true)
+        .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+        .baseUrl(mockUrl.toString())
+        .build();
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    System.out.println("response.raw() = " + response.raw());
+    System.out.println("response.body().features().get(0) = " + response.body().features().get(0));
+
+
+/*
+    double longitude = response.body().features().get(0).routablePoints()
+      .getAsJsonArray("points").getAsJsonArray()
+      .get(0).getAsJsonObject().get("coordinates").getAsJsonArray().get(0).getAsDouble();
+
+    double latitude = response.body().features().get(0).routablePoints()
+      .getAsJsonArray("points").getAsJsonArray()
+      .get(0).getAsJsonObject().get("coordinates").getAsJsonArray().get(1).getAsDouble();
+*/
+
+    /*Point routablePoint = Point.fromLngLat(longitude, latitude);
+
+     */
+    assertNotNull(response.body().features().get(0).routablePoints());
+//    assertNotNull(routablePoint);
+  }
+
+  @Test
+  public void routing_falsePreventsRoutingInfoFromArrivingNoAddressType() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("1600 pennsylvania ave nw")
+        .routing(false)
+        .baseUrl(mockUrl.toString())
+        .build();
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertNull(response.body().features().get(0).routablePoints());
+  }
+
+  @Test
+  public void routing_falsePreventsRoutingInfoFromArrivingWithAddressType() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("1600 pennsylvania ave nw")
+        .routing(false)
+        .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+        .baseUrl(mockUrl.toString())
+        .build();
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertNull(response.body().features().get(0).routablePoints());
   }
 
   @Test

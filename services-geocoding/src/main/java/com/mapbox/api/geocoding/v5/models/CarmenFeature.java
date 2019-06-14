@@ -2,6 +2,7 @@ package com.mapbox.api.geocoding.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,6 +10,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.geocoding.v5.GeocodingCriteria.GeocodingTypeCriteria;
+import com.mapbox.api.geocoding.v5.RoutingDestinationTypeAdapter;
+import com.mapbox.api.geocoding.v5.RoutingInfoDeserializer;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.GeoJson;
@@ -55,6 +58,8 @@ public abstract class CarmenFeature implements GeoJson {
     Gson gson = new GsonBuilder()
       .registerTypeAdapterFactory(GeometryAdapterFactory.create())
       .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter())
+      .registerTypeAdapter(RoutingInfo.class, new RoutingInfoDeserializer())
+      .registerTypeAdapter(RoutableDestination.class, new RoutingDestinationTypeAdapter())
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .create();
     CarmenFeature feature = gson.fromJson(json, CarmenFeature.class);
@@ -272,6 +277,17 @@ public abstract class CarmenFeature implements GeoJson {
   public abstract String language();
 
   /**
+   * A list of recommended navigation destinations corresponding to the CarmenFeature.
+   * Only applicable for CarmenFeatures with the "address" type.
+   *
+   * @return a {@link JsonObject} with a list of ideal navigation locations
+   * @since 4.10.0
+   */
+  @Nullable
+  @SerializedName("routable_points")
+  public abstract RoutingInfo routablePoints();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -481,6 +497,19 @@ public abstract class CarmenFeature implements GeoJson {
      * @since 2.2.0
      */
     public abstract Builder language(@Nullable String language);
+
+    /**
+     * A JSONObject with a list of recommended navigation destinations
+     * corresponding to the CarmenFeature. Only applicable for address CarmenFeatures.
+     *
+     * @param routingInfo a {@link JsonObject} which holds a list made up of ideal
+     *                   navigation locations for the specific
+     *                   {@link CarmenFeature}.
+     * @return this builder for chaining options together
+     * @since 4.10.0
+     */
+    @SerializedName("routable_points")
+    public abstract Builder routablePoints(@Nullable RoutingInfo routingInfo);
 
     /**
      * Build a new {@link CarmenFeature} object.

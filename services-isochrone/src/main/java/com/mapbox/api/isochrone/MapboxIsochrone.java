@@ -116,9 +116,9 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
 
   /**
    * This builder is used to create a new request to the Mapbox Isochrone API. At a bare minimum,
-   * your request must include an access token, a directions routing profile (driving, walking,
-   * or cycling),and a comma separated list of time for the contours. All other fields can be
-   * left alone in order to use the default behaviour of the API.
+   * your request must include an access token, a directions routing profile
+   * (driving, walking, or cycling),and a comma separated list of time for the contours.
+   * All other fields can be left alone in order to use the default behaviour of the API.
    * <p>
    * Note to contributors: All optional booleans in this builder use the object {@code Boolean}
    * rather than the primitive to allow for unset (null) values.

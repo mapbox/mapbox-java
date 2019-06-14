@@ -208,7 +208,8 @@ public abstract class MapboxOptimization
     /**
      * This selects which mode of transportation the user will be using while navigating from the
      * origin to the final destination. The options include driving, driving considering traffic,
-     * walking, and cycling. Using each of these profiles will result in different routing biases.
+     * walking, and cycling. Using each of these profiles will result in different
+     * routing biases.
      *
      * @param profile required to be one of the String values found in the {@link ProfileCriteria}
      * @return this builder for chaining options together

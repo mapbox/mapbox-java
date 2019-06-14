@@ -21,8 +21,9 @@ public class IsochroneCriteria {
   public static final String PROFILE_DEFAULT_USER = "mapbox";
 
   /**
-   * For walking routing. This profile shows routes that are short and safe for cyclist, avoiding
-   * highways and preferring streets with bike lanes.
+   * For walking routing. This profile shows routes that are
+   * short and safe for cyclist, avoiding highways and preferring
+   * streets with bike lanes.
    *
    * @since 4.6.0
    */
@@ -37,8 +38,9 @@ public class IsochroneCriteria {
   public static final String PROFILE_DRIVING = "driving";
 
   /**
-   * For bicycle routing. This profile shows routes that are short and safe for cyclist, avoiding
-   * highways and preferring streets with bike lanes.
+   * For bicycle routing. This profile shows routes that are
+   * short and safe for cyclist, avoiding highways and preferring
+   * streets with bike lanes.
    *
    * @since 4.6.0
    */

@@ -435,7 +435,8 @@ public abstract class MapboxDirections extends
     /**
      * This selects which mode of transportation the user will be using while navigating from the
      * origin to the final destination. The options include driving, driving considering traffic,
-     * walking, and cycling. Using each of these profiles will result in different routing biases.
+     * walking, and cycling. Using each of these profiles will result in different
+     * routing biases.
      *
      * @param profile required to be one of the String values found in the {@link ProfileCriteria}
      * @return this builder for chaining options together
@@ -671,8 +672,8 @@ public abstract class MapboxDirections extends
     abstract Builder radius(@Nullable String radiuses);
 
     /**
-     * Exclude certain road types from routing. Valid values depend on the profile in use. The
-     * default is to not exclude anything from the profile selected.
+     * Exclude certain road types from routing. Valid values depend on the
+     * profile in use. The default is to not exclude anything from the profile selected.
      *
      * @param exclude one of the constants defined in {@link ExcludeCriteria}
      * @return this builder for chaining options together

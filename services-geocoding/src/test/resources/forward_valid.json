@@ -1,1 +1,195 @@
-{"type":"FeatureCollection","query":["1600","pennsylvania","ave"],"features":[{"id":"address.10133733172573100","type":"Feature","text":"Pennsylvania Ave","place_name":"Pennsylvania Ave, Wasaga Beach, Ontario L9Z 3A8, Canada","relevance":0.39,"properties":{},"center":[-79.9850737,44.5047077],"geometry":{"type":"Point","coordinates":[-79.9850737,44.5047077]},"context":[{"id":"place.655624","text":"Wasaga Beach","wikidata":"Q3047234"},{"id":"postcode.17609609551414490","text":"L9Z 3A8"},{"id":"region.13373639426376420","text":"Ontario","short_code":"CA-ON","wikidata":"Q1904"},{"id":"country.15589894856372040","text":"Canada","short_code":"ca","wikidata":"Q16"}]},{"id":"address.6485281316573100","type":"Feature","text":"Pennsylvania Ave","place_name":"Pennsylvania Ave, Vaughan, Ontario L4K 3X6, Canada","relevance":0.39,"properties":{},"center":[-79.532497,43.802232],"geometry":{"type":"Point","coordinates":[-79.532497,43.802232]},"context":[{"id":"neighborhood.5043724752221980","text":"Vellore Woods"},{"id":"place.646758","text":"Vaughan","wikidata":"Q44013"},{"id":"postcode.6385804433309570","text":"L4K 3X6"},{"id":"region.13373639426376420","text":"Ontario","short_code":"CA-ON","wikidata":"Q1904"},{"id":"country.15589894856372040","text":"Canada","short_code":"ca","wikidata":"Q16"}]},{"id":"address.12769812476573100","type":"Feature","text":"Pennsylvania Ave","place_name":"Pennsylvania Ave, Stellarton, Nova Scotia B0K 1S0, Canada","relevance":0.39,"properties":{},"center":[-62.661376,45.556068],"geometry":{"type":"Point","coordinates":[-62.661376,45.556068]},"context":[{"id":"place.593196","text":"Stellarton","wikidata":"Q3498168"},{"id":"postcode.13310912212063190","text":"B0K 1S0"},{"id":"region.10539239752558240","text":"Nova Scotia","short_code":"CA-NS","wikidata":"Q1952"},{"id":"country.15589894856372040","text":"Canada","short_code":"ca","wikidata":"Q16"}]},{"id":"address.6456604709573100","type":"Feature","text":"Pennsylvania Ave","place_name":"Pennsylvania Ave, Vaughan, Ontario L4K 3X8, Canada","relevance":0.39,"properties":{},"center":[-79.531684,43.802706],"geometry":{"type":"Point","coordinates":[-79.531684,43.802706]},"context":[{"id":"neighborhood.5043724752221980","text":"Vellore Woods"},{"id":"place.646758","text":"Vaughan","wikidata":"Q44013"},{"id":"postcode.6367605302663760","text":"L4K 3X8"},{"id":"region.13373639426376420","text":"Ontario","short_code":"CA-ON","wikidata":"Q1904"},{"id":"country.15589894856372040","text":"Canada","short_code":"ca","wikidata":"Q16"}]}],"attribution":"NOTICE: © 2016 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained."}
+{
+  "type":"FeatureCollection",
+  "query":[
+    "1600",
+    "pennsylvania",
+    "ave"
+  ],
+  "features":[
+    {
+      "id":"address.10133733172573100",
+      "type":"Feature",
+      "text":"Pennsylvania Ave",
+      "place_name":"Pennsylvania Ave, Wasaga Beach, Ontario L9Z 3A8, Canada",
+      "relevance":0.39,
+      "properties":{
+
+      },
+      "center":[
+        -79.9850737,
+        44.5047077
+      ],
+      "geometry":{
+        "type":"Point",
+        "coordinates":[
+          -79.9850737,
+          44.5047077
+        ]
+      },
+      "context":[
+        {
+          "id":"place.655624",
+          "text":"Wasaga Beach",
+          "wikidata":"Q3047234"
+        },
+        {
+          "id":"postcode.17609609551414490",
+          "text":"L9Z 3A8"
+        },
+        {
+          "id":"region.13373639426376420",
+          "text":"Ontario",
+          "short_code":"CA-ON",
+          "wikidata":"Q1904"
+        },
+        {
+          "id":"country.15589894856372040",
+          "text":"Canada",
+          "short_code":"ca",
+          "wikidata":"Q16"
+        }
+      ]
+    },
+    {
+      "id":"address.6485281316573100",
+      "type":"Feature",
+      "text":"Pennsylvania Ave",
+      "place_name":"Pennsylvania Ave, Vaughan, Ontario L4K 3X6, Canada",
+      "relevance":0.39,
+      "properties":{
+
+      },
+      "center":[
+        -79.532497,
+        43.802232
+      ],
+      "geometry":{
+        "type":"Point",
+        "coordinates":[
+          -79.532497,
+          43.802232
+        ]
+      },
+      "context":[
+        {
+          "id":"neighborhood.5043724752221980",
+          "text":"Vellore Woods"
+        },
+        {
+          "id":"place.646758",
+          "text":"Vaughan",
+          "wikidata":"Q44013"
+        },
+        {
+          "id":"postcode.6385804433309570",
+          "text":"L4K 3X6"
+        },
+        {
+          "id":"region.13373639426376420",
+          "text":"Ontario",
+          "short_code":"CA-ON",
+          "wikidata":"Q1904"
+        },
+        {
+          "id":"country.15589894856372040",
+          "text":"Canada",
+          "short_code":"ca",
+          "wikidata":"Q16"
+        }
+      ]
+    },
+    {
+      "id":"address.12769812476573100",
+      "type":"Feature",
+      "text":"Pennsylvania Ave",
+      "place_name":"Pennsylvania Ave, Stellarton, Nova Scotia B0K 1S0, Canada",
+      "relevance":0.39,
+      "properties":{
+
+      },
+      "center":[
+        -62.661376,
+        45.556068
+      ],
+      "geometry":{
+        "type":"Point",
+        "coordinates":[
+          -62.661376,
+          45.556068
+        ]
+      },
+      "context":[
+        {
+          "id":"place.593196",
+          "text":"Stellarton",
+          "wikidata":"Q3498168"
+        },
+        {
+          "id":"postcode.13310912212063190",
+          "text":"B0K 1S0"
+        },
+        {
+          "id":"region.10539239752558240",
+          "text":"Nova Scotia",
+          "short_code":"CA-NS",
+          "wikidata":"Q1952"
+        },
+        {
+          "id":"country.15589894856372040",
+          "text":"Canada",
+          "short_code":"ca",
+          "wikidata":"Q16"
+        }
+      ]
+    },
+    {
+      "id":"address.6456604709573100",
+      "type":"Feature",
+      "text":"Pennsylvania Ave",
+      "place_name":"Pennsylvania Ave, Vaughan, Ontario L4K 3X8, Canada",
+      "relevance":0.39,
+      "properties":{
+
+      },
+      "center":[
+        -79.531684,
+        43.802706
+      ],
+      "geometry":{
+        "type":"Point",
+        "coordinates":[
+          -79.531684,
+          43.802706
+        ]
+      },
+      "context":[
+        {
+          "id":"neighborhood.5043724752221980",
+          "text":"Vellore Woods"
+        },
+        {
+          "id":"place.646758",
+          "text":"Vaughan",
+          "wikidata":"Q44013"
+        },
+        {
+          "id":"postcode.6367605302663760",
+          "text":"L4K 3X8"
+        },
+        {
+          "id":"region.13373639426376420",
+          "text":"Ontario",
+          "short_code":"CA-ON",
+          "wikidata":"Q1904"
+        },
+        {
+          "id":"country.15589894856372040",
+          "text":"Canada",
+          "short_code":"ca",
+          "wikidata":"Q16"
+        }
+      ]
+    }
+  ],
+  "attribution":"NOTICE: © 2016 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained."
+}

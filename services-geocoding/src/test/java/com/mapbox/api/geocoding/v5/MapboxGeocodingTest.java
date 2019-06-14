@@ -7,7 +7,6 @@ import com.mapbox.geojson.Point;
 
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,6 +15,7 @@ import retrofit2.Response;
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class MapboxGeocodingTest extends GeocodingTestUtils {
@@ -61,7 +61,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   public void build_noAccessTokenExceptionThrown() {
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("Missing required properties: accessToken");
-   MapboxGeocoding.builder()
+    MapboxGeocoding.builder()
       .query("1600 pennsylvania ave nw")
       .baseUrl(mockUrl.toString())
       .build();
@@ -177,7 +177,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   @Test
   public void bbox_getsFormattedCorrectlyForUrl() {
     BoundingBox bbox = BoundingBox.fromLngLats(
-            -77.083056, 38.908611, -76.997778, 38.959167);
+      -77.083056, 38.908611, -76.997778, 38.959167);
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
             .accessToken(ACCESS_TOKEN)
             .baseUrl(mockUrl.toString())
@@ -187,6 +187,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
     assertEquals("-77.083056,38.908611,-76.997778,38.959167",
             mapboxGeocoding.cloneCall().request().url().queryParameter("bbox"));
   }
+
 
   @Test
   public void bbox_asPoints_getsFormattedCorrectlyForUrl() {
@@ -289,14 +290,37 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   @Test
   public void fuzzyMatch_getsAddedToUrlCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("wahsington")
+        .fuzzyMatch(true)
+        .baseUrl(mockUrl.toString())
+        .build();
+    assertNotNull(mapboxGeocoding);
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("fuzzyMatch=true"));
+  }
+
+  @Test
+  public void routing_trueGetsAddedToUrlCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
-      .query("wahsington")
-      .fuzzyMatch(true)
+      .query("1600 pennsylvania ave nw")
+      .routing(true)
       .baseUrl(mockUrl.toString())
       .build();
     assertNotNull(mapboxGeocoding);
-    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
-      .contains("fuzzyMatch=true"));
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("routing=true"));
+  }
+
+  @Test
+  public void routing_falseGetsAddedToUrlCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("1600 pennsylvania ave nw")
+        .routing(false)
+        .baseUrl(mockUrl.toString())
+        .build();
+    assertNotNull(mapboxGeocoding);
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("routing=false"));
   }
 
   @Test
