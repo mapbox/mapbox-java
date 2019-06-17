@@ -281,4 +281,30 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
       .limit(2)
       .build();
   }
+
+  @Test
+  public void fuzzyMatchSanity() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("wahsington")
+      .fuzzyMatch(true)
+      .baseUrl(mockUrl.toString())
+      .build();
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(200, response.code());
+  }
+
+  @Test
+  public void fuzzyMatch_getsAddedToUrlCorrectly() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .query("wahsington")
+      .fuzzyMatch(true)
+      .baseUrl(mockUrl.toString())
+      .build();
+    assertNotNull(mapboxGeocoding);
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("fuzzyMatch=true"));
+  }
 }
