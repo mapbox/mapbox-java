@@ -118,6 +118,22 @@ public abstract class MapMatchingResponse implements Serializable {
   }
 
   /**
+   * Takes the currently defined values found inside this instance and converts it to a
+   * string.
+   *
+   * @return a JSON string which represents this MapMatching response
+   * @since 4.9.0
+   */
+  @NonNull
+  public String toJson() {
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapterFactory(MapMatchingAdapterFactory.create())
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+        .create();
+    return gson.toJson(this, MapMatchingResponse.class);
+  }
+
+  /**
    * This builder can be used to set the values describing the {@link MapMatchingResponse}.
    *
    * @since 3.0.0

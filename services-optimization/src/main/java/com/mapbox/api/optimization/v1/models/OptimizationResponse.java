@@ -2,9 +2,12 @@ package com.mapbox.api.optimization.v1.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 
 import java.io.Serializable;
@@ -88,6 +91,22 @@ public abstract class OptimizationResponse implements Serializable {
    * @since 3.1.0
    */
   public abstract Builder toBuilder();
+
+  /**
+   * This takes the currently defined values found inside this instance and converts it to a GeoJson
+   * string.
+   *
+   * @return a JSON string which represents this Optimization response
+   * @since 4.9.0
+   */
+  @NonNull
+  public String toJson() {
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapterFactory(OptimizationAdapterFactory.create())
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+        .create();
+    return gson.toJson(this, OptimizationResponse.class);
+  }
 
   /**
    * Gson type adapter for parsing Gson to this class.

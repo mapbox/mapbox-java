@@ -1,15 +1,18 @@
 package com.mapbox.api.matrix.v1.models;
 
-import java.io.Serializable;
-import java.util.List;
-
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.models.DirectionsWaypoint;
+import com.mapbox.api.matrix.v1.MatrixAdapterFactory;
 
-import android.support.annotation.NonNull;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * This contains the Matrix API response information which can be used to display the results.
@@ -116,6 +119,22 @@ public abstract class MatrixResponse implements Serializable {
    */
   public static TypeAdapter<MatrixResponse> typeAdapter(Gson gson) {
     return new AutoValue_MatrixResponse.GsonTypeAdapter(gson);
+  }
+
+  /**
+   * Takes the currently defined values found inside this instance and converts it to a
+   * string.
+   *
+   * @return a JSON string which represents this Matrix response
+   * @since 4.9.0
+   */
+  @NonNull
+  public String toJson() {
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapterFactory(MatrixAdapterFactory.create())
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+        .create();
+    return gson.toJson(this, MatrixResponse.class);
   }
 
   /**

@@ -207,7 +207,7 @@ public class MapboxMatrixTest extends TestUtils {
       .coordinates(positions)
       .addAnnotations(ANNOTATION_DISTANCE, ANNOTATION_DURATION)
       .addApproaches(APPROACH_CURB, APPROACH_CURB, APPROACH_CURB)
-      .sources(0,2)
+      .sources(0, 2)
       .baseUrl(mockUrl.toString())
       .build();
 
@@ -217,7 +217,7 @@ public class MapboxMatrixTest extends TestUtils {
     assertEquals(1, response.body().distances().size());
     assertEquals(1, response.body().durations().size());
     assertEquals(-122.461997, response.body().sources().get(0).location().longitude(), DELTA);
-    assertEquals(-122.420019, response.body().destinations().get(0).location().longitude(),  DELTA);
+    assertEquals(-122.420019, response.body().destinations().get(0).location().longitude(), DELTA);
     assertEquals(19711.7, response.body().durations().get(0)[2], DELTA);
     assertEquals(27192.3, response.body().distances().get(0)[2], DELTA);
     assertEquals("McAllister Street", response.body().destinations().get(0).name());

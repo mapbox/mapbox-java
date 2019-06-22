@@ -96,6 +96,22 @@ public abstract class DirectionsRefreshResponse extends DirectionsJsonObject {
   }
 
   /**
+   * Takes the currently defined values found inside this instance and converts it to a
+   * string.
+   *
+   * @return a JSON string which represents this Directions response
+   * @since 4.9.0
+   */
+  @NonNull
+  public String toJson() {
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapterFactory(DirectionsRefreshAdapterFactory.create())
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+        .create();
+    return gson.toJson(this, DirectionsRefreshResponse.class);
+  }
+
+  /**
    * This builder can be used to set the values describing the {@link DirectionsRefreshResponse}.
    * @since 4.4.0
    */
