@@ -5,7 +5,9 @@ import static com.mapbox.turf.TurfConversion.radiansToDegrees;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.google.gson.JsonObject;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
@@ -457,38 +459,71 @@ public final class TurfMeasurement {
    * geometry.
    *
    * @param boundingBox a {@link BoundingBox} object to calculate with
-   * @return a {@link Polygon} object
+   * @return a {@link Feature} object
    * @see <a href="http://turfjs.org/docs/#bboxPolygon">Turf BoundingBox Polygon documentation</a>
-   * @since 4.7.0
+   * @since 4.9.0
    */
-  public static Polygon bboxPolygon(@NonNull BoundingBox boundingBox) {
-    return Polygon.fromLngLats(
+  public static Feature bboxPolygon(@NonNull BoundingBox boundingBox) {
+    return bboxPolygon(boundingBox, null, null);
+  }
+
+  /**
+   * Takes a {@link BoundingBox} and uses its coordinates to create a {@link Polygon}
+   * geometry.
+   *
+   * @param boundingBox a {@link BoundingBox} object to calculate with
+   * @param properties a {@link JsonObject} containing the feature properties
+   * @param id  common identifier of this feature
+   * @return a {@link Feature} object
+   * @see <a href="http://turfjs.org/docs/#bboxPolygon">Turf BoundingBox Polygon documentation</a>
+   * @since 4.9.0
+   */
+  public static Feature bboxPolygon(@NonNull BoundingBox boundingBox,
+                                    @Nullable JsonObject properties,
+                                    @Nullable String id) {
+    return Feature.fromGeometry(Polygon.fromLngLats(
       Collections.singletonList(
         Arrays.asList(
           Point.fromLngLat(boundingBox.west(), boundingBox.south()),
           Point.fromLngLat(boundingBox.east(), boundingBox.south()),
           Point.fromLngLat(boundingBox.east(), boundingBox.north()),
           Point.fromLngLat(boundingBox.west(), boundingBox.north()),
-          Point.fromLngLat(boundingBox.west(), boundingBox.south()))));
+          Point.fromLngLat(boundingBox.west(), boundingBox.south())))), properties, id);
   }
 
   /**
    * Takes a bbox and uses its coordinates to create a {@link Polygon} geometry.
    *
    * @param bbox a double[] object to calculate with
-   * @return a {@link Polygon} object
+   * @return a {@link Feature} object
    * @see <a href="http://turfjs.org/docs/#bboxPolygon">Turf BoundingBox Polygon documentation</a>
    * @since 4.9.0
    */
-  public static Polygon bboxPolygon(@NonNull double[] bbox) {
-    return Polygon.fromLngLats(
+  public static Feature bboxPolygon(@NonNull double[] bbox) {
+    return bboxPolygon(bbox, null, null);
+  }
+
+  /**
+   * Takes a bbox and uses its coordinates to create a {@link Polygon} geometry.
+   *
+   * @param bbox a double[] object to calculate with
+   * @param properties a {@link JsonObject} containing the feature properties
+   * @param id  common identifier of this feature
+   * @return a {@link Feature} object
+   * @see <a href="http://turfjs.org/docs/#bboxPolygon">Turf BoundingBox Polygon documentation</a>
+   * @since 4.9.0
+   */
+  public static Feature bboxPolygon(@NonNull double[] bbox,
+                                    @Nullable JsonObject properties,
+                                    @Nullable String id) {
+    return Feature.fromGeometry(Polygon.fromLngLats(
       Collections.singletonList(
         Arrays.asList(
           Point.fromLngLat(bbox[0], bbox[1]),
           Point.fromLngLat(bbox[2], bbox[1]),
           Point.fromLngLat(bbox[2], bbox[3]),
           Point.fromLngLat(bbox[0], bbox[3]),
-          Point.fromLngLat(bbox[0], bbox[1]))));
+          Point.fromLngLat(bbox[0], bbox[1])))), properties, id);
   }
 
   /**
@@ -499,9 +534,8 @@ public final class TurfMeasurement {
    * @since 4.9.0
    */
   public static Polygon envelope(GeoJson geoJson) {
-    return bboxPolygon(bbox(geoJson));
+    return (Polygon) bboxPolygon(bbox(geoJson)).geometry();
   }
-
 
   /**
    * Takes a bounding box and calculates the minimum square bounding box
