@@ -2,6 +2,8 @@ package com.mapbox.turf;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
@@ -219,10 +221,31 @@ public final class TurfMisc {
    */
   @NonNull
   public static Feature nearestPointOnLine(@NonNull Point pt, @NonNull List<Point> coords) {
+    return nearestPointOnLine(pt, coords, null);
+  }
+
+  /**
+   * Takes a {@link Point} and a {@link LineString} and calculates the closest Point on the
+   * LineString.
+   *
+   * @param pt point to snap from
+   * @param coords line to snap to
+   * @param units one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   *              can be degrees, radians, miles, or kilometers
+   * @return closest point on the line to point
+   * @since 4.9.0
+   */
+  @NonNull
+  public static Feature nearestPointOnLine(@NonNull Point pt, @NonNull List<Point> coords,
+                                           @Nullable @TurfConstants.TurfUnitCriteria String units) {
 
     if (coords.size() < 2) {
       throw new TurfException("Turf nearestPointOnLine requires a List of Points "
-        + "made up of at least 2 coordinates.");
+          + "made up of at least 2 coordinates.");
+    }
+
+    if (units == null) {
+      units = TurfConstants.UNIT_KILOMETERS;
     }
 
     Feature closestPt = Feature.fromGeometry(
@@ -234,10 +257,10 @@ public final class TurfMisc {
       Feature stop = Feature.fromGeometry(coords.get(i + 1));
       //start
       start.addNumberProperty("dist", TurfMeasurement.distance(
-        pt, (Point) start.geometry(), TurfConstants.UNIT_MILES));
+        pt, (Point) start.geometry(), units));
       //stop
       stop.addNumberProperty("dist", TurfMeasurement.distance(
-        pt, (Point) stop.geometry(), TurfConstants.UNIT_MILES));
+        pt, (Point) stop.geometry(), units));
       //perpendicular
       double heightDistance = Math.max(
         start.properties().get("dist").getAsDouble(),
@@ -247,10 +270,10 @@ public final class TurfMisc {
         (Point) stop.geometry());
       Feature perpendicularPt1 = Feature.fromGeometry(
         TurfMeasurement.destination(pt, heightDistance, direction + 90,
-          TurfConstants.UNIT_MILES));
+              units));
       Feature perpendicularPt2 = Feature.fromGeometry(
         TurfMeasurement.destination(pt, heightDistance, direction - 90,
-          TurfConstants.UNIT_MILES));
+              units));
       LineIntersectsResult intersect = lineIntersects(
         ((Point) perpendicularPt1.geometry()).longitude(),
         ((Point) perpendicularPt1.geometry()).latitude(),
@@ -267,7 +290,7 @@ public final class TurfMisc {
         intersectPt = Feature.fromGeometry(
           Point.fromLngLat(intersect.horizontalIntersection(), intersect.verticalIntersection()));
         intersectPt.addNumberProperty("dist", TurfMeasurement.distance(pt,
-          (Point) intersectPt.geometry(), TurfConstants.UNIT_MILES));
+          (Point) intersectPt.geometry(), units));
       }
 
       if ((double) start.getNumberProperty("dist")
