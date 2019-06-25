@@ -244,6 +244,7 @@ public final class TurfMisc {
           + "made up of at least 2 coordinates.");
     }
 
+
     if (units == null) {
       units = TurfConstants.UNIT_KILOMETERS;
     }
