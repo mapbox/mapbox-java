@@ -86,10 +86,6 @@ def RELEASE_MODULES = ["services",
 
 subprojects { subproject ->
 
-  tasks.withType(Jar) {
-    exclude "**/*.java"
-  }
-
   if (TESTABLE_MODULES.contains(subproject.name)) {
     subproject.apply plugin: "com.vanniktech.android.junit.jacoco"
     subproject.apply from: "${rootDir}/gradle/jacoco.gradle"
