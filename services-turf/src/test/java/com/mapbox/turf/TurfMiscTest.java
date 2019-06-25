@@ -346,6 +346,30 @@ public class TurfMiscTest extends TestUtils {
   }
 
   @Test
+  public void testTurfPointOnLinePointsOnSidesOfLinesCustomUnit() throws TurfException {
+    List<Point> line = new ArrayList<>();
+    line.add(Point.fromLngLat(-122.45616137981413, 37.72125936929241));
+    line.add(Point.fromLngLat(-122.45717525482178, 37.718242366859215));
+    Point first = line.get(0);
+    Point last = line.get(1);
+
+    List<Point> pts = new ArrayList<>();
+    pts.add(Point.fromLngLat(-122.45702505111694, 37.71881098149625));
+    pts.add(Point.fromLngLat(-122.45733618736267, 37.719235317933844));
+    pts.add(Point.fromLngLat(-122.45686411857605, 37.72027068864082));
+    pts.add(Point.fromLngLat(-122.45652079582213, 37.72063561093274));
+
+    for (Point pt : pts) {
+      Feature snappedFeature = TurfMisc.nearestPointOnLine(pt, line, TurfConstants.UNIT_MILES);
+      Point snapped = (Point) snappedFeature.geometry();
+      // pt did not snap to first vertex
+      assertNotEquals(snapped, first);
+      // pt did not snap to last vertex
+      assertNotEquals(snapped, last);
+    }
+  }
+
+  @Test
   public void testLineSliceAlongLine1() throws IOException, TurfException {
     Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
     LineString lineStringLine1 = (LineString) line1.geometry();
