@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class ShifterTest {
 
@@ -54,6 +52,17 @@ public class ShifterTest {
     assertNotNull(coordinateShifterManager);
   }
 
+  @Test
+  public void default_shifter(){
+    assertTrue(CoordinateShifterManager.isUsingDefaultShifter());
+
+    CoordinateShifter shifter = new TestCoordinateShifter();
+    CoordinateShifterManager.setCoordinateShifter(shifter);
+    assertFalse(CoordinateShifterManager.isUsingDefaultShifter());
+
+    CoordinateShifterManager.setCoordinateShifter(null);
+    assertTrue(CoordinateShifterManager.isUsingDefaultShifter());
+  }
 
   @Test
   public void point_basic_shift() throws Exception {
