@@ -58,4 +58,12 @@ public final class CoordinateShifterManager {
     CoordinateShifterManager.coordinateShifter =
       coordinateShifter == null ? DEFAULT : coordinateShifter;
   }
+
+  /**
+   * Check whether the current shifter is the default one.
+   * @return true if using default shifter.
+   */
+  public static boolean isUsingDefaultShifter() {
+    return coordinateShifter == DEFAULT;
+  }
 }
