@@ -1,0 +1,24 @@
+ext {
+
+    mapboxArtifactGroupId = 'com.mapbox.mapboxsdk'
+    mapboxArtifactId = project.hasProperty('POM_ARTIFACT_ID') ? project.property('POM_ARTIFACT_ID') : System.getenv('POM_ARTIFACT_ID')
+    mapboxArtifactTitle = 'Mapbox Java SDK'
+    mapboxArtifactDescription = project.hasProperty('POM_DESCRIPTION') ? project.property('POM_DESCRIPTION') : System.getenv('POM_DESCRIPTION')
+    mapboxDeveloperName = 'Mapbox'
+    mapboxDeveloperEmail = 'apps@mapbox.com'
+    mapboxDeveloperOrganization = 'Mapbox'
+    mapboxDeveloperOrganizationUrl = 'http://www.mapbox.com'
+    mapboxDeveloperId = 'mapbox'
+    mapboxArtifactUrl = 'https://github.com/mapbox/mapbox-java'
+    mapboxArtifactVcsUrl = 'https://github.com/mapbox/mapbox-java.git'
+    mapboxArtifactScmUrl = 'scm:git@github.com:mapbox/mapbox-java.git'
+    mapboxArtifactLicenseName = 'The Apache Software License, Version 2.0'
+    mapboxArtifactLicenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    versionName = project.hasProperty('VERSION_NAME') ? project.property('VERSION_NAME') : System.getenv('VERSION_NAME')
+
+    mapboxBintrayUserOrg = 'mapbox'
+    mapboxBintrayRepoName = 'mapbox'
+    mapboxBintrayUser = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : System.getenv('BINTRAY_USER')
+    mapboxBintrayApiKey = project.hasProperty('BINTRAY_API_KEY') ? project.property('BINTRAY_API_KEY') : System.getenv('BINTRAY_API_KEY')
+    mapboxGpgPassphrase = project.hasProperty('GPG_PASSPHRASE') ? project.property('GPG_PASSPHRASE') : System.getenv('GPG_PASSPHRASE')
+}
