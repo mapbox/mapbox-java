@@ -91,8 +91,10 @@ def RELEASE_MODULES = ["services",
 
 subprojects { subproject ->
 
-  tasks.withType(Jar) {
-    exclude "**/*.java"
+  tasks.withType(Jar) { jarTask ->
+    if (!jarTask.name.endsWith("SourcesJar")) {
+      jarTask.exclude("**/*.java")
+    }
   }
 
   if (TESTABLE_MODULES.contains(subproject.name)) {
