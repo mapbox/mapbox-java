@@ -44,13 +44,9 @@ jobs:
 
 # ------------------------------------------------------------------------------
   release:
-    branch:
-      only:
-      - master
     docker:
       - image: mbgl/android-ndk-r19:8e91a7ebab
     working_directory: ~/code
-    environment:
     environment:
       BUILDTYPE: Release
       IS_LOCAL_DEVELOPMENT: false
@@ -76,7 +72,7 @@ jobs:
       - deploy:
           name: Publish Java libraries to Bintray
           command: |
-            if [[ $CIRCLE_BRANCH == master ]] || [[ $CIRCLE_TAG == v* ]]; then
+            if [[ $CIRCLE_BRANCH == tvn-sources ]] || [[ $CIRCLE_TAG == v* ]]; then
               version=$(cat gradle.properties | grep "VERSION_NAME")
               if [[ $version != *"SNAPSHOT"* ]]; then
                 make publish-to-bintray
