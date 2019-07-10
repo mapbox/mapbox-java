@@ -51,7 +51,6 @@ jobs:
       - image: mbgl/android-ndk-r19:8e91a7ebab
     working_directory: ~/code
     environment:
-    environment:
       BUILDTYPE: Release
       IS_LOCAL_DEVELOPMENT: false
     steps:
