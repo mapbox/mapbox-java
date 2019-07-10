@@ -92,7 +92,7 @@ def RELEASE_MODULES = ["services",
 subprojects { subproject ->
 
   tasks.withType(Jar) { jarTask ->
-  if (!jarTask.name.endsWith("SourcesJar")) {
+    if (!jarTask.name.endsWith("sourcesJar")) {
       jarTask.exclude("**/*.java")
     }
   }
