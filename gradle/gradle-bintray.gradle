@@ -13,6 +13,14 @@ publishing {
             artifactId project.ext.mapboxArtifactId
             version project.ext.versionName
 
+            artifact sourceJar {
+                classifier "sources"
+            }
+
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+
             pom.withXml {
                 final mainNode = asNode()
                 mainNode.appendNode('name', project.ext.mapboxArtifactTitle)
