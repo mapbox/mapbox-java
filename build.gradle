@@ -91,8 +91,8 @@ def RELEASE_MODULES = ["services",
 
 subprojects { subproject ->
 
-   tasks.withType(Jar) { jarTask ->
-    if (!jarTask.name.endsWith("SourcesJar")) {
+  tasks.withType(Jar) { jarTask ->
+  if (!jarTask.name.endsWith("SourcesJar")) {
       jarTask.exclude("**/*.java")
     }
   }
@@ -106,6 +106,21 @@ subprojects { subproject ->
   if (RELEASE_MODULES.contains(subproject.name)) {
     subproject.apply from: "${rootDir}/gradle/gradle-bintray.gradle"
     subproject.apply from: "${rootDir}/gradle/dependencies-graph.gradle"
+  }
+
+  task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+  }
+
+  task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+  }
+
+  artifacts {
+    archives sourcesJar
+    archives javadocJar
   }
 }
 
