@@ -13,12 +13,6 @@ publishing {
             artifactId project.ext.mapboxArtifactId
             version project.ext.versionName
 
-            afterEvaluate {
-                artifact("$buildDir/outputs/aar/${project.ext.mapboxArtifactId}-release.aar")
-                artifact sourcesJar
-                artifact javadocJar
-            }
-
             pom.withXml {
                 final mainNode = asNode()
                 mainNode.appendNode('name', project.ext.mapboxArtifactTitle)
