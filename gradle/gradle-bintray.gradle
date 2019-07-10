@@ -13,7 +13,7 @@ publishing {
             artifactId project.ext.mapboxArtifactId
             version project.ext.versionName
 
-            artifact sourceJar {
+            artifact sourcesJar {
                 classifier "sources"
             }
 
