@@ -1,6 +1,22 @@
-## Changelog for Mapbox Java and Android Services
+## Changelog for the Mapbox Java SDK
 
 Mapbox welcomes participation and contributions from everyone.
+
+### v4.9.0-alpha.1 - September 4, 2019
+
+- Fixed up bintray publish script, generate sources and javadoc jars #1065  
+- Keep *.java files in source.jar artifacts #1064
+- Added setup for bintray release process #1037
+- Add an API to check if a custom shifter is set. #1062
+- Added new nearestPointOnLine default and custom distance unit #1058
+- Adjustments to TurfMeasurement#bboxPolygon() to return a Feature instead of Polygon #1055
+- Added fuzzyMatch support to MapboxGeocoding #1051
+- Add Interceptor support to Directions Refresh API and enable Debug logging #1039
+- Add square() api to TurfMeasurement #1019
+- Adjusted link to Turf installation instructions #1038
+- Removed the last updated line from ported Turf method list #1032
+- Making GeoJson extend Serializable #1034
+- Add support for Turf envelope #1020
 
 ### v4.8.0 - May 10, 2019
 ### v4.8.0-alpha.3 - May 10, 2019
