@@ -20,6 +20,7 @@ public class GeocodingTestUtils extends TestUtils {
   private static final String FORWARD_INVALID = "forward_invalid.json";
   private static final String FORWARD_VALID_ZH = "forward_valid_zh.json";
   private static final String FORWARD_BATCH_GEOCODING = "geocoding_batch.json";
+  private static final String FORWARD_INTERSECTION = "forward_intersection.json";
 
   private MockWebServer server;
   protected HttpUrl mockUrl;
@@ -43,6 +44,8 @@ public class GeocodingTestUtils extends TestUtils {
             response = loadJsonFixture(FORWARD_GEOCODING);
           } else if (request.getPath().contains("sandy")) {
             response = loadJsonFixture(FORWARD_INVALID);
+          } else if (request.getPath().contains("%20and%20")) {
+            response = loadJsonFixture(FORWARD_INTERSECTION);
           } else {
             response = loadJsonFixture(FORWARD_VALID_ZH);
           }

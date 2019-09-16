@@ -247,6 +247,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
     private List<String> countries = new ArrayList<>();
 
+    private List<String> intersectionStreets = new ArrayList<>();
+
     /**
      * Perform a reverse geocode on the provided {@link Point}. Only one point can be passed in as
      * the query and isn't guaranteed to return a result. If you are an enterprise customer and
@@ -581,6 +583,20 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
     abstract MapboxGeocoding autoBuild();
 
+
+    /**
+     * Specify the two street names for intersection search.
+     *
+     * @param streetOne First street name of the intersection
+     * @param streetTwo Second street name of the intersection
+     * @return this builder for chaining options together
+     */
+    public Builder intersectionStreets(@NonNull String streetOne, @NonNull String streetTwo) {
+      intersectionStreets.add(streetOne);
+      intersectionStreets.add(streetTwo);
+      return this;
+    }
+
     /**
      * Build a new {@link MapboxGeocoding} object.
      *
@@ -591,6 +607,10 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
       if (!countries.isEmpty()) {
         country(TextUtils.join(",", countries.toArray()));
+      }
+
+      if (intersectionStreets.size() == 2) {
+        query(TextUtils.join(" and ", intersectionStreets.toArray()));
       }
 
       // Generate build so that we can check that values are valid.

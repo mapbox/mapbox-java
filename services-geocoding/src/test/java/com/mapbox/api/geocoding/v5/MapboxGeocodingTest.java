@@ -1,25 +1,16 @@
 package com.mapbox.api.geocoding.v5;
 
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
-import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Point;
 
-import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
 import static org.hamcrest.Matchers.startsWith;
@@ -306,5 +297,31 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
     assertNotNull(mapboxGeocoding);
     assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
       .contains("fuzzyMatch=true"));
+  }
+
+  @Test
+  public void intersectionSearchSanity() throws IOException {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .intersectionStreets("Market Street", "Fremont Street")
+      .proximity("-122.39738575285674,37.792514711136945")
+      .baseUrl(mockUrl.toString())
+      .build();
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(200, response.code());
+  }
+
+  @Test
+  public void intersectionSearch_AddIntersectionToQuery() throws IOException {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .intersectionStreets("Market Street", "Fremont Street")
+      .proximity("-122.39738575285674,37.792514711136945")
+      .baseUrl(mockUrl.toString())
+      .build();
+    assertNotNull(mapboxGeocoding);
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("Market%20Street%20and%20Fremont%20Street"));
   }
 }
