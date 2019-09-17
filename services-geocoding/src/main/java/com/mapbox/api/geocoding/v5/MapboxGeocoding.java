@@ -587,13 +587,14 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
     /**
      * Specify the two street names for intersection search.
      *
-     * @param streetOne First street name of the intersection
-     * @param streetTwo Second street name of the intersection
+     * @param streetOneName First street name of the intersection
+     * @param streetTwoName Second street name of the intersection
      * @return this builder for chaining options together
      */
-    public Builder intersectionStreets(@NonNull String streetOne, @NonNull String streetTwo) {
-      intersectionStreets.add(streetOne);
-      intersectionStreets.add(streetTwo);
+    public Builder intersectionStreets(@NonNull String streetOneName,
+                                       @NonNull String streetTwoName) {
+      intersectionStreets.add(streetOneName);
+      intersectionStreets.add(streetTwoName);
       return this;
     }
 
@@ -632,13 +633,13 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       if (intersectionStreets.size() == 2) {
         if (!(geocoding.mode().equals(GeocodingCriteria.MODE_PLACES)
                 || geocoding.mode().equals(GeocodingCriteria.MODE_PLACES_PERMANENT))) {
-          throw new ServicesException("Geocoding mode must be " + GeocodingCriteria.MODE_PLACES
-                  + " or " + GeocodingCriteria.MODE_PLACES_PERMANENT + " for intersection search.");
+          throw new ServicesException("Geocoding mode must be GeocodingCriteria.MODE_PLACES "
+                  + "or GeocodingCriteria.MODE_PLACES_PERMANENT for intersection search.");
         }
         if (TextUtils.isEmpty(geocoding.geocodingTypes())
                 || !geocoding.geocodingTypes().equals(GeocodingCriteria.TYPE_ADDRESS)) {
-          throw new ServicesException("Geocoding type must be set to "
-                  + GeocodingCriteria.TYPE_ADDRESS + " for intersection search.");
+          throw new ServicesException("Geocoding type must be set to Geocoding "
+                  + "Criteria.TYPE_ADDRESS for intersection search.");
         }
         if (TextUtils.isEmpty(geocoding.proximity())) {
           throw new ServicesException("Geocoding proximity must be set for intersection search.");

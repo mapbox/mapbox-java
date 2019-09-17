@@ -331,7 +331,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   public void intersectionSearch_WrongMode() {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(
-            startsWith("Geocoding mode must be mapbox.places or mapbox.places-permanent for intersection search."));
+            startsWith("Geocoding mode must be GeocodingCriteria.MODE_PLACES or GeocodingCriteria.MODE_PLACES_PERMANENT for intersection search."));
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .mode("RandomMode")
