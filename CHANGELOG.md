@@ -9,19 +9,19 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### v4.9.0-alpha.1 - September 4, 2019
 
-- Fixed up bintray publish script, generate sources and javadoc jars #1065  
-- Keep *.java files in source.jar artifacts #1064
-- Added setup for bintray release process #1037
-- Add an API to check if a custom shifter is set. #1062
-- Added new nearestPointOnLine default and custom distance unit #1058
-- Adjustments to TurfMeasurement#bboxPolygon() to return a Feature instead of Polygon #1055
-- Added fuzzyMatch support to MapboxGeocoding #1051
-- Add Interceptor support to Directions Refresh API and enable Debug logging #1039
-- Add square() api to TurfMeasurement #1019
-- Adjusted link to Turf installation instructions #1038
-- Removed the last updated line from ported Turf method list #1032
-- Making GeoJson extend Serializable #1034
-- Add support for Turf envelope #1020
+- Fixed up bintray publish script, generate sources and javadoc jars [#1065](https://github.com/mapbox/mapbox-java/pull/1065)
+- Keep *.java files in source.jar artifacts [#1064](https://github.com/mapbox/mapbox-java/pull/1064)
+- Added setup for bintray release process [#1037](https://github.com/mapbox/mapbox-java/pull/1037)
+- Add an API to check if a custom shifter is set. [#1062](https://github.com/mapbox/mapbox-java/pull/1062)
+- Added new nearestPointOnLine default and custom distance unit [#1058](https://github.com/mapbox/mapbox-java/pull/1058)
+- Adjustments to TurfMeasurement#bboxPolygon() to return a Feature instead of Polygon [#1055](https://github.com/mapbox/mapbox-java/pull/1055)
+- Added fuzzyMatch support to MapboxGeocoding [#1051](https://github.com/mapbox/mapbox-java/pull/1051)
+- Add Interceptor support to Directions Refresh API and enable Debug logging [#1039](https://github.com/mapbox/mapbox-java/pull/1039)
+- Add square() api to TurfMeasurement [#1019](https://github.com/mapbox/mapbox-java/pull/1019)
+- Adjusted link to Turf installation instructions [#1038](https://github.com/mapbox/mapbox-java/pull/1038)
+- Removed the last updated line from ported Turf method list [#1032](https://github.com/mapbox/mapbox-java/pull/1032)
+- Making GeoJson extend Serializable [#1034](https://github.com/mapbox/mapbox-java/pull/1034)
+- Add support for Turf envelope [#1020](https://github.com/mapbox/mapbox-java/pull/1020)
 
 ### v4.8.0 - May 10, 2019
 ### v4.8.0-alpha.3 - May 10, 2019
@@ -74,84 +74,83 @@ Mapbox welcomes participation and contributions from everyone.
 - Add getting mapmatching through POST method [#948](https://github.com/mapbox/mapbox-java/pull/948)
 
 ### v4.3.0 - December 18, 2018
-- Do not use BigDecimal for rounding (#938)[https://github.com/mapbox/mapbox-java/pull/938]
-- Remove coordinate limit from MapboxMapMatching (#940)[https://github.com/mapbox/mapbox-java/pull/940]
-- Remove character waypoint names limit from mapbox map matching (#941)[https://github.com/mapbox/mapbox-java/pull/941]
-- Adding additional tests to files related to coordinate shifting (#936)[https://github.com/mapbox/mapbox-java/pull/936]
-- Added waypoint targets to MapboxDirections request (#942)[https://github.com/mapbox/mapbox-java/pull/942]
+- Do not use BigDecimal for rounding [#938](https://github.com/mapbox/mapbox-java/pull/938)
+- Remove coordinate limit from MapboxMapMatching [#940](https://github.com/mapbox/mapbox-java/pull/940)
+- Remove character waypoint names limit from mapbox map matching [#941](https://github.com/mapbox/mapbox-java/pull/941)
+- Adding additional tests to files related to coordinate shifting [#936](https://github.com/mapbox/mapbox-java/pull/936)
+- Added waypoint targets to MapboxDirections request [#942](https://github.com/mapbox/mapbox-java/pull/942)
 
 ### v4.2.0 - December 4, 2018
-- Adding Shifter implementation #922
+- Adding Shifter implementation [#922](https://github.com/mapbox/mapbox-java/pull/922)
 - Fix v4.1.1 release
 
 ### v4.1.1 - November 30, 2018
-- Remove waypoint limit check #928
-- Adding code coverage report generation and upload to Codecov #925
+- Remove waypoint limit check [#928](https://github.com/mapbox/mapbox-java/pull/928)
+- Adding code coverage report generation and upload to Codecov [#925](https://github.com/mapbox/mapbox-java/pull/925)
 
 ### v4.1.0 - November 12, 2018
-- Added wrappers for route tile APIs Feature #913
-- Add annotations, approaches request parameter & distances to the response object #911
-- Add interceptor and network interceptor support to Mapbox Speech #910
-- Remove dependency on BindingContextFactory #909
-- Archive stale issues and pull request #906
-- Added StepManeuver.Type for ease of use #898
-- Route options should be serialized/deserialized using backend names #895
-- BoundingBox deserialization #891
+- Added wrappers for route tile APIs Feature [#913](https://github.com/mapbox/mapbox-java/pull/913)
+- Add annotations, approaches request parameter & distances to the response object [#911](https://github.com/mapbox/mapbox-java/pull/911)
+- Add interceptor and network interceptor support to Mapbox Speech [#910](https://github.com/mapbox/mapbox-java/pull/910)
+- Remove dependency on BindingContextFactory [#909](https://github.com/mapbox/mapbox-java/pull/909)
+- Archive stale issues and pull request [#906](https://github.com/mapbox/mapbox-java/pull/906)
+- Added StepManeuver.Type for ease of use [#898](https://github.com/mapbox/mapbox-java/pull/898)
+- Route options should be serialized/deserialized using backend names [#895](https://github.com/mapbox/mapbox-java/pull/895)
+- BoundingBox deserialization [#891](https://github.com/mapbox/mapbox-java/pull/891)
 
 ### v4.0.0 - September 19, 2018
-- downgrade to java 7 #876
-- The first and last positions should be equivalent in polygon ring Bug Ready For Review refactor #886
-- Fix circle generation in TurfTransformation #885
-- coordinates() should have @NotNull annotation in Geometry implementations #882
-- Tilequery API #879
-- all accesToken fields should be annotated with @nonnull #875
+- downgrade to java 7 [#876](https://github.com/mapbox/mapbox-java/pull/876)
+- The first and last positions should be equivalent in polygon ring Bug Ready For Review refactor [#886](https://github.com/mapbox/mapbox-java/pull/886)
+- Fix circle generation in TurfTransformation [#885](https://github.com/mapbox/mapbox-java/pull/885)
+- coordinates() should have @NotNull annotation in Geometry implementations [#882](https://github.com/mapbox/mapbox-java/pull/882)
+- Tilequery API [#879](https://github.com/mapbox/mapbox-java/pull/879)
+- all accesToken fields should be annotated with @nonnull [#875](https://github.com/mapbox/mapbox-java/pull/875)
 
 ### v3.4.1 - August 9, 2018
-- DirectionsRoute#fromJson RuntimeException (#864)
+- DirectionsRoute#fromJson RuntimeException [#864](https://github.com/mapbox/mapbox-java/pull/864)
 
 
 ### v3.4.0 - August 6, 2018
-- Fixed typo in static map annotations and added tests for map annotations (#855)
-- Added toJson and fromJson to Directions models (#854)
-- Upgraded dependencies (#853)
-- Missing space (#846)
-- Add voiceLanguage to MapMatchingMatching (#847)
+- Fixed typo in static map annotations and added tests for map annotations [#855](https://github.com/mapbox/mapbox-java/pull/855)
+- Added toJson and fromJson to Directions models [#854](https://github.com/mapbox/mapbox-java/pull/854)
+- Upgraded dependencies [#853](https://github.com/mapbox/mapbox-java/pull/853)
+- Missing space [#846](https://github.com/mapbox/mapbox-java/pull/846)
+- Add voiceLanguage to MapMatchingMatching [#847](https://github.com/mapbox/mapbox-java/pull/847)
 
 ### v3.3.0
-- add reverseMode parameter to Geocoding Service (#843)
-- doc changes (#840) (#835)
-- static map request format #836 (#839)
-- add waypoint names (#831)
-- add approaches to RouteOptions (#830)
+- add reverseMode parameter to Geocoding Service [#843](https://github.com/mapbox/mapbox-java/pull/843)
+- doc changes [#840) [#835](https://github.com/mapbox/mapbox-java/pull/835)
+- static map request format #836 [#839](https://github.com/mapbox/mapbox-java/pull/839)
+- add waypoint names [#831](https://github.com/mapbox/mapbox-java/pull/831)
+- add approaches to RouteOptions [#830](https://github.com/mapbox/mapbox-java/pull/830)
 
 ### v3.2.0
-- Added sub - to BannerInstructions (#823)
-- Added directions & active - to BannerText (#823)
-- Properties passed to Feature.fromGeometry and CarmenFeature.properties should be Nullable (#815)
-- Move TurfAssertions.getCoord() to TurfMeta.getCoord() to follow Turf.js (#818)
-- Semicolon should be used as radiuses and timestamps delimiters (#821)
-- Added approaches request paramenter to Directions and MapMatching (#827)
+- Added sub - to BannerInstructions [#823](https://github.com/mapbox/mapbox-java/pull/823)
+- Added directions & active - to BannerText [#823](https://github.com/mapbox/mapbox-java/pull/823)
+- Properties passed to Feature.fromGeometry and CarmenFeature.properties should be Nullable [#815](https://github.com/mapbox/mapbox-java/pull/815)
+- Move TurfAssertions.getCoord() to TurfMeta.getCoord() to follow Turf.js [#818](https://github.com/mapbox/mapbox-java/pull/818)
+- Semicolon should be used as radiuses and timestamps delimiters [#821](https://github.com/mapbox/mapbox-java/pull/821)
+- Added approaches request paramenter to Directions and MapMatching [#827](https://github.com/mapbox/mapbox-java/pull/827)
 
 ### v3.1.0
-- Added voiceLocale to DirectionsRoute  (#804)
+- Added voiceLocale to DirectionsRoute  [#804](https://github.com/mapbox/mapbox-java/pull/804)
 - Added line-slice-along() and degreesToRadians() to Turf functions(#800)
-- Removed java.awt.Color dependency in static map (#793)
-- Add missing RouteOptions params for MapMatching (#792)
-- Added BoundingBox.fromLngLats() for consistency (#789)
-- added toBuilder() to model classes (#787)
-
+- Removed java.awt.Color dependency in static map [#793](https://github.com/mapbox/mapbox-java/pull/793)
+- Add missing RouteOptions params for MapMatching [#792](https://github.com/mapbox/mapbox-java/pull/792)
+- Added BoundingBox.fromLngLats() for consistency [#789](https://github.com/mapbox/mapbox-java/pull/789)
+- added toBuilder() to model classes [#787](https://github.com/mapbox/mapbox-java/pull/787)
 ### v3.0.1
 - Adjust maxspeed annotation [#777](https://github.com/mapbox/mapbox-java/pull/777)
 
 ### v3.0.0
-- Added MapMatching Error reporting #758
-- MapMaptchingMatching to DirectionsRoute #759
-- Add Abbreviations and type to BannerComponent #762
-- Add voiceUnits to MapMatching #764
-- Implemented Comparable in BannerComponents #768
-- Adds a bbox() utility method for Geometry #769
-- Adds a method to Geometry to load from json #770
-- Add MaxSpeed Annotation to Directions API #772
+- Added MapMatching Error reporting [#758](https://github.com/mapbox/mapbox-java/pull/758)
+- MapMaptchingMatching to DirectionsRoute [#759](https://github.com/mapbox/mapbox-java/pull/759)
+- Add Abbreviations and type to BannerComponent [#762](https://github.com/mapbox/mapbox-java/pull/762)
+- Add voiceUnits to MapMatching [#764](https://github.com/mapbox/mapbox-java/pull/764)
+- Implemented Comparable in BannerComponents [#768](https://github.com/mapbox/mapbox-java/pull/768)
+- Adds a bbox() utility method for Geometry [#769](https://github.com/mapbox/mapbox-java/pull/769)
+- Adds a method to Geometry to load from json [#770](https://github.com/mapbox/mapbox-java/pull/770)
+- Add MaxSpeed Annotation to Directions API [#772](https://github.com/mapbox/mapbox-java/pull/772)
 
 ### v3.0.0-beta.4
 - Rework dependency tree, add api instead of implementation
