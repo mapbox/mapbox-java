@@ -27,6 +27,18 @@ public class TurfConversionTest extends TestUtils {
   private static final String TURF_EXPLODE_MULTIPOLYGON = "turf-explode/multipolygon.geojson";
   private static final String TURF_EXPLODE_GEOMETRY_COLLECTION = "turf-explode/geometrycollection.geojson";
 
+  private static final String TURF_POLYGON_TO_LINE_PATH_IN = "turf-polygon-to-line/in/";
+  private static final String TURF_POLYGON_TO_LINE_PATH_OUT = "turf-polygon-to-line/out/";
+
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_POLYGON= "polygon.geojson";
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_GEOMETRY_POLYGON= "geometry-polygon.geojson";
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_POLYGON_WITH_HOLE = "polygon-with-hole.geojson";
+
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON = "multi-polygon.geojson";
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_OUTER_DOUGHNUT = "multi-polygon-outer-doughnut.geojson";
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_WITH_HOLES = "multi-polygon-with-holes.geojson";
+
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -132,5 +144,41 @@ public class TurfConversionTest extends TestUtils {
       Feature.fromGeometry(MultiPolygon.fromJson(loadJsonFixture(TURF_EXPLODE_MULTIPOLYGON)))
     });
     assertEquals(16, TurfConversion.explode(featureCollection).features().size());
+  }
+
+  @Test
+  public void polygonToLine_GeometryPolygon() throws IOException {
+    Polygon polygon = Polygon.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_GEOMETRY_POLYGON));
+    compareJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_GEOMETRY_POLYGON), TurfConversion.polygonToLine(polygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_Polygon() throws IOException {
+    Feature polygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_POLYGON));
+    compareJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_POLYGON), TurfConversion.polygonToLine(polygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_PolygonWithHole() throws IOException {
+    Feature polygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_POLYGON_WITH_HOLE));
+    compareJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_POLYGON_WITH_HOLE), TurfConversion.polygonToLine(polygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_MultiPolygon() throws IOException {
+    Feature multiPolygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON));
+    compareJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON), TurfConversion.multiPolygonToLine(multiPolygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_MultiPolygonWithHoles() throws IOException {
+    Feature multiPolygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_WITH_HOLES));
+    compareJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_WITH_HOLES), TurfConversion.multiPolygonToLine(multiPolygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_MultiPolygonWithOuterDoughnut() throws IOException {
+    Feature multiPolygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_OUTER_DOUGHNUT));
+    compareJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_OUTER_DOUGHNUT), TurfConversion.multiPolygonToLine(multiPolygon).toJson());
   }
 }
