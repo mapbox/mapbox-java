@@ -611,6 +611,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
       if (intersectionStreets.size() == 2) {
         query(TextUtils.join(" and ", intersectionStreets.toArray()));
+        geocodingTypes(GeocodingCriteria.TYPE_ADDRESS);
       }
 
       // Generate build so that we can check that values are valid.
@@ -626,6 +627,22 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       if (geocoding.reverseMode() != null
         && geocoding.limit() != null && !geocoding.limit().equals("1")) {
         throw new ServicesException("Limit must be combined with a single type parameter");
+      }
+
+      if (intersectionStreets.size() == 2) {
+        if (!(geocoding.mode().equals(GeocodingCriteria.MODE_PLACES)
+                || geocoding.mode().equals(GeocodingCriteria.MODE_PLACES_PERMANENT))) {
+          throw new ServicesException("Geocoding mode must be " + GeocodingCriteria.MODE_PLACES
+                  + " or " + GeocodingCriteria.MODE_PLACES_PERMANENT + " for intersection search.");
+        }
+        if (TextUtils.isEmpty(geocoding.geocodingTypes())
+                || !geocoding.geocodingTypes().equals(GeocodingCriteria.TYPE_ADDRESS)) {
+          throw new ServicesException("Geocoding type must be set to "
+                  + GeocodingCriteria.TYPE_ADDRESS + " for intersection search.");
+        }
+        if (TextUtils.isEmpty(geocoding.proximity())) {
+          throw new ServicesException("Geocoding proximity must be set for intersection search.");
+        }
       }
       return geocoding;
     }
