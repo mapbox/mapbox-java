@@ -314,6 +314,19 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
+  public void intersectionSearchAndAddedCorrectly() {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+            .accessToken(ACCESS_TOKEN)
+            .intersectionStreets("Street one", "Street two")
+            .proximity("-122.39738575285674,37.792514711136945")
+            .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+            .baseUrl(mockUrl.toString())
+            .build();
+    assertNotNull(mapboxGeocoding);
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("and"));
+  }
+
+  @Test
   public void intersectionSearch_AddIntersectionToQuery() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
