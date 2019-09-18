@@ -31,7 +31,7 @@ public class TestUtils {
     assertThat(parser.parse(actualJson), Matchers.equalTo(parser.parse(expectedJson)));
   }
 
-  protected String loadJsonFixture(String filename) throws IOException {
+  protected String loadJsonFixture(String filename) {
     ClassLoader classLoader = getClass().getClassLoader();
     InputStream inputStream = classLoader.getResourceAsStream(filename);
     Scanner scanner = new Scanner(inputStream, UTF_8.name()).useDelimiter("\\A");
