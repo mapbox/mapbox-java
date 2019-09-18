@@ -6,11 +6,15 @@ import org.hamcrest.Matchers;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -27,7 +31,7 @@ public class TestUtils {
     assertThat(parser.parse(actualJson), Matchers.equalTo(parser.parse(expectedJson)));
   }
 
-  protected String loadJsonFixture(String filename) throws IOException {
+  protected String loadJsonFixture(String filename) {
     ClassLoader classLoader = getClass().getClassLoader();
     InputStream inputStream = classLoader.getResourceAsStream(filename);
     Scanner scanner = new Scanner(inputStream, UTF_8.name()).useDelimiter("\\A");
@@ -57,5 +61,16 @@ public class TestUtils {
   public static void expectNearNumber(double expected, double actual, double epsilon) {
     assertTrue(String.format("Expected %f to be near %f", actual, expected),
       Math.abs(expected - actual) <= epsilon);
+  }
+
+  protected List<String> getResourceFolderFileNames (String folder) {
+    ClassLoader loader = getClass().getClassLoader();
+    URL url = loader.getResource(folder);
+    String path = url.getPath();
+    List<String> names = new ArrayList<>();
+    for (File file : new File(path).listFiles()) {
+      names.add(file.getName());
+    }
+    return names;
   }
 }

@@ -62,7 +62,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [ ] turf-flatten
 - [ ] turf-line-to-polygon
 - [ ] turf-polygonize
-- [ ] turf-polygon-to-line
+- [x] turf-polygon-to-line
 
 ## Misc
 - [ ] turf-kinks

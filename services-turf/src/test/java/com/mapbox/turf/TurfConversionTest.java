@@ -27,11 +27,23 @@ public class TurfConversionTest extends TestUtils {
   private static final String TURF_EXPLODE_MULTIPOLYGON = "turf-explode/multipolygon.geojson";
   private static final String TURF_EXPLODE_GEOMETRY_COLLECTION = "turf-explode/geometrycollection.geojson";
 
+  private static final String TURF_POLYGON_TO_LINE_PATH_IN = "turf-polygon-to-line/in/";
+  private static final String TURF_POLYGON_TO_LINE_PATH_OUT = "turf-polygon-to-line/expected/";
+
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_POLYGON= "polygon.geojson";
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_GEOMETRY_POLYGON= "geometry-polygon.geojson";
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_POLYGON_WITH_HOLE = "polygon-with-hole.geojson";
+
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON = "multi-polygon.geojson";
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_OUTER_DOUGHNUT = "multi-polygon-outer-doughnut.geojson";
+  private static final String TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_WITH_HOLES = "multi-polygon-with-holes.geojson";
+
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
-  public void radiansToDistance() throws Exception {
+  public void radiansToDistance() {
     assertEquals(
       1, TurfConversion.radiansToLength(1, TurfConstants.UNIT_RADIANS), DELTA);
     assertEquals(
@@ -41,7 +53,7 @@ public class TurfConversionTest extends TestUtils {
   }
 
   @Test
-  public void distanceToRadians() throws Exception {
+  public void distanceToRadians() {
     assertEquals(
       1, TurfConversion.lengthToRadians(1, TurfConstants.UNIT_RADIANS), DELTA);
     assertEquals(
@@ -51,7 +63,7 @@ public class TurfConversionTest extends TestUtils {
   }
 
   @Test
-  public void distanceToDegrees() throws Exception {
+  public void distanceToDegrees() {
     assertEquals(
       57.29577951308232, TurfConversion.lengthToDegrees(1, TurfConstants.UNIT_RADIANS), DELTA);
     assertEquals(
@@ -79,25 +91,25 @@ public class TurfConversionTest extends TestUtils {
   }
 
   @Test
-  public void explodePointSingleFeature() throws IOException, NullPointerException {
+  public void explodePointSingleFeature() throws NullPointerException {
     Point point = Point.fromLngLat(102, 0.5);
     assertEquals(1, TurfConversion.explode(Feature.fromGeometry(point)).features().size());
   }
 
   @Test
-  public void explodeMultiPointSingleFeature() throws IOException, NullPointerException {
+  public void explodeMultiPointSingleFeature() throws NullPointerException {
     MultiPoint multiPoint = MultiPoint.fromJson(loadJsonFixture(TURF_EXPLODE_MULTI_POINT));
     assertEquals(4, TurfConversion.explode(Feature.fromGeometry(multiPoint)).features().size());
   }
 
   @Test
-  public void explodeLineStringSingleFeature() throws IOException, NullPointerException {
+  public void explodeLineStringSingleFeature() throws NullPointerException {
     LineString lineString = LineString.fromJson(loadJsonFixture(TURF_EXPLODE_LINESTRING));
     assertEquals(4, TurfConversion.explode(Feature.fromGeometry(lineString)).features().size());
   }
 
   @Test
-  public void explodePolygonSingleFeature() throws IOException, NullPointerException {
+  public void explodePolygonSingleFeature() throws NullPointerException {
     Polygon polygon = Polygon.fromLngLats(Arrays.asList(
       Arrays.asList(
         Point.fromLngLat(0, 101),
@@ -108,29 +120,71 @@ public class TurfConversionTest extends TestUtils {
   }
 
   @Test
-  public void explodeMultiLineStringSingleFeature() throws IOException, NullPointerException {
+  public void explodeMultiLineStringSingleFeature() throws NullPointerException {
     MultiLineString multiLineString = MultiLineString.fromJson(loadJsonFixture(TURF_EXPLODE_MULTILINESTRING));
     assertEquals(4, TurfConversion.explode(Feature.fromGeometry(multiLineString)).features().size());
   }
 
   @Test
-  public void explodeMultiPolygonSingleFeature() throws IOException, NullPointerException {
+  public void explodeMultiPolygonSingleFeature() throws NullPointerException {
     MultiPolygon multiPolygon = MultiPolygon.fromJson(loadJsonFixture(TURF_EXPLODE_MULTIPOLYGON));
     assertEquals(12, TurfConversion.explode(Feature.fromGeometry(multiPolygon)).features().size());
   }
 
   @Test
-  public void explodeGeometryCollectionSingleFeature() throws IOException, NullPointerException {
+  public void explodeGeometryCollectionSingleFeature() throws NullPointerException {
     GeometryCollection geometryCollection = GeometryCollection.fromJson(loadJsonFixture(TURF_EXPLODE_GEOMETRY_COLLECTION));
     assertEquals(3, TurfConversion.explode(Feature.fromGeometry(geometryCollection)).features().size());
   }
 
   @Test
-  public void explodeFeatureCollection() throws IOException, NullPointerException {
+  public void explodeFeatureCollection() throws NullPointerException {
     FeatureCollection featureCollection = FeatureCollection.fromFeatures(new Feature[] {
       Feature.fromGeometry(MultiLineString.fromJson(loadJsonFixture(TURF_EXPLODE_MULTILINESTRING))),
       Feature.fromGeometry(MultiPolygon.fromJson(loadJsonFixture(TURF_EXPLODE_MULTIPOLYGON)))
     });
     assertEquals(16, TurfConversion.explode(featureCollection).features().size());
+  }
+
+  @Test
+  public void polygonToLine_GeometryPolygon() throws NullPointerException {
+    Polygon polygon = Polygon.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_GEOMETRY_POLYGON));
+    Feature expected = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_GEOMETRY_POLYGON));
+    compareJson(expected.toJson(), TurfConversion.polygonToLine(polygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_Polygon() throws NullPointerException {
+    Feature polygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_POLYGON));
+    Feature expected = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_POLYGON));
+    compareJson(expected.toJson(), TurfConversion.polygonToLine(polygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_PolygonWithHole() throws NullPointerException {
+    Feature polygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_POLYGON_WITH_HOLE));
+    Feature expected = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_POLYGON_WITH_HOLE));
+    compareJson(expected.toJson(), TurfConversion.polygonToLine(polygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_MultiPolygon() throws NullPointerException {
+    Feature multiPolygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON));
+    FeatureCollection expected = FeatureCollection.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON));
+    compareJson(expected.toJson(), TurfConversion.multiPolygonToLine(multiPolygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_MultiPolygonWithHoles() throws NullPointerException {
+    Feature multiPolygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_WITH_HOLES));
+    FeatureCollection expected = FeatureCollection.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_WITH_HOLES));
+    compareJson(expected.toJson(), TurfConversion.multiPolygonToLine(multiPolygon).toJson());
+  }
+
+  @Test
+  public void polygonToLine_MultiPolygonWithOuterDoughnut() throws NullPointerException {
+    Feature multiPolygon = Feature.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_IN + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_OUTER_DOUGHNUT));
+    FeatureCollection expected = FeatureCollection.fromJson(loadJsonFixture(TURF_POLYGON_TO_LINE_PATH_OUT + TURF_POLYGON_TO_LINE_FILENAME_MULTIPOLYGON_OUTER_DOUGHNUT));
+    compareJson(expected.toJson(), TurfConversion.multiPolygonToLine(multiPolygon).toJson());
   }
 }

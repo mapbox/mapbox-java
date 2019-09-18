@@ -4,10 +4,17 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.gson.JsonObject;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Geometry;
+import com.mapbox.geojson.LineString;
+import com.mapbox.geojson.MultiLineString;
+import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
+import com.mapbox.geojson.Polygon;
 import com.mapbox.turf.TurfConstants.TurfUnitCriteria;
+import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -200,5 +207,143 @@ public final class TurfConversion {
       finalFeatureList.add(Feature.fromGeometry(singlePoint));
     }
     return FeatureCollection.fromFeatures(finalFeatureList);
+  }
+
+  /**
+   * Takes a {@link Feature} that contains {@link Polygon} and
+   * covert it to a {@link Feature} that contains {@link LineString} or {@link MultiLineString}.
+   *
+   * @param feature a {@link Feature} object that contains {@link Polygon}
+   * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
+   * @since 4.10.0
+   */
+  public static Feature polygonToLine(@NotNull Feature feature) {
+    return polygonToLine(feature, null);
+  }
+
+  /**
+   * Takes a {@link Feature} that contains {@link Polygon} and a properties {@link JsonObject} and
+   * covert it to a {@link Feature} that contains {@link LineString} or {@link MultiLineString}.
+   *
+   * @param feature a {@link Feature} object that contains {@link Polygon}
+   * @param properties a {@link JsonObject} that represents a feature's properties
+   * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
+   * @since 4.10.0
+   */
+  public static Feature polygonToLine(@NotNull Feature feature, @Nullable JsonObject properties) {
+    Geometry geometry = feature.geometry();
+    if (geometry instanceof Polygon) {
+      return polygonToLine((Polygon) geometry,properties != null ? properties :
+              feature.type().equals("Feature") ? feature.properties() : new JsonObject());
+    }
+    throw new TurfException("Feature's geometry must be Polygon");
+  }
+
+  /**
+   * Takes a {@link Polygon} and
+   * covert it to a {@link Feature} that contains {@link LineString} or {@link MultiLineString}.
+   *
+   * @param polygon a {@link Polygon} object
+   * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
+   * @since 4.10.0
+   */
+  public static Feature polygonToLine(@NotNull Polygon polygon) {
+    return polygonToLine(polygon, null);
+  }
+
+  /**
+   * Takes a {@link MultiPolygon} and
+   * covert it to a {@link FeatureCollection} that contains list
+   * of {@link Feature} of {@link LineString} or {@link MultiLineString}.
+   *
+   * @param multiPolygon a {@link MultiPolygon} object
+   * @return  a {@link FeatureCollection} object that contains
+   *   list of {@link Feature} of {@link LineString} or {@link MultiLineString}
+   * @since 4.10.0
+   */
+  public static FeatureCollection polygonToLine(@NotNull MultiPolygon multiPolygon) {
+    return polygonToLine(multiPolygon, null);
+  }
+
+  /**
+   * Takes a {@link Polygon} and a properties {@link JsonObject} and
+   * covert it to a {@link Feature} that contains {@link LineString} or {@link MultiLineString}.
+   *
+   * @param polygon a {@link Polygon} object
+   * @param properties a {@link JsonObject} that represents a feature's properties
+   * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
+   * @since 4.10.0
+   */
+  public static Feature polygonToLine(@NotNull Polygon polygon, @Nullable JsonObject properties) {
+    return coordsToLine(polygon.coordinates(), properties);
+  }
+
+  /**
+   * Takes a {@link MultiPolygon} and a properties {@link JsonObject} and
+   * covert it to a {@link FeatureCollection} that contains list
+   * of {@link Feature} of {@link LineString} or {@link MultiLineString}.
+   *
+   * @param multiPolygon a {@link MultiPolygon} object
+   * @param properties a {@link JsonObject} that represents a feature's properties
+   * @return  a {@link FeatureCollection} object that contains
+   *   list of {@link Feature} of {@link LineString} or {@link MultiLineString}
+   * @since 4.10.0
+   */
+  public static FeatureCollection polygonToLine(@NotNull MultiPolygon multiPolygon,
+                                                @Nullable JsonObject properties) {
+    List<List<List<Point>>> coordinates = multiPolygon.coordinates();
+    List<Feature> finalFeatureList = new ArrayList<>();
+    for (List<List<Point>> polygonCoordinates : coordinates) {
+      finalFeatureList.add(coordsToLine(polygonCoordinates, properties));
+    }
+    return FeatureCollection.fromFeatures(finalFeatureList);
+  }
+
+  /**
+   * Takes a {@link Feature} that contains {@link MultiPolygon} and
+   * covert it to a {@link FeatureCollection} that contains list of {@link Feature}
+   * of {@link LineString} or {@link MultiLineString}.
+   *
+   * @param feature a {@link Feature} object that contains {@link Polygon}
+   * @return  a {@link FeatureCollection} object that contains list of {@link Feature}
+   *   of {@link LineString} or {@link MultiLineString}
+   * @since 4.10.0
+   */
+  public static FeatureCollection multiPolygonToLine(@NotNull Feature feature) {
+    return multiPolygonToLine(feature, null);
+  }
+
+  /**
+   * Takes a {@link Feature} that contains {@link MultiPolygon} and a
+   * properties {@link JsonObject} and
+   * covert it to a {@link FeatureCollection} that contains
+   * list of {@link Feature} of {@link LineString} or {@link MultiLineString}.
+   *
+   * @param feature a {@link Feature} object that contains {@link MultiPolygon}
+   * @param properties a {@link JsonObject} that represents a feature's properties
+   * @return  a {@link FeatureCollection} object that contains
+   *   list of {@link Feature} of {@link LineString} or {@link MultiLineString}
+   * @since 4.10.0
+   */
+  public static FeatureCollection multiPolygonToLine(@NotNull Feature feature,
+                                                     @Nullable JsonObject properties) {
+    Geometry geometry = feature.geometry();
+    if (geometry instanceof MultiPolygon) {
+      return polygonToLine((MultiPolygon) geometry, properties != null ? properties :
+              feature.type().equals("Feature") ? feature.properties() : new JsonObject());
+    }
+    throw new TurfException("Feature's geometry must be MultiPolygon");
+  }
+
+  @Nullable
+  private static Feature coordsToLine(@NotNull List<List<Point>> coordinates,
+                                      @Nullable JsonObject properties) {
+    if (coordinates.size() > 1) {
+      return Feature.fromGeometry(MultiLineString.fromLngLats(coordinates), properties);
+    } else if (coordinates.size() == 1) {
+      LineString lineString = LineString.fromLngLats(coordinates.get(0));
+      return Feature.fromGeometry(lineString, properties);
+    }
+    return null;
   }
 }
