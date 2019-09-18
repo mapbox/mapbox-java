@@ -1,25 +1,16 @@
 package com.mapbox.api.geocoding.v5;
 
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
-import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Point;
 
-import org.hamcrest.junit.ExpectedException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
 import static org.hamcrest.Matchers.startsWith;
@@ -67,7 +58,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void build_noAccessTokenExceptionThrown() throws Exception {
+  public void build_noAccessTokenExceptionThrown() {
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("Missing required properties: accessToken");
    MapboxGeocoding.builder()
@@ -77,7 +68,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void build_invalidAccessTokenExceptionThrown() throws Exception {
+  public void build_invalidAccessTokenExceptionThrown() {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(
       startsWith("Using Mapbox Services requires setting a valid access token."));
@@ -113,7 +104,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void baseUrl_doesChangeTheRequestUrl() throws Exception {
+  public void baseUrl_doesChangeTheRequestUrl() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl("https://foobar.com")
@@ -124,7 +115,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void country_localeCountryConvertsCorrectly() throws Exception {
+  public void country_localeCountryConvertsCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -135,7 +126,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void country_localeCountryHandlesMultipleCountriesCorrectly() throws Exception {
+  public void country_localeCountryHandlesMultipleCountriesCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -148,7 +139,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void proximity_doesGetAddedToUrlCorrectly() throws Exception {
+  public void proximity_doesGetAddedToUrlCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -160,7 +151,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void geocodingTypes_getsAddedToUrlCorrectly() throws Exception {
+  public void geocodingTypes_getsAddedToUrlCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -172,7 +163,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void autocomplete_getsAddedToUrlCorrectly() throws Exception {
+  public void autocomplete_getsAddedToUrlCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -184,7 +175,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void bbox_getsFormattedCorrectlyForUrl() throws Exception {
+  public void bbox_getsFormattedCorrectlyForUrl() {
     BoundingBox bbox = BoundingBox.fromLngLats(
             -77.083056, 38.908611, -76.997778, 38.959167);
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
@@ -198,7 +189,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void bbox_asPoints_getsFormattedCorrectlyForUrl() throws Exception {
+  public void bbox_asPoints_getsFormattedCorrectlyForUrl() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -213,7 +204,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void limit_getsAddedToUrlCorrectly() throws Exception {
+  public void limit_getsAddedToUrlCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -225,7 +216,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void language_getsConvertedToUrlCorrectly() throws Exception {
+  public void language_getsConvertedToUrlCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -237,7 +228,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void clientAppName_hasAppInString() throws Exception {
+  public void clientAppName_hasAppInString() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
@@ -249,7 +240,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void reverseMode_getsAddedToUrlCorrectly() throws Exception {
+  public void reverseMode_getsAddedToUrlCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .baseUrl("https://foobar.com")
@@ -270,7 +261,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void reverseMode_onlyLimit1_Allowed() throws Exception {
+  public void reverseMode_onlyLimit1_Allowed() {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(startsWith("Limit must be combined with a single type"));
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
@@ -296,7 +287,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void fuzzyMatch_getsAddedToUrlCorrectly() throws Exception {
+  public void fuzzyMatch_getsAddedToUrlCorrectly() {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .query("wahsington")
@@ -306,5 +297,87 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
     assertNotNull(mapboxGeocoding);
     assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
       .contains("fuzzyMatch=true"));
+  }
+
+  @Test
+  public void intersectionSearchSanity() throws IOException {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .intersectionStreets("Market Street", "Fremont Street")
+      .proximity("-122.39738575285674,37.792514711136945")
+      .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+      .baseUrl(mockUrl.toString())
+      .build();
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(200, response.code());
+  }
+
+  @Test
+  public void intersectionSearchAndAddedCorrectly() {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+            .accessToken(ACCESS_TOKEN)
+            .intersectionStreets("Street one", "Street two")
+            .proximity("-122.39738575285674,37.792514711136945")
+            .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+            .baseUrl(mockUrl.toString())
+            .build();
+    assertNotNull(mapboxGeocoding);
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString().contains("and"));
+  }
+
+  @Test
+  public void intersectionSearch_AddIntersectionToQuery() {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .intersectionStreets("Market Street", "Fremont Street")
+      .proximity("-122.39738575285674,37.792514711136945")
+      .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+      .baseUrl(mockUrl.toString())
+      .build();
+    assertNotNull(mapboxGeocoding);
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+      .contains("Market%20Street%20and%20Fremont%20Street"));
+  }
+
+  @Test
+  public void intersectionSearch_WrongMode() {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+            startsWith("Geocoding mode must be GeocodingCriteria.MODE_PLACES or GeocodingCriteria.MODE_PLACES_PERMANENT for intersection search."));
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .mode("RandomMode")
+      .intersectionStreets("Market Street", "Fremont Street")
+      .proximity("-122.39738575285674,37.792514711136945")
+      .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+      .baseUrl(mockUrl.toString())
+      .build();
+  }
+
+  @Test
+  public void intersectionSearch_AutoSetGeocodingType() {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .intersectionStreets("Market Street", "Fremont Street")
+      .proximity("-122.39738575285674,37.792514711136945")
+      .baseUrl(mockUrl.toString())
+      .build();
+    assertNotNull(mapboxGeocoding);
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+            .contains("types=address"));
+  }
+
+  @Test
+  public void intersectionSearch_EmptyPromixity() {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+            startsWith("Geocoding proximity must be set for intersection search."));
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+      .accessToken(ACCESS_TOKEN)
+      .intersectionStreets("Market Street", "Fremont Street")
+      .geocodingTypes(GeocodingCriteria.TYPE_ADDRESS)
+      .baseUrl(mockUrl.toString())
+      .build();
   }
 }

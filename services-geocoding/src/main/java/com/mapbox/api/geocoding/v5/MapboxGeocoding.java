@@ -247,6 +247,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
     private List<String> countries = new ArrayList<>();
 
+    private List<String> intersectionStreets = new ArrayList<>();
+
     /**
      * Perform a reverse geocode on the provided {@link Point}. Only one point can be passed in as
      * the query and isn't guaranteed to return a result. If you are an enterprise customer and
@@ -581,6 +583,22 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
     abstract MapboxGeocoding autoBuild();
 
+
+    /**
+     * Specify the two street names for intersection search.
+     *
+     * @param streetOneName First street name of the intersection
+     * @param streetTwoName Second street name of the intersection
+     * @return this builder for chaining options together
+     * @since 4.10.0
+     */
+    public Builder intersectionStreets(@NonNull String streetOneName,
+                                       @NonNull String streetTwoName) {
+      intersectionStreets.add(streetOneName);
+      intersectionStreets.add(streetTwoName);
+      return this;
+    }
+
     /**
      * Build a new {@link MapboxGeocoding} object.
      *
@@ -591,6 +609,11 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
       if (!countries.isEmpty()) {
         country(TextUtils.join(",", countries.toArray()));
+      }
+
+      if (intersectionStreets.size() == 2) {
+        query(TextUtils.join(" and ", intersectionStreets.toArray()));
+        geocodingTypes(GeocodingCriteria.TYPE_ADDRESS);
       }
 
       // Generate build so that we can check that values are valid.
@@ -606,6 +629,22 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       if (geocoding.reverseMode() != null
         && geocoding.limit() != null && !geocoding.limit().equals("1")) {
         throw new ServicesException("Limit must be combined with a single type parameter");
+      }
+
+      if (intersectionStreets.size() == 2) {
+        if (!(geocoding.mode().equals(GeocodingCriteria.MODE_PLACES)
+                || geocoding.mode().equals(GeocodingCriteria.MODE_PLACES_PERMANENT))) {
+          throw new ServicesException("Geocoding mode must be GeocodingCriteria.MODE_PLACES "
+                  + "or GeocodingCriteria.MODE_PLACES_PERMANENT for intersection search.");
+        }
+        if (TextUtils.isEmpty(geocoding.geocodingTypes())
+                || !geocoding.geocodingTypes().equals(GeocodingCriteria.TYPE_ADDRESS)) {
+          throw new ServicesException("Geocoding type must be set to Geocoding "
+                  + "Criteria.TYPE_ADDRESS for intersection search.");
+        }
+        if (TextUtils.isEmpty(geocoding.proximity())) {
+          throw new ServicesException("Geocoding proximity must be set for intersection search.");
+        }
       }
       return geocoding;
     }

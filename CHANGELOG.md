@@ -2,6 +2,10 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### master
+
+- Added intersection search support to MapboxGeocoding [#1074](https://github.com/mapbox/mapbox-java/pull/1074)
+
 ### v4.9.0-alpha.1 - September 4, 2019
 
 - Fixed up bintray publish script, generate sources and javadoc jars #1065  
