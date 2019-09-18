@@ -215,7 +215,7 @@ public final class TurfConversion {
    *
    * @param feature a {@link Feature} object that contains {@link Polygon}
    * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static Feature polygonToLine(@NotNull Feature feature) {
     return polygonToLine(feature, null);
@@ -228,7 +228,7 @@ public final class TurfConversion {
    * @param feature a {@link Feature} object that contains {@link Polygon}
    * @param properties a {@link JsonObject} that represents a feature's properties
    * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static Feature polygonToLine(@NotNull Feature feature, @Nullable JsonObject properties) {
     Geometry geometry = feature.geometry();
@@ -245,7 +245,7 @@ public final class TurfConversion {
    *
    * @param polygon a {@link Polygon} object
    * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static Feature polygonToLine(@NotNull Polygon polygon) {
     return polygonToLine(polygon, null);
@@ -259,7 +259,7 @@ public final class TurfConversion {
    * @param multiPolygon a {@link MultiPolygon} object
    * @return  a {@link FeatureCollection} object that contains
    *   list of {@link Feature} of {@link LineString} or {@link MultiLineString}
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static FeatureCollection polygonToLine(@NotNull MultiPolygon multiPolygon) {
     return polygonToLine(multiPolygon, null);
@@ -272,7 +272,7 @@ public final class TurfConversion {
    * @param polygon a {@link Polygon} object
    * @param properties a {@link JsonObject} that represents a feature's properties
    * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static Feature polygonToLine(@NotNull Polygon polygon, @Nullable JsonObject properties) {
     return coordsToLine(polygon.coordinates(), properties);
@@ -287,7 +287,7 @@ public final class TurfConversion {
    * @param properties a {@link JsonObject} that represents a feature's properties
    * @return  a {@link FeatureCollection} object that contains
    *   list of {@link Feature} of {@link LineString} or {@link MultiLineString}
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static FeatureCollection polygonToLine(@NotNull MultiPolygon multiPolygon,
                                                 @Nullable JsonObject properties) {
@@ -307,7 +307,7 @@ public final class TurfConversion {
    * @param feature a {@link Feature} object that contains {@link Polygon}
    * @return  a {@link FeatureCollection} object that contains list of {@link Feature}
    *   of {@link LineString} or {@link MultiLineString}
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static FeatureCollection multiPolygonToLine(@NotNull Feature feature) {
     return multiPolygonToLine(feature, null);
@@ -323,7 +323,7 @@ public final class TurfConversion {
    * @param properties a {@link JsonObject} that represents a feature's properties
    * @return  a {@link FeatureCollection} object that contains
    *   list of {@link Feature} of {@link LineString} or {@link MultiLineString}
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static FeatureCollection multiPolygonToLine(@NotNull Feature feature,
                                                      @Nullable JsonObject properties) {
