@@ -44,6 +44,8 @@ public class TurfMeasurementTest extends TestUtils {
   private static final String TURF_ENVELOPE_FEATURE_COLLECTION = "turf-envelope/feature-collection.geojson";
   private static final String LINE_DISTANCE_MULTILINESTRING
     = "turf-line-distance/multilinestring.geojson";
+  private static final String TURF_AREA_GEOJSON = "turf-area/polygon.geojson";
+  private static final String TURF_AREA_RESULT = "turf-area/polygon.json";
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -473,5 +475,11 @@ public class TurfMeasurementTest extends TestUtils {
 
     assertEquals(BoundingBox.fromCoordinates(-2.5, 0, 7.5, 10), sq1);
     assertEquals(BoundingBox.fromCoordinates(0, -2.5, 10, 7.5), sq2);
+  }
+
+  @Test
+  public void area() {
+    double expected = Double.valueOf(loadJsonFixture(TURF_AREA_RESULT));
+    assertEquals(expected, TurfMeasurement.area(Feature.fromJson(loadJsonFixture(TURF_AREA_GEOJSON))), 1);
   }
 }
