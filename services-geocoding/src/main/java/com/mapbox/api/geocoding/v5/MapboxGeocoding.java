@@ -590,7 +590,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @param streetOneName First street name of the intersection
      * @param streetTwoName Second street name of the intersection
      * @return this builder for chaining options together
-     * @since 4.10.0
+     * @since 4.9.0
      */
     public Builder intersectionStreets(@NonNull String streetOneName,
                                        @NonNull String streetTwoName) {
