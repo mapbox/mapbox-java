@@ -39,6 +39,9 @@ public final class TurfMeasurement {
     throw new AssertionError("No Instances.");
   }
 
+  /**
+   * Earth's radius in meters.
+   */
   public static double EARTH_RADIUS = 6378137;
 
   /**
@@ -575,10 +578,24 @@ public final class TurfMeasurement {
     }
   }
 
+  /**
+   * Takes one {@link Feature} and returns it's area in square meters.
+   *
+   * @param feature input {@link Feature}
+   * @return area in square meters
+   * @since 4.9.0
+   */
   public static double area(@NonNull Feature feature) {
     return feature.geometry() != null ? area(feature.geometry()) : 0.0f;
   }
 
+  /**
+   * Takes one {@link FeatureCollection} and returns it's area in square meters.
+   *
+   * @param featureCollection input {@link FeatureCollection}
+   * @return area in square meters
+   * @since 4.9.0
+   */
   public static double area(@NonNull FeatureCollection featureCollection) {
     List<Feature> features = featureCollection.features();
     double total = 0.0f;
@@ -590,6 +607,13 @@ public final class TurfMeasurement {
     return total;
   }
 
+  /**
+   * Takes one {@link Geometry} and returns it's area in square meters.
+   *
+   * @param geometry input {@link Geometry}
+   * @return area in square meters
+   * @since 4.9.0
+   */
   public static double area(@NonNull Geometry geometry) {
     return calculateArea(geometry);
   }
@@ -614,7 +638,7 @@ public final class TurfMeasurement {
     double total = 0.0f;
     if (coordinates.size() > 0) {
       total += Math.abs(ringArea(coordinates.get(0)));
-      for (int i = 1; i < coordinates.size(); i ++) {
+      for (int i = 1; i < coordinates.size(); i++) {
         total -= Math.abs(ringArea(coordinates.get(i)));
       }
     }
@@ -623,7 +647,8 @@ public final class TurfMeasurement {
 
   /**
    * Calculate the approximate area of the polygon were it projected onto the earth.
-   * Note that this area will be positive if ring is oriented clockwise, otherwise it will be negative.
+   * Note that this area will be positive if ring is oriented clockwise, otherwise
+   * it will be negative.
    *
    * Reference:
    * Robert. G. Chamberlain and William H. Duquette, "Some Algorithms for Polygons on a Sphere",
@@ -645,7 +670,7 @@ public final class TurfMeasurement {
 
     if (coordsLength > 2) {
       for (int i = 0; i < coordsLength; i++) {
-        if (i == coordsLength -2) { // i = N-2
+        if (i == coordsLength - 2) { // i = N-2
           lowerIndex = coordsLength - 2;
           middleIndex = coordsLength - 1;
           upperIndex = 0;
@@ -669,6 +694,6 @@ public final class TurfMeasurement {
   }
 
   private static double rad(double num) {
-    return num * Math.PI /180;
+    return num * Math.PI / 180;
   }
 }
