@@ -4,6 +4,7 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 4.9.0 - September 23, 2019
 - Added intersection search support to MapboxGeocoding [#1074](https://github.com/mapbox/mapbox-java/pull/1074)
 - Added support for Turf polygonToLine method [#1075](https://github.com/mapbox/mapbox-java/pull/1075)
 
