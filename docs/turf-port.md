@@ -8,7 +8,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 
 ## Measurement
 - [x] turf-along
-- [ ] turf-area
+- [x] turf-area
 - [x] turf-bbox
 - [x] turf-bbox-polygon
 - [x] turf-bearing

@@ -40,6 +40,11 @@ public final class TurfMeasurement {
   }
 
   /**
+   * Earth's radius in meters.
+   */
+  public static double EARTH_RADIUS = 6378137;
+
+  /**
    * Takes two {@link Point}s and finds the geographic bearing between them.
    *
    * @param point1 first point used for calculating the bearing
@@ -571,5 +576,124 @@ public final class TurfMeasurement {
               boundingBox.north()
       );
     }
+  }
+
+  /**
+   * Takes one {@link Feature} and returns it's area in square meters.
+   *
+   * @param feature input {@link Feature}
+   * @return area in square meters
+   * @since 4.10.0
+   */
+  public static double area(@NonNull Feature feature) {
+    return feature.geometry() != null ? area(feature.geometry()) : 0.0f;
+  }
+
+  /**
+   * Takes one {@link FeatureCollection} and returns it's area in square meters.
+   *
+   * @param featureCollection input {@link FeatureCollection}
+   * @return area in square meters
+   * @since 4.10.0
+   */
+  public static double area(@NonNull FeatureCollection featureCollection) {
+    List<Feature> features = featureCollection.features();
+    double total = 0.0f;
+    if (features != null) {
+      for (Feature feature : features) {
+        total += area(feature);
+      }
+    }
+    return total;
+  }
+
+  /**
+   * Takes one {@link Geometry} and returns it's area in square meters.
+   *
+   * @param geometry input {@link Geometry}
+   * @return area in square meters
+   * @since 4.10.0
+   */
+  public static double area(@NonNull Geometry geometry) {
+    return calculateArea(geometry);
+  }
+
+  private static double calculateArea(@NonNull Geometry geometry) {
+    double total = 0.0f;
+    if (geometry instanceof Polygon) {
+      return polygonArea(((Polygon) geometry).coordinates());
+    } else if (geometry instanceof MultiPolygon) {
+      List<List<List<Point>>> coordinates = ((MultiPolygon) geometry).coordinates();
+      for (int i = 0; i < coordinates.size(); i++) {
+        total += polygonArea(coordinates.get(i));
+      }
+      return total;
+    } else {
+      // Area should be 0 for case Point, MultiPoint, LineString and MultiLineString
+      return 0.0f;
+    }
+  }
+
+  private static double polygonArea(@NonNull List<List<Point>> coordinates) {
+    double total = 0.0f;
+    if (coordinates.size() > 0) {
+      total += Math.abs(ringArea(coordinates.get(0)));
+      for (int i = 1; i < coordinates.size(); i++) {
+        total -= Math.abs(ringArea(coordinates.get(i)));
+      }
+    }
+    return total;
+  }
+
+  /**
+   * Calculate the approximate area of the polygon were it projected onto the earth.
+   * Note that this area will be positive if ring is oriented clockwise, otherwise
+   * it will be negative.
+   *
+   * Reference:
+   * Robert. G. Chamberlain and William H. Duquette, "Some Algorithms for Polygons on a Sphere",
+   * JPL Publication 07-03, Jet Propulsion
+   * Laboratory, Pasadena, CA, June 2007 https://trs.jpl.nasa.gov/handle/2014/41271
+   *
+   * @param coordinates  A list of {@link Point} of Ring Coordinates
+   * @return The approximate signed geodesic area of the polygon in square meters.
+   */
+  private static double ringArea(@NonNull List<Point> coordinates) {
+    Point p1;
+    Point p2;
+    Point p3;
+    int lowerIndex;
+    int middleIndex;
+    int upperIndex;
+    double total = 0.0f;
+    final int coordsLength = coordinates.size();
+
+    if (coordsLength > 2) {
+      for (int i = 0; i < coordsLength; i++) {
+        if (i == coordsLength - 2) { // i = N-2
+          lowerIndex = coordsLength - 2;
+          middleIndex = coordsLength - 1;
+          upperIndex = 0;
+        } else if (i == coordsLength - 1) { // i = N-1
+          lowerIndex = coordsLength - 1;
+          middleIndex = 0;
+          upperIndex = 1;
+        } else { // i = 0 to N-3
+          lowerIndex = i;
+          middleIndex = i + 1;
+          upperIndex = i + 2;
+        }
+        p1 = coordinates.get(lowerIndex);
+        p2 = coordinates.get(middleIndex);
+        p3 = coordinates.get(upperIndex);
+        total += (rad(p3.longitude()) - rad(p1.longitude())) * Math.sin(rad(p2.latitude()));
+      }
+      total = total * EARTH_RADIUS * EARTH_RADIUS / 2;
+    }
+    return total;
+  }
+
+  private static double rad(double num) {
+    return num * Math.PI / 180;
   }
 }
