@@ -583,7 +583,7 @@ public final class TurfMeasurement {
    *
    * @param feature input {@link Feature}
    * @return area in square meters
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static double area(@NonNull Feature feature) {
     return feature.geometry() != null ? area(feature.geometry()) : 0.0f;
@@ -594,7 +594,7 @@ public final class TurfMeasurement {
    *
    * @param featureCollection input {@link FeatureCollection}
    * @return area in square meters
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static double area(@NonNull FeatureCollection featureCollection) {
     List<Feature> features = featureCollection.features();
@@ -612,7 +612,7 @@ public final class TurfMeasurement {
    *
    * @param geometry input {@link Geometry}
    * @return area in square meters
-   * @since 4.9.0
+   * @since 4.10.0
    */
   public static double area(@NonNull Geometry geometry) {
     return calculateArea(geometry);

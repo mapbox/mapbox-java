@@ -4,10 +4,11 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+- Added support for Turf area measurement method [#1079](https://github.com/mapbox/mapbox-java/pull/1079)
+
 ### 4.9.0 - September 23, 2019
 - Added intersection search support to MapboxGeocoding [#1074](https://github.com/mapbox/mapbox-java/pull/1074)
 - Added support for Turf polygonToLine method [#1075](https://github.com/mapbox/mapbox-java/pull/1075)
-- Added support for Turf area measurement method [#1079](https://github.com/mapbox/mapbox-java/pull/1079)
 
 ### v4.9.0-alpha.1 - September 4, 2019
 
