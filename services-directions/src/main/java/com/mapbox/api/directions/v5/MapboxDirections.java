@@ -910,7 +910,8 @@ public abstract class MapboxDirections extends
           + " directions API request.");
       }
 
-      if (waypointIndices != null) {
+      boolean isWaypointIndicesEmpty = waypointIndices == null || waypointIndices.length == 0;
+      if (!isWaypointIndicesEmpty) {
         if (waypointIndices.length < 2) {
           throw new ServicesException(
             "Waypoints must be a list of at least two indexes separated by ';'");
@@ -929,30 +930,34 @@ public abstract class MapboxDirections extends
         }
       }
 
-      if (waypointNames != null) {
-        final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
-        waypointNames(waypointNamesStr);
-      }
-
-      if (waypointTargets != null) {
-        if (waypointTargets.length != coordinates.size()) {
-          throw new ServicesException("Number of waypoint targets must match "
-            + " the number of waypoints provided.");
+      if (waypointNames != null && waypointNames.length != 0) {
+        if (isWaypointIndicesEmpty || waypointNames.length != waypointIndices.length) {
+          throw new ServicesException("Number of waypoint names elements must match "
+            + "number of waypoints provided.");
         }
-
-        waypointTargets(formatWaypointTargets(waypointTargets));
+        String formattedWaypointNames = TextUtils.formatWaypointNames(waypointNames);
+        waypointNames(formattedWaypointNames);
       }
 
-      if (approaches != null) {
-        if (approaches.length != coordinates.size()) {
+      if (approaches != null && approaches.length != 0) {
+        if (isWaypointIndicesEmpty || approaches.length != waypointIndices.length) {
           throw new ServicesException("Number of approach elements must match "
-            + "number of coordinates provided.");
+            + "number of waypoints provided.");
         }
         String formattedApproaches = TextUtils.formatApproaches(approaches);
         if (formattedApproaches == null) {
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
         approaches(formattedApproaches);
+      }
+
+      if (waypointTargets != null) {
+        if (waypointTargets.length != coordinates.size()) {
+          throw new ServicesException("Number of waypoint targets must match "
+            + " the number of coordinates provided.");
+        }
+
+        waypointTargets(formatWaypointTargets(waypointTargets));
       }
 
       coordinates(coordinates);
