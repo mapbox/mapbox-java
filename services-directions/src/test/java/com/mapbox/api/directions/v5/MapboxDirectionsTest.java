@@ -644,14 +644,29 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void build_exceptionThrownWhenLessThanTwoApproachesProvided() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Approaches must be a list of at least two"));
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(2.0, 2.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addApproaches(APPROACH_UNRESTRICTED)
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
   public void build_exceptionThrownWhenNumApproachesDoesNotMatchCoordinates() throws Exception {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(
       startsWith("Number of approach elements must match"));
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .origin(Point.fromLngLat(2.0, 2.0))
+      .addWaypoint(Point.fromLngLat(3.0, 3.0))
       .destination(Point.fromLngLat(4.0, 4.0))
-      .addApproaches(APPROACH_UNRESTRICTED)
+      .addApproaches(APPROACH_UNRESTRICTED, APPROACH_CURB)
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -768,6 +783,35 @@ public class MapboxDirectionsTest extends TestUtils {
     assertNotNull(mapboxDirections);
     assertEquals("Home;Store;Work",
       mapboxDirections.cloneCall().request().url().queryParameter("waypoint_names"));
+  }
+
+  @Test
+  public void build_exceptionThrownWhenLessThanTwoWaypointNamesProvided() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Waypoint names must be a list of at least two"));
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(2.0, 2.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addWaypointNames("Home")
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+  }
+
+  @Test
+  public void build_exceptionThrownWhenNumWaypointNamesDoesNotMatchCoordinates() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      startsWith("Number of waypoint names elements must match"));
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .origin(Point.fromLngLat(2.0, 2.0))
+      .addWaypoint(Point.fromLngLat(3.0, 3.0))
+      .destination(Point.fromLngLat(4.0, 4.0))
+      .addWaypointNames("Home", "Work")
+      .baseUrl("https://foobar.com")
+      .accessToken(ACCESS_TOKEN)
+      .build();
   }
 
   @Test

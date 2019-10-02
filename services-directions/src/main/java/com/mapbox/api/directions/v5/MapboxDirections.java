@@ -854,6 +854,7 @@ public abstract class MapboxDirections extends
     /**
      * Use POST method to request data.
      * The default is to use GET.
+     *
      * @return this builder for chaining options together
      * @since 4.6.0
      */
@@ -864,6 +865,7 @@ public abstract class MapboxDirections extends
 
     /**
      * Use GET method to request data.
+     *
      * @return this builder for chaining options together
      * @since 4.6.0
      */
@@ -910,8 +912,7 @@ public abstract class MapboxDirections extends
           + " directions API request.");
       }
 
-      boolean isWaypointIndicesEmpty = waypointIndices == null || waypointIndices.length == 0;
-      if (!isWaypointIndicesEmpty) {
+      if (waypointIndices != null && waypointIndices.length > 0) {
         if (waypointIndices.length < 2) {
           throw new ServicesException(
             "Waypoints must be a list of at least two indexes separated by ';'");
@@ -930,31 +931,39 @@ public abstract class MapboxDirections extends
         }
       }
 
-      if (waypointNames != null && waypointNames.length != 0) {
-        if (isWaypointIndicesEmpty || waypointNames.length != waypointIndices.length) {
+      if (waypointNames != null && waypointNames.length > 0) {
+        if (waypointNames.length < 2) {
+          throw new ServicesException(
+            "Waypoint names must be a list of at least two indexes separated by ';'");
+        }
+        if (waypointNames.length != coordinates.size()) {
           throw new ServicesException("Number of waypoint names elements must match "
             + "number of waypoints provided.");
         }
-        String formattedWaypointNames = TextUtils.formatWaypointNames(waypointNames);
+        final String formattedWaypointNames = TextUtils.formatWaypointNames(waypointNames);
         waypointNames(formattedWaypointNames);
       }
 
-      if (approaches != null && approaches.length != 0) {
-        if (isWaypointIndicesEmpty || approaches.length != waypointIndices.length) {
+      if (approaches != null && approaches.length > 0) {
+        if (approaches.length < 2) {
+          throw new ServicesException(
+            "Approaches must be a list of at least two indexes separated by ';'");
+        }
+        if (approaches.length != coordinates.size()) {
           throw new ServicesException("Number of approach elements must match "
             + "number of waypoints provided.");
         }
-        String formattedApproaches = TextUtils.formatApproaches(approaches);
+        final String formattedApproaches = TextUtils.formatApproaches(approaches);
         if (formattedApproaches == null) {
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
         approaches(formattedApproaches);
       }
 
-      if (waypointTargets != null) {
+      if (waypointTargets != null && waypointTargets.length > 0) {
         if (waypointTargets.length != coordinates.size()) {
           throw new ServicesException("Number of waypoint targets must match "
-            + " the number of coordinates provided.");
+            + " the number of waypoints provided.");
         }
 
         waypointTargets(formatWaypointTargets(waypointTargets));
