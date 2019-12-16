@@ -147,7 +147,6 @@ public abstract class BannerText extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    @Nullable
     public abstract Builder text(@NonNull String text);
 
     /**
@@ -157,7 +156,6 @@ public abstract class BannerText extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    @Nullable
     public abstract Builder components(List<BannerComponents> components);
 
     /**

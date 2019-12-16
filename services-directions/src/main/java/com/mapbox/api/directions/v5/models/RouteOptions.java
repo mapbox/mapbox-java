@@ -555,7 +555,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    @Nullable
     public abstract Builder exclude(@NonNull String exclude);
 
     /**
@@ -565,7 +564,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.2.0
      */
-    @Nullable
     public abstract Builder approaches(String approaches);
 
     /**
@@ -575,7 +573,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 4.4.0
      */
-    @Nullable
     public abstract Builder waypointIndices(@Nullable String indices);
 
     /**
@@ -585,7 +582,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.3.0
      */
-    @Nullable
     public abstract Builder waypointNames(@Nullable String waypointNames);
 
     /**
@@ -595,9 +591,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 4.3.0
      */
-    @Nullable
     public abstract Builder waypointTargets(@Nullable String waypointTargets);
-
 
     /**
      * To be used to specify settings for use with the walking profile.
