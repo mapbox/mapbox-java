@@ -15,7 +15,6 @@ import com.mapbox.geojson.MultiPolygon;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
 import com.mapbox.turf.TurfConstants.TurfUnitCriteria;
-import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -218,7 +217,7 @@ public final class TurfConversion {
    * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
    * @since 4.9.0
    */
-  public static Feature polygonToLine(@NotNull Feature feature) {
+  public static Feature polygonToLine(@NonNull Feature feature) {
     return polygonToLine(feature, null);
   }
 
@@ -231,7 +230,7 @@ public final class TurfConversion {
    * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
    * @since 4.9.0
    */
-  public static Feature polygonToLine(@NotNull Feature feature, @Nullable JsonObject properties) {
+  public static Feature polygonToLine(@NonNull Feature feature, @Nullable JsonObject properties) {
     Geometry geometry = feature.geometry();
     if (geometry instanceof Polygon) {
       return polygonToLine((Polygon) geometry,properties != null ? properties :
@@ -248,7 +247,7 @@ public final class TurfConversion {
    * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
    * @since 4.9.0
    */
-  public static Feature polygonToLine(@NotNull Polygon polygon) {
+  public static Feature polygonToLine(@NonNull Polygon polygon) {
     return polygonToLine(polygon, null);
   }
 
@@ -262,7 +261,7 @@ public final class TurfConversion {
    *   list of {@link Feature} of {@link LineString} or {@link MultiLineString}
    * @since 4.9.0
    */
-  public static FeatureCollection polygonToLine(@NotNull MultiPolygon multiPolygon) {
+  public static FeatureCollection polygonToLine(@NonNull MultiPolygon multiPolygon) {
     return polygonToLine(multiPolygon, null);
   }
 
@@ -275,7 +274,7 @@ public final class TurfConversion {
    * @return  a {@link Feature} object that contains {@link LineString} or {@link MultiLineString}
    * @since 4.9.0
    */
-  public static Feature polygonToLine(@NotNull Polygon polygon, @Nullable JsonObject properties) {
+  public static Feature polygonToLine(@NonNull Polygon polygon, @Nullable JsonObject properties) {
     return coordsToLine(polygon.coordinates(), properties);
   }
 
@@ -290,7 +289,7 @@ public final class TurfConversion {
    *   list of {@link Feature} of {@link LineString} or {@link MultiLineString}
    * @since 4.9.0
    */
-  public static FeatureCollection polygonToLine(@NotNull MultiPolygon multiPolygon,
+  public static FeatureCollection polygonToLine(@NonNull MultiPolygon multiPolygon,
                                                 @Nullable JsonObject properties) {
     List<List<List<Point>>> coordinates = multiPolygon.coordinates();
     List<Feature> finalFeatureList = new ArrayList<>();
@@ -310,7 +309,7 @@ public final class TurfConversion {
    *   of {@link LineString} or {@link MultiLineString}
    * @since 4.9.0
    */
-  public static FeatureCollection multiPolygonToLine(@NotNull Feature feature) {
+  public static FeatureCollection multiPolygonToLine(@NonNull Feature feature) {
     return multiPolygonToLine(feature, null);
   }
 
@@ -326,7 +325,7 @@ public final class TurfConversion {
    *   list of {@link Feature} of {@link LineString} or {@link MultiLineString}
    * @since 4.9.0
    */
-  public static FeatureCollection multiPolygonToLine(@NotNull Feature feature,
+  public static FeatureCollection multiPolygonToLine(@NonNull Feature feature,
                                                      @Nullable JsonObject properties) {
     Geometry geometry = feature.geometry();
     if (geometry instanceof MultiPolygon) {
@@ -337,7 +336,7 @@ public final class TurfConversion {
   }
 
   @Nullable
-  private static Feature coordsToLine(@NotNull List<List<Point>> coordinates,
+  private static Feature coordsToLine(@NonNull List<List<Point>> coordinates,
                                       @Nullable JsonObject properties) {
     if (coordinates.size() > 1) {
       return Feature.fromGeometry(MultiLineString.fromLngLats(coordinates), properties);
