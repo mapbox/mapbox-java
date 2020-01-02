@@ -205,6 +205,10 @@ public abstract class MapboxDirections extends
       if (interceptor != null) {
         httpClient.addInterceptor(interceptor);
       }
+      Interceptor networkInterceptor = networkInterceptor();
+      if (networkInterceptor != null) {
+        httpClient.addNetworkInterceptor(networkInterceptor);
+      }
       EventListener eventListener = eventListener();
       if (eventListener != null) {
         httpClient.eventListener(eventListener);
@@ -328,6 +332,9 @@ public abstract class MapboxDirections extends
 
   @Nullable
   abstract Interceptor interceptor();
+
+  @Nullable
+  abstract Interceptor networkInterceptor();
 
   @Nullable
   abstract EventListener eventListener();
@@ -753,6 +760,14 @@ public abstract class MapboxDirections extends
      * @return this builder for chaining options together
      */
     public abstract Builder interceptor(Interceptor interceptor);
+
+    /**
+     * Adds an optional network interceptor to set in the OkHttp client.
+     *
+     * @param interceptor to set for OkHttp
+     * @return this builder for chaining options together
+     */
+    public abstract Builder networkInterceptor(Interceptor interceptor);
 
     /**
      * Adds an optional event listener to set in the OkHttp client.
