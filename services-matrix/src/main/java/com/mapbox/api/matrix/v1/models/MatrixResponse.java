@@ -3,13 +3,13 @@ package com.mapbox.api.matrix.v1.models;
 import java.io.Serializable;
 import java.util.List;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.models.DirectionsWaypoint;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * This contains the Matrix API response information which can be used to display the results.

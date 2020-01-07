@@ -1,10 +1,10 @@
 package com.mapbox.api.staticmap.v1.models;
 
-import static android.support.annotation.RestrictTo.Scope.LIBRARY;
+import static androidx.annotation.RestrictTo.Scope.LIBRARY;
 import static com.mapbox.core.utils.ColorUtils.toHexString;
 
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
 import com.google.auto.value.AutoValue;
 import com.mapbox.api.staticmap.v1.StaticMapCriteria;
 import com.mapbox.api.staticmap.v1.StaticMapCriteria.MarkerCriteria;

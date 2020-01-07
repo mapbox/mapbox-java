@@ -1,6 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

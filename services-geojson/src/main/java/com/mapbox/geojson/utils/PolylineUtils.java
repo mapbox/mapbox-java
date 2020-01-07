@@ -1,6 +1,6 @@
 package com.mapbox.geojson.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;

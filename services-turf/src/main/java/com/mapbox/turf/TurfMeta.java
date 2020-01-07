@@ -1,6 +1,6 @@
 package com.mapbox.turf;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;

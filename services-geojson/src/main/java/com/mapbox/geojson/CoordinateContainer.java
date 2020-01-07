@@ -1,6 +1,6 @@
 package com.mapbox.geojson;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 /**
  * Each of the s geometries which make up GeoJson implement this interface and consume a varying

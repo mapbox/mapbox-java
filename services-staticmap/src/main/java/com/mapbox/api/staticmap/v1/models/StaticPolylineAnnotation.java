@@ -1,13 +1,13 @@
 package com.mapbox.api.staticmap.v1.models;
 
-import static android.support.annotation.RestrictTo.Scope.LIBRARY;
+import static androidx.annotation.RestrictTo.Scope.LIBRARY;
 import static com.mapbox.core.utils.ColorUtils.toHexString;
 
-import android.support.annotation.FloatRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import android.support.annotation.RestrictTo;
+import androidx.annotation.RestrictTo;
 import com.google.auto.value.AutoValue;
 import com.mapbox.api.staticmap.v1.MapboxStaticMap;
 import com.mapbox.geojson.utils.PolylineUtils;

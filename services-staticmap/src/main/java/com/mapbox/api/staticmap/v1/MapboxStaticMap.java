@@ -1,9 +1,9 @@
 package com.mapbox.api.staticmap.v1;
 
-import android.support.annotation.FloatRange;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.FloatRange;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation;
 import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation;
