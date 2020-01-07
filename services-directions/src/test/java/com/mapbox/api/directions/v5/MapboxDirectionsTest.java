@@ -840,6 +840,30 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void testWithNetworkInterceptor() throws Exception {
+    Interceptor interceptor = new Interceptor() {
+      @Override
+      public okhttp3.Response intercept(Chain chain) throws IOException {
+        return null;
+      }
+    };
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .profile(PROFILE_CYCLING)
+            .origin(Point.fromLngLat(-122.42,37.78))
+            .destination(Point.fromLngLat(-77.03,38.91))
+            .steps(true)
+            .voiceInstructions(true)
+            .voiceUnits(DirectionsCriteria.IMPERIAL)
+            .addWaypointNames("Home", "Work")
+            .accessToken(ACCESS_TOKEN)
+            .baseUrl(mockUrl.toString())
+            .networkInterceptor(interceptor)
+            .build();
+
+    assertEquals(interceptor, mapboxDirections.networkInterceptor());
+  }
+
+  @Test
   public void testWithEventListener() throws Exception {
     EventListener eventListener = new EventListener() {
       @Override
