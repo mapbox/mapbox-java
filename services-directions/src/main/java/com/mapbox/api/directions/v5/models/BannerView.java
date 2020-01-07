@@ -73,16 +73,6 @@ public abstract class BannerView extends DirectionsJsonObject {
   @Nullable
   public abstract String modifier();
 
-
-  /**
-   * The url of the junction view image.
-   *
-   * @return String representation of an image url
-   * @since REPLACE_VERSION_KYLE
-   */
-  @Nullable
-  public abstract String url();
-
   /**
    * Convert the current {@link BannerView} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
@@ -166,16 +156,6 @@ public abstract class BannerView extends DirectionsJsonObject {
      * @since REPLACE_VERSION_KYLE
      */
     public abstract Builder modifier(@Nullable String modifier);
-
-    /**
-     * The degrees at which you will be exiting a roundabout, assuming `180` indicates
-     * going straight through the roundabout.
-     *
-     * @param url at which you will be exiting a roundabout
-     * @return this builder for chaining options together
-     * @since REPLACE_VERSION_KYLE
-     */
-    public abstract Builder url(String url);
 
     /**
      * Build a new {@link BannerView} object.
