@@ -37,4 +37,9 @@ public class JunctionViewResponseTest extends TestUtils {
 
     Assert.assertEquals(responseFromJson.view().text(), "CA01610_1_E");
   }
+
+  @Test
+  public void testFailureTest() {
+    Assert.assertEquals("Kyle", "Not Kyle");
+  }
 }
