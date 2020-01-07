@@ -5,6 +5,8 @@ import com.mapbox.core.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertNotNull;
 
 public class JunctionViewResponseTest extends TestUtils {
@@ -35,11 +37,15 @@ public class JunctionViewResponseTest extends TestUtils {
     String json = loadJsonFixture(BANNER_INSTRUCTION_V5_JUNCTION_VIEW_FIXTURE);
     BannerInstructions responseFromJson = BannerInstructions.fromJson(json);
 
-    Assert.assertEquals(responseFromJson.view().text(), "CA01610_1_E");
-  }
+    BannerView bannerView = responseFromJson.view();
+    Assert.assertEquals(bannerView.text(), "CA01610_1_E");
+    Assert.assertEquals(bannerView.type(), "fork");
+    Assert.assertEquals(bannerView.modifier(), "right");
 
-  @Test
-  public void testFailureTest() {
-    Assert.assertEquals("Kyle", "Not Kyle");
+    List<BannerComponents> bannerComponents = responseFromJson.view().components();
+    Assert.assertEquals(bannerComponents.size(), 1);
+    Assert.assertEquals(bannerComponents.get(0).text(), "CA01610_1_E");
+    Assert.assertEquals(bannerComponents.get(0).type(), "guidance-view");
+    // TODO add the url check
   }
 }

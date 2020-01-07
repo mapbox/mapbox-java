@@ -10,6 +10,8 @@ import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.MapboxDirections;
 
+import java.util.List;
+
 /**
  * Includes both plain text information that can be visualized inside your navigation application
  * along with the text string broken down into {@link BannerComponents} which may or may not
@@ -35,10 +37,19 @@ public abstract class BannerView extends DirectionsJsonObject {
    * Plain text with all the {@link BannerComponents} text combined.
    *
    * @return plain text with all the {@link BannerComponents} text items combined
-   * @since 3.0.0
+   * @since ??
    */
   @NonNull
   public abstract String text();
+
+  /**
+   * A part or element of the {@link BannerInstructions}.
+   *
+   * @return a {@link BannerComponents} specific to a {@link LegStep}
+   * @since ??
+   */
+  @Nullable
+  public abstract List<BannerComponents> components();
 
   /**
    * This indicates the type of maneuver.
@@ -88,7 +99,7 @@ public abstract class BannerView extends DirectionsJsonObject {
    *
    * @param gson the built {@link Gson} object
    * @return the type adapter for this class
-   * @since 3.0.0
+   * @since ??
    */
   public static TypeAdapter<BannerView> typeAdapter(Gson gson) {
     return new AutoValue_BannerView.GsonTypeAdapter(gson);
@@ -100,7 +111,7 @@ public abstract class BannerView extends DirectionsJsonObject {
    * @param json a formatted valid JSON string defining a BannerText
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
-   * @since 3.4.0
+   * @since ??
    */
   public static BannerView fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
@@ -111,7 +122,7 @@ public abstract class BannerView extends DirectionsJsonObject {
   /**
    * This builder can be used to set the values describing the {@link BannerView}.
    *
-   * @since 3.0.0
+   * @since ??
    */
   @AutoValue.Builder
   public abstract static class Builder {
@@ -121,9 +132,18 @@ public abstract class BannerView extends DirectionsJsonObject {
      *
      * @param text plain text with all the {@link BannerComponents} text items combined
      * @return this builder for chaining options together
-     * @since 3.0.0
+     * @since ??
      */
     public abstract Builder text(@NonNull String text);
+
+    /**
+     * A part or element of the {@link BannerInstructions}.
+     *
+     * @param components a {@link BannerComponents} specific to a {@link LegStep}
+     * @return this builder for chaining options together
+     * @since ??
+     */
+    public abstract Builder components(List<BannerComponents> components);
 
     /**
      * This indicates the type of maneuver. See {@link BannerView#type()} for a full list of
@@ -132,7 +152,7 @@ public abstract class BannerView extends DirectionsJsonObject {
      * @param type String with type of maneuver
      * @return this builder for chaining options together
      * @see StepManeuver.StepManeuverType
-     * @since 3.0.0
+     * @since ??
      */
     public abstract Builder type(@Nullable @StepManeuver.StepManeuverType  String type);
 
@@ -143,7 +163,7 @@ public abstract class BannerView extends DirectionsJsonObject {
      *
      * @param modifier String with modifier
      * @return this builder for chaining options together
-     * @since 3.0.0
+     * @since ??
      */
     public abstract Builder modifier(@Nullable String modifier);
 
@@ -161,7 +181,7 @@ public abstract class BannerView extends DirectionsJsonObject {
      * Build a new {@link BannerView} object.
      *
      * @return a new {@link BannerView} using the provided values in this builder
-     * @since 3.0.0
+     * @since ??
      */
     public abstract BannerView build();
   }
