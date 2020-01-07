@@ -71,6 +71,15 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
   public abstract BannerText sub();
 
   /**
+   * Visual representation of complex upcoming maneuver
+   *
+   * @return {@link BannerView} representing the secondary visual information
+   * @since 3.0.0
+   */
+  @Nullable
+  public abstract BannerView view();
+
+  /**
    * Convert the current {@link BannerInstructions} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link BannerInstructions}.
@@ -155,6 +164,19 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
      * @since 3.2.0
      */
     public abstract Builder sub(@Nullable BannerText sub);
+
+    /**
+     * Additional information that is included
+     * if we feel the driver needs a heads up about something.
+     * Can include information about the next maneuver (the one after the upcoming one),
+     * if the step is short - can be null, or can be lane information.
+     * If we have lane information, that trumps information about the next maneuver.
+     * @param view {@link BannerView} representing the sub visual information
+     * @return this builder for chaining options together
+     * @since ??
+     */
+    public abstract Builder view(@Nullable BannerView view);
+
 
     /**
      * Build a new {@link BannerInstructions} object.
