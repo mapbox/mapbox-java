@@ -108,6 +108,18 @@ public abstract class BannerComponents extends DirectionsJsonObject
   public abstract String imageBaseUrl();
 
   /**
+   * An image associated with the banner component. Unlike the imageBaseUrl,
+   * this image url does not include image density encodings.
+   *
+   * @return the url which can be used to download the image.
+   * @since 5.0.0
+   */
+  @Nullable
+  @SerializedName("imageURL")
+  public abstract String imageUrl();
+
+
+  /**
    * A List of directions indicating which way you can go from a lane
    * (left, right, or straight). If the value is ['left', 'straight'],
    * the driver can go straight or left from that lane.
@@ -268,6 +280,16 @@ public abstract class BannerComponents extends DirectionsJsonObject
      * @since 3.0.0
      */
     public abstract Builder imageBaseUrl(@Nullable String imageBaseUrl);
+
+    /**
+     * An image associated with the banner component. Unlike the imageBaseUrl,
+     * this image url does not include image density encodings.
+     *
+     * @param imageUrl the url which can be used to download the image
+     * @return this builder for chaining options together
+     * @since 5.0.0
+     */
+    public abstract Builder imageUrl(@Nullable String imageUrl);
 
     /**
      * A List of directions indicating which way you can go from a lane

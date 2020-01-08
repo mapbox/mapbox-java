@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class JunctionViewResponseTest {
 
-  private static final String BANNER_INSTRUCTION_JSON = "{\"distanceAlongGeometry\":139.2,\"primary\":{\"text\":\"E23\",\"components\":[{\"text\":\"E23\",\"type\":\"icon\"}],\"type\":\"fork\",\"modifier\":\"right\"},\"secondary\":{\"text\":\"東名阪自動車道 / 亀山 / 四日市 / 東名阪自動車道\",\"components\":[{\"text\":\"東名阪自動車道\",\"type\":\"text\"},{\"text\":\"/\",\"type\":\"text\"},{\"text\":\"亀山\",\"type\":\"text\"},{\"text\":\"/\",\"type\":\"text\"},{\"text\":\"四日市\",\"type\":\"text\"},{\"text\":\"/\",\"type\":\"text\"},{\"text\":\"東名阪自動車道\",\"type\":\"text\"}],\"type\":\"fork\",\"modifier\":\"right\"},\"view\":{\"text\":\"CA01610_1_E\",\"components\":[{\"text\":\"CA01610_1_E\",\"type\":\"guidance-view\",\"url\":\"https://api-turn-here-staging-451578336.us-east-1.elb.amazonaws.com/guidance-views/v1/z/jct/CA01610_1_E\"}],\"type\":\"fork\",\"modifier\":\"right\"}}";
+  private static final String BANNER_INSTRUCTION_JSON = "{\"distanceAlongGeometry\":139.2,\"primary\":{\"text\":\"E23\",\"components\":[{\"text\":\"E23\",\"type\":\"icon\"}],\"type\":\"fork\",\"modifier\":\"right\"},\"secondary\":{\"text\":\"東名阪自動車道 / 亀山 / 四日市 / 東名阪自動車道\",\"components\":[{\"text\":\"東名阪自動車道\",\"type\":\"text\"},{\"text\":\"/\",\"type\":\"text\"},{\"text\":\"亀山\",\"type\":\"text\"},{\"text\":\"/\",\"type\":\"text\"},{\"text\":\"四日市\",\"type\":\"text\"},{\"text\":\"/\",\"type\":\"text\"},{\"text\":\"東名阪自動車道\",\"type\":\"text\"}],\"type\":\"fork\",\"modifier\":\"right\"},\"view\":{\"text\":\"CA01610_1_E\",\"components\":[{\"text\":\"CA01610_1_E\",\"type\":\"guidance-view\",\"imageURL\":\"https://api-turn-here-staging-451578336.us-east-1.elb.amazonaws.com/guidance-views/v1/z/jct/CA01610_1_E\"}],\"type\":\"fork\",\"modifier\":\"right\"}}";
 
   @Test
   public void shouldReadBannerInstruction() {
@@ -37,10 +37,10 @@ public class JunctionViewResponseTest {
     Assert.assertEquals(bannerView.type(), "fork");
     Assert.assertEquals(bannerView.modifier(), "right");
 
-    List<BannerComponents> bannerComponents = responseFromJson.view().components();
-    Assert.assertEquals(bannerComponents.size(), 1);
-    Assert.assertEquals(bannerComponents.get(0).text(), "CA01610_1_E");
-    Assert.assertEquals(bannerComponents.get(0).type(), "guidance-view");
-    // TODO add the url check
+    Assert.assertEquals(responseFromJson.view().components().size(), 1);
+    BannerComponents bannerComponent = responseFromJson.view().components().get(0);
+    Assert.assertEquals(bannerComponent.text(), "CA01610_1_E");
+    Assert.assertEquals(bannerComponent.type(), "guidance-view");
+    Assert.assertEquals(bannerComponent.imageUrl(), "https://api-turn-here-staging-451578336.us-east-1.elb.amazonaws.com/guidance-views/v1/z/jct/CA01610_1_E");
   }
 }
