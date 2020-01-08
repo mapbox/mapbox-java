@@ -180,8 +180,7 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
      * @since 5.0.0
      */
     public abstract Builder view(@Nullable BannerView view);
-
-
+    
     /**
      * Build a new {@link BannerInstructions} object.
      *
