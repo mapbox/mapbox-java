@@ -65,6 +65,7 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
    * Can include information about the next maneuver (the one after the upcoming one),
    * if the step is short - can be null, or can be lane information.
    * If we have lane information, that trumps information about the next maneuver.
+   *
    * @return {@link BannerText} representing the sub visual information
    * @since 3.2.0
    */
@@ -162,6 +163,7 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
      * Can include information about the next maneuver (the one after the upcoming one),
      * if the step is short - can be null, or can be lane information.
      * If we have lane information, that trumps information about the next maneuver.
+     *
      * @param sub {@link BannerText} representing the sub visual information
      * @return {@link BannerText} representing the sub visual information
      * @since 3.2.0
@@ -169,11 +171,10 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
     public abstract Builder sub(@Nullable BannerText sub);
 
     /**
-     * Additional information that is included
-     * if we feel the driver needs a heads up about something.
-     * Can include information about the next maneuver (the one after the upcoming one),
-     * if the step is short - can be null, or can be lane information.
-     * If we have lane information, that trumps information about the next maneuver.
+     * Optional image to display for an upcoming maneuver. Used to provide a visual
+     * for complex junctions and maneuver. If the step is short the image should be displayed
+     * for the duration of the step, otherwise it is shown as you approach the maneuver.
+     *
      * @param view {@link BannerView} representing the sub visual information
      * @return this builder for chaining options together
      * @since 5.0.0
