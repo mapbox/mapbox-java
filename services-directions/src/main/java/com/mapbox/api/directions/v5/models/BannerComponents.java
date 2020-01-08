@@ -108,8 +108,9 @@ public abstract class BannerComponents extends DirectionsJsonObject
   public abstract String imageBaseUrl();
 
   /**
-   * An image associated with the banner component. Unlike the imageBaseUrl,
-   * this image url does not include image density encodings.
+   * In some cases when the {@link StepManeuver} will be difficult to navigate, an image
+   * can describe how to proceed. The domain name for this image is a Junction View.
+   * Unlike the imageBaseUrl, this image url does not include image density encodings.
    *
    * @return the url which can be used to download the image.
    * @since 5.0.0
@@ -282,8 +283,9 @@ public abstract class BannerComponents extends DirectionsJsonObject
     public abstract Builder imageBaseUrl(@Nullable String imageBaseUrl);
 
     /**
-     * An image associated with the banner component. Unlike the imageBaseUrl,
-     * this image url does not include image density encodings.
+     * In some cases when the {@link StepManeuver} will be difficult to navigate, an image
+     * can describe how to proceed. The domain name for this image is a Junction View.
+     * Unlike the imageBaseUrl, this image url does not include image density encodings.
      *
      * @param imageUrl the url which can be used to download the image
      * @return this builder for chaining options together
