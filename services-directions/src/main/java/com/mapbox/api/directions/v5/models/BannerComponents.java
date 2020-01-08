@@ -190,7 +190,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
   @Nullable
   @SerializedName("imageURL")
   public abstract String imageUrl();
-  
+
   /**
    * A List of directions indicating which way you can go from a lane
    * (left, right, or straight). If the value is ['left', 'straight'],
