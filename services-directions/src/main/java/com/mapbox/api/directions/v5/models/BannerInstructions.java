@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -64,11 +65,23 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
    * Can include information about the next maneuver (the one after the upcoming one),
    * if the step is short - can be null, or can be lane information.
    * If we have lane information, that trumps information about the next maneuver.
+   *
    * @return {@link BannerText} representing the sub visual information
    * @since 3.2.0
    */
   @Nullable
   public abstract BannerText sub();
+
+  /**
+   * Optional image to display for an upcoming maneuver. Used to provide a visual
+   * for complex junctions and maneuver. If the step is short the image should be displayed
+   * for the duration of the step, otherwise it is shown as you approach the maneuver.
+   *
+   * @return {@link BannerView} representing the secondary visual information
+   * @since 5.0.0
+   */
+  @Nullable
+  public abstract BannerView view();
 
   /**
    * Convert the current {@link BannerInstructions} to its builder holding the currently assigned
@@ -91,7 +104,6 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
   public static TypeAdapter<BannerInstructions> typeAdapter(Gson gson) {
     return new AutoValue_BannerInstructions.GsonTypeAdapter(gson);
   }
-
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String.
@@ -150,11 +162,23 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
      * Can include information about the next maneuver (the one after the upcoming one),
      * if the step is short - can be null, or can be lane information.
      * If we have lane information, that trumps information about the next maneuver.
+     *
      * @param sub {@link BannerText} representing the sub visual information
      * @return {@link BannerText} representing the sub visual information
      * @since 3.2.0
      */
     public abstract Builder sub(@Nullable BannerText sub);
+
+    /**
+     * Optional image to display for an upcoming maneuver. Used to provide a visual
+     * for complex junctions and maneuver. If the step is short the image should be displayed
+     * for the duration of the step, otherwise it is shown as you approach the maneuver.
+     *
+     * @param view {@link BannerView} representing the sub visual information
+     * @return this builder for chaining options together
+     * @since 5.0.0
+     */
+    public abstract Builder view(@Nullable BannerView view);
 
     /**
      * Build a new {@link BannerInstructions} object.
