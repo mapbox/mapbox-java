@@ -71,6 +71,13 @@ public abstract class BannerComponents extends DirectionsJsonObject
   public static final String LANE = "lane";
 
   /**
+   * This view gives guidance through junctions and is used to complete maneuvers.
+   *
+   * @since 5.0.0
+   */
+  public static final String GUIDANCE_VIEW = "guidance-view";
+
+  /**
    * Banner component types.
    * https://docs.mapbox.com/api/navigation/#banner-instruction-object
    *
@@ -83,7 +90,8 @@ public abstract class BannerComponents extends DirectionsJsonObject
           DELIMITER,
           EXIT_NUMBER,
           EXIT,
-          LANE
+          LANE,
+          GUIDANCE_VIEW
   })
   public @interface BannerComponentsType {
   }
@@ -170,6 +178,18 @@ public abstract class BannerComponents extends DirectionsJsonObject
   @Nullable
   @SerializedName("imageBaseURL")
   public abstract String imageBaseUrl();
+
+  /**
+   * In some cases when the {@link StepManeuver} will be difficult to navigate, an image
+   * can describe how to proceed. The domain name for this image is a Junction View.
+   * Unlike the imageBaseUrl, this image url does not include image density encodings.
+   *
+   * @return the url which can be used to download the image.
+   * @since 5.0.0
+   */
+  @Nullable
+  @SerializedName("imageURL")
+  public abstract String imageUrl();
 
   /**
    * A List of directions indicating which way you can go from a lane
@@ -332,6 +352,17 @@ public abstract class BannerComponents extends DirectionsJsonObject
      * @since 3.0.0
      */
     public abstract Builder imageBaseUrl(@Nullable String imageBaseUrl);
+
+    /**
+     * In some cases when the {@link StepManeuver} will be difficult to navigate, an image
+     * can describe how to proceed. The domain name for this image is a Junction View.
+     * Unlike the imageBaseUrl, this image url does not include image density encodings.
+     *
+     * @param imageUrl the url which can be used to download the image
+     * @return this builder for chaining options together
+     * @since 5.0.0
+     */
+    public abstract Builder imageUrl(@Nullable String imageUrl);
 
     /**
      * A List of directions indicating which way you can go from a lane
