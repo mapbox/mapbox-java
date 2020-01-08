@@ -75,7 +75,7 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
    * Visual representation of complex upcoming maneuver.
    *
    * @return {@link BannerView} representing the secondary visual information
-   * @since REPLACE_VERSION_KYLE
+   * @since 5.0.0
    */
   @Nullable
   public abstract BannerView view();
@@ -174,7 +174,7 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
      * If we have lane information, that trumps information about the next maneuver.
      * @param view {@link BannerView} representing the sub visual information
      * @return this builder for chaining options together
-     * @since REPLACE_VERSION_KYLE
+     * @since 5.0.0
      */
     public abstract Builder view(@Nullable BannerView view);
 
