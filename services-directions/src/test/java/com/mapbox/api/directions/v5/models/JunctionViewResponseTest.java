@@ -32,7 +32,7 @@ public class JunctionViewResponseTest {
 
     BannerView bannerView = responseFromJson.view();
     Assert.assertEquals(bannerView.text(), "CA01610_1_E");
-    Assert.assertEquals(bannerView.type(), "fork");
+    Assert.assertEquals(bannerView.type(), StepManeuver.FORK);
     Assert.assertEquals(bannerView.modifier(), "right");
 
     Assert.assertEquals(responseFromJson.view().components().size(), 1);
