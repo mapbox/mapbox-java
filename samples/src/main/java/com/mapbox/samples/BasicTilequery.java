@@ -15,7 +15,7 @@ public class BasicTilequery {
   public static void main(String[] args) {
     MapboxTilequery tilequery = MapboxTilequery.builder()
       .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
-      .mapIds("mapbox.mapbox-streets-v7")
+      .tilesetIds("mapbox.mapbox-streets-v7")
       .query(Point.fromLngLat(-122.42901, 37.806332))
       .radius(500)
       .limit(2)
