@@ -73,7 +73,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
   /**
    * This view gives guidance through junctions and is used to complete maneuvers.
    *
-   * @since 3.0.0
+   * @since 5.0.0
    */
   public static final String GUIDANCE_VIEW = "guidance-view";
 
