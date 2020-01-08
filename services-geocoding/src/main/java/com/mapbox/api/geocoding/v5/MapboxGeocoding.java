@@ -43,8 +43,9 @@ import retrofit2.Response;
  * states and countries that contain the given coordinates.
  * <p>
  * Batch Geocoding
- * This feature is limited to enterprise customers only and the {@link #mode()} must be set to
+ * The {@link #mode()} must be set to
  * {@link GeocodingCriteria#MODE_PLACES_PERMANENT}.
+ * For more information about batch geocoding, contact <a href="https://www.mapbox.com/contact/sales/">Mapbox sales</a>.
  * <p>
  * Batch requests have the same parameters as normal requests, but can include more than one query
  * by using {@link MapboxGeocoding.Builder#query(String)} and separating queries with the {@code ;}
@@ -231,10 +232,12 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
   /**
    * This builder is used to create a new request to the Mapbox Geocoding API. At a bare minimum,
    * your request must include an access token and a query of some kind. All other fields can
-   * be left alone inorder to use the default behaviour of the API.
+   * be left alone in order to use the default behaviour of the API.
    * <p>
-   * By default, the geocoding mode is set to places but can be changed to batch if you have an
-   * enterprise Mapbox plan.
+   * By default, the geocoding mode is set to mapbox.places.
+   * The mode can be changed to mapbox.places-permanent
+   * to enable batch and permanent geocoding. For more information about
+   * mapbox.places-permanent, contact <a href="https://www.mapbox.com/contact/sales/">Mapbox sales</a>.
    * </p><p>
    * Note to contributors: All optional booleans in this builder use the object {@code Boolean}
    * rather than the primitive to allow for unset (null) values.
@@ -251,9 +254,9 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
     /**
      * Perform a reverse geocode on the provided {@link Point}. Only one point can be passed in as
-     * the query and isn't guaranteed to return a result. If you are an enterprise customer and
-     * wanting to do a batch reverse Geocode, you can use the {@link #query(String)} method
-     * separating them with a semicolon.
+     * the query and isn't guaranteed to return a result. If you
+     * want to do a batch reverse Geocode, you can use the {@link #query(String)} method
+     * separating them with a semicolon. For more information about batch geocoding, contact <a href="https://www.mapbox.com/contact/sales/">Mapbox sales</a>.
      *
      * @param point a GeoJSON point which matches to coordinate you'd like to reverse geocode
      * @return this builder for chaining options together
@@ -268,8 +271,9 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
     /**
      * This method can be used for performing a forward geocode on a string representing a address
-     * or POI. If you are an enterprise customer and wish to perform a batch geocode, separate your
-     * queries with a semicolon.
+     * or POI. If you want to perform a batch geocode, separate your
+     * queries with a semicolon. For more information about batch geocoding,
+     * contact <a href="https://www.mapbox.com/contact/sales/">Mapbox sales</a>.
      *
      * @param query a String containing the text you'd like to forward geocode
      * @return this builder for chaining options together
@@ -281,15 +285,16 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * This sets the kind of geocoding result you desire, either ephemeral geocoding or batch
      * geocoding.
      * <p>
-     * Note tht batch geocoding's only available to users under a enterprise plan and will return an
-     * error code rather than a successful result.
+     * To access batch geocoding, contact <a href="https://www.mapbox.com/contact/sales/">Mapbox sales</a>.
+     * If you do not have access to batch geocoding, it will return
+     * an error code rather than a successful result.
      * </p><p>
      * Options avaliable to pass in include, {@link GeocodingCriteria#MODE_PLACES} for a ephemeral
-     * geocoding result (default) or {@link GeocodingCriteria#MODE_PLACES_PERMANENT} for enterprise
-     * batch geocoding.
+     * geocoding result (default) or {@link GeocodingCriteria#MODE_PLACES_PERMANENT} for
+     * batch and permanent geocoding.
      * </p>
      *
-     * @param mode mapbox.places or mapbox.places-permanent for enterprise/batch geocoding
+     * @param mode mapbox.places or mapbox.places-permanent for batch and permanent geocoding
      * @return this builder for chaining options together
      * @since 1.0.0
      */

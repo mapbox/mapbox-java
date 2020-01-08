@@ -22,7 +22,7 @@ public interface GeocodingService {
    * {@link MapboxGeocoding.Builder}.
    *
    * @param userAgent    The user
-   * @param mode         mapbox.places or mapbox.places-permanent for enterprise geocoding.
+   * @param mode         mapbox.places or mapbox.places-permanent for batch and permanent geocoding.
    * @param query        a location; a place name for forward geocoding or a coordinate pair
    *                     (longitude, latitude location) for reverse geocoding
    * @param accessToken  Mapbox access token.
