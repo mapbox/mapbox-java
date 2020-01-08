@@ -105,7 +105,6 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
     return new AutoValue_BannerInstructions.GsonTypeAdapter(gson);
   }
 
-
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String.
    *
