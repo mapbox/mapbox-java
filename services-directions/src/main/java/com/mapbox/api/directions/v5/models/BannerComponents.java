@@ -71,9 +71,10 @@ public abstract class BannerComponents extends DirectionsJsonObject
   public static final String LANE = "lane";
 
   /**
-   * Maneuver types.
+   * Banner component types.
+   * https://docs.mapbox.com/api/navigation/#banner-instruction-object
    *
-   * @since 4.1.0
+   * @since 3.0.0
    */
   @Retention(RetentionPolicy.SOURCE)
   @StringDef( {
