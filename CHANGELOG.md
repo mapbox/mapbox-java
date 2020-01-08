@@ -2,9 +2,20 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
-### master
+### 5.0.0 - January 8, 2020
 
-- Added support for Turf area measurement method [#1079](https://github.com/mapbox/mapbox-java/pull/1079)
+- Update to AndroidX annotation [#1095](https://github.com/mapbox/mapbox-java/pull/1095)
+- Rename references of `mapIds` to `tileSetIds` [#1047](https://github.com/mapbox/mapbox-java/pull/  1047)
+- Removed deprecated getCall() method in IsochroneService [#1099](https://github.com/mapbox/mapbox-java/pull/  1099)
+- Directions junction view api [#1097](https://github.com/mapbox/mapbox-java/pull/1097)
+- Add banner component type [#1098](https://github.com/mapbox/mapbox-java/pull/1098)
+- Remove references to enterprise from geocoding docs [#1084](https://github.com/mapbox/mapbox-java/pull/1084)
+- Add network interceptor to directions [#1093](https://github.com/mapbox/mapbox-java/pull/  1093)
+- Replaced NotNull with NonNull annotation in TurfConversion class [#1092](https://github.com/mapbox/mapbox-java/pull/  1092)
+- BannerText, RouteOptions builders: removed nullable annotations [#1091](https://github.com/mapbox/mapbox-java/pull/  1091)
+- Adding and adjusting repo issue templates [#1069](https://github.com/mapbox/mapbox-java/pull/  1069)
+- Adding combine turf method [#1008](https://github.com/mapbox/mapbox-java/pull/  1008)
+- Add turf area measurement method. [#1079](https://github.com/mapbox/mapbox-java/pull/1079)
 
 ### 4.9.0 - September 23, 2019
 - Added intersection search support to MapboxGeocoding [#1074](https://github.com/mapbox/mapbox-java/pull/1074)
