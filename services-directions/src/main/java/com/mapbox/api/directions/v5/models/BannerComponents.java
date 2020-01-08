@@ -71,6 +71,13 @@ public abstract class BannerComponents extends DirectionsJsonObject
   public static final String LANE = "lane";
 
   /**
+   * This view gives guidance through junctions and is used to complete maneuvers.
+   *
+   * @since 3.0.0
+   */
+  public static final String GUIDANCE_VIEW = "guidance-view";
+
+  /**
    * Banner component types.
    * https://docs.mapbox.com/api/navigation/#banner-instruction-object
    *
@@ -83,7 +90,8 @@ public abstract class BannerComponents extends DirectionsJsonObject
           DELIMITER,
           EXIT_NUMBER,
           EXIT,
-          LANE
+          LANE,
+          GUIDANCE_VIEW
   })
   public @interface BannerComponentsType {
   }

@@ -3,8 +3,6 @@ package com.mapbox.api.directions.v5.models;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.assertNotNull;
 
 public class JunctionViewResponseTest {
@@ -40,7 +38,7 @@ public class JunctionViewResponseTest {
     Assert.assertEquals(responseFromJson.view().components().size(), 1);
     BannerComponents bannerComponent = responseFromJson.view().components().get(0);
     Assert.assertEquals(bannerComponent.text(), "CA01610_1_E");
-    Assert.assertEquals(bannerComponent.type(), "guidance-view");
+    Assert.assertEquals(bannerComponent.type(), BannerComponents.GUIDANCE_VIEW);
     Assert.assertEquals(bannerComponent.imageUrl(), "https://api-turn-here-staging-451578336.us-east-1.elb.amazonaws.com/guidance-views/v1/z/jct/CA01610_1_E");
   }
 }
