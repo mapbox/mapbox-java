@@ -2,6 +2,8 @@
 
 Mapbox welcomes participation and contributions from everyone.
 
+### master
+
 ### 5.0.0 - January 8, 2020
 
 - Update to AndroidX annotation [#1095](https://github.com/mapbox/mapbox-java/pull/1095)
