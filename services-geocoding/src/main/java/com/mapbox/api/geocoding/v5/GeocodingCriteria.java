@@ -20,7 +20,7 @@ public final class GeocodingCriteria {
   public static final String MODE_PLACES = "mapbox.places";
 
   /**
-   * Geocoding mode for enterprise/batch geocoding.
+   * Geocoding mode for batch and permanent geocoding. For more information about this mode, contact <a href="https://www.mapbox.com/contact/sales/">Mapbox sales</a>.
    *
    * @since 1.0.0
    */

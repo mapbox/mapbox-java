@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -11,6 +12,8 @@ import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.MapboxDirections;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
@@ -24,6 +27,66 @@ import java.util.List;
 @AutoValue
 public abstract class BannerComponents extends DirectionsJsonObject
   implements Comparable<BannerComponents> {
+
+  /**
+   * Default. Indicates the text is part of the instructions and no other type.
+   *
+   * @since 3.0.0
+   */
+  public static final String TEXT = "text";
+
+  /**
+   * This is text that can be replaced by an imageBaseURL icon.
+   *
+   * @since 3.0.0
+   */
+  public static final String ICON = "icon";
+
+  /**
+   * This is text that can be dropped, and should be dropped if you are rendering icons.
+   *
+   * @since 3.0.0
+   */
+  public static final String DELIMITER = "delimiter";
+
+  /**
+   * Indicates the exit number for the maneuver.
+   *
+   * @since 3.0.0
+   */
+  public static final String EXIT_NUMBER = "exit-number";
+
+  /**
+   * Provides the the word for exit in the local language.
+   *
+   * @since 3.0.0
+   */
+  public static final String EXIT = "exit";
+
+  /**
+   * Indicates which lanes can be used to complete the maneuver.
+   *
+   * @since 3.0.0
+   */
+  public static final String LANE = "lane";
+
+  /**
+   * Banner component types.
+   * https://docs.mapbox.com/api/navigation/#banner-instruction-object
+   *
+   * @since 3.0.0
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+          TEXT,
+          ICON,
+          DELIMITER,
+          EXIT_NUMBER,
+          EXIT,
+          LANE
+  })
+  public @interface BannerComponentsType {
+  }
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -64,6 +127,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
    * @since 3.0.0
    */
   @NonNull
+  @BannerComponentsType
   public abstract String type();
 
   /**
@@ -243,7 +307,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder type(@NonNull String type);
+    public abstract Builder type(@NonNull @BannerComponentsType String type);
 
 
     /**
