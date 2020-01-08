@@ -1,6 +1,6 @@
 package com.mapbox.api.matching.v5.models;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;

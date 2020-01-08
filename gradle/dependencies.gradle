@@ -1,14 +1,14 @@
 ext {
 
   version = [
-      autoValue        : '1.6.2',
+      autoValue        : '1.7',
       autoValueGson    : '0.8.0',
       junit            : '4.12',
-      supportLibVersion: '27.1.1',
-      gson             : '2.8.5',
-      retrofit         : '2.4.0',
-      okhttp3          : '3.11.0',
-      mockito          : '2.18.3',
+      annotation       : '1.0.0',
+      gson             : '2.8.6',
+      retrofit         : '2.7.1',
+      okhttp3          : '3.12.7',
+      mockito          : '2.28.2',
       hamcrestJunit    : '2.0.0.0',
       errorprone       : '2.3.1',
   ]
@@ -29,7 +29,7 @@ ext {
       autoValue           : "com.google.auto.value:auto-value:${version.autoValue}",
       autoValueGson       : "com.ryanharter.auto.value:auto-value-gson:${version.autoValueGson}",
       junit               : "junit:junit:${version.junit}",
-      supportAnnotation   : "com.android.support:support-annotations:${version.supportLibVersion}",
+      supportAnnotation   : "androidx.annotation:annotation:${version.annotation}",
       gson                : "com.google.code.gson:gson:${version.gson}",
       retrofit            : "com.squareup.retrofit2:retrofit:${version.retrofit}",
       retrofit2Gson       : "com.squareup.retrofit2:converter-gson:${version.retrofit}",
@@ -40,7 +40,6 @@ ext {
       hamcrestJunit       : "org.hamcrest:hamcrest-junit:${version.hamcrestJunit}",
       errorprone          : "com.google.errorprone:error_prone_core:${version.errorprone}"
   ]
-
 
   pluginDependencies = [
       checkstyle : "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",

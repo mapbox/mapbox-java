@@ -1,6 +1,6 @@
 package com.mapbox.api.routetiles.v1.versions.models;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;

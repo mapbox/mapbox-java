@@ -1,6 +1,6 @@
 package com.mapbox.api.geocoding.v5;
 
-import android.support.annotation.StringDef;
+import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

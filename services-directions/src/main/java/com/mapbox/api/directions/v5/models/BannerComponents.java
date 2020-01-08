@@ -1,8 +1,8 @@
 package com.mapbox.api.directions.v5.models;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * A part of the {@link BannerText} which includes a snippet of the full banner text instruction. In
- * cases where data is avaliable, an image url will be provided to visually include a road shield.
+ * cases where data is available, an image url will be provided to visually include a road shield.
  * To receive this information, your request must have {@link MapboxDirections#bannerInstructions()}
  * set to true.
  *

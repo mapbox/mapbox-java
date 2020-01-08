@@ -2,7 +2,7 @@ package com.mapbox.api.staticmap.v1;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-import android.support.annotation.StringDef;
+import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 

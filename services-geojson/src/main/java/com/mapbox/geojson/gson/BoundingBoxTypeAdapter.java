@@ -1,6 +1,6 @@
 package com.mapbox.geojson.gson;
 
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

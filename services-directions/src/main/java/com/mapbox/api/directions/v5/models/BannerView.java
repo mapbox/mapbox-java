@@ -1,8 +1,5 @@
 package com.mapbox.api.directions.v5.models;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +8,9 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.MapboxDirections;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Includes both plain text information that can be visualized inside your navigation application
@@ -34,7 +34,7 @@ public abstract class BannerView extends DirectionsJsonObject {
   }
 
   /**
-   * Plain text with all the {@link BannerComponents} text combined.
+   * Plain text with all the {@link BannerComponents} text combined.BannerInstructions.
    *
    * @return plain text with all the {@link BannerComponents} text items combined
    * @since 5.0.0

@@ -1,6 +1,6 @@
 package com.mapbox.turf.models;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 /**
  * if the lines intersect, the result contains the x and y of the intersection (treating the lines
