@@ -110,7 +110,7 @@ public abstract class BannerText extends DirectionsJsonObject {
    *
    * @param gson the built {@link Gson} object
    * @return the type adapter for this class
-   * @since 3.0.0
+   * @since 3.0.0`
    */
   public static TypeAdapter<BannerText> typeAdapter(Gson gson) {
     return new AutoValue_BannerText.GsonTypeAdapter(gson);

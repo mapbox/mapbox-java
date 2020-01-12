@@ -13,9 +13,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_CONGESTION;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.OVERVIEW_FULL;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING_TRAFFIC;
+import static com.mapbox.api.directions.models.DirectionsCriteria.ANNOTATION_CONGESTION;
+import static com.mapbox.api.directions.models.DirectionsCriteria.OVERVIEW_FULL;
+import static com.mapbox.api.directions.models.DirectionsCriteria.PROFILE_DRIVING_TRAFFIC;
 
 public class BasicDirectionsRefresh {
   public static void main(String[] args) throws IOException {
