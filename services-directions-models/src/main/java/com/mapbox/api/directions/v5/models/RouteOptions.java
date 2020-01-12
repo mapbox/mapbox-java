@@ -8,11 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.MapboxDirections;
-import com.mapbox.api.directions.v5.WalkingOptions;
-import com.mapbox.api.directions.v5.WalkingOptionsAdapterFactory;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
@@ -67,8 +62,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * The same profile which was used during the request that resulted in this root directions
-   * response. {@link MapboxDirections#builder()} ensures that a profile is always set even if the
-   * {@link MapboxDirections} requesting object doesn't specifically set a profile.
+   * response. ensures that a profile is always set even if the
+   * requesting object doesn't specifically set a profile.
    *
    * @return string value representing the profile
    * @since 3.0.0
@@ -242,7 +237,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * A universally unique identifier (UUID) for identifying and executing a similar specific route
-   * in the future. {@link MapboxDirections} always waits for the response object which ensures this
+   * in the future. always waits for the response object which ensures this
    * value will never be null.
    *
    * @return a string containing the request UUID

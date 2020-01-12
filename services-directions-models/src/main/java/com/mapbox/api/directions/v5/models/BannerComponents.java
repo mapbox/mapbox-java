@@ -9,8 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.MapboxDirections;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -19,7 +17,7 @@ import java.util.List;
 /**
  * A part of the {@link BannerText} which includes a snippet of the full banner text instruction. In
  * cases where data is available, an image url will be provided to visually include a road shield.
- * To receive this information, your request must have {@link MapboxDirections#bannerInstructions()}
+ * To receive this information, your request must have
  * set to true.
  *
  * @since 3.0.0

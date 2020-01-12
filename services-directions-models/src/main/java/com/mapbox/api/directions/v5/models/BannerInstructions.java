@@ -6,13 +6,11 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.MapboxDirections;
 
 /**
  * Visual instruction information related to a particular {@link LegStep} useful for making UI
  * elements inside your application such as banners. To receive this information, your request must
- * have {@link MapboxDirections#bannerInstructions()} set to true.
+ * have set to true.
  *
  * @since 3.0.0
  */

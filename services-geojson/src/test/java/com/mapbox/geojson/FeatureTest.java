@@ -6,9 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mapbox.core.TestUtils;
 
 import org.junit.Test;
 

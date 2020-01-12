@@ -7,12 +7,12 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
-import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
-import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
-import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.directions.v5.models.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.models.DirectionsCriteria;
+import com.mapbox.api.directions.v5.models.DirectionsCriteria.AnnotationCriteria;
+import com.mapbox.api.directions.v5.models.DirectionsCriteria.GeometriesCriteria;
+import com.mapbox.api.directions.v5.models.DirectionsCriteria.OverviewCriteria;
+import com.mapbox.api.directions.v5.models.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.matching.v5.models.MapMatchingAdapterFactory;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.MapboxService;
@@ -615,7 +615,7 @@ public abstract class MapboxMapMatching extends
      *
      * @param approaches null if you'd like the default approaches,
      *                   else one of the options found in
-     *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     *                   {@link DirectionsCriteria.ApproachesCriteria}.
      * @return this builder for chaining options together
      * @since 3.2.0
      */

@@ -7,8 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
@@ -113,7 +111,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   /**
    * String of the language to be used for voice instructions.  Defaults to en, and
    * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
-   * via {@link MapboxDirections#language()} is not compatible with API Voice.
+   * via is not compatible with API Voice.
    *
    * @return String compatible with voice instructions, null otherwise
    * @since 3.1.0

@@ -4,8 +4,6 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.MapboxDirections;
 
 import java.util.List;
 
@@ -16,7 +14,7 @@ import androidx.annotation.Nullable;
  * Includes both plain text information that can be visualized inside your navigation application
  * along with the text string broken down into {@link BannerComponents} which may or may not
  * include a image url. To receive this information, your request must have
- * {@link MapboxDirections#bannerInstructions()} set to true.
+ * set to true.
  *
  * @since 5.0.0
  */

@@ -10,8 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.geojson.Point;
 
 import java.lang.annotation.Retention;
@@ -145,7 +143,7 @@ public abstract class StepManeuver extends DirectionsJsonObject {
   /**
    * Indicates the exit maneuver from a rotary.
    * Will not appear in results unless you supply true
-   * to the {@link MapboxDirections#roundaboutExits()}  query parameter in the request.
+   * to the query parameter in the request.
    *
    * @since 4.1.0
    */

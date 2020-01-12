@@ -4,10 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.models.BannerComponents;
 import com.mapbox.api.directions.v5.models.BannerInstructions;
+import com.mapbox.api.directions.v5.models.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.models.DirectionsCriteria;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.api.directions.v5.models.WalkingOptions;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
@@ -35,12 +38,12 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
-import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.GEOMETRY_POLYLINE;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_CYCLING;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING_TRAFFIC;
+import static com.mapbox.api.directions.v5.models.DirectionsCriteria.APPROACH_CURB;
+import static com.mapbox.api.directions.v5.models.DirectionsCriteria.APPROACH_UNRESTRICTED;
+import static com.mapbox.api.directions.v5.models.DirectionsCriteria.GEOMETRY_POLYLINE;
+import static com.mapbox.api.directions.v5.models.DirectionsCriteria.PROFILE_CYCLING;
+import static com.mapbox.api.directions.v5.models.DirectionsCriteria.PROFILE_DRIVING;
+import static com.mapbox.api.directions.v5.models.DirectionsCriteria.PROFILE_DRIVING_TRAFFIC;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
@@ -231,7 +234,7 @@ public class MapboxDirectionsTest extends TestUtils {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
-      .profile(DirectionsCriteria.PROFILE_CYCLING)
+      .profile(PROFILE_CYCLING)
       .accessToken(ACCESS_TOKEN)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("/cycling/"));

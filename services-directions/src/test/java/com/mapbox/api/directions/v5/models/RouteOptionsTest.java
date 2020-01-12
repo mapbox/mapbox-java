@@ -1,8 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
-import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
-import com.mapbox.api.directions.v5.WalkingOptions;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Point;

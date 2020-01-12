@@ -7,8 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.MapboxDirections;
 
 import java.util.List;
 
@@ -152,7 +150,7 @@ public abstract class LegStep extends DirectionsJsonObject {
   public abstract List<VoiceInstructions> voiceInstructions();
 
   /**
-   * If in your request you set {@link MapboxDirections#bannerInstructions()} to true, you'll
+   * If in your request you set to true, you'll
    * receive a list of {@link BannerInstructions} which encompasses all information necessary for
    * creating a visual cue about a given {@link LegStep}.
    *
@@ -361,7 +359,7 @@ public abstract class LegStep extends DirectionsJsonObject {
     public abstract Builder voiceInstructions(@NonNull List<VoiceInstructions> voiceInstructions);
 
     /**
-     * If in your request you set {@link MapboxDirections#bannerInstructions()} to true, you'll
+     * If in your request you set to true, you'll
      * receive a list of {@link BannerInstructions} which encompasses all information necessary for
      * creating a visual cue about a given {@link LegStep}.
      *
