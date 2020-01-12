@@ -6,7 +6,7 @@ apply plugin: 'com.jfrog.artifactory'
 apply from: file('../gradle/artifact-settings.gradle')
 
 publishing {
-    /*publications {
+    publications {
         MapboxJavaSDKPublication(MavenPublication) {
             from components.java
             groupId project.ext.mapboxArtifactGroupId
@@ -74,7 +74,7 @@ bintray {
                 sync = false
             }
         }
-    }*/
+    }
 }
 
 artifactory {
