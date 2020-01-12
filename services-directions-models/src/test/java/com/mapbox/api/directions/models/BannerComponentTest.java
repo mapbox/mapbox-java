@@ -1,6 +1,7 @@
 package com.mapbox.api.directions.models;
 
 import com.mapbox.core.TestUtils;
+import com.mapbox.api.directions.models.BannerComponents;
 
 import org.junit.Test;
 
