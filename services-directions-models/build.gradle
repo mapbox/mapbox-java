@@ -1,4 +1,9 @@
 apply plugin: 'java-library'
+apply plugin: 'idea'
+
+// Re-apply runtime required subproject gradle scripts and classpaths,
+// so that Maps SDK doesn't rely on them being served from the top level build.gradle
+apply from: "../gradle/dependencies.gradle"
 
 dependencies {
     api project(":services-geojson")

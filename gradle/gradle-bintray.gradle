@@ -6,19 +6,21 @@ apply plugin: 'com.jfrog.artifactory'
 apply from: file('../gradle/artifact-settings.gradle')
 
 publishing {
-    publications {
+    /*publications {
         MapboxJavaSDKPublication(MavenPublication) {
             from components.java
             groupId project.ext.mapboxArtifactGroupId
             artifactId project.ext.mapboxArtifactId
             version project.ext.versionName
 
-            artifact sourcesJar {
-                classifier "sources"
-            }
+            afterEvaluate {
+                artifact sourcesJar {
+                    classifier "sources"
+                }
 
-            artifact javadocJar {
-                classifier "javadoc"
+                artifact javadocJar {
+                    classifier "javadoc"
+                }
             }
 
             pom.withXml {
@@ -72,7 +74,7 @@ bintray {
                 sync = false
             }
         }
-    }
+    }*/
 }
 
 artifactory {

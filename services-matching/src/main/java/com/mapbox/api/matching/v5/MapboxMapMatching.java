@@ -7,12 +7,12 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
-import com.mapbox.api.directions.v5.models.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.models.DirectionsCriteria;
-import com.mapbox.api.directions.v5.models.DirectionsCriteria.AnnotationCriteria;
-import com.mapbox.api.directions.v5.models.DirectionsCriteria.GeometriesCriteria;
-import com.mapbox.api.directions.v5.models.DirectionsCriteria.OverviewCriteria;
-import com.mapbox.api.directions.v5.models.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.directions.models.DirectionsAdapterFactory;
+import com.mapbox.api.directions.models.DirectionsCriteria;
+import com.mapbox.api.directions.models.DirectionsCriteria.AnnotationCriteria;
+import com.mapbox.api.directions.models.DirectionsCriteria.GeometriesCriteria;
+import com.mapbox.api.directions.models.DirectionsCriteria.OverviewCriteria;
+import com.mapbox.api.directions.models.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.matching.v5.models.MapMatchingAdapterFactory;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.MapboxService;

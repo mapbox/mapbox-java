@@ -1,8 +1,8 @@
 package com.mapbox.api.directions.v5;
 
-import com.mapbox.api.directions.v5.models.DirectionsResponse;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.api.directions.models.DirectionsResponse;
+import com.mapbox.api.directions.models.DirectionsRoute;
+import com.mapbox.api.directions.models.RouteOptions;
 
 import java.util.ArrayList;
 import java.util.List;

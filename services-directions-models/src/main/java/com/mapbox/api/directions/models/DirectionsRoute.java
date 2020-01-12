@@ -1,26 +1,24 @@
-package com.mapbox.api.matching.v5.models;
+package com.mapbox.api.directions.models;
 
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.mapbox.api.directions.models.DirectionsRoute;
-import com.mapbox.api.directions.models.RouteLeg;
-import com.mapbox.api.directions.models.RouteOptions;
+import com.mapbox.geojson.Point;
+import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
- * A match object is a {@link DirectionsRoute} object with an
- * additional confidence field.
+ * Detailed information about an individual route such as the duration, distance and geometry.
  *
- * @since 2.0.0
+ * @since 1.0.0
  */
 @AutoValue
-public abstract class MapMatchingMatching implements Serializable {
+public abstract class DirectionsRoute extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -29,8 +27,17 @@ public abstract class MapMatchingMatching implements Serializable {
    * @since 3.0.0
    */
   public static Builder builder() {
-    return new AutoValue_MapMatchingMatching.Builder();
+    return new AutoValue_DirectionsRoute.Builder();
   }
+
+  /**
+   * The index of this route in the original network response.
+   *
+   * @return string of an int value representing the index
+   * @since 4.4.0
+   */
+  @Nullable
+  public abstract String routeIndex();
 
   /**
    * The distance traveled from origin to destination.
@@ -38,7 +45,8 @@ public abstract class MapMatchingMatching implements Serializable {
    * @return a double number with unit meters
    * @since 1.0.0
    */
-  public abstract double distance();
+  @Nullable
+  public abstract Double distance();
 
   /**
    * The estimated travel time from origin to destination.
@@ -46,7 +54,8 @@ public abstract class MapMatchingMatching implements Serializable {
    * @return a double number with unit seconds
    * @since 1.0.0
    */
-  public abstract double duration();
+  @Nullable
+  public abstract Double duration();
 
   /**
    * Gives the geometry of the route. Commonly used to draw the route on the map view.
@@ -63,7 +72,8 @@ public abstract class MapMatchingMatching implements Serializable {
    * @return the weight value provided from the API as a {@code double} value
    * @since 2.1.0
    */
-  public abstract double weight();
+  @Nullable
+  public abstract Double weight();
 
   /**
    * The name of the weight profile used while calculating during extraction phase. The default is
@@ -73,6 +83,7 @@ public abstract class MapMatchingMatching implements Serializable {
    * @return a String representing the weight profile used while calculating the route
    * @since 2.1.0
    */
+  @Nullable
   @SerializedName("weight_name")
   public abstract String weightName();
 
@@ -82,15 +93,8 @@ public abstract class MapMatchingMatching implements Serializable {
    * @return list of {@link RouteLeg} objects
    * @since 1.0.0
    */
+  @Nullable
   public abstract List<RouteLeg> legs();
-
-  /**
-   * A number between 0 (low) and 1 (high) indicating level of confidence in the returned match.
-   *
-   * @return confidence value
-   * @since 2.0.0
-   */
-  public abstract double confidence();
 
   /**
    * Holds onto the parameter information used when making the directions request. Useful for
@@ -103,48 +107,29 @@ public abstract class MapMatchingMatching implements Serializable {
   @Nullable
   public abstract RouteOptions routeOptions();
 
+
   /**
    * String of the language to be used for voice instructions.  Defaults to en, and
    * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
-   * via {@link com.mapbox.api.matching.v5.MapboxMapMatching#language()} is not compatible
-   * with API Voice.
+   * via is not compatible with API Voice.
    *
    * @return String compatible with voice instructions, null otherwise
-   * @since 3.4.0
+   * @since 3.1.0
    */
   @Nullable
   @SerializedName("voiceLocale")
   public abstract String voiceLanguage();
 
   /**
-   * Convert the current {@link MapMatchingMatching} to its builder holding the currently assigned
-   * values. This allows you to modify a single variable and then rebuild the object resulting in
-   * an updated and modified {@link MapMatchingMatching}.
+   * Convert the current {@link DirectionsRoute} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link DirectionsRoute}.
    *
-   * @return a {@link MapMatchingMatching.Builder} with the same values set to match the ones
-   *   defined in this {@link MapMatchingMatching}
+   * @return a {@link DirectionsRoute.Builder} with the same values set to match the ones defined
+   *   in this {@link DirectionsRoute}
    * @since 3.0.0
    */
   public abstract Builder toBuilder();
-
-  /**
-   * Map this MapMatchingMatching object to a {@link DirectionsRoute} object.
-   *
-   * @return a {@link DirectionsRoute} object
-   */
-  public DirectionsRoute toDirectionRoute() {
-
-    return DirectionsRoute.builder()
-      .legs(legs())
-      .geometry(geometry())
-      .weightName(weightName())
-      .weight(weight())
-      .duration(duration())
-      .distance(distance())
-      .routeOptions(routeOptions())
-      .voiceLanguage(voiceLanguage())
-      .build();
-  }
 
   /**
    * Gson type adapter for parsing Gson to this class.
@@ -153,12 +138,27 @@ public abstract class MapMatchingMatching implements Serializable {
    * @return the type adapter for this class
    * @since 3.0.0
    */
-  public static TypeAdapter<MapMatchingMatching> typeAdapter(Gson gson) {
-    return new AutoValue_MapMatchingMatching.GsonTypeAdapter(gson);
+  public static TypeAdapter<DirectionsRoute> typeAdapter(Gson gson) {
+    return new AutoValue_DirectionsRoute.GsonTypeAdapter(gson);
   }
 
   /**
-   * This builder can be used to set the values describing the {@link MapMatchingResponse}.
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a formatted valid JSON string defining a GeoJson Directions Route
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static DirectionsRoute fromJson(String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
+    return gson.create().fromJson(json, DirectionsRoute.class);
+  }
+
+  /**
+   * This builder can be used to set the values describing the {@link DirectionsRoute}.
    *
    * @since 3.0.0
    */
@@ -172,7 +172,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder distance(double distance);
+    public abstract Builder distance(@Nullable Double distance);
 
     /**
      * The estimated travel time from origin to destination.
@@ -181,7 +181,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder duration(double duration);
+    public abstract Builder duration(@Nullable Double duration);
 
     /**
      * Gives the geometry of the route. Commonly used to draw the route on the map view.
@@ -199,7 +199,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder weight(double weight);
+    public abstract Builder weight(@Nullable Double weight);
 
     /**
      * The name of the weight profile used while calculating during extraction phase. The default is
@@ -210,7 +210,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder weightName(String weightName);
+    public abstract Builder weightName(@Nullable String weightName);
 
     /**
      * A Leg is a route between only two waypoints.
@@ -219,16 +219,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder legs(List<RouteLeg> legs);
-
-    /**
-     * A number between 0 (low) and 1 (high) indicating level of confidence in the returned match.
-     *
-     * @param confidence confidence value
-     * @return this builder for chaining options together
-     * @since 3.0.0
-     */
-    public abstract Builder confidence(double confidence);
+    public abstract Builder legs(@Nullable List<RouteLeg> legs);
 
     /**
      * Holds onto the parameter information used when making the directions request.
@@ -242,22 +233,22 @@ public abstract class MapMatchingMatching implements Serializable {
 
     /**
      * String of the language to be used for voice instructions.  Defaults to en, and
-     * can be any accepted instruction language.  Should be <tt>null</tt> when the language provided
-     * via {@link com.mapbox.api.matching.v5.MapboxMapMatching#language()} is not
-     * compatible with API Voice.
+     * can be any accepted instruction language.
      *
      * @param voiceLanguage String compatible with voice instructions, null otherwise
      * @return this builder for chaining options together
-     * @since 3.4.0
+     * @since 3.1.0
      */
     public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
 
+    abstract Builder routeIndex(String routeIndex);
+
     /**
-     * Build a new {@link MapMatchingMatching} object.
+     * Build a new {@link DirectionsRoute} object.
      *
-     * @return a new {@link MapMatchingMatching} using the provided values in this builder
+     * @return a new {@link DirectionsRoute} using the provided values in this builder
      * @since 3.0.0
      */
-    public abstract MapMatchingMatching build();
+    public abstract DirectionsRoute build();
   }
 }

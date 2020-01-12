@@ -7,7 +7,7 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.api.directions.v5.models.DirectionsAdapterFactory;
+import com.mapbox.api.directions.models.DirectionsAdapterFactory;
 
 import java.io.Serializable;
 import java.util.List;

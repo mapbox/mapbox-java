@@ -3,7 +3,7 @@ package com.mapbox.samples;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.WalkingOptions;
-import com.mapbox.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.api.directions.models.DirectionsResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.sample.BuildConfig;
 

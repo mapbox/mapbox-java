@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
-import com.mapbox.api.directions.v5.models.DirectionsAdapterFactory;
+import com.mapbox.api.directions.models.DirectionsAdapterFactory;
 import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshAdapterFactory;
 import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
 import com.mapbox.core.MapboxService;
@@ -126,7 +126,7 @@ public abstract class MapboxDirectionsRefresh extends MapboxService<DirectionsRe
      * have specified enableRefresh.
      *
      * @param requestId id of the original directions request. This is found in the
-     *                  {@link com.mapbox.api.directions.v5.models.RouteOptions} object.
+     *                  {@link com.mapbox.api.directions.models.RouteOptions} object.
      * @return this builder
      * @since 4.4.0
      */
