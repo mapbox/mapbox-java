@@ -13,14 +13,12 @@ publishing {
             artifactId project.ext.mapboxArtifactId
             version project.ext.versionName
 
-            afterEvaluate {
-                artifact sourcesJar {
-                    classifier "sources"
-                }
+            artifact sourcesJar {
+                classifier "sources"
+            }
 
-                artifact javadocJar {
-                    classifier "javadoc"
-                }
+            artifact javadocJar {
+                classifier "javadoc"
             }
 
             pom.withXml {

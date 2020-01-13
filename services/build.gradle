@@ -22,8 +22,9 @@ dependencies {
     compileOnly dependenciesList.autoValueGson
 }
 
-// required because the autovalue picks up and generates duplicate class for walking options from services-directions-models,
-// possibly because they are in the same package as the rest of services-directions
+// Required because the autovalue picks up and generates duplicate class for walking options from services-directions-models,
+// possibly because they are in the same package as the rest of services-directions.
+// Placing them in the same package has been intentional to avoid breaking changes.
 tasks.withType(Jar) { jarTask ->
     if (!jarTask.name.endsWith("sourcesJar")) {
         jarTask.exclude("**/*WalkingOptions*.class")
