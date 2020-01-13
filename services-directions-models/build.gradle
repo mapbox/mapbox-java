@@ -7,8 +7,8 @@ dependencies {
     implementation dependenciesList.supportAnnotation
 
     // AutoValue
-    implementation dependenciesList.autoValue
-    implementation dependenciesList.autoValueGson
+    compileOnly dependenciesList.autoValue
+    compileOnly dependenciesList.autoValueGson
 
     // Test Dependencies
     testImplementation dependenciesList.okhttp3Mockwebserver

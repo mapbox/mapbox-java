@@ -112,7 +112,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   /**
    * String of the language to be used for voice instructions.  Defaults to en, and
    * can be any accepted instruction language.  Will be <tt>null</tt> when the language provided
-   * via is not compatible with API Voice.
+   * <tt>MapboxDirections.Builder#language()</tt> via is not compatible with API Voice.
    *
    * @return String compatible with voice instructions, null otherwise
    * @since 3.1.0

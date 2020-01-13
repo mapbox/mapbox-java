@@ -19,7 +19,7 @@ import java.util.List;
  * A part of the {@link BannerText} which includes a snippet of the full banner text instruction. In
  * cases where data is available, an image url will be provided to visually include a road shield.
  * To receive this information, your request must have
- * set to true.
+ * <tt>MapboxDirections.Builder#bannerInstructions()</tt> set to true.
  *
  * @since 3.0.0
  */

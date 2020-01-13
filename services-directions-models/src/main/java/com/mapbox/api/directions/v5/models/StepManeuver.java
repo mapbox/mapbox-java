@@ -144,7 +144,7 @@ public abstract class StepManeuver extends DirectionsJsonObject {
   /**
    * Indicates the exit maneuver from a rotary.
    * Will not appear in results unless you supply true
-   * to the query parameter in the request.
+   * to the <tt>MapboxDirections.Builder#roundaboutExits()</tt> query parameter in the request.
    *
    * @since 4.1.0
    */

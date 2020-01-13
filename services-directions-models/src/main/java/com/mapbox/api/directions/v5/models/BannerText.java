@@ -16,7 +16,7 @@ import java.util.List;
  * Includes both plain text information that can be visualized inside your navigation application
  * along with the text string broken down into {@link BannerComponents} which may or may not
  * include a image url. To receive this information, your request must have
- * set to true.
+ * <tt>MapboxDirections.Builder#bannerInstructions()</tt> set to true.
  *
  * @since 3.0.0
  */
@@ -111,7 +111,7 @@ public abstract class BannerText extends DirectionsJsonObject {
    *
    * @param gson the built {@link Gson} object
    * @return the type adapter for this class
-   * @since 3.0.0`
+   * @since 3.0.0
    */
   public static TypeAdapter<BannerText> typeAdapter(Gson gson) {
     return new AutoValue_BannerText.GsonTypeAdapter(gson);

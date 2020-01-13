@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,7 +12,7 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 /**
  * Visual instruction information related to a particular {@link LegStep} useful for making UI
  * elements inside your application such as banners. To receive this information, your request must
- * have set to true.
+ * <tt>MapboxDirections.Builder#bannerInstructions()</tt> have set to true.
  *
  * @since 3.0.0
  */

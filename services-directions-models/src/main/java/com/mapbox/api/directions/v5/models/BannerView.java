@@ -1,5 +1,8 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,14 +11,11 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 /**
  * Includes both plain text information that can be visualized inside your navigation application
  * along with the text string broken down into {@link BannerComponents} which may or may not
  * include a image url. To receive this information, your request must have
- * set to true.
+ * <tt>MapboxDirections.Builder#bannerInstructions()</tt> set to true.
  *
  * @since 5.0.0
  */
