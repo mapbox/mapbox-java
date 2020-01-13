@@ -241,8 +241,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * A universally unique identifier (UUID) for identifying and executing a similar specific route
-   * in the future. <tt>MapboxDirections</tt> always waits for the response object which ensures this
-   * value will never be null.
+   * in the future. <tt>MapboxDirections</tt> always waits for the response object which ensures
+   * this value will never be null.
    *
    * @return a string containing the request UUID
    * @since 3.0.0
