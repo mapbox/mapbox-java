@@ -7,7 +7,6 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.matrix.v1.models.MatrixResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
@@ -188,11 +187,11 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
      * cycling. Using each of these profiles will result in different durations.
      *
      * @param profile required to be one of the String values found in the
-     *                {@link ProfileCriteria}
+     *                {@link DirectionsCriteria.ProfileCriteria}
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public abstract Builder profile(@NonNull @ProfileCriteria String profile);
+    public abstract Builder profile(@NonNull @DirectionsCriteria.ProfileCriteria String profile);
 
     /**
      * Required to call when this is being built. If no access token provided,
@@ -233,7 +232,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
      *
      * @param approaches null if you'd like the default approaches,
      *                   else one of the options found in
-     *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     *                   {@link DirectionsCriteria.ApproachesCriteria}.
      * @return this builder for chaining options together
      * @since 4.1.0
      */

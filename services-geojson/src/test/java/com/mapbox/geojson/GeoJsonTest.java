@@ -1,6 +1,5 @@
 package com.mapbox.geojson;
 
-import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
 import java.io.IOException;

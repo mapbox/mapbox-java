@@ -1,8 +1,6 @@
 package com.mapbox.api.matching.v5;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.MapboxDirections;
-import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.TestUtils;
@@ -246,7 +244,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .baseUrl("https://foobar.com")
-      .profile(DirectionsCriteria.PROFILE_DRIVING)
+      .profile(PROFILE_DRIVING)
       .accessToken(ACCESS_TOKEN)
       .build();
     assertTrue(mapMatching.cloneCall().request().url().toString().contains("/driving/"));
@@ -259,7 +257,7 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
       .baseUrl("https://foobar.com")
-      .profile(DirectionsCriteria.PROFILE_DRIVING)
+      .profile(PROFILE_DRIVING)
       .accessToken(ACCESS_TOKEN)
       .build();
     assertTrue(mapMatching.cloneCall().request().url().toString()

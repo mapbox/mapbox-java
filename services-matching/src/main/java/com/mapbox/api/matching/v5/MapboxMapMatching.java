@@ -615,7 +615,7 @@ public abstract class MapboxMapMatching extends
      *
      * @param approaches null if you'd like the default approaches,
      *                   else one of the options found in
-     *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     *                   {@link DirectionsCriteria.ApproachesCriteria}.
      * @return this builder for chaining options together
      * @since 3.2.0
      */

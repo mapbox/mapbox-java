@@ -1,12 +1,11 @@
 package com.mapbox.samples;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.WalkingOptions;
+import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.sample.BuildConfig;
-
 import java.io.IOException;
 
 import retrofit2.Call;

@@ -1,6 +1,6 @@
 rootProject.name = "mapbox-java"
 
-include ':services'
+include ':services', ':services-directions-models'
 include ':services-speech'
 include ':services-core'
 include ':services-geojson'

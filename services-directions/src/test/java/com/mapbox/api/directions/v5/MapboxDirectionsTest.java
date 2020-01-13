@@ -231,7 +231,7 @@ public class MapboxDirectionsTest extends TestUtils {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
-      .profile(DirectionsCriteria.PROFILE_CYCLING)
+      .profile(PROFILE_CYCLING)
       .accessToken(ACCESS_TOKEN)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("/cycling/"));

@@ -2,7 +2,7 @@ apply plugin: 'java-library'
 
 dependencies {
   api project(":services-core")
-  api project(":services-geojson")
+  api project(":services-directions-models")
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation

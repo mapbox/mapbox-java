@@ -1,8 +1,9 @@
 package com.mapbox.geojson.utils;
 
+import com.mapbox.geojson.TestUtils;
+
 import static org.junit.Assert.assertEquals;
 
-import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
 

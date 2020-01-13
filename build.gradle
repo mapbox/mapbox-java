@@ -38,6 +38,7 @@ allprojects {
     jcenter()
     // For publishing to Bintray
     maven { url 'https://mapbox.bintray.com/mapbox' }
+    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
   }
 }
 
@@ -71,6 +72,7 @@ subprojects {
 def TESTABLE_MODULES = ["services",
                         "services-core",
                         "services-directions",
+                        "services-directions-models",
                         "services-geocoding",
                         "services-geojson",
                         "services-matching",
@@ -87,7 +89,8 @@ def TESTABLE_MODULES = ["services",
 def RELEASE_MODULES = ["services",
                        "services-core",
                        "services-geojson",
-                       "services-turf"]
+                       "services-turf",
+                       "services-directions-models"]
 
 subprojects { subproject ->
 
