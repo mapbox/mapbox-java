@@ -6,14 +6,13 @@ sourceSets {
                          '../services-optimization/src/main/java', '../services-staticmap/src/main/java',
                          '../services-speech/src/main/java', '../services-tilequery/src/main/java',
                          '../services-route-tiles/src/main/java', '../services-directions-refresh/src/main/java',
-                         '../services-isochrone/src/main/java', '../services-directions-models/src/main/java']
+                         '../services-isochrone/src/main/java']
 }
 
 dependencies {
     api project(":services-core")
     api project(":services-geojson")
-    // todo uncomment and remove from sources sets when artifact is available
-//    api project(":services-directions-models")
+    api "com.mapbox.mapboxsdk:mapbox-sdk-directions-models:4.10.0-SNAPSHOT"
 
     // Annotations
     compileOnly dependenciesList.supportAnnotation

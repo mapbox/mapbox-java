@@ -38,6 +38,7 @@ allprojects {
     jcenter()
     // For publishing to Bintray
     maven { url 'https://mapbox.bintray.com/mapbox' }
+    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
   }
 }
 
