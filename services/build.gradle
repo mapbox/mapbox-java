@@ -12,6 +12,8 @@ sourceSets {
 dependencies {
     api project(":services-core")
     api project(":services-geojson")
+    // todo uncomment and remove from sources sets when artifact is available
+//    api project(":services-directions-models")
 
     // Annotations
     compileOnly dependenciesList.supportAnnotation
