@@ -1,7 +1,7 @@
 package com.mapbox.api.matching.v5;
 
-import com.mapbox.api.directions.models.DirectionsCriteria;
-import com.mapbox.api.directions.models.RouteOptions;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
@@ -26,10 +26,10 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
-import static com.mapbox.api.directions.models.DirectionsCriteria.APPROACH_CURB;
-import static com.mapbox.api.directions.models.DirectionsCriteria.APPROACH_UNRESTRICTED;
-import static com.mapbox.api.directions.models.DirectionsCriteria.PROFILE_CYCLING;
-import static com.mapbox.api.directions.models.DirectionsCriteria.PROFILE_DRIVING;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_CYCLING;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.junit.MatcherAssert.assertThat;

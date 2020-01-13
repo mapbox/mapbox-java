@@ -7,9 +7,10 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.mapbox.api.directions.models.DirectionsAdapterFactory;
-import com.mapbox.api.directions.models.DirectionsJsonObject;
-import com.mapbox.api.directions.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.models.DirectionsJsonObject;
+import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.RouteLeg;
 
 /**
  * Response object for Directions Refresh requests.
@@ -49,7 +50,7 @@ public abstract class DirectionsRefreshResponse extends DirectionsJsonObject {
 
   /**
    * Barebones {@link DirectionsRoute} which only contains a list of
-   * {@link com.mapbox.api.directions.models.RouteLeg}s, which only contain lists of the
+   * {@link RouteLeg}s, which only contain lists of the
    * refreshed annotations.
    *
    * @return barebones route with annotation data
@@ -124,7 +125,7 @@ public abstract class DirectionsRefreshResponse extends DirectionsJsonObject {
 
     /**
      * Barebones {@link DirectionsRoute} which only contains a list of
-     * {@link com.mapbox.api.directions.models.RouteLeg}s, which only contain lists of the
+     * {@link RouteLeg}s, which only contain lists of the
      * refreshed annotations.
      *
      * @param directionsRoute route containing annotation data

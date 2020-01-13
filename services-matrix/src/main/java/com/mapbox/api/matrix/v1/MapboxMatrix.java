@@ -5,8 +5,8 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
-import com.mapbox.api.directions.models.DirectionsAdapterFactory;
-import com.mapbox.api.directions.models.DirectionsCriteria;
+import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.matrix.v1.models.MatrixResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;

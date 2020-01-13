@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import com.mapbox.api.directions.models.DirectionsWaypoint;
+import com.mapbox.api.directions.v5.models.DirectionsWaypoint;
 
 import androidx.annotation.NonNull;
 

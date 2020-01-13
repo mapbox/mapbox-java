@@ -1,6 +1,6 @@
 package com.mapbox.api.directions.v5;
 
-import com.mapbox.api.directions.models.DirectionsResponse;
+import com.mapbox.api.directions.v5.models.DirectionsResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

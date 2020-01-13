@@ -1,6 +1,6 @@
 package com.mapbox.api.matrix.v1;
 
-import com.mapbox.api.directions.models.DirectionsCriteria;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
@@ -22,9 +22,9 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
-import static com.mapbox.api.directions.models.DirectionsCriteria.ANNOTATION_DISTANCE;
-import static com.mapbox.api.directions.models.DirectionsCriteria.ANNOTATION_DURATION;
-import static com.mapbox.api.directions.models.DirectionsCriteria.APPROACH_CURB;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_DISTANCE;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_DURATION;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
