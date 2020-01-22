@@ -1,0 +1,12 @@
+apply plugin: 'java-library'
+
+dependencies {
+    api project(":services-directions-models")
+
+    // Annotations
+    implementation dependenciesList.supportAnnotation
+
+    // AutoValue
+    compileOnly dependenciesList.autoValue
+    compileOnly dependenciesList.autoValueGson
+}
