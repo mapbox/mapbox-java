@@ -84,13 +84,15 @@ def TESTABLE_MODULES = ["services",
                         "services-tilequery",
                         "services-turf",
                         "services-directions-refresh",
+                        "services-directions-refresh-models",
                         "services-isochrone"]
 
 def RELEASE_MODULES = ["services",
                        "services-core",
                        "services-geojson",
                        "services-turf",
-                       "services-directions-models"]
+                       "services-directions-models",
+                       "services-directions-refresh-models"]
 
 subprojects { subproject ->
 

@@ -33,6 +33,7 @@ publish-to-bintray:
 	./gradlew :services:bintrayUpload ; \
 	./gradlew :services-turf:bintrayUpload ; \
 	./gradlew :services-directions-models:bintrayUpload ; \
+	./gradlew :services-directions-refresh-models:bintrayUpload ; \
 
 publish-snapshot:
 	./gradlew :services-core:artifactoryPublish ; \
@@ -40,13 +41,15 @@ publish-snapshot:
 	./gradlew :services:artifactoryPublish ; \
 	./gradlew :services-turf:artifactoryPublish ; \
 	./gradlew :services-directions-models:artifactoryPublish ; \
+	./gradlew :services-directions-refresh-models:artifactoryPublish ; \
 
 graphs:
 	./gradlew :services-core:generateDependencyGraphMapboxLibraries
 	./gradlew :services-geojson:generateDependencyGraphMapboxLibraries
 	./gradlew :services:generateDependencyGraphMapboxLibraries
 	./gradlew :services-turf:generateDependencyGraphMapboxLibraries
-	./gradlew :services-directions:generateDependencyGraphMapboxLibraries
+	./gradlew :services-directions-models:generateDependencyGraphMapboxLibraries
+	./gradlew :services-directions-refresh-models:generateDependencyGraphMapboxLibraries
 
 directions-matrix-fixtures:
 	# request a symmetric 1x3 matrix for pedestrians
