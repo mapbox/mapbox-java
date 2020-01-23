@@ -40,7 +40,7 @@ public final class StaticMapCriteria {
    *
    * @since 3.0.0
    */
-  public static final String STREET_STYLE = "streets-v10";
+  public static final String STREET_STYLE = "streets-v11";
 
   /**
    * Mapbox Outdoors is a general-purpose map with curated tilesets and specialized styling tailored
@@ -48,7 +48,7 @@ public final class StaticMapCriteria {
    *
    * @since 3.0.0
    */
-  public static final String OUTDOORS_STYLE = "outdoors-v10";
+  public static final String OUTDOORS_STYLE = "outdoors-v11";
 
 
   /**
@@ -57,7 +57,7 @@ public final class StaticMapCriteria {
    *
    * @since 3.0.0
    */
-  public static final String LIGHT_STYLE = "light-v9";
+  public static final String LIGHT_STYLE = "light-v10";
 
   /**
    * Mapbox Dark style's a subtle, full-featured map designed to provide geographic context while
@@ -65,7 +65,7 @@ public final class StaticMapCriteria {
    *
    * @since 3.0.0
    */
-  public static final String DARK_STYLE = "dark-v9";
+  public static final String DARK_STYLE = "dark-v10";
 
   /**
    * Mapbox Satellite is our full global base map that is perfect as a blank canvas or an overlay
@@ -82,35 +82,35 @@ public final class StaticMapCriteria {
    *
    * @since 3.0.0
    */
-  public static final String SATELLITE_STREETS_STYLE = "satellite-streets-v10";
+  public static final String SATELLITE_STREETS_STYLE = "satellite-streets-v11";
 
   /**
    * Navigation specific style that shows only the necessary information while a user is driving.
    *
    * @since 3.0.0
    */
-  public static final String NAVIGATION_PREVIEW_DAY = "navigation-preview-day-v2";
+  public static final String NAVIGATION_PREVIEW_DAY = "navigation-preview-day-v3";
 
   /**
    * Navigation specific style that shows only the necessary information while a user is driving.
    *
    * @since 3.0.0
    */
-  public static final String NAVIGATION_PREVIEW_NIGHT = "navigation-preview-night-v2";
+  public static final String NAVIGATION_PREVIEW_NIGHT = "navigation-preview-night-v3";
 
   /**
    * Navigation specific style that shows only the necessary information while a user is driving.
    *
    * @since 3.0.0
    */
-  public static final String NAVIGATION_GUIDANCE_DAY = "navigation-guidance-day-v2";
+  public static final String NAVIGATION_GUIDANCE_DAY = "navigation-guidance-day-v3";
 
   /**
    * Navigation specific style that shows only the necessary information while a user is driving.
    *
    * @since 3.0.0
    */
-  public static final String NAVIGATION_GUIDANCE_NIGHT = "navigation-guidance-night-v2";
+  public static final String NAVIGATION_GUIDANCE_NIGHT = "navigation-guidance-night-v3";
 
   private StaticMapCriteria() {
     throw new AssertionError("No Instances.");
