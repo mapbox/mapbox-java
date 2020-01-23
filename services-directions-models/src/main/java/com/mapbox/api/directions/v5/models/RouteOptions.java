@@ -350,6 +350,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
+   * Convert the current {@link RouteOptions} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link RouteOptions}.
+   *
+   * @return a {@link RouteOptions.Builder} with the same values set to match the ones defined
+   *   in this {@link RouteOptions}
+   */
+  @NonNull
+  public abstract Builder toBuilder();
+
+  /**
    * This builder can be used to set the values describing the {@link RouteOptions}.
    *
    * @since 3.0.0
