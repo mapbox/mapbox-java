@@ -37,6 +37,22 @@ public class WalkingOptionsTest extends TestUtils {
         assertEquals(Double.valueOf(0.7), walkingOptions.alleyBias());
     }
 
+    @Test
+    public void toBuilder() {
+        WalkingOptions walkingOptions = walkingOptions();
+
+        double delta = 0;
+        double newSpeed = 2.0;
+
+        WalkingOptions updatedOptions = walkingOptions.toBuilder()
+                .walkingSpeed(newSpeed)
+                .build();
+
+        assertEquals(newSpeed, updatedOptions.walkingSpeed(), delta);
+        assertEquals(walkingOptions.walkwayBias(), updatedOptions.walkwayBias(), delta);
+        assertEquals(walkingOptions.alleyBias(), updatedOptions.alleyBias(), delta);
+    }
+
     private WalkingOptions walkingOptions() {
         return WalkingOptions.builder()
                 .walkingSpeed(1.0)

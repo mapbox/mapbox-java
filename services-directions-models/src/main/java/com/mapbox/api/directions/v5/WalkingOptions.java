@@ -1,6 +1,7 @@
 package com.mapbox.api.directions.v5;
 
 import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -79,6 +80,17 @@ public abstract class WalkingOptions {
       .create();
     return gson.toJson(this, WalkingOptions.class);
   }
+
+  /**
+   * Convert the current {@link WalkingOptions} to its builder holding the currently assigned
+   * values. This allows you to modify a single property and then rebuild the object resulting in
+   * an updated and modified {@link WalkingOptions}.
+   *
+   * @return a {@link WalkingOptions.Builder} with the same values set to match the ones defined
+   *   in this {@link WalkingOptions}
+   */
+  @NonNull
+  public abstract Builder toBuilder();
 
   /**
    * Gson type adapter for parsing Gson to this class.
