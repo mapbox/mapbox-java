@@ -12,8 +12,8 @@ sourceSets {
 dependencies {
     api project(":services-core")
     api project(":services-geojson")
-    api "com.mapbox.mapboxsdk:mapbox-sdk-directions-models:5.1.0-SNAPSHOT"
-    api "com.mapbox.mapboxsdk:mapbox-sdk-directions-refresh-models:5.1.0-SNAPSHOT"
+    api project(":services-directions-models")
+    api project(":services-directions-refresh-models")
 
     // Annotations
     compileOnly dependenciesList.supportAnnotation
