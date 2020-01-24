@@ -82,7 +82,7 @@ public class MapboxStaticMapTest extends TestUtils {
       .accessToken(ACCESS_TOKEN)
       .styleId(StaticMapCriteria.DARK_STYLE)
       .build();
-    assertTrue(staticMap.url().toString().contains("styles/v1/mapbox/dark-v9/static/"));
+    assertTrue(staticMap.url().toString().contains("styles/v1/mapbox/dark-v10/static/"));
   }
 
   @Test
