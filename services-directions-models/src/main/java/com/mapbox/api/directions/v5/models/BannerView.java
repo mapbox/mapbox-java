@@ -33,7 +33,7 @@ public abstract class BannerView extends DirectionsJsonObject {
   }
 
   /**
-   * Plain text with all the {@link BannerComponents} text combined.BannerInstructions.
+   * Plain text with all the {@link BannerComponents} text combined.
    *
    * @return plain text with all the {@link BannerComponents} text items combined
    * @since 5.0.0
