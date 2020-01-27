@@ -110,7 +110,10 @@ public abstract class MapboxDirections extends
       enableRefresh(),
       walkingSpeed(),
       walkwayBias(),
-      alleyBias()
+      alleyBias(),
+      originTrace(),
+      originTraceRadiuses(),
+      originTraceTimestamps()
     );
   }
 
@@ -142,7 +145,10 @@ public abstract class MapboxDirections extends
       enableRefresh(),
       walkingSpeed(),
       walkwayBias(),
-      alleyBias()
+      alleyBias(),
+      originTrace(),
+      originTraceRadiuses(),
+      originTraceTimestamps()
     );
   }
 
@@ -232,17 +238,16 @@ public abstract class MapboxDirections extends
   }
 
   /**
-   * Converts array of Points with waypoint_targets values
-   * to a string ready for API consumption.
+   * Converts array of Points to a string ready for API consumption.
    *
-   * @param waypointTargets a string representing approaches to each coordinate.
+   * @param points an array representing approaches to each coordinate.
    * @return a formatted string.
    * @since 4.3.0
    */
-  private static String formatWaypointTargets(Point[] waypointTargets) {
-    String[] coordinatesFormatted = new String[waypointTargets.length];
+  private static String formatPointsArray(Point[] points) {
+    String[] coordinatesFormatted = new String[points.length];
     int index = 0;
-    for (Point target : waypointTargets) {
+    for (Point target : points) {
       if (target == null) {
         coordinatesFormatted[index++] = "";
       } else {
@@ -346,6 +351,15 @@ public abstract class MapboxDirections extends
   abstract WalkingOptions walkingOptions();
 
   @Nullable
+  abstract String originTrace();
+
+  @Nullable
+  abstract String originTraceRadiuses();
+
+  @Nullable
+  abstract String originTraceTimestamps();
+
+  @Nullable
   Double walkingSpeed() {
     if (!hasWalkingOptions()) {
       return null;
@@ -427,6 +441,9 @@ public abstract class MapboxDirections extends
     private Integer[] waypointIndices;
     private String[] waypointNames;
     private Point[] waypointTargets;
+    private Point[] originTrace;
+    private Integer[] originTraceRadiuses;
+    private Long[] originTraceTimestamps;
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -905,6 +922,50 @@ public abstract class MapboxDirections extends
     abstract MapboxDirections autoBuild();
 
     /**
+     * List of coordinates corresponding to locations leading up to the origin in the Directions API
+     * request.
+     *
+     * @param originTrace list of coordinates corresponding to locations leading up to the origin
+     * @return this builder for chaining options together
+     */
+    public Builder addOriginTrace(@Nullable Point... originTrace) {
+      this.originTrace = originTrace;
+      return this;
+    }
+
+    abstract Builder originTrace(@Nullable String originTrace);
+
+    /**
+     * The origin_trace_radiuses query parameter is a list of radius values corresponding to the
+     * accuracy of the origin_trace locations.
+     *
+     * @param originTraceRadiuses a list of radius values corresponding to the accuracy of the
+     *                            origin_trace locations
+     * @return this builder for chaining options together
+     */
+    public Builder addOriginTraceRadiuses(@Nullable Integer... originTraceRadiuses) {
+      this.originTraceRadiuses = originTraceRadiuses;
+      return this;
+    }
+
+    abstract Builder originTraceRadiuses(@Nullable String originTraceRadiuses);
+
+    /**
+     * The origin_trace_timestamps query parameter is a list of timestamp values corresponding to
+     * timestamps of the origin_trace locations.
+     *
+     * @param originTraceTimestamps list of timestamp values corresponding to timestamps of the
+     *                              origin_trace locations
+     * @return this builder for chaining options together
+     */
+    public Builder addOriginTraceTimestamps(@Nullable Long... originTraceTimestamps) {
+      this.originTraceTimestamps = originTraceTimestamps;
+      return this;
+    }
+
+    abstract Builder originTraceTimestamps(@Nullable String originTraceTimestamps);
+
+    /**
      * This uses the provided parameters set using the {@link Builder} and first checks that all
      * values are valid, formats the values as strings for easier consumption by the API, and lastly
      * creates a new {@link MapboxDirections} object with the values provided.
@@ -955,7 +1016,7 @@ public abstract class MapboxDirections extends
             + " the number of waypoints provided.");
         }
 
-        waypointTargets(formatWaypointTargets(waypointTargets));
+        waypointTargets(formatPointsArray(waypointTargets));
       }
 
       if (approaches != null) {
@@ -968,6 +1029,30 @@ public abstract class MapboxDirections extends
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
         approaches(formattedApproaches);
+      }
+
+      if (originTrace != null && originTraceRadiuses != null && originTraceTimestamps != null) {
+        if (originTrace.length != originTraceRadiuses.length
+          || originTrace.length != originTraceTimestamps.length) {
+          throw new ServicesException("originTrace, originTraceRadiuses and "
+            + "originTraceTimestamps must have the same size.");
+        }
+
+        if (originTrace.length < 2 || originTrace.length > 20) {
+          throw new ServicesException("originTrace, originTraceRadiuses and "
+            + "originTraceTimestamps must be from 2 to 20 items.");
+        }
+
+        originTrace(formatPointsArray(originTrace));
+        originTraceRadiuses(TextUtils.join(";", originTraceRadiuses));
+        originTraceTimestamps(TextUtils.join(";", originTraceTimestamps));
+
+      } else if (originTrace == null && originTraceRadiuses == null
+          && originTraceTimestamps == null) {
+            // do nothing, skip Map Matching params
+      } else {
+        throw new ServicesException("originTrace, originTraceRadiuses and originTraceTimestamps "
+          + "must be used at the same time");
       }
 
       coordinates(coordinates);

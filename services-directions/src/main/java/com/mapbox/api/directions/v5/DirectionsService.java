@@ -59,6 +59,12 @@ public interface DirectionsService {
    * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
    *                            that do not allow vehicles and are set aside for pedestrian use
    * @param alleyBias           a factor that modifies the cost when alleys are encountered
+   * @param originTrace         a list of coordinates corresponding to locations leading up to the
+   *                            origin
+   * @param originTraceTimestamps a list of timestamp values corresponding to timestamps of the
+   *                              origin_trace locations
+   * @param originTraceRadiuses a list of radius values corresponding to the accuracy of the
+   *                            originTrace locations
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */
@@ -90,7 +96,10 @@ public interface DirectionsService {
     @Query("enable_refresh") Boolean enableRefresh,
     @Query("walking_speed") Double walkingSpeed,
     @Query("walkway_bias") Double walkwayBias,
-    @Query("alley_bias") Double alleyBias
+    @Query("alley_bias") Double alleyBias,
+    @Query("origin_trace") String originTrace,
+    @Query("origin_trace_radiuses") String originTraceRadiuses,
+    @Query("origin_trace_timestamps") String originTraceTimestamps
   );
 
   /**
@@ -134,6 +143,12 @@ public interface DirectionsService {
    * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
    *                            that do not allow vehicles and are set aside for pedestrian use
    * @param alleyBias           a factor that modifies the cost when alleys are encountered
+   * @param originTrace         a list of coordinates corresponding to locations leading up to the
+   *                            origin
+   * @param originTraceTimestamps a list of timestamp values corresponding to timestamps of the
+   *                              origin_trace locations
+   * @param originTraceRadiuses a list of radius values corresponding to the accuracy of the
+   *                            originTrace locations
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 4.6.0
    */
@@ -166,6 +181,9 @@ public interface DirectionsService {
     @Field("enable_refresh") Boolean enableRefresh,
     @Field("walking_speed") Double walkingSpeed,
     @Field("walkway_bias") Double walkwayBias,
-    @Field("alley_bias") Double alleyBias
+    @Field("alley_bias") Double alleyBias,
+    @Field("origin_trace") String originTrace,
+    @Field("origin_trace_radiuses") String originTraceRadiuses,
+    @Field("origin_trace_timestamps") String originTraceTimestamps
   );
 }

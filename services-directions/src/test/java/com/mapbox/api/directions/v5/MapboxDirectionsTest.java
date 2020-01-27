@@ -983,6 +983,129 @@ public class MapboxDirectionsTest extends TestUtils {
     assertEquals("GET", call.request().method());
   }
 
+  @Test
+  public void build_onlyOriginTraceProvided() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("originTrace, originTraceRadiuses and originTraceTimestamps must be used "
+      + "at the same time");
+    getDirectionsBuilderWithDefaultParams()
+      .addOriginTrace(Point.fromLngLat(1.234, 2.345))
+      .build()
+      .executeCall();
+  }
+
+  @Test
+  public void build_onlyOriginTraceRadiusesProvided() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("originTrace, originTraceRadiuses and originTraceTimestamps must be used "
+      + "at the same time");
+    getDirectionsBuilderWithDefaultParams()
+      .addOriginTraceRadiuses(1, 2, 3)
+      .build()
+      .executeCall();
+  }
+
+  @Test
+  public void build_onlyOriginTraceTimestampsProvided() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("originTrace, originTraceRadiuses and originTraceTimestamps must be used "
+      + "at the same time");
+    getDirectionsBuilderWithDefaultParams()
+      .addOriginTraceTimestamps(14111L, 14826752L)
+      .build()
+      .executeCall();
+  }
+
+  @Test
+  public void build_mapMatchingWithDifferentParamsSize() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("originTrace, originTraceRadiuses and originTraceTimestamps must have the "
+      + "same size.");
+    getDirectionsBuilderWithDefaultParams()
+      .addOriginTrace(Point.fromLngLat(1.234, 2.345), Point.fromLngLat(1.234, 2.345))
+      .addOriginTraceRadiuses(4, 4, 4)
+      .addOriginTraceTimestamps(14111L, 14826752L)
+      .build()
+      .executeCall();
+  }
+
+  @Test
+  public void build_mapMatchingWithSmallParamsSize() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("originTrace, originTraceRadiuses and originTraceTimestamps must be from "
+      + "2 to 20 items.");
+    getDirectionsBuilderWithDefaultParams()
+      .addOriginTrace(Point.fromLngLat(1.234, 2.345))
+      .addOriginTraceRadiuses(4)
+      .addOriginTraceTimestamps(14111L)
+      .build()
+      .executeCall();
+  }
+
+  @Test
+  public void build_mapMatchingWithBigParamsSize() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("originTrace, originTraceRadiuses and originTraceTimestamps must be from "
+      + "2 to 20 items.");
+    getDirectionsBuilderWithDefaultParams()
+      .addOriginTrace(Point.fromLngLat(1, 1), Point.fromLngLat(1, 1), Point.fromLngLat(1, 1),
+        Point.fromLngLat(1, 1), Point.fromLngLat(1, 1), Point.fromLngLat(1, 1),
+        Point.fromLngLat(1, 1), Point.fromLngLat(1, 1), Point.fromLngLat(1, 1),
+        Point.fromLngLat(1, 1), Point.fromLngLat(1, 1), Point.fromLngLat(1, 1),
+        Point.fromLngLat(1, 1), Point.fromLngLat(1, 1), Point.fromLngLat(1, 1),
+        Point.fromLngLat(1, 1), Point.fromLngLat(1, 1), Point.fromLngLat(1, 1),
+        Point.fromLngLat(1, 1), Point.fromLngLat(1, 1), Point.fromLngLat(1, 1))
+      .addOriginTraceRadiuses(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1, 1, 1, 1, 1, 1, 1, 1)
+      .addOriginTraceTimestamps(1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L,
+        1L ,1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L)
+      .build()
+      .executeCall();
+  }
+
+  @Test
+  public void originTrace_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = getDirectionsBuilderWithDefaultParams()
+      .addOriginTrace(Point.fromLngLat(2.234, 3.345), Point.fromLngLat(4.567, 1.345))
+      .addOriginTraceRadiuses(5, 4)
+      .addOriginTraceTimestamps(14111L, 14826L)
+      .build();
+
+    assertEquals("2.234,3.345;4.567,1.345",
+      directions.cloneCall().request().url().queryParameter("origin_trace"));
+  }
+
+  @Test
+  public void originTraceRadiuses_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = getDirectionsBuilderWithDefaultParams()
+      .addOriginTrace(Point.fromLngLat(2.234, 3.345), Point.fromLngLat(4.567, 1.345))
+      .addOriginTraceRadiuses(5, 4)
+      .addOriginTraceTimestamps(14111L, 14826L)
+      .build();
+
+    assertEquals("5;4",
+      directions.cloneCall().request().url().queryParameter("origin_trace_radiuses"));
+  }
+
+  @Test
+  public void originTraceTimestamps_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = getDirectionsBuilderWithDefaultParams()
+      .addOriginTrace(Point.fromLngLat(2.234, 3.345), Point.fromLngLat(4.567, 1.345))
+      .addOriginTraceRadiuses(5, 4)
+      .addOriginTraceTimestamps(14111L, 14826L)
+      .build();
+
+    assertEquals("14111;14826",
+            directions.cloneCall().request().url().queryParameter("origin_trace_timestamps"));
+  }
+
+  private MapboxDirections.Builder getDirectionsBuilderWithDefaultParams() {
+    return MapboxDirections.builder()
+      .baseUrl("https://foobar.com")
+      .origin(Point.fromLngLat(1.234, 2.345))
+      .destination(Point.fromLngLat(13.4930, 9.958))
+      .accessToken(ACCESS_TOKEN);
+  }
+
   private void addWaypoints(MapboxDirections.Builder builder, int number) {
     for (int i = 0; i < number; i++) {
       builder.addWaypoint(Point.fromLngLat(getRandomLng(), getRandomLat()));

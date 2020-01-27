@@ -323,6 +323,27 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract WalkingOptions walkingOptions();
 
   /**
+   * A semicolon-separated list of coordinates corresponding to locations leading up to the origin
+   * in the Directions API request.
+   */
+  @Nullable
+  public abstract String originTrace();
+
+  /**
+   * A semicolon-separated list of radius values corresponding to the accuracy of the origin_trace
+   * locations.
+   */
+  @Nullable
+  public abstract String originTraceRadiuses();
+
+  /**
+   * A semicolon-separated list of timestamp values corresponding to timestamps of the origin_trace
+   * locations.
+   */
+  @Nullable
+  public abstract String originTraceTimestamps();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -611,6 +632,36 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @since 4.8.0
      */
     public abstract Builder walkingOptions(@NonNull WalkingOptions walkingOptions);
+
+    /**
+     * The origin_trace query parameter is a list of coordinates corresponding to locations leading
+     * up to the origin in the Directions API request.
+     *
+     * @param originTrace list of coordinates corresponding to locations leading up to the origin
+     *                    in the Directions API request
+     * @return this builder for chaining options together
+     */
+    public abstract Builder originTrace(@NonNull String originTrace);
+
+    /**
+     * The origin_trace_radiuses query parameter is a list of radius values corresponding to the
+     * accuracy of the origin_trace locations.
+     *
+     * @param originTraceRadiuses list of radius values corresponding to the accuracy of the
+     *                            origin_trace locations
+     * @return this builder for chaining options together
+     */
+    public abstract Builder originTraceRadiuses(@NonNull String originTraceRadiuses);
+
+    /**
+     * The origin_trace_timestamps query parameter is a list of timestamp values corresponding to
+     * timestamps of the origin_trace locations.
+     *
+     * @param originTraceTimestamps list of timestamp values corresponding to timestamps of the
+     *                              origin_trace locations
+     * @return this builder for chaining options together
+     */
+    public abstract Builder originTraceTimestamps(@NonNull String originTraceTimestamps);
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.
