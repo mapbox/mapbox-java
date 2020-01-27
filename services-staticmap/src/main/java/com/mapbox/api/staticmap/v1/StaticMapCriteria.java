@@ -103,14 +103,14 @@ public final class StaticMapCriteria {
    *
    * @since 3.0.0
    */
-  public static final String NAVIGATION_GUIDANCE_DAY = "navigation-guidance-day-v3";
+  public static final String NAVIGATION_GUIDANCE_DAY = "navigation-guidance-day-v4";
 
   /**
    * Navigation specific style that shows only the necessary information while a user is driving.
    *
    * @since 3.0.0
    */
-  public static final String NAVIGATION_GUIDANCE_NIGHT = "navigation-guidance-night-v3";
+  public static final String NAVIGATION_GUIDANCE_NIGHT = "navigation-guidance-night-v4";
 
   private StaticMapCriteria() {
     throw new AssertionError("No Instances.");
