@@ -4,6 +4,14 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.1.0-beta.1 - January 24, 2020
+
+- Removed typo in `BannerView` class javadocs [#1111](https://github.com/mapbox/mapbox-java/pull/1111)
+- Extract refresh models into separate module [#1107](https://github.com/mapbox/mapbox-java/pull/1107)
+- Bumped `StaticMapCriteria` constant style strings to new versions [#1109](https://github.com/mapbox/mapbox-java/pull/1109)
+- Add `toBuilder()` method to `RouteOptions` and `WalkingOptions` [#1110](https://github.com/mapbox/mapbox-java/pull/1110)
+- Split Directions models from the implementation into a separate module [#1104](https://github.com/mapbox/mapbox-java/pull/1104)
+
 ### 5.0.0 - January 8, 2020
 
 - Update to AndroidX annotation [#1095](https://github.com/mapbox/mapbox-java/pull/1095)
