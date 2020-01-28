@@ -77,6 +77,9 @@ class DirectionsResponseFactory {
           .requestUuid(response.body().uuid())
           .baseUrl(mapboxDirections.baseUrl())
           .walkingOptions(mapboxDirections.walkingOptions())
+          .originTrace(mapboxDirections.originTrace())
+          .originTraceRadiuses(mapboxDirections.originTraceRadiuses())
+          .originTraceTimestamps(mapboxDirections.originTraceTimestamps())
           .build()
       ).build());
     }
