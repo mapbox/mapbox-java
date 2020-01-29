@@ -326,6 +326,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * A semicolon-separated list of coordinates corresponding to locations leading up to the origin
    * in the Directions API request.
    */
+  @SerializedName("origin_trace")
   @Nullable
   public abstract String originTrace();
 
@@ -333,6 +334,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * A semicolon-separated list of radius values corresponding to the accuracy of the origin_trace
    * locations.
    */
+  @SerializedName("origin_trace_radiuses")
   @Nullable
   public abstract String originTraceRadiuses();
 
@@ -341,6 +343,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * locations.
    */
   @Nullable
+  @SerializedName("origin_trace_timestamps")
   public abstract String originTraceTimestamps();
 
   /**
