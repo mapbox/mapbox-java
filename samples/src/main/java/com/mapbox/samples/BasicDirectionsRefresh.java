@@ -31,7 +31,7 @@ public class BasicDirectionsRefresh {
       .destination(Point.fromLngLat(-95.3591, 29.7576))
       .overview(OVERVIEW_FULL)
       .profile(PROFILE_DRIVING_TRAFFIC)
-      .annotations(ANNOTATION_CONGESTION).build();
+      .addAnnotation(ANNOTATION_CONGESTION).build();
 
     Response<DirectionsResponse> response = directions.executeCall();
     System.out.println("Directions response: " + response);
