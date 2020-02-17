@@ -7,6 +7,7 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.matrix.v1.models.MatrixResponse;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
@@ -330,8 +331,8 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
       List<String> coordinatesFormatted = new ArrayList<>();
       for (Point point : coordinates) {
         coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(point.longitude()),
-          TextUtils.formatCoordinate(point.latitude())));
+          FormatUtils.formatCoordinate(point.longitude()),
+          FormatUtils.formatCoordinate(point.latitude())));
       }
       return TextUtils.join(";", coordinatesFormatted.toArray());
     }

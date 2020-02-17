@@ -15,16 +15,17 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.VoiceUnitCriteria;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.RouteLeg;
+import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
-import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -87,7 +88,7 @@ public abstract class MapboxDirections extends
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
-      formatCoordinates(coordinates()),
+      FormatUtils.formatCoordinates(coordinates()),
       accessToken(),
       alternatives(),
       geometries(),
@@ -119,7 +120,7 @@ public abstract class MapboxDirections extends
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       user(),
       profile(),
-      formatCoordinates(coordinates()),
+      FormatUtils.formatCoordinates(coordinates()),
       accessToken(),
       alternatives(),
       geometries(),
@@ -217,41 +218,6 @@ public abstract class MapboxDirections extends
       okHttpClient = httpClient.build();
     }
     return okHttpClient;
-  }
-
-  private static String formatCoordinates(List<Point> coordinates) {
-    String[] coordinatesFormatted = new String[coordinates.size()];
-    int index = 0;
-    for (Point point : coordinates) {
-      coordinatesFormatted[index++] = String.format(Locale.US, "%s,%s",
-        TextUtils.formatCoordinate(point.longitude()),
-        TextUtils.formatCoordinate(point.latitude()));
-    }
-
-    return TextUtils.join(";", coordinatesFormatted);
-  }
-
-  /**
-   * Converts array of Points with waypoint_targets values
-   * to a string ready for API consumption.
-   *
-   * @param waypointTargets a string representing approaches to each coordinate.
-   * @return a formatted string.
-   * @since 4.3.0
-   */
-  private static String formatWaypointTargets(Point[] waypointTargets) {
-    String[] coordinatesFormatted = new String[waypointTargets.length];
-    int index = 0;
-    for (Point target : waypointTargets) {
-      if (target == null) {
-        coordinatesFormatted[index++] = "";
-      } else {
-        coordinatesFormatted[index++] = String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(target.longitude()),
-          TextUtils.formatCoordinate(target.latitude()));
-      }
-    }
-    return TextUtils.join(";", coordinatesFormatted);
   }
 
   @NonNull
@@ -416,17 +382,17 @@ public abstract class MapboxDirections extends
    */
   @AutoValue.Builder
   public abstract static class Builder {
-
-    private List<Double[]> bearings = new ArrayList<>();
+    //TODO change List<Double> to a custom model or to a Pair
+    private List<List<Double>> bearings = new ArrayList<>();
     private List<Point> coordinates = new ArrayList<>();
-    private String[] annotations;
-    private double[] radiuses;
+    private List<String> annotations = new ArrayList<>();
+    private List<Double> radiuses = new ArrayList<>();
     private Point destination;
     private Point origin;
-    private String[] approaches;
-    private Integer[] waypointIndices;
-    private String[] waypointNames;
-    private Point[] waypointTargets;
+    private List<String> approaches = new ArrayList<>();
+    private List<Integer> waypointIndices = new ArrayList<>();
+    private List<String> waypointNames = new ArrayList<>();
+    private List<Point> waypointTargets = new ArrayList<>();
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -484,13 +450,27 @@ public abstract class MapboxDirections extends
      * in the request is currently limited to 1.
      *
      * @param waypoint a {@link Point} which represents the pit-stop or waypoint where you'd like
-     *                 one of the {@link RouteLeg} to
-     *                 navigate the user to
+     *                 one of the {@link RouteLeg} to navigate the user to
      * @return this builder for chaining options together
      * @since 3.0.0
      */
     public Builder addWaypoint(@NonNull Point waypoint) {
       coordinates.add(waypoint);
+      return this;
+    }
+
+    /**
+     * This can be used to set up to 23 additional in-between points which will act as pit-stops
+     * along the users route. Note that if you are using the
+     * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} that the max number of waypoints allowed
+     * in the request is currently limited to 1.
+     *
+     * @param waypoints a list which represents the pit-stops or waypoints where
+     *                  you'd like one of the {@link RouteLeg} to navigate the user to
+     * @return this builder for chaining options together
+     */
+    public Builder waypoints(@NonNull List<Point> waypoints) {
+      coordinates = waypoints;
       return this;
     }
 
@@ -597,7 +577,6 @@ public abstract class MapboxDirections extends
     /**
      * Whether or not to return additional metadata along the route. Possible values are:
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE},
-     * {@link DirectionsCriteria#ANNOTATION_DURATION},
      * {@link DirectionsCriteria#ANNOTATION_DURATION} and
      * {@link DirectionsCriteria#ANNOTATION_CONGESTION}. Several annotation can be used by
      * separating them with {@code ,}.
@@ -609,9 +588,41 @@ public abstract class MapboxDirections extends
      * @see <a href="https://www.mapbox.com/api-documentation/navigation/#route-leg-object">RouteLeg object
      * documentation</a>
      * @since 2.1.0
+     * @deprecated use {@link #annotations(List)}
      */
-    public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
+    @Deprecated
+    public Builder annotations(@AnnotationCriteria @NonNull String... annotations) {
+      return annotations(Arrays.asList(annotations));
+    }
+
+    /**
+     * Whether or not to return additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE},
+     * {@link DirectionsCriteria#ANNOTATION_DURATION} and
+     * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
+     *
+     * @param annotations a list of annotations
+     * @return this builder for chaining options together
+     */
+    public Builder annotations(@NonNull List<String> annotations) {
       this.annotations = annotations;
+      return this;
+    }
+
+    /**
+     * Whether or not to return additional metadata along the route. Possible values are:
+     * {@link DirectionsCriteria#ANNOTATION_DISTANCE},
+     * {@link DirectionsCriteria#ANNOTATION_DURATION} and
+     * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
+     *
+     * @param annotation string referencing one of the annotation direction criteria's.
+     * @return this builder for chaining options together
+     * @see <a href="https://www.mapbox.com/api-documentation/navigation/#route-leg-object">RouteLeg object
+     * documentation</a>
+     * @since 2.1.0
+     */
+    public Builder addAnnotation(@AnnotationCriteria @NonNull String annotation) {
+      this.annotations.add(annotation);
       return this;
     }
 
@@ -620,7 +631,7 @@ public abstract class MapboxDirections extends
     /**
      * Optionally, Use to filter the road segment the waypoint will be placed on by direction and
      * dictates the angle of approach. This option should always be used in conjunction with the
-     * {@link #radiuses(double...)} parameter.
+     * {@link #radiuses} parameter.
      * <p>
      * The parameter takes two values per waypoint: the first is an angle clockwise from true north
      * between 0 and 360. The second is the range of degrees the angle can deviate by. We recommend
@@ -648,10 +659,44 @@ public abstract class MapboxDirections extends
     public Builder addBearing(@Nullable @FloatRange(from = 0, to = 360) Double angle,
                               @Nullable @FloatRange(from = 0, to = 360) Double tolerance) {
       if (angle == null || tolerance == null) {
-        bearings.add(new Double[0]);
+        bearings.add(new ArrayList<Double>());
       } else {
-        bearings.add(new Double[] {angle, tolerance});
+        bearings.add(Arrays.asList(angle, tolerance));
       }
+      return this;
+    }
+
+    /**
+     * Optionally, Use to filter the road segment the waypoint will be placed on by direction and
+     * dictates the angle of approach. This option should always be used in conjunction with the
+     * {@link #radiuses} parameter.
+     *
+     * @param bearings  a list of list of doubles. Every list has two values:
+     *                  the first is an angle clockwise from true north between 0 and 360. The
+     *                  second is the range of degrees the angle can deviate by. We recommend
+     *                  a value of 45 degrees or 90 degrees for the range, as bearing measurements
+     *                  tend to be inaccurate.
+     * @return this builder for chaining options together
+     */
+    public Builder bearings(@NonNull List<List<Double>> bearings) {
+      List<List<Double>> newBearings = new ArrayList<>();
+      for (List<Double> bearing : bearings) {
+        if (bearing.size() != 2) {
+          throw new ServicesException("Bearing size should be 2.");
+        }
+        Double angle = bearing.get(0);
+        Double tolerance = bearing.get(1);
+        if (angle == null || tolerance == null) {
+          newBearings.add(new ArrayList<Double>());
+        } else {
+          if (angle < 0 || angle > 360 || tolerance < 0 || tolerance > 360) {
+            throw new ServicesException("Angle and tolerance have to be from 0 to 360.");
+          }
+          newBearings.add(Arrays.asList(angle, tolerance));
+        }
+      }
+
+      this.bearings = newBearings;
       return this;
     }
 
@@ -669,9 +714,45 @@ public abstract class MapboxDirections extends
      * @param radiuses double array containing the radiuses defined in unit meters.
      * @return this builder for chaining options together
      * @since 1.0.0
+     * @deprecated use {@link #radiuses(List)}
      */
-    public Builder radiuses(@FloatRange(from = 0) double... radiuses) {
+    @Deprecated
+    public Builder radiuses(@NonNull @FloatRange(from = 0) Double... radiuses) {
+      return radiuses(Arrays.asList(radiuses));
+    }
+
+    /**
+     * Optionally, set the maximum distance in meters that each coordinate is allowed to move when
+     * snapped to a nearby road segment. There must be as many radiuses as there are coordinates in
+     * the request. Values can be any number greater than 0 or they can be unlimited simply by
+     * passing {@link Double#POSITIVE_INFINITY}.
+     * <p>
+     * If no routable road is found within the radius, a {@code NoSegment} error is returned.
+     * </p>
+     *
+     * @param radiuses a list with radiuses defined in unit meters.
+     * @return this builder for chaining options together
+     */
+    public Builder radiuses(@NonNull List<Double> radiuses) {
       this.radiuses = radiuses;
+      return this;
+    }
+
+    /**
+     * Optionally, set the maximum distance in meters that each coordinate is allowed to move when
+     * snapped to a nearby road segment. There must be as many radiuses as there are coordinates in
+     * the request. Values can be any number greater than 0 or they can be unlimited simply by
+     * passing {@link Double#POSITIVE_INFINITY}.
+     * <p>
+     * If no routable road is found within the radius, a {@code NoSegment} error is returned.
+     * </p>
+     *
+     * @param radius double param defined in unit meters.
+     * @return this builder for chaining options together
+     * @since 1.0.0
+     */
+    public Builder addRadius(@NonNull @FloatRange(from = 0) Double radius) {
+      this.radiuses.add(radius);
       return this;
     }
 
@@ -793,8 +874,28 @@ public abstract class MapboxDirections extends
      *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
      * @return this builder for chaining options together
      * @since 3.2.0
+     * @deprecated use {@link #approaches(List)}
      */
-    public Builder addApproaches(String... approaches) {
+    @Deprecated
+    public Builder addApproaches(@NonNull String... approaches) {
+      return approaches(Arrays.asList(approaches));
+    }
+
+    /**
+     * Indicates from which side of the road to approach a waypoint.
+     * Accepts  unrestricted (default), curb or null.
+     * If set to  unrestricted , the route can approach waypoints
+     * from either side of the road. If set to  curb , the route will be returned
+     * so that on arrival, the waypoint will be found on the side that corresponds with the
+     * driving_side of the region in which the returned route is located.
+     * If provided, the list of approaches must be the same length as the list of waypoints.
+     *
+     * @param approaches empty if you'd like the default approaches,
+     *                   else one of the options found in
+     *                   {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     * @return this builder for chaining options together
+     */
+    public Builder approaches(@NonNull List<String> approaches) {
       this.approaches = approaches;
       return this;
     }
@@ -802,20 +903,58 @@ public abstract class MapboxDirections extends
     abstract Builder approaches(@Nullable String approaches);
 
     /**
+     * Indicates from which side of the road to approach a waypoint.
+     * Accepts  unrestricted (default), curb or null.
+     * If set to  unrestricted , the route can approach waypoints
+     * from either side of the road. If set to  curb , the route will be returned
+     * so that on arrival, the waypoint will be found on the side that corresponds with the
+     * driving_side of the region in which the returned route is located.
+     * If provided, the list of approaches must be the same length as the list of waypoints.
+     *
+     * @param approach null if you'd like the default approaches, else one of the options found in
+     *                 {@link com.mapbox.api.directions.v5.DirectionsCriteria.ApproachesCriteria}.
+     * @return this builder for chaining options together
+     * @since 3.2.0
+     */
+    public Builder addApproach(@Nullable String approach) {
+      this.approaches.add(approach);
+      return this;
+    }
+
+    /**
      * Optionally, set which input coordinates should be treated as waypoints / separate legs.
      * Note: coordinate indices not added here act as silent waypoints
      * <p>
      * Most useful in combination with  steps=true and requests based on traces
      * with high sample rates. Can be an index corresponding to any of the input coordinates,
-     * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
+     * but must contain the first ( 0 ) and last coordinates' indices.
      * {@link #steps()}
      * </p>
      *
      * @param waypointIndices integer array of coordinate indices to be used as waypoints
      * @return this builder for chaining options together
      * @since 4.4.0
+     * @deprecated use {@link #waypointIndices(List)}
      */
-    public Builder addWaypointIndices(@Nullable @IntRange(from = 0) Integer... waypointIndices) {
+    @Deprecated
+    public Builder addWaypointIndices(@NonNull @IntRange(from = 0) Integer... waypointIndices) {
+      return waypointIndices(Arrays.asList(waypointIndices));
+    }
+
+    /**
+     * Optionally, set which input coordinates should be treated as waypoints / separate legs.
+     * Note: coordinate indices not added here act as silent waypoints
+     * <p>
+     * Most useful in combination with  steps=true and requests based on traces
+     * with high sample rates. Can be an index corresponding to any of the input coordinates,
+     * but must contain the first ( 0 ) and last coordinates' indices.
+     * {@link #steps()}
+     * </p>
+     *
+     * @param waypointIndices a list of coordinate indices to be used as waypoints
+     * @return this builder for chaining options together
+     */
+    public Builder waypointIndices(@NonNull List<Integer> waypointIndices) {
       this.waypointIndices = waypointIndices;
       return this;
     }
@@ -823,16 +962,50 @@ public abstract class MapboxDirections extends
     abstract Builder waypointIndices(@Nullable String waypointIndices);
 
     /**
-     * Custom names for waypoints used for the arrival instruction,
-     * each separated by  ; . Values can be any string and total number of all characters cannot
-     * exceed 500. If provided, the list of waypointNames must be the same length as the list of
-     * coordinates, but you can skip a coordinate and show its position with the ; separator.
+     * Optionally, set which input coordinates should be treated as waypoints / separate legs.
+     * Note: coordinate indices not added here act as silent waypoints
+     * <p>
+     * Most useful in combination with  steps=true and requests based on traces
+     * with high sample rates. Can be an index corresponding to any of the input coordinates,
+     * but must contain the first ( 0 ) and last coordinates' indices.
+     * {@link #steps()}
+     * </p>
+     *
+     * @param waypointIndex integer index to be used as waypoint
+     * @return this builder for chaining options together
+     * @since 4.4.0
+     */
+    public Builder addWaypointIndex(@NonNull @IntRange(from = 0) Integer waypointIndex) {
+      this.waypointIndices.add(waypointIndex);
+      return this;
+    }
+
+    /**
+     * Custom names for waypoints used for the arrival instruction.
+     * Values can be any string and total number of all characters cannot exceed 500.
+     * If provided, the list of waypointNames must be the same length as the list of
+     * coordinates, but you can skip a coordinate and show its position with the null value.
      *
      * @param waypointNames Custom names for waypoints used for the arrival instruction.
      * @return this builder for chaining options together
      * @since 3.3.0
+     * @deprecated use {@link #waypointNames(List)}
      */
-    public Builder addWaypointNames(@Nullable String... waypointNames) {
+    @Deprecated
+    public Builder addWaypointNames(@NonNull String... waypointNames) {
+      return waypointNames(Arrays.asList(waypointNames));
+    }
+
+    /**
+     * Custom names for waypoints used for the arrival instruction.
+     * Values can be any string and total number of all characters cannot exceed 500.
+     * If provided, the list of waypointNames must be the same length as the list of
+     * coordinates, but you can skip a coordinate and show its position with the null value.
+     *
+     * @param waypointNames a list of custom names for waypoints used for the arrival instruction.
+     * @return this builder for chaining options together
+     */
+    public Builder waypointNames(@NonNull List<String> waypointNames) {
       this.waypointNames = waypointNames;
       return this;
     }
@@ -840,8 +1013,23 @@ public abstract class MapboxDirections extends
     abstract Builder waypointNames(@Nullable String waypointNames);
 
     /**
-     * A list of coordinate points used to specify drop-off locations
-     * that are distinct from the locations specified in coordinates.
+     * Custom names for waypoints used for the arrival instruction.
+     * Values can be any string and total number of all characters cannot exceed 500.
+     * If provided, the list of waypointNames must be the same length as the list of
+     * coordinates, but you can skip a coordinate and show its position with the null value.
+     *
+     * @param waypointName Custom name for waypoint used for the arrival instruction.
+     * @return this builder for chaining options together
+     * @since 3.3.0
+     */
+    public Builder addWaypointName(@Nullable String waypointName) {
+      this.waypointNames.add(waypointName);
+      return this;
+    }
+
+    /**
+     * Points to specify drop-off locations that are distinct from the locations specified in
+     * coordinates.
      * The number of waypoint targets must be the same as the number of coordinates,
      * but you can skip a coordinate with a null value.
      * Must be used with steps=true.
@@ -849,13 +1037,45 @@ public abstract class MapboxDirections extends
      * @param waypointTargets list of coordinate points for drop-off locations
      * @return this builder for chaining options together
      * @since 4.3.0
+     * @deprecated use {@link #waypointTargets(List)}
      */
-    public Builder addWaypointTargets(@Nullable Point... waypointTargets) {
+    @Deprecated
+    public Builder addWaypointTargets(@NonNull Point... waypointTargets) {
+      return waypointTargets(Arrays.asList(waypointTargets));
+    }
+
+    /**
+     * A list of points used to specify drop-off locations that are distinct from the locations
+     * specified in coordinates.
+     * The number of waypoint targets must be the same as the number of coordinates,
+     * but you can skip a coordinate with a null value.
+     * Must be used with steps=true.
+     *
+     * @param waypointTargets list of coordinate points for drop-off locations
+     * @return this builder for chaining options together
+     */
+    public Builder waypointTargets(@NonNull List<Point> waypointTargets) {
       this.waypointTargets = waypointTargets;
       return this;
     }
 
     abstract Builder waypointTargets(@Nullable String waypointTargets);
+
+    /**
+     * A point to specify drop-off locations that are distinct from the locations specified in
+     * coordinates.
+     * The number of waypoint targets must be the same as the number of coordinates,
+     * but you can skip a coordinate with a null value.
+     * Must be used with steps=true.
+     *
+     * @param waypointTarget a point for drop-off locations
+     * @return this builder for chaining options together
+     * @since 4.3.0
+     */
+    public Builder addWaypointTarget(@Nullable Point waypointTarget) {
+      this.waypointTargets.add(waypointTarget);
+      return this;
+    }
 
     /**
      * Whether the routes should be refreshable via the directions refresh API.
@@ -925,45 +1145,45 @@ public abstract class MapboxDirections extends
           + " directions API request.");
       }
 
-      if (waypointIndices != null) {
-        if (waypointIndices.length < 2) {
+      if (!waypointIndices.isEmpty()) {
+        if (waypointIndices.size() < 2) {
           throw new ServicesException(
             "Waypoints must be a list of at least two indexes separated by ';'");
         }
-        if (waypointIndices[0] != 0 || waypointIndices[waypointIndices.length - 1]
+        if (waypointIndices.get(0) != 0 || waypointIndices.get(waypointIndices.size() - 1)
           != coordinates.size() - 1) {
           throw new ServicesException(
             "Waypoints must contain indices of the first and last coordinates"
           );
         }
-        for (int i = 1; i < waypointIndices.length - 1; i++) {
-          if (waypointIndices[i] < 0 || waypointIndices[i] >= coordinates.size()) {
+        for (int i = 1; i < waypointIndices.size() - 1; i++) {
+          if (waypointIndices.get(i) < 0 || waypointIndices.get(i) >= coordinates.size()) {
             throw new ServicesException(
               "Waypoints index too large (no corresponding coordinate)");
           }
         }
       }
 
-      if (waypointNames != null) {
-        final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
+      if (!waypointNames.isEmpty()) {
+        final String waypointNamesStr = FormatUtils.formatWaypointNames(waypointNames);
         waypointNames(waypointNamesStr);
       }
 
-      if (waypointTargets != null) {
-        if (waypointTargets.length != coordinates.size()) {
+      if (!waypointTargets.isEmpty()) {
+        if (waypointTargets.size() != coordinates.size()) {
           throw new ServicesException("Number of waypoint targets must match "
             + " the number of waypoints provided.");
         }
 
-        waypointTargets(formatWaypointTargets(waypointTargets));
+        waypointTargets(FormatUtils.formatPointsList(waypointTargets));
       }
 
-      if (approaches != null) {
-        if (approaches.length != coordinates.size()) {
+      if (!approaches.isEmpty()) {
+        if (approaches.size() != coordinates.size()) {
           throw new ServicesException("Number of approach elements must match "
             + "number of coordinates provided.");
         }
-        String formattedApproaches = TextUtils.formatApproaches(approaches);
+        String formattedApproaches = FormatUtils.formatApproaches(approaches);
         if (formattedApproaches == null) {
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
@@ -971,10 +1191,10 @@ public abstract class MapboxDirections extends
       }
 
       coordinates(coordinates);
-      bearing(TextUtils.formatBearing(bearings));
-      annotation(TextUtils.join(",", annotations));
-      radius(TextUtils.formatRadiuses(radiuses));
-      waypointIndices(TextUtils.join(";", waypointIndices));
+      bearing(FormatUtils.formatBearings(bearings));
+      annotation(FormatUtils.join(",", annotations));
+      radius(FormatUtils.formatRadiuses(radiuses));
+      waypointIndices(FormatUtils.join(";", waypointIndices, true));
 
       MapboxDirections directions = autoBuild();
 

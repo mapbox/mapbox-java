@@ -93,7 +93,9 @@ public final class TextUtils {
    * @param radiuses a double array which represents the radius values
    * @return a String ready for being passed into the Retrofit call
    * @since 3.0.0
+   * @deprecated use FormatUtils.formatRadiuses(List)
    */
+  @Deprecated
   public static String formatRadiuses(double[] radiuses) {
     if (radiuses == null || radiuses.length == 0) {
       return null;
@@ -118,7 +120,9 @@ public final class TextUtils {
    * @param bearings a List of doubles representing bearing values
    * @return a string with the bearing values
    * @since 3.0.0
+   * @deprecated use FormatUtils.formatBearing(List)
    */
+  @Deprecated
   public static String formatBearing(List<Double[]> bearings) {
     if (bearings.isEmpty()) {
       return null;
@@ -143,7 +147,9 @@ public final class TextUtils {
    * @param distributions the list of integer arrays representing the distribution
    * @return a string with the distribution values
    * @since 3.0.0
+   * @deprecated use FormatUtils.formatDistributions(List)
    */
+  @Deprecated
   public static String formatDistributions(List<Integer[]> distributions) {
     if (distributions.isEmpty()) {
       return null;
@@ -170,13 +176,15 @@ public final class TextUtils {
    * @param approaches a string representing approaches to each coordinate.
    * @return a formatted string.
    * @since 3.2.0
+   * @deprecated use FormatUtils.formatApproaches(List)
    */
+  @Deprecated
   public static String formatApproaches(String[] approaches) {
     for (int i = 0; i < approaches.length; i++) {
       if (approaches[i] == null) {
         approaches[i] = "";
       } else if (!approaches[i].equals("unrestricted")
-        && !approaches[i].equals("curb") && !approaches[i].isEmpty()) {
+          && !approaches[i].equals("curb") && !approaches[i].isEmpty()) {
         return null;
       }
     }
@@ -190,7 +198,9 @@ public final class TextUtils {
    * @param waypointNames a string representing approaches to each coordinate.
    * @return a formatted string.
    * @since 3.3.0
+   * @deprecated use FormatUtils.formatWaypointNames(List)
    */
+  @Deprecated
   public static String formatWaypointNames(String[] waypointNames) {
     for (int i = 0; i < waypointNames.length; i++) {
       if (waypointNames[i] == null) {

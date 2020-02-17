@@ -11,21 +11,12 @@ import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
-
-import org.hamcrest.core.StringStartsWith;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-
 import okhttp3.Call;
 import okhttp3.EventListener;
 import okhttp3.HttpUrl;
@@ -33,6 +24,13 @@ import okhttp3.Interceptor;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.hamcrest.core.StringStartsWith;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import retrofit2.Response;
 
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
@@ -169,6 +167,22 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void build_coordinatesCreatedInCorrectOrder() throws Exception {
+    List<Point> waypoints = new ArrayList<>();
+    waypoints.add( Point.fromLngLat(5.29838, 4.42189));
+    waypoints.add(Point.fromLngLat(5.11111, 4.22222));
+
+    MapboxDirections directions = MapboxDirections.builder()
+            .origin(Point.fromLngLat(1.234, 2.345))
+            .destination(Point.fromLngLat(13.4930, 9.958))
+            .waypoints(waypoints)
+            .accessToken(ACCESS_TOKEN)
+            .build();
+    assertTrue(directions.cloneCall().request().url().toString()
+            .contains("1.234,2.345;5.29838,4.42189;5.11111,4.22222;13.493,9.958"));
+  }
+
+  @Test
   public void build_originDestinationGetAddedToListCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
@@ -272,15 +286,77 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test
   public void waypoints_doesGetFormattedInUrlCorrectly() {
+    List<Integer> indices = new ArrayList<>();
+    indices.add(0);
+    indices.add(2);
+
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
       .addWaypoint(Point.fromLngLat(4.56, 7.89))
       .origin(Point.fromLngLat(1.234, 2.345))
-      .addWaypointIndices(0, 2)
+      .waypointIndices(indices)
       .accessToken(ACCESS_TOKEN)
       .build();
     String semicolon = "%3B";
     assertTrue(directions.cloneCall().request().url().toString().contains("waypoints=0" + semicolon + "2"));
+  }
+
+  @Test
+  public void waypointsList_doesGetFormattedInUrlCorrectly() {
+    List<Integer> waypointIndices = new ArrayList<>();
+    waypointIndices.add(0);
+    waypointIndices.add(2);
+
+    MapboxDirections directions = MapboxDirections.builder()
+            .destination(Point.fromLngLat(13.4930, 9.958))
+            .addWaypoint(Point.fromLngLat(4.56, 7.89))
+            .origin(Point.fromLngLat(1.234, 2.345))
+            .waypointIndices(waypointIndices)
+            .accessToken(ACCESS_TOKEN)
+            .build();
+    String semicolon = "%3B";
+    assertTrue(directions.cloneCall().request().url().toString().contains("waypoints=0" + semicolon + "2"));
+  }
+
+  @Test
+  public void waypointList_doesGetFormattedInUrlCorrectly() {
+    List<Integer> waypointIndices = new ArrayList<>();
+    waypointIndices.add(0);
+    waypointIndices.add(2);
+
+    MapboxDirections directions = MapboxDirections.builder()
+            .destination(Point.fromLngLat(13.4930, 9.958))
+            .addWaypoint(Point.fromLngLat(4.56, 7.89))
+            .origin(Point.fromLngLat(1.234, 2.345))
+            .addWaypoint(Point.fromLngLat(4.56, 7.89))
+            .waypointIndices(waypointIndices)
+            .addWaypointIndex(3)
+            .accessToken(ACCESS_TOKEN)
+            .build();
+
+    assertEquals("0;2;3", directions.cloneCall().request().url().queryParameter("waypoints"));
+  }
+
+  @Test
+  public void waypointListRemoveAndAdd_doesGetFormattedInUrlCorrectly() {
+    List<Integer> waypointIndices = new ArrayList<>();
+    waypointIndices.add(0);
+    waypointIndices.add(2);
+
+    MapboxDirections directions = MapboxDirections.builder()
+            .destination(Point.fromLngLat(13.4930, 9.958))
+            .addWaypoint(Point.fromLngLat(4.56, 7.89))
+            .origin(Point.fromLngLat(1.234, 2.345))
+            .addWaypoint(Point.fromLngLat(4.56, 7.89))
+            .waypointIndices(waypointIndices)
+            .waypointIndices(new ArrayList<Integer>())
+            .addWaypointIndex(0)
+            .addWaypointIndex(1)
+            .addWaypointIndex(3)
+            .accessToken(ACCESS_TOKEN)
+            .build();
+
+    assertEquals("0;1;3", directions.cloneCall().request().url().queryParameter("waypoints"));
   }
 
   @Test
@@ -355,12 +431,30 @@ public class MapboxDirectionsTest extends TestUtils {
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
-      .annotations(DirectionsCriteria.ANNOTATION_CONGESTION, DirectionsCriteria.ANNOTATION_DURATION)
+      .addAnnotation(DirectionsCriteria.ANNOTATION_CONGESTION)
+      .addAnnotation(DirectionsCriteria.ANNOTATION_DURATION)
       .overview(DirectionsCriteria.OVERVIEW_FULL)
       .accessToken(ACCESS_TOKEN)
       .build();
     assertEquals("congestion,duration",
       directions.cloneCall().request().url().queryParameter("annotations"));
+  }
+
+  @Test
+  public void annotationsList_doesGetFormattedInUrlCorrectly() throws Exception {
+    List<String> annotations = new ArrayList<>();
+    annotations.add(DirectionsCriteria.ANNOTATION_CONGESTION);
+    annotations.add(DirectionsCriteria.ANNOTATION_DURATION);
+
+    MapboxDirections directions = MapboxDirections.builder()
+            .destination(Point.fromLngLat(13.4930, 9.958))
+            .origin(Point.fromLngLat(1.234, 2.345))
+            .annotations(annotations)
+            .overview(DirectionsCriteria.OVERVIEW_FULL)
+            .accessToken(ACCESS_TOKEN)
+            .build();
+    assertEquals("congestion,duration",
+            directions.cloneCall().request().url().queryParameter("annotations"));
   }
 
   @Test
@@ -377,15 +471,51 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void bearing_doesGetFormattedInUrlCorrectly() throws Exception {
+    List<List<Double>> bearings = new ArrayList<>();
+    bearings.add(Arrays.asList(45d, 90d));
+    bearings.add(Arrays.asList(2d, 90d));
+
+    MapboxDirections directions = MapboxDirections.builder()
+            .destination(Point.fromLngLat(13.4930, 9.958))
+            .origin(Point.fromLngLat(1.234, 2.345))
+            .bearings(bearings)
+            .accessToken(ACCESS_TOKEN)
+            .build();
+    assertEquals("45,90;2,90",
+            directions.cloneCall().request().url().queryParameter("bearings"));
+  }
+
+  @Test
   public void radiuses_doesGetFormattedInUrlCorrectly() throws Exception {
+    List<Double> radiuses = new ArrayList<>();
+    radiuses.add(23d);
+    radiuses.add(30d);
+
     MapboxDirections directions = MapboxDirections.builder()
       .destination(Point.fromLngLat(13.4930, 9.958))
       .origin(Point.fromLngLat(1.234, 2.345))
-      .radiuses(23, 30)
+      .radiuses(radiuses)
       .accessToken(ACCESS_TOKEN)
       .build();
     assertEquals("23;30",
       directions.cloneCall().request().url().queryParameter("radiuses"));
+  }
+
+  @Test
+  public void radiusesList_doesGetFormattedInUrlCorrectly() throws Exception {
+    List<Double> radiuses = new ArrayList<>();
+    radiuses.add(23d);
+    radiuses.add(30d);
+
+    MapboxDirections directions = MapboxDirections.builder()
+            .destination(Point.fromLngLat(13.4930, 9.958))
+            .origin(Point.fromLngLat(1.234, 2.345))
+            .radiuses(radiuses)
+            .accessToken(ACCESS_TOKEN)
+            .build();
+    assertEquals("23;30",
+            directions.cloneCall().request().url().queryParameter("radiuses"));
   }
 
   @Test
@@ -505,11 +635,16 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testRadiusWithUnlimitedDistance() throws IOException {
+  public void radiusWithUnlimitedDistance() throws IOException {
     List<Point> coordinates = new ArrayList<>();
     coordinates.add(Point.fromLngLat(13.4301, 52.5109));
     coordinates.add(Point.fromLngLat(13.4265, 52.5080));
     coordinates.add(Point.fromLngLat(13.4316, 52.5021));
+
+    List<Double> radiuses = new ArrayList<>();
+    radiuses.add(100d);
+    radiuses.add(Double.POSITIVE_INFINITY);
+    radiuses.add(100d);
 
     MapboxDirections client = MapboxDirections.builder()
       .accessToken(ACCESS_TOKEN)
@@ -517,11 +652,36 @@ public class MapboxDirectionsTest extends TestUtils {
       .addWaypoint(coordinates.get(1))
       .destination(coordinates.get(2))
       .baseUrl("https://foobar.com")
-      .radiuses(100, Double.POSITIVE_INFINITY, 100)
+      .radiuses(radiuses)
       .build();
 
     assertEquals("100;unlimited;100",
       client.cloneCall().request().url().queryParameter("radiuses"));
+  }
+
+  @Test
+  public void radiusesListWithUnlimitedDistance() throws IOException {
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(13.4301, 52.5109));
+    coordinates.add(Point.fromLngLat(13.4265, 52.5080));
+    coordinates.add(Point.fromLngLat(13.4316, 52.5021));
+
+    List<Double> radiuses = new ArrayList<>();
+    radiuses.add(100d);
+    radiuses.add(Double.POSITIVE_INFINITY);
+    radiuses.add(100d);
+
+    MapboxDirections client = MapboxDirections.builder()
+            .accessToken(ACCESS_TOKEN)
+            .origin(coordinates.get(0))
+            .addWaypoint(coordinates.get(1))
+            .destination(coordinates.get(2))
+            .baseUrl("https://foobar.com")
+            .radiuses(radiuses)
+            .build();
+
+    assertEquals("100;unlimited;100",
+            client.cloneCall().request().url().queryParameter("radiuses"));
   }
 
   @Test
@@ -560,7 +720,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .origin(Point.fromLngLat(1.234,2.345))
       .addWaypoint(Point.fromLngLat(13.493,9.958))
       .destination(Point.fromLngLat(5.29838,4.42189))
-      .annotations(DirectionsCriteria.ANNOTATION_MAXSPEED)
+      .addAnnotation(DirectionsCriteria.ANNOTATION_MAXSPEED)
       .build();
 
     assertThat(directions.cloneCall().request().url().toString(),
@@ -628,12 +788,18 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test
   public void sanityApproachesInstructions() throws Exception {
+    List<String> approaches = new ArrayList<>();
+    approaches.add(APPROACH_UNRESTRICTED);
+    approaches.add(null);
+    approaches.add("");
+    approaches.add(APPROACH_CURB);
+
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .origin(Point.fromLngLat(1.0, 1.0))
       .addWaypoint(Point.fromLngLat(2.0, 2.0))
       .addWaypoint(Point.fromLngLat(3.0, 3.0))
       .destination(Point.fromLngLat(4.0, 4.0))
-      .addApproaches(APPROACH_UNRESTRICTED, null, "", APPROACH_CURB)
+      .approaches(approaches)
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -651,7 +817,7 @@ public class MapboxDirectionsTest extends TestUtils {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .origin(Point.fromLngLat(2.0, 2.0))
       .destination(Point.fromLngLat(4.0, 4.0))
-      .addApproaches(APPROACH_UNRESTRICTED)
+      .addApproach(APPROACH_UNRESTRICTED)
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -662,22 +828,31 @@ public class MapboxDirectionsTest extends TestUtils {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(
       startsWith("All approaches values must be one of curb, unrestricted"));
+
+    List<String> approaches = new ArrayList<>();
+    approaches.add(APPROACH_UNRESTRICTED);
+    approaches.add("restricted");
+
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .origin(Point.fromLngLat(2.0, 2.0))
       .destination(Point.fromLngLat(4.0, 4.0))
-      .addApproaches(APPROACH_UNRESTRICTED, "restricted")
+      .approaches(approaches)
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
   }
 
   @Test
-  public void testApproaches() throws Exception {
+  public void approaches() throws Exception {
+    List<String> approaches = new ArrayList<>();
+    approaches.add(APPROACH_UNRESTRICTED);
+    approaches.add(APPROACH_CURB);
+
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .profile(PROFILE_DRIVING)
       .origin(Point.fromLngLat(13.4301,52.5109))
       .destination(Point.fromLngLat(13.432508,52.501725))
-      .addApproaches(APPROACH_UNRESTRICTED, APPROACH_CURB)
+      .approaches(approaches)
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
       .build();
@@ -689,12 +864,37 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testRouteOptionsApproaches() throws Exception {
+  public void approachesList() throws Exception {
+    List<String> approaches = new ArrayList<>();
+    approaches.add(APPROACH_UNRESTRICTED);
+    approaches.add(APPROACH_CURB);
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .profile(PROFILE_DRIVING)
+            .origin(Point.fromLngLat(13.4301,52.5109))
+            .destination(Point.fromLngLat(13.432508,52.501725))
+            .approaches(approaches)
+            .accessToken(ACCESS_TOKEN)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    mapboxDirections.setCallFactory(null);
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+  }
+
+  @Test
+  public void routeOptionsApproaches() throws Exception {
+    List<String> approachesList = new ArrayList<>();
+    approachesList.add(APPROACH_UNRESTRICTED);
+    approachesList.add(APPROACH_CURB);
+
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .profile(PROFILE_DRIVING)
       .origin(Point.fromLngLat(13.4301,52.5109))
       .destination(Point.fromLngLat(13.432508,52.501725))
-      .addApproaches(APPROACH_UNRESTRICTED, APPROACH_CURB)
+      .approaches(approachesList)
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
       .build();
@@ -704,8 +904,34 @@ public class MapboxDirectionsTest extends TestUtils {
     RouteOptions routeOptions = response.body().routes().get(0).routeOptions();
 
 
-    String approaches = routeOptions.approaches();
-    assertEquals("unrestricted;curb", approaches);
+    List<String> approaches = routeOptions.approachesList();
+    assertEquals("unrestricted", approaches.get(0));
+    assertEquals("curb", approaches.get(1));
+  }
+
+  @Test
+  public void routeOptionsApproachesList() throws Exception {
+    List<String> approaches = new ArrayList<>();
+    approaches.add(APPROACH_UNRESTRICTED);
+    approaches.add(APPROACH_CURB);
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .profile(PROFILE_DRIVING)
+            .origin(Point.fromLngLat(13.4301,52.5109))
+            .destination(Point.fromLngLat(13.432508,52.501725))
+            .approaches(approaches)
+            .accessToken(ACCESS_TOKEN)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    mapboxDirections.setCallFactory(null);
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    RouteOptions routeOptions = response.body().routes().get(0).routeOptions();
+
+
+    List<String> result = routeOptions.approachesList();
+    assertEquals("unrestricted", result.get(0));
+    assertEquals("curb", result.get(1));
   }
 
   @Test(expected = ServicesException.class)
@@ -713,7 +939,7 @@ public class MapboxDirectionsTest extends TestUtils {
     MapboxDirections.builder()
             .origin(Point.fromLngLat(2.0, 2.0))
             .destination(Point.fromLngLat(4.0, 4.0))
-            .addWaypointIndices(0)
+            .addWaypointIndex(0)
             .baseUrl("https://foobar.com")
             .accessToken(ACCESS_TOKEN)
             .build();
@@ -725,7 +951,8 @@ public class MapboxDirectionsTest extends TestUtils {
             .origin(Point.fromLngLat(2.0, 2.0))
             .addWaypoint(Point.fromLngLat(3.0, 3.0))
             .destination(Point.fromLngLat(4.0, 4.0))
-            .addWaypointIndices(1, 2)
+            .addWaypointIndex(1)
+            .addWaypointIndex(2)
             .baseUrl("https://foobar.com")
             .accessToken(ACCESS_TOKEN)
             .build();
@@ -733,11 +960,15 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test(expected = ServicesException.class)
   public void build_exceptionThrownWhenWaypointDoNotEndWithLast() {
+    List<Integer> indices = new ArrayList<>();
+    indices.add(0);
+    indices.add(1);
+
     MapboxDirections.builder()
             .origin(Point.fromLngLat(2.0, 2.0))
             .addWaypoint(Point.fromLngLat(3.0, 3.0))
             .destination(Point.fromLngLat(4.0, 4.0))
-            .addWaypointIndices(0, 1)
+            .waypointIndices(indices)
             .baseUrl("https://foobar.com")
             .accessToken(ACCESS_TOKEN)
             .build();
@@ -745,11 +976,16 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test(expected = ServicesException.class)
   public void build_exceptionThrownWhenMiddleWaypointsAreWrong() {
+    List<Integer> indices = new ArrayList<>();
+    indices.add(0);
+    indices.add(3);
+    indices.add(2);
+
     MapboxDirections.builder()
             .origin(Point.fromLngLat(2.0, 2.0))
             .addWaypoint(Point.fromLngLat(3.0, 3.0))
             .destination(Point.fromLngLat(4.0, 4.0))
-            .addWaypointIndices(0, 3, 2)
+            .waypointIndices(indices)
             .baseUrl("https://foobar.com")
             .accessToken(ACCESS_TOKEN)
             .build();
@@ -757,11 +993,16 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test
   public void sanityWaypointNamesInstructions() throws Exception {
+    List<String> names = new ArrayList<>();
+    names.add("Home");
+    names.add("Store");
+    names.add("Work");
+
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .origin(Point.fromLngLat(1.0, 1.0))
       .addWaypoint(Point.fromLngLat(2.0, 2.0))
       .destination(Point.fromLngLat(4.0, 4.0))
-      .addWaypointNames("Home", "Store", "Work")
+      .waypointNames(names)
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -771,7 +1012,30 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testWithWaypointNames() throws Exception {
+  public void sanityWaypointNamesListInstructions() throws Exception {
+    List<String> names = new ArrayList<>();
+    names.add("Home");
+    names.add("Store");
+    names.add("Work");
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .origin(Point.fromLngLat(1.0, 1.0))
+            .addWaypoint(Point.fromLngLat(2.0, 2.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .waypointNames(names)
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .build();
+    assertNotNull(mapboxDirections);
+    assertEquals("Home;Store;Work",
+            mapboxDirections.cloneCall().request().url().queryParameter("waypoint_names"));
+  }
+
+  @Test
+  public void withWaypointNames() throws Exception {
+    List<String> names = new ArrayList<>();
+    names.add("Home");
+    names.add("Work");
 
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .profile(PROFILE_CYCLING)
@@ -780,7 +1044,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .steps(true)
       .voiceInstructions(true)
       .voiceUnits(DirectionsCriteria.IMPERIAL)
-      .addWaypointNames("Home", "Work")
+      .waypointNames(names)
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
       .build();
@@ -792,14 +1056,43 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testWithWaypointTargets() throws Exception {
+  public void withWaypointNamesList() throws Exception {
+    List<String> names = new ArrayList<>();
+    names.add("Home");
+    names.add("Work");
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .profile(PROFILE_CYCLING)
+            .origin(Point.fromLngLat(-122.42,37.78))
+            .destination(Point.fromLngLat(-77.03,38.91))
+            .steps(true)
+            .voiceInstructions(true)
+            .voiceUnits(DirectionsCriteria.IMPERIAL)
+            .waypointNames(names)
+            .accessToken(ACCESS_TOKEN)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    mapboxDirections.setCallFactory(null);
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+    assertEquals("Home", response.body().routes().get(0).routeOptions().waypointNamesList().get(0));
+    assertEquals("Work", response.body().routes().get(0).routeOptions().waypointNamesList().get(1));
+  }
+
+  @Test
+  public void withWaypointTargets() throws Exception {
+    List<Point> targets = new ArrayList<>();
+    targets.add(null);
+    targets.add( Point.fromLngLat(-6.799936294555664,61.99987216574813));
 
     MapboxDirections mapboxDirections = MapboxDirections.builder()
             .profile(PROFILE_DRIVING_TRAFFIC)
             .origin(Point.fromLngLat(-6.80904429026134,62.00015328799685))
             .destination(Point.fromLngLat(-6.800065040588378,62.00012400993553))
             .steps(true)
-            .addWaypointTargets(null, Point.fromLngLat(-6.799936294555664,61.99987216574813))
+            .waypointTargets(targets)
             .accessToken(ACCESS_TOKEN)
             .baseUrl(mockUrl.toString())
             .build();
@@ -816,13 +1109,18 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testWithInterceptor() throws Exception {
+  public void withInterceptor() throws Exception {
     Interceptor interceptor = new Interceptor() {
       @Override
       public okhttp3.Response intercept(Chain chain) throws IOException {
         return null;
       }
     };
+
+    List<String> names = new ArrayList<>();
+    names.add("Home");
+    names.add("Work");
+
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .profile(PROFILE_CYCLING)
       .origin(Point.fromLngLat(-122.42,37.78))
@@ -830,7 +1128,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .steps(true)
       .voiceInstructions(true)
       .voiceUnits(DirectionsCriteria.IMPERIAL)
-      .addWaypointNames("Home", "Work")
+      .waypointNames(names)
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
       .interceptor(interceptor)
@@ -840,13 +1138,18 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testWithNetworkInterceptor() throws Exception {
+  public void withNetworkInterceptor() throws Exception {
     Interceptor interceptor = new Interceptor() {
       @Override
       public okhttp3.Response intercept(Chain chain) throws IOException {
         return null;
       }
     };
+
+    List<String> names = new ArrayList<>();
+    names.add("Home");
+    names.add("Work");
+
     MapboxDirections mapboxDirections = MapboxDirections.builder()
             .profile(PROFILE_CYCLING)
             .origin(Point.fromLngLat(-122.42,37.78))
@@ -854,7 +1157,7 @@ public class MapboxDirectionsTest extends TestUtils {
             .steps(true)
             .voiceInstructions(true)
             .voiceUnits(DirectionsCriteria.IMPERIAL)
-            .addWaypointNames("Home", "Work")
+            .waypointNames(names)
             .accessToken(ACCESS_TOKEN)
             .baseUrl(mockUrl.toString())
             .networkInterceptor(interceptor)
@@ -864,13 +1167,18 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testWithEventListener() throws Exception {
+  public void withEventListener() throws Exception {
     EventListener eventListener = new EventListener() {
       @Override
       public void callStart(Call call) {
         super.callStart(call);
       }
     };
+
+    List<String> names = new ArrayList<>();
+    names.add("Home");
+    names.add("Work");
+
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .profile(PROFILE_CYCLING)
       .origin(Point.fromLngLat(-122.42,37.78))
@@ -878,7 +1186,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .steps(true)
       .voiceInstructions(true)
       .voiceUnits(DirectionsCriteria.IMPERIAL)
-      .addWaypointNames("Home", "Work")
+      .waypointNames(names)
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
       .eventListener(eventListener)
@@ -889,7 +1197,11 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testPost() throws IOException {
+  public void post() throws IOException {
+    List<String> names = new ArrayList<>();
+    names.add("Home");
+    names.add("Work");
+
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .profile(PROFILE_CYCLING)
       .origin(Point.fromLngLat(-122.42,37.78))
@@ -897,7 +1209,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .steps(true)
       .voiceInstructions(true)
       .voiceUnits(DirectionsCriteria.IMPERIAL)
-      .addWaypointNames("Home", "Work")
+      .waypointNames(names)
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
       .post()
@@ -912,7 +1224,7 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testCallForUrlLength_longUrl() {
+  public void callForUrlLength_longUrl() {
     MapboxDirections.Builder builder = MapboxDirections.builder()
       .profile(PROFILE_CYCLING)
       .steps(true)
@@ -930,7 +1242,7 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testCallForUrlLength_shortUrl() {
+  public void callForUrlLength_shortUrl() {
     MapboxDirections.Builder builder = MapboxDirections.builder()
       .profile(PROFILE_CYCLING)
       .steps(true)
@@ -948,7 +1260,7 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testPostIsUsed() {
+  public void postIsUsed() {
     MapboxDirections.Builder builder = MapboxDirections.builder()
       .profile(PROFILE_CYCLING)
       .steps(true)
@@ -966,7 +1278,7 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void testGetIsUsed() {
+  public void getIsUsed() {
     MapboxDirections.Builder builder = MapboxDirections.builder()
       .profile(PROFILE_CYCLING)
       .steps(true)

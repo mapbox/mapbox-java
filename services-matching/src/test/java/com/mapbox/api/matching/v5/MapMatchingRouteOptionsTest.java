@@ -107,7 +107,7 @@ public class MapMatchingRouteOptionsTest extends TestUtils {
 
     // Never set values
     assertNull(matching.routeOptions().annotations());
-    assertNull(matching.routeOptions().bearings());
+    assertNull(matching.routeOptions().bearingsList());
   }
 
   @Test

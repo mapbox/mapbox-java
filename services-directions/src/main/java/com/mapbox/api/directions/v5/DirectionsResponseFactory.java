@@ -3,6 +3,7 @@ package com.mapbox.api.directions.v5;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.api.directions.v5.utils.ParseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,16 +55,16 @@ class DirectionsResponseFactory {
         RouteOptions.builder()
           .profile(mapboxDirections.profile())
           .coordinates(mapboxDirections.coordinates())
-          .waypointIndices(mapboxDirections.waypointIndices())
-          .waypointNames(mapboxDirections.waypointNames())
-          .waypointTargets(mapboxDirections.waypointTargets())
+          .waypointIndicesList(ParseUtils.parseToIntegers(mapboxDirections.waypointIndices()))
+          .waypointNamesList(ParseUtils.parseToStrings(mapboxDirections.waypointNames()))
+          .waypointTargetsList(ParseUtils.parseToPoints(mapboxDirections.waypointTargets()))
           .continueStraight(mapboxDirections.continueStraight())
           .annotations(mapboxDirections.annotation())
-          .approaches(mapboxDirections.approaches())
-          .bearings(mapboxDirections.bearing())
+          .approachesList(ParseUtils.parseToStrings(mapboxDirections.approaches()))
+          .bearingsList(ParseUtils.parseToListOfListOfDoubles(mapboxDirections.bearing()))
           .alternatives(mapboxDirections.alternatives())
           .language(mapboxDirections.language())
-          .radiuses(mapboxDirections.radius())
+          .radiusesList(ParseUtils.parseToDoubles(mapboxDirections.radius()))
           .user(mapboxDirections.user())
           .voiceInstructions(mapboxDirections.voiceInstructions())
           .bannerInstructions(mapboxDirections.bannerInstructions())
