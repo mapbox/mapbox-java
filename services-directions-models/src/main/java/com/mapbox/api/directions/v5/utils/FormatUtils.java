@@ -125,12 +125,26 @@ public class FormatUtils {
 
     List<String> bearingsToJoin = new ArrayList<>();
     for (List<Double> bearing : bearings) {
-      if (bearing == null || bearing.size() == 0) {
+      if (bearing == null) {
         bearingsToJoin.add(null);
       } else {
-        bearingsToJoin.add(String.format(Locale.US, "%s,%s",
-            formatCoordinate(bearing.get(0)),
-            formatCoordinate(bearing.get(1))));
+        if (bearing.size() != 2) {
+          throw new RuntimeException("Bearing size should be 2.");
+        }
+
+        Double angle = bearing.get(0);
+        Double tolerance = bearing.get(1);
+        if (angle == null || tolerance == null) {
+          bearingsToJoin.add(null);
+        } else {
+          if (angle < 0 || angle > 360 || tolerance < 0 || tolerance > 360) {
+            throw new RuntimeException("Angle and tolerance have to be from 0 to 360.");
+          }
+
+          bearingsToJoin.add(String.format(Locale.US, "%s,%s",
+              formatCoordinate(angle),
+              formatCoordinate(tolerance)));
+        }
       }
     }
     return join(";", bearingsToJoin);

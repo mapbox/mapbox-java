@@ -25,8 +25,11 @@ import java.util.List;
 abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
 
 
-  protected void writePoint(JsonWriter out, Point value) throws  IOException {
-    writePointList(out, value.coordinates());
+  protected void writePoint(JsonWriter out, Point point) throws  IOException {
+    if (point == null) {
+      return;
+    }
+    writePointList(out, point.coordinates());
   }
 
   protected Point readPoint(JsonReader in) throws IOException {

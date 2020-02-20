@@ -471,6 +471,33 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void addNullBearings_doesGetFormattedInUrlCorrectly() throws Exception {
+    List<Double> bearing1 = new ArrayList<>();
+    bearing1.add(45d);
+    bearing1.add(90d);
+
+    List<Double> bearing2 = new ArrayList<>();
+    bearing2.add(2d);
+    bearing2.add(90d);
+
+    List<List<Double>> bearings = new ArrayList<>();
+    bearings.add(null);
+    bearings.add(null);
+    bearings.add(bearing1);
+    bearings.add(bearing2);
+    bearings.add(null);
+
+    MapboxDirections directions = MapboxDirections.builder()
+        .destination(Point.fromLngLat(13.4930, 9.958))
+        .origin(Point.fromLngLat(1.234, 2.345))
+        .bearings(bearings)
+        .accessToken(ACCESS_TOKEN)
+        .build();
+    assertEquals(";;45,90;2,90;",
+        directions.cloneCall().request().url().queryParameter("bearings"));
+  }
+
+  @Test
   public void bearing_doesGetFormattedInUrlCorrectly() throws Exception {
     List<List<Double>> bearings = new ArrayList<>();
     bearings.add(Arrays.asList(45d, 90d));
