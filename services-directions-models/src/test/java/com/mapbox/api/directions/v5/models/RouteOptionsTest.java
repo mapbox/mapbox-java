@@ -91,12 +91,14 @@ public class RouteOptionsTest {
     bearing.add(5.1);
     bearing.add(7.4);
 
-    assertEquals(";5.1,7.4", routeOptions.bearings());
+    assertEquals(";5.1,7.4;;", routeOptions.bearings());
 
     List<List<Double>> bearings = routeOptions.bearingsList();
-    assertEquals(2, bearings.size());
+    assertEquals(4, bearings.size());
     assertEquals(null, bearings.get(0));
     assertEquals(bearing, bearings.get(1));
+    assertEquals(null, bearings.get(2));
+    assertEquals(null, bearings.get(3));
   }
 
   @Test

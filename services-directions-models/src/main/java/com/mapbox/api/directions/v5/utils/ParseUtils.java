@@ -138,7 +138,7 @@ public class ParseUtils {
     }
 
     List<List<Double>> result = new ArrayList<>();
-    String[] pairs = original.split(SEMICOLON);
+    String[] pairs = original.split(SEMICOLON, -1);
     for (String pair : pairs) {
       if (pair.isEmpty()) {
         result.add(null);

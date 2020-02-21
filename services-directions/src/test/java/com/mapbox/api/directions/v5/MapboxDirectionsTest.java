@@ -8,6 +8,7 @@ import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
@@ -495,6 +496,27 @@ public class MapboxDirectionsTest extends TestUtils {
         .build();
     assertEquals(";;45,90;2,90;",
         directions.cloneCall().request().url().queryParameter("bearings"));
+  }
+
+  @Test
+  public void checksParseToListOfListOfDoublesEmptyTrailing() {
+    List<List<Double>> bearings = ParseUtils.parseToListOfListOfDoubles(";;45,90;2,90;");
+
+    assertEquals(5, bearings.size());
+
+    List<Double> bearing1 = new ArrayList<>();
+    bearing1.add(45d);
+    bearing1.add(90d);
+
+    List<Double> bearing2 = new ArrayList<>();
+    bearing2.add(2d);
+    bearing2.add(90d);
+
+    assertEquals(null, bearings.get(0));
+    assertEquals(null, bearings.get(1));
+    assertEquals(bearing1, bearings.get(2));
+    assertEquals(bearing2, bearings.get(3));
+    assertEquals(null, bearings.get(4));
   }
 
   @Test

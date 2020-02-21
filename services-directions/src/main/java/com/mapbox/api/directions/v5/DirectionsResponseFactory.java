@@ -59,7 +59,7 @@ class DirectionsResponseFactory {
           .waypointNamesList(ParseUtils.parseToStrings(mapboxDirections.waypointNames()))
           .waypointTargetsList(ParseUtils.parseToPoints(mapboxDirections.waypointTargets()))
           .continueStraight(mapboxDirections.continueStraight())
-          .annotations(mapboxDirections.annotation())
+          .annotationsList(ParseUtils.parseToStrings(mapboxDirections.annotation()))
           .approachesList(ParseUtils.parseToStrings(mapboxDirections.approaches()))
           .bearingsList(ParseUtils.parseToListOfListOfDoubles(mapboxDirections.bearing()))
           .alternatives(mapboxDirections.alternatives())
