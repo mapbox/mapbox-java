@@ -658,11 +658,7 @@ public abstract class MapboxDirections extends
      */
     public Builder addBearing(@Nullable @FloatRange(from = 0, to = 360) Double angle,
                               @Nullable @FloatRange(from = 0, to = 360) Double tolerance) {
-      if (angle == null || tolerance == null) {
-        bearings.add(new ArrayList<Double>());
-      } else {
-        bearings.add(Arrays.asList(angle, tolerance));
-      }
+      bearings.add(Arrays.asList(angle, tolerance));
       return this;
     }
 
@@ -679,24 +675,7 @@ public abstract class MapboxDirections extends
      * @return this builder for chaining options together
      */
     public Builder bearings(@NonNull List<List<Double>> bearings) {
-      List<List<Double>> newBearings = new ArrayList<>();
-      for (List<Double> bearing : bearings) {
-        if (bearing.size() != 2) {
-          throw new ServicesException("Bearing size should be 2.");
-        }
-        Double angle = bearing.get(0);
-        Double tolerance = bearing.get(1);
-        if (angle == null || tolerance == null) {
-          newBearings.add(new ArrayList<Double>());
-        } else {
-          if (angle < 0 || angle > 360 || tolerance < 0 || tolerance > 360) {
-            throw new ServicesException("Angle and tolerance have to be from 0 to 360.");
-          }
-          newBearings.add(Arrays.asList(angle, tolerance));
-        }
-      }
-
-      this.bearings = newBearings;
+      this.bearings = bearings;
       return this;
     }
 

@@ -481,13 +481,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Must be used with {@link RouteOptions#steps()} = true.
    * @return  a list of Points representing coordinate pairs for drop-off locations
    * @since 4.3.0
-   * @deprecated use {@link #waypointTargetsList()}
    */
+  @SerializedName("waypoint_targets")
   @Nullable
-  @Deprecated
-  public String waypointTargets() {
-    return FormatUtils.formatPointsList(waypointTargetsList());
-  }
+  public abstract String waypointTargets();
 
   /**
    * A list of points used to specify drop-off
@@ -499,9 +496,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Must be used with {@link RouteOptions#steps()} = true.
    * @return  a list of Points representing coordinate pairs for drop-off locations
    */
-  @SerializedName("waypoint_targets")
   @Nullable
-  public abstract List<Point> waypointTargetsList();
+  public List<Point> waypointTargetsList() {
+    return ParseUtils.parseToPoints(waypointTargets());
+  }
 
   /**
    * To be used to specify settings for use with the walking profile.
@@ -1029,16 +1027,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param waypointTargets list of coordinate pairs for drop-off locations (;)
      * @return this builder for chaining options together
      * @since 4.3.0
-     * @deprecated use {@link #waypointTargetsList(List)}
      */
-    @Deprecated
-    public Builder waypointTargets(@NonNull String waypointTargets) {
-      List<Point> targets = ParseUtils.parseToPoints(waypointTargets);
-      if (targets != null) {
-        waypointTargetsList(targets);
-      }
-      return this;
-    }
+    public abstract Builder waypointTargets(@NonNull String waypointTargets);
 
     /**
      * A list of coordinate pairs used to specify drop-off
@@ -1054,7 +1044,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param waypointTargets list of Points for drop-off locations
      * @return this builder for chaining options together
      */
-    public abstract Builder waypointTargetsList(@NonNull List<Point> waypointTargets);
+    public Builder waypointTargetsList(@NonNull List<Point> waypointTargets) {
+      waypointTargets(FormatUtils.formatPointsList(waypointTargets));
+      return this;
+    }
 
     /**
      * To be used to specify settings for use with the walking profile.
