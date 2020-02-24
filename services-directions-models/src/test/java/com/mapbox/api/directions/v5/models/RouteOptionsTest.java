@@ -16,6 +16,8 @@ import static org.junit.Assert.assertEquals;
 
 public class RouteOptionsTest {
 
+  private static final String ROUTE_OPTIONS_JSON = "{\"baseUrl\":\"base_url\",\"user\":\"user\",\"profile\":\"profile\",\"coordinates\":[[1.0,2.0],[3.0,4.0]],\"access_token\":\"token\",\"uuid\":\"requestUuid\",\"waypoint_targets\":\";33,44;55,66\"}";
+
   @Test
   public void toBuilder() {
     RouteOptions routeOptions = routeOptions();
@@ -257,7 +259,7 @@ public class RouteOptionsTest {
         .waypointTargets(targetsStr)
         .build();
 
-    assertEquals("1.2,3.4;;;5.65,7.123", routeOptions.waypointTargets());
+    assertEquals("1.2,3.4;;;5.65,7.123;;;", routeOptions.waypointTargets());
 
     List<Point> targets = routeOptions.waypointTargetsList();
     assertEquals(4, targets.size());
@@ -320,6 +322,50 @@ public class RouteOptionsTest {
 
     assertEquals(annotations, routeOptions.annotationsList());
     assertEquals("congestion;distance;maxspeed;speed", routeOptions.annotations());
+  }
+
+  @Test
+  public void waypointTargetsStringToJson() {
+    RouteOptions options = routeOptions().toBuilder()
+        .waypointTargets(";33,44;55,66")
+        .build();
+
+    String json = options.toJson();
+
+    assertEquals(ROUTE_OPTIONS_JSON, json);
+  }
+
+  @Test
+  public void waypointTargetsListToJson() {
+    List<Point> waypointTargets = new ArrayList<>();
+    waypointTargets.add(null);
+    waypointTargets.add(Point.fromLngLat(33, 44));
+    waypointTargets.add(Point.fromLngLat(55, 66));
+
+    RouteOptions options = routeOptions().toBuilder()
+        .waypointTargetsList(waypointTargets)
+        .build();
+
+    String json = options.toJson();
+
+    assertEquals(ROUTE_OPTIONS_JSON, json);
+  }
+
+  @Test
+  public void waypointTargetsStringFromJson() {
+    RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(";33,44;55,66", options.waypointTargets());
+  }
+
+  @Test
+  public void waypointTargetsListFromJson() {
+    RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(3, options.waypointTargetsList().size());
+    assertEquals(null, options.waypointTargetsList().get(0));
+    assertEquals(Point.fromLngLat(33, 44), options.waypointTargetsList().get(1));
+    assertEquals(Point.fromLngLat(55, 66), options.waypointTargetsList().get(2));
   }
 
   private RouteOptions routeOptions() {
