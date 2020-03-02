@@ -124,13 +124,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a string representing the radiuses separated by ;.
    * @since 3.0.0
-   * @deprecated use {@link #radiusesList()} ()}
    */
   @Nullable
-  @Deprecated
-  public String radiuses() {
-    return FormatUtils.formatRadiuses(radiusesList());
-  }
+  public abstract String radiuses();
 
   /**
    * The maximum distance a coordinate can be moved to snap to the road network in meters. There
@@ -140,7 +136,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return a list of radiuses
    */
   @Nullable
-  public abstract List<Double> radiusesList();
+  public List<Double> radiusesList() {
+    return ParseUtils.parseToDoubles(radiuses());
+  }
 
   /**
    * Influences the direction in which a route starts from a waypoint. Used to filter the road
@@ -155,13 +153,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return a string representing the bearings with the ; separator. Angle and degrees for every
    *   bearing value are comma-separated.
    * @since 3.0.0
-   * @deprecated use {@link #bearingsList()}
    */
   @Nullable
-  @Deprecated
-  public String bearings() {
-    return FormatUtils.formatBearings(bearingsList());
-  }
+  public abstract String bearings();
 
   /**
    * Influences the direction in which a route starts from a waypoint. Used to filter the road
@@ -176,9 +170,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return a List of list of doubles representing the bearings used in the original request.
    *         The first value in the list is the angle, the second one is the degrees.
    */
-  @SerializedName("bearings")
   @Nullable
-  public abstract List<List<Double>> bearingsList();
+  public List<List<Double>> bearingsList() {
+    return ParseUtils.parseToListOfListOfDoubles(bearings());
+  }
 
   /**
    * The allowed direction of travel when departing intermediate waypoints. If true, the route
@@ -260,14 +255,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a string containing any of the annotations that were used during the request
    * @since 3.0.0
-   *
-   * @deprecated use {@link #annotationsList()}
    */
-  @Deprecated
   @Nullable
-  public String annotations() {
-    return FormatUtils.join(";", annotationsList(), true);
-  }
+  public abstract String annotations();
 
   /**
    * A list of annotations. Defines whether to return additional metadata along the
@@ -282,9 +272,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a list of annotations that were used during the request
    */
-  @SerializedName("annotations")
   @Nullable
-  public abstract List<String> annotationsList();
+  public List<String> annotationsList() {
+    return ParseUtils.parseToStrings(annotations(), ",");
+  }
 
   /**
    * Exclude certain road types from routing. The default is to not exclude anything from the
@@ -378,13 +369,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a string representing approaches for each waypoint
    * @since 3.2.0
-   * @deprecated use {@link #approachesList()}
    */
-  @Deprecated
   @Nullable
-  public String approaches() {
-    return FormatUtils.formatApproaches(approachesList());
-  }
+  public abstract String approaches();
 
   /**
    * Indicates from which side of the road to approach a waypoint.
@@ -399,9 +386,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a list of strings representing approaches for each waypoint
    */
-  @SerializedName("approaches")
   @Nullable
-  public abstract List<String> approachesList();
+  public List<String> approachesList() {
+    return ParseUtils.parseToStrings(approaches());
+  }
 
   /**
    * Indicates which input coordinates should be treated as waypoints.
@@ -414,13 +402,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a string representing indices to be used as waypoints
    * @since 4.4.0
-   * @deprecated use {@link #waypointIndicesList()}
    */
+  @SerializedName("waypoints")
   @Nullable
-  @Deprecated
-  public String waypointIndices() {
-    return FormatUtils.join(";", waypointIndicesList());
-  }
+  public abstract String waypointIndices();
 
   /**
    * Indicates which input coordinates should be treated as waypoints.
@@ -433,9 +418,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a List of Integers representing indices to be used as waypoints
    */
-  @SerializedName("waypoints")
   @Nullable
-  public abstract List<Integer> waypointIndicesList();
+  public List<Integer> waypointIndicesList() {
+    return ParseUtils.parseToIntegers(waypointIndices());
+  }
 
   /**
    * A semicolon-separated list of custom names for entries in the list of
@@ -447,13 +433,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Must be used in conjunction with {@link RouteOptions#steps()} = true.
    * @return  a string representing names for each waypoint
    * @since 3.3.0
-   * @deprecated use {@link #waypointNamesList()}
    */
+  @SerializedName("waypoint_names")
   @Nullable
-  @Deprecated
-  public String waypointNames() {
-    return FormatUtils.formatWaypointNames(waypointNamesList());
-  }
+  public abstract String waypointNames();
 
   /**
    * A semicolon-separated list of custom names for entries in the list of
@@ -466,10 +449,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return  a list of strings representing names for each waypoint
    */
-  @SerializedName("waypoint_names")
   @Nullable
-  public abstract List<String> waypointNamesList();
-
+  public List<String> waypointNamesList() {
+    return ParseUtils.parseToStrings(waypointNames());
+  }
 
   /**
    * A semicolon-separated list of coordinate pairs used to specify drop-off
@@ -637,16 +620,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param radiuses a String of radius values, each separated by ;.
      * @return this builder for chaining options together
      * @since 3.0.0
-     * @deprecated use {@link #radiusesList(List)}
      */
-    @Deprecated
-    public Builder radiuses(@NonNull String radiuses) {
-      List<Double> radiusesList = ParseUtils.parseToDoubles(radiuses);
-      if (radiusesList != null) {
-        radiusesList(radiusesList);
-      }
-      return this;
-    }
+    public abstract Builder radiuses(@NonNull String radiuses);
 
     /**
      * The maximum distance a coordinate can be moved to snap to the road network in meters. There
@@ -656,7 +631,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param radiuses a list of radius values
      * @return this builder for chaining options together
      */
-    public abstract Builder radiusesList(@NonNull List<Double> radiuses);
+    public Builder radiusesList(@NonNull List<Double> radiuses) {
+      String result = FormatUtils.formatRadiuses(radiuses);
+      if (result != null) {
+        radiuses(result);
+      }
+      return this;
+    }
 
     /**
      * Influences the direction in which a route starts from a waypoint. Used to filter the road
@@ -673,16 +654,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *                 for every bearing value are comma-separated.
      * @return this builder for chaining options together
      * @since 3.0.0
-     * @deprecated use {@link #bearingsList(List)}
      */
-    @Deprecated
-    public Builder bearings(@NonNull String bearings) {
-      List<List<Double>> bearingsList = ParseUtils.parseToListOfListOfDoubles(bearings);
-      if (bearingsList != null) {
-        bearingsList(bearingsList);
-      }
-      return this;
-    }
+    public abstract Builder bearings(@NonNull String bearings);
 
     /**
      * Influences the direction in which a route starts from a waypoint. Used to filter the road
@@ -700,7 +673,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *                 degrees.
      * @return this builder for chaining options together
      */
-    public abstract Builder bearingsList(@NonNull List<List<Double>> bearings);
+    public Builder bearingsList(@NonNull List<List<Double>> bearings) {
+      String result = FormatUtils.formatBearings(bearings);
+      if (result != null) {
+        bearings(result);
+      }
+      return this;
+    }
 
     /**
      * Sets the allowed direction of travel when departing intermediate waypoints. If true, the
@@ -787,16 +766,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *                    requested
      * @return this builder for chaining options together
      * @since 3.0.0
-     * @deprecated use {@link #annotationsList(List)}
      */
-    @Deprecated
-    public Builder annotations(@NonNull String annotations) {
-      List<String>  annotationsList = ParseUtils.parseToStrings(annotations);
-      if (annotationsList != null) {
-        annotationsList(annotationsList);
-      }
-      return this;
-    }
+    public abstract Builder annotations(@NonNull String annotations);
 
     /**
      * Whether to return additional metadata along the route. Possible values are:
@@ -813,7 +784,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param annotations a list of annotations
      * @return this builder for chaining options together
      */
-    public abstract Builder annotationsList(@NonNull List<String> annotations);
+    public Builder annotationsList(@NonNull List<String> annotations) {
+      String result = FormatUtils.join(",", annotations);
+      if (result != null) {
+        annotations(result);
+      }
+      return this;
+    }
 
     /**
      * Whether to return SSML marked-up text for voice guidance along the route (true) or not
@@ -906,16 +883,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param approaches unrestricted, curb or omitted (;)
      * @return this builder for chaining options together
      * @since 3.2.0
-     * @deprecated use {@link #approachesList(List)}
      */
-    @Deprecated
-    public Builder approaches(@NonNull String approaches) {
-      List<String>  approachesList = ParseUtils.parseToStrings(approaches);
-      if (approachesList != null) {
-        approachesList(approachesList);
-      }
-      return this;
-    }
+    public abstract Builder approaches(@NonNull String approaches);
 
     /**
      * Indicates from which side of the road to approach a waypoint.
@@ -933,7 +902,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param approaches a list of Strings
      * @return this builder for chaining options together
      */
-    public abstract Builder approachesList(@NonNull List<String> approaches);
+    public Builder approachesList(@NonNull List<String> approaches) {
+      String result = FormatUtils.formatApproaches(approaches);
+      if (result != null) {
+        approaches(result);
+      }
+      return this;
+    }
 
     /**
      * Indicates which input coordinates should be treated as waypoints.
@@ -948,16 +923,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param waypointIndices to be used as waypoints
      * @return this builder for chaining options together
      * @since 4.4.0
-     * @deprecated use {@link #waypointIndicesList(List)}
      */
-    @Deprecated
-    public Builder waypointIndices(@NonNull String waypointIndices) {
-      List<Integer> indices = ParseUtils.parseToIntegers(waypointIndices);
-      if (indices != null) {
-        waypointIndicesList(indices);
-      }
-      return this;
-    }
+    public abstract Builder waypointIndices(@NonNull String waypointIndices);
 
     /**
      * Indicates which input coordinates should be treated as waypoints.
@@ -972,7 +939,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param indices a list to be used as waypoints
      * @return this builder for chaining options together
      */
-    public abstract Builder waypointIndicesList(@NonNull List<Integer> indices);
+    public Builder waypointIndicesList(@NonNull List<Integer> indices) {
+      String result = FormatUtils.join(";", indices);
+      if (result != null) {
+        waypointIndices(result);
+      }
+      return this;
+    }
 
     /**
      * A semicolon-separated list of custom names for entries in the list of
@@ -987,16 +960,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param waypointNames unrestricted, curb or omitted (;)
      * @return this builder for chaining options together
      * @since 3.3.0
-     * @deprecated use {@link #waypointNamesList(List)}
      */
-    @Deprecated
-    public Builder waypointNames(@NonNull String waypointNames) {
-      List<String> names = ParseUtils.parseToStrings(waypointNames);
-      if (names != null) {
-        waypointNamesList(names);
-      }
-      return this;
-    }
+    public abstract Builder waypointNames(@NonNull String waypointNames);
 
     /**
      * A semicolon-separated list of custom names for entries in the list of
@@ -1011,7 +976,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param waypointNames a list of Strings
      * @return this builder for chaining options together
      */
-    public abstract Builder waypointNamesList(@NonNull List<String> waypointNames);
+    public Builder waypointNamesList(@NonNull List<String> waypointNames) {
+      String result = FormatUtils.formatWaypointNames(waypointNames);
+      if (result != null) {
+        waypointNames(result);
+      }
+      return this;
+    }
 
     /**
      * A semicolon-separated list of coordinate pairs used to specify drop-off

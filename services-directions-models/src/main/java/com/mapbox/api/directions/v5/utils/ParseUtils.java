@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.utils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.mapbox.geojson.Point;
 import java.util.ArrayList;
@@ -42,19 +43,31 @@ public class ParseUtils {
   }
 
   /**
-   * Parse a String to a list of Strings.
+   * Parse a String to a list of Strings using ";" as a separator.
    *
    * @param original an original String.
    * @return List of Strings
    */
   @Nullable
   public static List<String> parseToStrings(@Nullable String original) {
+    return parseToStrings(original, SEMICOLON);
+  }
+
+  /**
+   * Parse a String to a list of Strings.
+   *
+   * @param original an original String.
+   * @param separator a String used as a separator.
+   * @return List of Strings
+   */
+  @Nullable
+  public static List<String> parseToStrings(@Nullable String original, @NonNull String separator) {
     if (original == null) {
       return null;
     }
 
     List<String> result = new ArrayList<>();
-    String[] strings = original.split(SEMICOLON);
+    String[] strings = original.split(separator, -1);
     for (String str : strings) {
       if (str != null) {
         if (str.isEmpty()) {
@@ -81,7 +94,7 @@ public class ParseUtils {
     }
 
     List<Point> points = new ArrayList<>();
-    String[] targets = original.split(SEMICOLON);
+    String[] targets = original.split(SEMICOLON, -1);
     for (String target : targets) {
       if (target != null) {
         if (target.isEmpty()) {
@@ -109,7 +122,7 @@ public class ParseUtils {
     }
 
     List<Double> doubles = new ArrayList<>();
-    String[] strings = original.split(SEMICOLON);
+    String[] strings = original.split(SEMICOLON, -1);
     for (String str : strings) {
       if (str != null) {
         if (str.isEmpty()) {
