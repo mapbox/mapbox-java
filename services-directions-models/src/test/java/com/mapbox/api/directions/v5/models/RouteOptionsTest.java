@@ -16,7 +16,8 @@ import static org.junit.Assert.assertEquals;
 
 public class RouteOptionsTest {
 
-  private static final String ROUTE_OPTIONS_JSON = "{\"baseUrl\":\"base_url\",\"user\":\"user\",\"profile\":\"profile\",\"coordinates\":[[1.0,2.0],[3.0,4.0]],\"access_token\":\"token\",\"uuid\":\"requestUuid\",\"waypoint_targets\":\";33,44;55,66\"}";
+  private static final String ROUTE_OPTIONS_JSON =
+      "{\"baseUrl\":\"https://api.mapbox.com\",\"user\":\"mapbox\",\"profile\":\"driving-traffic\",\"coordinates\":[[-122.4003312,37.7736941],[-122.4187529,37.7689715],[-122.4255172,37.7775835]],\"alternatives\":false,\"language\":\"ru\",\"radiuses\":\";unlimited;100\",\"bearings\":\"0,90;90,0;\",\"continue_straight\":false,\"roundabout_exits\":false,\"geometries\":\"polyline6\",\"overview\":\"full\",\"steps\":true,\"annotations\":\"congestion,distance,duration\",\"exclude\":\"toll\",\"voice_instructions\":true,\"banner_instructions\":true,\"voice_units\":\"metric\",\"access_token\":\"token\",\"uuid\":\"12345543221\",\"approaches\":\";curb;\",\"waypoints\":\"0;1;2\",\"waypoint_names\":\";two;\",\"waypoint_targets\":\";12.2,21.2;\"}";
 
   @Test
   public void toBuilder() {
@@ -49,14 +50,16 @@ public class RouteOptionsTest {
         .radiuses(radiusesStr)
         .build();
 
-    assertEquals(";5.1;;7.4", routeOptions.radiuses());
+    assertEquals(radiusesStr, routeOptions.radiuses());
 
     List<Double> radiuses = routeOptions.radiusesList();
-    assertEquals(4, radiuses.size());
+    assertEquals(6, radiuses.size());
     assertEquals(null, radiuses.get(0));
     assertEquals(Double.valueOf(5.1), radiuses.get(1));
     assertEquals(null, radiuses.get(2));
     assertEquals(Double.valueOf(7.4), radiuses.get(3));
+    assertEquals(null, radiuses.get(4));
+    assertEquals(null, radiuses.get(5));
   }
 
   @Test
@@ -138,15 +141,15 @@ public class RouteOptionsTest {
         .approaches(approachesStr)
         .build();
 
-    assertEquals(";" + APPROACH_CURB + ";" + ";" + APPROACH_UNRESTRICTED,
-        routeOptions.approaches());
+    assertEquals(approachesStr, routeOptions.approaches());
 
     List<String> approaches = routeOptions.approachesList();
-    assertEquals(4, approaches.size());
+    assertEquals(5, approaches.size());
     assertEquals(null, approaches.get(0));
     assertEquals(APPROACH_CURB, approaches.get(1));
     assertEquals(null, approaches.get(2));
     assertEquals(APPROACH_UNRESTRICTED, approaches.get(3));
+    assertEquals(null, approaches.get(4));
   }
 
   @Test
@@ -262,11 +265,14 @@ public class RouteOptionsTest {
     assertEquals("1.2,3.4;;;5.65,7.123;;;", routeOptions.waypointTargets());
 
     List<Point> targets = routeOptions.waypointTargetsList();
-    assertEquals(4, targets.size());
+    assertEquals(7, targets.size());
     assertEquals(Point.fromLngLat(1.2, 3.4), targets.get(0));
     assertEquals(null, targets.get(1));
     assertEquals(null, targets.get(2));
     assertEquals(Point.fromLngLat(5.65, 7.123), targets.get(3));
+    assertEquals(null, targets.get(4));
+    assertEquals(null, targets.get(5));
+    assertEquals(null, targets.get(6));
   }
 
   @Test
@@ -290,14 +296,14 @@ public class RouteOptionsTest {
 
   @Test
   public void annotationsString() {
-    String annotationsStr = ANNOTATION_MAXSPEED + ";" + ANNOTATION_DURATION + ";" + ";";
+    String annotationsStr = ANNOTATION_MAXSPEED + "," + ANNOTATION_DURATION;
 
     RouteOptions routeOptions = routeOptions()
         .toBuilder()
         .annotations(annotationsStr)
         .build();
 
-    assertEquals(ANNOTATION_MAXSPEED + ";" + ANNOTATION_DURATION, routeOptions.annotations());
+    assertEquals(annotationsStr, routeOptions.annotations());
 
     List<String> annotations = routeOptions.annotationsList();
     assertEquals(2, annotations.size());
@@ -312,8 +318,6 @@ public class RouteOptionsTest {
     annotations.add(ANNOTATION_DISTANCE);
     annotations.add(ANNOTATION_MAXSPEED);
     annotations.add(ANNOTATION_SPEED);
-    annotations.add(null);
-    annotations.add(null);
 
     RouteOptions routeOptions = routeOptions()
         .toBuilder()
@@ -321,65 +325,423 @@ public class RouteOptionsTest {
         .build();
 
     assertEquals(annotations, routeOptions.annotationsList());
-    assertEquals("congestion;distance;maxspeed;speed", routeOptions.annotations());
+    assertEquals("congestion,distance,maxspeed,speed", routeOptions.annotations());
   }
 
   @Test
-  public void waypointTargetsStringToJson() {
-    RouteOptions options = routeOptions().toBuilder()
-        .waypointTargets(";33,44;55,66")
-        .build();
+  public void baseUrlIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
 
-    String json = options.toJson();
-
-    assertEquals(ROUTE_OPTIONS_JSON, json);
+    assertEquals("https://api.mapbox.com", routeOptions.baseUrl());
   }
 
   @Test
-  public void waypointTargetsListToJson() {
-    List<Point> waypointTargets = new ArrayList<>();
-    waypointTargets.add(null);
-    waypointTargets.add(Point.fromLngLat(33, 44));
-    waypointTargets.add(Point.fromLngLat(55, 66));
+  public void userIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
 
-    RouteOptions options = routeOptions().toBuilder()
-        .waypointTargetsList(waypointTargets)
-        .build();
-
-    String json = options.toJson();
-
-    assertEquals(ROUTE_OPTIONS_JSON, json);
+    assertEquals("mapbox", routeOptions.user());
   }
 
   @Test
-  public void waypointTargetsStringFromJson() {
+  public void profileIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("driving-traffic", routeOptions.profile());
+  }
+
+  @Test
+  public void coordinatesAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(3, routeOptions.coordinates().size());
+    assertEquals(Point.fromLngLat(-122.4003312, 37.7736941), routeOptions.coordinates().get(0));
+    assertEquals(Point.fromLngLat(-122.4187529, 37.7689715), routeOptions.coordinates().get(1));
+    assertEquals(Point.fromLngLat(-122.4255172, 37.7775835), routeOptions.coordinates().get(2));
+  }
+
+  @Test
+  public void alternativesAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(false, routeOptions.alternatives());
+  }
+
+  @Test
+  public void languageIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("ru", routeOptions.language());
+  }
+
+  @Test
+  public void radiusesAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(";unlimited;100", routeOptions.radiuses());
+  }
+
+  @Test
+  public void radiusesListIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(3, routeOptions.radiusesList().size());
+    assertEquals(null, routeOptions.radiusesList().get(0));
+    assertEquals(Double.valueOf(Double.POSITIVE_INFINITY), routeOptions.radiusesList().get(1));
+    assertEquals(Double.valueOf(100.0), routeOptions.radiusesList().get(2));
+  }
+
+  @Test
+  public void bearingsAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("0,90;90,0;", routeOptions.bearings());
+  }
+
+  @Test
+  public void bearingsListIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(3, routeOptions.bearingsList().size());
+    assertEquals(Double.valueOf(0), routeOptions.bearingsList().get(0).get(0));
+    assertEquals(Double.valueOf(90), routeOptions.bearingsList().get(0).get(1));
+    assertEquals(Double.valueOf(90), routeOptions.bearingsList().get(1).get(0));
+    assertEquals(Double.valueOf(0), routeOptions.bearingsList().get(1).get(1));
+    assertEquals(null, routeOptions.bearingsList().get(2));
+  }
+
+  @Test
+  public void continueStraightIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(false, routeOptions.continueStraight());
+  }
+
+  @Test
+  public void roundaboutExitsIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(false, routeOptions.continueStraight());
+  }
+
+  @Test
+  public void geometriesAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("polyline6", routeOptions.geometries());
+  }
+
+  @Test
+  public void stepsAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(true, routeOptions.steps());
+  }
+
+  @Test
+  public void annotationsAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("congestion,distance,duration", routeOptions.annotations());
+  }
+
+  @Test
+  public void annotationsListIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(3, routeOptions.annotationsList().size());
+    assertEquals("congestion", routeOptions.annotationsList().get(0));
+    assertEquals("distance", routeOptions.annotationsList().get(1));
+    assertEquals("duration", routeOptions.annotationsList().get(2));
+  }
+
+  @Test
+  public void excludeIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("toll", routeOptions.exclude());
+  }
+
+  @Test
+  public void overviewIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("full", routeOptions.overview());
+  }
+
+  @Test
+  public void voiceInstructionsAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(true, routeOptions.voiceInstructions());
+  }
+
+  @Test
+  public void bannerInstructionsAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(true, routeOptions.bannerInstructions());
+  }
+
+  @Test
+  public void voiceUnitsAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("metric", routeOptions.voiceUnits());
+  }
+
+  @Test
+  public void accessTokenIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("token", routeOptions.accessToken());
+  }
+
+  @Test
+  public void uuidIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("12345543221", routeOptions.requestUuid());
+  }
+
+  @Test
+  public void approachesStringIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(";curb;", routeOptions.approaches());
+  }
+
+  @Test
+  public void approachesListIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(3, routeOptions.approachesList().size());
+    assertEquals(null, routeOptions.approachesList().get(0));
+    assertEquals("curb", routeOptions.approachesList().get(1));
+    assertEquals(null, routeOptions.approachesList().get(2));
+  }
+
+  @Test
+  public void waypointIndicesStringIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals("0;1;2", routeOptions.waypointIndices());
+  }
+
+  @Test
+  public void waypointIndicesListIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(3, routeOptions.waypointIndicesList().size());
+    assertEquals(Integer.valueOf(0), routeOptions.waypointIndicesList().get(0));
+    assertEquals(Integer.valueOf(1), routeOptions.waypointIndicesList().get(1));
+    assertEquals(Integer.valueOf(2), routeOptions.waypointIndicesList().get(2));
+  }
+
+  @Test
+  public void waypointNamesStringIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(";two;", routeOptions.waypointNames());
+  }
+
+  @Test
+  public void waypointNamesListIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(3, routeOptions.waypointNamesList().size());
+    assertEquals(null, routeOptions.waypointNamesList().get(0));
+    assertEquals("two", routeOptions.waypointNamesList().get(1));
+    assertEquals(null, routeOptions.waypointNamesList().get(2));
+  }
+
+  @Test
+  public void waypointTargetsStringIsValid_fromJson() {
     RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
 
-    assertEquals(";33,44;55,66", options.waypointTargets());
+    assertEquals(";12.2,21.2;", options.waypointTargets());
   }
 
   @Test
-  public void waypointTargetsListFromJson() {
+  public void waypointTargetsListIsValid_fromJson() {
     RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
 
     assertEquals(3, options.waypointTargetsList().size());
     assertEquals(null, options.waypointTargetsList().get(0));
-    assertEquals(Point.fromLngLat(33, 44), options.waypointTargetsList().get(1));
-    assertEquals(Point.fromLngLat(55, 66), options.waypointTargetsList().get(2));
+    assertEquals(Point.fromLngLat(12.2, 21.2), options.waypointTargetsList().get(1));
+    assertEquals(null, options.waypointTargetsList().get(2));
+  }
+
+  @Test
+  public void routeOptions_toJson() {
+    RouteOptions options = routeOptions();
+
+    assertEquals(ROUTE_OPTIONS_JSON, options.toJson());
+  }
+
+  @Test
+  public void radiusesList_toJson() {
+    RouteOptions options = routeOptions().toBuilder()
+        .radiuses("")
+        .build();
+
+    List<Double> radiuses = new ArrayList<>();
+    radiuses.add(null);
+    radiuses.add(Double.POSITIVE_INFINITY);
+    radiuses.add(100.0);
+
+    RouteOptions finalOptions = options.toBuilder()
+        .radiusesList(radiuses)
+        .build();
+
+    assertEquals(ROUTE_OPTIONS_JSON, finalOptions.toJson());
+  }
+
+  @Test
+  public void bearingsList_toJson() {
+    RouteOptions options = routeOptions().toBuilder()
+        .bearings("")
+        .build();
+
+    List<Double> originBearing = new ArrayList<>();
+    originBearing.add(0.0);
+    originBearing.add(90.0);
+    List<Double> waypointBearing = new ArrayList<>();
+    waypointBearing.add(90.0);
+    waypointBearing.add(0.0);
+
+    List<List<Double>> bearings = new ArrayList<>();
+    bearings.add(originBearing);
+    bearings.add(waypointBearing);
+    bearings.add(null);
+
+    RouteOptions finalOptions = options.toBuilder()
+        .bearingsList(bearings)
+        .build();
+
+    assertEquals(ROUTE_OPTIONS_JSON, finalOptions.toJson());
+  }
+
+  @Test
+  public void annotationsList_toJson() {
+    RouteOptions options = routeOptions().toBuilder()
+        .annotations("")
+        .build();
+
+    List<String> annotations = new ArrayList<>();
+    annotations.add("congestion");
+    annotations.add("distance");
+    annotations.add("duration");
+
+    RouteOptions finalOptions = options.toBuilder()
+        .annotationsList(annotations)
+        .build();
+
+    assertEquals(ROUTE_OPTIONS_JSON, finalOptions.toJson());
+  }
+
+  @Test
+  public void approachesList_toJson() {
+    RouteOptions options = routeOptions().toBuilder()
+        .approaches("")
+        .build();
+
+    List<String> approaches = new ArrayList<>();
+    approaches.add(null);
+    approaches.add("curb");
+    approaches.add(null);
+
+    RouteOptions finalOptions = options.toBuilder()
+        .approachesList(approaches)
+        .build();
+
+    assertEquals(ROUTE_OPTIONS_JSON, finalOptions.toJson());
+  }
+
+  @Test
+  public void waypointIndicesList_toJson() {
+    RouteOptions options = routeOptions().toBuilder()
+        .waypointIndices("")
+        .build();
+
+    List<Integer> waypoints = new ArrayList<>();
+    waypoints.add(0);
+    waypoints.add(1);
+    waypoints.add(2);
+
+    RouteOptions finalOptions = options.toBuilder()
+        .waypointIndicesList(waypoints)
+        .build();
+
+    assertEquals(ROUTE_OPTIONS_JSON, finalOptions.toJson());
+  }
+
+  @Test
+  public void waypointNamesList_toJson() {
+    RouteOptions options = routeOptions().toBuilder()
+        .waypointNames("")
+        .build();
+
+    List<String> waypointNames = new ArrayList<>();
+    waypointNames.add(null);
+    waypointNames.add("two");
+    waypointNames.add(null);
+
+    RouteOptions finalOptions = options.toBuilder()
+        .waypointNamesList(waypointNames)
+        .build();
+
+    assertEquals(ROUTE_OPTIONS_JSON, finalOptions.toJson());
+  }
+
+  @Test
+  public void waypointTargetsList_toJson() {
+    RouteOptions options = routeOptions().toBuilder()
+        .waypointTargets("")
+        .build();
+
+    List<Point> waypointTargets = new ArrayList<>();
+    waypointTargets.add(null);
+    waypointTargets.add(Point.fromLngLat(12.2, 21.2));
+    waypointTargets.add(null);
+
+    RouteOptions finalOptions = options.toBuilder()
+        .waypointTargetsList(waypointTargets)
+        .build();
+
+    assertEquals(ROUTE_OPTIONS_JSON, finalOptions.toJson());
   }
 
   private RouteOptions routeOptions() {
     List<Point> coordinates = new ArrayList<>();
-    coordinates.add(Point.fromLngLat(1.0, 2.0));
-    coordinates.add(Point.fromLngLat(3.0, 4.0));
+    coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
+    coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
+    coordinates.add(Point.fromLngLat(-122.4255172, 37.7775835));
 
     return RouteOptions.builder()
-        .accessToken("token")
-        .baseUrl("base_url")
+        .baseUrl("https://api.mapbox.com")
+        .user("mapbox")
+        .profile("driving-traffic")
         .coordinates(coordinates)
-        .user("user")
-        .profile("profile")
-        .requestUuid("requestUuid")
+        .alternatives(false)
+        .language("ru")
+        .radiuses(";unlimited;100")
+        .bearings("0,90;90,0;")
+        .continueStraight(false)
+        .roundaboutExits(false)
+        .geometries("polyline6")
+        .overview("full")
+        .steps(true)
+        .annotations("congestion,distance,duration")
+        .exclude("toll")
+        .voiceInstructions(true)
+        .bannerInstructions(true)
+        .voiceUnits("metric")
+        .accessToken("token")
+        .requestUuid("12345543221")
+        .approaches(";curb;")
+        .waypointIndices("0;1;2")
+        .waypointNames(";two;")
+        .waypointTargets(";12.2,21.2;")
         .build();
   }
 }
