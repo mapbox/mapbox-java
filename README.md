@@ -37,7 +37,7 @@ You'll find all of the documentation for this SDK on [our Mapbox Java documentat
 
 ## Using Snapshots
 
-If you want to test recent bugfixes or features that have not been packaged in an official release yet, you can use a `-SNAPSHOT` release of the current development version of the Mapbox Java SDK via Gradle, available on [Sonatype](https://oss.sonatype.org/content/repositories/snapshots/com/mapbox/mapboxsdk/). There are several different snapshots built nightly. Feel free to use any of the modules as needed.
+If you want to test recent bugfixes or features that have not been packaged in an official release yet, you can use a `-SNAPSHOT` release of the current development version of the Mapbox Java SDK via Gradle, available on [JFrog](https://oss.jfrog.org/artifactory/oss-snapshot-local/com/mapbox/mapboxsdk/). There are several different snapshots built nightly. Feel free to use any of the modules as needed.
 
 ```gradle
 repositories {
