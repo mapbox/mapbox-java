@@ -4,6 +4,14 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.1.0-beta.2 - March 23, 2020
+
+- Updated SNAPSHOT link in README [#1126](https://github.com/mapbox/mapbox-java/pull/1126)
+- Use Strings instead of Lists to store data inside RouteOptions [#1123](https://github.com/mapbox/mapbox-java/pull/1123)
+- Bearing formatting fix [#1121](https://github.com/mapbox/mapbox-java/pull/1121)
+- RouteOptions and MapboxDirections refactoring [#1118](https://github.com/mapbox/mapbox-java/pull/1118)
+- Bumped StaticMapCriteria guidance day and night to v4 [#1116](https://github.com/mapbox/mapbox-java/pull/1116)
+
 ### 5.1.0-beta.1 - January 24, 2020
 
 - Removed typo in `BannerView` class javadocs [#1111](https://github.com/mapbox/mapbox-java/pull/1111)
