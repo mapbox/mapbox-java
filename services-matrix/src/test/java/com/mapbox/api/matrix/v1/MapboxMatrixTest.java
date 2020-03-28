@@ -27,7 +27,9 @@ import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_DURATIO
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class MapboxMatrixTest extends TestUtils {
@@ -149,7 +151,13 @@ public class MapboxMatrixTest extends TestUtils {
     }
 
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Maximum of 25 coordinates are allowed for this API."));
+    thrown.expectMessage(startsWith(
+        "A maximum of 25 coordinates is the default " +
+            " allowed for this API. If your Mapbox account has been enabled by the" +
+            " Mapbox team to make a request with more than 25 coordinates, please use" +
+            " the builder's coordinateListSizeLimit() method and pass through your account" +
+            "-specific maximum."
+    ));
     MapboxMatrix.builder()
       .accessToken(ACCESS_TOKEN)
       .profile(DirectionsCriteria.PROFILE_DRIVING)
@@ -221,5 +229,60 @@ public class MapboxMatrixTest extends TestUtils {
     assertEquals(19711.7, response.body().durations().get(0)[2], DELTA);
     assertEquals(27192.3, response.body().distances().get(0)[2], DELTA);
     assertEquals("McAllister Street", response.body().destinations().get(0).name());
+  }
+
+  @Test
+  public void destinationListSizeLimitCheckThatCallWorks() throws ServicesException, IOException {
+    int total = 35;
+    ArrayList<Point> positions = new ArrayList<>();
+    for (int i = 0; i < total; i++) {
+      positions.add(Point.fromLngLat(0.0, 0.0));
+    }
+
+    MapboxMatrix client = MapboxMatrix.builder()
+        .accessToken(ACCESS_TOKEN)
+        .profile(DirectionsCriteria.PROFILE_DRIVING)
+        .coordinateListSizeLimit(50)
+        .coordinates(positions)
+        .build();
+
+    Response<MatrixResponse> response = client.executeCall();
+    assertFalse(response.isSuccessful());
+    assertNull(response.body());
+  }
+
+  @Test
+  public void build_invalidCoordinateAndDefaultMaxExceptionThrown() throws Exception {
+    int total = 35;
+    ArrayList<Point> positions = new ArrayList<>();
+    for (int i = 0; i < total; i++) {
+      positions.add(Point.fromLngLat(0.0, 0.0));
+    }
+
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("If you're going to use the coordinateListSizeLimit() method," +
+        " please pass through a number that's greater than the size of your coordinate list.");
+    MapboxMatrix.builder()
+        .accessToken(ACCESS_TOKEN)
+        .coordinateListSizeLimit(20)
+        .coordinates(positions)
+        .build();
+  }
+
+  @Test
+  public void build_invalidLessThanZeroDefaultMaxExceptionThrown() throws Exception {
+    int total = 20;
+    ArrayList<Point> positions = new ArrayList<>();
+    for (int i = 0; i < total; i++) {
+      positions.add(Point.fromLngLat(0.0, 0.0));
+    }
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("If you're going to use the coordinateListSizeLimit() method, " +
+        "please pass through a number that's greater than zero.");
+    MapboxMatrix.builder()
+        .accessToken(ACCESS_TOKEN)
+        .coordinates(positions)
+        .coordinateListSizeLimit(-3)
+        .build();
   }
 }

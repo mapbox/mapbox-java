@@ -382,7 +382,7 @@ public abstract class MapboxDirections extends
    */
   @AutoValue.Builder
   public abstract static class Builder {
-    //TODO change List<Double> to a custom model or to a Pair
+    // TODO: change List<Double> to a custom model or to a Pair
     private List<List<Double>> bearings = new ArrayList<>();
     private List<Point> coordinates = new ArrayList<>();
     private List<String> annotations = new ArrayList<>();
