@@ -338,7 +338,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
           + "-specific maximum.");
       } else if (coordinateListSizeLimit != null && coordinateListSizeLimit < coordinates.size()) {
         throw new ServicesException("If you're going to use the coordinateListSizeLimit() method,"
-          + " please pass through a number that's greater than the size of"
+          + " please pass through a number that's equal to or greater than the size of"
           + " your coordinate list.");
       }
 

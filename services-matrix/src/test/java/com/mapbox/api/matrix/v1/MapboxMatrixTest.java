@@ -260,8 +260,9 @@ public class MapboxMatrixTest extends TestUtils {
     }
 
     thrown.expect(ServicesException.class);
-    thrown.expectMessage("If you're going to use the coordinateListSizeLimit() method," +
-        " please pass through a number that's greater than the size of your coordinate list.");
+    thrown.expectMessage("If you're going to use the coordinateListSizeLimit() method,"
+        + " please pass through a number that's equal to or greater than the size of"
+        + " your coordinate list.");
     MapboxMatrix.builder()
         .accessToken(ACCESS_TOKEN)
         .coordinateListSizeLimit(20)
