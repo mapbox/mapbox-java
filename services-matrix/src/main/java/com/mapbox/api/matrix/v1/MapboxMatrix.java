@@ -138,6 +138,7 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
     private String[] approaches;
     private Integer[] destinations;
     private Integer[] sources;
+    private Integer coordinateListSizeLimit;
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -293,6 +294,25 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
      */
     public abstract Builder baseUrl(@NonNull String baseUrl);
 
+    /**
+     * Override the standard maximum coordinate list size of 25 so that you can
+     * make a Matrix API call with a list of coordinates as large as the value you give to
+     * this method.
+     *
+     * You should only use this method if the Mapbox team has enabled your Mapbox
+     * account to be able to request Matrix API information with a list of more than 25
+     * coordinates.
+     *
+     * @param coordinateListSizeLimit the max limit of coordinates used by a single call
+     *
+     * @return this builder for chaining options together
+     * @since 5.1.0
+     */
+    public Builder coordinateListSizeLimit(@NonNull Integer coordinateListSizeLimit) {
+      this.coordinateListSizeLimit = coordinateListSizeLimit;
+      return this;
+    }
+
     abstract MapboxMatrix autoBuild();
 
     /**
@@ -307,8 +327,19 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException("At least two coordinates must be provided with your API"
           + " request.");
-      } else if (coordinates.size() > 25) {
-        throw new ServicesException("Maximum of 25 coordinates are allowed for this API.");
+      } else if (coordinateListSizeLimit != null && coordinateListSizeLimit < 0) {
+        throw new ServicesException("If you're going to use the coordinateListSizeLimit() method, "
+          + "please pass through a number that's greater than zero.");
+      } else if (coordinateListSizeLimit == null && coordinates.size() > 25) {
+        throw new ServicesException("A maximum of 25 coordinates is the default "
+          + " allowed for this API. If your Mapbox account has been enabled by the"
+          + " Mapbox team to make a request with more than 25 coordinates, please use"
+          + " the builder's coordinateListSizeLimit() method and pass through your account"
+          + "-specific maximum.");
+      } else if (coordinateListSizeLimit != null && coordinateListSizeLimit < coordinates.size()) {
+        throw new ServicesException("If you're going to use the coordinateListSizeLimit() method,"
+          + " please pass through a number that's equal to or greater than the size of"
+          + " your coordinate list.");
       }
 
       coordinates(formatCoordinates(coordinates));
