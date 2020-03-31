@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.1.0 - March 30, 2020
+
+- Adding flexibility to Matrix API builder to set custom max coordinate list size limit [#1133](https://github.com/mapbox/mapbox-java/pull/1133)
+
 ### 5.1.0-beta.2 - March 23, 2020
 
 - Updated SNAPSHOT link in README [#1126](https://github.com/mapbox/mapbox-java/pull/1126)
