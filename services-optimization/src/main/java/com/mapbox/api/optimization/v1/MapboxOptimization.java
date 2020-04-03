@@ -3,7 +3,6 @@ package com.mapbox.api.optimization.v1;
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
@@ -13,6 +12,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.DestinationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.optimization.v1.models.OptimizationAdapterFactory;
 import com.mapbox.api.optimization.v1.models.OptimizationResponse;
 import com.mapbox.core.MapboxService;
@@ -22,11 +22,10 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-
 import retrofit2.Call;
 
 /**
@@ -158,7 +157,7 @@ public abstract class MapboxOptimization
   public abstract static class Builder {
 
     private List<Integer[]> distributions = new ArrayList<>();
-    private List<Double[]> bearings = new ArrayList<>();
+    private List<List<Double>> bearings = new ArrayList<>();
     private List<Point> coordinates = new ArrayList<>();
     private String[] annotations;
     private double[] radiuses;
@@ -339,7 +338,7 @@ public abstract class MapboxOptimization
      */
     public Builder bearing(@Nullable @FloatRange(from = 0, to = 360) Double angle,
                            @Nullable @FloatRange(from = 0, to = 360) Double tolerance) {
-      bearings.add(new Double[] {angle, tolerance});
+      bearings.add(Arrays.asList(angle, tolerance));
       return this;
     }
 
@@ -487,10 +486,10 @@ public abstract class MapboxOptimization
       }
 
       coordinates(formatCoordinates(coordinates));
-      bearings(TextUtils.formatBearing(bearings));
+      bearings(FormatUtils.formatBearings(bearings));
       annotations(TextUtils.join(",", annotations));
       radiuses(TextUtils.formatRadiuses(radiuses));
-      distributions(TextUtils.formatDistributions(distributions));
+      distributions(FormatUtils.formatDistributions(distributions));
 
       // Generate build so that we can check that values are valid.
       MapboxOptimization optimization = autoBuild();
@@ -505,8 +504,8 @@ public abstract class MapboxOptimization
       List<String> coordinatesFormatted = new ArrayList<>();
       for (Point point : coordinates) {
         coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(point.longitude()),
-          TextUtils.formatCoordinate(point.latitude())));
+          FormatUtils.formatCoordinate(point.longitude()),
+          FormatUtils.formatCoordinate(point.latitude())));
       }
 
       return TextUtils.join(";", coordinatesFormatted.toArray());

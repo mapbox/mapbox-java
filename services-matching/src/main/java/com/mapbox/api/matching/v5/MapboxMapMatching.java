@@ -13,6 +13,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.AnnotationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.matching.v5.models.MapMatchingAdapterFactory;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.MapboxService;
@@ -25,6 +26,7 @@ import com.mapbox.geojson.Point;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -700,7 +702,8 @@ public abstract class MapboxMapMatching extends
       }
 
       if (waypointNames != null) {
-        final String waypointNamesStr = TextUtils.formatWaypointNames(waypointNames);
+        final String waypointNamesStr
+            = FormatUtils.formatWaypointNames(Arrays.asList(waypointNames));
         waypointNames(waypointNamesStr);
       }
 
@@ -709,7 +712,7 @@ public abstract class MapboxMapMatching extends
           throw new ServicesException("Number of approach elements must match "
             + "number of coordinates provided.");
         }
-        String formattedApproaches = TextUtils.formatApproaches(approaches);
+        String formattedApproaches = FormatUtils.formatApproaches(Arrays.asList(approaches));
         if (formattedApproaches == null) {
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
@@ -735,8 +738,8 @@ public abstract class MapboxMapMatching extends
       List<String> coordinatesFormatted = new ArrayList<>();
       for (Point point : coordinates) {
         coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          TextUtils.formatCoordinate(point.longitude()),
-          TextUtils.formatCoordinate(point.latitude())));
+          FormatUtils.formatCoordinate(point.longitude()),
+          FormatUtils.formatCoordinate(point.latitude())));
       }
 
       return TextUtils.join(";", coordinatesFormatted.toArray());
