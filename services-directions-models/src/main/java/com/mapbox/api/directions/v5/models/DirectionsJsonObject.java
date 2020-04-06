@@ -9,7 +9,7 @@ import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 import java.io.Serializable;
 
 /**
- * Provideds a base class for Directions model classes.
+ * Provides a base class for Directions model classes.
  *
  * @since 3.4.0
  */
