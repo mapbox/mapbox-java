@@ -214,7 +214,7 @@ public final class TurfMeasurement {
   }
 
   /**
-   * Takes a {@link List<Point>} and measures its length in the specified units.
+   * Takes a {@link List} of {@link Point} and measures its length in the specified units.
    *
    * @param coords geometry to measure
    * @param units  one of the units found inside {@link TurfConstants.TurfUnitCriteria}
