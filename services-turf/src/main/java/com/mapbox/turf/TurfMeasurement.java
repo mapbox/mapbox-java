@@ -213,7 +213,16 @@ public final class TurfMeasurement {
     return len;
   }
 
-  private static double length(List<Point> coords, String units) {
+  /**
+   * Takes a {@link List<Point>} and measures its length in the specified units.
+   *
+   * @param coords geometry to measure
+   * @param units  one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   * @return length of the input line in the units specified
+   * @see <a href="http://turfjs.org/docs/#linedistance">Turf Line Distance documentation</a>
+   * @since 5.2.0
+   */
+  public static double length(List<Point> coords, String units) {
     double travelled = 0;
     Point prevCoords = coords.get(0);
     Point curCoords;
@@ -253,7 +262,21 @@ public final class TurfMeasurement {
    */
   public static Point along(@NonNull LineString line, @FloatRange(from = 0) double distance,
                             @NonNull @TurfConstants.TurfUnitCriteria String units) {
-    List<Point> coords = line.coordinates();
+    return along(line.coordinates(), distance, units);
+  }
+
+  /**
+   * Takes a list of points and returns a point at a specified distance along the line.
+   *
+   * @param coords   that the point should be placed upon
+   * @param distance along the linestring geometry which the point should be placed on
+   * @param units    one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   * @return a {@link Point} which is on the linestring provided and at the distance from
+   *         the origin of that line to the end of the distance
+   * @since 5.2.0
+   */
+  public static Point along(@NonNull List<Point> coords, @FloatRange(from = 0) double distance,
+                            @NonNull @TurfConstants.TurfUnitCriteria String units) {
 
     double travelled = 0;
     for (int i = 0; i < coords.size(); i++) {
