@@ -393,7 +393,7 @@ public abstract class StepManeuver extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder modifier(@Nullable String modifier);
+    public abstract Builder modifier(@Nullable @ManeuverModifier.Type String modifier);
 
     /**
      * An optional integer indicating number of the exit to take. If exit is undefined the
