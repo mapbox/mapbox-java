@@ -71,6 +71,7 @@ public abstract class BannerText extends DirectionsJsonObject {
    * @since 3.0.0
    */
   @Nullable
+  @ManeuverModifier.Type
   public abstract String modifier();
 
 

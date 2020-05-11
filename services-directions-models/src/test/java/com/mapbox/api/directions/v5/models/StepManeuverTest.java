@@ -38,7 +38,7 @@ public class StepManeuverTest extends TestUtils {
     StepManeuver stepManeuver = StepManeuver.builder()
       .rawLocation(new double[]{13.424671, 52.508812})
       .type("turn")
-      .modifier("left")
+      .modifier(ManeuverModifier.LEFT)
       .bearingBefore(299.0)
       .bearingAfter(202.0)
       .instruction("Turn left onto Adalbertstraße")
