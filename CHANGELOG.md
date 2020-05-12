@@ -4,6 +4,13 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.2.0 - May 12, 2020
+
+- Add step maneuver modifier constants (#1142)
+- Refactor turf measurement functions (#1139)
+- remove stale bot settings for this repo (#1138)
+- Fix typo in DirectionsJsonObject documentation (#1137)
+
 ### 5.1.0 - March 30, 2020
 
 - Adding flexibility to Matrix API builder to set custom max coordinate list size limit [#1133](https://github.com/mapbox/mapbox-java/pull/1133)
