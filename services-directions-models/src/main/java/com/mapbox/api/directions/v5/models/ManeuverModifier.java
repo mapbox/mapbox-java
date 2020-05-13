@@ -71,7 +71,7 @@ public final class ManeuverModifier {
   /**
    * Representation of ManeuverModifier in form of logical types.
    *
-   * @since 5.2.0
+   * @since 5.2.1
    */
   @Retention(RetentionPolicy.SOURCE)
   @StringDef({
@@ -84,6 +84,6 @@ public final class ManeuverModifier {
           ManeuverModifier.LEFT,
           ManeuverModifier.SHARP_LEFT
   })
-  @interface Type {
+  public @interface Type {
   }
 }
