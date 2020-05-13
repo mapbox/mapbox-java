@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.2.1 - May 13, 2020
+
+- Update maneuver modifier type to be public (#1146)
+
 ### 5.2.0 - May 12, 2020
 
 - Add step maneuver modifier constants (#1142)
