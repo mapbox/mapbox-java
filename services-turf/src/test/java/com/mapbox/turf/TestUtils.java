@@ -8,18 +8,19 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestUtils {
 
@@ -32,10 +33,14 @@ public class TestUtils {
   }
 
   protected String loadJsonFixture(String filename) {
-    ClassLoader classLoader = getClass().getClassLoader();
-    InputStream inputStream = classLoader.getResourceAsStream(filename);
-    Scanner scanner = new Scanner(inputStream, UTF_8.name()).useDelimiter("\\A");
-    return scanner.hasNext() ? scanner.next() : "";
+    try {
+      String filepath = "src/test/resources/" + filename;
+      byte[] encoded = Files.readAllBytes(Paths.get(filepath));
+      return new String(encoded, UTF_8);
+    } catch (IOException e) {
+      fail("Unable to load " + filename);
+      return "";
+    }
   }
 
   public static <T extends Serializable> byte[] serialize(T obj)
