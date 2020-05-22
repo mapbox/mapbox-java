@@ -12,7 +12,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [x] turf-bbox
 - [x] turf-bbox-polygon
 - [x] turf-bearing
-- [ ] turf-center
+- [x] turf-center
 - [ ] turf-center-of-mass
 - [ ] turf-centroid
 - [x] turf-destination
