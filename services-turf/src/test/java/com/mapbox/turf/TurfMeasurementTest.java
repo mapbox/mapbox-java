@@ -1,5 +1,6 @@
 package com.mapbox.turf;
 
+import com.google.gson.JsonObject;
 import com.mapbox.geojson.BoundingBox;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class TurfMeasurementTest extends TestUtils {
 
@@ -507,5 +509,52 @@ public class TurfMeasurementTest extends TestUtils {
     assertEquals(expected, TurfMeasurement.area(FeatureCollection.fromJson(loadJsonFixture(TURF_AREA_FEATURECOLLECTION_POLYGON_GEOJSON))), 1);
   }
 
+  @Test
+  public void centerFeature() {
+    Feature expectedFeature = Feature.fromGeometry(Point.fromLngLat(133.5, -27.0));
+    Feature inputFeature = Feature.fromJson(loadJsonFixture(TURF_AREA_POLYGON_GEOJSON));
+    assertEquals(expectedFeature, TurfMeasurement.center(inputFeature, null, null));
+  }
 
+  @Test
+  public void centerFeatureWithProperties() {
+    JsonObject properties = new JsonObject();
+    properties.addProperty("key", "value");
+    Feature inputFeature = Feature.fromJson(loadJsonFixture(TURF_AREA_POLYGON_GEOJSON));
+    Feature returnedCenterFeature = TurfMeasurement.center(inputFeature, properties, null);
+    Point returnedPoint = (Point) returnedCenterFeature.geometry();
+    if (returnedPoint != null) {
+      assertEquals(133.5, returnedPoint.longitude(), 0);
+      assertEquals(-27.0, returnedPoint.latitude(), 0);
+      if (returnedCenterFeature.properties() != null) {
+        assertTrue(returnedCenterFeature.properties().toString().contains("{\"key\":\"value\"}"));
+      }
+    }
+  }
+
+  @Test
+  public void centerFeatureWithId() {
+    final String testIdString = "testId";
+    Feature inputFeature = Feature.fromJson(loadJsonFixture(TURF_AREA_POLYGON_GEOJSON));
+    Feature returnedCenterFeature = TurfMeasurement.center(inputFeature, null, testIdString);
+    Point returnedPoint = (Point) returnedCenterFeature.geometry();
+    if (returnedPoint != null) {
+      assertEquals(133.5, returnedPoint.longitude(), 0);
+      assertEquals(-27.0, returnedPoint.latitude(), 0);
+      if (returnedCenterFeature.id() != null) {
+        assertEquals(returnedCenterFeature.id(), testIdString);
+      }
+    }
+  }
+
+  @Test
+  public void centerFeatureCollection() {
+    FeatureCollection inputFeatureCollection = FeatureCollection.fromJson(loadJsonFixture(TURF_AREA_FEATURECOLLECTION_POLYGON_GEOJSON));
+    Feature returnedCenterFeature = TurfMeasurement.center(inputFeatureCollection, null, null);
+    Point returnedPoint = (Point) returnedCenterFeature.geometry();
+    if (returnedPoint != null) {
+      assertEquals(4.1748046875, returnedPoint.longitude(), DELTA);
+      assertEquals(47.214224817196836, returnedPoint.latitude(), DELTA);
+    }
+  }
 }

@@ -631,7 +631,7 @@ public final class TurfMeasurement {
   }
 
   /**
-   * Takes one {@link Geometry} and returns it's area in square meters.
+   * Takes one {@link Geometry} and returns its area in square meters.
    *
    * @param geometry input {@link Geometry}
    * @return area in square meters
@@ -718,5 +718,65 @@ public final class TurfMeasurement {
 
   private static double rad(double num) {
     return num * Math.PI / 180;
+  }
+
+  /**
+   * Takes a {@link Feature} and returns the absolute center of the {@link Feature}.
+   *
+   * @param feature the single {@link Feature} to find the center of.
+   * @param properties a optional {@link JsonObject} containing the properties that should be
+   *                   placed in the returned {@link Feature}.
+   * @param id  an optional common identifier that should be placed in the returned {@link Feature}.
+   * @return a {@link Feature} with a {@link Point} geometry type.
+   * @since 5.3.0
+   */
+  public static Feature center(Feature feature,
+                               @Nullable JsonObject properties,
+                               @Nullable String id) {
+    return center(FeatureCollection.fromFeature(feature), properties, id);
+  }
+
+  /**
+   * Takes a {@link Feature} and returns the absolute center of the {@link Feature}.
+   *
+   * @param feature the single {@link Feature} to find the center of.
+   * @return a {@link Feature} with a {@link Point} geometry type.
+   * @since 5.3.0
+   */
+  public static Feature center(Feature feature) {
+    return center(FeatureCollection.fromFeature(feature), null, null);
+  }
+
+  /**
+   * Takes {@link FeatureCollection} and returns the absolute center
+   * of the {@link Feature}s in the {@link FeatureCollection}.
+   *
+   * @param featureCollection the single {@link FeatureCollection} to find the center of.
+   * @param properties a optional {@link JsonObject} containing the properties that should be
+   *                   placed in the returned {@link Feature}.
+   * @param id  an optional common identifier that should be placed in the returned {@link Feature}.
+   * @return a {@link Feature} with a {@link Point} geometry type.
+   * @since 5.3.0
+   */
+  public static Feature center(FeatureCollection featureCollection,
+                               @Nullable JsonObject properties,
+                               @Nullable String id) {
+    double[] ext = bbox(featureCollection);
+    double finalCenterLongitude = (ext[0] + ext[2]) / 2;
+    double finalCenterLatitude = (ext[1] + ext[3]) / 2;
+    return Feature.fromGeometry(Point.fromLngLat(finalCenterLongitude, finalCenterLatitude),
+        properties, id);
+  }
+
+  /**
+   * Takes {@link FeatureCollection} and returns the absolute center
+   * of the {@link Feature}s in the {@link FeatureCollection}.
+   *
+   * @param featureCollection the single {@link FeatureCollection} to find the center of.
+   * @return a {@link Feature} with a {@link Point} geometry type.
+   * @since 5.3.0
+   */
+  public static Feature center(FeatureCollection featureCollection) {
+    return center(featureCollection, null, null);
   }
 }
