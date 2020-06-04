@@ -2,6 +2,7 @@ buildscript {
   apply from: "${rootDir}/gradle/dependencies.gradle"
 
   repositories {
+    maven { url "http://dl.bintray.com/riteshakya037/maven" }
     google()
     jcenter()
     mavenCentral()
@@ -34,6 +35,7 @@ tasks.withType(JavaCompile) {
 
 allprojects {
   repositories {
+    maven { url "http://dl.bintray.com/riteshakya037/maven" }
     google()
     jcenter()
     mavenCentral()
