@@ -7,6 +7,7 @@ apply from: "../gradle/dependencies.gradle"
 dependencies {
   // Gson
   api dependenciesList.gson
+  implementation dependenciesList.gsonExtras
 
   // Annotations
   compileOnly dependenciesList.supportAnnotation
