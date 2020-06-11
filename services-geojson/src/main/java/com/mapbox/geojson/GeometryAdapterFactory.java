@@ -4,7 +4,7 @@ import androidx.annotation.Keep;
 
 import com.google.gson.TypeAdapterFactory;
 
-import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
+import com.mapbox.geojson.internal.typeadapters.RuntimeTypeAdapterFactory;
 
 /**
  * A Geometry type adapter factory for convenience for serialization/deserialization.
