@@ -4,6 +4,11 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.3.0 - June 15, 2020
+
+- [turf] Ported TurfMeasurement.center() method (#1150)
+- [geojson] move gson package to com.mapbox.geojson.internal (#1153)
+
 ### 5.2.1 - May 13, 2020
 
 - Update maneuver modifier type to be public (#1146)
