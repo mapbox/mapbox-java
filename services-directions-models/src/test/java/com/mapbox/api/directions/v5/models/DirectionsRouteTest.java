@@ -18,13 +18,14 @@ public class DirectionsRouteTest extends TestUtils {
   public void sanity() throws Exception {
     DirectionsRoute route = DirectionsRoute.builder()
       .distance(100d)
+      .duration(100d)
       .build();
     assertNotNull(route);
   }
 
   @Test
   public void testSerializable() throws Exception {
-    DirectionsRoute route = DirectionsRoute.builder().distance(100d).build();
+    DirectionsRoute route = DirectionsRoute.builder().distance(100d).duration(100d).build();
     byte[] serialized = TestUtils.serialize(route);
     assertEquals(route, deserialize(serialized, DirectionsRoute.class));
   }

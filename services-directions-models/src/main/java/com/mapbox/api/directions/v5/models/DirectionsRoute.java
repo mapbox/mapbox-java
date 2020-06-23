@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -46,7 +47,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
    * @return a double number with unit meters
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract Double distance();
 
   /**
@@ -55,7 +56,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
    * @return a double number with unit seconds
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract Double duration();
 
   /**
@@ -173,7 +174,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder distance(@Nullable Double distance);
+    public abstract Builder distance(@NonNull Double distance);
 
     /**
      * The estimated travel time from origin to destination.
@@ -182,7 +183,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder duration(@Nullable Double duration);
+    public abstract Builder duration(@NonNull Double duration);
 
     /**
      * Gives the geometry of the route. Commonly used to draw the route on the map view.
