@@ -353,7 +353,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @since 3.0.0
    */
   @SerializedName("uuid")
-  @Nullable
+  @NonNull
   public abstract String requestUuid();
 
   /**
