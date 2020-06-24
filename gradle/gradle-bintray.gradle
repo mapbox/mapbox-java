@@ -52,7 +52,7 @@ publishing {
 bintray {
     user = mapboxBintrayUser
     key = mapboxBintrayApiKey
-    publications = ['MapboxJavaSDKPublication']
+    publications('MapboxJavaSDKPublication')
     pkg {
         repo = project.ext.mapboxBintrayRepoName
         name = project.ext.mapboxArtifactId

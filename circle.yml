@@ -4,7 +4,10 @@ workflows:
   default:
     jobs:
       - build
-      - release
+      - release:
+          filters:
+            tags:
+              only: /v.*/
 jobs:
   build:
     working_directory: ~/code
@@ -67,7 +70,7 @@ jobs:
           name: Update version name
           command: |
             if [[ $CIRCLE_TAG == v* ]]; then
-              sed -i -e "s/^VERSION_NAME=.*/VERSION_NAME=${CIRCLE_TAG:9}/" gradle.properties
+              sed -i -e "s/^VERSION_NAME=.*/VERSION_NAME=${CIRCLE_TAG:1}/" gradle.properties
             fi          
       - run:
           name: Build Java libraries
