@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.gson.typeadapters;
+package com.mapbox.geojson.internal.typeadapters;
 
 import android.support.annotation.Keep;
 
