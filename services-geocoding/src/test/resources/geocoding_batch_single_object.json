@@ -1,0 +1,87 @@
+{
+  "attribution": "© 2017 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service. (https://www.mapbox.com/about/maps/)",
+  "features": [
+    {
+      "bbox": [
+        -77.028082,
+        38.890834,
+        -77.007177,
+        38.929058
+      ],
+      "center": [
+        -77.018017,
+        38.909197
+      ],
+      "context": [
+        {
+          "id": "region.6884744206035790",
+          "short_code": "US-DC",
+          "text": "District of Columbia",
+          "wikidata": "Q61"
+        },
+        {
+          "id": "country.3145",
+          "short_code": "us",
+          "text": "United States",
+          "wikidata": "Q30"
+        }
+      ],
+      "geometry": {
+        "coordinates": [
+          -77.018017,
+          38.909197
+        ],
+        "type": "Point"
+      },
+      "id": "postcode.3526019892841050",
+      "place_name": "20001, District of Columbia, United States",
+      "properties": {},
+      "relevance": 0.99,
+      "text": "20001",
+      "type": "Feature"
+    },
+    {
+      "bbox": [
+        -1.9773194,
+        43.3207099,
+        -1.9689983,
+        43.3261118
+      ],
+      "center": [
+        -1.97179,
+        43.323477
+      ],
+      "context": [
+        {
+          "id": "region.12146957993406680",
+          "short_code": "ES-SS",
+          "text": "Gipuzkoa",
+          "wikidata": "Q95010"
+        },
+        {
+          "id": "country.3110",
+          "short_code": "es",
+          "text": "Spain",
+          "wikidata": "Q29"
+        }
+      ],
+      "geometry": {
+        "coordinates": [
+          -1.97179,
+          43.323477
+        ],
+        "type": "Point"
+      },
+      "id": "postcode.9979",
+      "place_name": "20001, Gipuzkoa, Spain",
+      "properties": {},
+      "relevance": 0.99,
+      "text": "20001",
+      "type": "Feature"
+    }
+  ],
+  "query": [
+    "20001"
+  ],
+  "type": "FeatureCollection"
+}

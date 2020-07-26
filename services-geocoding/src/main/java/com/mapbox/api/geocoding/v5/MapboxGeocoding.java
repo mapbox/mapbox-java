@@ -74,6 +74,7 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
     return new GsonBuilder()
       .registerTypeAdapterFactory(GeocodingAdapterFactory.create())
       .registerTypeAdapterFactory(GeometryAdapterFactory.create())
+      .registerTypeAdapterFactory(SingleElementSafeListTypeAdapter.FACTORY)
       .registerTypeAdapter(BoundingBox.class, new BoundingBoxTypeAdapter());
   }
 

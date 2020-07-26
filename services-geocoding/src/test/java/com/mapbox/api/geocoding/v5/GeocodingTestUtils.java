@@ -20,6 +20,7 @@ public class GeocodingTestUtils extends TestUtils {
   private static final String FORWARD_INVALID = "forward_invalid.json";
   private static final String FORWARD_VALID_ZH = "forward_valid_zh.json";
   private static final String FORWARD_BATCH_GEOCODING = "geocoding_batch.json";
+  private static final String FORWARD_BATCH_SINGLE_ITEM_GEOCODING = "geocoding_batch_single_object.json";
   private static final String FORWARD_INTERSECTION = "forward_intersection.json";
 
   private MockWebServer server;
@@ -35,16 +36,19 @@ public class GeocodingTestUtils extends TestUtils {
       @Override
       public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
         try {
-          String response;
-          if (request.getPath().contains(GeocodingCriteria.MODE_PLACES_PERMANENT)) {
+          final String response;
+          final String path = request.getPath();
+          if (path.contains(GeocodingCriteria.MODE_PLACES_PERMANENT) && path.contains(";")) {
             response = loadJsonFixture(FORWARD_BATCH_GEOCODING);
-          } else if (request.getPath().contains("1600") && !request.getPath().contains("nw")) {
+          } else if (path.contains(GeocodingCriteria.MODE_PLACES_PERMANENT) && !path.contains(";")) {
+            response = loadJsonFixture(FORWARD_BATCH_SINGLE_ITEM_GEOCODING);
+          } else if (path.contains("1600") && !path.contains("nw")) {
             response = loadJsonFixture(FORWARD_VALID);
-          } else if (request.getPath().contains("nw")) {
+          } else if (path.contains("nw")) {
             response = loadJsonFixture(FORWARD_GEOCODING);
-          } else if (request.getPath().contains("sandy")) {
+          } else if (path.contains("sandy")) {
             response = loadJsonFixture(FORWARD_INVALID);
-          } else if (request.getPath().contains("%20and%20")) {
+          } else if (path.contains("%20and%20")) {
             response = loadJsonFixture(FORWARD_INTERSECTION);
           } else {
             response = loadJsonFixture(FORWARD_VALID_ZH);
