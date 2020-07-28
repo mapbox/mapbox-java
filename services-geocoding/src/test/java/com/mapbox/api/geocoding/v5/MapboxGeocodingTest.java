@@ -61,7 +61,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   @Test
   public void executeBatchCall_exceptionThrownWhenModeNotSetCorrectly() throws Exception {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Use getCall() for non-batch calls."));
+    thrown.expectMessage(startsWith("Use getCall() for non-batch calls or set the mode to `permanent` for batch requests."));
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .query("1600 pennsylvania ave nw")
