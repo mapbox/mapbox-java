@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.4.0 - July 29, 2020
+
+- [geocoding] Correct handling of a single element batch geocoding response (#1160)
+
 ### 5.3.0 - June 15, 2020
 
 - [turf] Ported TurfMeasurement.center() method (#1150)
