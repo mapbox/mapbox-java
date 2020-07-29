@@ -46,9 +46,22 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
+  public void sanity_batchGeocodeSingleItemRequest() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+            .mode(GeocodingCriteria.MODE_PLACES_PERMANENT)
+            .accessToken(ACCESS_TOKEN)
+            .query("20001")
+            .baseUrl(mockUrl.toString())
+            .build();
+    assertNotNull(mapboxGeocoding);
+    Response<List<GeocodingResponse>> response = mapboxGeocoding.executeBatchCall();
+    assertEquals(200, response.code());
+  }
+
+  @Test
   public void executeBatchCall_exceptionThrownWhenModeNotSetCorrectly() throws Exception {
     thrown.expect(ServicesException.class);
-    thrown.expectMessage(startsWith("Use getCall() for non-batch calls."));
+    thrown.expectMessage(startsWith("Use getCall() for non-batch calls or set the mode to `permanent` for batch requests."));
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
       .query("1600 pennsylvania ave nw")
