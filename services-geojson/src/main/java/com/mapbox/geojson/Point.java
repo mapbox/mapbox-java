@@ -1,11 +1,5 @@
 package com.mapbox.geojson;
 
-import static com.mapbox.geojson.constants.GeoJsonConstants.MAX_LATITUDE;
-import static com.mapbox.geojson.constants.GeoJsonConstants.MAX_LONGITUDE;
-import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LATITUDE;
-import static com.mapbox.geojson.constants.GeoJsonConstants.MIN_LONGITUDE;
-
-import androidx.annotation.FloatRange;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,8 +62,7 @@ public final class Point implements CoordinateContainer<List<Double>> {
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
    * creating a Point object from scratch it is better to use one of the other provided static
-   * factory methods such as {@link #fromLngLat(double, double)}. Longitude values should not exceed
-   * the spec defined -180 to 180 range and latitude's limit of -90 to 90. While no limit is placed
+   * factory methods such as {@link #fromLngLat(double, double)}. While no limit is placed
    * on decimal precision, for performance reasons when serializing and deserializing it is
    * suggested to limit decimal precision to within 6 decimal places.
    *
@@ -86,20 +79,17 @@ public final class Point implements CoordinateContainer<List<Double>> {
 
   /**
    * Create a new instance of this class defining a longitude and latitude value in that respective
-   * order. Longitude values are limited to a -180 to 180 range and latitude's limited to -90 to 90
-   * as the spec defines. While no limit is placed on decimal precision, for performance reasons
+   * order. While no limit is placed on decimal precision, for performance reasons
    * when serializing and deserializing it is suggested to limit decimal precision to within 6
    * decimal places.
    *
-   * @param longitude a double value between -180 to 180 representing the x position of this point
-   * @param latitude  a double value between -90 to 90 representing the y position of this point
+   * @param longitude a double value representing the x position of this point
+   * @param latitude  a double value representing the y position of this point
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @since 3.0.0
    */
-  public static Point fromLngLat(
-    @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
-    @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude) {
+  public static Point fromLngLat(double longitude, double latitude) {
 
     List<Double> coordinates =
       CoordinateShifterManager.getCoordinateShifter().shiftLonLat(longitude, latitude);
@@ -108,22 +98,19 @@ public final class Point implements CoordinateContainer<List<Double>> {
 
   /**
    * Create a new instance of this class defining a longitude and latitude value in that respective
-   * order. Longitude values are limited to a -180 to 180 range and latitude's limited to -90 to 90
-   * as the spec defines. While no limit is placed on decimal precision, for performance reasons
+   * order. While no limit is placed on decimal precision, for performance reasons
    * when serializing and deserializing it is suggested to limit decimal precision to within 6
    * decimal places. An optional altitude value can be passed in and can vary between negative
    * infinity and positive infinity.
    *
-   * @param longitude a double value between -180 to 180 representing the x position of this point
-   * @param latitude  a double value between -90 to 90 representing the y position of this point
+   * @param longitude a double value representing the x position of this point
+   * @param latitude  a double value representing the y position of this point
    * @param bbox      optionally include a bbox definition as a double array
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @since 3.0.0
    */
-  public static Point fromLngLat(
-    @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
-    @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
+  public static Point fromLngLat(double longitude, double latitude,
     @Nullable BoundingBox bbox) {
 
     List<Double> coordinates =
@@ -133,24 +120,20 @@ public final class Point implements CoordinateContainer<List<Double>> {
 
   /**
    * Create a new instance of this class defining a longitude and latitude value in that respective
-   * order. Longitude values are limited to a -180 to 180 range and latitude's limited to -90 to 90
-   * as the spec defines. While no limit is placed on decimal precision, for performance reasons
+   * order. While no limit is placed on decimal precision, for performance reasons
    * when serializing and deserializing it is suggested to limit decimal precision to within 6
    * decimal places. An optional altitude value can be passed in and can vary between negative
    * infinity and positive infinity.
    *
-   * @param longitude a double value between -180 to 180 representing the x position of this point
-   * @param latitude  a double value between -90 to 90 representing the y position of this point
+   * @param longitude a double value representing the x position of this point
+   * @param latitude  a double value representing the y position of this point
    * @param altitude  a double value which can be negative or positive infinity representing either
    *                  elevation or altitude
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @since 3.0.0
    */
-  public static Point fromLngLat(
-    @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
-    @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
-    double altitude) {
+  public static Point fromLngLat(double longitude, double latitude, double altitude) {
 
     List<Double> coordinates =
       CoordinateShifterManager.getCoordinateShifter().shiftLonLatAlt(longitude, latitude, altitude);
@@ -160,14 +143,13 @@ public final class Point implements CoordinateContainer<List<Double>> {
 
   /**
    * Create a new instance of this class defining a longitude and latitude value in that respective
-   * order. Longitude values are limited to a -180 to 180 range and latitude's limited to -90 to 90
-   * as the spec defines. While no limit is placed on decimal precision, for performance reasons
+   * order. While no limit is placed on decimal precision, for performance reasons
    * when serializing and deserializing it is suggested to limit decimal precision to within 6
    * decimal places. An optional altitude value can be passed in and can vary between negative
    * infinity and positive infinity.
    *
-   * @param longitude a double value between -180 to 180 representing the x position of this point
-   * @param latitude  a double value between -90 to 90 representing the y position of this point
+   * @param longitude a double value representing the x position of this point
+   * @param latitude  a double value representing the y position of this point
    * @param altitude  a double value which can be negative or positive infinity representing either
    *                  elevation or altitude
    * @param bbox      optionally include a bbox definition as a double array
@@ -175,9 +157,7 @@ public final class Point implements CoordinateContainer<List<Double>> {
    *   method
    * @since 3.0.0
    */
-  public static Point fromLngLat(
-    @FloatRange(from = MIN_LONGITUDE, to = MAX_LONGITUDE) double longitude,
-    @FloatRange(from = MIN_LATITUDE, to = MAX_LATITUDE) double latitude,
+  public static Point fromLngLat(double longitude, double latitude,
     double altitude, @Nullable BoundingBox bbox) {
 
     List<Double> coordinates =
@@ -208,11 +188,11 @@ public final class Point implements CoordinateContainer<List<Double>> {
   }
 
   /**
-   * This returns a double value ranging from -180 to 180 representing the x or easting position of
+   * This returns a double value representing the x or easting position of
    * this point. ideally, this value would be restricted to 6 decimal places to correctly follow the
    * GeoJson spec.
    *
-   * @return a double value ranging from -180 to 180 representing the x or easting position of this
+   * @return a double value representing the x or easting position of this
    *   point
    * @since 3.0.0
    */
@@ -221,11 +201,11 @@ public final class Point implements CoordinateContainer<List<Double>> {
   }
 
   /**
-   * This returns a double value ranging from -90 to 90 representing the y or northing position of
+   * This returns a double value representing the y or northing position of
    * this point. ideally, this value would be restricted to 6 decimal places to correctly follow the
    * GeoJson spec.
    *
-   * @return a double value ranging from -90 to 90 representing the y or northing position of this
+   * @return a double value representing the y or northing position of this
    *   point
    * @since 3.0.0
    */
