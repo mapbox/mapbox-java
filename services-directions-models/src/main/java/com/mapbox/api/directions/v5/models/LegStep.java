@@ -47,6 +47,19 @@ public abstract class LegStep extends DirectionsJsonObject {
   public abstract double duration();
 
   /**
+   * The typical travel time for traversing this LegStep. There's a delay along the LegStep
+   * if you subtract this durationTypical() value from the LegStep duration() value and
+   * the resulting difference is greater than 0. The delay is because of any number
+   * of real-world situations (road repair, traffic jam, etc).
+   *
+   * @return a double number with unit seconds
+   * @since 5.5.0
+   */
+  @Nullable
+  @SerializedName("duration_typical")
+  public abstract Double durationTypical();
+
+  /**
    * Gives the geometry of the leg step.
    *
    * @return an encoded polyline string
@@ -262,6 +275,18 @@ public abstract class LegStep extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder duration(double duration);
+
+    /**
+     * The typical travel time for traversing this LegStep. There's a delay along the LegStep
+     * if you subtract this durationTypical() value from the LegStep duration() value and
+     * the resulting difference is greater than 0. The delay is because of any number
+     * of real-world situations (road repair, traffic jam, etc).
+     *
+     * @param durationTypical a double number with unit seconds
+     * @return this builder for chaining options together
+     * @since 5.5.0
+     */
+    public abstract Builder durationTypical(@Nullable Double durationTypical);
 
     /**
      * Gives the geometry of the leg step.

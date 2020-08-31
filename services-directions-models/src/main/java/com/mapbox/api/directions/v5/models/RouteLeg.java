@@ -5,6 +5,7 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 
 import java.util.List;
@@ -44,6 +45,19 @@ public abstract class RouteLeg extends DirectionsJsonObject {
    */
   @Nullable
   public abstract Double duration();
+
+  /**
+   * The typical travel time for traversing this RouteLeg. There's a delay along the RouteLeg
+   * if you subtract this durationTypical() value from the RouteLeg duration() value and
+   * the resulting difference is greater than 0. The delay is because of any number
+   * of real-world situations (road repair, traffic jam, etc).
+   *
+   * @return a double number with unit seconds
+   * @since 5.5.0
+   */
+  @Nullable
+  @SerializedName("duration_typical")
+  public abstract Double durationTypical();
 
   /**
    * A short human-readable summary of major roads traversed. Useful to distinguish alternatives.
@@ -136,6 +150,18 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @since 1.0.0
      */
     public abstract Builder duration(@Nullable Double duration);
+
+    /**
+     * The typical travel time for traversing this RouteLeg. There's a delay along the RouteLeg
+     * if you subtract this durationTypical() value from the RouteLeg duration() value and
+     * the resulting difference is greater than 0. The delay is because of any number
+     * of real-world situations (road repair, traffic jam, etc).
+     *
+     * @param durationTypical a double number with unit seconds
+     * @return this builder for chaining options together
+     * @since 5.5.0
+     */
+    public abstract Builder durationTypical(@Nullable Double durationTypical);
 
     /**
      * A short human-readable summary of major roads traversed. Useful to distinguish alternatives.

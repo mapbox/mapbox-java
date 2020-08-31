@@ -60,6 +60,19 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   public abstract Double duration();
 
   /**
+   * The typical travel time from this route's origin to destination. There's a delay along
+   * this route if you subtract this durationTypical() value from the route's duration()
+   * value and the resulting difference is greater than 0. The delay is because of any
+   * number of real-world situations (road repair, traffic jam, etc).
+   *
+   * @return a double number with unit seconds
+   * @since 5.5.0
+   */
+  @Nullable
+  @SerializedName("duration_typical")
+  public abstract Double durationTypical();
+
+  /**
    * Gives the geometry of the route. Commonly used to draw the route on the map view.
    *
    * @return an encoded polyline string
@@ -184,6 +197,18 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder duration(@NonNull Double duration);
+
+    /**
+     * The typical travel time from this route's origin to destination. There's a delay along
+     * this route if you subtract this durationTypical() value from the route's duration()
+     * value and the resulting difference is greater than 0. The delay is because of any
+     * number of real-world situations (road repair, traffic jam, etc).
+     *
+     * @param durationTypical a double number with unit seconds
+     * @return this builder for chaining options together
+     * @since 5.5.0
+     */
+    public abstract Builder durationTypical(@Nullable Double durationTypical);
 
     /**
      * Gives the geometry of the route. Commonly used to draw the route on the map view.
