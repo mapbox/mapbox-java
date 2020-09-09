@@ -5,11 +5,11 @@ import static org.junit.Assert.assertNotNull;
 
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
-
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
 
 public class StepIntersectionTest extends TestUtils {
 
@@ -73,8 +73,16 @@ public class StepIntersectionTest extends TestUtils {
   @Test
   public void testFromJson() {
     String stepIntersectionJsonString = "{\"out\": 0, \"entry\": [true], \"bearings\": [ 125 ], "
-    + "\"tunnel_name\": \"test tunnel name\","
-    + "\"location\": [ 13.426579, 52.508068 ] }";
+      + "\"tunnel_name\": \"test tunnel name\","
+      + "\"location\": [ 13.426579, 52.508068 ],"
+      + "\"incidents\": ["
+      + "  {\"incident_type\": \"road_closure\","
+      + "   \"start_time\": \"2020-08-12T14:18:20Z\","
+      + "   \"end_time\": \"2020-08-12T14:46:40Z\","
+      + "   \"creation_time\": \"2020-08-12T14:16:40Z\","
+      + "   \"id\": 5 }"
+      + "  ] "
+      + "}";
 
     StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
     Assert.assertEquals("test tunnel name", stepIntersection.tunnelName());
@@ -82,6 +90,18 @@ public class StepIntersectionTest extends TestUtils {
     Point location = stepIntersection.location();
     Assert.assertEquals(13.426579, location.longitude(), 0.0001);
     Assert.assertEquals(52.508068, location.latitude(), 0.0001);
+
+    List<Incident> incidents = stepIntersection.incidents();
+    Assert.assertNotNull(incidents);
+    Assert.assertEquals(1, incidents.size());
+
+    Incident incident = incidents.get(0);
+    Assert.assertNotNull(incident);
+    Assert.assertEquals("road_closure", incident.incidentType());
+    Assert.assertEquals("2020-08-12T14:16:40Z", incident.creationTime());
+    Assert.assertEquals("2020-08-12T14:18:20Z", incident.startTime());
+    Assert.assertEquals("2020-08-12T14:46:40Z", incident.endTime());
+    Assert.assertEquals(5, incident.id(), 0);
 
     String jsonStr = stepIntersection.toJson();
 
