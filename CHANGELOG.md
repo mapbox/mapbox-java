@@ -4,6 +4,13 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.5.0 - September 3, 2020
+
+- Update VERSION_NAME: 5.4.1-SNAPSHOT -> 5.5.0-SNAPSHOT ((#1173)
+- DirectionRoute: added `durationTypical` for Route, Leg and Step; VERSION_NAME: updated to `5.4.1-SNAPSHOT` (#1172)
+- Remove min/max latitude/longitude range annotations (#1168)
+- Update annotation for NonNull attributes. (#1087)
+
 ### 5.4.1 - July 29, 2020
 
 - [geocoding] Correct handling of a single element batch geocoding response (#1160)
