@@ -127,6 +127,15 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract List<IntersectionLanes> lanes();
 
   /**
+   * Name of the tunnel. Value may be present if {@link #classes} contains "tunnel".
+   *
+   * @return name of the tunnel
+   */
+  @Nullable
+  @SerializedName("tunnel_name")
+  public abstract String tunnelName();
+
+  /**
    * Convert the current {@link StepIntersection} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link StepIntersection}.
@@ -244,6 +253,14 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder lanes(@Nullable List<IntersectionLanes> lanes);
+
+    /**
+     * Name of the tunnel. Value is present only if class is tunnel.
+     *
+     * @param tunnelName name of the tunnel
+     * @return this builder for chaining options together
+     */
+    public abstract Builder tunnelName(@Nullable String tunnelName);
 
     /**
      * The rawLocation as a double array. Once the {@link StepIntersection} object's created,
