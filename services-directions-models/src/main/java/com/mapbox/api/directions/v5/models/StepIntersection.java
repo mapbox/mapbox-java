@@ -136,6 +136,17 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract String tunnelName();
 
   /**
+   * The zero-based index for the intersection.
+   * This value can be used to apply the duration annotation that corresponds with the intersection.
+   * Only available on the driving profile.
+   *
+   * @return index for the intersection
+   */
+  @Nullable
+  @SerializedName("geometry_index")
+  public abstract Integer geometryIndex();
+
+  /**
    * Convert the current {@link StepIntersection} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link StepIntersection}.
@@ -261,6 +272,17 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      * @return this builder for chaining options together
      */
     public abstract Builder tunnelName(@Nullable String tunnelName);
+
+    /**
+     * The zero-based index for the intersection.
+     * This value can be used to apply the duration annotation
+     * that corresponds with the intersection.
+     * Only available on the driving profile.
+     *
+     * @param geometryIndex index for the intersection
+     * @return this builder for chaining options together
+     */
+    public abstract Builder geometryIndex(@Nullable Integer geometryIndex);
 
     /**
      * The rawLocation as a double array. Once the {@link StepIntersection} object's created,
