@@ -44,6 +44,7 @@ public class StepIntersectionTest extends TestUtils {
       .bearings(Arrays.asList(125))
       .rawLocation(new double[]{13.426579, 52.508068})
       .tunnelName("test tunnel")
+      .geometryIndex(123)
       .build();
 
     String jsonString = intersection.toJson();
@@ -74,10 +75,12 @@ public class StepIntersectionTest extends TestUtils {
   public void testFromJson() {
     String stepIntersectionJsonString = "{\"out\": 0, \"entry\": [true], \"bearings\": [ 125 ], "
     + "\"tunnel_name\": \"test tunnel name\","
+    + "\"geometry_index\": 123,"
     + "\"location\": [ 13.426579, 52.508068 ] }";
 
     StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
     Assert.assertEquals("test tunnel name", stepIntersection.tunnelName());
+    Assert.assertEquals(123, stepIntersection.geometryIndex().intValue());
 
     Point location = stepIntersection.location();
     Assert.assertEquals(13.426579, location.longitude(), 0.0001);
