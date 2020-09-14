@@ -59,6 +59,10 @@ public interface DirectionsService {
    * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
    *                            that do not allow vehicles and are set aside for pedestrian use
    * @param alleyBias           a factor that modifies the cost when alleys are encountered
+   * @param arriveBy            the desired arrival time, formatted as a timestamp in ISO-8601
+   *                            format in the local time at the route <b>destination</b>
+   * @param departAt            the departure time, formatted as a timestamp in ISO-8601
+   *                            format in the local time at the route <b>origin</b>
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */
@@ -90,7 +94,9 @@ public interface DirectionsService {
     @Query("enable_refresh") Boolean enableRefresh,
     @Query("walking_speed") Double walkingSpeed,
     @Query("walkway_bias") Double walkwayBias,
-    @Query("alley_bias") Double alleyBias
+    @Query("alley_bias") Double alleyBias,
+    @Query("arrive_by") String arriveBy,
+    @Query("depart_at") String departAt
   );
 
   /**
@@ -134,6 +140,10 @@ public interface DirectionsService {
    * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
    *                            that do not allow vehicles and are set aside for pedestrian use
    * @param alleyBias           a factor that modifies the cost when alleys are encountered
+   * @param arriveBy            the desired arrival time, formatted as a timestamp in ISO-8601
+   *                            format in the local time at the route <b>destination</b>
+   * @param departAt            the departure time, formatted as a timestamp in ISO-8601
+   *                            format in the local time at the route <b>origin</b>
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 4.6.0
    */
@@ -166,6 +176,8 @@ public interface DirectionsService {
     @Field("enable_refresh") Boolean enableRefresh,
     @Field("walking_speed") Double walkingSpeed,
     @Field("walkway_bias") Double walkwayBias,
-    @Field("alley_bias") Double alleyBias
+    @Field("alley_bias") Double alleyBias,
+    @Field("arrive_by") String arriveBy,
+    @Field("depart_at") String departAt
   );
 }
