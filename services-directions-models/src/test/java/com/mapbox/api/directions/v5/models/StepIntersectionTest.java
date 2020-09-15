@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
@@ -45,6 +46,8 @@ public class StepIntersectionTest extends TestUtils {
       .rawLocation(new double[]{13.426579, 52.508068})
       .tunnelName("test tunnel")
       .geometryIndex(123)
+      .isUrban(true)
+      .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
       .build();
 
     String jsonString = intersection.toJson();
@@ -62,6 +65,7 @@ public class StepIntersectionTest extends TestUtils {
       .bearings(Arrays.asList(120, 210, 300))
       .rawLocation(new double[]{13.424671, 52.508812})
       .tunnelName("test tunnel")
+      .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
       .build();
 
     String jsonString = intersection.toJson();
@@ -73,14 +77,22 @@ public class StepIntersectionTest extends TestUtils {
 
   @Test
   public void testFromJson() {
-    String stepIntersectionJsonString = "{\"out\": 0, \"entry\": [true], \"bearings\": [ 125 ], "
+    String stepIntersectionJsonString = "{"
+    + "\"location\": [ 13.426579, 52.508068 ],"
+    + "\"bearings\": [ 125 ], "
+    + "\"entry\": [true], "
+    + "\"out\": 0, "
     + "\"tunnel_name\": \"test tunnel name\","
     + "\"geometry_index\": 123,"
-    + "\"location\": [ 13.426579, 52.508068 ] }";
+    + "\"is_urban\": true,"
+    + "\"mapbox_streets_v8\": {\"class\": \"street\"}"
+    + "}";
 
     StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
     Assert.assertEquals("test tunnel name", stepIntersection.tunnelName());
     Assert.assertEquals(123, stepIntersection.geometryIndex().intValue());
+    assertTrue(stepIntersection.isUrban());
+    assertEquals("street", stepIntersection.mapboxStreetsV8().roadClass());
 
     Point location = stepIntersection.location();
     Assert.assertEquals(13.426579, location.longitude(), 0.0001);

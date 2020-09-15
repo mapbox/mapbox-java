@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.geojson.Point;
 
 import java.util.List;
@@ -147,6 +148,28 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract Integer geometryIndex();
 
   /**
+   * A boolean indicating whether the road exiting the intersection is considered to be in an urban
+   * area. This value is determined by the density of the surrounding road network.
+   * Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
+   *
+   * @return a value indicating whether the road exiting the intersection is in an urban area
+   */
+  @Nullable
+  @SerializedName("is_urban")
+  public abstract Boolean isUrban();
+
+  /**
+   * An object containing detailed information about the road exiting the intersection along the
+   * route. Properties in this object correspond to properties in the {@link #classes()}
+   * specification. Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
+   *
+   * @return an object containing detailed road information.
+   */
+  @Nullable
+  @SerializedName("mapbox_streets_v8")
+  public abstract MapboxStreetsV8 mapboxStreetsV8();
+
+  /**
    * Convert the current {@link StepIntersection} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link StepIntersection}.
@@ -283,6 +306,28 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      * @return this builder for chaining options together
      */
     public abstract Builder geometryIndex(@Nullable Integer geometryIndex);
+
+    /**
+     * A boolean indicating whether the road exiting the intersection is considered to be in an
+     * urban area. This value is determined by the density of the surrounding road network.
+     * Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
+     *
+     * @param isUrban indicating whether the road exiting the intersection is in an urban area
+     * @return this builder for chaining options together
+     */
+    @Nullable
+    public abstract Builder isUrban(@Nullable Boolean isUrban);
+
+    /**
+     * An object containing detailed information about the road exiting the intersection along the
+     * route. Properties in this object correspond to properties in the {@link #classes()}
+     * specification. Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
+     *
+     * @param street an object containing detailed road information.
+     * @return this builder for chaining options together
+     */
+    @Nullable
+    public abstract Builder mapboxStreetsV8(@Nullable MapboxStreetsV8 street);
 
     /**
      * The rawLocation as a double array. Once the {@link StepIntersection} object's created,
