@@ -44,7 +44,6 @@ public class StepIntersectionTest extends TestUtils {
       .entry(Arrays.asList(true))
       .bearings(Arrays.asList(125))
       .rawLocation(new double[]{13.426579, 52.508068})
-      .tunnelName("test tunnel")
       .geometryIndex(123)
       .isUrban(true)
       .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
@@ -64,7 +63,6 @@ public class StepIntersectionTest extends TestUtils {
       .entry(Arrays.asList(false, true, true))
       .bearings(Arrays.asList(120, 210, 300))
       .rawLocation(new double[]{13.424671, 52.508812})
-      .tunnelName("test tunnel")
       .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
       .build();
 
@@ -82,14 +80,12 @@ public class StepIntersectionTest extends TestUtils {
     + "\"bearings\": [ 125 ], "
     + "\"entry\": [true], "
     + "\"out\": 0, "
-    + "\"tunnel_name\": \"test tunnel name\","
     + "\"geometry_index\": 123,"
     + "\"is_urban\": true,"
     + "\"mapbox_streets_v8\": {\"class\": \"street\"}"
     + "}";
 
     StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
-    Assert.assertEquals("test tunnel name", stepIntersection.tunnelName());
     Assert.assertEquals(123, stepIntersection.geometryIndex().intValue());
     assertTrue(stepIntersection.isUrban());
     assertEquals("street", stepIntersection.mapboxStreetsV8().roadClass());
