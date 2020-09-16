@@ -4,6 +4,13 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.6.0 - September 16, 2020
+
+Add fields to `StepIntersection`:
+- `tunnelName` [#1179](https://github.com/mapbox/mapbox-java/pull/1179)
+- `geometryIndex` [#1181](https://github.com/mapbox/mapbox-java/pull/1181)
+- `isUrban`, `MapboxStreetsV8` [#1182](https://github.com/mapbox/mapbox-java/pull/1182)
+
 ### 5.5.0 - September 3, 2020
 
 - Update VERSION_NAME: 5.4.1-SNAPSHOT -> 5.5.0-SNAPSHOT ((#1173)
