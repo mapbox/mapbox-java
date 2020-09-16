@@ -128,15 +128,6 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract List<IntersectionLanes> lanes();
 
   /**
-   * Name of the tunnel. Value may be present if {@link #classes} contains "tunnel".
-   *
-   * @return name of the tunnel
-   */
-  @Nullable
-  @SerializedName("tunnel_name")
-  public abstract String tunnelName();
-
-  /**
    * The zero-based index for the intersection.
    * This value can be used to apply the duration annotation that corresponds with the intersection.
    * Only available on the driving profile.
@@ -287,14 +278,6 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder lanes(@Nullable List<IntersectionLanes> lanes);
-
-    /**
-     * Name of the tunnel. Value is present only if class is tunnel.
-     *
-     * @param tunnelName name of the tunnel
-     * @return this builder for chaining options together
-     */
-    public abstract Builder tunnelName(@Nullable String tunnelName);
 
     /**
      * The zero-based index for the intersection.
