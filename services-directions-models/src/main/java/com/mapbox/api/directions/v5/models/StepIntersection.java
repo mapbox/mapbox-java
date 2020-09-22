@@ -162,6 +162,16 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract Integer adminIndex();
 
   /**
+   * An object containing information about passing rest stops along the route.
+   * Only available on the `driving` profile.
+   *
+   * @return an object containing information about passing rest stops along the route.
+   */
+  @Nullable
+  @SerializedName("rest_stop")
+  public abstract RestStop restStop();
+
+  /**
    * An object containing detailed information about the road exiting the intersection along the
    * route. Properties in this object correspond to properties in the {@link #classes()}
    * specification. Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
@@ -323,6 +333,16 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      */
     @Nullable
     public abstract Builder adminIndex(@Nullable Integer adminIndex);
+
+    /**
+     * An object containing information about passing rest stops along the route.
+     * Only available on the `driving` profile.
+     *
+     * @param restStop object containing information about passing rest stops along the route.
+     * @return this builder for chaining options together
+     */
+    @Nullable
+    public abstract Builder restStop(@Nullable RestStop restStop);
 
     /**
      * An object containing detailed information about the road exiting the intersection along the
