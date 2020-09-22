@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug configuration",
+            "program": "${workspaceFolder}/index.js download-all",
+            "args": [
+                "download", "5.6.0"
+            ],
+        }
+    ]
+}

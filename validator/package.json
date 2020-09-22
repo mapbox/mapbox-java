@@ -1,0 +1,21 @@
+{
+  "name": "validator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.mjs",
+  "bin": {
+    "validator": "./src/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jarfile": "^2.0.0",
+    "java": "^0.12.1",
+    "node-fetch": "^2.6.1",
+    "yargs": "^16.0.3"
+  }
+}
