@@ -172,6 +172,20 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract RestStop restStop();
 
   /**
+   * An object containing information about a toll collection point along the route.
+   * This is a payment booth or overhead electronic gantry
+   * <a href="https://wiki.openstreetmap.org/wiki/Tag:barrier%3Dtoll_booth">
+   *   payment booth or overhead electronic gantry</a>
+   * where toll charge is collected.
+   * Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
+   *
+   * @return an object containing information about a toll collection point along the route.
+   */
+  @Nullable
+  @SerializedName("toll_collection")
+  public abstract TollCollection tollCollection();
+
+  /**
    * An object containing detailed information about the road exiting the intersection along the
    * route. Properties in this object correspond to properties in the {@link #classes()}
    * specification. Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
@@ -343,6 +357,20 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      */
     @Nullable
     public abstract Builder restStop(@Nullable RestStop restStop);
+
+    /**
+     * An object containing information about a toll collection point along the route.
+     * This is a payment booth or overhead electronic gantry
+     * <a href="https://wiki.openstreetmap.org/wiki/Tag:barrier%3Dtoll_booth">
+     *   payment booth or overhead electronic gantry</a>
+     * where toll charge is collected.
+     *
+     * @param tollCollection object containing information about
+     *                       a toll collection point along the route.
+     * @return this builder for chaining options together
+     */
+    @Nullable
+    public abstract Builder tollCollection(@Nullable TollCollection tollCollection);
 
     /**
      * An object containing detailed information about the road exiting the intersection along the
