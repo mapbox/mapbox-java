@@ -1,31 +1,28 @@
 package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 
 /**
- * An object containing detailed information about the road exiting the intersection along the
- * route.
+ * An object containing information about passing rest stops along the route.
  * Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
  */
 @AutoValue
-public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
+public abstract class RestStop extends DirectionsJsonObject {
 
-  // TODO update docs below
   /**
-   * Class of the road exiting the intersection.
-   *
-   * @return class of the road.
+   * The type of rest stop, either `rest_area` (includes parking only) or `service_area`
+   * (includes amenities such as gas or restaurants).
+   * Note that adding new possible types is not considered a breaking change.
    */
   @Nullable
-  @SerializedName("class")
-  public abstract String roadClass();
+  public abstract String type();
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -33,16 +30,16 @@ public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
    * @return this classes {@link Builder} for creating a new instance
    */
   public static Builder builder() {
-    return new AutoValue_MapboxStreetsV8.Builder();
+    return new AutoValue_RestStop.Builder();
   }
 
   /**
-   * Convert the current {@link MapboxStreetsV8} to its builder holding the currently assigned
+   * Convert the current {@link RestStop} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
-   * an updated and modified {@link MapboxStreetsV8}.
+   * an updated and modified {@link RestStop}.
    *
    * @return a {@link Builder} with the same values set to match the ones defined in this {@link
-   * MapboxStreetsV8}
+   * RestStop}
    */
   public abstract Builder toBuilder();
 
@@ -52,8 +49,8 @@ public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
    * @param gson the built {@link Gson} object
    * @return the type adapter for this class
    */
-  public static TypeAdapter<MapboxStreetsV8> typeAdapter(Gson gson) {
-    return new AutoValue_MapboxStreetsV8.GsonTypeAdapter(gson);
+  public static TypeAdapter<RestStop> typeAdapter(Gson gson) {
+    return new AutoValue_RestStop.GsonTypeAdapter(gson);
   }
 
   /**
@@ -62,31 +59,32 @@ public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
    * @param json a formatted valid JSON string defining an Incident
    * @return a new instance of this class defined by the values passed in the method
    */
-  public static MapboxStreetsV8 fromJson(String json) {
+  public static RestStop fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gson.create().fromJson(json, MapboxStreetsV8.class);
+    return gson.create().fromJson(json, RestStop.class);
   }
 
   /**
-   * This builder can be used to set the values describing the {@link MapboxStreetsV8}.
+   * This builder can be used to set the values describing the {@link RestStop}.
    */
   @AutoValue.Builder
   public abstract static class Builder {
 
     /**
-     * Class of the road exiting the intersection.
+     * The type of rest stop, either `rest_area` (includes parking only) or `service_area`
+     * (includes amenities such as gas or restaurants).
+     * Note that adding new possible types is not considered a breaking change.
      *
-     * @param roadClass class of the road exiting the intersection.
-     * @return this builder for chaining options together
+     * @param type rest stop type
      */
-    public abstract Builder roadClass(@Nullable String roadClass);
+    public abstract Builder type(@Nullable String type);
 
     /**
-     * Build a new {@link MapboxStreetsV8} object.
+     * Build a new {@link RestStop} object.
      *
-     * @return a new {@link MapboxStreetsV8} using the provided values in this builder
+     * @return a new {@link RestStop} using the provided values in this builder
      */
-    public abstract MapboxStreetsV8 build();
+    public abstract RestStop build();
   }
 }
