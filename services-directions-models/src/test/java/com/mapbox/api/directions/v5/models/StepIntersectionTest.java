@@ -46,6 +46,7 @@ public class StepIntersectionTest extends TestUtils {
       .rawLocation(new double[]{13.426579, 52.508068})
       .geometryIndex(123)
       .isUrban(true)
+      .adminIndex(2)
       .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
       .build();
 
@@ -96,6 +97,20 @@ public class StepIntersectionTest extends TestUtils {
 
     String jsonStr = stepIntersection.toJson();
 
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testAdminIndex() {
+    String stepIntersectionJsonString = "{"
+    + "\"location\": [ 13.426579, 52.508068 ],"
+    + "\"admin_index\": 2"
+    + "}";
+
+    StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    Assert.assertEquals(2, stepIntersection.adminIndex().intValue());
+    String jsonStr = stepIntersection.toJson();
     compareJson(stepIntersectionJsonString, jsonStr);
   }
 }

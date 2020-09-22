@@ -69,6 +69,14 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   public abstract String summary();
 
   /**
+   * An array of objects describing the administrative boundaries the route leg travels through.
+   * Use {@link StepIntersection#adminIndex()} on the intersection object
+   * to look up the admin for each intersection in this array.
+   */
+  @Nullable
+  public abstract List<Admin> admins();
+
+  /**
    * Gives a List including all the steps to get from one waypoint to another.
    *
    * @return List of {@link LegStep}
@@ -171,6 +179,16 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder summary(@Nullable String summary);
+
+    /**
+     * An array of objects describing the administrative boundaries the route leg travels through.
+     * Use {@link StepIntersection#adminIndex()} on the intersection object
+     * to look up the admin for each intersection in this array.
+     *
+     * @param admins Array with admins
+     * @return this builder for chaining options together
+     */
+    public abstract Builder admins(@Nullable List<Admin> admins);
 
     /**
      * Gives a List including all the steps to get from one waypoint to another.
