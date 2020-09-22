@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.mapbox.core.TestUtils;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class RouteLegTest extends TestUtils {
     byte[] serialized = TestUtils.serialize(routeLeg);
     assertEquals(routeLeg, deserialize(serialized, RouteLeg.class));
   }
-
 
   @Test
   public void testToFromJson1() {
@@ -94,5 +94,30 @@ public class RouteLegTest extends TestUtils {
     RouteLeg routeLegFromJson = RouteLeg.fromJson(jsonString);
 
     assertEquals(routeLeg, routeLegFromJson);
+  }
+
+  @Test
+  public void testAdmins() {
+    String routeLegJsonString = "{"
+      + "\"distance\": 53.4,"
+      + "\"duration\": 14.3,"
+      + "\"summary\": \"route summary\","
+      + "\"admins\": [{ \"iso_3166_1_alpha3\": \"USA\", \"iso_3166_1\": \"US\" }]"
+      + "}";
+    List<Admin> admins = new ArrayList<>();
+    admins.add(Admin.builder().countryCode("US").countryCodeAlpha3("USA").build());
+
+    RouteLeg routeLeg = RouteLeg.builder()
+      .distance(53.4)
+      .duration(14.3)
+      .summary("route summary")
+      .admins(admins)
+      .build();
+
+    RouteLeg routeLegFromJson = RouteLeg.fromJson(routeLegJsonString);
+
+    assertEquals(routeLeg, routeLegFromJson);
+    assertEquals("US", routeLegFromJson.admins().get(0).countryCode());
+    assertEquals("USA", routeLegFromJson.admins().get(0).countryCodeAlpha3());
   }
 }

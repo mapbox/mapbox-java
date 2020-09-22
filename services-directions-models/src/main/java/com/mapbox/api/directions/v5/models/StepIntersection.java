@@ -150,6 +150,18 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract Boolean isUrban();
 
   /**
+   * The zero-based index into the admin list on the route leg for this intersection.
+   * Use this field to look up the ISO-3166-1 country code for this point on the route.
+   * Only available on the `driving` profile.
+   *
+   * @return a zero-based index into the admin list on the route leg.
+   * @see RouteLeg#admins()
+   */
+  @Nullable
+  @SerializedName("admin_index")
+  public abstract Integer adminIndex();
+
+  /**
    * An object containing detailed information about the road exiting the intersection along the
    * route. Properties in this object correspond to properties in the {@link #classes()}
    * specification. Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
@@ -300,6 +312,17 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      */
     @Nullable
     public abstract Builder isUrban(@Nullable Boolean isUrban);
+
+    /**
+     * The zero-based index into the admin list on the route leg for this intersection.
+     * Use this field to look up the ISO-3166-1 country code for this point on the route.
+     * Only available on the `driving` profile.
+     *
+     * @param adminIndex zero-based index into the admin list on the route leg for this intersection
+     * @return this builder for chaining options together
+     */
+    @Nullable
+    public abstract Builder adminIndex(@Nullable Integer adminIndex);
 
     /**
      * An object containing detailed information about the road exiting the intersection along the
