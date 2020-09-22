@@ -17,9 +17,13 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 @AutoValue
 public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
 
-  // TODO update docs below
   /**
-   * Class of the road exiting the intersection.
+   * The road class of the road exiting the intersection as defined by the
+   *<a href="https://docs.mapbox.com/vector-tiles/reference/mapbox-streets-v8/#--road---class-text">
+   *   Mapbox Streets v8 road class specification</a>.
+   * Valid values are the same as those supported by Mapbox Streets v8.
+   * Examples include: `motorway`, `motorway_link`, `primary`, and `street`.
+   * Note that adding new possible values is not considered a breaking change.
    *
    * @return class of the road.
    */
