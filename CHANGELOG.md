@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.7.0-beta - September 23, 2020
+- Exposed border crossings, rest stops and toll collection points [#1188](https://github.com/mapbox/mapbox-java/pull/1188)
+
 ### 5.6.0 - September 16, 2020
 
 Add fields to `StepIntersection`:
