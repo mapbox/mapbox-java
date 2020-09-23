@@ -38,8 +38,9 @@ public final class TurfTransformation {
   }
 
   /**
-   * Takes a {@link Point} and calculates the circle polygon given a radius in degrees, radians,
-   * miles, or kilometers; and steps for precision. This uses the {@link #DEFAULT_STEPS}.
+   * Takes a {@link Point} and calculates the circle polygon given a radius in the
+   * provided {@link TurfConstants.TurfUnitCriteria}; and steps for precision. This
+   * method uses the {@link #DEFAULT_STEPS}.
    *
    * @param center a {@link Point} which the circle will center around
    * @param radius the radius of the circle
@@ -53,8 +54,8 @@ public final class TurfTransformation {
   }
 
   /**
-   * Takes a {@link Point} and calculates the circle polygon given a radius in degrees, radians,
-   * miles, or kilometers; and steps for precision.
+   * Takes a {@link Point} and calculates the circle polygon given a radius in the
+   * provided {@link TurfConstants.TurfUnitCriteria}; and steps for precision.
    *
    * @param center a {@link Point} which the circle will center around
    * @param radius the radius of the circle
