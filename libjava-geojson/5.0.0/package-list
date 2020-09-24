@@ -1,0 +1,7 @@
+com.google.gson.typeadapters
+com.mapbox.geojson
+com.mapbox.geojson.constants
+com.mapbox.geojson.exception
+com.mapbox.geojson.gson
+com.mapbox.geojson.shifter
+com.mapbox.geojson.utils
