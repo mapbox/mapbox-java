@@ -58,20 +58,12 @@ async function downloadService(release, service) {
     return response
 };
 
-async function downloadRelease(release, callback) {
-    const sdkServices = downloadService(release, "mapbox-sdk-services")
-    const sdkGeojson = downloadService(release, "mapbox-sdk-geojson")
-    const directionsModels = downloadService(release, "mapbox-sdk-directions-models")
-    const directionsRefreshModels = downloadService(release, "mapbox-sdk-directions-refresh-models")
-    let values = await Promise.all([sdkServices, sdkGeojson, directionsModels, directionsRefreshModels]);
-    callback(values)
-}
-
 module.exports = {
-    downloadRelease: function(release,) {
-        downloadRelease(release, (values) => {
-            const downloaded = values.every((download) => download.result == "success")
-            console.log(`${release} ${downloaded}`)
-        })
+    downloadRelease: async function(release) {
+        const sdkServices = downloadService(release, "mapbox-sdk-services")
+        const sdkGeojson = downloadService(release, "mapbox-sdk-geojson")
+        const directionsModels = downloadService(release, "mapbox-sdk-directions-models")
+        const directionsRefreshModels = downloadService(release, "mapbox-sdk-directions-refresh-models")
+        return await Promise.all([sdkServices, sdkGeojson, directionsModels, directionsRefreshModels]);
     }
 }

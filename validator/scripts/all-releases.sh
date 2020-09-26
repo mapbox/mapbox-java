@@ -10,16 +10,21 @@
 #
 
 # This script requires a file with a DirectionsResponse in the form of json.
-if [[ $# -ne 1 ]]; then
+echo $#
+if [[ $# -lt 1 ]]; then
   echo "Provide a path to the json file"
   exit 1
 fi
 JSON_FILE=$1
 
-# Validate the json with each release that has been downloaded.
-# To download releases, use the validator command line interface
-FILES=releases/*
-for f in $FILES; do
-  release="${f:9}"
-  validator json $release $JSON_FILE
+for var in "$@"; do
+  JSON_FILE=$var
+  echo Testing $JSON_FILE
+  # Validate the json with each release that has been downloaded.
+  # To download releases, use the validator command line interface
+  FILES=releases/*
+  for f in $FILES; do
+    release="${f:9}"
+    validator json $release $JSON_FILE
+  done
 done
