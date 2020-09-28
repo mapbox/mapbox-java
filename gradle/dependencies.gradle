@@ -6,7 +6,7 @@ ext {
       junit            : '4.12',
       annotation       : '1.0.0',
       gson             : '2.8.6',
-      retrofit         : '2.7.1',
+      retrofit         : '2.7.2',
       okhttp3          : '3.12.7',
       mockito          : '2.28.2',
       hamcrestJunit    : '2.0.0.0',
