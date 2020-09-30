@@ -50,12 +50,13 @@ public class StepIntersectionTest extends TestUtils {
       .tollCollection(TollCollection.builder().type("toll_gantry").build())
       .adminIndex(2)
       .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
+      .tunnelName("tunnel_name")
       .build();
 
     String jsonString = intersection.toJson();
     StepIntersection intersectionFromJson = StepIntersection.fromJson(jsonString);
 
-    Assert.assertEquals(intersection, intersectionFromJson);
+    assertEquals(intersection, intersectionFromJson);
   }
 
   @Test
@@ -67,12 +68,13 @@ public class StepIntersectionTest extends TestUtils {
       .bearings(Arrays.asList(120, 210, 300))
       .rawLocation(new double[]{13.424671, 52.508812})
       .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
+      .tunnelName("tunnel_name")
       .build();
 
     String jsonString = intersection.toJson();
     StepIntersection intersectionFromJson = StepIntersection.fromJson(jsonString);
 
-    Assert.assertEquals(intersection, intersectionFromJson);
+    assertEquals(intersection, intersectionFromJson);
   }
 
 
@@ -85,17 +87,19 @@ public class StepIntersectionTest extends TestUtils {
     + "\"out\": 0, "
     + "\"geometry_index\": 123,"
     + "\"is_urban\": true,"
-    + "\"mapbox_streets_v8\": {\"class\": \"street\"}"
+    + "\"mapbox_streets_v8\": {\"class\": \"street\"},"
+    + "\"tunnel_name\": \"test tunnel name\""
     + "}";
 
     StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
-    Assert.assertEquals(123, stepIntersection.geometryIndex().intValue());
+    assertEquals(123, stepIntersection.geometryIndex().intValue());
     assertTrue(stepIntersection.isUrban());
     assertEquals("street", stepIntersection.mapboxStreetsV8().roadClass());
+    assertEquals("test tunnel name", stepIntersection.tunnelName());
 
     Point location = stepIntersection.location();
-    Assert.assertEquals(13.426579, location.longitude(), 0.0001);
-    Assert.assertEquals(52.508068, location.latitude(), 0.0001);
+    assertEquals(13.426579, location.longitude(), 0.0001);
+    assertEquals(52.508068, location.latitude(), 0.0001);
 
     String jsonStr = stepIntersection.toJson();
 
