@@ -16,6 +16,9 @@ test:
 build-release:
 	./gradlew assemble
 
+build-cli:
+	./gradlew shadowJar
+
 javadoc:
 	mkdir documentation
 	mkdir documentation/core/

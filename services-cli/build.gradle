@@ -1,0 +1,63 @@
+apply plugin: 'de.fuerstenau.buildconfig'
+apply plugin: 'application'
+apply plugin: 'kotlin'
+apply plugin: "com.vanniktech.android.junit.jacoco"
+apply plugin: 'com.github.johnrengelman.shadow'
+
+buildscript {
+    apply from: "../gradle/dependencies.gradle"
+
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2' }
+        // To use snapshots
+        //maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+        jcenter()
+    }
+
+    dependencies {
+        classpath pluginDependencies.buildConfig
+        classpath pluginDependencies.kotlin
+        classpath pluginDependencies.shadowJar
+    }
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    // To use snapshots
+    //implementation "com.mapbox.mapboxsdk:mapbox-sdk-services:$VERSION_NAME"
+
+    // Make sure to use ./gradlew shadowJar for this to work
+    implementation project(":services-core")
+    implementation project(":services-directions-models")
+    implementation project(":services-directions-refresh-models")
+    implementation project(":services-geojson")
+    implementation project(":services-directions")
+    implementation project(":services-directions-refresh")
+
+    // The Apache Software License, Version 2.0
+    // http://www.apache.org/licenses/LICENSE-2.0.txt
+    implementation("commons-cli:commons-cli:1.4")
+
+    // Kotlin
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    // Testing
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+}
+
+buildConfig {
+    packageName = 'com.mapbox.services.cli'
+    buildConfigField 'String', 'MAPBOX_ACCESS_TOKEN', System.getenv("MAPBOX_ACCESS_TOKEN")
+}
+
+application {
+    mainClassName = 'com.mapbox.services.cli.MapboxJavaCli'
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': application.mainClassName)
+    }
+}
