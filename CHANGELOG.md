@@ -4,6 +4,12 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.7.0 - October 1, 2020
+
+- Adjust javadoc info about Turf circle methods [#1192](https://github.com/mapbox/mapbox-java/pull/1192)
+- Bump retrofit to 2.7.2 to be android API 30 compatible [#1194](https://github.com/mapbox/mapbox-java/pull/1194)
+- Add `tunnelName` field to `StepIntersection` [#1197](https://github.com/mapbox/mapbox-java/pull/1197)
+
 ### 5.7.0-beta - September 23, 2020
 - Exposed border crossings, rest stops and toll collection points [#1188](https://github.com/mapbox/mapbox-java/pull/1188)
 
