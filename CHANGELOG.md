@@ -4,6 +4,11 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.8.0-beta.1 - October 9, 2020
+
+- Add test `services-cli` module for json schema testing [#1198](https://github.com/mapbox/mapbox-java/pull/1198)
+- Added `Incident` to `LegStep` [#1201](https://github.com/mapbox/mapbox-java/pull/1201)
+
 ### 5.7.0 - October 1, 2020
 
 - Adjust javadoc info about Turf circle methods [#1192](https://github.com/mapbox/mapbox-java/pull/1192)
