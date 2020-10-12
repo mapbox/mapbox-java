@@ -56,6 +56,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_ROTARY_FIXTURE = "directions_v5_fixtures_rotary.json";
   private static final String DIRECTIONS_V5_ANNOTATIONS_FIXTURE = "directions_annotations_v5.json";
   private static final String DIRECTIONS_V5_NO_ROUTE = "directions_v5_no_route.json";
+  private static final String DIRECTIONS_V5_SPEED_LIMIT = "directions_v5_speedlimit.json";
   private static final String DIRECTIONS_V5_MAX_SPEED_ANNOTATION = "directions_v5_max_speed_annotation.json";
   private static final String DIRECTIONS_V5_BANNER_INSTRUCTIONS = "directions_v5_banner_instructions.json";
   private static final String DIRECTIONS_V5_APPROACHES_REQUEST = "directions_v5_approaches.json";
@@ -787,6 +788,32 @@ public class MapboxDirectionsTest extends TestUtils {
     LegAnnotation maxSpeedAnnotation = maxSpeedRoute.legs().get(0).annotation();
 
     assertNotNull(maxSpeedAnnotation.maxspeed());
+  }
+
+  @Test
+  public void speedLimit_doesUnitGetCreatedInResponse() throws IOException {
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
+    String body = loadJsonFixture(DIRECTIONS_V5_SPEED_LIMIT);
+    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
+    DirectionsRoute speedLimitRoute = response.routes().get(0);
+    String speedLimitSign = speedLimitRoute.legs().get(0).steps().get(0).speedLimitSign();
+    String speedLimitUnit = speedLimitRoute.legs().get(0).steps().get(0).speedLimitUnit();
+
+    assertEquals("mph", speedLimitUnit);
+  }
+
+  @Test
+  public void speedLimit_doesSignGetCreatedInResponse() throws IOException {
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
+    String body = loadJsonFixture(DIRECTIONS_V5_SPEED_LIMIT);
+    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
+    DirectionsRoute speedLimitRoute = response.routes().get(0);
+    String speedLimitSign = speedLimitRoute.legs().get(0).steps().get(0).speedLimitSign();
+    String speedLimitUnit = speedLimitRoute.legs().get(0).steps().get(0).speedLimitUnit();
+
+    assertEquals("mutcd", speedLimitSign);
   }
 
   @Test

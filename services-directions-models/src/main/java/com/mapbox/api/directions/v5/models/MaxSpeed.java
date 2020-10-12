@@ -8,7 +8,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 
-
 /**
  * Object representing max speeds along a route.
  *
@@ -43,6 +42,7 @@ public abstract class MaxSpeed extends DirectionsJsonObject {
    * @since 3.0.0
    */
   @Nullable
+  @SpeedLimit.Unit
   public abstract String unit();
 
   /**
@@ -124,7 +124,7 @@ public abstract class MaxSpeed extends DirectionsJsonObject {
      * @return a {@link Builder} object
      * @since 3.0.0
      */
-    public abstract Builder unit(@Nullable String unit);
+    public abstract Builder unit(@Nullable @SpeedLimit.Unit String unit);
 
     /**
      * Boolean is true if the speed limit is not known, otherwise null.

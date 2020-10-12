@@ -75,6 +75,8 @@ public class LegStepTest extends TestUtils {
         .modifier("left")
         .instruction("Turn left onto Adalbertstraße")
         .build())
+      .speedLimitUnit("mph")
+      .speedLimitSign(LegStep.MUTCD)
       .intersections(intersections)
       .voiceInstructions(voiceInstructions)
       .bannerInstructions(bannerInstructions)
