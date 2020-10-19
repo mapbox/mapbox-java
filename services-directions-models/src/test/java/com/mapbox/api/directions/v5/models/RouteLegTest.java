@@ -73,6 +73,8 @@ public class RouteLegTest extends TestUtils {
 
     List<LegStep> steps = new ArrayList<>();
 
+    List<Incident> incidents = new ArrayList<>();
+
     LegAnnotation annotation = LegAnnotation.builder()
       .congestion(new ArrayList<String>())
       .distance(distanceList)
@@ -84,9 +86,9 @@ public class RouteLegTest extends TestUtils {
     RouteLeg routeLeg = RouteLeg.builder()
       .annotation(annotation)
       .distance(53.4)
-      //.weight(14.3)
       .duration(14.3)
       .steps(steps)
+      .incidents(incidents)
       .summary("")
       .build();
 
@@ -97,21 +99,26 @@ public class RouteLegTest extends TestUtils {
   }
 
   @Test
-  public void testAdmins() {
+  public void testFromJson() {
     String routeLegJsonString = "{"
       + "\"distance\": 53.4,"
       + "\"duration\": 14.3,"
       + "\"summary\": \"route summary\","
-      + "\"admins\": [{ \"iso_3166_1_alpha3\": \"USA\", \"iso_3166_1\": \"US\" }]"
+      + "\"admins\": [{ \"iso_3166_1_alpha3\": \"USA\", \"iso_3166_1\": \"US\" }],"
+      + "\"incidents\": [{ \"id\": \"15985415522454461962\" }]"
       + "}";
     List<Admin> admins = new ArrayList<>();
     admins.add(Admin.builder().countryCode("US").countryCodeAlpha3("USA").build());
+
+    List<Incident> incidents = new ArrayList<>();
+    incidents.add(Incident.builder().id("15985415522454461962").build());
 
     RouteLeg routeLeg = RouteLeg.builder()
       .distance(53.4)
       .duration(14.3)
       .summary("route summary")
       .admins(admins)
+      .incidents(incidents)
       .build();
 
     RouteLeg routeLegFromJson = RouteLeg.fromJson(routeLegJsonString);

@@ -86,6 +86,14 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   public abstract List<LegStep> steps();
 
   /**
+   * A list of incidents that occur on this leg.
+   *
+   * @return a list of {@link Incident}
+   */
+  @Nullable
+  public abstract List<Incident> incidents();
+
+  /**
    * A {@link LegAnnotation} that contains additional details about each line segment along the
    * route geometry. If you'd like to receiving this, you must request it inside your Directions
    * request before executing the call.
@@ -198,6 +206,14 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder steps(@Nullable List<LegStep> steps);
+
+    /**
+     * A list of incidents that occur on this leg.
+     *
+     * @param incidents a list of {@link Incident}
+     * @return this builder for chaining options together
+     */
+    public abstract Builder incidents(@Nullable List<Incident> incidents);
 
     /**
      * A {@link LegAnnotation} that contains additional details about each line segment along the
