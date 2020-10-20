@@ -60,14 +60,6 @@ public abstract class LegStep extends DirectionsJsonObject {
   public abstract Double durationTypical();
 
   /**
-   * A list of incidents that occur on the route.
-   *
-   * @return a list of {@link Incident}
-   */
-  @Nullable
-  public abstract List<Incident> incidents();
-
-  /**
    * Gives the geometry of the leg step.
    *
    * @return an encoded polyline string
@@ -295,14 +287,6 @@ public abstract class LegStep extends DirectionsJsonObject {
      * @since 5.5.0
      */
     public abstract Builder durationTypical(@Nullable Double durationTypical);
-
-    /**
-     * A list of incidents that occur on the route.
-     *
-     * @param incidents a list of {@link Incident}
-     * @return this builder for chaining options together
-     */
-    public abstract Builder incidents(@Nullable List<Incident> incidents);
 
     /**
      * Gives the geometry of the leg step.
