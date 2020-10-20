@@ -6,6 +6,7 @@ import com.mapbox.api.directions.v5.models.BannerComponents;
 import com.mapbox.api.directions.v5.models.BannerInstructions;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.Incident;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
@@ -1342,6 +1343,48 @@ public class MapboxDirectionsTest extends TestUtils {
     retrofit2.Call<DirectionsResponse> call = builder.build().initializeCall();
 
     assertEquals("GET", call.request().method());
+  }
+
+  @Test
+  public void withIncidents() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+        .baseUrl(mockUrl.toString())
+        .geometries(GEOMETRY_POLYLINE)
+        .accessToken(ACCESS_TOKEN)
+        .origin(Point.fromLngLat(1.0, 1.0))
+        .destination(Point.fromLngLat(2.0, 2.0))
+        .build();
+
+    assertNotNull(mapboxDirections);
+
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+    assertEquals(1, response.body().routes().size());
+
+    List<Incident> incidents = response.body().routes().get(0).legs().get(0).incidents();
+    assertEquals(1, incidents.size());
+
+    List<Integer> alertcCodes = new ArrayList<>();
+    alertcCodes.add(501);
+    alertcCodes.add(803);
+
+    Incident incident = incidents.get(0);
+    assertEquals("15985415522454461962", incident.id());
+    assertEquals("construction", incident.type());
+    assertEquals(true, incident.closed());
+    assertEquals(55, incident.congestion().value());
+    assertEquals("Zwischen Eching", incident.description());
+    assertEquals("Zwischen Eching und Oberpfaffenhofen", incident.longDescription());
+    assertEquals("minor", incident.impact());
+    assertEquals("CONSTRUCTION", incident.subType());
+    assertEquals("construction description", incident.subTypeDescription());
+    assertEquals(alertcCodes, incident.alertcCodes());
+    assertEquals(805, (int) incident.geometryIndexStart());
+    assertEquals(896, (int) incident.geometryIndexEnd());
+    assertEquals("2020-10-08T11:34:14Z", incident.creationTime());
+    assertEquals("2020-10-06T12:52:02Z", incident.startTime());
+    assertEquals("2020-11-27T16:00:00Z", incident.endTime());
   }
 
   private void addWaypoints(MapboxDirections.Builder builder, int number) {
