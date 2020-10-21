@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.8.0-beta.2 - October 21, 2020
+
+- Move `Incident` to `RouteLeg` [#1207](https://github.com/mapbox/mapbox-java/pull/1207)
+
 ### 5.8.0-beta.1 - October 9, 2020
 
 - Add test `services-cli` module for json schema testing [#1198](https://github.com/mapbox/mapbox-java/pull/1198)
