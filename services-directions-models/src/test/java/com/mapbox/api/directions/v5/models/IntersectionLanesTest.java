@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class IntersectionLanesTest extends TestUtils {
 
@@ -21,23 +22,51 @@ public class IntersectionLanesTest extends TestUtils {
   }
 
   @Test
-  public void testSerializable() throws Exception {
+  public void testSerializableRoundTripping() throws Exception {
     IntersectionLanes intersectionLanes = IntersectionLanes.builder()
-      .indications(new ArrayList<String>())
       .valid(true)
+      .active(true)
+      .validIndications(Collections.singletonList("straight"))
+      .indications(Arrays.asList("straight","slight left"))
       .build();
     byte[] serialized = TestUtils.serialize(intersectionLanes);
     assertEquals(intersectionLanes, deserialize(serialized, IntersectionLanes.class));
   }
 
   @Test
-  public void testToFromJson() {
+  public void testJsonRoundTripping() {
     IntersectionLanes intersectionLanes = IntersectionLanes.builder()
-      .indications(Arrays.asList("straight","slight left"))
       .valid(true)
+      .active(true)
+      .validIndications(Collections.singletonList("straight"))
+      .indications(Arrays.asList("straight","slight left"))
       .build();
 
     String jsonString = intersectionLanes.toJson();
+    IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
+
+    assertEquals(intersectionLanes, intersectionLanesFromJson);
+  }
+
+  @Test
+  public void testFromJson_active() {
+    IntersectionLanes intersectionLanes = IntersectionLanes.builder()
+      .active(true)
+      .build();
+
+    String jsonString = "{\"active\":true}";
+    IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
+
+    assertEquals(intersectionLanes, intersectionLanesFromJson);
+  }
+
+  @Test
+  public void testFromJson_validIndications() {
+    IntersectionLanes intersectionLanes = IntersectionLanes.builder()
+      .validIndications(Collections.singletonList("straight"))
+      .build();
+
+    String jsonString = "{\"valid_indication\":[\"straight\"]}";
     IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
 
     assertEquals(intersectionLanes, intersectionLanesFromJson);
