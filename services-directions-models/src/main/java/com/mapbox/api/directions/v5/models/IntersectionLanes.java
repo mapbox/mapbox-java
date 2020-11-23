@@ -1,10 +1,12 @@
 package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 
 import java.util.List;
@@ -38,6 +40,35 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
    */
   @Nullable
   public abstract Boolean valid();
+
+  /**
+   * Indicates whether this lane is a preferred lane (true) or not (false).
+   * A preferred lane is a lane that is recommended if there are multiple lanes available.
+   * For example, if guidance indicates that the driver must turn left at an intersection
+   * and there are multiple left turn lanes, the left turn lane that will better prepare
+   * the driver for the next maneuver will be marked as active.
+   * Only available on the mapbox/driving profile.
+   *
+   * @return Indicates whether this lane is a preferred lane (true) or not (false).
+   */
+  @Nullable
+  public abstract Boolean active();
+
+  /**
+   * When either valid or active is set to true, this property shows which of the lane indications
+   * is applicable to the current route, when there is more than one. For example, if a lane allows
+   * you to go left or straight but your current route is guiding you to the left,
+   * then this value will be set to left.
+   * See indications for possible values.
+   * When both active and valid are false, this property will not be included in the response.
+   * Only available on the mapbox/driving profile.
+   *
+   * @return Array of which of the lane indications is applicable to the current route,
+   *   when there is more than one
+   */
+  @Nullable
+  @SerializedName("valid_indication")
+  public abstract List<String> validIndications();
 
   /**
    * Array that can be made up of multiple signs such as {@code left}, {@code right}, etc.
@@ -105,6 +136,25 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder valid(@Nullable Boolean valid);
+
+    /**
+     * Indicates whether this lane is a preferred lane (true) or not (false).
+     *
+     * @param active Boolean value that indicates whether this lane is a preferred lane (true)
+     *               or not (false).
+     * @return this builder for chaining options together
+     */
+    public abstract Builder active(@Nullable Boolean active);
+
+    /**
+     * Shows which of the lane indications is applicable to the current route,
+     * when there is more than one.
+     *
+     * @param validIndications list of lane indications that are applicable to the current route,
+     *                         when there is more than one.
+     * @return this builder for chaining options together
+     */
+    public abstract Builder validIndications(@Nullable List<String> validIndications);
 
     /**
      * list that can be made up of multiple signs such as {@code left}, {@code right}, etc.
