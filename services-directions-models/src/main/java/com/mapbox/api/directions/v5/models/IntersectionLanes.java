@@ -63,12 +63,12 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
    * When both active and valid are false, this property will not be included in the response.
    * Only available on the mapbox/driving profile.
    *
-   * @return Array of which of the lane indications is applicable to the current route,
+   * @return which of the lane indications is applicable to the current route,
    *   when there is more than one
    */
   @Nullable
   @SerializedName("valid_indication")
-  public abstract List<String> validIndications();
+  public abstract String validIndication();
 
   /**
    * Array that can be made up of multiple signs such as {@code left}, {@code right}, etc.
@@ -150,11 +150,11 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
      * Shows which of the lane indications is applicable to the current route,
      * when there is more than one.
      *
-     * @param validIndications list of lane indications that are applicable to the current route,
+     * @param validIndication lane indications applicable to the current route,
      *                         when there is more than one.
      * @return this builder for chaining options together
      */
-    public abstract Builder validIndications(@Nullable List<String> validIndications);
+    public abstract Builder validIndication(@Nullable String validIndication);
 
     /**
      * list that can be made up of multiple signs such as {@code left}, {@code right}, etc.
