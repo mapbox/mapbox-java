@@ -26,7 +26,7 @@ public class IntersectionLanesTest extends TestUtils {
     IntersectionLanes intersectionLanes = IntersectionLanes.builder()
       .valid(true)
       .active(true)
-      .validIndications(Collections.singletonList("straight"))
+      .validIndication("straight")
       .indications(Arrays.asList("straight","slight left"))
       .build();
     byte[] serialized = TestUtils.serialize(intersectionLanes);
@@ -38,7 +38,7 @@ public class IntersectionLanesTest extends TestUtils {
     IntersectionLanes intersectionLanes = IntersectionLanes.builder()
       .valid(true)
       .active(true)
-      .validIndications(Collections.singletonList("straight"))
+      .validIndication("straight")
       .indications(Arrays.asList("straight","slight left"))
       .build();
 
@@ -61,12 +61,12 @@ public class IntersectionLanesTest extends TestUtils {
   }
 
   @Test
-  public void testFromJson_validIndications() {
+  public void testFromJson_validIndication() {
     IntersectionLanes intersectionLanes = IntersectionLanes.builder()
-      .validIndications(Collections.singletonList("straight"))
+      .validIndication("straight")
       .build();
 
-    String jsonString = "{\"valid_indication\":[\"straight\"]}";
+    String jsonString = "{\"valid_indication\":\"straight\"}";
     IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
 
     assertEquals(intersectionLanes, intersectionLanesFromJson);
