@@ -71,10 +71,18 @@ public abstract class BannerComponents extends DirectionsJsonObject
 
   /**
    * This view gives guidance through junctions and is used to complete maneuvers.
-   *
-   * @since 5.0.0
    */
   public static final String GUIDANCE_VIEW = "guidance-view";
+
+  /**
+   * This view gives guidance through signboards and is used to complete maneuvers.
+   */
+  public static final String SIGNBOARD = "signboard";
+
+  /**
+   * This view gives guidance through junctions and is used to complete maneuvers.
+   */
+  public static final String JCT = "jct";
 
   /**
    * Banner component types.
@@ -93,6 +101,19 @@ public abstract class BannerComponents extends DirectionsJsonObject
           GUIDANCE_VIEW
   })
   public @interface BannerComponentsType {
+  }
+
+  /**
+   * Banner component types.
+   * https://docs.mapbox.com/api/navigation/#banner-instruction-object
+   *
+   */
+  @Retention(RetentionPolicy.SOURCE)
+  @StringDef( {
+      JCT,
+      SIGNBOARD
+  })
+  public @interface BannerComponentsSubType {
   }
 
   /**
@@ -136,6 +157,22 @@ public abstract class BannerComponents extends DirectionsJsonObject
   @NonNull
   @BannerComponentsType
   public abstract String type();
+
+  /**
+   * String giving you more context about {@link BannerComponentsType} which
+   * may help in visual markup/display choices.
+   * <p>
+   * Possible values:
+   * <ul>
+   * <li><strong>jct</strong>: indicates a junction guidance view.</li>
+   * <li><strong>signboard</strong>: indicates a signboard guidance view.</li>
+   * </ul>
+   *
+   * @return String type from above list
+   */
+  @Nullable
+  @BannerComponentsType
+  public abstract String subType();
 
   /**
    * The abbreviated form of text.
@@ -314,6 +351,25 @@ public abstract class BannerComponents extends DirectionsJsonObject
      * @since 3.0.0
      */
     public abstract Builder type(@NonNull @BannerComponentsType String type);
+
+
+
+    /**
+     * String giving you more context about {@link BannerComponentsType}
+     * which may help in visual markup/display choices.
+     * <p>
+     * Possible values:
+     * <ul>
+     * <li><strong>jct</strong>: indicates a junction guidance view.</li>
+     * <li><strong>signboard</strong>: indicates a signboard guidance view.</li>
+     * </ul>
+     *
+     * @param subType String subType from above list
+     * @return String type from above list
+     */
+    @NonNull
+    @BannerComponentsType
+    public abstract Builder subType(@Nullable @BannerComponentsSubType String subType);
 
 
     /**

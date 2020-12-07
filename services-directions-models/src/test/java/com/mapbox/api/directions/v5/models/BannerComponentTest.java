@@ -175,4 +175,34 @@ public class BannerComponentTest extends TestUtils {
 
     assertEquals(bannerComponents, bannerComponentsFromJson);
   }
+
+  @Test
+  public void testToFromJsonJctSubType() {
+
+    BannerComponents bannerComponents = BannerComponents.builder()
+        .text("")
+        .type("guidance-view")
+        .subType("jct")
+        .build();
+
+    String jsonString = bannerComponents.toJson();
+    BannerComponents bannerComponentsFromJson = BannerComponents.fromJson(jsonString);
+
+    assertEquals(bannerComponents, bannerComponentsFromJson);
+  }
+
+  @Test
+  public void testToFromJsonSignboardSubType() {
+
+    BannerComponents bannerComponents = BannerComponents.builder()
+        .text("")
+        .type("guidance-view")
+        .subType("signboard")
+        .build();
+
+    String jsonString = bannerComponents.toJson();
+    BannerComponents bannerComponentsFromJson = BannerComponents.fromJson(jsonString);
+
+    assertEquals(bannerComponents, bannerComponentsFromJson);
+  }
 }
