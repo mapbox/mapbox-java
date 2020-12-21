@@ -4,6 +4,16 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.8.0-beta.5 - December 21, 2020
+- Add `BannerComponentSubType` to `BannerComponents` [#1222](https://github.com/mapbox/mapbox-java/pull/1222)
+
+### 5.8.0-beta.4 - November 23, 2020
+- Expose `active` and `validIndications` to `IntersectionLanes` [#1217](https://github.com/mapbox/mapbox-java/pull/1217)
+
+### 5.8.0-beta.3 - October 23, 2020
+
+- Add `speedLimitUnit` and `speedLimitSign` to `LegStep` to  [#1204](https://github.com/mapbox/mapbox-java/pull/1204)
+
 ### 5.8.0-beta.2 - October 21, 2020
 
 - Move `Incident` to `RouteLeg` [#1207](https://github.com/mapbox/mapbox-java/pull/1207)
