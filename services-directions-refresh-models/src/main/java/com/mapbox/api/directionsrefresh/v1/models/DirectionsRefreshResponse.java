@@ -8,9 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
-import com.mapbox.api.directions.v5.models.DirectionsJsonObject;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.RouteLeg;
+import com.mapbox.api.directionsrefresh.v1.DirectionsRefreshAdapterFactory;
 
 /**
  * Response object for Directions Refresh requests.
@@ -18,7 +16,7 @@ import com.mapbox.api.directions.v5.models.RouteLeg;
  * @since 4.4.0
  */
 @AutoValue
-public abstract class DirectionsRefreshResponse extends DirectionsJsonObject {
+public abstract class DirectionsRefreshResponse extends DirectionsRefreshJsonObject {
 
   /**
    * String indicating the state of the response. This is a separate code than the HTTP status code.
@@ -49,15 +47,15 @@ public abstract class DirectionsRefreshResponse extends DirectionsJsonObject {
   public abstract String message();
 
   /**
-   * Barebones {@link DirectionsRoute} which only contains a list of
-   * {@link RouteLeg}s, which only contain lists of the
+   * Barebones {@link DirectionsRouteRefresh} which only contains a list of
+   * {@link RouteLegRefresh}s, which only contain lists of the
    * refreshed annotations.
    *
    * @return barebones route with annotation data
    * @since 4.4.0
    */
   @Nullable
-  public abstract DirectionsRoute route();
+  public abstract DirectionsRouteRefresh route();
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -124,15 +122,15 @@ public abstract class DirectionsRefreshResponse extends DirectionsJsonObject {
     public abstract Builder message(String message);
 
     /**
-     * Barebones {@link DirectionsRoute} which only contains a list of
-     * {@link RouteLeg}s, which only contain lists of the
+     * Barebones {@link DirectionsRouteRefresh} which only contains a list of
+     * {@link RouteLegRefresh}s, which only contain lists of the
      * refreshed annotations.
      *
-     * @param directionsRoute route containing annotation data
+     * @param directionsRouteRefresh route containing annotation data
      * @return this builder
      * @since 4.4.0
      */
-    public abstract Builder route(DirectionsRoute directionsRoute);
+    public abstract Builder route(DirectionsRouteRefresh directionsRouteRefresh);
 
     /**
      * Builds a new {@link DirectionsRefreshResponse} object.

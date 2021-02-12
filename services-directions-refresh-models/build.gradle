@@ -9,4 +9,7 @@ dependencies {
     // AutoValue
     compileOnly dependenciesList.autoValue
     compileOnly dependenciesList.autoValueGson
+
+    // Test Dependencies
+    testImplementation project(path: ':services-core', configuration: 'testOutput')
 }
