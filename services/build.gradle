@@ -21,6 +21,7 @@ dependencies {
     // AutoValue
     compileOnly dependenciesList.autoValue
     compileOnly dependenciesList.autoValueGson
+    annotationProcessor(dependenciesList.autoValueGson)
 }
 
 // Required because the autovalue picks up and generates duplicate class for walking options from services-directions-models,

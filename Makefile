@@ -30,21 +30,13 @@ javadoc:
 	./gradlew :services-turf:javadoc; mv services-turf/build/docs/javadoc/ ./documentation/turf/javadoc/ ; \
 	./gradlew :services:javadoc; mv services/build/docs/javadoc/ ./documentation/services/javadoc/ ; \
 
-publish-to-bintray:
-	./gradlew :services-core:bintrayUpload ; \
-	./gradlew :services-geojson:bintrayUpload ; \
-	./gradlew :services:bintrayUpload ; \
-	./gradlew :services-turf:bintrayUpload ; \
-	./gradlew :services-directions-models:bintrayUpload ; \
-	./gradlew :services-directions-refresh-models:bintrayUpload ; \
-
-publish-snapshot:
-	./gradlew :services-core:artifactoryPublish ; \
-	./gradlew :services-geojson:artifactoryPublish ; \
-	./gradlew :services:artifactoryPublish ; \
-	./gradlew :services-turf:artifactoryPublish ; \
-	./gradlew :services-directions-models:artifactoryPublish ; \
-	./gradlew :services-directions-refresh-models:artifactoryPublish ; \
+publish-to-sdk-registry:
+	./gradlew :services-core:mapboxSDKRegistryUpload ; \
+	./gradlew :services-geojson:mapboxSDKRegistryUpload ; \
+	./gradlew :services:mapboxSDKRegistryUpload ; \
+	./gradlew :services-turf:mapboxSDKRegistryUpload ; \
+	./gradlew :services-directions-models:mapboxSDKRegistryUpload ; \
+	./gradlew :services-directions-refresh-models:mapboxSDKRegistryUpload ; \
 
 graphs:
 	./gradlew :services-core:generateDependencyGraphMapboxLibraries

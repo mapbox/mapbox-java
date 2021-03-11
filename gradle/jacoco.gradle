@@ -6,14 +6,12 @@ jacoco {
 
 test {
     jacoco {
-        append false
         excludes.add("**/samples/**")
-//        excludes.add("**/generated/**")
-//        excludes.add("**/*_.class")
     }
 }
 
-jacocoTestReport {
+jacocoTestReport{
+    dependsOn test
     group = 'Coverage reports'
     description = 'Generates a test coverage report for a project'
 
