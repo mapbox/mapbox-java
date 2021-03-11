@@ -1,0 +1,73 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'com.mapbox.sdkRegistry'
+apply from: file("${rootDir}/gradle/artifact-settings.gradle")
+
+afterEvaluate {
+    publishing {
+        publications {
+            MapboxJavaSDKPublication(MavenPublication) {
+                from components.java
+                groupId project.ext.mapboxArtifactGroupId
+                artifactId project.ext.mapboxArtifactId
+                version project.ext.versionName
+
+                artifact sourcesJar {
+                    classifier "sources"
+                }
+
+                artifact javadocJar {
+                    classifier "javadoc"
+                }
+
+                pom.withXml {
+                    final mainNode = asNode()
+                    mainNode.appendNode('name', project.ext.mapboxArtifactTitle)
+                    mainNode.appendNode('description', project.ext.mapboxArtifactTitle)
+                    mainNode.appendNode('url', project.ext.mapboxArtifactUrl)
+
+                    final licenseNode = mainNode.appendNode('licenses').appendNode('license')
+                    licenseNode.appendNode('name', project.ext.mapboxArtifactLicenseName)
+                    licenseNode.appendNode('url', project.ext.mapboxArtifactLicenseUrl)
+                    licenseNode.appendNode('distribution', "repo")
+
+                    final developerNode = mainNode.appendNode('developers').appendNode('developer')
+                    developerNode.appendNode('id', project.ext.mapboxDeveloperId)
+                    developerNode.appendNode('name', project.ext.mapboxDeveloperName)
+                    developerNode.appendNode('email', project.ext.mapboxDeveloperEmail)
+                    developerNode.appendNode('organization', project.ext.mapboxDeveloperOrganization)
+                    developerNode.appendNode('organizationUrl', project.ext.mapboxDeveloperOrganizationUrl)
+
+                    final scmNode = mainNode.appendNode("scm")
+                    scmNode.appendNode("connection", project.ext.mapboxArtifactScmUrl)
+                    scmNode.appendNode("developerConnection", project.ext.mapboxArtifactScmUrl)
+                    scmNode.appendNode("url", project.ext.mapboxArtifactUrl)
+                }
+            }
+        }
+    }
+}
+
+def sdkNameMap = [:]
+sdkNameMap["services"] = "com-mapbox-mapboxsdk-mapbox-sdk-services"
+sdkNameMap["services-core"] = "com-mapbox-mapboxsdk-mapbox-sdk-core"
+sdkNameMap["services-directions-models"] = "com-mapbox-mapboxsdk-mapbox-sdk-directions-models"
+sdkNameMap["services-directions-refresh-models"] = "com-mapbox-mapboxsdk-mapbox-sdk-directions-refresh-models"
+sdkNameMap["services-geojson"] = "com-mapbox-mapboxsdk-mapbox-sdk-geojson"
+sdkNameMap["services-turf"] = "com-mapbox-mapboxsdk-mapbox-sdk-turf"
+
+registry {
+    sdkName = sdkNameMap[project.name]
+    production = true
+    snapshot = project.ext.versionName.endsWith("-SNAPSHOT")
+    override = snapshot ? true : false
+    dryRun = false
+    publish = true
+    publications = ["MapboxJavaSDKPublication"]
+}
+
+tasks.withType(Javadoc) {
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('docencoding', 'UTF-8')
+    options.addStringOption('charset', 'UTF-8')
+}

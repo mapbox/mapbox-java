@@ -23,6 +23,10 @@ Using the MAS testapp will require a valid [Mapbox access token](https://www.map
 </resources>
 ```
 
-## 3: Begin developing
+## 3. Add an `SDK_REGISTRY_TOKEN`
+
+Add the gradle property or env variable with a **secret token**. The token needs to have the `DOWNLOADS:READ` scope. You can obtain the token from your [Mapbox Account page](https://account.mapbox.com/access-tokens/).
+
+## 4: Begin developing
 
 We recommend using [Android Studio](https://developer.android.com/studio/index.html) to work on the code base.

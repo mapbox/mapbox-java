@@ -6,6 +6,16 @@ buildscript {
     google()
     mavenCentral()
     jcenter()
+    maven {
+      url 'https://api.mapbox.com/downloads/v2/releases/maven'
+      authentication {
+        basic(BasicAuthentication)
+      }
+      credentials {
+        username = "mapbox"
+        password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
+      }
+    }
   }
 
   dependencies {
@@ -14,14 +24,10 @@ buildscript {
       transitive = false
     }
 
+    classpath pluginDependencies.jacoco
     classpath pluginDependencies.errorprone
     classpath pluginDependencies.buildConfig
-    classpath pluginDependencies.jacoco
-
-    // These plugins are for publishing to Bintray
-    classpath pluginDependencies.bintray
-    classpath pluginDependencies.maven
-    classpath pluginDependencies.artifactory
+    classpath pluginDependencies.mapboxSdkRegistry
   }
 }
 
@@ -36,9 +42,18 @@ allprojects {
     google()
     mavenCentral()
     jcenter()
-    // For publishing to Bintray
-    maven { url 'https://mapbox.bintray.com/mapbox' }
-    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+    maven {
+      url 'https://api.mapbox.com/downloads/v2/releases/maven'
+      authentication {
+        basic(BasicAuthentication)
+      }
+      credentials {
+        username = "mapbox"
+        password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
+      }
+    }
+    // uncomment if snapshots access is needed
+    // maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
   }
 }
 
@@ -104,13 +119,14 @@ subprojects { subproject ->
   }
 
   if (TESTABLE_MODULES.contains(subproject.name)) {
-    subproject.apply plugin: "com.vanniktech.android.junit.jacoco"
-    subproject.apply from: "${rootDir}/gradle/jacoco.gradle"
-    subproject.apply from: "${rootDir}/gradle/checkstyle.gradle"
+    afterEvaluate { project ->
+      project.apply from: "${rootDir}/gradle/jacoco.gradle"
+      project.apply from: "${rootDir}/gradle/checkstyle.gradle"
+    }
   }
 
   if (RELEASE_MODULES.contains(subproject.name)) {
-    subproject.apply from: "${rootDir}/gradle/gradle-bintray.gradle"
+    subproject.apply from: "${rootDir}/gradle/publish.gradle"
     subproject.apply from: "${rootDir}/gradle/dependencies-graph.gradle"
   }
 
