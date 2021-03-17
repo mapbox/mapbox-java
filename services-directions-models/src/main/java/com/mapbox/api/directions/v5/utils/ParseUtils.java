@@ -14,6 +14,8 @@ public class ParseUtils {
   private static final String SEMICOLON = ";";
   private static final String COMMA = ",";
   private static final String UNLIMITED = "unlimited";
+  private static final String TRUE = "true";
+  private static final String FALSE = "false";
 
   /**
    * Parse a String to a list of Integers.
@@ -164,5 +166,40 @@ public class ParseUtils {
     }
 
     return result;
+  }
+
+  /**
+   * Parse a String to a list of Boolean.
+   *
+   * @param original an original String.
+   * @return List of Booleans
+   */
+  @Nullable
+  public static List<Boolean> parseToBooleans(@Nullable String original) {
+    if (original == null) {
+      return null;
+    }
+
+    List<Boolean> booleans = new ArrayList<>();
+    if (original.isEmpty()) {
+      return booleans;
+    }
+
+    String[] strings = original.split(SEMICOLON, -1);
+    for (String str : strings) {
+      if (str != null) {
+        if (str.isEmpty()) {
+          booleans.add(null);
+        } else if (str.equalsIgnoreCase(TRUE)) {
+          booleans.add(true);
+        } else if (str.equalsIgnoreCase(FALSE)) {
+          booleans.add(false);
+        } else {
+          booleans.add(null);
+        }
+      }
+    }
+
+    return booleans;
   }
 }

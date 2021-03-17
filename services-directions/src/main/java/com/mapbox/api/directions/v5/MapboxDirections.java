@@ -111,7 +111,8 @@ public abstract class MapboxDirections extends
       enableRefresh(),
       walkingSpeed(),
       walkwayBias(),
-      alleyBias()
+      alleyBias(),
+      snappingClosures()
     );
   }
 
@@ -143,7 +144,8 @@ public abstract class MapboxDirections extends
       enableRefresh(),
       walkingSpeed(),
       walkwayBias(),
-      alleyBias()
+      alleyBias(),
+      snappingClosures()
     );
   }
 
@@ -338,6 +340,9 @@ public abstract class MapboxDirections extends
     return walkingOptions().alleyBias();
   }
 
+  @Nullable
+  abstract String snappingClosures();
+
   private boolean hasWalkingOptions() {
     return walkingOptions() != null;
   }
@@ -393,6 +398,7 @@ public abstract class MapboxDirections extends
     private List<Integer> waypointIndices = new ArrayList<>();
     private List<String> waypointNames = new ArrayList<>();
     private List<Point> waypointTargets = new ArrayList<>();
+    private List<Boolean> snappingClosures = new ArrayList<>();
 
     /**
      * The username for the account that the directions engine runs on. In most cases, this should
@@ -1041,6 +1047,25 @@ public abstract class MapboxDirections extends
     abstract Builder waypointTargets(@Nullable String waypointTargets);
 
     /**
+     * A list of booleans affecting snapping of waypoint locations to road segments.
+     * If true, road segments closed due to live-traffic closures will be considered for snapping.
+     * If false, they will not be considered for snapping.
+     * If provided, the number of snappingClosures must be the same as the number of
+     * coordinates.
+     * You can skip a coordinate and show its position in the list with null value.
+     * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
+     *
+     * @param snappingClosures a list of booleans
+     * @return this builder for chaining options together
+     */
+    public Builder snappingClosures(@NonNull List<Boolean> snappingClosures) {
+      this.snappingClosures = snappingClosures;
+      return this;
+    }
+
+    abstract Builder snappingClosures(@Nullable String snappingClosures);
+
+    /**
      * A point to specify drop-off locations that are distinct from the locations specified in
      * coordinates.
      * The number of waypoint targets must be the same as the number of coordinates,
@@ -1167,6 +1192,14 @@ public abstract class MapboxDirections extends
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
         approaches(formattedApproaches);
+      }
+
+      if (!snappingClosures.isEmpty()) {
+        if (snappingClosures.size() != coordinates.size()) {
+          throw new ServicesException("Number of snapping closures elements must match "
+              + "number of coordinates provided.");
+        }
+        snappingClosures(FormatUtils.join(";", snappingClosures));
       }
 
       coordinates(coordinates);
