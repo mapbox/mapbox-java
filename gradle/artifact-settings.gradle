@@ -1,5 +1,4 @@
 ext {
-
     mapboxArtifactGroupId = 'com.mapbox.mapboxsdk'
     mapboxArtifactId = project.hasProperty('POM_ARTIFACT_ID') ? project.property('POM_ARTIFACT_ID') : System.getenv('POM_ARTIFACT_ID')
     mapboxArtifactTitle = 'Mapbox Java SDK'
@@ -14,5 +13,25 @@ ext {
     mapboxArtifactScmUrl = 'scm:git@github.com:mapbox/mapbox-java.git'
     mapboxArtifactLicenseName = 'The Apache Software License, Version 2.0'
     mapboxArtifactLicenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    versionName = project.hasProperty('VERSION_NAME') ? project.property('VERSION_NAME') : System.getenv('VERSION_NAME')
+    versionName = getVersionName()
+}
+
+def getVersionName() {
+    def cmd = "git describe --tag --abbrev=0"
+    def proc = cmd.execute()
+    def version = proc.text.trim()
+    return isSnapshot() ? getSnapshotVersion(version) : version
+}
+
+def isSnapshot() {
+    return project.hasProperty("snapshot")
+            ? project.property("snapshot").toBoolean()
+            : false
+}
+
+private static def getSnapshotVersion(String version) {
+    def matcher = version =~ /^[v|V](\d+).(\d+)?.*/
+    def major = (matcher[0][1] as Integer)
+    def minor = (matcher[0][2] as Integer) + 1
+    return "v${major}.${minor}.0-SNAPSHOT"
 }

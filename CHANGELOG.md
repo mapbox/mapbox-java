@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.9.0 - February 12, 2021
+ - Stopped releasing artifacts to jfrog and now to Mapbox's sdk-registry
+
 ### 5.9.0-alpha-1 - February 12, 2021
 - Fixed `DirectionsRefreshResponse` flow: introduced `DirectionsRouteRefresh` and restricted dependency on `DirectionsRoute` which is a critical bug fixes. Even though this is a semver-breaking change, we're not considering it as one because the refresh feature was non-functional beforehand. [#1225](https://github.com/mapbox/mapbox-java/pull/1225)
 

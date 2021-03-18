@@ -30,13 +30,21 @@ javadoc:
 	./gradlew :services-turf:javadoc; mv services-turf/build/docs/javadoc/ ./documentation/turf/javadoc/ ; \
 	./gradlew :services:javadoc; mv services/build/docs/javadoc/ ./documentation/services/javadoc/ ; \
 
-publish-to-sdk-registry:
+sdk-registry-publish:
 	./gradlew :services-core:mapboxSDKRegistryUpload ; \
 	./gradlew :services-geojson:mapboxSDKRegistryUpload ; \
 	./gradlew :services:mapboxSDKRegistryUpload ; \
 	./gradlew :services-turf:mapboxSDKRegistryUpload ; \
 	./gradlew :services-directions-models:mapboxSDKRegistryUpload ; \
 	./gradlew :services-directions-refresh-models:mapboxSDKRegistryUpload ; \
+
+sdk-registry-publish-snapshot:
+	./gradlew :services-core:mapboxSDKRegistryUpload -Psnapshot=true ; \
+	./gradlew :services-geojson:mapboxSDKRegistryUpload -Psnapshot=true ; \
+	./gradlew :services:mapboxSDKRegistryUpload -Psnapshot=true ; \
+	./gradlew :services-turf:mapboxSDKRegistryUpload -Psnapshot=true ; \
+	./gradlew :services-directions-models:mapboxSDKRegistryUpload -Psnapshot=true ; \
+	./gradlew :services-directions-refresh-models:mapboxSDKRegistryUpload -Psnapshot=true ; \
 
 graphs:
 	./gradlew :services-core:generateDependencyGraphMapboxLibraries

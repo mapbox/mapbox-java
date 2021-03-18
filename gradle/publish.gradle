@@ -60,11 +60,12 @@ registry {
     sdkName = sdkNameMap[project.name]
     production = true
     snapshot = project.ext.versionName.endsWith("-SNAPSHOT")
-    override = snapshot ? true : false
+    override = snapshot
     dryRun = false
     publish = true
     publications = ["MapboxJavaSDKPublication"]
 }
+
 
 tasks.withType(Javadoc) {
     options.addStringOption('encoding', 'UTF-8')
