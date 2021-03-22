@@ -59,6 +59,8 @@ public interface DirectionsService {
    * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
    *                            that do not allow vehicles and are set aside for pedestrian use
    * @param alleyBias           a factor that modifies the cost when alleys are encountered
+   * @param snappingClosures    a list of booleans affecting snapping of waypoint locations to road
+   *                            segments
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 1.0.0
    */
@@ -90,7 +92,8 @@ public interface DirectionsService {
     @Query("enable_refresh") Boolean enableRefresh,
     @Query("walking_speed") Double walkingSpeed,
     @Query("walkway_bias") Double walkwayBias,
-    @Query("alley_bias") Double alleyBias
+    @Query("alley_bias") Double alleyBias,
+    @Query("snapping_include_closures") String snappingClosures
   );
 
   /**
@@ -134,6 +137,8 @@ public interface DirectionsService {
    * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
    *                            that do not allow vehicles and are set aside for pedestrian use
    * @param alleyBias           a factor that modifies the cost when alleys are encountered
+   * @param snappingClosures    a list of booleans affecting snapping of waypoint locations to road
+   *                            segments
    * @return the {@link DirectionsResponse} in a Call wrapper
    * @since 4.6.0
    */
@@ -166,6 +171,7 @@ public interface DirectionsService {
     @Field("enable_refresh") Boolean enableRefresh,
     @Field("walking_speed") Double walkingSpeed,
     @Field("walkway_bias") Double walkwayBias,
-    @Field("alley_bias") Double alleyBias
+    @Field("alley_bias") Double alleyBias,
+    @Field("snapping_include_closures") String snappingClosures
   );
 }

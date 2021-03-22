@@ -494,6 +494,36 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract WalkingOptions walkingOptions();
 
   /**
+   * A semicolon-separated list of booleans affecting snapping of waypoint locations to road
+   * segments.
+   * If true, road segments closed due to live-traffic closures will be considered for snapping.
+   * If false, they will not be considered for snapping.
+   * If provided, the number of snappingClosures must be the same as the number of
+   * coordinates.
+   * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
+   *
+   * @return a String representing a list of booleans
+   */
+  @SerializedName("snapping_closures")
+  @Nullable
+  public abstract String snappingClosures();
+
+  /**
+   * A list of booleans affecting snapping of waypoint locations to road segments.
+   * If true, road segments closed due to live-traffic closures will be considered for snapping.
+   * If false, they will not be considered for snapping.
+   * If provided, the number of snappingClosures must be the same as the number of
+   * coordinates.
+   * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
+   *
+   * @return a list of booleans
+   */
+  @Nullable
+  public List<Boolean> snappingClosuresList() {
+    return ParseUtils.parseToBooleans(snappingClosures());
+  }
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -1028,6 +1058,45 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @since 4.8.0
      */
     public abstract Builder walkingOptions(@NonNull WalkingOptions walkingOptions);
+
+    /**
+     * A semicolon-separated list of booleans affecting snapping of waypoint locations to road
+     * segments.
+     * If true, road segments closed due to live-traffic closures will be considered for snapping.
+     * If false, they will not be considered for snapping.
+     * If provided, the number of snappingClosures must be the same as the number of
+     * coordinates.
+     * You can skip a coordinate and show its position in the list with the ; separator.
+     * If unspecified, this parameter defaults to false.
+     * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
+     *
+     * @param snappingClosures a semicolon-separated list of booleans
+     * @return this builder for chaining options together
+     */
+    public abstract Builder snappingClosures(@NonNull String snappingClosures);
+
+    /**
+     * A list of booleans affecting snapping of waypoint locations to road segments.
+     * If true, road segments closed due to live-traffic closures will be considered for snapping.
+     * If false, they will not be considered for snapping.
+     * If provided, the number of snappingClosures must be the same as the number of
+     * coordinates.
+     * You can skip a coordinate and show its position in the list with null value.
+     * If unspecified, this parameter defaults to false.
+     * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
+     *
+     * @param snappingClosures a list of booleans
+     * @return this builder for chaining options together
+     */
+    public Builder snappingClosures(@NonNull List<Boolean> snappingClosures) {
+      String result = FormatUtils.join(";", snappingClosures);
+      if (result != null) {
+        snappingClosures(result);
+      } else {
+        snappingClosures("");
+      }
+      return this;
+    }
 
     /**
      * Builds a new instance of the {@link RouteOptions} object.

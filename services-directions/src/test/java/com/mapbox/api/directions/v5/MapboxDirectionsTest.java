@@ -46,6 +46,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.junit.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest extends TestUtils {
@@ -1412,6 +1413,82 @@ public class MapboxDirectionsTest extends TestUtils {
     assertEquals("2020-10-08T11:34:14Z", incident.creationTime());
     assertEquals("2020-10-06T12:52:02Z", incident.startTime());
     assertEquals("2020-11-27T16:00:00Z", incident.endTime());
+  }
+
+  @Test
+  public void snappingClosuresList() throws Exception {
+    List<Boolean> snappingClosures = new ArrayList<>();
+    snappingClosures.add(false);
+    snappingClosures.add(true);
+    snappingClosures.add(null);
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+        .origin(Point.fromLngLat(1.0, 1.0))
+        .addWaypoint(Point.fromLngLat(2.0, 2.0))
+        .destination(Point.fromLngLat(4.0, 4.0))
+        .baseUrl("https://foobar.com")
+        .accessToken(ACCESS_TOKEN)
+        .snappingClosures(snappingClosures)
+        .build();
+
+    assertNotNull(mapboxDirections);
+    assertEquals("false;true;",
+        mapboxDirections.cloneCall().request().url().queryParameter("snapping_include_closures"));
+  }
+
+  @Test
+  public void snappingClosuresListNotMatchingCoordinates() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage(
+      "Number of snapping closures elements must match number of coordinates provided."
+    );
+
+    List<Boolean> snappingClosures = new ArrayList<>();
+    snappingClosures.add(false);
+    snappingClosures.add(null);
+
+    MapboxDirections.builder()
+            .origin(Point.fromLngLat(1.0, 1.0))
+            .addWaypoint(Point.fromLngLat(2.0, 2.0))
+            .destination(Point.fromLngLat(4.0, 4.0))
+            .baseUrl("https://foobar.com")
+            .accessToken(ACCESS_TOKEN)
+            .snappingClosures(snappingClosures)
+            .build();
+  }
+
+  @Test
+  public void snappingClosures() throws Exception {
+    String snappingClosures = "true;;";
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+        .origin(Point.fromLngLat(1.0, 1.0))
+        .addWaypoint(Point.fromLngLat(2.0, 2.0))
+        .destination(Point.fromLngLat(4.0, 4.0))
+        .snappingClosures(snappingClosures)
+        .baseUrl("https://foobar.com")
+        .accessToken(ACCESS_TOKEN)
+        .build();
+
+    assertNotNull(mapboxDirections);
+    assertEquals("true;;",
+        mapboxDirections.cloneCall().request().url().queryParameter("snapping_include_closures"));
+  }
+
+  @Test
+  public void snappingClosuresDefaultValue() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+        .origin(Point.fromLngLat(1.0, 1.0))
+        .addWaypoint(Point.fromLngLat(2.0, 2.0))
+        .destination(Point.fromLngLat(4.0, 4.0))
+        .baseUrl("https://foobar.com")
+        .accessToken(ACCESS_TOKEN)
+        .build();
+
+    assertNotNull(mapboxDirections);
+    assertNull(
+        mapboxDirections.cloneCall().request().url().queryParameter("snapping_include_closures")
+    );
   }
 
   private void addWaypoints(MapboxDirections.Builder builder, int number) {

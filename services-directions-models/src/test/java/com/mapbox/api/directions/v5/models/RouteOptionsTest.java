@@ -3,6 +3,7 @@ package com.mapbox.api.directions.v5.models;
 import com.mapbox.geojson.Point;
 import java.util.ArrayList;
 import java.util.List;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_CONGESTION;
@@ -17,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 public class RouteOptionsTest {
 
   private static final String ROUTE_OPTIONS_JSON =
-      "{\"baseUrl\":\"https://api.mapbox.com\",\"user\":\"mapbox\",\"profile\":\"driving-traffic\",\"coordinates\":[[-122.4003312,37.7736941],[-122.4187529,37.7689715],[-122.4255172,37.7775835]],\"alternatives\":false,\"language\":\"ru\",\"radiuses\":\";unlimited;100\",\"bearings\":\"0,90;90,0;\",\"continue_straight\":false,\"roundabout_exits\":false,\"geometries\":\"polyline6\",\"overview\":\"full\",\"steps\":true,\"annotations\":\"congestion,distance,duration\",\"exclude\":\"toll\",\"voice_instructions\":true,\"banner_instructions\":true,\"voice_units\":\"metric\",\"access_token\":\"token\",\"uuid\":\"12345543221\",\"approaches\":\";curb;\",\"waypoints\":\"0;1;2\",\"waypoint_names\":\";two;\",\"waypoint_targets\":\";12.2,21.2;\"}";
+      "{\"baseUrl\":\"https://api.mapbox.com\",\"user\":\"mapbox\",\"profile\":\"driving-traffic\",\"coordinates\":[[-122.4003312,37.7736941],[-122.4187529,37.7689715],[-122.4255172,37.7775835]],\"alternatives\":false,\"language\":\"ru\",\"radiuses\":\";unlimited;100\",\"bearings\":\"0,90;90,0;\",\"continue_straight\":false,\"roundabout_exits\":false,\"geometries\":\"polyline6\",\"overview\":\"full\",\"steps\":true,\"annotations\":\"congestion,distance,duration\",\"exclude\":\"toll\",\"voice_instructions\":true,\"banner_instructions\":true,\"voice_units\":\"metric\",\"access_token\":\"token\",\"uuid\":\"12345543221\",\"approaches\":\";curb;\",\"waypoints\":\"0;1;2\",\"waypoint_names\":\";two;\",\"waypoint_targets\":\";12.2,21.2;\",\"snapping_closures\":\";false;true\"}";
 
   @Test
   public void toBuilder() {
@@ -329,6 +330,79 @@ public class RouteOptionsTest {
   }
 
   @Test
+  public void snappingClosuresString() {
+    String snappingClosuresString = "true;;;false;false;true;;;;" ;
+
+    RouteOptions routeOptions = routeOptions()
+        .toBuilder()
+        .snappingClosures(snappingClosuresString)
+        .build();
+
+    assertEquals(snappingClosuresString, routeOptions.snappingClosures());
+
+    List<Boolean> snappingClosures = routeOptions.snappingClosuresList();
+    assertEquals(10, snappingClosures.size());
+    assertEquals(true, snappingClosures.get(0));
+    assertEquals(null, snappingClosures.get(1));
+    assertEquals(null, snappingClosures.get(2));
+    assertEquals(false, snappingClosures.get(3));
+    assertEquals(false, snappingClosures.get(4));
+    assertEquals(true, snappingClosures.get(5));
+    assertEquals(null, snappingClosures.get(6));
+    assertEquals(null, snappingClosures.get(7));
+    assertEquals(null, snappingClosures.get(8));
+    assertEquals(null, snappingClosures.get(9));
+  }
+
+  @Test
+  public void snappingClosuresEmptyString() {
+    String snappingClosuresString = "" ;
+
+    RouteOptions routeOptions = routeOptions()
+            .toBuilder()
+            .snappingClosures(snappingClosuresString)
+            .build();
+
+    assertEquals(snappingClosuresString, routeOptions.snappingClosures());
+
+    List<Boolean> snappingClosures = routeOptions.snappingClosuresList();
+    assertTrue(snappingClosures.isEmpty());
+  }
+
+  @Test
+  public void snappingClosuresList() {
+    List<Boolean> snappingClosures = new ArrayList<>();
+    snappingClosures.add(false);
+    snappingClosures.add(false);
+    snappingClosures.add(null);
+    snappingClosures.add(true);
+    snappingClosures.add(false);
+    snappingClosures.add(null);
+    snappingClosures.add(null);
+
+    RouteOptions routeOptions = routeOptions()
+        .toBuilder()
+        .snappingClosures(snappingClosures)
+        .build();
+
+    assertEquals(snappingClosures, routeOptions.snappingClosuresList());
+    assertEquals("false;false;;true;false;;", routeOptions.snappingClosures());
+  }
+
+  @Test
+  public void snappingClosuresEmptyList() {
+    List<Boolean> snappingClosures = new ArrayList<>();
+
+    RouteOptions routeOptions = routeOptions()
+            .toBuilder()
+            .snappingClosures(snappingClosures)
+            .build();
+
+    assertEquals(snappingClosures, routeOptions.snappingClosuresList());
+    assertTrue(routeOptions.snappingClosures().isEmpty());
+  }
+
+  @Test
   public void baseUrlIsValid_fromJson() {
     RouteOptions routeOptions = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
 
@@ -572,6 +646,24 @@ public class RouteOptionsTest {
   }
 
   @Test
+  public void snappingIncludeClosuresStringIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    assertEquals(";false;true", options.snappingClosures());
+  }
+
+  @Test
+  public void snappingIncludeClosuresListIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
+
+    List list = options.snappingClosuresList();
+    assertEquals(3, list.size());
+    assertEquals(null, list.get(0));
+    assertEquals(false, list.get(1));
+    assertEquals(true, list.get(2));
+  }
+
+  @Test
   public void routeOptions_toJson() {
     RouteOptions options = routeOptions();
 
@@ -742,6 +834,7 @@ public class RouteOptionsTest {
         .waypointIndices("0;1;2")
         .waypointNames(";two;")
         .waypointTargets(";12.2,21.2;")
+        .snappingClosures(";false;true")
         .build();
   }
 }
