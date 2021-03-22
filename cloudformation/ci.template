@@ -1,0 +1,41 @@
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Outputs": {
+    "AccessKeyId": {
+      "Value": { "Ref": "AccessKey" }
+    },
+    "SecretAccessKey": {
+      "Value": { "Fn::GetAtt": ["AccessKey", "SecretAccessKey"] }
+    }
+  },
+  "Resources": {
+    "AccessKey": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "UserName": { "Ref": "User" }
+      }
+    },
+    "User": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "Policies": [
+          {
+            "PolicyName": "upload-sdk-registry",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": ["s3:PutObject"],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:aws:s3:::mapbox-api-downloads-production/v2/*",
+                    "arn:aws:s3:::mapbox-api-downloads-staging/v2/*"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
