@@ -18,9 +18,8 @@ ext {
 
 def getVersionName() {
     def cmd = "git describe --tag --abbrev=0"
-    def proc = cmd.execute()
-    def version = proc.text.trim()
-    return isSnapshot() ? getSnapshotVersion(version) : version
+    def version = cmd.execute().text.trim()
+    return isSnapshot() ? getSnapshotVersion(version) : getReleaseVersion(version)
 }
 
 def isSnapshot() {
@@ -29,9 +28,13 @@ def isSnapshot() {
             : false
 }
 
+private static def getReleaseVersion(String version) {
+    return version.substring(1)
+}
+
 private static def getSnapshotVersion(String version) {
     def matcher = version =~ /^[v|V](\d+).(\d+)?.*/
     def major = (matcher[0][1] as Integer)
     def minor = (matcher[0][2] as Integer) + 1
-    return "v${major}.${minor}.0-SNAPSHOT"
+    return "${major}.${minor}.0-SNAPSHOT"
 }
