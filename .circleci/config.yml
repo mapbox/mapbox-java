@@ -3,11 +3,6 @@ workflows:
   version: 2
   release-workflow:
     jobs:
-      - release-snapshot:
-          filters:
-            branches:
-              only:
-                - master
       - release:
           filters:
             tags:
@@ -18,6 +13,14 @@ workflows:
     jobs:
       - build
       - test
+      - publish-snapshot:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only:
+                - master
 
 commands:
   build-release:
@@ -78,15 +81,12 @@ jobs:
       - run-tests
 
 # ------------------------------------------------------------------------------
-  release-snapshot:
+  publish-snapshot:
     docker:
       - image: mbgl/android-ndk-r19:latest
     working_directory: ~/code
     steps:
       - checkout
-      - build-release
-      - build-cli
-      - run-tests
       - deploy:
           name: Publish Java snapshot libraries to Mapbox SDK Registry
           command: |
