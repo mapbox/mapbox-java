@@ -24,7 +24,15 @@
             "PolicyDocument": {
               "Statement": [
                 {
-                  "Action": ["s3:PutObject", "s3:ListObject"],
+                  "Action": ["s3:ListBucket"],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:aws:s3:::mapbox-api-downloads-production",
+                    "arn:aws:s3:::mapbox-api-downloads-staging"
+                  ]
+                },
+                {
+                  "Action": ["s3:PutObject"],
                   "Effect": "Allow",
                   "Resource": [
                     "arn:aws:s3:::mapbox-api-downloads-production/v2/*",
