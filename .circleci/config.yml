@@ -1,54 +1,39 @@
-version: 2
+version: 2.1
 workflows:
   version: 2
-  default:
+  release-workflow:
     jobs:
-      - build
-      - test
       - release-snapshot:
-          requires:
-            - build
-            - test
           filters:
             branches:
               only:
                 - master
       - release:
-          requires:
-            - build
-            - test
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
+  default:
+    jobs:
+      - build
+      - test
 
-jobs:
-  build:
-    working_directory: ~/code
-    docker:
-      - image: mbgl/android-ndk-r19:latest
+commands:
+  build-release:
     steps:
-      - checkout
       - run:
           name: Build libraries
           command: make build-release
+
+  build-cli:
+    steps:
       - run:
           name: Build command line interface
           command: make build-cli
 
-  test:
-    working_directory: ~/code
-    docker:
-      - image: mbgl/android-ndk-r19:latest
+  run-tests:
     steps:
-      - checkout
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}
       - run:
           name: Check Java code style
           command: make checkstyle
@@ -62,11 +47,35 @@ jobs:
           path: mapbox/app/build/reports
           destination: reports
       - store_test_results:
-          path: mapbox/app/build/test-results    
+          path: mapbox/app/build/test-results
       - run:
           name: Post code coverage report to Codecov.io
           command: |
             bash <(curl -s https://codecov.io/bash)
+
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: mbgl/android-ndk-r19:latest
+    steps:
+      - checkout
+      - build-release
+      - build-cli
+
+  test:
+    working_directory: ~/code
+    docker:
+      - image: mbgl/android-ndk-r19:latest
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}
+      - run-tests
 
 # ------------------------------------------------------------------------------
   release-snapshot:
@@ -75,6 +84,9 @@ jobs:
     working_directory: ~/code
     steps:
       - checkout
+      - build-release
+      - build-cli
+      - run-tests
       - deploy:
           name: Publish Java snapshot libraries to Mapbox SDK Registry
           command: |
@@ -86,6 +98,9 @@ jobs:
     working_directory: ~/code
     steps:
       - checkout
+      - build-release
+      - build-cli
+      - run-tests
       - deploy:
           name: Publish Java libraries to Mapbox SDK Registry
           command: |
