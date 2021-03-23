@@ -14,9 +14,6 @@ workflows:
               only:
                 - master
       - release:
-          requires:
-            - build
-            - test
           filters:
             tags:
               only: /^v.*/
