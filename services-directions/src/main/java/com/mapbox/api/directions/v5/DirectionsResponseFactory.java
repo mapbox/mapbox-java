@@ -78,6 +78,7 @@ class DirectionsResponseFactory {
           .requestUuid(response.body().uuid())
           .baseUrl(mapboxDirections.baseUrl())
           .walkingOptions(mapboxDirections.walkingOptions())
+          .snappingClosures(mapboxDirections.snappingClosures())
           .build()
       ).build());
     }
