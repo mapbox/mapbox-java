@@ -102,6 +102,11 @@ jobs:
       - build-cli
       - run-tests
       - deploy:
-          name: Publish Java libraries to Mapbox SDK Registry
+          name: Upload libraries to Mapbox SDK Registry
           command: |
-            make sdk-registry-publish
+            make sdk-registry-upload
+#      This is not yet supported, still need to be able to authenticate CI to create a Github pull request.
+#      - run:
+#          name: Create pull request in api-downloads
+#          command: |
+#            make sdk-registry-publish
