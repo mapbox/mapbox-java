@@ -4,7 +4,11 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
-### 5.9.0 - February 12, 2021
+### 5.9.0-alpha.3 - March 24, 2021
+ - Fixed added SnappingClosures to response options [#1232](https://github.com/mapbox/mapbox-java/pull/1243)
+
+### 5.9.0-alpha.2 - March 23, 2021
+ - Added to RouteOptions SnappingClosures [#1232](https://github.com/mapbox/mapbox-java/pull/1232)
  - Stopped releasing artifacts to jfrog and now to Mapbox's sdk-registry
 
 ### 5.9.0-alpha-1 - February 12, 2021
