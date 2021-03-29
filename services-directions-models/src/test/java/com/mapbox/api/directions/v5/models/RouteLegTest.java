@@ -75,6 +75,8 @@ public class RouteLegTest extends TestUtils {
 
     List<Incident> incidents = new ArrayList<>();
 
+    List<Closure> closures = new ArrayList<>();
+
     LegAnnotation annotation = LegAnnotation.builder()
       .congestion(new ArrayList<String>())
       .distance(distanceList)
@@ -89,6 +91,7 @@ public class RouteLegTest extends TestUtils {
       .duration(14.3)
       .steps(steps)
       .incidents(incidents)
+      .closures(closures)
       .summary("")
       .build();
 
@@ -105,13 +108,16 @@ public class RouteLegTest extends TestUtils {
       + "\"duration\": 14.3,"
       + "\"summary\": \"route summary\","
       + "\"admins\": [{ \"iso_3166_1_alpha3\": \"USA\", \"iso_3166_1\": \"US\" }],"
-      + "\"incidents\": [{ \"id\": \"15985415522454461962\" }]"
-      + "}";
+      + "\"incidents\": [{ \"id\": \"15985415522454461962\" }],"
+      + "\"closures\": [{ \"geometry_index_start\": 1,\"geometry_index_end\": 4}]}";
     List<Admin> admins = new ArrayList<>();
     admins.add(Admin.builder().countryCode("US").countryCodeAlpha3("USA").build());
 
     List<Incident> incidents = new ArrayList<>();
     incidents.add(Incident.builder().id("15985415522454461962").build());
+
+    List<Closure> closures = new ArrayList<>();
+    closures.add(Closure.builder().geometryIndexStart(1).geometryIndexEnd(4).build());
 
     RouteLeg routeLeg = RouteLeg.builder()
       .distance(53.4)
@@ -119,6 +125,7 @@ public class RouteLegTest extends TestUtils {
       .summary("route summary")
       .admins(admins)
       .incidents(incidents)
+      .closures(closures)
       .build();
 
     RouteLeg routeLegFromJson = RouteLeg.fromJson(routeLegJsonString);
