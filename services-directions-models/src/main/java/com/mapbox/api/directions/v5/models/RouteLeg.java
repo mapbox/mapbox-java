@@ -105,6 +105,14 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   public abstract LegAnnotation annotation();
 
   /**
+   * A list of closures that occur on this leg.
+   *
+   * @return a list of {@link Incident}
+   */
+  @Nullable
+  public abstract List<Closure> closures();
+
+  /**
    * Convert the current {@link RouteLeg} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link RouteLeg}.
@@ -225,6 +233,14 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder annotation(@Nullable LegAnnotation annotation);
+
+    /**
+     * A list of closures that occur on this leg.
+     *
+     * @param closures a list of {@link Closure}
+     * @return this builder for chaining options together
+     */
+    public abstract Builder closures(@Nullable List<Closure> closures);
 
     /**
      * Build a new {@link RouteLeg} object.
