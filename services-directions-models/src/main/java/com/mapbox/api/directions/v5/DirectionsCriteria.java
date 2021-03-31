@@ -123,6 +123,11 @@ public final class DirectionsCriteria {
   public static final String ANNOTATION_MAXSPEED = "maxspeed";
 
   /**
+   * The closure of sections of a route.
+   */
+  public static final String ANNOTATION_CLOSURE = "closure";
+
+  /**
    * Exclude all tolls along the returned directions route.
    *
    * @since 3.0.0
