@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.9.0-alpha.4 - March 31, 2021
+- Added support for route closures coming from the directions API [#1250](https://github.com/mapbox/mapbox-java/pull/1250)
+
 ### 5.9.0-alpha.3 - March 24, 2021
  - Fixed added SnappingClosures to response options [#1232](https://github.com/mapbox/mapbox-java/pull/1243)
 
