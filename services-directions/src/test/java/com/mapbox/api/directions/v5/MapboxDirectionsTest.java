@@ -1437,6 +1437,45 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void addSnappingClosure() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+        .origin(Point.fromLngLat(1.0, 1.0))
+        .destination(Point.fromLngLat(4.0, 4.0))
+        .baseUrl("https://foobar.com")
+        .accessToken(ACCESS_TOKEN)
+        .addSnappingClosure(null)
+        .addSnappingClosure(true)
+        .build();
+
+    assertNotNull(mapboxDirections);
+    assertEquals(";true",
+        mapboxDirections.cloneCall().request().url().queryParameter("snapping_include_closures"));
+  }
+
+  @Test
+  public void addSnappingClosures() throws Exception {
+    List<Boolean> snappingClosures = new ArrayList<>();
+    snappingClosures.add(false);
+    snappingClosures.add(false);
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+        .origin(Point.fromLngLat(1.0, 1.0))
+        .addWaypoint(Point.fromLngLat(2.0, 2.0))
+        .addWaypoint(Point.fromLngLat(2.0, 3.0))
+        .destination(Point.fromLngLat(4.0, 4.0))
+        .baseUrl("https://foobar.com")
+        .accessToken(ACCESS_TOKEN)
+        .snappingClosures(snappingClosures)
+        .addSnappingClosure(null)
+        .addSnappingClosure(true)
+        .build();
+
+    assertNotNull(mapboxDirections);
+    assertEquals("false;false;;true",
+        mapboxDirections.cloneCall().request().url().queryParameter("snapping_include_closures"));
+  }
+
+  @Test
   public void snappingClosuresListNotMatchingCoordinates() throws Exception {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(

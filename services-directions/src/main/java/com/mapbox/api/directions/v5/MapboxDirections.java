@@ -1047,6 +1047,22 @@ public abstract class MapboxDirections extends
     abstract Builder waypointTargets(@Nullable String waypointTargets);
 
     /**
+     * A point to specify drop-off locations that are distinct from the locations specified in
+     * coordinates.
+     * The number of waypoint targets must be the same as the number of coordinates,
+     * but you can skip a coordinate with a null value.
+     * Must be used with steps=true.
+     *
+     * @param waypointTarget a point for drop-off locations
+     * @return this builder for chaining options together
+     * @since 4.3.0
+     */
+    public Builder addWaypointTarget(@Nullable Point waypointTarget) {
+      this.waypointTargets.add(waypointTarget);
+      return this;
+    }
+
+    /**
      * A list of booleans affecting snapping of waypoint locations to road segments.
      * If true, road segments closed due to live-traffic closures will be considered for snapping.
      * If false, they will not be considered for snapping.
@@ -1066,18 +1082,20 @@ public abstract class MapboxDirections extends
     abstract Builder snappingClosures(@Nullable String snappingClosures);
 
     /**
-     * A point to specify drop-off locations that are distinct from the locations specified in
+     * A boolean affecting snapping of waypoint location to the road segment.
+     * If true, road segment closed due to live-traffic closure will be considered for snapping.
+     * If false, it will not be considered for snapping.
+     * If provided, the number of snappingClosures must be the same as the number of
      * coordinates.
-     * The number of waypoint targets must be the same as the number of coordinates,
-     * but you can skip a coordinate with a null value.
-     * Must be used with steps=true.
+     * You can skip a coordinate with null value.
+     * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
      *
-     * @param waypointTarget a point for drop-off locations
+     * @param snappingClosure a boolean affecting snapping of waypoint location to the road segment.
      * @return this builder for chaining options together
-     * @since 4.3.0
+     * @since 5.9.0
      */
-    public Builder addWaypointTarget(@Nullable Point waypointTarget) {
-      this.waypointTargets.add(waypointTarget);
+    public Builder addSnappingClosure(@Nullable Boolean snappingClosure) {
+      this.snappingClosures.add(snappingClosure);
       return this;
     }
 
