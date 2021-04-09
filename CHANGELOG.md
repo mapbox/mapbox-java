@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### master
 
+### 5.9.0-alpha.5 - April 9, 2021
+- Exposed a method to pass a single boolean snapping closure parameter [#1253](https://github.com/mapbox/mapbox-java/pull/1253)
+
 ### 5.9.0-alpha.4 - March 31, 2021
 - Added support for route closures coming from the directions API [#1250](https://github.com/mapbox/mapbox-java/pull/1250)
 
@@ -16,6 +19,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### 5.9.0-alpha-1 - February 12, 2021
 - Fixed `DirectionsRefreshResponse` flow: introduced `DirectionsRouteRefresh` and restricted dependency on `DirectionsRoute` which is a critical bug fixes. Even though this is a semver-breaking change, we're not considering it as one because the refresh feature was non-functional beforehand. [#1225](https://github.com/mapbox/mapbox-java/pull/1225)
+
+### 5.8.0 - January 20, 2021
+- No additional changes.
 
 ### 5.8.0-beta.5 - December 21, 2020
 - Add `BannerComponentSubType` to `BannerComponents` [#1222](https://github.com/mapbox/mapbox-java/pull/1222)
