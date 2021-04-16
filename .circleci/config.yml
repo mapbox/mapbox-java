@@ -51,10 +51,11 @@ commands:
           destination: reports
       - store_test_results:
           path: mapbox/app/build/test-results
-      - run:
-          name: Post code coverage report to Codecov.io
-          command: |
-            bash <(curl -s https://codecov.io/bash)
+#      Disabling Codecov (for now) due to https://about.codecov.io/security-update/
+#      - run:
+#          name: Post code coverage report to Codecov.io
+#          command: |
+#            bash <(curl -s https://codecov.io/bash)
 
 jobs:
   build:
