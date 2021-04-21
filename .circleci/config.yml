@@ -20,7 +20,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
 
 commands:
   build-release:

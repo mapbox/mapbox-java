@@ -1,6 +1,6 @@
 ### RELEASE_VERSION_NUMBER-alpha.1 pre-release checklist 
 
-- [ ] Create a new branch off of `master`.
+- [ ] Create a new branch off of `main`.
 - [ ] Update the SNAPSHOT version in this repo's `README.md` file
 - [ ] Update this repo's `CHANGELOG.md`
 - [ ] Change version name to `RELEASE_VERSION_NUMBER-alpha.1` in this repo's `gradle.properties` (make sure to remove `-SNAPSHOT`)
@@ -32,7 +32,7 @@ Verify the attached files for each module, especially the POM which contains the
 - [ ] Report any regressions on this ticket
 
 ### Final RELEASE_VERSION_NUMBER release checklist 
-- [ ] Create a new branch off of `master`.
+- [ ] Create a new branch off of `main`.
 - [ ] Update this repo's `README.md` file 
 - [ ] Update `CHANGELOG.md`
 - [ ] Change version name to `RELEASE_VERSION_NUMBER` in `gradle.properties` (removing `-SNAPSHOT`)

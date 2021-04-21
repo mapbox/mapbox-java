@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://www.mapbox.com/android-docs/java-sdk/overview/"><img src="https://github.com/mapbox/mapbox-java/blob/master/.github/mbxservice-logo.png" alt="Mapbox Service" width="400"></a>
+  <a href="https://www.mapbox.com/android-docs/java-sdk/overview/"><img src="https://github.com/mapbox/mapbox-java/blob/main/.github/mbxservice-logo.png" alt="Mapbox Service" width="400"></a>
 </h1>
 
 <h4 align="center">Build powerful Java apps using Mapbox's tools and services</h4>
@@ -14,7 +14,7 @@
     <img src="https://circleci.com/gh/mapbox/mapbox-java.svg?style=shield&circle-token=:circle-token">
   </a>
   <a href="https://codecov.io/gh/mapbox/mapbox-java">
-    <img src="https://codecov.io/gh/mapbox/mapbox-java/branch/master/graph/badge.svg">
+    <img src="https://codecov.io/gh/mapbox/mapbox-java/branch/main/graph/badge.svg">
     </a>
 </p>
 <br>
@@ -52,8 +52,8 @@ dependencies {
 
 ## Sample code
 
-View [the CLI samples](https://github.com/mapbox/mapbox-java/tree/master/samples/src/main/java/com/mapbox/samples) or download the [Mapbox Demo App](https://play.google.com/store/apps/details?id=com.mapbox.mapboxandroiddemo) to see what's possible with the Mapbox Java SDK. You can also visit the [Mapbox Android examples page](https://www.mapbox.com/android-docs/java-sdk/examples) for additional code examples.
+View [the CLI samples](https://github.com/mapbox/mapbox-java/tree/main/samples/src/main/java/com/mapbox/samples) or download the [Mapbox Demo App](https://play.google.com/store/apps/details?id=com.mapbox.mapboxandroiddemo) to see what's possible with the Mapbox Java SDK. You can also visit the [Mapbox Android examples page](https://www.mapbox.com/android-docs/java-sdk/examples) for additional code examples.
 
 ## Contributing
 
-All libraries are contained within the `mapbox` folder. You can import the project using Android Studio or IntelliJ IDEA. Read [the contribution guide](https://github.com/mapbox/mapbox-java/blob/master/CONTRIBUTING.md) to get setup properly.
+All libraries are contained within the `mapbox` folder. You can import the project using Android Studio or IntelliJ IDEA. Read [the contribution guide](https://github.com/mapbox/mapbox-java/blob/main/CONTRIBUTING.md) to get setup properly.

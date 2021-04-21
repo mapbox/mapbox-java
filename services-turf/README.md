@@ -14,6 +14,6 @@ Either Gradle or Maven can be used to install the Turf dependency. Visit [docs.m
 
 ## Available functionality
 
-[This list](https://github.com/mapbox/mapbox-java/blob/master/docs/turf-port.md) shows the progress made in porting [the various Turf.js methods](http://turfjs.org/docs/) to Java. 
+[This list](https://github.com/mapbox/mapbox-java/blob/main/docs/turf-port.md) shows the progress made in porting [the various Turf.js methods](http://turfjs.org/docs/) to Java. 
 
 Please make a ticket in this repository if there's a Turf.js method that you'd like to see ported to Java.
