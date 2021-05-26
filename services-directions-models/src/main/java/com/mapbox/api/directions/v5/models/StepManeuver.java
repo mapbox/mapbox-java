@@ -155,7 +155,7 @@ public abstract class StepManeuver extends DirectionsJsonObject {
    *
    * @since 4.1.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     TURN,
     NEW_NAME,

@@ -36,7 +36,7 @@ public abstract class LegStep extends DirectionsJsonObject {
   /**
    * Speed limit sign.
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef({
     MUTCD,
     VIENNA

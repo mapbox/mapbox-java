@@ -90,7 +90,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
           TEXT,
           ICON,
@@ -108,7 +108,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
    * https://docs.mapbox.com/api/navigation/#banner-instruction-object
    *
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
       JCT,
       SIGNBOARD

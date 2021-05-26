@@ -73,7 +73,7 @@ public final class ManeuverModifier {
    *
    * @since 5.2.1
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef({
           ManeuverModifier.UTURN,
           ManeuverModifier.SHARP_RIGHT,

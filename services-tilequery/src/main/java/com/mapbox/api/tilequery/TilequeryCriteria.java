@@ -38,7 +38,7 @@ public class TilequeryCriteria {
    *
    * @since 3.5.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     TILEQUERY_GEOMETRY_POLYGON,
     TILEQUERY_GEOMETRY_LINESTRING,

@@ -49,7 +49,7 @@ public class IsochroneCriteria {
    *
    * @since 4.6.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
       PROFILE_WALKING,
       PROFILE_DRIVING,
