@@ -240,7 +240,7 @@ public final class DirectionsCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     PROFILE_DRIVING_TRAFFIC,
     PROFILE_DRIVING,
@@ -255,7 +255,7 @@ public final class DirectionsCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     GEOMETRY_POLYLINE,
     GEOMETRY_POLYLINE6
@@ -268,7 +268,7 @@ public final class DirectionsCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     OVERVIEW_FALSE,
     OVERVIEW_FULL,
@@ -282,7 +282,7 @@ public final class DirectionsCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     ANNOTATION_CONGESTION,
     ANNOTATION_DISTANCE,
@@ -298,7 +298,7 @@ public final class DirectionsCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     EXCLUDE_FERRY,
     EXCLUDE_MOTORWAY,
@@ -314,7 +314,7 @@ public final class DirectionsCriteria {
    *
    * @since 0.3.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     IMPERIAL,
     METRIC
@@ -327,7 +327,7 @@ public final class DirectionsCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     SOURCE_ANY,
     SOURCE_FIRST
@@ -340,7 +340,7 @@ public final class DirectionsCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     DESTINATION_ANY,
     DESTINATION_LAST
@@ -354,7 +354,7 @@ public final class DirectionsCriteria {
    *
    * @since 3.2.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     APPROACH_UNRESTRICTED,
     APPROACH_CURB

@@ -82,7 +82,7 @@ public abstract class Incident extends DirectionsJsonObject {
   /**
    * Incident type.
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef({
     INCIDENT_ACCIDENT,
     INCIDENT_CONGESTION,
@@ -128,7 +128,7 @@ public abstract class Incident extends DirectionsJsonObject {
   /**
    * Impact type.
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef({
     IMPACT_UNKNOWN,
     IMPACT_CRITICAL,

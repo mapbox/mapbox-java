@@ -1,10 +1,9 @@
 package com.mapbox.api.staticmap.v1;
 
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-
 import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Constant values related to the Static Map API can be found in this class.
@@ -121,7 +120,7 @@ public final class StaticMapCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     SMALL_PIN,
     MEDIUM_PIN,

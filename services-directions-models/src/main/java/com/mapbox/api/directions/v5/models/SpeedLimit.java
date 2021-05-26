@@ -22,7 +22,7 @@ public class SpeedLimit {
   /**
    * Speed limit unit.
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef({
       MPH,
       KMPH

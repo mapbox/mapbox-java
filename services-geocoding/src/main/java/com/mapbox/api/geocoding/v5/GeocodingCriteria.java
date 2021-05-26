@@ -119,7 +119,7 @@ public final class GeocodingCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     MODE_PLACES,
     MODE_PLACES_PERMANENT
@@ -132,7 +132,7 @@ public final class GeocodingCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     TYPE_COUNTRY,
     TYPE_REGION,
@@ -154,7 +154,7 @@ public final class GeocodingCriteria {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     REVERSE_MODE_DISTANCE,
     REVERSE_MODE_SCORE

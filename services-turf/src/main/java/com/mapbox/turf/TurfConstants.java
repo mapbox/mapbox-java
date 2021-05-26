@@ -145,7 +145,7 @@ public class TurfConstants {
    *
    * @since 3.0.0
    */
-  @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     UNIT_KILOMETRES,
     UNIT_METRES,
