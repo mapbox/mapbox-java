@@ -57,6 +57,14 @@ commands:
 #          command: |
 #            bash <(curl -s https://codecov.io/bash)
 
+  setup-aws-credentials:
+    steps:
+      - run:
+          name: Install mbx-ci and obtain credentials
+          command: |
+            curl -Ls https://mapbox-release-engineering.s3.amazonaws.com/mbx-ci/latest/mbx-ci-linux-amd64 > mbx-ci && chmod 755 ./mbx-ci
+            ./mbx-ci aws setup
+
 jobs:
   build:
     working_directory: ~/code
@@ -83,17 +91,22 @@ jobs:
 
 # ------------------------------------------------------------------------------
   publish-snapshot:
+    environment:
+      - MBX_CI_DOMAIN: o619qyc20d.execute-api.us-east-1.amazonaws.com
     docker:
       - image: mbgl/android-ndk-r19:latest
     working_directory: ~/code
     steps:
       - checkout
+      - setup-aws-credentials
       - deploy:
           name: Publish Java snapshot libraries to Mapbox SDK Registry
           command: |
             make sdk-registry-publish-snapshot
 
   release:
+    environment:
+      - MBX_CI_DOMAIN: o619qyc20d.execute-api.us-east-1.amazonaws.com
     docker:
       - image: mbgl/android-ndk-r19:latest
     working_directory: ~/code
@@ -102,6 +115,7 @@ jobs:
       - build-release
       - build-cli
       - run-tests
+      - setup-aws-credentials
       - deploy:
           name: Upload libraries to Mapbox SDK Registry
           command: |
