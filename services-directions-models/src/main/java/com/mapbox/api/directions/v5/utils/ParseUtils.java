@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.mapbox.geojson.Point;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,189 +16,201 @@ public class ParseUtils {
   private static final String TRUE = "true";
   private static final String FALSE = "false";
 
+  private interface ValueParser<T> {
+    @NonNull
+    T parse(@NonNull String element);
+  }
+
+  private static final ValueParser<Integer> INTEGER_PARSER = new ValueParser<Integer>() {
+    @NonNull
+    @Override
+    public Integer parse(@NonNull String element) {
+      return Integer.valueOf(element);
+    }
+  };
+
+  private static final ValueParser<String> STRING_PARSER = new ValueParser<String>() {
+    @NonNull
+    @Override
+    public String parse(@NonNull String element) {
+      return element;
+    }
+  };
+
+  private static final ValueParser<Point> POINT_PARSER = new ValueParser<Point>() {
+    @NonNull
+    @Override
+    public Point parse(@NonNull String element) {
+      String[] pointArray = element.split(COMMA);
+      if (pointArray.length != 2) {
+        throw new RuntimeException(
+          "Point list should have exactly 2 values, longitude and latitude."
+        );
+      }
+      return Point.fromLngLat(Double.parseDouble(pointArray[0]), Double.parseDouble(pointArray[1]));
+    }
+  };
+
+  private static final ValueParser<Double> DOUBLE_PARSER = new ValueParser<Double>() {
+    @NonNull
+    @Override
+    public Double parse(@NonNull String element) {
+      if (element.equals(UNLIMITED)) {
+        return Double.POSITIVE_INFINITY;
+      } else {
+        return Double.valueOf(element);
+      }
+    }
+  };
+
+  private static final ValueParser<Boolean> BOOLEAN_PARSER = new ValueParser<Boolean>() {
+    @NonNull
+    @Override
+    public Boolean parse(@NonNull String element) {
+      if (element.equalsIgnoreCase(TRUE)) {
+        return true;
+      } else if (element.equalsIgnoreCase(FALSE)) {
+        return false;
+      } else {
+        throw new RuntimeException(
+          "Boolean value should be either true or false string but is " + element
+        );
+      }
+    }
+  };
+
+  private static final ValueParser<List<Double>> DOUBLE_LIST_PARSER =
+    new ValueParser<List<Double>>() {
+      @NonNull
+      @Override
+      public List<Double> parse(@NonNull String element) {
+        String[] values = element.split(COMMA);
+        List<Double> doubles = new ArrayList<>();
+        for (String value : values) {
+          doubles.add(Double.valueOf(value));
+        }
+        return doubles;
+      }
+    };
+
   /**
-   * Parse a String to a list of Integers.
+   * Parse a String to a list of values separated by the separator.
+   * If separation finds empty strings, those will be added as nulls to the resulting list.
+   *
+   * @param original  an original String.
+   * @param separator separator to split the original string by
+   * @param parser    parser
+   * @return List of values or null if the original string is null
+   */
+  @Nullable
+  private static <T> List<T> parseToList(
+    @NonNull String separator, @Nullable String original, @NonNull ValueParser<T> parser) {
+    if (original == null) {
+      return null;
+    }
+
+    List<T> result = new ArrayList<>();
+    String[] elements = original.split(separator, -1);
+    for (String element : elements) {
+      if (element.isEmpty()) {
+        result.add(null);
+      } else {
+        result.add(parser.parse(element));
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Parse a semicolon separated String to a list of Integers.
+   * If separation finds empty strings, those will be added as nulls to the resulting list.
    *
    * @param original an original String.
-   * @return List of Integers
+   * @return List of Integers or null if the original string is null
    */
   @Nullable
   public static List<Integer> parseToIntegers(@Nullable String original) {
-    if (original == null) {
-      return null;
-    }
-
-    List<Integer> integers = new ArrayList<>();
-    String[] strings = original.split(SEMICOLON);
-    for (String index : strings) {
-      if (index != null) {
-        if (index.isEmpty()) {
-          integers.add(null);
-        } else {
-          integers.add(Integer.valueOf(index));
-        }
-      }
-    }
-
-    return integers;
+    return parseToList(SEMICOLON, original, INTEGER_PARSER);
   }
 
   /**
-   * Parse a String to a list of Strings using ";" as a separator.
+   * Parse a semicolon separated String to a list of Strings.
+   * If separation finds empty strings, those will be added as nulls to the resulting list.
    *
    * @param original an original String.
-   * @return List of Strings
+   * @return List of Strings or null if the original string is null
    */
   @Nullable
   public static List<String> parseToStrings(@Nullable String original) {
-    return parseToStrings(original, SEMICOLON);
+    return parseToList(SEMICOLON, original, STRING_PARSER);
   }
 
   /**
-   * Parse a String to a list of Strings.
+   * Parse a String to a list of Strings using the provided separator.
+   * If separation finds empty strings, those will be added as nulls to the resulting list.
    *
-   * @param original an original String.
+   * @param original  an original String.
    * @param separator a String used as a separator.
-   * @return List of Strings
+   * @return List of Strings or null if the original string is null
    */
   @Nullable
   public static List<String> parseToStrings(@Nullable String original, @NonNull String separator) {
-    if (original == null) {
-      return null;
-    }
-
-    List<String> result = new ArrayList<>();
-    String[] strings = original.split(separator, -1);
-    for (String str : strings) {
-      if (str != null) {
-        if (str.isEmpty()) {
-          result.add(null);
-        } else {
-          result.add(str);
-        }
-      }
-    }
-
-    return result;
+    return parseToList(separator, original, STRING_PARSER);
   }
 
   /**
-   * Parse a String to a list of Points.
+   * Parse a semicolon separated String to a list of Points.
+   * If separation finds empty strings, those will be added as nulls to the resulting list.
+   * <p>
+   * Elements of the string should have 2 comma separated double values,
+   * longitude and latitude, for example:
+   * "10.1,47.3;33.09,79.111"
    *
    * @param original an original String.
-   * @return List of Points
+   * @return List of Points or null if the original string is null
    */
   @Nullable
   public static List<Point> parseToPoints(@Nullable String original) {
-    if (original == null) {
-      return null;
-    }
-
-    List<Point> points = new ArrayList<>();
-    String[] targets = original.split(SEMICOLON, -1);
-    for (String target : targets) {
-      if (target != null) {
-        if (target.isEmpty()) {
-          points.add(null);
-        } else {
-          String[] point = target.split(COMMA);
-          points.add(Point.fromLngLat(Double.valueOf(point[0]), Double.valueOf(point[1])));
-        }
-      }
-    }
-
-    return points;
+    return parseToList(SEMICOLON, original, POINT_PARSER);
   }
 
   /**
-   * Parse a String to a list of Points.
+   * Parse a semicolon separated String to a list of Doubles.
+   * If separation finds empty strings, those will be added as nulls to the resulting list.
    *
    * @param original an original String.
-   * @return List of Doubles
+   * @return List of Doubles or null if the original string is null
    */
   @Nullable
   public static List<Double> parseToDoubles(@Nullable String original) {
-    if (original == null) {
-      return null;
-    }
-
-    List<Double> doubles = new ArrayList<>();
-    String[] strings = original.split(SEMICOLON, -1);
-    for (String str : strings) {
-      if (str != null) {
-        if (str.isEmpty()) {
-          doubles.add(null);
-        } else if (str.equals(UNLIMITED)) {
-          doubles.add(Double.POSITIVE_INFINITY);
-        } else {
-          doubles.add(Double.valueOf(str));
-        }
-      }
-    }
-
-    return doubles;
+    return parseToList(SEMICOLON, original, DOUBLE_PARSER);
   }
 
   /**
-   * Parse a String to a list of list of Doubles.
+   * Parse a semicolon separated String to a list of lists of doubles.
+   * If separation finds empty strings, those will be added as nulls to the resulting list.
+   * <p>
+   * Elements of the string should have a comma separated double values, for example:
+   * ";;10.1,47.3,33.09,79.111;84.45,45.4;"
    *
    * @param original an original String.
-   * @return List of List of Doubles
+   * @return List of List of Doubles or null if the original string is null
    */
   @Nullable
   public static List<List<Double>> parseToListOfListOfDoubles(@Nullable String original) {
-    if (original == null) {
-      return null;
-    }
-
-    List<List<Double>> result = new ArrayList<>();
-    String[] pairs = original.split(SEMICOLON, -1);
-    for (String pair : pairs) {
-      if (pair.isEmpty()) {
-        result.add(null);
-      } else {
-        String[] values = pair.split(COMMA);
-        if (values.length == 2) {
-          result.add(Arrays.asList(Double.valueOf(values[0]), Double.valueOf(values[1])));
-        }
-      }
-    }
-
-    return result;
+    return parseToList(SEMICOLON, original, DOUBLE_LIST_PARSER);
   }
 
   /**
-   * Parse a String to a list of Boolean.
+   * Parse a semicolon separated String to a list of Booleans.
+   * If separation finds empty strings, those will be added as nulls to the resulting list.
    *
    * @param original an original String.
-   * @return List of Booleans
+   * @return List of Booleans or null if the original string is null
    */
   @Nullable
   public static List<Boolean> parseToBooleans(@Nullable String original) {
-    if (original == null) {
-      return null;
-    }
-
-    List<Boolean> booleans = new ArrayList<>();
-    if (original.isEmpty()) {
-      return booleans;
-    }
-
-    String[] strings = original.split(SEMICOLON, -1);
-    for (String str : strings) {
-      if (str != null) {
-        if (str.isEmpty()) {
-          booleans.add(null);
-        } else if (str.equalsIgnoreCase(TRUE)) {
-          booleans.add(true);
-        } else if (str.equalsIgnoreCase(FALSE)) {
-          booleans.add(false);
-        } else {
-          booleans.add(null);
-        }
-      }
-    }
-
-    return booleans;
+    return parseToList(SEMICOLON, original, BOOLEAN_PARSER);
   }
 }

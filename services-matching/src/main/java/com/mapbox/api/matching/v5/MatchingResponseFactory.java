@@ -1,10 +1,8 @@
 package com.mapbox.api.matching.v5;
 
 import com.mapbox.api.directions.v5.models.RouteOptions;
-import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.api.matching.v5.models.MapMatchingMatching;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
-import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,42 +52,34 @@ class MatchingResponseFactory {
     List<MapMatchingMatching> matchings = response.body().matchings();
     List<MapMatchingMatching> modifiedMatchings = new ArrayList<>();
     for (MapMatchingMatching matching : matchings) {
-      modifiedMatchings.add(matching.toBuilder().routeOptions(
-        RouteOptions.builder()
-          .profile(mapboxMapMatching.profile())
-          .coordinates(formatCoordinates(mapboxMapMatching.coordinates()))
-          .annotations(mapboxMapMatching.annotations())
-          .approachesList(ParseUtils.parseToStrings(mapboxMapMatching.approaches()))
-          .language(mapboxMapMatching.language())
-          .radiusesList(ParseUtils.parseToDoubles(mapboxMapMatching.radiuses()))
-          .user(mapboxMapMatching.user())
-          .voiceInstructions(mapboxMapMatching.voiceInstructions())
-          .bannerInstructions(mapboxMapMatching.bannerInstructions())
-          .roundaboutExits(mapboxMapMatching.roundaboutExits())
-          .geometries(mapboxMapMatching.geometries())
-          .overview(mapboxMapMatching.overview())
-          .steps(mapboxMapMatching.steps())
-          .voiceUnits(mapboxMapMatching.voiceUnits())
+      modifiedMatchings.add(
+        matching.toBuilder()
+          .routeOptions(
+            RouteOptions.builder()
+              .profile(mapboxMapMatching.profile())
+              .coordinates(mapboxMapMatching.coordinates())
+              .annotations(mapboxMapMatching.annotations())
+              .approaches(mapboxMapMatching.approaches())
+              .language(mapboxMapMatching.language())
+              .radiuses(mapboxMapMatching.radiuses())
+              .user(mapboxMapMatching.user())
+              .voiceInstructions(mapboxMapMatching.voiceInstructions())
+              .bannerInstructions(mapboxMapMatching.bannerInstructions())
+              .roundaboutExits(mapboxMapMatching.roundaboutExits())
+              .geometries(mapboxMapMatching.geometries())
+              .overview(mapboxMapMatching.overview())
+              .steps(mapboxMapMatching.steps())
+              .voiceUnits(mapboxMapMatching.voiceUnits())
+              .accessToken(mapboxMapMatching.accessToken())
+              .waypointIndices(mapboxMapMatching.waypointIndices())
+              .waypointNames(mapboxMapMatching.waypointNames())
+              .baseUrl(mapboxMapMatching.baseUrl())
+              .build()
+          )
           .requestUuid(PLACEHOLDER_UUID)
-          .accessToken(mapboxMapMatching.accessToken())
-          .waypointIndicesList(ParseUtils.parseToIntegers(mapboxMapMatching.waypointIndices()))
-          .waypointNamesList(ParseUtils.parseToStrings(mapboxMapMatching.waypointNames()))
-          .baseUrl(mapboxMapMatching.baseUrl())
           .build()
-      ).build());
+      );
     }
     return modifiedMatchings;
-  }
-
-  private static List<Point> formatCoordinates(String coordinates) {
-    String[] coordPairs = coordinates.split(";", -1);
-    List<Point> coordinatesFormatted = new ArrayList<>();
-    for (String coordPair : coordPairs) {
-      String[] coords = coordPair.split(",", -1);
-      coordinatesFormatted.add(
-        Point.fromLngLat(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
-
-    }
-    return coordinatesFormatted;
   }
 }

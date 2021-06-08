@@ -96,6 +96,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanity() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
@@ -109,6 +110,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     thrown.expectMessage(
       startsWith("At least two coordinates must be provided with your API request."));
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
@@ -122,6 +124,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     thrown.expectMessage(
       startsWith("There must be as many radiuses as there are coordinates."));
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
@@ -134,11 +137,27 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
   @Test
+  public void build_throwsExceptionWhenNotMatchingrdProfile() throws Exception {
+    thrown.expect(IllegalStateException.class);
+    thrown.expectMessage(
+      startsWith("Missing required properties: profile"));
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .coordinate(Point.fromLngLat(2.0, 2.0))
+      .baseUrl("https://foobar.com")
+      .user("userString")
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    mapMatching.executeCall();
+  }
+
+  @Test
   public void build_throwsExceptionWhenNotMatchingTimestampsForEachCoord() throws Exception {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(
       startsWith("There must be as many timestamps as there are coordinates."));
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
@@ -155,6 +174,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("Missing required properties: accessToken");
     MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .build();
@@ -165,6 +185,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     thrown.expect(ServicesException.class);
     thrown.expectMessage("Using Mapbox Services requires setting a valid access token.");
     MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .accessToken("")
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
@@ -174,6 +195,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void clientAppName_doesSetInHeaderCorrectly1() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
       .clientAppName("APP")
@@ -185,6 +207,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void clientAppName_doesSetInHeaderCorrectly2() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
       .clientAppName("APP")
@@ -197,6 +220,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void mapMatchingToDirectionsRoute() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
@@ -208,6 +232,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void accessToken_doesGetPlacedInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
@@ -218,6 +243,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void tidy_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .baseUrl("https://foobar.com")
@@ -230,6 +256,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void user_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .baseUrl("https://foobar.com")
@@ -242,6 +269,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void profile_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .baseUrl("https://foobar.com")
@@ -254,6 +282,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void coordinates_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
@@ -269,6 +298,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void geometries_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
@@ -283,6 +313,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void radiuses_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
@@ -297,6 +328,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void steps_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
@@ -311,6 +343,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void overview_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
@@ -325,6 +358,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void timestamps_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
@@ -339,6 +373,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void annotations_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
@@ -355,6 +390,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void language_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
@@ -369,6 +405,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void baseUrl_doesShowInUrlCorrectly() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.1234, 3.3456))
       .coordinate(Point.fromLngLat(90.10293, 7.10293))
       .coordinate(Point.fromLngLat(100.10203, 84.039))
@@ -383,6 +420,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test(expected = ServicesException.class)
   public void build_exceptionThrownWhenLessThanTwoSeparatesLegsProvided() {
     MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
       .waypointIndices(0)
@@ -394,6 +432,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test(expected = ServicesException.class)
   public void build_exceptionThrownWhenSeparatesLegsDoNotStartWith0() {
     MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(3.0, 3.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
@@ -406,6 +445,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test(expected = ServicesException.class)
   public void build_exceptionThrownWhenSeparatesLegsDoNotEndWithLast() {
     MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(3.0, 3.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
@@ -418,6 +458,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test(expected = ServicesException.class)
   public void build_exceptionThrownWhenMiddleSeparatesLegsAreWrong() {
     MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(3.0, 3.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
@@ -430,6 +471,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanitySeparatesLegs() {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(3.0, 3.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
@@ -443,6 +485,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanityVoiceInstructions() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
       .voiceInstructions(true)
@@ -457,6 +500,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanityVoiceUnits() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
       .voiceInstructions(true)
@@ -472,6 +516,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanityBannerInstructions() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
       .bannerInstructions(true)
@@ -486,6 +531,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanityRoundExtsInstructions() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
       .roundaboutExits(true)
@@ -500,6 +546,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void noValidMatchTest() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(0, -40))
       .coordinate(Point.fromLngLat(0, -20 ))
       .baseUrl(mockUrl.toString())
@@ -514,11 +561,12 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanityApproachesInstructions() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(1.0, 1.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(3.0, 3.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
-      .addApproaches(APPROACH_UNRESTRICTED, null, "", APPROACH_CURB)
+      .addApproaches(APPROACH_UNRESTRICTED, null, null, APPROACH_CURB)
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .build();
@@ -530,6 +578,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanityApproachesOptional() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(1.0, 1.0))
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(3.0, 3.0))
@@ -548,6 +597,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     thrown.expectMessage(
       startsWith("Number of approach elements must match"));
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
       .addApproaches(APPROACH_UNRESTRICTED)
@@ -557,11 +607,13 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
   @Test
-  public void build_exceptionThrownWhenInvalidApproaches() throws Exception {
-    thrown.expect(ServicesException.class);
+  public void
+  build_exceptionThrownWhenInvalidApproaches() throws Exception {
+    thrown.expect(RuntimeException.class);
     thrown.expectMessage(
-      startsWith("All approaches values must be one of curb, unrestricted"));
+      startsWith("Approach should be one of unrestricted or curb"));
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinate(Point.fromLngLat(2.0, 2.0))
       .coordinate(Point.fromLngLat(4.0, 4.0))
       .addApproaches(APPROACH_UNRESTRICTED, "restricted")
@@ -624,6 +676,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   @Test
   public void sanityWaypointNamesInstructions() {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .baseUrl("https://foobar.com")
       .accessToken(ACCESS_TOKEN)
       .coordinate(Point.fromLngLat(1.0, 1.0))

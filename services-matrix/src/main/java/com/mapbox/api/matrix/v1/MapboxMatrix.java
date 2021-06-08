@@ -362,8 +362,8 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
       List<String> coordinatesFormatted = new ArrayList<>();
       for (Point point : coordinates) {
         coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          FormatUtils.formatCoordinate(point.longitude()),
-          FormatUtils.formatCoordinate(point.latitude())));
+          FormatUtils.formatDouble(point.longitude()),
+          FormatUtils.formatDouble(point.latitude())));
       }
       return TextUtils.join(";", coordinatesFormatted.toArray());
     }

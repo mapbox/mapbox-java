@@ -1,6 +1,7 @@
 package com.mapbox.api.directions.v5;
 
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -13,56 +14,43 @@ import retrofit2.http.Query;
 
 /**
  * Interface that defines the directions service (v5).
- *
- * @since 1.0.0
  */
-public interface DirectionsService {
+interface DirectionsService {
 
   /**
-   * Constructs the html get call using the information passed in through the
-   * {@link MapboxDirections.Builder}.
+   * Request definition.
    *
-   * @param userAgent           the user agent
-   * @param user                the user
-   * @param profile             the profile directions should use
-   * @param coordinates         the coordinates the route should follow
-   * @param accessToken         Mapbox access token
-   * @param alternatives        define whether you want to receive more then one route
-   * @param geometries          route geometry
-   * @param overview            route full, simplified, etc.
-   * @param radiuses            start at the most efficient point within the radius
-   * @param steps               define if you'd like the route steps
-   * @param bearings            used to filter the road segment the waypoint will be placed on by
-   *                            direction and dictates the angle of approach
-   * @param continueStraight    define whether the route should continue straight even if the
-   *                            route will be slower
-   * @param annotations         an annotations object that contains additional details about each
-   *                            line segment along the route geometry. Each entry in an
-   *                            annotations field corresponds to a coordinate along the route
-   *                            geometry
-   * @param language            language of returned turn-by-turn text instructions
-   * @param roundaboutExits     Add extra step when roundabouts occur with additional information
-   *                            for the user
-   * @param voiceInstructions   request that the response contain voice instruction information,
-   *                            useful for navigation
-   * @param bannerInstructions  request that the response contain banner instruction information,
-   *                            useful for navigation
-   * @param voiceUnits          voice units
-   * @param exclude             exclude tolls, motorways or more along your route
-   * @param approaches          which side of the road to approach a waypoint
-   * @param waypointIndices     which input coordinates should be treated as waypoints/separate legs
-   *                            Note: coordinate indices not added here act as silent waypoints
-   * @param waypointNames       custom names for waypoints used for the arrival instruction
-   * @param waypointTargets     list of coordinate pairs for drop-off locations
-   * @param enableRefresh       whether the routes should be refreshable
-   * @param walkingSpeed        walking speed
-   * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
-   *                            that do not allow vehicles and are set aside for pedestrian use
-   * @param alleyBias           a factor that modifies the cost when alleys are encountered
-   * @param snappingClosures    a list of booleans affecting snapping of waypoint locations to road
-   *                            segments
+   * @param userAgent               the user agent
+   * @param user                    {@link RouteOptions#user()}
+   * @param profile                 {@link RouteOptions#profile()}
+   * @param coordinates             {@link RouteOptions#coordinatesList()}
+   * @param accessToken             {@link RouteOptions#accessToken()}
+   * @param alternatives            {@link RouteOptions#alternatives()}
+   * @param geometries              {@link RouteOptions#geometries()}
+   * @param overview                {@link RouteOptions#overview()}
+   * @param radiuses                {@link RouteOptions#radiuses()}
+   * @param steps                   {@link RouteOptions#steps()}
+   * @param bearings                {@link RouteOptions#bearings()}
+   * @param continueStraight        {@link RouteOptions#continueStraight()}
+   * @param annotations             {@link RouteOptions#annotations()}
+   * @param language                {@link RouteOptions#language()}
+   * @param roundaboutExits         {@link RouteOptions#roundaboutExits()}
+   * @param voiceInstructions       {@link RouteOptions#voiceInstructions()}
+   * @param bannerInstructions      {@link RouteOptions#bannerInstructions()}
+   * @param voiceUnits              {@link RouteOptions#voiceUnits()}
+   * @param exclude                 {@link RouteOptions#exclude()}
+   * @param approaches              {@link RouteOptions#approaches()}
+   * @param waypointIndices         {@link RouteOptions#waypointIndices()}
+   * @param waypointNames           {@link RouteOptions#waypointNames()}
+   * @param waypointTargets         {@link RouteOptions#waypointTargets()}
+   * @param enableRefresh           {@link RouteOptions#enableRefresh()}
+   * @param walkingSpeed            {@link RouteOptions#walkingSpeed()}
+   * @param walkwayBias             {@link RouteOptions#walkwayBias()}
+   * @param alleyBias               {@link RouteOptions#alleyBias()}
+   * @param snappingIncludeClosures {@link RouteOptions#snappingIncludeClosures()}
+   * @param arriveBy                {@link RouteOptions#arriveBy()}
+   * @param departAt                {@link RouteOptions#departAt()}
    * @return the {@link DirectionsResponse} in a Call wrapper
-   * @since 1.0.0
    */
   @GET("directions/v5/{user}/{profile}/{coordinates}")
   Call<DirectionsResponse> getCall(
@@ -93,54 +81,45 @@ public interface DirectionsService {
     @Query("walking_speed") Double walkingSpeed,
     @Query("walkway_bias") Double walkwayBias,
     @Query("alley_bias") Double alleyBias,
-    @Query("snapping_include_closures") String snappingClosures
+    @Query("snapping_include_closures") String snappingIncludeClosures,
+    @Query("arrive_by") String arriveBy,
+    @Query("depart_at") String departAt
   );
 
   /**
-   * Constructs the post html call using the information passed in through the
-   * {@link MapboxDirections.Builder}.
+   * Request definition.
    *
-   * @param userAgent           the user agent
-   * @param user                the user
-   * @param profile             the profile directions should use
-   * @param coordinates         the coordinates the route should follow
-   * @param accessToken         Mapbox access token
-   * @param alternatives        define whether you want to receive more then one route
-   * @param geometries          route geometry
-   * @param overview            route full, simplified, etc.
-   * @param radiuses            start at the most efficient point within the radius
-   * @param steps               define if you'd like the route steps
-   * @param bearings            used to filter the road segment the waypoint will be placed on by
-   *                            direction and dictates the angle of approach
-   * @param continueStraight    define whether the route should continue straight even if the
-   *                            route will be slower
-   * @param annotations         an annotations object that contains additional details about each
-   *                            line segment along the route geometry. Each entry in an
-   *                            annotations field corresponds to a coordinate along the route
-   *                            geometry
-   * @param language            language of returned turn-by-turn text instructions
-   * @param roundaboutExits     Add extra step when roundabouts occur with additional information
-   *                            for the user
-   * @param voiceInstructions   request that the response contain voice instruction information,
-   *                            useful for navigation
-   * @param bannerInstructions  request that the response contain banner instruction information,
-   *                            useful for navigation
-   * @param voiceUnits          voice units
-   * @param exclude             exclude tolls, motorways or more along your route
-   * @param approaches          which side of the road to approach a waypoint
-   * @param waypointIndices     which input coordinates should be treated as waypoints/separate legs
-   *                            Note: coordinate indices not added here act as silent waypoints
-   * @param waypointNames       custom names for waypoints used for the arrival instruction
-   * @param waypointTargets     list of coordinate pairs for drop-off locations
-   * @param enableRefresh       whether the routes should be refreshable
-   * @param walkingSpeed        walking speed
-   * @param walkwayBias         a factor that modifies the cost when encountering roads or paths
-   *                            that do not allow vehicles and are set aside for pedestrian use
-   * @param alleyBias           a factor that modifies the cost when alleys are encountered
-   * @param snappingClosures    a list of booleans affecting snapping of waypoint locations to road
-   *                            segments
+   * @param userAgent               the user agent
+   * @param user                    {@link RouteOptions#user()}
+   * @param profile                 {@link RouteOptions#profile()}
+   * @param coordinates             {@link RouteOptions#coordinatesList()}
+   * @param accessToken             {@link RouteOptions#accessToken()}
+   * @param alternatives            {@link RouteOptions#alternatives()}
+   * @param geometries              {@link RouteOptions#geometries()}
+   * @param overview                {@link RouteOptions#overview()}
+   * @param radiuses                {@link RouteOptions#radiuses()}
+   * @param steps                   {@link RouteOptions#steps()}
+   * @param bearings                {@link RouteOptions#bearings()}
+   * @param continueStraight        {@link RouteOptions#continueStraight()}
+   * @param annotations             {@link RouteOptions#annotations()}
+   * @param language                {@link RouteOptions#language()}
+   * @param roundaboutExits         {@link RouteOptions#roundaboutExits()}
+   * @param voiceInstructions       {@link RouteOptions#voiceInstructions()}
+   * @param bannerInstructions      {@link RouteOptions#bannerInstructions()}
+   * @param voiceUnits              {@link RouteOptions#voiceUnits()}
+   * @param exclude                 {@link RouteOptions#exclude()}
+   * @param approaches              {@link RouteOptions#approaches()}
+   * @param waypointIndices         {@link RouteOptions#waypointIndices()}
+   * @param waypointNames           {@link RouteOptions#waypointNames()}
+   * @param waypointTargets         {@link RouteOptions#waypointTargets()}
+   * @param enableRefresh           {@link RouteOptions#enableRefresh()}
+   * @param walkingSpeed            {@link RouteOptions#walkingSpeed()}
+   * @param walkwayBias             {@link RouteOptions#walkwayBias()}
+   * @param alleyBias               {@link RouteOptions#alleyBias()}
+   * @param snappingIncludeClosures {@link RouteOptions#snappingIncludeClosures()}
+   * @param arriveBy                {@link RouteOptions#arriveBy()}
+   * @param departAt                {@link RouteOptions#departAt()}
    * @return the {@link DirectionsResponse} in a Call wrapper
-   * @since 4.6.0
    */
   @FormUrlEncoded
   @POST("directions/v5/{user}/{profile}")
@@ -172,6 +151,8 @@ public interface DirectionsService {
     @Field("walking_speed") Double walkingSpeed,
     @Field("walkway_bias") Double walkwayBias,
     @Field("alley_bias") Double alleyBias,
-    @Field("snapping_include_closures") String snappingClosures
+    @Field("snapping_include_closures") String snappingIncludeClosures,
+    @Field("arrive_by") String arriveBy,
+    @Field("depart_at") String departAt
   );
 }

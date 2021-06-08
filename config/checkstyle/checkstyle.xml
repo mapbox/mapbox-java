@@ -438,13 +438,6 @@
       <property name="scope" value="public"/>
     </module>
 
-    <!-- Require the @since tag to be on all public javadoc methods. -->
-    <module name="WriteTag">
-      <property name="tag" value="@since"/>
-      <property name="severity" value="warning"/>
-      <property name="tagSeverity" value="ignore"/>
-    </module>
-
     <!-- Forbid pointless Javadoc summary sentences. -->
     <module name="SummaryJavadocCheck">
       <property name="forbiddenSummaryFragments"

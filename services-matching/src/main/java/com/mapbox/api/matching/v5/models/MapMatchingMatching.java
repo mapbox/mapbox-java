@@ -1,5 +1,6 @@
 package com.mapbox.api.matching.v5.models;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -117,6 +118,14 @@ public abstract class MapMatchingMatching implements Serializable {
   public abstract String voiceLanguage();
 
   /**
+   * The universally unique identifier of the request that produced this route.
+   *
+   * @return request uuid
+   */
+  @Nullable
+  public abstract String requestUuid();
+
+  /**
    * Convert the current {@link MapMatchingMatching} to its builder holding the currently assigned
    * values. This allows you to modify a single variable and then rebuild the object resulting in
    * an updated and modified {@link MapMatchingMatching}.
@@ -143,6 +152,7 @@ public abstract class MapMatchingMatching implements Serializable {
       .distance(distance())
       .routeOptions(routeOptions())
       .voiceLanguage(voiceLanguage())
+      .requestUuid(requestUuid())
       .build();
   }
 
@@ -251,6 +261,15 @@ public abstract class MapMatchingMatching implements Serializable {
      * @since 3.4.0
      */
     public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
+
+    /**
+     * The universally unique identifier of the request that produced this route.
+     *
+     * @param requestUuid uuid
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder requestUuid(@Nullable String requestUuid);
 
     /**
      * Build a new {@link MapMatchingMatching} object.

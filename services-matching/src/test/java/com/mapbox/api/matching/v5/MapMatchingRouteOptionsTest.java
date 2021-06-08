@@ -82,9 +82,8 @@ public class MapMatchingRouteOptionsTest extends TestUtils {
       .baseUrl(mockUrl.toString())
       .profile("hello")
       .user("user")
-      .coordinates(pointList)
+      .coordinatesList(pointList)
       .accessToken(ACCESS_TOKEN)
-      .requestUuid("uuid")
       .build();
     assertNotNull(routeOptions);
     assertEquals("hello", routeOptions.profile());
@@ -188,5 +187,22 @@ public class MapMatchingRouteOptionsTest extends TestUtils {
     MapMatchingMatching matching = response.body().matchings().get(0);
 
     assertEquals(DirectionsCriteria.OVERVIEW_SIMPLIFIED, matching.routeOptions().overview());
+  }
+
+  @Test
+  public void mapMatchingRequestResult_doesContainRequestUuid() throws Exception {
+    Response<MapMatchingResponse> response = MapboxMapMatching.builder()
+      .coordinates(coordinates)
+      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
+      .baseUrl(mockUrl.toString())
+      .accessToken(ACCESS_TOKEN)
+      .profile(DirectionsCriteria.PROFILE_WALKING)
+      .language(Locale.CANADA)
+      .overview(DirectionsCriteria.OVERVIEW_SIMPLIFIED)
+      .build()
+      .executeCall();
+    MapMatchingMatching matching = response.body().matchings().get(0);
+
+    assertEquals("mapmatching", matching.requestUuid());
   }
 }

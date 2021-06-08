@@ -1,65 +1,58 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.WalkingOptions;
-import com.mapbox.api.directions.v5.WalkingOptionsAdapterFactory;
 import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.geojson.Point;
-import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.List;
 
 /**
- * Provides information connected to your request that help when a new directions request is needing
- * using the identical parameters as the original request.
+ * Defines route request parameters.
  * <p>
- * For example, if I request a driving (profile) with alternatives and continueStraight set to true.
- * I make the request but loose reference and information which built the original request. Thus, If
- * I only want to change a single variable such as the destination coordinate, i'd have to have all
- * the other route information stores so the request was made identical to the previous but only now
- * using this new destination point.
- * <p>
- * Using this class can provide you wth the information used when the {@link DirectionsRoute} was
- * made.
- *
- * @since 3.0.0
+ * Refer to
+ * <a href="https://www.mapbox.com/api-documentation/navigation/#directions">Directions API
+ * documentation</a> for details and up-to-date documentation for each of the parameters.
  */
 @AutoValue
 public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
-   * Build a new instance of this RouteOptions class optionally settling values.
+   * Build a new instance of this RouteOptions.
    *
    * @return {@link RouteOptions.Builder}
-   * @since 3.0.0
    */
   public static Builder builder() {
-    return new AutoValue_RouteOptions.Builder();
+    return new AutoValue_RouteOptions.Builder()
+      .baseUrl(DirectionsCriteria.BASE_API_URL)
+      .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
+      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6);
   }
 
   /**
-   * The same base URL which was used during the request that resulted in this root directions
-   * response.
+   * Base URL for the request.
    *
    * @return string value representing the base URL
-   * @since 3.0.0
    */
   @NonNull
   public abstract String baseUrl();
 
   /**
-   * The same user which was used during the request that resulted in this root directions response.
+   * The user parameter of the request, defaults to "mapbox".
    *
-   * @return string value representing the user
-   * @since 3.0.0
+   * @return string with the user
    */
   @NonNull
   public abstract String user();
@@ -68,30 +61,45 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * The routing profile to use. Possible values are
    * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}, {@link DirectionsCriteria#PROFILE_DRIVING},
    * {@link DirectionsCriteria#PROFILE_WALKING}, or {@link DirectionsCriteria#PROFILE_CYCLING}.
-   * The same profile which was used during the request that resulted in this root directions
-   * response. <tt>MapboxDirections.Builder</tt> ensures that a profile is always set even if the
-   * <tt>MapboxDirections</tt> requesting object doesn't specifically set a profile.
    *
    * @return string value representing the profile defined in
-   *         {@link DirectionsCriteria.ProfileCriteria}
-   * @since 3.0.0
+   *   {@link DirectionsCriteria.ProfileCriteria}
    */
   @NonNull
+  @DirectionsCriteria.ProfileCriteria
   public abstract String profile();
 
   /**
-   * A list of Points to visit in order.
-   * There can be between two and 25 coordinates for most requests, or up to three coordinates for
-   * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} requests.
-   * Note that these coordinates are different than the direction responses
-   * {@link DirectionsWaypoint}s that these are the non-snapped coordinates.
+   * A semicolon-separated list of {longitude},{latitude} coordinate pairs to visit in order.
+   * There can be between two and 25 coordinates for most requests,
+   * or up to three coordinates for {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} requests.
+   * Contact Mapbox Support if you'd like to extend this limit.
+   * <p>
+   * Note that these coordinates are different than the {@link DirectionsWaypoint}s
+   * found in the {@link DirectionsResponse} which are snapped to a road.
    *
    * @return a list of {@link Point}s which represent the route origin, destination,
-   *   and optionally, waypoints
-   * @since 3.0.0
+   *   and optionally waypoints
    */
   @NonNull
-  public abstract List<Point> coordinates();
+  public abstract String coordinates();
+
+  /**
+   * A list of Points to visit in order.
+   * There can be between two and 25 coordinates for most requests, or up to 3 coordinates for
+   * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} requests.
+   * Contact Mapbox Support if you'd like to extend this limit.
+   * <p>
+   * Note that these coordinates are different than the {@link DirectionsWaypoint}s
+   * found in the {@link DirectionsResponse} which are snapped to a road.
+   *
+   * @return a list of {@link Point}s which represent the route origin, destination,
+   *   and optionally waypoints
+   */
+  @NonNull
+  public List<Point> coordinatesList() {
+    return ParseUtils.parseToPoints(coordinates());
+  }
 
   /**
    * Whether to try to return alternative routes (true) or not (false, default). An alternative
@@ -99,31 +107,40 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * reasonably fast. Such a route does not exist in all circumstances. Up to two alternatives may
    * be returned. This is available for {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC},
    * {@link DirectionsCriteria#PROFILE_DRIVING}, {@link DirectionsCriteria#PROFILE_CYCLING}.
+   * <p>
+   * The order of the routes in the response is not sorted by duration, but by weight.
+   * The first route in the list is not the most preferable because of the duration,
+   * but also based on the type of maneuvers.
+   * <p>
+   * If null is provided, the Directions API defaults to false.
    *
    * @return boolean object representing the setting for alternatives
-   * @since 3.0.0
    */
   @Nullable
   public abstract Boolean alternatives();
 
   /**
-   * The language of returned turn-by-turn text instructions. The default is en (English).
-   * Must be used in conjunction with {@link RouteOptions.Builder#steps(Boolean)}.
+   * The language of returned turn-by-turn text instructions.
+   * Defaults to "en" (English) if null.
+   * Must be used in conjunction with {@link RouteOptions#steps()}=true.
+   * <p>
+   * Refer to
+   * <a href="https://docs.mapbox.com/api/navigation/directions/#instructions-languages">
+   * supported languages list</a> for details.
    *
-   * @return the language as a string used during the request,
-   *   if english, this will most likely be empty
-   * @since 3.0.0
+   * @return the language as a string used during the request
    */
   @Nullable
   public abstract String language();
 
   /**
    * The maximum distance a coordinate can be moved to snap to the road network in meters. There
-   * must be as many radiuses as there are coordinates in the request, each separated by ;.
-   * Values can be any number greater than 0, the string unlimited or empty string.
+   * must be as many radiuses as there are coordinates in the request, each separated by ";".
+   * Values can be any number greater than 0 or the string "unlimited".
+   * <p>
+   * A NoSegment error is returned if no routable road is found within the radius.
    *
-   * @return a string representing the radiuses separated by ;.
-   * @since 3.0.0
+   * @return a string representing the radiuses separated by ";".
    */
   @Nullable
   public abstract String radiuses();
@@ -131,7 +148,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   /**
    * The maximum distance a coordinate can be moved to snap to the road network in meters. There
    * must be as many radiuses as there are coordinates in the request.
-   * Values can be any number greater than 0, the string unlimited, or null.
+   * Values can be any number greater than 0 or {@link Double#POSITIVE_INFINITY} for unlimited.
+   * <p>
+   * A NoSegment error is returned if no routable road is found within the radius.
    *
    * @return a list of radiuses
    */
@@ -149,10 +168,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * north between 0 and 360, and the range of degrees by which the angle can deviate (recommended
    * value is 45° or 90°), formatted as {angle, degrees}. If provided, the list of bearings must be
    * the same length as the list of coordinates.
+   * However, you can skip a coordinate and show its position in the list with the ; separator.
    *
    * @return a string representing the bearings with the ; separator. Angle and degrees for every
    *   bearing value are comma-separated.
-   * @since 3.0.0
    */
   @Nullable
   public abstract String bearings();
@@ -168,7 +187,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * If provided, the list of bearings must be the same length as the list of coordinates.
    *
    * @return a List of list of doubles representing the bearings used in the original request.
-   *         The first value in the list is the angle, the second one is the degrees.
+   *   The first value in the list is the angle, the second one is the degrees.
    */
   @Nullable
   public List<List<Double>> bearingsList() {
@@ -183,22 +202,20 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a boolean value representing whether or not continueStraight was enabled or
    *   not during the initial request
-   * @since 3.0.0
    */
   @SerializedName("continue_straight")
   @Nullable
   public abstract Boolean continueStraight();
 
   /**
-   * Whether to emit instructions at roundabout exits (true) or not (false, default). Without
-   * this parameter, roundabout maneuvers are given as a single instruction that includes both
-   * entering and exiting the roundabout. With roundabout_exits=true, this maneuver becomes two
-   * instructions, one for entering the roundabout and one for exiting it. Must be used in
+   * Whether to emit instructions at roundabout exits (true) or not (false, default if null).
+   * Without this parameter, roundabout maneuvers are given as a single instruction that
+   * includes both entering and exiting the roundabout.
+   * With roundabout_exits=true, this maneuver becomes two instructions,
+   * one for entering the roundabout and one for exiting it. Must be used in
    * conjunction with {@link RouteOptions#steps()}=true.
    *
-   * @return a boolean value representing whether or not roundaboutExits was enabled or disabled
-   *   during the initial route request
-   * @since 3.1.0
+   * @return a boolean value representing whether or not roundaboutExits is enabled or disabled
    */
   @SerializedName("roundabout_exits")
   @Nullable
@@ -206,38 +223,41 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * The format of the returned geometry. Allowed values are:
-   * {@link DirectionsCriteria#GEOMETRY_POLYLINE} (default, a polyline with a precision of five
-   * decimal places), {@link DirectionsCriteria#GEOMETRY_POLYLINE6} (a polyline with a precision
-   * of six decimal places).
+   * {@link DirectionsCriteria#GEOMETRY_POLYLINE} (a polyline with a precision of five
+   * decimal places), {@link DirectionsCriteria#GEOMETRY_POLYLINE6}
+   * (default, a polyline with a precision of six decimal places).
    *
    * @return String geometry type from {@link DirectionsCriteria.GeometriesCriteria}.
-   * @since 3.1.0
    */
-  @Nullable
+  @NonNull
+  @DirectionsCriteria.GeometriesCriteria
   public abstract String geometries();
 
   /**
    * Displays the requested type of overview geometry. Can be
    * {@link DirectionsCriteria#OVERVIEW_FULL} (the most detailed geometry
-   * available), {@link DirectionsCriteria#OVERVIEW_SIMPLIFIED} (default, a simplified version of
-   * the full geometry), or {@link DirectionsCriteria#OVERVIEW_FALSE} (no overview geometry).
+   * available), {@link DirectionsCriteria#OVERVIEW_SIMPLIFIED} (default if null,
+   * a simplified version of the full geometry),
+   * or {@link DirectionsCriteria#OVERVIEW_FALSE} (no overview geometry).
    *
    * @return null or one of the options found in {@link DirectionsCriteria.OverviewCriteria}
-   * @since 3.1.0
    */
   @Nullable
+  @DirectionsCriteria.OverviewCriteria
   public abstract String overview();
 
   /**
-   * Whether to return steps and turn-by-turn instructions (true) or not (false, default).
+   * Whether to return steps and turn-by-turn instructions (true)
+   * or not (false if null, default).
    * If steps is set to true, the following guidance-related parameters will be available:
    * {@link RouteOptions#bannerInstructions()}, {@link RouteOptions#language()},
    * {@link RouteOptions#roundaboutExits()}, {@link RouteOptions#voiceInstructions()},
-   * {@link RouteOptions#voiceUnits()}, {@link RouteOptions#waypointNamesList()},
-   * {@link RouteOptions#waypointTargetsList()}, waypoints from {@link RouteOptions#coordinates()}
+   * {@link RouteOptions#voiceUnits()}, {@link RouteOptions#waypointNames()},
+   * {@link RouteOptions#waypointNamesList()}, {@link RouteOptions#waypointTargets()},
+   * {@link RouteOptions#waypointTargetsList()}, {@link RouteOptions#waypointIndices()},
+   * {@link RouteOptions#waypointIndicesList()}, {@link RouteOptions#alleyBias()}
    *
-   * @return true if you'd like step information, false otherwise
-   * @since 3.1.0
+   * @return true if you'd like step information, false or null otherwise
    */
   @Nullable
   public abstract Boolean steps();
@@ -245,16 +265,19 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   /**
    * A comma-separated list of annotations. Defines whether to return additional metadata along the
    * route. Possible values are:
-   * {@link DirectionsCriteria#ANNOTATION_DURATION}
    * {@link DirectionsCriteria#ANNOTATION_DISTANCE}
+   * {@link DirectionsCriteria#ANNOTATION_DURATION}
    * {@link DirectionsCriteria#ANNOTATION_SPEED}
    * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
+   * {@link DirectionsCriteria#ANNOTATION_CONGESTION_NUMERIC}
    * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
+   * {@link DirectionsCriteria#ANNOTATION_CLOSURE}
    * See the {@link RouteLeg} object for more details on what is included with annotations.
-   * Must be used in conjunction with overview=full.
+   * <p>
+   * Must be used in conjunction with {@link DirectionsCriteria#OVERVIEW_FULL}
+   * in {@link RouteOptions#overview()}.
    *
-   * @return a string containing any of the annotations that were used during the request
-   * @since 3.0.0
+   * @return a string containing requested annotations
    */
   @Nullable
   public abstract String annotations();
@@ -262,13 +285,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   /**
    * A list of annotations. Defines whether to return additional metadata along the
    * route. Possible values are:
-   * {@link DirectionsCriteria#ANNOTATION_DURATION}
    * {@link DirectionsCriteria#ANNOTATION_DISTANCE}
+   * {@link DirectionsCriteria#ANNOTATION_DURATION}
    * {@link DirectionsCriteria#ANNOTATION_SPEED}
    * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
+   * {@link DirectionsCriteria#ANNOTATION_CONGESTION_NUMERIC}
    * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
+   * {@link DirectionsCriteria#ANNOTATION_CLOSURE}
    * See the {@link RouteLeg} object for more details on what is included with annotations.
-   * Must be used in conjunction with overview=full.
+   * <p>
+   * Must be used in conjunction with {@link DirectionsCriteria#OVERVIEW_FULL}
+   * in {@link RouteOptions#overview()}.
    *
    * @return a list of annotations that were used during the request
    */
@@ -280,31 +307,29 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   /**
    * Exclude certain road types from routing. The default is to not exclude anything from the
    * profile selected. The following exclude flags are available for each profile:
-   *
+   * <p>
    * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#EXCLUDE_TOLL},
    * {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or {@link DirectionsCriteria#EXCLUDE_FERRY}.
-   *
+   * <p>
    * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
    * {@link DirectionsCriteria#EXCLUDE_TOLL}, {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or
    * {@link DirectionsCriteria#EXCLUDE_FERRY}.
-   *
+   * <p>
    * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
-   *
+   * <p>
    * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
    *
    * @return a string matching one of the {@link DirectionsCriteria.ExcludeCriteria} exclusions
-   * @since 3.0.0
    */
   @Nullable
   public abstract String exclude();
 
   /**
    * Whether to return SSML marked-up text for voice guidance along the route (true) or not
-   * (false, default).
+   * (false, default if null).
    * Must be used in conjunction with {@link RouteOptions#steps()}=true.
    *
-   * @return true if the original request included voice instructions
-   * @since 3.0.0
+   * @return true if the request included voice instructions
    */
   @SerializedName("voice_instructions")
   @Nullable
@@ -312,10 +337,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * Whether to return banner objects associated with the route steps (true) or not
-   * (false, default). Must be used in conjunction with {@link RouteOptions#steps()}=true
+   * (false, default if null).
+   * Must be used in conjunction with {@link RouteOptions#steps()}=true.
    *
-   * @return true if the original request included banner instructions
-   * @since 3.0.0
+   * @return true if the request includes banner instructions
    */
   @SerializedName("banner_instructions")
   @Nullable
@@ -325,57 +350,48 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * A type of units to return in the text for voice instructions.
    * Can be {@link DirectionsCriteria#IMPERIAL} (default) or {@link DirectionsCriteria#METRIC}.
    * Must be used in conjunction with {@link RouteOptions#steps()}=true and
-   * {@link RouteOptions#voiceInstructions()} ()}=true.
+   * {@link RouteOptions#steps()}=true
+   * and {@link RouteOptions#voiceInstructions()}=true.
    *
    * @return a string matching either imperial or metric
-   * @since 3.0.0
    */
   @SerializedName("voice_units")
   @Nullable
+  @DirectionsCriteria.VoiceUnitCriteria
   public abstract String voiceUnits();
 
   /**
    * A valid Mapbox access token used to making the request.
    *
    * @return a string representing the Mapbox access token
-   * @since 3.0.0
    */
   @SerializedName("access_token")
   @NonNull
   public abstract String accessToken();
 
   /**
-   * A universally unique identifier (UUID) for identifying and executing a similar specific route
-   * in the future. <tt>MapboxDirections</tt> always waits for the response object which ensures
-   * this value will never be null.
-   *
-   * @return a string containing the request UUID
-   * @since 3.0.0
-   */
-  @SerializedName("uuid")
-  @NonNull
-  public abstract String requestUuid();
-
-  /**
-   * Indicates from which side of the road to approach a waypoint.
+   * A semicolon-separated list indicating from which side of the road
+   * to approach a waypoint.
    * Accepts  {@link DirectionsCriteria#APPROACH_UNRESTRICTED} (default) or
-   * {@link DirectionsCriteria#APPROACH_CURB} .
+   * {@link DirectionsCriteria#APPROACH_CURB}.
    * If set to {@link DirectionsCriteria#APPROACH_UNRESTRICTED}, the route can approach waypoints
    * from either side of the road.
    * If set to {@link DirectionsCriteria#APPROACH_CURB}, the route will be returned so that on
    * arrival, the waypoint will be found on the side that corresponds with the driving_side of the
    * region in which the returned route is located.
    * If provided, the list of approaches must be the same length as the list of waypoints.
+   * However, you can skip a coordinate and show its position in the list with the ; separator.
+   * Since the first value will not be evaluated, begin the list with a semicolon.
+   * If the waypoint is within 1 meter of the road, this parameter is ignored.
    *
    * @return a string representing approaches for each waypoint
-   * @since 3.2.0
    */
   @Nullable
   public abstract String approaches();
 
   /**
    * Indicates from which side of the road to approach a waypoint.
-   * Accepts  {@link DirectionsCriteria#APPROACH_UNRESTRICTED} (default) or
+   * Accepts {@link DirectionsCriteria#APPROACH_UNRESTRICTED} (default) or
    * {@link DirectionsCriteria#APPROACH_CURB} .
    * If set to {@link DirectionsCriteria#APPROACH_UNRESTRICTED}, the route can approach waypoints
    * from either side of the road.
@@ -383,6 +399,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * arrival, the waypoint will be found on the side that corresponds with the driving_side of the
    * region in which the returned route is located.
    * If provided, the list of approaches must be the same length as the list of waypoints.
+   * However, you can skip a coordinate and show its position in the list with null.
+   * Since the first value will not be evaluated, you can begin the list with a null.
+   * If the waypoint is within 1 meter of the road, this parameter is ignored.
    *
    * @return a list of strings representing approaches for each waypoint
    */
@@ -392,29 +411,57 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
-   * Indicates which input coordinates should be treated as waypoints.
+   * A semicolon-separated list indicating which input coordinates
+   * should be treated as waypoints.
    * <p>
-   * Most useful in combination with  steps=true and requests based on traces
-   * with high sample rates. Can be an index corresponding to any of the input coordinates,
-   * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
-   * {@link #steps()}
-   * </p>
+   * Waypoints form the beginning and end of each leg in the returned route and correspond to
+   * the depart and arrive steps.
+   * If a list of waypoints is not provided, all coordinates are treated as waypoints.
+   * Each item in the list must be the zero-based index of an input coordinate,
+   * and the list must include 0 (the index of the first coordinate)
+   * and the index of the last coordinate.
+   * The waypoints parameter can be used to guide the path of the route without
+   * introducing additional legs and arrive/depart instructions.
+   * <p>
+   * For example, if a coordinates list has 3 points,
+   * origin, some middle point, and destination, we can have below combinations:
+   * <p>
+   * - waypointIndices are null, the route will have 2 legs
+   * <p>
+   * - waypointIndices are "0;1;2", the route will have 2 legs
+   * <p>
+   * - waypointIndices are "0;2", the route will have only one leg that goes via the middle point
+   * <p>
+   * Must be used with {@link RouteOptions#steps()}=true.
    *
    * @return a string representing indices to be used as waypoints
-   * @since 4.4.0
    */
   @SerializedName("waypoints")
   @Nullable
   public abstract String waypointIndices();
 
   /**
-   * Indicates which input coordinates should be treated as waypoints.
+   * A list indicating which input coordinates should be treated as waypoints.
    * <p>
-   * Most useful in combination with  steps=true and requests based on traces
-   * with high sample rates. Can be an index corresponding to any of the input coordinates,
-   * but must contain the first ( 0 ) and last coordinates' index.
-   * {@link #steps()}
-   * </p>
+   * Waypoints form the beginning and end of each leg in the returned route and correspond to
+   * the depart and arrive steps.
+   * If a list of waypoints is not provided, all coordinates are treated as waypoints.
+   * Each item in the list must be the zero-based index of an input coordinate,
+   * and the list must include 0 (the index of the first coordinate)
+   * and the index of the last coordinate.
+   * The waypoints parameter can be used to guide the path of the route without
+   * introducing additional legs and arrive/depart instructions.
+   * <p>
+   * For example, if a coordinates list has 3 points,
+   * origin, some middle point, and destination, we can have below combinations:
+   * <p>
+   * - waypointIndices are null, the route will have 2 legs
+   * <p>
+   * - waypointIndices are [0,1,2], the route will have 2 legs
+   * <p>
+   * - waypointIndices are [0,2], the route will have only one leg that goes via the middle point
+   * <p>
+   * Must be used with {@link RouteOptions#steps()}=true.
    *
    * @return a List of Integers representing indices to be used as waypoints
    */
@@ -430,24 +477,26 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * 500. If provided, the list of waypoint_names must be the same length as the list of
    * coordinates. The first value in the list corresponds to the route origin, not the first
    * destination.
-   * Must be used in conjunction with {@link RouteOptions#steps()} = true.
-   * @return  a string representing names for each waypoint
-   * @since 3.3.0
+   * To leave the origin unnamed, begin the list with a semicolon.
+   * Must be used in conjunction with {@link RouteOptions#steps()}=true.
+   *
+   * @return a string representing names for each waypoint
    */
   @SerializedName("waypoint_names")
   @Nullable
   public abstract String waypointNames();
 
   /**
-   * A semicolon-separated list of custom names for entries in the list of
-   * {@link RouteOptions#coordinates()}, used for the arrival instruction in banners and voice
+   * A list of custom names for entries in the list of
+   * {@link RouteOptions#coordinatesList()}, used for the arrival instruction in banners and voice
    * instructions. Values can be any string, and the total number of all characters cannot exceed
-   * 500. If provided, the list of waypoint_names must be the same length as the list of
+   * 500. If provided, the list of names must be the same length as the list of
    * coordinates. The first value in the list corresponds to the route origin, not the first
    * destination.
-   * Must be used in conjunction with {@link RouteOptions#steps()} = true.
+   * <p>
+   * Must be used in conjunction with {@link RouteOptions#steps()}=true.
    *
-   * @return  a list of strings representing names for each waypoint
+   * @return a list of strings representing names for each waypoint
    */
   @Nullable
   public List<String> waypointNamesList() {
@@ -460,10 +509,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * If this parameter is provided, the Directions API will compute the side of the street,
    * left or right, for each target based on the waypoint_targets and the driving direction.
    * The maneuver.modifier, banner and voice instructions will be updated with the computed
-   * side of street. The number of waypoint targets must be the same as the number of coordinates.
-   * Must be used with {@link RouteOptions#steps()} = true.
-   * @return  a list of Points representing coordinate pairs for drop-off locations
-   * @since 4.3.0
+   * side of street. The number of waypoint targets must be the same as the number of coordinates,
+   * but you can skip a coordinate pair and show its position in the list with the ; separator.
+   * Since the first value will not be evaluated, begin the list with a semicolon.
+   * <p>
+   * Must be used with {@link RouteOptions#steps()}=true.
+   *
+   * @return a list of Points representing coordinate pairs for drop-off locations
    */
   @SerializedName("waypoint_targets")
   @Nullable
@@ -476,8 +528,11 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * left or right, for each target based on the waypoint_targets and the driving direction.
    * The maneuver.modifier, banner and voice instructions will be updated with the computed
    * side of street. The number of waypoint targets must be the same as the number of coordinates.
-   * Must be used with {@link RouteOptions#steps()} = true.
-   * @return  a list of Points representing coordinate pairs for drop-off locations
+   * You can skip a coordinate pair and show its position in the list with the "null".
+   * Since the first value will not be evaluated, you can begin the list with "null".
+   * Must be used with {@link RouteOptions#steps()}=true.
+   *
+   * @return a list of Points representing coordinate pairs for drop-off locations
    */
   @Nullable
   public List<Point> waypointTargetsList() {
@@ -485,13 +540,41 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
-   * To be used to specify settings for use with the walking profile.
+   * A scale from -1 to 1, where -1 biases the route against alleys
+   * and 1 biases the route toward alleys. If null, default is 0, which is neutral.
    *
-   * @return options to use for walking profile
-   * @since 4.8.0
+   * @return bias towards alleys
    */
+  @SerializedName("alley_bias")
   @Nullable
-  public abstract WalkingOptions walkingOptions();
+  public abstract Double alleyBias();
+
+  /**
+   * The walking speed in meters per second with a minimum of 0.14 m/s (or 0.5 km/h)
+   * and a maximum of 6.94 m/s (or 25.0 km/h).
+   * If null, defaults to 1.42 m/s (5.1 km/h).
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_WALKING}.
+   *
+   * @return walkingSpeed in meters per second
+   */
+  @SerializedName("walking_speed")
+  @Nullable
+  public abstract Double walkingSpeed();
+
+  /**
+   * A bias which determines whether the route should prefer or avoid the use of roads or paths
+   * that are set aside for pedestrian-only use (walkways). The allowed range of values is from
+   * -1 to 1, where -1 indicates indicates preference to avoid walkways, 1 indicates preference
+   * to favor walkways, and 0 indicates no preference (the default, if null).
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_WALKING}.
+   *
+   * @return walkwayBias bias to prefer or avoid walkways
+   */
+  @SerializedName("walkway_bias")
+  @Nullable
+  public abstract Double walkwayBias();
 
   /**
    * A semicolon-separated list of booleans affecting snapping of waypoint locations to road
@@ -500,13 +583,16 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * If false, they will not be considered for snapping.
    * If provided, the number of snappingClosures must be the same as the number of
    * coordinates.
-   * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
+   * However, you can skip a coordinate and show its position in the list with the ; separator.
+   * If null, this parameter defaults to false.
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
    *
    * @return a String representing a list of booleans
    */
-  @SerializedName("snapping_closures")
+  @SerializedName("snapping_include_closures")
   @Nullable
-  public abstract String snappingClosures();
+  public abstract String snappingIncludeClosures();
 
   /**
    * A list of booleans affecting snapping of waypoint locations to road segments.
@@ -514,21 +600,65 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * If false, they will not be considered for snapping.
    * If provided, the number of snappingClosures must be the same as the number of
    * coordinates.
-   * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
+   * However, you can skip a coordinate and show its position in the list with the null.
+   * If the list is null, this parameter defaults to false.
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
    *
    * @return a list of booleans
    */
   @Nullable
-  public List<Boolean> snappingClosuresList() {
-    return ParseUtils.parseToBooleans(snappingClosures());
+  public List<Boolean> snappingIncludeClosuresList() {
+    return ParseUtils.parseToBooleans(snappingIncludeClosures());
   }
+
+  /**
+   * The desired arrival time, formatted as a timestamp in ISO-8601 format
+   * in the local time at the route destination.
+   * The travel time returned in duration is a prediction for travel time based
+   * on historical travel data. The route is calculated in a time-dependent manner.
+   * For example, a trip that takes two hours will consider changing historic traffic
+   * conditions across the two-hour window.
+   * The route takes timed turn restrictions and conditional access restrictions into account
+   * based on the requested arrival time.
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING}.
+   */
+  @SerializedName("arrive_by")
+  @Nullable
+  public abstract String arriveBy();
+
+  /**
+   * The departure time, formatted as a timestamp in ISO-8601 format in the local time
+   * at the route origin. The travel time returned in duration is a prediction for travel time
+   * based on historical travel data. The route is calculated in a time-dependent manner.
+   * For example, a trip that takes two hours will consider changing historic traffic conditions
+   * across the two-hour window, instead of only at the specified depart_at time.
+   * The route takes timed turn restrictions and conditional access restrictions into account based
+   * on the requested departure time.
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING}.
+   */
+  @SerializedName("depart_at")
+  @Nullable
+  public abstract String departAt();
+
+  /**
+   * Whether the routes should be refreshable via the directions refresh API.
+   * <p>
+   * If false, the refresh requests will fail. Defaults to false if null.
+   *
+   * @return whether the routes should be refreshable
+   */
+  @SerializedName("enable_refresh")
+  @Nullable
+  public abstract Boolean enableRefresh();
 
   /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
    * @return the type adapter for this class
-   * @since 3.0.0
    */
   public static TypeAdapter<RouteOptions> typeAdapter(Gson gson) {
     return new AutoValue_RouteOptions.GsonTypeAdapter(gson);
@@ -540,15 +670,48 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @param json a formatted valid JSON string defining a RouteOptions
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
-   * @since 3.4.0
+   * @see #fromUrl(URL)
    */
   @NonNull
   public static RouteOptions fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
-    gson.registerTypeAdapterFactory(WalkingOptionsAdapterFactory.create());
     return gson.create().fromJson(json, RouteOptions.class);
+  }
+
+  /**
+   * Create a new instance of this class by passing a get request URL.
+   *
+   * @param url request URL
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @see #fromJson(String)
+   */
+  @NonNull
+  public static RouteOptions fromUrl(@NonNull URL url) {
+    JsonObject optionsJson = new JsonObject();
+
+    optionsJson.addProperty("baseUrl", url.getProtocol() + "://" + url.getHost());
+
+    String[] pathElements = url.getPath().split("/");
+    optionsJson.addProperty("user", pathElements[3]);
+    optionsJson.addProperty("profile", pathElements[4]);
+    optionsJson.addProperty("coordinates", pathElements[5]);
+
+    String[] queryElements = url.getQuery().split("&");
+    for (String query : queryElements) {
+      int idx = query.indexOf("=");
+      try {
+        optionsJson.addProperty(
+          URLDecoder.decode(query.substring(0, idx), "UTF-8"),
+          URLDecoder.decode(query.substring(idx + 1), "UTF-8")
+        );
+      } catch (UnsupportedEncodingException ex) {
+        throw new RuntimeException(ex);
+      }
+    }
+
+    return fromJson(optionsJson.toString());
   }
 
   /**
@@ -564,104 +727,138 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * This builder can be used to set the values describing the {@link RouteOptions}.
-   *
-   * @since 3.0.0
    */
   @AutoValue.Builder
   public abstract static class Builder {
 
     /**
-     * The base URL that was used during the request time and resulted in this responses
-     * result.
+     * Base URL for the request.
      *
-     * @param baseUrl base URL used for original request
+     * @param baseUrl string value representing the base URL
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
+    @NonNull
     public abstract Builder baseUrl(@NonNull String baseUrl);
 
     /**
-     * The user value that was used during the request.
+     * The user parameter of the request, defaults to "mapbox".
      *
-     * @param user string representing the user field in the calling url
+     * @param user string with the user
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
+    @NonNull
     public abstract Builder user(@NonNull String user);
 
     /**
      * The routing profile to use. Possible values are
      * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC},
-     * {@link DirectionsCriteria#PROFILE_DRIVING}, {@link DirectionsCriteria#PROFILE_WALKING}, or
-     * {@link DirectionsCriteria#PROFILE_CYCLING}.
-     * The same profile which was used during the request that resulted in this root directions
-     * response. <tt>MapboxDirections.Builder</tt> ensures that a profile is always set even if the
-     * <tt>MapboxDirections</tt> requesting object doesn't specifically set a profile.
+     * {@link DirectionsCriteria#PROFILE_DRIVING},
+     * {@link DirectionsCriteria#PROFILE_WALKING}, or {@link DirectionsCriteria#PROFILE_CYCLING}.
      *
-     * @param profile One of the direction profiles defined in
+     * @param profile string value representing the profile defined in
      *                {@link DirectionsCriteria.ProfileCriteria}
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
+    @NonNull
     public abstract Builder profile(@NonNull @DirectionsCriteria.ProfileCriteria String profile);
 
     /**
-     * A list of Points to visit in order.
-     * There can be between two and 25 coordinates for most requests, or up to three coordinates for
-     * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} requests.
-     * Note that these coordinates are different than the direction responses
-     * {@link DirectionsWaypoint}s that these are the non-snapped coordinates.
+     * A semicolon-separated list of {longitude},{latitude} coordinate pairs to visit in order.
+     * There can be between two and 25 coordinates for most requests,
+     * or up to three coordinates for {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} requests.
+     * Contact Mapbox Support if you'd like to extend this limit.
+     * <p>
+     * Note that these coordinates are different than the {@link DirectionsWaypoint}s
+     * found in the {@link DirectionsResponse} which are snapped to a road.
      *
      * @param coordinates a list of {@link Point}s which represent the route origin, destination,
-     *                    and optionally, waypoints
+     *                    and optionally waypoints
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder coordinates(@NonNull List<Point> coordinates);
+    @NonNull
+    public abstract Builder coordinates(@NonNull String coordinates);
+
+    /**
+     * A list of Points to visit in order.
+     * There can be between two and 25 coordinates for most requests, or up to 3 coordinates for
+     * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} requests.
+     * Contact Mapbox Support if you'd like to extend this limit.
+     * <p>
+     * Note that these coordinates are different than the {@link DirectionsWaypoint}s
+     * found in the {@link DirectionsResponse} which are snapped to a road.
+     *
+     * @param coordinates a list of {@link Point}s which represent the route origin, destination,
+     *                    and optionally waypoints
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public Builder coordinatesList(@NonNull List<Point> coordinates) {
+      String result = FormatUtils.formatPointsList(coordinates);
+      if (result != null) {
+        coordinates(result);
+      }
+      return this;
+    }
 
     /**
      * Whether to try to return alternative routes (true) or not (false, default). An alternative
      * route is a route that is significantly different than the fastest route, but also still
      * reasonably fast. Such a route does not exist in all circumstances. Up to two alternatives may
-     * be returned. This is available for{@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC},
+     * be returned. This is available for {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC},
      * {@link DirectionsCriteria#PROFILE_DRIVING}, {@link DirectionsCriteria#PROFILE_CYCLING}.
+     * <p>
+     * The order of the routes in the response is not sorted by duration, but by weight.
+     * The first route in the list is not the most preferable because of the duration,
+     * but also based on the type of maneuvers.
+     * <p>
+     * If null is provided, the Directions API defaults to false.
      *
-     * @param alternatives true if the request contained additional route request, otherwise false
+     * @param alternatives boolean object representing the setting for alternatives
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder alternatives(@NonNull Boolean alternatives);
+    @NonNull
+    public abstract Builder alternatives(@Nullable Boolean alternatives);
 
     /**
-     * The language of returned turn-by-turn text instructions. The default is en (English).
-     * Must be used in conjunction with {@link RouteOptions#steps()} = true.
+     * The language of returned turn-by-turn text instructions.
+     * Defaults to "en" (English) if null.
+     * Must be used in conjunction with {@link RouteOptions#steps()}=true.
+     * <p>
+     * Refer to
+     * <a href="https://docs.mapbox.com/api/navigation/directions/#instructions-languages">
+     * supported languages list</a> for details.
      *
-     * @param language a string with the language which was requested in the url
+     * @param language the language as a string used during the request
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder language(@NonNull String language);
+    @NonNull
+    public abstract Builder language(@Nullable String language);
 
     /**
      * The maximum distance a coordinate can be moved to snap to the road network in meters. There
-     * must be as many radiuses as there are coordinates in the request, each separated by ;.
-     * Values can be any number greater than 0 or the string unlimited.
+     * must be as many radiuses as there are coordinates in the request, each separated by ";".
+     * Values can be any number greater than 0 or the string "unlimited".
+     * <p>
+     * A NoSegment error is returned if no routable road is found within the radius.
      *
-     * @param radiuses a String of radius values, each separated by ;.
+     * @param radiuses a string representing the radiuses separated by ";".
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder radiuses(@NonNull String radiuses);
+    @NonNull
+    public abstract Builder radiuses(@Nullable String radiuses);
 
     /**
      * The maximum distance a coordinate can be moved to snap to the road network in meters. There
      * must be as many radiuses as there are coordinates in the request.
-     * Values can be any number greater than 0 or {@link Double#POSITIVE_INFINITY}.
+     * Values can be any number greater than 0 or {@link Double#POSITIVE_INFINITY} for unlimited.
+     * <p>
+     * A NoSegment error is returned if no routable road is found within the radius.
      *
-     * @param radiuses a list of radius values
+     * @param radiuses a list of radiuses
      * @return this builder for chaining options together
      */
-    public Builder radiusesList(@NonNull List<Double> radiuses) {
+    @NonNull
+    public Builder radiusesList(@Nullable List<Double> radiuses) {
       String result = FormatUtils.formatRadiuses(radiuses);
       if (result != null) {
         radiuses(result);
@@ -672,38 +869,41 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     /**
      * Influences the direction in which a route starts from a waypoint. Used to filter the road
      * segment the waypoint will be placed on by direction. This is useful for making sure the new
-     * routes of rerouted vehicles continue traveling in their current direction. A request that
-     * does this would provide bearing and radius values for the first waypoint and leave the
-     * remaining values empty. Takes two comma-separated values per waypoint: an angle clockwise
-     * from true north between 0 and 360, and the range of degrees by which the angle can deviate
-     * (recommended value is 45° or 90°), formatted as {angle, degrees}. If provided, the list of
-     * bearings must be the same length as the list of coordinates. However, you can skip a
-     * coordinate and show its position in the list with the ; separator.
+     * routes of rerouted vehicles continue traveling in their current direction.
+     * A request that does
+     * this would provide bearing and radius values for the first waypoint and leave the remaining
+     * values empty. Returns two comma-separated values per waypoint: an angle clockwise from true
+     * north between 0 and 360, and the range of degrees by which the angle can deviate (recommended
+     * value is 45° or 90°), formatted as {angle, degrees}. If provided, the list of bearings must
+     * be the same length as the list of coordinates.
+     * However, you can skip a coordinate and show its position in the list with the ; separator.
      *
-     * @param bearings a string representing the bearings with the ; separator. Angle and degrees
-     *                 for every bearing value are comma-separated.
+     * @param bearings a string representing the bearings with the ; separator.
+     *                 Angle and degrees for every bearing value are comma-separated.
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder bearings(@NonNull String bearings);
+    @NonNull
+    public abstract Builder bearings(@Nullable String bearings);
 
     /**
      * Influences the direction in which a route starts from a waypoint. Used to filter the road
      * segment the waypoint will be placed on by direction. This is useful for making sure the new
-     * routes of rerouted vehicles continue traveling in their current direction. A request that
-     * does this would provide bearing and radius values for the first waypoint and leave the
-     * remaining values empty. Takes a List of list of doubles: the first value in the list is an
-     * angle clockwise from true north between 0 and 360, the second value is the range of degrees
-     * by which the angle can deviate (recommended value is 45° or 90°).
+     * routes of rerouted vehicles continue traveling in their current direction.
+     * A request that does
+     * this would provide bearing and radius values for the first waypoint and leave the remaining
+     * values empty. Returns a list of values, each value is a list of an angle clockwise from true
+     * north between 0 and 360, and the range of degrees by which the angle can deviate
+     * (recommended value is 45° or 90°).
      * If provided, the list of bearings must be the same length as the list of coordinates.
-     * However, you can skip a coordinate and show its position in the list with the null value.
+     * However, you can skip a coordinate and show its position in the list with null.
      *
      * @param bearings a List of list of doubles representing the bearings used in the original
-     *                 request. The first value in the list is the angle, the second one is the
-     *                 degrees.
+     *                 request.
+     *                 The first value in the list is the angle, the second one is the degrees.
      * @return this builder for chaining options together
      */
-    public Builder bearingsList(@NonNull List<List<Double>> bearings) {
+    @NonNull
+    public Builder bearingsList(@Nullable List<List<Double>> bearings) {
       String result = FormatUtils.formatBearings(bearings);
       if (result != null) {
         bearings(result);
@@ -712,109 +912,123 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     }
 
     /**
-     * Sets the allowed direction of travel when departing intermediate waypoints. If true, the
-     * route will continue in the same direction of travel. If false, the route may continue in the
-     * opposite direction of travel. Defaults to true for {@link DirectionsCriteria#PROFILE_DRIVING}
-     * and false for {@link DirectionsCriteria#PROFILE_WALKING} and
+     * The allowed direction of travel when departing intermediate waypoints. If true, the route
+     * will continue in the same direction of travel. If false, the route may continue in
+     * the opposite
+     * direction of travel. Defaults to true for {@link DirectionsCriteria#PROFILE_DRIVING}
+     * and false
+     * for {@link DirectionsCriteria#PROFILE_WALKING} and
      * {@link DirectionsCriteria#PROFILE_CYCLING}.
      *
-     * @param continueStraight true if you'd like the user to continue straight from the starting
-     *                         point
+     * @param continueStraight a boolean value representing whether or not continueStraight
+     *                         was enabled or during the initial request
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder continueStraight(@NonNull Boolean continueStraight);
+    @NonNull
+    public abstract Builder continueStraight(@Nullable Boolean continueStraight);
 
     /**
-     * Whether to emit instructions at roundabout exits (true) or not (false, default). Without
-     * this parameter, roundabout maneuvers are given as a single instruction that includes both
-     * entering and exiting the roundabout. With roundabout_exits=true, this maneuver becomes two
-     * instructions, one for entering the roundabout and one for exiting it. Must be used in
-     * conjunction with {@link RouteOptions.Builder#steps(Boolean)}
+     * Whether to emit instructions at roundabout exits (true) or not (false, default if null).
+     * Without this parameter, roundabout maneuvers are given as a single instruction that
+     * includes both entering and exiting the roundabout.
+     * With roundabout_exits=true, this maneuver becomes two instructions,
+     * one for entering the roundabout and one for exiting it. Must be used in
+     * conjunction with {@link RouteOptions#steps()}=true.
      *
-     * @param roundaboutExits true if you'd like extra roundabout instructions
+     * @param roundaboutExits a boolean value representing whether or not roundaboutExits
+     *                        is enabled or disabled
      * @return this builder for chaining options together
-     * @since 3.1.0
      */
-    public abstract Builder roundaboutExits(@NonNull Boolean roundaboutExits);
+    @NonNull
+    public abstract Builder roundaboutExits(@Nullable Boolean roundaboutExits);
 
     /**
      * The format of the returned geometry. Allowed values are:
-     * {@link DirectionsCriteria#GEOMETRY_POLYLINE} (default, a polyline with a precision of five
-     * decimal places), {@link DirectionsCriteria#GEOMETRY_POLYLINE6} (a polyline with a precision
-     * of six decimal places).
-     * A null value will reset this field to the APIs default value vs this SDKs default value of
-     * {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.
+     * {@link DirectionsCriteria#GEOMETRY_POLYLINE} (a polyline with a precision of five
+     * decimal places), {@link DirectionsCriteria#GEOMETRY_POLYLINE6}
+     * (default, a polyline with a precision of six decimal places).
      *
-     * @param geometries one of the options found in {@link DirectionsCriteria.GeometriesCriteria}.
+     * @param geometries String geometry type from {@link DirectionsCriteria.GeometriesCriteria}.
      * @return this builder for chaining options together
-     * @since 3.1.0
      */
+    @NonNull
     public abstract Builder geometries(
-        @NonNull @DirectionsCriteria.GeometriesCriteria String geometries);
+      @NonNull @DirectionsCriteria.GeometriesCriteria String geometries);
 
     /**
      * Displays the requested type of overview geometry. Can be
      * {@link DirectionsCriteria#OVERVIEW_FULL} (the most detailed geometry
-     * available), {@link DirectionsCriteria#OVERVIEW_SIMPLIFIED} (default, a simplified version of
-     * the full geometry), or {@link DirectionsCriteria#OVERVIEW_FALSE} (no overview geometry).
+     * available), {@link DirectionsCriteria#OVERVIEW_SIMPLIFIED} (default if null,
+     * a simplified version of the full geometry),
+     * or {@link DirectionsCriteria#OVERVIEW_FALSE} (no overview geometry).
      *
-     * @param overview one of the options found in {@link DirectionsCriteria.OverviewCriteria}
+     * @param overview null or one of the options found in
+     *                 {@link DirectionsCriteria.OverviewCriteria}
      * @return this builder for chaining options together
-     * @since 3.1.0
      */
+    @NonNull
     public abstract Builder overview(
-      @NonNull @DirectionsCriteria.OverviewCriteria String overview
+      @Nullable @DirectionsCriteria.OverviewCriteria String overview
     );
 
     /**
-     * Whether to return steps and turn-by-turn instructions (true) or not (false, default).
+     * Whether to return steps and turn-by-turn instructions (true)
+     * or not (false if null, default).
      * If steps is set to true, the following guidance-related parameters will be available:
      * {@link RouteOptions#bannerInstructions()}, {@link RouteOptions#language()},
      * {@link RouteOptions#roundaboutExits()}, {@link RouteOptions#voiceInstructions()},
-     * {@link RouteOptions#voiceUnits()}, {@link RouteOptions#waypointNamesList()},
-     * {@link RouteOptions#waypointTargetsList()}, waypoints from {@link RouteOptions#coordinates()}
+     * {@link RouteOptions#voiceUnits()}, {@link RouteOptions#waypointNames()},
+     * {@link RouteOptions#waypointNamesList()}, {@link RouteOptions#waypointTargets()},
+     * {@link RouteOptions#waypointTargetsList()}, {@link RouteOptions#waypointIndices()},
+     * {@link RouteOptions#waypointIndicesList()}, {@link RouteOptions#alleyBias()}
      *
-     * @param steps true if you'd like step information, false otherwise
+     * @param steps true if you'd like step information, false or null otherwise
      * @return this builder for chaining options together
-     * @since 3.1.0
      */
-    public abstract Builder steps(@NonNull Boolean steps);
+    @NonNull
+    public abstract Builder steps(@Nullable Boolean steps);
 
     /**
-     * Whether to return additional metadata along the route. Possible values are:
-     * {@link DirectionsCriteria#ANNOTATION_DURATION}
+     * A comma-separated list of annotations. Defines whether to return additional metadata along
+     * the route. Possible values are:
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE}
+     * {@link DirectionsCriteria#ANNOTATION_DURATION}
      * {@link DirectionsCriteria#ANNOTATION_SPEED}
      * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
+     * {@link DirectionsCriteria#ANNOTATION_CONGESTION_NUMERIC}
      * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
-     * You can include several annotations as a comma-separated list. See the
-     * {@link RouteLeg} object for more details on what is included with annotations.
-     * Must be used in conjunction with overview=full.
+     * {@link DirectionsCriteria#ANNOTATION_CLOSURE}
+     * See the {@link RouteLeg} object for more details on what is included with annotations.
+     * <p>
+     * Must be used in conjunction with {@link DirectionsCriteria#OVERVIEW_FULL}
+     * in {@link RouteOptions#overview()}.
      *
-     * @param annotations in string format and separated by commas if more than one annotation was
-     *                    requested
+     * @param annotations a string containing requested annotations
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder annotations(@NonNull String annotations);
+    @NonNull
+    public abstract Builder annotations(@Nullable String annotations);
 
     /**
-     * Whether to return additional metadata along the route. Possible values are:
-     * {@link DirectionsCriteria#ANNOTATION_DURATION}
+     * A list of annotations. Defines whether to return additional metadata along the
+     * route. Possible values are:
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE}
+     * {@link DirectionsCriteria#ANNOTATION_DURATION}
      * {@link DirectionsCriteria#ANNOTATION_SPEED}
      * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
+     * {@link DirectionsCriteria#ANNOTATION_CONGESTION_NUMERIC}
      * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
+     * {@link DirectionsCriteria#ANNOTATION_CLOSURE}
+     * See the {@link RouteLeg} object for more details on what is included with annotations.
+     * <p>
+     * Must be used in conjunction with {@link DirectionsCriteria#OVERVIEW_FULL}
+     * in {@link RouteOptions#overview()}.
      *
-     * See the {@link RouteLeg} object for more details on what is included with
-     * annotations.
-     * Must be used in conjunction with overview=full.
-     *
-     * @param annotations a list of annotations
+     * @param annotations a list of annotations that were used during the request
      * @return this builder for chaining options together
      */
-    public Builder annotationsList(@NonNull List<String> annotations) {
+    @NonNull
+    public Builder annotationsList(@Nullable List<String> annotations) {
       String result = FormatUtils.join(",", annotations);
       if (result != null) {
         annotations(result);
@@ -824,83 +1038,75 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
     /**
      * Whether to return SSML marked-up text for voice guidance along the route (true) or not
-     * (false, default).
-     * Must be used in conjunction with {@link RouteOptions.Builder#steps(Boolean)}.
+     * (false, default if null).
+     * Must be used in conjunction with {@link RouteOptions#steps()}=true.
      *
-     * @param voiceInstructions true if the original request included voice instructions
+     * @param voiceInstructions true if the request included voice instructions
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder voiceInstructions(@NonNull Boolean voiceInstructions);
+    @NonNull
+    public abstract Builder voiceInstructions(@Nullable Boolean voiceInstructions);
 
     /**
      * Whether to return banner objects associated with the route steps (true) or not
-     * (false, default). Must be used in conjunction with
-     * {@link RouteOptions.Builder#steps(Boolean)}
+     * (false, default if null).
+     * Must be used in conjunction with {@link RouteOptions#steps()}=true.
      *
-     * @param bannerInstructions true if the original request included banner instructions
+     * @param bannerInstructions true if the request includes banner instructions
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder bannerInstructions(@NonNull Boolean bannerInstructions);
+    @NonNull
+    public abstract Builder bannerInstructions(@Nullable Boolean bannerInstructions);
 
     /**
-     * Specify which type of units to return in the text for voice instructions.
+     * A type of units to return in the text for voice instructions.
      * Can be {@link DirectionsCriteria#IMPERIAL} (default) or {@link DirectionsCriteria#METRIC}.
-     * Must be used in conjunction with {@link RouteOptions.Builder#steps(Boolean)}=true and
-     * {@link RouteOptions.Builder#voiceInstructions(Boolean)}=true.
+     * Must be used in conjunction with {@link RouteOptions#steps()}=true and
+     * {@link RouteOptions#steps()}=true
+     * and {@link RouteOptions#voiceInstructions()}=true.
      *
-     * @param voiceUnits string matching either imperial or metric
+     * @param voiceUnits a string matching either imperial or metric
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder voiceUnits(@NonNull String voiceUnits);
+    @NonNull
+    public abstract Builder voiceUnits(@Nullable String voiceUnits);
 
     /**
      * A valid Mapbox access token used to making the request.
      *
      * @param accessToken a string containing a valid Mapbox access token
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
+    @NonNull
     public abstract Builder accessToken(@NonNull String accessToken);
-
-    /**
-     * A universally unique identifier (UUID) for identifying and executing a similar specific route
-     * in the future.
-     *
-     * @param requestUuid a string containing the request UUID
-     * @return this builder for chaining options together
-     * @since 3.0.0
-     */
-    public abstract Builder requestUuid(@NonNull String requestUuid);
 
     /**
      * Exclude certain road types from routing. The default is to not exclude anything from the
      * profile selected. The following exclude flags are available for each profile:
-     *
+     * <p>
      * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#EXCLUDE_TOLL},
      * {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or {@link DirectionsCriteria#EXCLUDE_FERRY}.
-     *
+     * <p>
      * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
      * {@link DirectionsCriteria#EXCLUDE_TOLL}, {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or
      * {@link DirectionsCriteria#EXCLUDE_FERRY}.
-     *
+     * <p>
      * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
-     *
+     * <p>
      * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
      *
      * @param exclude a string matching one of the {@link DirectionsCriteria.ExcludeCriteria}
      *                exclusions
      * @return this builder for chaining options together
-     * @since 3.0.0
      */
-    public abstract Builder exclude(@NonNull String exclude);
+    @NonNull
+    public abstract Builder exclude(@Nullable @DirectionsCriteria.ExcludeCriteria String exclude);
 
     /**
-     * Indicates from which side of the road to approach a waypoint.
+     * A semicolon-separated list indicating from which side of the road
+     * to approach a waypoint.
      * Accepts  {@link DirectionsCriteria#APPROACH_UNRESTRICTED} (default) or
-     * {@link DirectionsCriteria#APPROACH_CURB} .
+     * {@link DirectionsCriteria#APPROACH_CURB}.
      * If set to {@link DirectionsCriteria#APPROACH_UNRESTRICTED}, the route can approach waypoints
      * from either side of the road.
      * If set to {@link DirectionsCriteria#APPROACH_CURB}, the route will be returned so that on
@@ -908,17 +1114,18 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * region in which the returned route is located.
      * If provided, the list of approaches must be the same length as the list of waypoints.
      * However, you can skip a coordinate and show its position in the list with the ; separator.
-     * The same approaches the user originally made when the request was made.
+     * Since the first value will not be evaluated, begin the list with a semicolon.
+     * If the waypoint is within 1 meter of the road, this parameter is ignored.
      *
-     * @param approaches unrestricted, curb or omitted (;)
+     * @param approaches a string representing approaches for each waypoint
      * @return this builder for chaining options together
-     * @since 3.2.0
      */
-    public abstract Builder approaches(@NonNull String approaches);
+    @NonNull
+    public abstract Builder approaches(@Nullable String approaches);
 
     /**
      * Indicates from which side of the road to approach a waypoint.
-     * Accepts  {@link DirectionsCriteria#APPROACH_UNRESTRICTED} (default) or
+     * Accepts {@link DirectionsCriteria#APPROACH_UNRESTRICTED} (default) or
      * {@link DirectionsCriteria#APPROACH_CURB} .
      * If set to {@link DirectionsCriteria#APPROACH_UNRESTRICTED}, the route can approach waypoints
      * from either side of the road.
@@ -926,13 +1133,15 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * arrival, the waypoint will be found on the side that corresponds with the driving_side of the
      * region in which the returned route is located.
      * If provided, the list of approaches must be the same length as the list of waypoints.
-     * However, you can skip a coordinate and show its position in the list with null value.
-     * The same approaches the user originally made when the request was made.
+     * However, you can skip a coordinate and show its position in the list with null.
+     * Since the first value will not be evaluated, you can begin the list with a null.
+     * If the waypoint is within 1 meter of the road, this parameter is ignored.
      *
-     * @param approaches a list of Strings
+     * @param approaches a list of strings representing approaches for each waypoint
      * @return this builder for chaining options together
      */
-    public Builder approachesList(@NonNull List<String> approaches) {
+    @NonNull
+    public Builder approachesList(@Nullable List<String> approaches) {
       String result = FormatUtils.formatApproaches(approaches);
       if (result != null) {
         approaches(result);
@@ -941,35 +1150,63 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     }
 
     /**
-     * Indicates which input coordinates should be treated as waypoints.
+     * A semicolon-separated list indicating which input coordinates
+     * should be treated as waypoints.
      * <p>
-     * Most useful in combination with  steps=true and requests based on traces
-     * with high sample rates. Can be an index corresponding to any of the input coordinates,
-     * but must contain the first ( 0 ) and last coordinates' index separated by  ; .
-     * {@link #steps()}
-     * </p>
-     * The same waypoint indices the user originally made when the request was made.
+     * Waypoints form the beginning and end of each leg in the returned route and correspond to
+     * the depart and arrive steps.
+     * If a list of waypoints is not provided, all coordinates are treated as waypoints.
+     * Each item in the list must be the zero-based index of an input coordinate,
+     * and the list must include 0 (the index of the first coordinate)
+     * and the index of the last coordinate.
+     * The waypoints parameter can be used to guide the path of the route without
+     * introducing additional legs and arrive/depart instructions.
+     * <p>
+     * For example, if a coordinates list has 3 points,
+     * origin, some middle point, and destination, we can have below combinations:
+     * <p>
+     * - waypointIndices are null, the route will have 2 legs
+     * <p>
+     * - waypointIndices are "0;1;2", the route will have 2 legs
+     * <p>
+     * - waypointIndices are "0;2", the route will have only one leg that goes via the middle point
+     * <p>
+     * Must be used with {@link RouteOptions#steps()}=true.
      *
-     * @param waypointIndices to be used as waypoints
+     * @param waypointIndices a string representing indices to be used as waypoints
      * @return this builder for chaining options together
-     * @since 4.4.0
      */
-    public abstract Builder waypointIndices(@NonNull String waypointIndices);
+    @NonNull
+    public abstract Builder waypointIndices(@Nullable String waypointIndices);
 
     /**
-     * Indicates which input coordinates should be treated as waypoints.
+     * A list indicating which input coordinates should be treated as waypoints.
      * <p>
-     * Most useful in combination with  steps=true and requests based on traces
-     * with high sample rates. Can be an index corresponding to any of the input coordinates,
-     * but must contain the first ( 0 ) and last coordinates'.
-     * {@link #steps()}
-     * </p>
-     * The same waypoint indices the user originally made when the request was made.
+     * Waypoints form the beginning and end of each leg in the returned route and correspond to
+     * the depart and arrive steps.
+     * If a list of waypoints is not provided, all coordinates are treated as waypoints.
+     * Each item in the list must be the zero-based index of an input coordinate,
+     * and the list must include 0 (the index of the first coordinate)
+     * and the index of the last coordinate.
+     * The waypoints parameter can be used to guide the path of the route without
+     * introducing additional legs and arrive/depart instructions.
+     * <p>
+     * For example, if a coordinates list has 3 points,
+     * origin, some middle point, and destination, we can have below combinations:
+     * <p>
+     * - waypointIndices are null, the route will have 2 legs
+     * <p>
+     * - waypointIndices are [0,1,2], the route will have 2 legs
+     * <p>
+     * - waypointIndices are [0,2], the route will have only one leg that goes via the middle point
+     * <p>
+     * Must be used with {@link RouteOptions#steps()}=true.
      *
-     * @param indices a list to be used as waypoints
+     * @param indices a List of Integers representing indices to be used as waypoints
      * @return this builder for chaining options together
      */
-    public Builder waypointIndicesList(@NonNull List<Integer> indices) {
+    @NonNull
+    public Builder waypointIndicesList(@Nullable List<Integer> indices) {
       String result = FormatUtils.join(";", indices);
       if (result != null) {
         waypointIndices(result);
@@ -982,32 +1219,33 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * {@link RouteOptions#coordinates()}, used for the arrival instruction in banners and voice
      * instructions. Values can be any string, and the total number of all characters cannot exceed
      * 500. If provided, the list of waypoint_names must be the same length as the list of
-     * coordinates, but you can skip a coordinate pair and show its position in the list with the ;
-     * separator. The first value in the list corresponds to the route origin, not the first
-     * destination. To leave the origin unnamed, begin the list with a semicolon.
-     * Must be used in conjunction with {@link RouteOptions.Builder#steps(Boolean)} = true.
+     * coordinates. The first value in the list corresponds to the route origin, not the first
+     * destination.
+     * To leave the origin unnamed, begin the list with a semicolon.
+     * Must be used in conjunction with {@link RouteOptions#steps()}=true.
      *
-     * @param waypointNames unrestricted, curb or omitted (;)
+     * @param waypointNames a string representing names for each waypoint
      * @return this builder for chaining options together
-     * @since 3.3.0
      */
-    public abstract Builder waypointNames(@NonNull String waypointNames);
+    @NonNull
+    public abstract Builder waypointNames(@Nullable String waypointNames);
 
     /**
-     * A semicolon-separated list of custom names for entries in the list of
-     * {@link RouteOptions#coordinates()}, used for the arrival instruction in banners and voice
+     * A list of custom names for entries in the list of
+     * {@link RouteOptions#coordinatesList()}, used for the arrival instruction in banners and voice
      * instructions. Values can be any string, and the total number of all characters cannot exceed
-     * 500. If provided, the list of waypoint_names must be the same length as the list of
-     * coordinates, but you can skip a coordinate pair and show its position in the list with the
-     * null value. The first value in the list corresponds to the route origin, not the first
-     * destination. To leave the origin unnamed, begin the list with a null value.
-     * Must be used in conjunction with {@link RouteOptions.Builder#steps(Boolean)} = true.
+     * 500. If provided, the list of names must be the same length as the list of
+     * coordinates. The first value in the list corresponds to the route origin, not the first
+     * destination.
+     * <p>
+     * Must be used in conjunction with {@link RouteOptions#steps()}=true.
      *
-     * @param waypointNames a list of Strings
+     * @param waypointNames a list of strings representing names for each waypoint
      * @return this builder for chaining options together
      */
-    public Builder waypointNamesList(@NonNull List<String> waypointNames) {
-      String result = FormatUtils.formatWaypointNames(waypointNames);
+    @NonNull
+    public Builder waypointNamesList(@Nullable List<String> waypointNames) {
+      String result = FormatUtils.join(";", waypointNames);
       if (result != null) {
         waypointNames(result);
       }
@@ -1022,42 +1260,75 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * The maneuver.modifier, banner and voice instructions will be updated with the computed
      * side of street. The number of waypoint targets must be the same as the number of coordinates,
      * but you can skip a coordinate pair and show its position in the list with the ; separator.
-     * Must be used with {@link RouteOptions.Builder#steps(Boolean)} = true.
-     * The same waypoint targets the user originally made when the request was made.
+     * Since the first value will not be evaluated, begin the list with a semicolon.
+     * <p>
+     * Must be used with {@link RouteOptions#steps()}=true.
      *
-     * @param waypointTargets list of coordinate pairs for drop-off locations (;)
+     * @param waypointTargets a list of Points representing coordinate pairs for drop-off locations
      * @return this builder for chaining options together
-     * @since 4.3.0
      */
-    public abstract Builder waypointTargets(@NonNull String waypointTargets);
+    @NonNull
+    public abstract Builder waypointTargets(@Nullable String waypointTargets);
 
     /**
-     * A list of coordinate pairs used to specify drop-off
+     * A list of points used to specify drop-off
      * locations that are distinct from the locations specified in coordinates.
      * If this parameter is provided, the Directions API will compute the side of the street,
      * left or right, for each target based on the waypoint_targets and the driving direction.
      * The maneuver.modifier, banner and voice instructions will be updated with the computed
-     * side of street. The number of waypoint targets must be the same as the number of coordinates,
-     * but you can skip a coordinate pair and show its position in the list with the null value.
-     * Must be used with {@link RouteOptions.Builder#steps(Boolean)} = true.
-     * The same waypoint targets the user originally made when the request was made.
+     * side of street. The number of waypoint targets must be the same as the number of coordinates.
+     * You can skip a coordinate pair and show its position in the list with the "null".
+     * Since the first value will not be evaluated, you can begin the list with "null".
+     * Must be used with {@link RouteOptions#steps()}=true.
      *
-     * @param waypointTargets list of Points for drop-off locations
+     * @param waypointTargets a list of Points representing coordinate pairs for drop-off locations
      * @return this builder for chaining options together
      */
-    public Builder waypointTargetsList(@NonNull List<Point> waypointTargets) {
+    @NonNull
+    public Builder waypointTargetsList(@Nullable List<Point> waypointTargets) {
       waypointTargets(FormatUtils.formatPointsList(waypointTargets));
       return this;
     }
 
     /**
-     * To be used to specify settings for use with the walking profile.
+     * A scale from -1 to 1, where -1 biases the route against alleys
+     * and 1 biases the route toward alleys. If null, default is 0, which is neutral.
      *
-     * @param walkingOptions options to use for walking profile
-     * @return this builder for chaining options together
-     * @since 4.8.0
+     * @param alleyBias bias towards alleys
+     * @return this builder
      */
-    public abstract Builder walkingOptions(@NonNull WalkingOptions walkingOptions);
+    @NonNull
+    public abstract Builder alleyBias(
+      @Nullable @FloatRange(from = -1, to = 1) Double alleyBias);
+
+    /**
+     * The walking speed in meters per second with a minimum of 0.14 m/s (or 0.5 km/h)
+     * and a maximum of 6.94 m/s (or 25.0 km/h).
+     * If null, defaults to 1.42 m/s (5.1 km/h).
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_WALKING}.
+     *
+     * @param walkingSpeed in meters per second
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder walkingSpeed(
+      @Nullable @FloatRange(from = 0.14, to = 6.94) Double walkingSpeed);
+
+    /**
+     * A bias which determines whether the route should prefer or avoid the use of roads or paths
+     * that are set aside for pedestrian-only use (walkways). The allowed range of values is from
+     * -1 to 1, where -1 indicates indicates preference to avoid walkways, 1 indicates preference
+     * to favor walkways, and 0 indicates no preference (the default, if null).
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_WALKING}.
+     *
+     * @param walkwayBias bias to prefer or avoid walkways
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder walkwayBias(
+      @Nullable @FloatRange(from = -1, to = 1) Double walkwayBias);
 
     /**
      * A semicolon-separated list of booleans affecting snapping of waypoint locations to road
@@ -1066,14 +1337,16 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * If false, they will not be considered for snapping.
      * If provided, the number of snappingClosures must be the same as the number of
      * coordinates.
-     * You can skip a coordinate and show its position in the list with the ; separator.
-     * If unspecified, this parameter defaults to false.
-     * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
+     * However, you can skip a coordinate and show its position in the list with the ; separator.
+     * If null, this parameter defaults to false.
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
      *
-     * @param snappingClosures a semicolon-separated list of booleans
+     * @param snappingClosures a String representing a list of booleans
      * @return this builder for chaining options together
      */
-    public abstract Builder snappingClosures(@NonNull String snappingClosures);
+    @NonNull
+    public abstract Builder snappingIncludeClosures(@Nullable String snappingClosures);
 
     /**
      * A list of booleans affecting snapping of waypoint locations to road segments.
@@ -1081,29 +1354,194 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * If false, they will not be considered for snapping.
      * If provided, the number of snappingClosures must be the same as the number of
      * coordinates.
-     * You can skip a coordinate and show its position in the list with null value.
-     * If unspecified, this parameter defaults to false.
-     * Must be used with {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}
+     * However, you can skip a coordinate and show its position in the list with the null.
+     * If the list is null, this parameter defaults to false.
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
      *
      * @param snappingClosures a list of booleans
      * @return this builder for chaining options together
      */
-    public Builder snappingClosures(@NonNull List<Boolean> snappingClosures) {
+    @NonNull
+    public Builder snappingIncludeClosuresList(@Nullable List<Boolean> snappingClosures) {
       String result = FormatUtils.join(";", snappingClosures);
       if (result != null) {
-        snappingClosures(result);
-      } else {
-        snappingClosures("");
+        snappingIncludeClosures(result);
       }
       return this;
     }
 
     /**
-     * Builds a new instance of the {@link RouteOptions} object.
+     * The desired arrival time, formatted as a timestamp in ISO-8601 format
+     * in the local time at the route destination.
+     * The travel time returned in duration is a prediction for travel time based
+     * on historical travel data. The route is calculated in a time-dependent manner.
+     * For example, a trip that takes two hours will consider changing historic traffic
+     * conditions across the two-hour window.
+     * The route takes timed turn restrictions and conditional access restrictions into account
+     * based on the requested arrival time.
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING}.
      *
-     * @return a new {@link RouteOptions} instance
-     * @since 3.0.0
+     * @param arriveBy arrive time ISO8601, see {@link FormatUtils#ISO_8601_PATTERN}
+     * @return this builder for chaining options together
      */
-    public abstract RouteOptions build();
+    @NonNull
+    public abstract Builder arriveBy(@Nullable String arriveBy);
+
+    /**
+     * The departure time, formatted as a timestamp in ISO-8601 format in the local time
+     * at the route origin. The travel time returned in duration is a prediction for travel time
+     * based on historical travel data. The route is calculated in a time-dependent manner.
+     * For example, a trip that takes two hours will consider changing historic traffic conditions
+     * across the two-hour window, instead of only at the specified depart_at time.
+     * The route takes timed turn restrictions and conditional access restrictions into account
+     * based on the requested departure time.
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING}.
+     *
+     * @param departAt departure time ISO8601, see {@link FormatUtils#ISO_8601_PATTERN}
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder departAt(@Nullable String departAt);
+
+    /**
+     * Whether the routes should be refreshable via the directions refresh API.
+     * <p>
+     * If false, the refresh requests will fail. Defaults to false if null.
+     *
+     * @param enableRefresh whether the routes should be refreshable
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder enableRefresh(@Nullable Boolean enableRefresh);
+
+    /**
+     * Package private used to build the object and verify.
+     */
+    @NonNull
+    abstract RouteOptions autoBuild();
+
+    /**
+     * This uses the provided parameters set using the {@link Builder} and first checks that all
+     * values are valid, and creates a new {@link RouteOptions} object with the values provided.
+     *
+     * @return a new instance of {@link RouteOptions}
+     */
+    @NonNull
+    public RouteOptions build() {
+      RouteOptions routeOptions = autoBuild();
+
+      List<Point> coordinates = routeOptions.coordinatesList();
+      if (coordinates.size() < 2) {
+        throw new RuntimeException(
+          "An origin and destination are required before making the directions API request."
+        );
+      }
+
+      List<Integer> waypointIndices = routeOptions.waypointIndicesList();
+      if (waypointIndices != null && !waypointIndices.isEmpty()) {
+        if (waypointIndices.size() < 2) {
+          throw new RuntimeException(
+            "Waypoints indices must be a list of at least two indexes, origin and destination."
+          );
+        }
+        if (waypointIndices.get(0) != 0 || waypointIndices.get(waypointIndices.size() - 1)
+          != coordinates.size() - 1) {
+          throw new RuntimeException(
+            "First and last waypoints indices must match the origin and final destination."
+          );
+        }
+        for (int i = 1; i < waypointIndices.size() - 1; i++) {
+          if (waypointIndices.get(i) < 0
+            || waypointIndices.get(i) >= coordinates.size()) {
+            throw new RuntimeException(
+              "Waypoints index out of bounds (no corresponding coordinate).");
+          }
+        }
+      }
+
+      checkSizeMatchingWaypoints(
+        "waypointTargets",
+        true,
+        routeOptions.waypointTargetsList(),
+        coordinates,
+        routeOptions.waypointIndicesList()
+      );
+
+      checkSizeMatchingWaypoints(
+        "approaches",
+        false,
+        routeOptions.approachesList(),
+        coordinates,
+        routeOptions.waypointIndicesList()
+      );
+
+      checkSizeMatchingWaypoints(
+        "snappingIncludeClosures",
+        false,
+        routeOptions.snappingIncludeClosuresList(),
+        coordinates,
+        routeOptions.waypointIndicesList()
+      );
+
+      checkSizeMatchingWaypoints(
+        "bearings",
+        false,
+        routeOptions.bearingsList(),
+        coordinates,
+        routeOptions.waypointIndicesList()
+      );
+
+      checkSizeMatchingWaypoints(
+        "radiuses",
+        false,
+        routeOptions.radiusesList(),
+        coordinates,
+        routeOptions.waypointIndicesList()
+      );
+
+      checkSizeMatchingWaypoints(
+        "waypointNames",
+        true,
+        routeOptions.waypointNamesList(),
+        coordinates,
+        routeOptions.waypointIndicesList()
+      );
+
+      return routeOptions;
+    }
+
+    private void checkSizeMatchingWaypoints(
+      String paramName,
+      boolean waypointIndicesDependent,
+      List<?> testedParam,
+      List<Point> coordinates,
+      List<Integer> waypointIndices
+    ) {
+      if (testedParam != null && !testedParam.isEmpty()) {
+        boolean error = false;
+        if (waypointIndicesDependent && waypointIndices != null && !waypointIndices.isEmpty()) {
+          if (testedParam.size() != waypointIndices.size()) {
+            error = true;
+          }
+        } else if (testedParam.size() != coordinates.size()) {
+          error = true;
+        }
+        if (error) {
+          StringBuilder builder = new StringBuilder();
+          builder.append("Number of ");
+          builder.append(paramName);
+          builder.append(" must match the number of coordinates");
+          if (waypointIndicesDependent) {
+            builder.append(" or waypoints indices (if present)");
+          }
+          builder.append(".");
+
+          throw new RuntimeException(builder.toString());
+        }
+      }
+    }
   }
 }
