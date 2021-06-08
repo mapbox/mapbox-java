@@ -1,8 +1,12 @@
 package com.mapbox.api.directions.v5.models;
 
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.Point;
 
 import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -50,5 +54,23 @@ public class DirectionsRouteTest extends TestUtils {
     String voiceLanguage = route.voiceLanguage();
 
     assertNull(voiceLanguage);
+  }
+
+  @Test
+  public void directionsRoute_doesContainOptionsAndUuid() throws Exception {
+    String json = loadJsonFixture("directions_v5-with-closure_precision_6.json");
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .accessToken("token")
+      .build();
+    String uuid = "123";
+    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
+
+    assertEquals(options, route.routeOptions());
+    assertEquals(uuid, route.requestUuid());
   }
 }

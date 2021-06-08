@@ -2,7 +2,6 @@ package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,7 +10,6 @@ import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
-
 import java.util.List;
 
 /**
@@ -136,6 +134,14 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   public abstract String voiceLanguage();
 
   /**
+   * The universally unique identifier of the request that produced this route.
+   *
+   * @return request uuid
+   */
+  @Nullable
+  public abstract String requestUuid();
+
+  /**
    * Convert the current {@link DirectionsRoute} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link DirectionsRoute}.
@@ -163,13 +169,42 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
    * @param json a formatted valid JSON string defining a GeoJson Directions Route
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
+   * @see #fromJson(String, RouteOptions, String)
    * @since 3.0.0
    */
-  public static DirectionsRoute fromJson(String json) {
+  public static DirectionsRoute fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     return gson.create().fromJson(json, DirectionsRoute.class);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   * <p>
+   * The parameters of {@link RouteOptions} that were used to make the original route request
+   * as well as the {@link String} UUID of the original response are needed
+   * by the Navigation SDK to support correct rerouting and route refreshing.
+   *
+   * @param json         a formatted valid JSON string defining a GeoJson Directions Route
+   * @param routeOptions options that were used during the original route request
+   * @param requestUuid  UUID of the request found in the body of the original response,
+   *                     see "response.body.uuid"
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @see RouteOptions#fromUrl(java.net.URL)
+   * @see RouteOptions#fromJson(String)
+   */
+  public static DirectionsRoute fromJson(
+    @NonNull String json, @Nullable RouteOptions routeOptions, @Nullable String requestUuid) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
+    return gson.create().fromJson(json, DirectionsRoute.class)
+      .toBuilder()
+      .routeOptions(routeOptions)
+      .requestUuid(requestUuid)
+      .build();
   }
 
   /**
@@ -267,6 +302,15 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @since 3.1.0
      */
     public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
+
+    /**
+     * The universally unique identifier of the request that produced this route.
+     *
+     * @param requestUuid uuid
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder requestUuid(@Nullable String requestUuid);
 
     abstract Builder routeIndex(String routeIndex);
 

@@ -1,14 +1,16 @@
 package com.mapbox.api.directions.v5.models;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.Point;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class DirectionsResponseTest extends TestUtils {
 
@@ -42,5 +44,23 @@ public class DirectionsResponseTest extends TestUtils {
 
     Assert.assertEquals(responseFromJson1, responseFromJson2);
     Assert.assertEquals(responseFromJson2, responseFromJson1);
+  }
+
+  @Test
+  public void fromJson_correctlyBuildsFromJsonWithOptionsAndUuid() throws Exception {
+    String json = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .accessToken("token")
+      .build();
+    String uuid = "123";
+    DirectionsResponse response = DirectionsResponse.fromJson(json, options, uuid);
+
+    assertEquals(options, response.routes().get(0).routeOptions());
+    assertEquals(uuid, response.routes().get(0).requestUuid());
   }
 }

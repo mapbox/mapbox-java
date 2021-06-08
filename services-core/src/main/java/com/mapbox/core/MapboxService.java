@@ -21,7 +21,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @since 1.0.0
  */
 public abstract class MapboxService<T, S> {
-  protected static final int MAX_URL_SIZE = 1024 * 8;
+
+  /**
+   * If the url length exceeds this value, the POST method is chosen by default.
+   */
+  public static final int MAX_URL_SIZE = 1024 * 8;
+
   private final Class<S> serviceType;
   private boolean enableDebug;
   protected OkHttpClient okHttpClient;

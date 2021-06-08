@@ -20,6 +20,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import retrofit2.Response;
 
+import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING;
 import static org.junit.Assert.assertTrue;
 
 public class MapMatchingResponseTest extends TestUtils {
@@ -66,6 +67,7 @@ public class MapMatchingResponseTest extends TestUtils {
   @Test
   public void code_doesReturnCodeFromJson() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
       .coordinates(coordinates)
       .baseUrl(mockUrl.toString())
       .accessToken(ACCESS_TOKEN)
