@@ -54,6 +54,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * {@link DirectionsCriteria.ProfileCriteria}
    */
   @NonNull
+  @DirectionsCriteria.ProfileCriteria
   public abstract String profile();
 
   /**
@@ -208,7 +209,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return String geometry type from {@link DirectionsCriteria.GeometriesCriteria}.
    */
-  @Nullable
+  @NonNull
+  @DirectionsCriteria.GeometriesCriteria
   public abstract String geometries();
 
   /**
@@ -221,6 +223,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return null or one of the options found in {@link DirectionsCriteria.OverviewCriteria}
    */
   @Nullable
+  @DirectionsCriteria.OverviewCriteria
   public abstract String overview();
 
   /**
@@ -233,6 +236,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return a string representing the radiuses separated by ";".
    */
   @NonNull
+  // todo is this required?
   public abstract String radiuses();
 
   /**
@@ -367,6 +371,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    */
   @SerializedName("voice_units")
   @Nullable
+  @DirectionsCriteria.VoiceUnitCriteria
   public abstract String voiceUnits();
 
   /**
@@ -616,6 +621,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   @SerializedName("uuid")
   @Nullable
+  // todo should this live outside of options? a route field?
   public abstract String requestUuid();
 
   /**
@@ -839,7 +845,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      */
     @NonNull
-    public abstract Builder exclude(@Nullable String exclude);
+    public abstract Builder exclude(@Nullable @DirectionsCriteria.ExcludeCriteria String exclude);
 
     /**
      * The format of the returned geometry. Allowed values are:
@@ -852,7 +858,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder geometries(
-      @Nullable @DirectionsCriteria.GeometriesCriteria String geometries);
+      @NonNull @DirectionsCriteria.GeometriesCriteria String geometries);
 
     /**
      * Displays the requested type of overview geometry. Can be

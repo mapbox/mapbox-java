@@ -293,11 +293,13 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef( {
-    ANNOTATION_CONGESTION,
-    ANNOTATION_DISTANCE,
     ANNOTATION_DURATION,
+    ANNOTATION_DISTANCE,
     ANNOTATION_SPEED,
-    ANNOTATION_MAXSPEED
+    ANNOTATION_CONGESTION,
+    ANNOTATION_CONGESTION_NUMERIC,
+    ANNOTATION_MAXSPEED,
+    ANNOTATION_CLOSURE
   })
   public @interface AnnotationCriteria {
   }
