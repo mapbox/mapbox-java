@@ -88,42 +88,53 @@ public final class DirectionsCriteria {
   public static final String OVERVIEW_FALSE = "false";
 
   /**
-   * The duration, in seconds, between each pair of coordinates.
+   * The duration between each pair of coordinates in seconds.
    *
    * @since 2.1.0
    */
   public static final String ANNOTATION_DURATION = "duration";
 
   /**
-   * The distance, in meters, between each pair of coordinates.
+   * The distance between each pair of coordinates in meters.
    *
    * @since 2.1.0
    */
   public static final String ANNOTATION_DISTANCE = "distance";
 
   /**
-   * The speed, in km/h, between each pair of coordinates.
+   * The speed between each pair of coordinates in meters per second.
    *
    * @since 2.1.0
    */
   public static final String ANNOTATION_SPEED = "speed";
 
   /**
-   * The congestion, provided as a String, between each pair of coordinates.
-   *
-   * @since 2.2.0
+   * The level of congestion between each entry in the array of coordinate pairs
+   * in the route leg.
+   * This annotation is only available for the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
    */
   public static final String ANNOTATION_CONGESTION = "congestion";
 
   /**
-   * The posted speed limit, between each pair of coordinates.
-   *
-   * @since 2.1.0
+   * The numeric level of congestion between each entry in the array of coordinate pairs
+   * in the route leg.
+   * This annotation is only available for the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
+   */
+  public static final String ANNOTATION_CONGESTION_NUMERIC = "congestion_NUMERIC";
+
+  /**
+   * The maximum speed limit between the coordinates of a segment.
+   * This annotation is only available for
+   * the {@link DirectionsCriteria#PROFILE_DRIVING} and
+   * the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
    */
   public static final String ANNOTATION_MAXSPEED = "maxspeed";
 
   /**
-   * The closure of sections of a route.
+   * An array of closure objects describing live-traffic related closures
+   * that occur along the route.
+   * This annotation is only available for
+   * the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
    */
   public static final String ANNOTATION_CLOSURE = "closure";
 
@@ -213,7 +224,7 @@ public final class DirectionsCriteria {
 
   /**
    * The routes can approach waypoints from either side of the road. <p>
-   *
+   * <p>
    * Used in MapMatching and Directions API.
    *
    * @since 3.2.0
@@ -222,10 +233,8 @@ public final class DirectionsCriteria {
 
   /**
    * The route will be returned so that on arrival,
-   * the waypoint will be found on the side that corresponds with the  driving_side of
-   * the region in which the returned route is located. <p>
-   *
-   * Used in MapMatching and Directions API.
+   * the waypoint will be found on the side that corresponds with the driving_side of
+   * the region in which the returned route is located.
    *
    * @since 3.2.0
    */

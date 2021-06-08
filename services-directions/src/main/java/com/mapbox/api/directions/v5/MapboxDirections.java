@@ -41,8 +41,10 @@ import retrofit2.Response;
  * The Directions API allows the calculation of routes between coordinates. The fastest route can be
  * returned with geometries, turn-by-turn instructions, and much more. The Mapbox Directions API
  * supports routing for driving cars (including live traffic), riding bicycles and walking.
+ * <p>
  * Requested routes can include as much as 25 coordinates anywhere on earth (except the traffic
- * profile).
+ * profile which support up to 3 coordinates, contact Mapbox Support if you'd like to extend this limit).
+ * </p>
  * <p>
  * Requesting a route at a bare minimal must include, a Mapbox access token, destination, and an
  * origin.
@@ -52,7 +54,6 @@ import retrofit2.Response;
  * Directions documentation</a>
  * @see <a href="https://www.mapbox.com/api-documentation/navigation/#directions">Directions API
  * documentation</a>
- * @since 1.0.0
  */
 @AutoValue
 public abstract class MapboxDirections extends
@@ -157,11 +158,10 @@ public abstract class MapboxDirections extends
 
   /**
    * Wrapper method for Retrofits {@link Call#execute()} call returning a response specific to the
-   * Directions API.
+   * Directions API synchronously.
    *
    * @return the Directions v5 response once the call completes successfully
    * @throws IOException Signals that an I/O exception of some sort has occurred
-   * @since 1.0.0
    */
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
@@ -172,7 +172,7 @@ public abstract class MapboxDirections extends
 
   /**
    * Wrapper method for Retrofits {@link Call#enqueue(Callback)} call returning a response specific
-   * to the Directions API. Use this method to make a directions request on the Main Thread.
+   * to the Directions API.
    *
    * @param callback a {@link Callback} which is used once the {@link DirectionsResponse} is
    *                 created.
@@ -223,6 +223,10 @@ public abstract class MapboxDirections extends
   }
 
   @NonNull
+  @Override
+  protected abstract String baseUrl();
+
+  @NonNull
   abstract String user();
 
   @NonNull
@@ -232,23 +236,19 @@ public abstract class MapboxDirections extends
   abstract List<Point> coordinates();
 
   @NonNull
-  @Override
-  protected abstract String baseUrl();
-
-  @NonNull
   abstract String accessToken();
 
   @Nullable
   abstract Boolean alternatives();
 
   @Nullable
+  abstract String radius();
+
+  @Nullable
   abstract String geometries();
 
   @Nullable
   abstract String overview();
-
-  @Nullable
-  abstract String radius();
 
   @Nullable
   abstract String bearing();
@@ -673,11 +673,11 @@ public abstract class MapboxDirections extends
      * dictates the angle of approach. This option should always be used in conjunction with the
      * {@link #radiuses} parameter.
      *
-     * @param bearings  a list of list of doubles. Every list has two values:
-     *                  the first is an angle clockwise from true north between 0 and 360. The
-     *                  second is the range of degrees the angle can deviate by. We recommend
-     *                  a value of 45 degrees or 90 degrees for the range, as bearing measurements
-     *                  tend to be inaccurate.
+     * @param bearings a list of list of doubles. Every list has two values:
+     *                 the first is an angle clockwise from true north between 0 and 360. The
+     *                 second is the range of degrees the angle can deviate by. We recommend
+     *                 a value of 45 degrees or 90 degrees for the range, as bearing measurements
+     *                 tend to be inaccurate.
      * @return this builder for chaining options together
      */
     public Builder bearings(@NonNull List<List<Double>> bearings) {
@@ -1111,6 +1111,7 @@ public abstract class MapboxDirections extends
     /**
      * Use POST method to request data.
      * The default is to use GET.
+     *
      * @return this builder for chaining options together
      * @since 4.6.0
      */
@@ -1121,6 +1122,7 @@ public abstract class MapboxDirections extends
 
     /**
      * Use GET method to request data.
+     *
      * @return this builder for chaining options together
      * @since 4.6.0
      */
@@ -1215,7 +1217,7 @@ public abstract class MapboxDirections extends
       if (!snappingClosures.isEmpty()) {
         if (snappingClosures.size() != coordinates.size()) {
           throw new ServicesException("Number of snapping closures elements must match "
-              + "number of coordinates provided.");
+            + "number of coordinates provided.");
         }
         snappingClosures(FormatUtils.join(";", snappingClosures));
       }

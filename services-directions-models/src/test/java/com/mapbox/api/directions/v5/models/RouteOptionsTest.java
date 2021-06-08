@@ -338,9 +338,9 @@ public class RouteOptionsTest {
         .snappingClosures(snappingClosuresString)
         .build();
 
-    assertEquals(snappingClosuresString, routeOptions.snappingClosures());
+    assertEquals(snappingClosuresString, routeOptions.snappingIncludeClosures());
 
-    List<Boolean> snappingClosures = routeOptions.snappingClosuresList();
+    List<Boolean> snappingClosures = routeOptions.snappingIncludeClosuresList();
     assertEquals(10, snappingClosures.size());
     assertEquals(true, snappingClosures.get(0));
     assertEquals(null, snappingClosures.get(1));
@@ -363,9 +363,9 @@ public class RouteOptionsTest {
             .snappingClosures(snappingClosuresString)
             .build();
 
-    assertEquals(snappingClosuresString, routeOptions.snappingClosures());
+    assertEquals(snappingClosuresString, routeOptions.snappingIncludeClosures());
 
-    List<Boolean> snappingClosures = routeOptions.snappingClosuresList();
+    List<Boolean> snappingClosures = routeOptions.snappingIncludeClosuresList();
     assertTrue(snappingClosures.isEmpty());
   }
 
@@ -385,8 +385,8 @@ public class RouteOptionsTest {
         .snappingClosures(snappingClosures)
         .build();
 
-    assertEquals(snappingClosures, routeOptions.snappingClosuresList());
-    assertEquals("false;false;;true;false;;", routeOptions.snappingClosures());
+    assertEquals(snappingClosures, routeOptions.snappingIncludeClosuresList());
+    assertEquals("false;false;;true;false;;", routeOptions.snappingIncludeClosures());
   }
 
   @Test
@@ -398,8 +398,8 @@ public class RouteOptionsTest {
             .snappingClosures(snappingClosures)
             .build();
 
-    assertEquals(snappingClosures, routeOptions.snappingClosuresList());
-    assertTrue(routeOptions.snappingClosures().isEmpty());
+    assertEquals(snappingClosures, routeOptions.snappingIncludeClosuresList());
+    assertTrue(routeOptions.snappingIncludeClosures().isEmpty());
   }
 
   @Test
@@ -649,14 +649,14 @@ public class RouteOptionsTest {
   public void snappingIncludeClosuresStringIsValid_fromJson() {
     RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
 
-    assertEquals(";false;true", options.snappingClosures());
+    assertEquals(";false;true", options.snappingIncludeClosures());
   }
 
   @Test
   public void snappingIncludeClosuresListIsValid_fromJson() {
     RouteOptions options = RouteOptions.fromJson(ROUTE_OPTIONS_JSON);
 
-    List list = options.snappingClosuresList();
+    List list = options.snappingIncludeClosuresList();
     assertEquals(3, list.size());
     assertEquals(null, list.get(0));
     assertEquals(false, list.get(1));

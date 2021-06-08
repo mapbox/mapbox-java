@@ -2,7 +2,9 @@ package com.mapbox.api.directions.v5.utils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.mapbox.geojson.Point;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -13,12 +15,18 @@ import java.util.Locale;
  * Methods to convert models to Strings.
  */
 public class FormatUtils {
+
+  /**
+   * Date-time <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO-8601</a> pattern.
+   */
+  public static final String ISO_8601_PATTERN = "yyyy-MM-dd'T'HH:mm";
+
   /**
    * Returns a string containing the tokens joined by delimiters. Doesn't remove trailing nulls.
    *
    * @param delimiter the delimiter on which to split.
-   * @param tokens A list of objects to be joined. Strings will be formed from the objects by
-   *               calling object.toString().
+   * @param tokens    A list of objects to be joined. Strings will be formed from the objects by
+   *                  calling object.toString().
    * @return {@link String}
    */
   @Nullable
@@ -29,15 +37,15 @@ public class FormatUtils {
   /**
    * Returns a string containing the tokens joined by delimiters.
    *
-   * @param delimiter the delimiter on which to split.
-   * @param tokens A list of objects to be joined. Strings will be formed from the objects by
-   *               calling object.toString().
+   * @param delimiter           the delimiter on which to split.
+   * @param tokens              A list of objects to be joined. Strings will be formed from the objects by
+   *                            calling object.toString().
    * @param removeTrailingNulls true if trailing nulls should be removed.
    * @return {@link String}
    */
   @Nullable
   public static String join(@NonNull CharSequence delimiter, @Nullable List<?> tokens,
-      boolean removeTrailingNulls) {
+                            boolean removeTrailingNulls) {
     if (tokens == null || tokens.size() < 1) {
       return null;
     }
@@ -79,9 +87,9 @@ public class FormatUtils {
   @NonNull
   public static String formatCoordinate(double coordinate) {
     DecimalFormat decimalFormat = new DecimalFormat("0.######",
-        new DecimalFormatSymbols(Locale.US));
+      new DecimalFormatSymbols(Locale.US));
     return String.format(Locale.US, "%s",
-        decimalFormat.format(coordinate));
+      decimalFormat.format(coordinate));
   }
 
   /**
@@ -142,8 +150,8 @@ public class FormatUtils {
           }
 
           bearingsToJoin.add(String.format(Locale.US, "%s,%s",
-              formatCoordinate(angle),
-              formatCoordinate(tolerance)));
+            formatCoordinate(angle),
+            formatCoordinate(tolerance)));
         }
       }
     }
@@ -168,8 +176,8 @@ public class FormatUtils {
         distributionsToJoin.add(null);
       } else {
         distributionsToJoin.add(String.format(Locale.US, "%s,%s",
-            formatCoordinate(array[0]),
-            formatCoordinate(array[1])));
+          formatCoordinate(array[0]),
+          formatCoordinate(array[1])));
       }
     }
     return join(";", distributionsToJoin);
@@ -190,7 +198,7 @@ public class FormatUtils {
 
     for (String approach : approaches) {
       if (approach != null && !approach.equals("unrestricted") && !approach.equals("curb")
-          && !approach.isEmpty()) {
+        && !approach.isEmpty()) {
         return null;
       }
     }
@@ -223,8 +231,8 @@ public class FormatUtils {
     List<String> coordinatesToJoin = new ArrayList<>();
     for (Point point : coordinates) {
       coordinatesToJoin.add(String.format(Locale.US, "%s,%s",
-          formatCoordinate(point.longitude()),
-          formatCoordinate(point.latitude())));
+        formatCoordinate(point.longitude()),
+        formatCoordinate(point.latitude())));
     }
 
     return join(";", coordinatesToJoin);
@@ -248,8 +256,8 @@ public class FormatUtils {
         coordinatesToJoin.add(null);
       } else {
         coordinatesToJoin.add(String.format(Locale.US, "%s,%s",
-            formatCoordinate(point.longitude()),
-            formatCoordinate(point.latitude())));
+          formatCoordinate(point.longitude()),
+          formatCoordinate(point.latitude())));
       }
     }
     return join(";", coordinatesToJoin);
