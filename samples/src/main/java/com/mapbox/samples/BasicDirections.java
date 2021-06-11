@@ -1,12 +1,15 @@
 package com.mapbox.samples;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.WalkingOptions;
 import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.geojson.Point;
 import com.mapbox.sample.BuildConfig;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,13 +33,17 @@ public class BasicDirections {
    * @throws IOException signals that an I/O exception of some sort has occurred
    */
   private static void simpleMapboxDirectionsRequest() throws IOException {
-
     MapboxDirections.Builder builder = MapboxDirections.builder();
 
     // 1. Pass in all the required information to get a simple directions route.
-    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
-    builder.origin(Point.fromLngLat(-95.6332, 29.7890));
-    builder.destination(Point.fromLngLat(-95.3591, 29.7576));
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-95.6332, 29.7890));
+    coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
+    RouteOptions routeOptions = RouteOptions.builder()
+      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
+      .coordinates(coordinates)
+      .build();
+    builder.routeOptions(routeOptions);
 
     // 2. That's it! Now execute the command and get the response.
     Response<DirectionsResponse> response = builder.build().executeCall();
@@ -53,19 +60,21 @@ public class BasicDirections {
    * @throws IOException signals that an I/O exception of some sort has occurred
    */
   private static void simpleMapboxDirectionsWalkingRequest() throws IOException {
-
     MapboxDirections.Builder builder = MapboxDirections.builder();
 
-    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
-    builder.origin(Point.fromLngLat(-95.6332, 29.7890));
-    builder.destination(Point.fromLngLat(-95.3591, 29.7576));
-    builder.profile("walking");
-    builder.walkingOptions(
-      WalkingOptions.builder()
-        .walkingSpeed(1.0)
-        .walkwayBias(0.6)
-        .alleyBias(0.7)
-        .build());
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-95.6332, 29.7890));
+    coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
+    RouteOptions routeOptions = RouteOptions.builder()
+      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
+      .coordinates(coordinates)
+      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
+      .profile("walking")
+      .walkingSpeed(1.0)
+      .walkwayBias(0.6)
+      .alleyBias(0.7)
+      .build();
+    builder.routeOptions(routeOptions);
 
     // 2. That's it! Now execute the command and get the response.
     Response<DirectionsResponse> response = builder.build().executeCall();
@@ -84,11 +93,15 @@ public class BasicDirections {
   private static void simpleMapboxDirectionsPostRequest() throws IOException {
 
     MapboxDirections.Builder builder = MapboxDirections.builder();
-
-    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
-    builder.origin(Point.fromLngLat(-95.6332, 29.7890));
-    builder.destination(Point.fromLngLat(-95.3591, 29.7576));
-    builder.post();
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-95.6332, 29.7890));
+    coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
+    RouteOptions routeOptions = RouteOptions.builder()
+      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
+      .coordinates(coordinates)
+      .build();
+    builder.routeOptions(routeOptions);
+    builder.usePostMethod(true);
 
     Response<DirectionsResponse> response = builder.build().executeCall();
 
@@ -101,18 +114,22 @@ public class BasicDirections {
    * Demonstrates how to make an asynchronous directions request.
    */
   private static void asyncMapboxDirectionsRequest() {
+    MapboxDirections.Builder builder = MapboxDirections.builder();
 
     // 1. Pass in all the required information to get a route.
-    MapboxDirections request = MapboxDirections.builder()
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-95.6332, 29.7890));
+    coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
+    RouteOptions routeOptions = RouteOptions.builder()
       .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
-      .origin(Point.fromLngLat(-95.6332, 29.7890))
-      .destination(Point.fromLngLat(-95.3591, 29.7576))
+      .coordinates(coordinates)
       .profile(DirectionsCriteria.PROFILE_CYCLING)
       .steps(true)
       .build();
+    builder.routeOptions(routeOptions);
 
     // 2. Now request the route using a async call
-    request.enqueueCall(new Callback<DirectionsResponse>() {
+    builder.build().enqueueCall(new Callback<DirectionsResponse>() {
       @Override
       public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
         // 3. Log information from the response

@@ -34,7 +34,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @return {@link RouteOptions.Builder}
    */
   public static Builder builder() {
-    return new AutoValue_RouteOptions.Builder();
+    return new AutoValue_RouteOptions.Builder()
+      .baseUrl(DirectionsCriteria.BASE_API_URL)
+      .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
+      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE);
   }
 
   /**
@@ -91,26 +94,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract Boolean alternatives();
 
   /**
-   * A comma-separated list of annotations. Defines whether to return additional metadata along the
-   * route. Possible values are:
-   * {@link DirectionsCriteria#ANNOTATION_DISTANCE}
-   * {@link DirectionsCriteria#ANNOTATION_DURATION}
-   * {@link DirectionsCriteria#ANNOTATION_SPEED}
-   * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
-   * {@link DirectionsCriteria#ANNOTATION_CONGESTION_NUMERIC}
-   * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
-   * {@link DirectionsCriteria#ANNOTATION_CLOSURE}
-   * See the {@link RouteLeg} object for more details on what is included with annotations.
-   * <p>
-   * Must be used in conjunction with {@link DirectionsCriteria#OVERVIEW_FULL}
-   * in {@link RouteOptions#overview()}.
-   *
-   * @return a string containing requested annotations
-   */
-  @Nullable
-  public abstract String annotations();
-
-  /**
    * A list of annotations. Defines whether to return additional metadata along the
    * route. Possible values are:
    * {@link DirectionsCriteria#ANNOTATION_DISTANCE}
@@ -126,28 +109,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * in {@link RouteOptions#overview()}.
    *
    * @return a list of annotations that were used during the request
+   * @see ParseUtils#parseToStrings(String, String)
    */
   @Nullable
-  public List<String> annotationsList() {
-    return ParseUtils.parseToStrings(annotations(), ",");
-  }
-
-  /**
-   * Influences the direction in which a route starts from a waypoint. Used to filter the road
-   * segment the waypoint will be placed on by direction. This is useful for making sure the new
-   * routes of rerouted vehicles continue traveling in their current direction. A request that does
-   * this would provide bearing and radius values for the first waypoint and leave the remaining
-   * values empty. Returns two comma-separated values per waypoint: an angle clockwise from true
-   * north between 0 and 360, and the range of degrees by which the angle can deviate (recommended
-   * value is 45° or 90°), formatted as {angle, degrees}. If provided, the list of bearings must be
-   * the same length as the list of coordinates.
-   * However, you can skip a coordinate and show its position in the list with the ; separator.
-   *
-   * @return a string representing the bearings with the ; separator. Angle and degrees for every
-   * bearing value are comma-separated.
-   */
-  @Nullable
-  public abstract String bearings();
+  public abstract List<String> annotations();
 
   /**
    * Influences the direction in which a route starts from a waypoint. Used to filter the road
@@ -161,11 +126,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a List of list of doubles representing the bearings used in the original request.
    * The first value in the list is the angle, the second one is the degrees.
+   * @see ParseUtils#parseToListOfListOfDoubles(String)
    */
   @Nullable
-  public List<List<Double>> bearingsList() {
-    return ParseUtils.parseToListOfListOfDoubles(bearings());
-  }
+  public abstract List<List<Double>> bearings();
 
 
   /**
@@ -203,7 +167,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * The format of the returned geometry. Allowed values are:
-   * {@link DirectionsCriteria#GEOMETRY_POLYLINE} (default if null, a polyline with a precision of five
+   * {@link DirectionsCriteria#GEOMETRY_POLYLINE} (default, a polyline with a precision of five
    * decimal places), {@link DirectionsCriteria#GEOMETRY_POLYLINE6} (a polyline with a precision
    * of six decimal places).
    *
@@ -228,50 +192,16 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * The maximum distance a coordinate can be moved to snap to the road network in meters. There
-   * must be as many radiuses as there are coordinates in the request, each separated by ";".
+   * must be as many radiuses as there are coordinates in the request.
    * Values can be any number greater than 0 or the string "unlimited".
    * <p>
    * A NoSegment error is returned if no routable road is found within the radius.
    *
-   * @return a string representing the radiuses separated by ";".
-   */
-  @NonNull
-  // todo is this required?
-  public abstract String radiuses();
-
-  /**
-   * The maximum distance a coordinate can be moved to snap to the road network in meters. There
-   * must be as many radiuses as there are coordinates in the request.
-   * Values can be any number greater than 0.
-   * <p>
-   * A NoSegment error is returned if no routable road is found within the radius.
-   *
    * @return a list of radiuses
-   */
-  @NonNull
-  public List<Double> radiusesList() {
-    return ParseUtils.parseToDoubles(radiuses());
-  }
-
-  /**
-   * A semicolon-separated list indicating from which side of the road
-   * to approach a waypoint.
-   * Accepts  {@link DirectionsCriteria#APPROACH_UNRESTRICTED} (default) or
-   * {@link DirectionsCriteria#APPROACH_CURB}.
-   * If set to {@link DirectionsCriteria#APPROACH_UNRESTRICTED}, the route can approach waypoints
-   * from either side of the road.
-   * If set to {@link DirectionsCriteria#APPROACH_CURB}, the route will be returned so that on
-   * arrival, the waypoint will be found on the side that corresponds with the driving_side of the
-   * region in which the returned route is located.
-   * If provided, the list of approaches must be the same length as the list of waypoints.
-   * However, you can skip a coordinate and show its position in the list with the ; separator.
-   * Since the first value will not be evaluated, begin the list with a semicolon.
-   * If the waypoint is within 1 meter of the road, this parameter is ignored.
-   *
-   * @return a string representing approaches for each waypoint
+   * @see ParseUtils#parseToStrings(String)
    */
   @Nullable
-  public abstract String approaches();
+  public abstract List<String> radiuses();
 
   /**
    * Indicates from which side of the road to approach a waypoint.
@@ -288,11 +218,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * If the waypoint is within 1 meter of the road, this parameter is ignored.
    *
    * @return a list of strings representing approaches for each waypoint
+   * @see ParseUtils#parseToStrings(String)
    */
   @Nullable
-  public List<String> approachesList() {
-    return ParseUtils.parseToStrings(approaches());
-  }
+  public abstract List<String> approaches();
 
   /**
    * Whether to return steps and turn-by-turn instructions (true)
@@ -301,9 +230,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * {@link RouteOptions#bannerInstructions()}, {@link RouteOptions#language()},
    * {@link RouteOptions#roundaboutExits()}, {@link RouteOptions#voiceInstructions()},
    * {@link RouteOptions#voiceUnits()}, {@link RouteOptions#waypointNames()},
-   * {@link RouteOptions#waypointNamesList()}, {@link RouteOptions#waypointTargets()},
-   * {@link RouteOptions#waypointTargetsList()}, {@link RouteOptions#waypointIndices()},
-   * {@link RouteOptions#waypointIndicesList()}, {@link RouteOptions#alleyBias()}
+   * {@link RouteOptions#waypointTargets()}, {@link RouteOptions#waypointIndices()},
+   * {@link RouteOptions#alleyBias()}
    *
    * @return true if you'd like step information, false or null otherwise
    */
@@ -375,22 +303,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String voiceUnits();
 
   /**
-   * A semicolon-separated list of custom names for entries in the list of
-   * {@link RouteOptions#coordinates()}, used for the arrival instruction in banners and voice
-   * instructions. Values can be any string, and the total number of all characters cannot exceed
-   * 500. If provided, the list of waypoint_names must be the same length as the list of
-   * coordinates. The first value in the list corresponds to the route origin, not the first
-   * destination.
-   * To leave the origin unnamed, begin the list with a semicolon.
-   * Must be used in conjunction with {@link RouteOptions#steps()}=true.
-   *
-   * @return a string representing names for each waypoint
-   */
-  @SerializedName("waypoint_names")
-  @Nullable
-  public abstract String waypointNames();
-
-  /**
    * A list of custom names for entries in the list of
    * {@link RouteOptions#coordinates()}, used for the arrival instruction in banners and voice
    * instructions. Values can be any string, and the total number of all characters cannot exceed
@@ -401,29 +313,11 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Must be used in conjunction with {@link RouteOptions#steps()}=true.
    *
    * @return a list of strings representing names for each waypoint
+   * @see ParseUtils#parseToStrings(String)
    */
+  @SerializedName("waypoint_names")
   @Nullable
-  public List<String> waypointNamesList() {
-    return ParseUtils.parseToStrings(waypointNames());
-  }
-
-  /**
-   * A semicolon-separated list of coordinate pairs used to specify drop-off
-   * locations that are distinct from the locations specified in coordinates.
-   * If this parameter is provided, the Directions API will compute the side of the street,
-   * left or right, for each target based on the waypoint_targets and the driving direction.
-   * The maneuver.modifier, banner and voice instructions will be updated with the computed
-   * side of street. The number of waypoint targets must be the same as the number of coordinates,
-   * but you can skip a coordinate pair and show its position in the list with the ; separator.
-   * Since the first value will not be evaluated, begin the list with a semicolon.
-   * <p>
-   * Must be used with {@link RouteOptions#steps()}=true.
-   *
-   * @return a list of Points representing coordinate pairs for drop-off locations
-   */
-  @SerializedName("waypoint_targets")
-  @Nullable
-  public abstract String waypointTargets();
+  public abstract List<String> waypointNames();
 
   /**
    * A list of points used to specify drop-off
@@ -437,41 +331,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Must be used with {@link RouteOptions#steps()}=true.
    *
    * @return a list of Points representing coordinate pairs for drop-off locations
+   * @see ParseUtils#parseToPoints(String)
    */
   @Nullable
-  public List<Point> waypointTargetsList() {
-    return ParseUtils.parseToPoints(waypointTargets());
-  }
-
-  /**
-   * A semicolon-separated list indicating which input coordinates
-   * should be treated as waypoints.
-   * <p>
-   * Waypoints form the beginning and end of each leg in the returned route and correspond to
-   * the depart and arrive steps.
-   * If a list of waypoints is not provided, all coordinates are treated as waypoints.
-   * Each item in the list must be the zero-based index of an input coordinate,
-   * and the list must include 0 (the index of the first coordinate)
-   * and the index of the last coordinate.
-   * The waypoints parameter can be used to guide the path of the route without
-   * introducing additional legs and arrive/depart instructions.
-   * <p>
-   * For example, if a coordinates list has 3 points,
-   * origin, some middle point, and destination, we can have below combinations:
-   * <p>
-   * - waypointIndices are null, the route will have 2 legs
-   * <p>
-   * - waypointIndices are "0;1;2", the route will have 2 legs
-   * <p>
-   * - waypointIndices are "0;2", the route will have only one leg that goes via the middle point
-   * <p>
-   * Must be used with {@link RouteOptions#steps()}=true.
-   *
-   * @return a string representing indices to be used as waypoints
-   */
-  @SerializedName("waypoints")
-  @Nullable
-  public abstract String waypointIndices();
+  public abstract List<Point> waypointTargets();
 
   /**
    * A list indicating which input coordinates should be treated as waypoints.
@@ -497,11 +360,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Must be used with {@link RouteOptions#steps()}=true.
    *
    * @return a List of Integers representing indices to be used as waypoints
+   * @see ParseUtils#parseToIntegers(String)
    */
   @Nullable
-  public List<Integer> waypointIndicesList() {
-    return ParseUtils.parseToIntegers(waypointIndices());
-  }
+  public abstract List<Integer> waypointIndices();
 
   /**
    * A scale from -1 to 1, where -1 biases the route against alleys
@@ -572,24 +434,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String departAt();
 
   /**
-   * A semicolon-separated list of booleans affecting snapping of waypoint locations to road
-   * segments.
-   * If true, road segments closed due to live-traffic closures will be considered for snapping.
-   * If false, they will not be considered for snapping.
-   * If provided, the number of snappingClosures must be the same as the number of
-   * coordinates.
-   * However, you can skip a coordinate and show its position in the list with the ; separator.
-   * If null, this parameter defaults to false.
-   * <p>
-   * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
-   *
-   * @return a String representing a list of booleans
-   */
-  @SerializedName("snapping_include_closures")
-  @Nullable
-  public abstract String snappingIncludeClosures();
-
-  /**
    * A list of booleans affecting snapping of waypoint locations to road segments.
    * If true, road segments closed due to live-traffic closures will be considered for snapping.
    * If false, they will not be considered for snapping.
@@ -601,11 +445,20 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
    *
    * @return a list of booleans
+   * @see ParseUtils#parseToBooleans(String)
    */
   @Nullable
-  public List<Boolean> snappingIncludeClosuresList() {
-    return ParseUtils.parseToBooleans(snappingIncludeClosures());
-  }
+  public abstract List<Boolean> snappingIncludeClosures();
+
+  /**
+   * Whether the routes should be refreshable via the directions refresh API.
+   * <p>
+   * If false, the refresh requests will fail. Defaults to false if null.
+   *
+   * @return whether the routes should be refreshable
+   */
+  @Nullable
+  public abstract Boolean enableRefresh();
 
   /**
    * A valid Mapbox access token used to making the request.
@@ -724,27 +577,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder alternatives(@Nullable Boolean alternatives);
 
     /**
-     * A comma-separated list of annotations. Defines whether to return additional metadata along the
-     * route. Possible values are:
-     * {@link DirectionsCriteria#ANNOTATION_DISTANCE}
-     * {@link DirectionsCriteria#ANNOTATION_DURATION}
-     * {@link DirectionsCriteria#ANNOTATION_SPEED}
-     * {@link DirectionsCriteria#ANNOTATION_CONGESTION}
-     * {@link DirectionsCriteria#ANNOTATION_CONGESTION_NUMERIC}
-     * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
-     * {@link DirectionsCriteria#ANNOTATION_CLOSURE}
-     * See the {@link RouteLeg} object for more details on what is included with annotations.
-     * <p>
-     * Must be used in conjunction with {@link DirectionsCriteria#OVERVIEW_FULL}
-     * in {@link RouteOptions#overview()}.
-     *
-     * @param annotations a string containing requested annotations
-     * @return this builder for chaining options together
-     */
-    @NonNull
-    public abstract Builder annotations(@Nullable String annotations);
-
-    /**
      * A list of annotations. Defines whether to return additional metadata along the
      * route. Possible values are:
      * {@link DirectionsCriteria#ANNOTATION_DISTANCE}
@@ -761,33 +593,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *
      * @param annotations a list of annotations that were used during the request
      * @return this builder for chaining options together
+     * @see ParseUtils#parseToStrings(String, String)
      */
     @NonNull
-    public Builder annotationsList(@Nullable List<String> annotations) {
-      String result = FormatUtils.join(",", annotations);
-      if (result != null) {
-        annotations(result);
-      }
-      return this;
-    }
-
-    /**
-     * Influences the direction in which a route starts from a waypoint. Used to filter the road
-     * segment the waypoint will be placed on by direction. This is useful for making sure the new
-     * routes of rerouted vehicles continue traveling in their current direction. A request that does
-     * this would provide bearing and radius values for the first waypoint and leave the remaining
-     * values empty. Returns two comma-separated values per waypoint: an angle clockwise from true
-     * north between 0 and 360, and the range of degrees by which the angle can deviate (recommended
-     * value is 45° or 90°), formatted as {angle, degrees}. If provided, the list of bearings must be
-     * the same length as the list of coordinates.
-     * However, you can skip a coordinate and show its position in the list with the ; separator.
-     *
-     * @param bearings a string representing the bearings with the ; separator. Angle and degrees for every
-     *                 bearing value are comma-separated.
-     * @return this builder for chaining options together
-     */
-    @NonNull
-    public abstract Builder bearings(@Nullable String bearings);
+    public abstract Builder annotations(@Nullable List<String> annotations);
 
     /**
      * Influences the direction in which a route starts from a waypoint. Used to filter the road
@@ -803,15 +612,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param bearings a List of list of doubles representing the bearings used in the original request.
      *                 The first value in the list is the angle, the second one is the degrees.
      * @return this builder for chaining options together
+     * @see ParseUtils#parseToListOfListOfDoubles(String)
      */
     @NonNull
-    public Builder bearingsList(@Nullable List<List<Double>> bearings) {
-      String result = FormatUtils.formatBearings(bearings);
-      if (result != null) {
-        bearings(result);
-      }
-      return this;
-    }
+    public abstract Builder bearings(@Nullable List<List<Double>> bearings);
 
     /**
      * The allowed direction of travel when departing intermediate waypoints. If true, the route
@@ -849,7 +653,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
     /**
      * The format of the returned geometry. Allowed values are:
-     * {@link DirectionsCriteria#GEOMETRY_POLYLINE} (default if null, a polyline with a precision of five
+     * {@link DirectionsCriteria#GEOMETRY_POLYLINE} (default, a polyline with a precision of five
      * decimal places), {@link DirectionsCriteria#GEOMETRY_POLYLINE6} (a polyline with a precision
      * of six decimal places).
      *
@@ -877,56 +681,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
     /**
      * The maximum distance a coordinate can be moved to snap to the road network in meters. There
-     * must be as many radiuses as there are coordinates in the request, each separated by ";".
-     * Values can be any number greater than 0 or the string "unlimited".
-     * <p>
-     * A NoSegment error is returned if no routable road is found within the radius.
-     *
-     * @param radiuses a string representing the radiuses separated by ";".
-     * @return this builder for chaining options together
-     */
-    @NonNull
-    public abstract Builder radiuses(@Nullable String radiuses);
-
-    /**
-     * The maximum distance a coordinate can be moved to snap to the road network in meters. There
      * must be as many radiuses as there are coordinates in the request.
-     * Values can be any number greater than 0.
+     * Values can be any number greater than 0 or the string "unlimited".
      * <p>
      * A NoSegment error is returned if no routable road is found within the radius.
      *
      * @param radiuses a list of radiuses
      * @return this builder for chaining options together
+     * @see ParseUtils#parseToStrings(String)
      */
     @NonNull
-    public Builder radiusesList(@Nullable List<Double> radiuses) {
-      String result = FormatUtils.formatRadiuses(radiuses);
-      if (result != null) {
-        radiuses(result);
-      }
-      return this;
-    }
-
-    /**
-     * A semicolon-separated list indicating from which side of the road
-     * to approach a waypoint.
-     * Accepts  {@link DirectionsCriteria#APPROACH_UNRESTRICTED} (default) or
-     * {@link DirectionsCriteria#APPROACH_CURB}.
-     * If set to {@link DirectionsCriteria#APPROACH_UNRESTRICTED}, the route can approach waypoints
-     * from either side of the road.
-     * If set to {@link DirectionsCriteria#APPROACH_CURB}, the route will be returned so that on
-     * arrival, the waypoint will be found on the side that corresponds with the driving_side of the
-     * region in which the returned route is located.
-     * If provided, the list of approaches must be the same length as the list of waypoints.
-     * However, you can skip a coordinate and show its position in the list with the ; separator.
-     * Since the first value will not be evaluated, begin the list with a semicolon.
-     * If the waypoint is within 1 meter of the road, this parameter is ignored.
-     *
-     * @param approaches a string representing approaches for each waypoint
-     * @return this builder for chaining options together
-     */
-    @NonNull
-    public abstract Builder approaches(@Nullable String approaches);
+    public abstract Builder radiuses(@Nullable List<String> radiuses);
 
     /**
      * Indicates from which side of the road to approach a waypoint.
@@ -944,15 +709,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *
      * @param approaches a list of strings representing approaches for each waypoint
      * @return this builder for chaining options together
+     * @see ParseUtils#parseToStrings(String)
      */
     @NonNull
-    public Builder approachesList(@Nullable List<String> approaches) {
-      String result = FormatUtils.formatApproaches(approaches);
-      if (result != null) {
-        approaches(result);
-      }
-      return this;
-    }
+    public abstract Builder approaches(@Nullable List<String> approaches);
 
     /**
      * Whether to return steps and turn-by-turn instructions (true)
@@ -961,9 +721,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * {@link RouteOptions#bannerInstructions()}, {@link RouteOptions#language()},
      * {@link RouteOptions#roundaboutExits()}, {@link RouteOptions#voiceInstructions()},
      * {@link RouteOptions#voiceUnits()}, {@link RouteOptions#waypointNames()},
-     * {@link RouteOptions#waypointNamesList()}, {@link RouteOptions#waypointTargets()},
-     * {@link RouteOptions#waypointTargetsList()}, {@link RouteOptions#waypointIndices()},
-     * {@link RouteOptions#waypointIndicesList()}, {@link RouteOptions#alleyBias()}
+     * {@link RouteOptions#waypointTargets()}, {@link RouteOptions#waypointIndices()},
+     * {@link RouteOptions#alleyBias()}
      *
      * @param steps true if you'd like step information, false or null otherwise
      * @return this builder for chaining options together
@@ -1036,22 +795,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder voiceUnits(@Nullable String voiceUnits);
 
     /**
-     * A semicolon-separated list of custom names for entries in the list of
-     * {@link RouteOptions#coordinates()}, used for the arrival instruction in banners and voice
-     * instructions. Values can be any string, and the total number of all characters cannot exceed
-     * 500. If provided, the list of waypoint_names must be the same length as the list of
-     * coordinates. The first value in the list corresponds to the route origin, not the first
-     * destination.
-     * To leave the origin unnamed, begin the list with a semicolon.
-     * Must be used in conjunction with {@link RouteOptions#steps()}=true.
-     *
-     * @param waypointNames a string representing names for each waypoint
-     * @return this builder for chaining options together
-     */
-    @NonNull
-    public abstract Builder waypointNames(@Nullable String waypointNames);
-
-    /**
      * A list of custom names for entries in the list of
      * {@link RouteOptions#coordinates()}, used for the arrival instruction in banners and voice
      * instructions. Values can be any string, and the total number of all characters cannot exceed
@@ -1063,33 +806,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *
      * @param waypointNames a list of strings representing names for each waypoint
      * @return this builder for chaining options together
+     * @see ParseUtils#parseToStrings(String)
      */
     @NonNull
-    public Builder waypointNamesList(@Nullable List<String> waypointNames) {
-      String result = FormatUtils.formatWaypointNames(waypointNames);
-      if (result != null) {
-        waypointNames(result);
-      }
-      return this;
-    }
-
-    /**
-     * A semicolon-separated list of coordinate pairs used to specify drop-off
-     * locations that are distinct from the locations specified in coordinates.
-     * If this parameter is provided, the Directions API will compute the side of the street,
-     * left or right, for each target based on the waypoint_targets and the driving direction.
-     * The maneuver.modifier, banner and voice instructions will be updated with the computed
-     * side of street. The number of waypoint targets must be the same as the number of coordinates,
-     * but you can skip a coordinate pair and show its position in the list with the ; separator.
-     * Since the first value will not be evaluated, begin the list with a semicolon.
-     * <p>
-     * Must be used with {@link RouteOptions#steps()}=true.
-     *
-     * @param waypointTargets a list of Points representing coordinate pairs for drop-off locations
-     * @return this builder for chaining options together
-     */
-    @NonNull
-    public abstract Builder waypointTargets(@Nullable String waypointTargets);
+    public abstract Builder waypointNames(@Nullable List<String> waypointNames);
 
     /**
      * A list of points used to specify drop-off
@@ -1104,42 +824,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *
      * @param waypointTargets a list of Points representing coordinate pairs for drop-off locations
      * @return this builder for chaining options together
+     * @see ParseUtils#parseToPoints(String)
      */
     @NonNull
-    public Builder waypointTargetsList(@Nullable List<Point> waypointTargets) {
-      waypointTargets(FormatUtils.formatPointsList(waypointTargets));
-      return this;
-    }
-
-    /**
-     * A semicolon-separated list indicating which input coordinates
-     * should be treated as waypoints.
-     * <p>
-     * Waypoints form the beginning and end of each leg in the returned route and correspond to
-     * the depart and arrive steps.
-     * If a list of waypoints is not provided, all coordinates are treated as waypoints.
-     * Each item in the list must be the zero-based index of an input coordinate,
-     * and the list must include 0 (the index of the first coordinate)
-     * and the index of the last coordinate.
-     * The waypoints parameter can be used to guide the path of the route without
-     * introducing additional legs and arrive/depart instructions.
-     * <p>
-     * For example, if a coordinates list has 3 points,
-     * origin, some middle point, and destination, we can have below combinations:
-     * <p>
-     * - waypointIndices are null, the route will have 2 legs
-     * <p>
-     * - waypointIndices are "0;1;2", the route will have 2 legs
-     * <p>
-     * - waypointIndices are "0;2", the route will have only one leg that goes via the middle point
-     * <p>
-     * Must be used with {@link RouteOptions#steps()}=true.
-     *
-     * @param waypointIndices a string representing indices to be used as waypoints
-     * @return this builder for chaining options together
-     */
-    @NonNull
-    public abstract Builder waypointIndices(@Nullable String waypointIndices);
+    public abstract Builder waypointTargets(@Nullable List<Point> waypointTargets);
 
     /**
      * A list indicating which input coordinates should be treated as waypoints.
@@ -1166,15 +854,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *
      * @param indices a List of Integers representing indices to be used as waypoints
      * @return this builder for chaining options together
+     * @see ParseUtils#parseToIntegers(String)
      */
     @NonNull
-    public Builder waypointIndicesList(@Nullable List<Integer> indices) {
-      String result = FormatUtils.join(";", indices);
-      if (result != null) {
-        waypointIndices(result);
-      }
-      return this;
-    }
+    public abstract Builder waypointIndices(@Nullable List<Integer> indices);
 
     /**
      * A scale from -1 to 1, where -1 biases the route against alleys
@@ -1252,24 +935,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder departAt(@Nullable String departAt);
 
     /**
-     * A semicolon-separated list of booleans affecting snapping of waypoint locations to road
-     * segments.
-     * If true, road segments closed due to live-traffic closures will be considered for snapping.
-     * If false, they will not be considered for snapping.
-     * If provided, the number of snappingClosures must be the same as the number of
-     * coordinates.
-     * However, you can skip a coordinate and show its position in the list with the ; separator.
-     * If null, this parameter defaults to false.
-     * <p>
-     * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
-     *
-     * @param snappingClosures a String representing a list of booleans
-     * @return this builder for chaining options together
-     */
-    @NonNull
-    public abstract Builder snappingIncludeClosures(@Nullable String snappingClosures);
-
-    /**
      * A list of booleans affecting snapping of waypoint locations to road segments.
      * If true, road segments closed due to live-traffic closures will be considered for snapping.
      * If false, they will not be considered for snapping.
@@ -1282,17 +947,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *
      * @param snappingClosures a list of booleans
      * @return this builder for chaining options together
+     * @see ParseUtils#parseToBooleans(String)
      */
     @NonNull
-    public Builder snappingIncludeClosuresList(@Nullable List<Boolean> snappingClosures) {
-      String result = FormatUtils.join(";", snappingClosures);
-      if (result != null) {
-        snappingIncludeClosures(result);
-      } else {
-        snappingIncludeClosures("");
-      }
-      return this;
-    }
+    public abstract Builder snappingIncludeClosures(@Nullable List<Boolean> snappingClosures);
 
     /**
      * A valid Mapbox access token used to making the request.
@@ -1303,6 +961,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public abstract Builder accessToken(@NonNull String accessToken);
 
+    /**
+     * Whether the routes should be refreshable via the directions refresh API.
+     * <p>
+     * If false, the refresh requests will fail. Defaults to false if null.
+     *
+     * @param enableRefresh whether the routes should be refreshable
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder enableRefresh(@Nullable Boolean enableRefresh);
+
     @NonNull
     public abstract Builder user(@NonNull String user);
 
@@ -1310,10 +979,86 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder requestUuid(@Nullable String requestUuid);
 
     /**
-     * Builds a new instance of the {@link RouteOptions} object.
-     *
-     * @return a new {@link RouteOptions} instance
+     * Package private used to build the object and verify.
      */
-    public abstract RouteOptions build();
+    @NonNull
+    abstract RouteOptions autoBuild();
+
+    /**
+     * This uses the provided parameters set using the {@link Builder} and first checks that all
+     * values are valid, and creates a new {@link RouteOptions} object with the values provided.
+     *
+     * @return a new instance of {@link RouteOptions}
+     */
+    @NonNull
+    public RouteOptions build() {
+      RouteOptions routeOptions = autoBuild();
+
+      List<Point> coordinates = routeOptions.coordinates();
+      if (coordinates.size() < 2) {
+        throw new RuntimeException(
+          "An origin and destination are required before making the directions API request."
+        );
+      }
+
+      List<Integer> waypointIndices = routeOptions.waypointIndices();
+      if (waypointIndices != null) {
+        if (waypointIndices.size() < 2) {
+          throw new RuntimeException(
+            "Waypoints indices must be a list of at least two indexes, origin and destination."
+          );
+        }
+        if (waypointIndices.get(0) != 0 || waypointIndices.get(waypointIndices.size() - 1)
+          != coordinates.size() - 1) {
+          throw new RuntimeException(
+            "First and last waypoints indices must match the origin and final destination."
+          );
+        }
+        for (int i = 1; i < waypointIndices.size() - 1; i++) {
+          if (waypointIndices.get(i) < 0 ||
+            waypointIndices.get(i) >= coordinates.size()) {
+            throw new RuntimeException(
+              "Waypoints index out of bounds (no corresponding coordinate).");
+          }
+        }
+      }
+
+      List<Point> waypointTargets = routeOptions.waypointTargets();
+      if (waypointTargets != null && waypointTargets.size() != coordinates.size()) {
+        throw new RuntimeException(
+          "Number of waypoint targets must match the number of coordinates provided."
+        );
+      }
+
+      List<String> approaches = routeOptions.approaches();
+      if (approaches != null && approaches.size() != coordinates.size()) {
+        throw new RuntimeException(
+          "Number of approach elements must match number of coordinates provided."
+        );
+      }
+
+      List<Boolean> snappingIncludeClosures = routeOptions.snappingIncludeClosures();
+      if (snappingIncludeClosures != null && snappingIncludeClosures.size() != coordinates.size()) {
+        throw new RuntimeException(
+          "Number of snapping include closures elements must match number of coordinates provided."
+        );
+      }
+
+      List<List<Double>> bearings = routeOptions.bearings();
+      if (bearings != null && bearings.size() != coordinates.size()) {
+        throw new RuntimeException(
+          "Number of bearings elements must match number of coordinates provided."
+        );
+      }
+
+      List<String> waypointNames = routeOptions.waypointNames();
+      if (waypointNames != null && waypointNames.size() != coordinates.size()) {
+        throw new RuntimeException(
+          "Number of waypoint names elements must match number of coordinates provided."
+        );
+      }
+
+      return routeOptions;
+    }
   }
 }

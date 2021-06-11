@@ -20,6 +20,11 @@ public final class DirectionsCriteria {
   public static final String PROFILE_DEFAULT_USER = "mapbox";
 
   /**
+   * Base URL for all API calls.
+   */
+  public static final String BASE_API_URL = "https://api.mapbox.com";
+
+  /**
    * For car and motorcycle routing. This profile factors in current and historic traffic
    * conditions to avoid slowdowns.
    *

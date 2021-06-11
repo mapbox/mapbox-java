@@ -117,8 +117,6 @@ public class MapboxDirectionsTest extends TestUtils {
     server.shutdown();
   }
 
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void sanity() throws Exception {
@@ -130,33 +128,6 @@ public class MapboxDirectionsTest extends TestUtils {
     Assert.assertNotNull(mapboxDirections);
   }
 
-  @Test
-  public void build_noAccessTokenExceptionThrown() throws Exception {
-    thrown.expect(IllegalStateException.class);
-    thrown.expectMessage("Missing required properties: accessToken");
-    MapboxDirections.builder()
-      .origin(Point.fromLngLat(1.0, 1.0))
-      .destination(Point.fromLngLat(2.0, 2.0))
-      .build();
-  }
-
-  @Test
-  public void build_invalidAccessTokenExceptionThrown() throws ServicesException {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage(StringStartsWith.startsWith("Using Mapbox Services requires setting a valid access token"));
-    MapboxDirections.builder()
-      .accessToken("")
-      .origin(Point.fromLngLat(1.0, 1.0))
-      .destination(Point.fromLngLat(2.0, 2.0))
-      .build();
-  }
-
-  @Test
-  public void build_noCoordinatesHaveBeenProvided() throws Exception {
-    thrown.expect(ServicesException.class);
-    thrown.expectMessage("An origin and destination are required before making the");
-    MapboxDirections.builder().accessToken(ACCESS_TOKEN).build().executeCall();
-  }
 
   @Test
   public void build_coordinatesListCreatedInCorrectOrder() throws Exception {

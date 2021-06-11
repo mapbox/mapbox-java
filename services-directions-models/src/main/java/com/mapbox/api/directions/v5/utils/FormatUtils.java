@@ -46,7 +46,7 @@ public class FormatUtils {
   @Nullable
   public static String join(@NonNull CharSequence delimiter, @Nullable List<?> tokens,
                             boolean removeTrailingNulls) {
-    if (tokens == null || tokens.size() < 1) {
+    if (tokens == null) {
       return null;
     }
 
@@ -93,32 +93,6 @@ public class FormatUtils {
   }
 
   /**
-   * Used in various APIs to format the user provided radiuses to a String matching the APIs
-   * format.
-   *
-   * @param radiuses a list of doubles represents the radius values
-   * @return a String ready for being passed into the Retrofit call
-   */
-  @Nullable
-  public static String formatRadiuses(@Nullable List<Double> radiuses) {
-    if (radiuses == null || radiuses.size() == 0) {
-      return null;
-    }
-
-    List<String> radiusesToJoin = new ArrayList<>();
-    for (Double radius : radiuses) {
-      if (radius == null) {
-        radiusesToJoin.add(null);
-      } else if (radius == Double.POSITIVE_INFINITY) {
-        radiusesToJoin.add("unlimited");
-      } else {
-        radiusesToJoin.add(String.format(Locale.US, "%s", formatCoordinate(radius)));
-      }
-    }
-    return join(";", radiusesToJoin);
-  }
-
-  /**
    * Formats the bearing variables from the raw values to a string which can than be used for the
    * request URL.
    *
@@ -127,7 +101,7 @@ public class FormatUtils {
    */
   @Nullable
   public static String formatBearings(@Nullable List<List<Double>> bearings) {
-    if (bearings == null || bearings.isEmpty()) {
+    if (bearings == null) {
       return null;
     }
 
@@ -192,14 +166,15 @@ public class FormatUtils {
    */
   @Nullable
   public static String formatApproaches(@Nullable List<String> approaches) {
-    if (approaches == null || approaches.isEmpty()) {
+    if (approaches == null) {
       return null;
     }
 
     for (String approach : approaches) {
-      if (approach != null && !approach.equals("unrestricted") && !approach.equals("curb")
-        && !approach.isEmpty()) {
-        return null;
+      if (approach != null && !approach.equals("unrestricted") && !approach.equals("curb")) {
+        throw new RuntimeException(
+          "Approach should be one of unrestricted or curb"
+        );
       }
     }
     return join(";", approaches);
@@ -246,7 +221,7 @@ public class FormatUtils {
    */
   @Nullable
   public static String formatPointsList(@Nullable List<Point> points) {
-    if (points == null || points.isEmpty()) {
+    if (points == null) {
       return null;
     }
 

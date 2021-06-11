@@ -2,14 +2,17 @@ package com.mapbox.samples;
 
 import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.directionsrefresh.v1.MapboxDirectionsRefresh;
 import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
 import com.mapbox.geojson.Point;
 import com.mapbox.sample.BuildConfig;
 
 import java.io.IOException;
-
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,20 +40,25 @@ public class BasicDirectionsRefresh {
   }
 
   private static MapboxDirections mapboxDirections(Boolean addWaypoint) {
-    MapboxDirections.Builder directions = MapboxDirections.builder()
+    MapboxDirections.Builder builder = MapboxDirections.builder();
+
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-95.6332, 29.7890));
+    if (addWaypoint) {
+      coordinates.add(Point.fromLngLat(-95.5591, 29.7376));
+    }
+    coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
+    RouteOptions routeOptions = RouteOptions.builder()
       .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
+      .coordinates(coordinates)
       .enableRefresh(true)
-      .origin(Point.fromLngLat(-95.6332, 29.7890))
-      .destination(Point.fromLngLat(-95.3591, 29.7576))
       .overview(OVERVIEW_FULL)
       .profile(PROFILE_DRIVING_TRAFFIC)
-      .annotations(Arrays.asList(ANNOTATION_CONGESTION,ANNOTATION_MAXSPEED));
+      .annotations(Arrays.asList(ANNOTATION_CONGESTION, ANNOTATION_MAXSPEED))
+      .build();
+    builder.routeOptions(routeOptions);
 
-    if (addWaypoint) {
-      directions.addWaypoint(Point.fromLngLat(-95.5591, 29.7376));
-    }
-
-    return directions.build();
+    return builder.build();
   }
 
   private static void simpleMapboxDirectionsRefreshRequest(String requestId, Integer legIndex) {
