@@ -1,7 +1,8 @@
 package com.mapbox.api.directions.v5.models;
 
 import com.google.common.collect.Lists;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

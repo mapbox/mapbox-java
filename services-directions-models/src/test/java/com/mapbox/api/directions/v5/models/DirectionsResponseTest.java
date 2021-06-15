@@ -3,7 +3,7 @@ package com.mapbox.api.directions.v5.models;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;

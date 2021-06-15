@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.core.exceptions.ServicesException;
 

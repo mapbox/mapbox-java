@@ -1,6 +1,6 @@
 package com.mapbox.api.directionsrefresh.v1.models;
 
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;

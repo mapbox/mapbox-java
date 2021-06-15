@@ -1,7 +1,7 @@
 package com.mapbox.api.directionsrefresh.v1;
 
 import com.mapbox.api.directionsrefresh.v1.models.DirectionsRefreshResponse;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 
 import org.hamcrest.junit.ExpectedException;
 import org.junit.After;

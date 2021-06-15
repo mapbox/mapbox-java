@@ -3,7 +3,7 @@ package com.mapbox.api.directionsrefresh.v1.models;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.api.directions.v5.models.MaxSpeed;
 import com.mapbox.api.directions.v5.models.SpeedLimit;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

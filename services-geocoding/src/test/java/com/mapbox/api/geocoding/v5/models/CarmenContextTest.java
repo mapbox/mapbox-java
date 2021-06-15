@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockWebServer;
 import org.hamcrest.Matchers;

@@ -3,7 +3,9 @@ package com.mapbox.api.directions.v5.utils;
 import com.mapbox.geojson.Point;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,9 @@ import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
 
 public class FormatUtilsTest {
+
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void join_1() {
@@ -149,7 +154,47 @@ public class FormatUtilsTest {
     targets.add(Point.fromLngLat(1.55, 8.99));
     String expected = ";;5.55,7.77;1.22,3.44;;1.55,8.99";
 
-    String actual = FormatUtils.formatPointsList(targets);
+    String actual = FormatUtils.formatWaypointTargets(targets);
+
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void formatRadiuses() {
+    List<String> radiuses = new ArrayList<>();
+    radiuses.add("1.0");
+    radiuses.add("unlimited");
+    radiuses.add("3.1");
+    String expected = "1.0;unlimited;3.1";
+
+    String actual = FormatUtils.formatRadiuses(radiuses);
+
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void formatRadiuses_exception() {
+    thrown.expect(RuntimeException.class);
+    thrown.expectMessage(
+      "Radiuses need to be greater than 0 or a string \"unlimited\"."
+    );
+    List<String> radiuses = new ArrayList<>();
+    radiuses.add("1.0");
+    radiuses.add("unlimited");
+    radiuses.add("-3.1");
+
+    FormatUtils.formatRadiuses(radiuses);
+  }
+
+  @Test
+  public void formatAnnotations() {
+    List<String> annotations = new ArrayList<>();
+    annotations.add("maxspeed");
+    annotations.add("congestion");
+    annotations.add("closure");
+    String expected = "maxspeed,congestion,closure";
+
+    String actual = FormatUtils.formatAnnotations(annotations);
 
     Assert.assertEquals(expected, actual);
   }

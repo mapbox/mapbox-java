@@ -1,3 +1,4 @@
+/*
 package com.mapbox.api.directions.v5;
 
 import com.google.gson.Gson;
@@ -10,7 +11,7 @@ import com.mapbox.api.directions.v5.models.Incident;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
 import java.io.IOException;
@@ -1519,3 +1520,4 @@ public class MapboxDirectionsTest extends TestUtils {
     return lat - 90;
   }
 }
+*/

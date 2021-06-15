@@ -1,6 +1,6 @@
 package com.mapbox.api.isochrone;
 
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.Dispatcher;

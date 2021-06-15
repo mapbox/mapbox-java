@@ -1,6 +1,6 @@
 package com.mapbox.api.tilequery;
 
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
 

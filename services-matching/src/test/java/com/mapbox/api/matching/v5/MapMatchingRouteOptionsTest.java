@@ -4,7 +4,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.matching.v5.models.MapMatchingMatching;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Point;
 

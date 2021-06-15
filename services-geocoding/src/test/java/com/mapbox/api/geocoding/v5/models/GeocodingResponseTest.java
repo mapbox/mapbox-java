@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 
 import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import org.junit.Test;
 import retrofit2.Response;
 

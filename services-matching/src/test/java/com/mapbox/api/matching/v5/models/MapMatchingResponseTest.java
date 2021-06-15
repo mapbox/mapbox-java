@@ -1,7 +1,7 @@
 package com.mapbox.api.matching.v5.models;
 
 import com.mapbox.api.matching.v5.MapboxMapMatching;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.geojson.Point;
 
 import org.junit.After;

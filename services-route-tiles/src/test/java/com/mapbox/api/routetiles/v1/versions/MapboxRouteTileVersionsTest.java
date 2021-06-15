@@ -1,7 +1,7 @@
 package com.mapbox.api.routetiles.v1.versions;
 
 import com.mapbox.api.routetiles.v1.versions.models.RouteTileVersionsResponse;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 
 import org.junit.After;
 import org.junit.Assert;

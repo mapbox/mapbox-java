@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation;
 import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.core.utils.ColorUtils;
 import com.mapbox.core.utils.TextUtils;

@@ -1,6 +1,6 @@
 package com.mapbox.api.routetiles.v1;
 
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.geojson.BoundingBox;
 
 import org.junit.After;

@@ -1,7 +1,7 @@
 package com.mapbox.api.matrix.v1;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.geojson.Point;
 import com.mapbox.api.matrix.v1.models.MatrixResponse;

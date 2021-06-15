@@ -2,7 +2,7 @@ package com.mapbox.core.utils;
 
 import static org.junit.Assert.assertTrue;
 
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 
 import org.junit.Assert;
 import org.junit.Test;

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNotNull;
 import com.google.gson.JsonObject;
 import com.mapbox.api.geocoding.v5.GeocodingTestUtils;
 import com.mapbox.api.geocoding.v5.MapboxGeocoding;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.geojson.CoordinateContainer;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;

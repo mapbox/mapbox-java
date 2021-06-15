@@ -193,7 +193,7 @@ public abstract class MapboxMapMatching extends
   @NonNull
   abstract String coordinates();
 
-  @Nullable
+  @NonNull
   abstract String geometries();
 
   @Nullable
@@ -352,7 +352,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 2.0.0
      */
-    public abstract Builder geometries(@Nullable @GeometriesCriteria String geometries);
+    public abstract Builder geometries(@NonNull @GeometriesCriteria String geometries);
 
     /**
      * Optionally, set the maximum distance in meters that each coordinate is allowed to move when
@@ -738,8 +738,8 @@ public abstract class MapboxMapMatching extends
       List<String> coordinatesFormatted = new ArrayList<>();
       for (Point point : coordinates) {
         coordinatesFormatted.add(String.format(Locale.US, "%s,%s",
-          FormatUtils.formatCoordinate(point.longitude()),
-          FormatUtils.formatCoordinate(point.latitude())));
+          FormatUtils.formatDouble(point.longitude()),
+          FormatUtils.formatDouble(point.latitude())));
       }
 
       return TextUtils.join(";", coordinatesFormatted.toArray());

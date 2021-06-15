@@ -3,6 +3,7 @@ package com.mapbox.api.directions.v5.utils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.geojson.Point;
 
 import java.text.DecimalFormat;
@@ -30,7 +31,7 @@ public class FormatUtils {
    * @return {@link String}
    */
   @Nullable
-  public static String join(@NonNull CharSequence delimiter, @Nullable List<?> tokens) {
+  static String join(@NonNull CharSequence delimiter, @Nullable List<?> tokens) {
     return join(delimiter, tokens, false);
   }
 
@@ -44,8 +45,8 @@ public class FormatUtils {
    * @return {@link String}
    */
   @Nullable
-  public static String join(@NonNull CharSequence delimiter, @Nullable List<?> tokens,
-                            boolean removeTrailingNulls) {
+  static String join(@NonNull CharSequence delimiter, @Nullable List<?> tokens,
+                     boolean removeTrailingNulls) {
     if (tokens == null) {
       return null;
     }
@@ -79,13 +80,13 @@ public class FormatUtils {
   }
 
   /**
-   * Useful to remove any trailing zeros and prevent a coordinate being over 7 significant figures.
+   * Useful to remove any trailing zeros and prevent a double being over 7 significant figures.
    *
    * @param coordinate a double value representing a coordinate.
    * @return a formatted string.
    */
   @NonNull
-  public static String formatCoordinate(double coordinate) {
+  public static String formatDouble(double coordinate) {
     DecimalFormat decimalFormat = new DecimalFormat("0.######",
       new DecimalFormatSymbols(Locale.US));
     return String.format(Locale.US, "%s",
@@ -93,8 +94,7 @@ public class FormatUtils {
   }
 
   /**
-   * Formats the bearing variables from the raw values to a string which can than be used for the
-   * request URL.
+   * Formats the bearing variables from the raw values to a string ready for API consumption.
    *
    * @param bearings a List of list of doubles representing bearing values
    * @return a string with the bearing values
@@ -124,8 +124,8 @@ public class FormatUtils {
           }
 
           bearingsToJoin.add(String.format(Locale.US, "%s,%s",
-            formatCoordinate(angle),
-            formatCoordinate(tolerance)));
+            formatDouble(angle),
+            formatDouble(tolerance)));
         }
       }
     }
@@ -133,7 +133,7 @@ public class FormatUtils {
   }
 
   /**
-   * Converts the list of integer arrays to a string ready for API consumption.
+   * Converts the list of distributions to a string ready for API consumption.
    *
    * @param distributions the list of integer arrays representing the distribution
    * @return a string with the distribution values
@@ -150,8 +150,8 @@ public class FormatUtils {
         distributionsToJoin.add(null);
       } else {
         distributionsToJoin.add(String.format(Locale.US, "%s,%s",
-          formatCoordinate(array[0]),
-          formatCoordinate(array[1])));
+          formatDouble(array[0]),
+          formatDouble(array[1])));
       }
     }
     return join(";", distributionsToJoin);
@@ -196,7 +196,7 @@ public class FormatUtils {
   }
 
   /**
-   * Converts a list of Points to String.
+   * Converts a list of coordinates to a string ready for API consumption.
    *
    * @param coordinates a list of coordinates.
    * @return a formatted string.
@@ -206,8 +206,8 @@ public class FormatUtils {
     List<String> coordinatesToJoin = new ArrayList<>();
     for (Point point : coordinates) {
       coordinatesToJoin.add(String.format(Locale.US, "%s,%s",
-        formatCoordinate(point.longitude()),
-        formatCoordinate(point.latitude())));
+        formatDouble(point.longitude()),
+        formatDouble(point.latitude())));
     }
 
     return join(";", coordinatesToJoin);
@@ -216,11 +216,12 @@ public class FormatUtils {
   /**
    * Converts array of Points with waypoint_targets values to a string ready for API consumption.
    *
-   * @param points a list representing approaches to each coordinate.
+   * @param points a list representing targets to each coordinate.
    * @return a formatted string.
+   * @see RouteOptions#waypointTargets()
    */
   @Nullable
-  public static String formatPointsList(@Nullable List<Point> points) {
+  public static String formatWaypointTargets(@Nullable List<Point> points) {
     if (points == null) {
       return null;
     }
@@ -231,10 +232,72 @@ public class FormatUtils {
         coordinatesToJoin.add(null);
       } else {
         coordinatesToJoin.add(String.format(Locale.US, "%s,%s",
-          formatCoordinate(point.longitude()),
-          formatCoordinate(point.latitude())));
+          formatDouble(point.longitude()),
+          formatDouble(point.latitude())));
       }
     }
     return join(";", coordinatesToJoin);
+  }
+
+  /**
+   * Converts array of waypoint indices to a string ready for API consumption.
+   *
+   * @param indices a list representing indices to each coordinate.
+   * @return a formatted string.
+   * @see RouteOptions#waypointIndices()
+   */
+  @Nullable
+  public static String formatWaypointIndices(@Nullable List<Integer> indices) {
+    return join(";", indices);
+  }
+
+  /**
+   * Converts a list of radiuses to a string ready for API consumption.
+   *
+   * @param radiuses a list of radiuses.
+   * @return a formatted string.
+   * @see RouteOptions#radiuses()
+   */
+  @Nullable
+  public static String formatRadiuses(@Nullable List<String> radiuses) {
+    if (radiuses == null) {
+      return null;
+    }
+
+    for (String radius : radiuses) {
+      if (!radius.equals("unlimited")) {
+        double value = Double.parseDouble(radius);
+        if (value < 0) {
+          throw new RuntimeException(
+            "Radiuses need to be greater than 0 or a string \"unlimited\"."
+          );
+        }
+      }
+    }
+
+    return join(";", radiuses);
+  }
+
+  /**
+   * Converts a list of annotation to a string ready for API consumption.
+   *
+   * @param annotations a list of annotations.
+   * @return a formatted string.
+   */
+  @Nullable
+  public static String formatAnnotations(@Nullable List<String> annotations) {
+    return join(",", annotations);
+  }
+
+  /**
+   * Converts a list of snapping include closures for each waypoint
+   * to a string ready for API consumption.
+   *
+   * @param snappingIncludeClosures a list of allowed snappings to closures.
+   * @return a formatted string.
+   */
+  @Nullable
+  public static String formatSnappingIncludeClosures(@Nullable List<Boolean> snappingIncludeClosures) {
+    return join(";", snappingIncludeClosures);
   }
 }

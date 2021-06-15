@@ -7,8 +7,11 @@ import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.FormatUtils;
@@ -16,6 +19,7 @@ import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,7 +41,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     return new AutoValue_RouteOptions.Builder()
       .baseUrl(DirectionsCriteria.BASE_API_URL)
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
-      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE);
+      .geometries(DirectionsCriteria.GEOMETRY_POLYLINE); // todo default to 6
   }
 
   /**
@@ -130,7 +134,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    */
   @Nullable
   public abstract List<List<Double>> bearings();
-
 
   /**
    * The allowed direction of travel when departing intermediate waypoints. If true, the route

@@ -2,7 +2,7 @@ package com.mapbox.api.optimization.v1.models;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.geojson.Point;
 import com.mapbox.api.optimization.v1.MapboxOptimization;
 

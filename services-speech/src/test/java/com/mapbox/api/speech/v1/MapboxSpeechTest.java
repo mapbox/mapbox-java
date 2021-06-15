@@ -1,6 +1,6 @@
 package com.mapbox.api.speech.v1;
 
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
 
 import org.hamcrest.junit.ExpectedException;

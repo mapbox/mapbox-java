@@ -1,6 +1,6 @@
 package com.mapbox.api.matching.v5.models;
 
-import com.mapbox.core.TestUtils;
+import com.mapbox.geojson.TestUtils;
 
 import org.junit.Test;
 
