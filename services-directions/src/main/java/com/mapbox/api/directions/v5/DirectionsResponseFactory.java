@@ -24,25 +24,19 @@ class DirectionsResponseFactory {
         response
           .body()
           .toBuilder()
-          .routes(generateRouteOptions(response))
+          .routes(updateRoutesWithRequestData(response))
           .build(),
-        new okhttp3.Response.Builder()
-          .code(200)
-          .message("OK")
-          .protocol(response.raw().protocol())
-          .headers(response.headers())
-          .request(response.raw().request())
-          .build());
+        response.raw()
+      );
     }
   }
 
   private boolean isNotSuccessful(Response<DirectionsResponse> response) {
     return !response.isSuccessful()
-      || response.body() == null
-      || response.body().routes().isEmpty();
+      || response.body() == null;
   }
 
-  private List<DirectionsRoute> generateRouteOptions(Response<DirectionsResponse> response) {
+  private List<DirectionsRoute> updateRoutesWithRequestData(Response<DirectionsResponse> response) {
     List<DirectionsRoute> routes = response.body().routes();
     List<DirectionsRoute> modifiedRoutes = new ArrayList<>();
     for (DirectionsRoute route : routes) {
