@@ -30,9 +30,12 @@ import java.util.List;
 public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
-   * Build a new instance of this RouteOptions.
-   *
-   * @return {@link RouteOptions.Builder}
+   * Build a new instance of {@link RouteOptions} and sets default values for:
+   * <ul>
+   *   <li>{@link #baseUrl()} equal to {@link DirectionsCriteria#BASE_API_URL}.</li>
+   *   <li>{@link #user()} equal to {@link DirectionsCriteria#PROFILE_DEFAULT_USER}.</li>
+   *   <li>{@link #geometries()} equal to {@link DirectionsCriteria#GEOMETRY_POLYLINE6}.</li>
+   * </ul>
    */
   public static Builder builder() {
     return new AutoValue_RouteOptions.Builder()
@@ -1140,7 +1143,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public Builder approachesList(@Nullable List<String> approaches) {
-      String result = FormatUtils.formatApproaches(approaches);
+      String result = FormatUtils.join(";", approaches);
       if (result != null) {
         approaches(result);
       }
@@ -1416,130 +1419,11 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder enableRefresh(@Nullable Boolean enableRefresh);
 
     /**
-     * Package private used to build the object and verify.
-     */
-    @NonNull
-    abstract RouteOptions autoBuild();
-
-    /**
-     * This uses the provided parameters set using the {@link Builder} and first checks that all
-     * values are valid, and creates a new {@link RouteOptions} object with the values provided.
+     * Builds the object.
      *
      * @return a new instance of {@link RouteOptions}
      */
     @NonNull
-    public RouteOptions build() {
-      RouteOptions routeOptions = autoBuild();
-
-      List<Point> coordinates = routeOptions.coordinatesList();
-      if (coordinates.size() < 2) {
-        throw new RuntimeException(
-          "An origin and destination are required before making the directions API request."
-        );
-      }
-
-      List<Integer> waypointIndices = routeOptions.waypointIndicesList();
-      if (waypointIndices != null && !waypointIndices.isEmpty()) {
-        if (waypointIndices.size() < 2) {
-          throw new RuntimeException(
-            "Waypoints indices must be a list of at least two indexes, origin and destination."
-          );
-        }
-        if (waypointIndices.get(0) != 0 || waypointIndices.get(waypointIndices.size() - 1)
-          != coordinates.size() - 1) {
-          throw new RuntimeException(
-            "First and last waypoints indices must match the origin and final destination."
-          );
-        }
-        for (int i = 1; i < waypointIndices.size() - 1; i++) {
-          if (waypointIndices.get(i) < 0
-            || waypointIndices.get(i) >= coordinates.size()) {
-            throw new RuntimeException(
-              "Waypoints index out of bounds (no corresponding coordinate).");
-          }
-        }
-      }
-
-      checkSizeMatchingWaypoints(
-        "waypointTargets",
-        true,
-        routeOptions.waypointTargetsList(),
-        coordinates,
-        routeOptions.waypointIndicesList()
-      );
-
-      checkSizeMatchingWaypoints(
-        "approaches",
-        false,
-        routeOptions.approachesList(),
-        coordinates,
-        routeOptions.waypointIndicesList()
-      );
-
-      checkSizeMatchingWaypoints(
-        "snappingIncludeClosures",
-        false,
-        routeOptions.snappingIncludeClosuresList(),
-        coordinates,
-        routeOptions.waypointIndicesList()
-      );
-
-      checkSizeMatchingWaypoints(
-        "bearings",
-        false,
-        routeOptions.bearingsList(),
-        coordinates,
-        routeOptions.waypointIndicesList()
-      );
-
-      checkSizeMatchingWaypoints(
-        "radiuses",
-        false,
-        routeOptions.radiusesList(),
-        coordinates,
-        routeOptions.waypointIndicesList()
-      );
-
-      checkSizeMatchingWaypoints(
-        "waypointNames",
-        true,
-        routeOptions.waypointNamesList(),
-        coordinates,
-        routeOptions.waypointIndicesList()
-      );
-
-      return routeOptions;
-    }
-
-    private void checkSizeMatchingWaypoints(
-      String paramName,
-      boolean waypointIndicesDependent,
-      List<?> testedParam,
-      List<Point> coordinates,
-      List<Integer> waypointIndices
-    ) {
-      if (testedParam != null && !testedParam.isEmpty()) {
-        boolean error = false;
-        if (waypointIndicesDependent && waypointIndices != null && !waypointIndices.isEmpty()) {
-          if (testedParam.size() != waypointIndices.size()) {
-            error = true;
-          }
-        } else if (testedParam.size() != coordinates.size()) {
-          error = true;
-        }
-        if (error) {
-          StringBuilder builder = new StringBuilder();
-          builder.append("Number of ");
-          builder.append(paramName);
-          builder.append(" must match the number of coordinates");
-          if (waypointIndicesDependent) {
-            builder.append(" or waypoints indices (if present)");
-          }
-          builder.append(".");
-
-          throw new RuntimeException(builder.toString());
-        }
-      }
-    }
+    public abstract RouteOptions build();
   }
 }

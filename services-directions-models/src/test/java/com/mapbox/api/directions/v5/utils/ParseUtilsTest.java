@@ -214,6 +214,6 @@ public class ParseUtilsTest {
 
     String input = "true;abc";
 
-    List<Boolean> actual = ParseUtils.parseToBooleans(input);
+    ParseUtils.parseToBooleans(input);
   }
 }

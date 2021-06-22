@@ -713,7 +713,7 @@ public abstract class MapboxMapMatching extends
           throw new ServicesException("Number of approach elements must match "
             + "number of coordinates provided.");
         }
-        String formattedApproaches = FormatUtils.formatApproaches(Arrays.asList(approaches));
+        String formattedApproaches = FormatUtils.join(";", Arrays.asList(approaches));
         if (formattedApproaches == null) {
           throw new ServicesException("All approaches values must be one of curb, unrestricted");
         }
