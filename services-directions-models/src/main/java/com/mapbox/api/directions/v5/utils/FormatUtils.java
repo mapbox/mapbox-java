@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.utils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.mapbox.api.directions.v5.models.Bearing;
 import com.mapbox.geojson.Point;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -54,15 +55,15 @@ public class FormatUtils {
   /**
    * Useful to remove any trailing zeros and prevent a double being over 7 significant figures.
    *
-   * @param coordinate a double value representing a coordinate.
+   * @param value a double value
    * @return a formatted string.
    */
   @NonNull
-  public static String formatDouble(double coordinate) {
+  public static String formatDouble(double value) {
     DecimalFormat decimalFormat = new DecimalFormat("0.#######",
       new DecimalFormatSymbols(Locale.US));
     return String.format(Locale.US, "%s",
-      decimalFormat.format(coordinate));
+      decimalFormat.format(value));
   }
 
   /**
@@ -98,41 +99,34 @@ public class FormatUtils {
   /**
    * Formats the bearing variables from the raw values to a string ready for API consumption.
    *
-   * @param bearings a List of list of doubles representing bearing values
+   * @param bearings a List of {@link Bearing} values
    * @return a string with the bearing values
    */
   @Nullable
-  public static String formatBearings(@Nullable List<List<Double>> bearings) {
+  public static String formatBearings(@Nullable List<Bearing> bearings) {
     if (bearings == null) {
       return null;
     }
 
     List<String> bearingsToJoin = new ArrayList<>();
-    for (List<Double> bearing : bearings) {
+    for (Bearing bearing : bearings) {
       if (bearing == null) {
         bearingsToJoin.add(null);
       } else {
-        if (bearing.size() != 2) {
-          throw new RuntimeException("Bearing object should have 2 elements, angle and tolerance.");
+        double angle = bearing.angle();
+        double tolerance = bearing.degrees();
+
+        if (angle < 0 || angle > 360) {
+          throw new RuntimeException("Angle has to be from 0 to 360.");
         }
 
-        Double angle = bearing.get(0);
-        Double tolerance = bearing.get(1);
-        if (angle == null || tolerance == null) {
-          bearingsToJoin.add(null);
-        } else {
-          if (angle < 0 || angle > 360) {
-            throw new RuntimeException("Angle has to be from 0 to 360.");
-          }
-
-          if (tolerance < 0 || tolerance > 180) {
-            throw new RuntimeException("Tolerance has to be from 0 to 180.");
-          }
-
-          bearingsToJoin.add(String.format(Locale.US, "%s,%s",
-            formatDouble(angle),
-            formatDouble(tolerance)));
+        if (tolerance < 0 || tolerance > 180) {
+          throw new RuntimeException("Degrees has to be from 0 to 180.");
         }
+
+        bearingsToJoin.add(String.format(Locale.US, "%s,%s",
+          formatDouble(angle),
+          formatDouble(tolerance)));
       }
     }
     return join(";", bearingsToJoin);

@@ -106,10 +106,10 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(3, routeOptions.bearingsList().size());
-    assertEquals(Double.valueOf(0), routeOptions.bearingsList().get(0).get(0));
-    assertEquals(Double.valueOf(90), routeOptions.bearingsList().get(0).get(1));
-    assertEquals(Double.valueOf(90), routeOptions.bearingsList().get(1).get(0));
-    assertEquals(Double.valueOf(0), routeOptions.bearingsList().get(1).get(1));
+    assertEquals(0.0, routeOptions.bearingsList().get(0).angle(), 0.00001);
+    assertEquals(90.0, routeOptions.bearingsList().get(0).degrees(), 0.00001);
+    assertEquals(90.0, routeOptions.bearingsList().get(1).angle(), 0.00001);
+    assertEquals(0.0, routeOptions.bearingsList().get(1).degrees(), 0.00001);
     assertNull(routeOptions.bearingsList().get(2));
   }
 
@@ -637,7 +637,7 @@ public class RouteOptionsTest extends TestUtils {
     coordinates.add(Point.fromLngLat(0.0, 0.0));
     coordinates.add(Point.fromLngLat(1.0, 1.0));
     coordinates.add(Point.fromLngLat(2.0, 3.0));
-    List<List<Double>> data = new ArrayList<>();
+    List<Bearing> data = new ArrayList<>();
     data.add(null);
     RouteOptions.builder()
       .accessToken(ACCESS_TOKEN)
@@ -653,7 +653,7 @@ public class RouteOptionsTest extends TestUtils {
     coordinates.add(Point.fromLngLat(0.0, 0.0));
     coordinates.add(Point.fromLngLat(1.0, 1.0));
     coordinates.add(Point.fromLngLat(2.0, 3.0));
-    List<List<Double>> data = new ArrayList<>();
+    List<Bearing> data = new ArrayList<>();
     RouteOptions options = RouteOptions.builder()
       .accessToken(ACCESS_TOKEN)
       .coordinatesList(coordinates)
@@ -674,11 +674,8 @@ public class RouteOptionsTest extends TestUtils {
     coordinates.add(Point.fromLngLat(0.0, 0.0));
     coordinates.add(Point.fromLngLat(1.0, 1.0));
     coordinates.add(Point.fromLngLat(2.0, 3.0));
-    List<List<Double>> data = new ArrayList<>();
-    List<Double> dataNested = new ArrayList<>();
-    dataNested.add(0.0);
-    dataNested.add(1.0);
-    data.add(dataNested);
+    List<Bearing> data = new ArrayList<>();
+    data.add(Bearing.builder().angle(0.0).degrees(1.0).build());
     RouteOptions.builder()
       .accessToken(ACCESS_TOKEN)
       .coordinatesList(coordinates)
@@ -826,15 +823,9 @@ public class RouteOptionsTest extends TestUtils {
         add("distance");
         add("duration");
       }})
-      .bearingsList(new ArrayList<List<Double>>() {{
-        add(new ArrayList<Double>() {{
-          add(0.0);
-          add(90.0);
-        }});
-        add(new ArrayList<Double>() {{
-          add(90.0);
-          add(0.0);
-        }});
+      .bearingsList(new ArrayList<Bearing>() {{
+        add(Bearing.builder().angle(0.0).degrees(90.0).build());
+        add(Bearing.builder().angle(90.0).degrees(0.0).build());
         add(null);
       }})
       .continueStraight(false)

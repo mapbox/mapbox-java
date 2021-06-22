@@ -1,17 +1,15 @@
 package com.mapbox.api.directions.v5.utils;
 
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
+import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
+import com.mapbox.api.directions.v5.models.Bearing;
 import com.mapbox.geojson.Point;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
 
 public class FormatUtilsTest {
 
@@ -151,19 +149,11 @@ public class FormatUtilsTest {
 
   @Test
   public void formatBearings() {
-    List<Double> bearing1 = new ArrayList<>();
-    bearing1.add(1.1);
-    bearing1.add(2.2);
-
-    List<Double> bearing2 = new ArrayList<>();
-    bearing2.add(7.7);
-    bearing2.add(8.8);
-
-    List<List<Double>> bearings = new ArrayList<>();
+    List<Bearing> bearings = new ArrayList<>();
     bearings.add(null);
     bearings.add(null);
-    bearings.add(bearing1);
-    bearings.add(bearing2);
+    bearings.add(Bearing.builder().angle(1.1).degrees(2.2).build());
+    bearings.add(Bearing.builder().angle(7.7).degrees(8.8).build());
     bearings.add(null);
 
     String expected = ";;1.1,2.2;7.7,8.8;";
