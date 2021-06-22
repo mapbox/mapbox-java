@@ -83,10 +83,6 @@ public class FormatUtils {
     for (Double radius : radiuses) {
       if (radius == null) {
         radiusesToJoin.add(null);
-      } else if (radius <= 0) {
-        throw new RuntimeException(
-          "Radiuses need to be greater than 0 or Double.POSITIVE_INFINITY."
-        );
       } else if (radius == Double.POSITIVE_INFINITY) {
         radiusesToJoin.add("unlimited");
       } else {
@@ -115,14 +111,6 @@ public class FormatUtils {
       } else {
         double angle = bearing.angle();
         double tolerance = bearing.degrees();
-
-        if (angle < 0 || angle > 360) {
-          throw new RuntimeException("Angle has to be from 0 to 360.");
-        }
-
-        if (tolerance < 0 || tolerance > 180) {
-          throw new RuntimeException("Degrees has to be from 0 to 180.");
-        }
 
         bearingsToJoin.add(String.format(Locale.US, "%s,%s",
           formatDouble(angle),
@@ -155,29 +143,6 @@ public class FormatUtils {
       }
     }
     return join(";", distributionsToJoin);
-  }
-
-  /**
-   * Converts String list with approaches values to a string ready for API consumption. An approach
-   * could be unrestricted, curb or null.
-   *
-   * @param approaches a list representing approaches to each coordinate.
-   * @return a formatted string.
-   */
-  @Nullable
-  public static String formatApproaches(@Nullable List<String> approaches) {
-    if (approaches == null) {
-      return null;
-    }
-
-    for (String approach : approaches) {
-      if (approach != null && !approach.equals("unrestricted") && !approach.equals("curb")) {
-        throw new RuntimeException(
-          "Approach should be one of unrestricted or curb"
-        );
-      }
-    }
-    return join(";", approaches);
   }
 
   /**

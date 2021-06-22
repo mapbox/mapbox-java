@@ -7,14 +7,9 @@ import com.mapbox.geojson.Point;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class FormatUtilsTest {
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void join_1() {
@@ -112,42 +107,6 @@ public class FormatUtilsTest {
   }
 
   @Test
-  public void formatRadiuses_0() {
-    thrown.expect(RuntimeException.class);
-    thrown.expectMessage(
-      "Radiuses need to be greater than 0 or Double.POSITIVE_INFINITY."
-    );
-
-    List<Double> names = new ArrayList<>();
-    names.add(0.0);
-    names.add(3.3);
-    names.add(Double.POSITIVE_INFINITY);
-    String expected = "5.1;3.3;unlimited";
-
-    String actual = FormatUtils.formatRadiuses(names);
-
-    Assert.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void formatRadiuses_negative() {
-    thrown.expect(RuntimeException.class);
-    thrown.expectMessage(
-      "Radiuses need to be greater than 0 or Double.POSITIVE_INFINITY."
-    );
-
-    List<Double> names = new ArrayList<>();
-    names.add(-5.1);
-    names.add(3.3);
-    names.add(Double.POSITIVE_INFINITY);
-    String expected = "5.1;3.3;unlimited";
-
-    String actual = FormatUtils.formatRadiuses(names);
-
-    Assert.assertEquals(expected, actual);
-  }
-
-  @Test
   public void formatBearings() {
     List<Bearing> bearings = new ArrayList<>();
     bearings.add(null);
@@ -159,25 +118,6 @@ public class FormatUtilsTest {
     String expected = ";;1.1,2.2;7.7,8.8;";
 
     String actual = FormatUtils.formatBearings(bearings);
-
-    Assert.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void formatApproaches() {
-    List<String> approaches = new ArrayList<>();
-    approaches.add(APPROACH_CURB);
-    approaches.add(null);
-    approaches.add(null);
-    approaches.add(APPROACH_UNRESTRICTED);
-    approaches.add(APPROACH_UNRESTRICTED);
-    approaches.add(null);
-    approaches.add(null);
-    approaches.add(APPROACH_CURB);
-    approaches.add(null);
-    String expected = "curb;;;unrestricted;unrestricted;;;curb;";
-
-    String actual = FormatUtils.formatApproaches(approaches);
 
     Assert.assertEquals(expected, actual);
   }

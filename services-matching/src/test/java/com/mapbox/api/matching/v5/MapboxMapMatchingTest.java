@@ -1,32 +1,5 @@
 package com.mapbox.api.matching.v5;
 
-import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.models.RouteOptions;
-import com.mapbox.api.directions.v5.utils.FormatUtils;
-import com.mapbox.api.matching.v5.models.MapMatchingResponse;
-import com.mapbox.core.TestUtils;
-import com.mapbox.core.exceptions.ServicesException;
-import com.mapbox.geojson.Point;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
-import retrofit2.Response;
-
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_CYCLING;
@@ -38,6 +11,29 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.api.directions.v5.utils.FormatUtils;
+import com.mapbox.api.matching.v5.models.MapMatchingResponse;
+import com.mapbox.core.TestUtils;
+import com.mapbox.core.exceptions.ServicesException;
+import com.mapbox.geojson.Point;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import retrofit2.Response;
 
 public class MapboxMapMatchingTest extends TestUtils {
 
@@ -607,22 +603,6 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
   @Test
-  public void
-  build_exceptionThrownWhenInvalidApproaches() throws Exception {
-    thrown.expect(RuntimeException.class);
-    thrown.expectMessage(
-      startsWith("Approach should be one of unrestricted or curb"));
-    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
-      .profile(PROFILE_DRIVING)
-      .coordinate(Point.fromLngLat(2.0, 2.0))
-      .coordinate(Point.fromLngLat(4.0, 4.0))
-      .addApproaches(APPROACH_UNRESTRICTED, "restricted")
-      .baseUrl("https://foobar.com")
-      .accessToken(ACCESS_TOKEN)
-      .build();
-  }
-
-  @Test
   public void testApproaches() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .profile(PROFILE_DRIVING)
@@ -670,7 +650,7 @@ public class MapboxMapMatchingTest extends TestUtils {
     Response<MapMatchingResponse> response = mapMatching.executeCall();
     RouteOptions routeOptions = response.body().matchings().get(0).routeOptions();
 
-    assertEquals("unrestricted;curb", FormatUtils.formatApproaches(routeOptions.approachesList()));
+    assertEquals("unrestricted;curb", FormatUtils.join(";", routeOptions.approachesList()));
   }
 
   @Test
