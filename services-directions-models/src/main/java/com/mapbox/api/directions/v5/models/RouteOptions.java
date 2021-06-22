@@ -181,17 +181,16 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * segment the waypoint will be placed on by direction. This is useful for making sure the new
    * routes of rerouted vehicles continue traveling in their current direction. A request that does
    * this would provide bearing and radius values for the first waypoint and leave the remaining
-   * values empty. Returns a list of values, each value is a list of an angle clockwise from true
-   * north between 0 and 360, and the range of degrees by which the angle can deviate (recommended
-   * value is 45° or 90°).
+   * values empty. Returns a list of {@link Bearing} values.
+   * <p>
    * If provided, the list of bearings must be the same length as the list of coordinates.
    *
    * @return a List of list of doubles representing the bearings used in the original request.
    *   The first value in the list is the angle, the second one is the degrees.
    */
   @Nullable
-  public List<List<Double>> bearingsList() {
-    return ParseUtils.parseToListOfListOfDoubles(bearings());
+  public List<Bearing> bearingsList() {
+    return ParseUtils.parseBearings(bearings());
   }
 
   /**
@@ -891,9 +890,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * routes of rerouted vehicles continue traveling in their current direction.
      * A request that does
      * this would provide bearing and radius values for the first waypoint and leave the remaining
-     * values empty. Returns a list of values, each value is a list of an angle clockwise from true
-     * north between 0 and 360, and the range of degrees by which the angle can deviate
-     * (recommended value is 45° or 90°).
+     * values empty. Returns a list of values, each value is a list of {@link Bearing} objects.
+     * <p>
      * If provided, the list of bearings must be the same length as the list of coordinates.
      * However, you can skip a coordinate and show its position in the list with null.
      *
@@ -903,7 +901,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @return this builder for chaining options together
      */
     @NonNull
-    public Builder bearingsList(@Nullable List<List<Double>> bearings) {
+    public Builder bearingsList(@Nullable List<Bearing> bearings) {
       String result = FormatUtils.formatBearings(bearings);
       if (result != null) {
         bearings(result);

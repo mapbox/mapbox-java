@@ -12,6 +12,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria.DestinationCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.GeometriesCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.OverviewCriteria;
 import com.mapbox.api.directions.v5.DirectionsCriteria.ProfileCriteria;
+import com.mapbox.api.directions.v5.models.Bearing;
 import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.optimization.v1.models.OptimizationAdapterFactory;
 import com.mapbox.api.optimization.v1.models.OptimizationResponse;
@@ -23,7 +24,6 @@ import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import retrofit2.Call;
@@ -157,7 +157,7 @@ public abstract class MapboxOptimization
   public abstract static class Builder {
 
     private List<Integer[]> distributions = new ArrayList<>();
-    private List<List<Double>> bearings = new ArrayList<>();
+    private List<Bearing> bearings = new ArrayList<>();
     private List<Point> coordinates = new ArrayList<>();
     private String[] annotations;
     private double[] radiuses;
@@ -336,9 +336,8 @@ public abstract class MapboxOptimization
      * @return this builder for chaining options together
      * @since 2.1.0
      */
-    public Builder bearing(@Nullable @FloatRange(from = 0, to = 360) Double angle,
-                           @Nullable @FloatRange(from = 0, to = 360) Double tolerance) {
-      bearings.add(Arrays.asList(angle, tolerance));
+    public Builder bearing(double angle, double tolerance) {
+      bearings.add(Bearing.builder().angle(angle).degrees(tolerance).build());
       return this;
     }
 

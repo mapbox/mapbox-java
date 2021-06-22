@@ -1,15 +1,14 @@
 package com.mapbox.api.directions.v5.utils;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.models.Bearing;
 import com.mapbox.geojson.Point;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ParseUtilsTest {
 
@@ -163,16 +162,13 @@ public class ParseUtilsTest {
   @Test
   public void parseToListOfListOfDoubles() {
     String input = ";5.1,7.4;;";
-    List<List<Double>> expected = new ArrayList<>();
+    List<Bearing> expected = new ArrayList<>();
     expected.add(null);
-    expected.add(new ArrayList<Double>() {{
-      add(5.1);
-      add(7.4);
-    }});
+    expected.add(Bearing.builder().angle(5.1).degrees(7.4).build());
     expected.add(null);
     expected.add(null);
 
-    List<List<Double>> actual = ParseUtils.parseToListOfListOfDoubles(input);
+    List<Bearing> actual = ParseUtils.parseBearings(input);
 
     Assert.assertEquals(expected, actual);
   }

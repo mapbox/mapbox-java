@@ -196,7 +196,8 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
    * @see RouteOptions#fromJson(String)
    */
   public static DirectionsRoute fromJson(
-    @NonNull String json, @Nullable RouteOptions routeOptions, @Nullable String requestUuid) {
+    @NonNull String json, @Nullable RouteOptions routeOptions, @Nullable String requestUuid
+  ) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());

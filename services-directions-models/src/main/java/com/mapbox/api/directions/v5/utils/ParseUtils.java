@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.utils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.mapbox.api.directions.v5.models.Bearing;
 import com.mapbox.geojson.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,17 +80,16 @@ public class ParseUtils {
     }
   };
 
-  private static final ValueParser<List<Double>> DOUBLE_LIST_PARSER =
-    new ValueParser<List<Double>>() {
+  private static final ValueParser<Bearing> BEARING_PARSER =
+    new ValueParser<Bearing>() {
       @NonNull
       @Override
-      public List<Double> parse(@NonNull String element) {
+      public Bearing parse(@NonNull String element) {
         String[] values = element.split(COMMA);
-        List<Double> doubles = new ArrayList<>();
-        for (String value : values) {
-          doubles.add(Double.valueOf(value));
-        }
-        return doubles;
+        return Bearing.builder()
+          .angle(Double.parseDouble(values[0]))
+          .degrees(Double.parseDouble(values[1]))
+          .build();
       }
     };
 
@@ -195,11 +195,11 @@ public class ParseUtils {
    * ";;10.1,47.3,33.09,79.111;84.45,45.4;"
    *
    * @param original an original String.
-   * @return List of List of Doubles or null if the original string is null
+   * @return List of {@link Bearing} or null if the original string is null
    */
   @Nullable
-  public static List<List<Double>> parseToListOfListOfDoubles(@Nullable String original) {
-    return parseToList(SEMICOLON, original, DOUBLE_LIST_PARSER);
+  public static List<Bearing> parseBearings(@Nullable String original) {
+    return parseToList(SEMICOLON, original, BEARING_PARSER);
   }
 
   /**
