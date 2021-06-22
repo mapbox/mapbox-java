@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.utils;
 
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_CURB;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.APPROACH_UNRESTRICTED;
+import static org.junit.Assert.assertEquals;
 import com.mapbox.api.directions.v5.models.Bearing;
 import com.mapbox.geojson.Point;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class FormatUtilsTest {
 
     String actual = FormatUtils.join(";", input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -34,7 +35,7 @@ public class FormatUtilsTest {
 
     String actual = FormatUtils.join(",", input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -51,7 +52,7 @@ public class FormatUtilsTest {
 
     String actual = FormatUtils.join(";", input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -68,7 +69,7 @@ public class FormatUtilsTest {
 
     String actual = FormatUtils.join(";", names);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -90,7 +91,7 @@ public class FormatUtilsTest {
 
     String actual = FormatUtils.formatRadiuses(names);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -103,7 +104,7 @@ public class FormatUtilsTest {
 
     String actual = FormatUtils.formatRadiuses(names);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -119,7 +120,7 @@ public class FormatUtilsTest {
 
     String actual = FormatUtils.formatBearings(bearings);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -135,6 +136,6 @@ public class FormatUtilsTest {
 
     String actual = FormatUtils.formatPointsList(targets);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 }

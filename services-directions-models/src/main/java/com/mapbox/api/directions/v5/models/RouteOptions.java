@@ -29,6 +29,8 @@ import java.util.List;
 @AutoValue
 public abstract class RouteOptions extends DirectionsJsonObject {
 
+  private static final String UTF_8 = "UTF-8";
+
   /**
    * Build a new instance of {@link RouteOptions} and sets default values for:
    * <ul>
@@ -705,8 +707,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       int idx = query.indexOf("=");
       try {
         optionsJson.addProperty(
-          URLDecoder.decode(query.substring(0, idx), "UTF-8"),
-          URLDecoder.decode(query.substring(idx + 1), "UTF-8")
+          URLDecoder.decode(query.substring(0, idx), UTF_8),
+          URLDecoder.decode(query.substring(idx + 1), UTF_8)
         );
       } catch (UnsupportedEncodingException ex) {
         throw new RuntimeException(ex);

@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.utils;
 
+import static org.junit.Assert.assertEquals;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.models.Bearing;
 import com.mapbox.geojson.Point;
@@ -27,7 +28,7 @@ public class ParseUtilsTest {
 
     List<Integer> actual = ParseUtils.parseToIntegers(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -39,7 +40,7 @@ public class ParseUtilsTest {
 
     List<String> actual = ParseUtils.parseToStrings(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -58,7 +59,7 @@ public class ParseUtilsTest {
 
     List<String> actual = ParseUtils.parseToStrings(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -70,7 +71,7 @@ public class ParseUtilsTest {
 
     List<String> actual = ParseUtils.parseToStrings(input, ",");
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -83,7 +84,7 @@ public class ParseUtilsTest {
 
     List<String> actual = ParseUtils.parseToStrings(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -97,7 +98,7 @@ public class ParseUtilsTest {
 
     List<String> actual = ParseUtils.parseToStrings(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -110,7 +111,7 @@ public class ParseUtilsTest {
 
     List<String> actual = ParseUtils.parseToStrings(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -123,7 +124,7 @@ public class ParseUtilsTest {
 
     List<String> actual = ParseUtils.parseToStrings(input, ",");
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -140,7 +141,7 @@ public class ParseUtilsTest {
 
     List<Point> actual = ParseUtils.parseToPoints(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -156,7 +157,7 @@ public class ParseUtilsTest {
 
     List<Double> actual = ParseUtils.parseToDoubles(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -170,7 +171,7 @@ public class ParseUtilsTest {
 
     List<Bearing> actual = ParseUtils.parseBearings(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -191,7 +192,7 @@ public class ParseUtilsTest {
 
     List<Boolean> actual = ParseUtils.parseToBooleans(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -202,7 +203,7 @@ public class ParseUtilsTest {
 
     List<Boolean> actual = ParseUtils.parseToBooleans(input);
 
-    Assert.assertEquals(expected, actual);
+    assertEquals(expected, actual);
   }
 
   @Test
