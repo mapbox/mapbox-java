@@ -14,6 +14,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.geojson.Point;
+import com.ryanharter.auto.value.gson.Ignore;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -366,11 +367,15 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * A valid Mapbox access token used to making the request.
+   * <p>
+   * Avoiding to provide a token will most-likely result in a failure, however,
+   * it's annotated as nullable to prevent serialization of tokens.
    *
    * @return a string representing the Mapbox access token
    */
   @SerializedName("access_token")
-  @NonNull
+  @Ignore(Ignore.Type.SERIALIZATION)
+  @Nullable
   public abstract String accessToken();
 
   /**
@@ -670,6 +675,30 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String.
+   * <p>
+   * The Mapbox Access Token that was part of the original object was not serialized and needs
+   * to be provided again.
+   * The options will not be valid for a request without a Mapbox Access Token.
+   *
+   * @param json        a formatted valid JSON string defining a RouteOptions
+   * @param accessToken a Mapbox Access Token
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @see #fromUrl(URL)
+   */
+  @NonNull
+  public static RouteOptions fromJson(@NonNull String json, @Nullable String accessToken) {
+    return fromJson(json).toBuilder().accessToken(accessToken).build();
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   * <p>
+   * The Mapbox Access Token that was part of the original object was not serialized and needs
+   * to be provided again.
+   * The options will not be valid for a request without a Mapbox Access Token so make sure to
+   * provide a token with {@link #fromJson(String, String)}
+   * or rebuild the options with {@link #toBuilder()}.
    *
    * @param json a formatted valid JSON string defining a RouteOptions
    * @return a new instance of this class defined by the values passed inside this static factory
@@ -677,7 +706,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @see #fromUrl(URL)
    */
   @NonNull
-  public static RouteOptions fromJson(String json) {
+  public static RouteOptions fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     return gson.create().fromJson(json, RouteOptions.class);
@@ -689,7 +718,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @param url request URL
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
-   * @see #fromJson(String)
+   * @see #fromJson(String, String)
    */
   @NonNull
   public static RouteOptions fromUrl(@NonNull URL url) {
@@ -1077,11 +1106,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     /**
      * A valid Mapbox access token used to making the request.
      *
-     * @param accessToken a string containing a valid Mapbox access token
+     * @param accessToken a string containing a valid Mapbox access token.
+     *                    Avoiding to provide a token will most-likely result in a failure, however,
+     *                    it's annotated as nullable to prevent serialization of tokens.
      * @return this builder for chaining options together
      */
     @NonNull
-    public abstract Builder accessToken(@NonNull String accessToken);
+    public abstract Builder accessToken(@Nullable String accessToken);
 
     /**
      * Exclude certain road types from routing. The default is to not exclude anything from the

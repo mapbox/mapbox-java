@@ -193,7 +193,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @see RouteOptions#fromUrl(java.net.URL)
-   * @see RouteOptions#fromJson(String)
+   * @see RouteOptions#fromJson(String, String)
    */
   public static DirectionsRoute fromJson(
     @NonNull String json, @Nullable RouteOptions routeOptions, @Nullable String requestUuid
