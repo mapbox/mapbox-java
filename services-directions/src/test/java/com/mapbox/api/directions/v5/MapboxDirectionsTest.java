@@ -1,5 +1,8 @@
 package com.mapbox.api.directions.v5;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.models.BannerComponents;
@@ -12,11 +15,6 @@ import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -24,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-
 import okhttp3.Call;
 import okhttp3.EventListener;
 import okhttp3.HttpUrl;
@@ -32,11 +29,10 @@ import okhttp3.Interceptor;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import retrofit2.Response;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class MapboxDirectionsTest extends TestUtils {
 
@@ -59,7 +55,7 @@ public class MapboxDirectionsTest extends TestUtils {
   private MockWebServer server;
   private HttpUrl mockUrl;
 
-  private final RouteOptions routeOptions = RouteOptions.fromJson(loadJsonFixture(ROUTE_OPTIONS_V5));
+  private final RouteOptions routeOptions = RouteOptions.fromJson(loadJsonFixture(ROUTE_OPTIONS_V5), "token");
 
   public MapboxDirectionsTest() throws IOException {
   }
@@ -81,6 +77,7 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test
   public void testRouteOptionsFromUrl() throws IOException {
+    assertNotNull(routeOptions.accessToken());
     MapboxDirections directions = MapboxDirections.builder()
       .routeOptions(routeOptions)
       .build();
@@ -92,6 +89,7 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test
   public void testRouteOptionsFromUrl_alreadyDecoded() throws IOException {
+    assertNotNull(routeOptions.accessToken());
     MapboxDirections directions = MapboxDirections.builder()
       .routeOptions(routeOptions)
       .build();

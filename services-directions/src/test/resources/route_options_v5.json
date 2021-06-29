@@ -17,7 +17,6 @@
   "voice_instructions": true,
   "banner_instructions": true,
   "voice_units": "metric",
-  "access_token": "token",
   "approaches": ";curb;",
   "waypoints": "0;1;2",
   "waypoint_names": ";two;",
