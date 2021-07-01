@@ -1,6 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -18,14 +18,14 @@ public abstract class Closure extends DirectionsJsonObject {
   /**
    * Closure's geometry index start point.
    */
-  @Nullable
+  @NonNull
   @SerializedName("geometry_index_start")
   public abstract Integer geometryIndexStart();
 
   /**
    * Closure's geometry index end point.
    */
-  @Nullable
+  @NonNull
   @SerializedName("geometry_index_end")
   public abstract Integer geometryIndexEnd();
 
@@ -81,14 +81,14 @@ public abstract class Closure extends DirectionsJsonObject {
      *
      * @param geometryIndexStart start index
      */
-    public abstract Builder geometryIndexStart(@Nullable Integer geometryIndexStart);
+    public abstract Builder geometryIndexStart(@NonNull Integer geometryIndexStart);
 
     /**
      * Closure's geometry index end point.
      *
      * @param geometryIndexEnd end index
      */
-    public abstract Builder geometryIndexEnd(@Nullable Integer geometryIndexEnd);
+    public abstract Builder geometryIndexEnd(@NonNull Integer geometryIndexEnd);
 
     /**
      * Build a new {@link Closure} object.
