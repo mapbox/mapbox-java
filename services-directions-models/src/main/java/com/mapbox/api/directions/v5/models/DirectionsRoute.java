@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
@@ -165,18 +166,58 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String.
+   * <p>
+   * Use this method if the provided serialized route was not obtained by this library.
+   * Alternatively, use {@link #fromJson(String, String)}.
+   * <p>
+   * If you're using the provided route with the Mapbox Navigation SDK, also see
+   * {@link #fromJson(String, RouteOptions, String)}.
    *
    * @param json a formatted valid JSON string defining a GeoJson Directions Route
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
-   * @see #fromJson(String, RouteOptions, String)
-   * @since 3.0.0
    */
   public static DirectionsRoute fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
+    JsonObject jsonObject = gson.create().fromJson(json, JsonObject.class);
+    if (jsonObject.has("routeOptions")) {
+      throw new IllegalArgumentException(
+        "Provided serialized route contains RouteOptions. "
+          + "Use DirectionsRoute#fromJson(json, accessToken) instead."
+      );
+    }
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
-    return gson.create().fromJson(json, DirectionsRoute.class);
+    return gson.create().fromJson(jsonObject, DirectionsRoute.class);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   * <p>
+   * Use this method if the provided serialized route was obtained by this library.
+   * This means that it includes {@link RouteOptions} and you need to supply a Mapbox Access Token.
+   * Alternatively, use {@link #fromJson(String)}.
+   *
+   * @param json        a formatted valid JSON string defining a GeoJson Directions Route
+   * @param accessToken a Mapbox Access Token
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   */
+  public static DirectionsRoute fromJson(@NonNull String json, @NonNull String accessToken) {
+    GsonBuilder gson = new GsonBuilder();
+    JsonObject jsonObject = gson.create().fromJson(json, JsonObject.class);
+    if (jsonObject.has("routeOptions")) {
+      JsonObject routeOptions = jsonObject.getAsJsonObject("routeOptions");
+      routeOptions.addProperty("access_token", accessToken);
+    } else {
+      throw new IllegalArgumentException(
+        "Provided serialized route does not contain RouteOptions. "
+          + "Use DirectionsRoute#fromJson(json) instead."
+      );
+    }
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
+    return gson.create().fromJson(jsonObject, DirectionsRoute.class);
   }
 
   /**
@@ -184,7 +225,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
    * <p>
    * The parameters of {@link RouteOptions} that were used to make the original route request
    * as well as the {@link String} UUID of the original response are needed
-   * by the Navigation SDK to support correct rerouting and route refreshing.
+   * by the Mapbox Navigation SDK to support correct rerouting and route refreshing.
    *
    * @param json         a formatted valid JSON string defining a GeoJson Directions Route
    * @param routeOptions options that were used during the original route request
@@ -198,10 +239,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   public static DirectionsRoute fromJson(
     @NonNull String json, @Nullable RouteOptions routeOptions, @Nullable String requestUuid
   ) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
-    return gson.create().fromJson(json, DirectionsRoute.class)
+    return fromJson(json)
       .toBuilder()
       .routeOptions(routeOptions)
       .requestUuid(requestUuid)
@@ -223,6 +261,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder distance(@NonNull Double distance);
 
     /**
@@ -232,6 +271,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder duration(@NonNull Double duration);
 
     /**
@@ -244,6 +284,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 5.5.0
      */
+    @NonNull
     public abstract Builder durationTypical(@Nullable Double durationTypical);
 
     /**
@@ -253,6 +294,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder geometry(@Nullable String geometry);
 
     /**
@@ -262,6 +304,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder weight(@Nullable Double weight);
 
     /**
@@ -273,6 +316,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder weightName(@Nullable String weightName);
 
     /**
@@ -282,6 +326,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder legs(@Nullable List<RouteLeg> legs);
 
     /**
@@ -292,6 +337,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder routeOptions(@Nullable RouteOptions routeOptions);
 
     /**
@@ -302,6 +348,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.1.0
      */
+    @NonNull
     public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
 
     /**
@@ -313,6 +360,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
     @NonNull
     public abstract Builder requestUuid(@Nullable String requestUuid);
 
+    @NonNull
     abstract Builder routeIndex(String routeIndex);
 
     /**
@@ -321,6 +369,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      * @return a new {@link DirectionsRoute} using the provided values in this builder
      * @since 3.0.0
      */
+    @NonNull
     public abstract DirectionsRoute build();
   }
 }

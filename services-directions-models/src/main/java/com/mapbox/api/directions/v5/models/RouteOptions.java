@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -367,15 +368,12 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * A valid Mapbox access token used to making the request.
-   * <p>
-   * Avoiding to provide a token will most-likely result in a failure, however,
-   * it's annotated as nullable to prevent serialization of tokens.
    *
    * @return a string representing the Mapbox access token
    */
   @SerializedName("access_token")
   @Ignore(Ignore.Type.SERIALIZATION)
-  @Nullable
+  @NonNull
   public abstract String accessToken();
 
   /**
@@ -674,42 +672,36 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
-   * Create a new instance of this class by passing in a formatted valid JSON String.
-   * <p>
-   * The Mapbox Access Token that was part of the original object was not serialized and needs
-   * to be provided again.
-   * The options will not be valid for a request without a Mapbox Access Token.
+   * Create a new instance of this class by passing in a formatted valid JSON String
+   * with a Mapbox Access Token.
    *
    * @param json        a formatted valid JSON string defining a RouteOptions
-   * @param accessToken a Mapbox Access Token
+   * @param accessToken a Mapbox Access Token since {@link #toJson()} does not serialize the token
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @see #fromUrl(URL)
    */
   @NonNull
-  public static RouteOptions fromJson(@NonNull String json, @Nullable String accessToken) {
-    return fromJson(json).toBuilder().accessToken(accessToken).build();
+  public static RouteOptions fromJson(@NonNull String json, @NonNull String accessToken) {
+    GsonBuilder gson = new GsonBuilder();
+
+    JsonObject jsonObject = gson.create().fromJson(json, JsonObject.class);
+    jsonObject.addProperty("access_token", accessToken);
+
+    return fromJsonElement(jsonObject);
   }
 
   /**
-   * Create a new instance of this class by passing in a formatted valid JSON String.
+   * This takes the currently defined values found inside this instance and converts it to a json
+   * string.
    * <p>
-   * The Mapbox Access Token that was part of the original object was not serialized and needs
-   * to be provided again.
-   * The options will not be valid for a request without a Mapbox Access Token so make sure to
-   * provide a token with {@link #fromJson(String, String)}
-   * or rebuild the options with {@link #toBuilder()}.
+   * The access token field is not serialized when using this method.
    *
-   * @param json a formatted valid JSON string defining a RouteOptions
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @see #fromUrl(URL)
+   * @return a JSON string
    */
-  @NonNull
-  public static RouteOptions fromJson(@NonNull String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gson.create().fromJson(json, RouteOptions.class);
+  @Override
+  public String toJson() {
+    return super.toJson();
   }
 
   /**
@@ -744,7 +736,21 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       }
     }
 
-    return fromJson(optionsJson.toString());
+    return fromJsonString(optionsJson.toString());
+  }
+
+  @NonNull
+  private static RouteOptions fromJsonString(@NonNull String json) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(json, RouteOptions.class);
+  }
+
+  @NonNull
+  private static RouteOptions fromJsonElement(@NonNull JsonElement jsonElement) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    return gson.create().fromJson(jsonElement, RouteOptions.class);
   }
 
   /**
