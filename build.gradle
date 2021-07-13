@@ -118,6 +118,11 @@ subprojects { subproject ->
     }
   }
 
+  tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
+
   if (TESTABLE_MODULES.contains(subproject.name)) {
     afterEvaluate { project ->
       project.apply from: "${rootDir}/gradle/jacoco.gradle"
