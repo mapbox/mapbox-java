@@ -79,7 +79,7 @@ public abstract class MapboxDirections extends
       routeOptions().user(),
       routeOptions().profile(),
       routeOptions().coordinates(),
-      routeOptions().accessToken(),
+      accessToken(),
       routeOptions().alternatives(),
       routeOptions().geometries(),
       routeOptions().overview(),
@@ -114,7 +114,7 @@ public abstract class MapboxDirections extends
       routeOptions().user(),
       routeOptions().profile(),
       routeOptions().coordinates(),
-      routeOptions().accessToken(),
+      accessToken(),
       routeOptions().alternatives(),
       routeOptions().geometries(),
       routeOptions().overview(),
@@ -216,6 +216,9 @@ public abstract class MapboxDirections extends
   }
 
   @NonNull
+  abstract String accessToken();
+
+  @NonNull
   abstract RouteOptions routeOptions();
 
   @Nullable
@@ -256,6 +259,18 @@ public abstract class MapboxDirections extends
    */
   @AutoValue.Builder
   public abstract static class Builder {
+
+    /**
+     * A valid Mapbox Access Token used to making the request.
+     * <p>
+     * Learn more about the tokens
+     * <a href="https://docs.mapbox.com/help/getting-started/access-tokens/">here</a>.
+     *
+     * @param accessToken a string representing the Mapbox Access Token
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder accessToken(@NonNull String accessToken);
 
     /**
      * Set of options specified for this directions request.

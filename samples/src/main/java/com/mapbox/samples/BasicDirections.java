@@ -40,10 +40,10 @@ public class BasicDirections {
     coordinates.add(Point.fromLngLat(-95.6332, 29.7890));
     coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
     RouteOptions routeOptions = RouteOptions.builder()
-      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
       .coordinatesList(coordinates)
       .build();
     builder.routeOptions(routeOptions);
+    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
 
     // 2. That's it! Now execute the command and get the response.
     Response<DirectionsResponse> response = builder.build().executeCall();
@@ -66,7 +66,6 @@ public class BasicDirections {
     coordinates.add(Point.fromLngLat(-95.6332, 29.7890));
     coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
     RouteOptions routeOptions = RouteOptions.builder()
-      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
       .coordinatesList(coordinates)
       .profile("walking")
       .walkingSpeed(1.0)
@@ -74,6 +73,7 @@ public class BasicDirections {
       .alleyBias(0.7)
       .build();
     builder.routeOptions(routeOptions);
+    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
 
     // 2. That's it! Now execute the command and get the response.
     Response<DirectionsResponse> response = builder.build().executeCall();
@@ -96,11 +96,11 @@ public class BasicDirections {
     coordinates.add(Point.fromLngLat(-95.6332, 29.7890));
     coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
     RouteOptions routeOptions = RouteOptions.builder()
-      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
       .coordinatesList(coordinates)
       .build();
     builder.routeOptions(routeOptions);
     builder.usePostMethod(true);
+    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
 
     Response<DirectionsResponse> response = builder.build().executeCall();
 
@@ -120,12 +120,12 @@ public class BasicDirections {
     coordinates.add(Point.fromLngLat(-95.6332, 29.7890));
     coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
     RouteOptions routeOptions = RouteOptions.builder()
-      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
       .coordinatesList(coordinates)
       .profile(DirectionsCriteria.PROFILE_CYCLING)
       .steps(true)
       .build();
     builder.routeOptions(routeOptions);
+    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
 
     // 2. Now request the route using a async call
     builder.build().enqueueCall(new Callback<DirectionsResponse>() {

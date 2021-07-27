@@ -70,7 +70,6 @@ class MatchingResponseFactory {
               .overview(mapboxMapMatching.overview())
               .steps(mapboxMapMatching.steps())
               .voiceUnits(mapboxMapMatching.voiceUnits())
-              .accessToken(mapboxMapMatching.accessToken())
               .waypointIndices(mapboxMapMatching.waypointIndices())
               .waypointNames(mapboxMapMatching.waypointNames())
               .baseUrl(mapboxMapMatching.baseUrl())

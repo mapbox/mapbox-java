@@ -49,7 +49,6 @@ public class BasicDirectionsRefresh {
     }
     coordinates.add(Point.fromLngLat(-95.3591, 29.7576));
     RouteOptions routeOptions = RouteOptions.builder()
-      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
       .coordinatesList(coordinates)
       .enableRefresh(true)
       .overview(OVERVIEW_FULL)
@@ -57,6 +56,7 @@ public class BasicDirectionsRefresh {
       .annotationsList(Arrays.asList(ANNOTATION_CONGESTION, ANNOTATION_MAXSPEED))
       .build();
     builder.routeOptions(routeOptions);
+    builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
 
     return builder.build();
   }

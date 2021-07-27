@@ -17,7 +17,7 @@ import java.util.List;
  * chained together to make up a similar structure to the original APIs JSON response.
  *
  * @see <a href="https://www.mapbox.com/api-documentation/navigation/#directions-response-object">Direction
- * Response Object</a>
+ *   Response Object</a>
  * @since 1.0.0
  */
 @AutoValue
@@ -146,7 +146,7 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @see RouteOptions#fromUrl(java.net.URL)
-   * @see RouteOptions#fromJson(String, String)
+   * @see RouteOptions#fromJson(String)
    */
   public static DirectionsResponse fromJson(
     @NonNull String json, @Nullable RouteOptions routeOptions, @Nullable String requestUuid) {

@@ -3,15 +3,12 @@ package com.mapbox.api.directions.v5.models;
 import static com.google.gson.JsonParser.parseString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class RouteOptionsTest extends TestUtils {
@@ -28,28 +25,28 @@ public class RouteOptionsTest extends TestUtils {
 
   @Test
   public void baseUrlIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(DirectionsCriteria.BASE_API_URL, routeOptions.baseUrl());
   }
 
   @Test
   public void userIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(DirectionsCriteria.PROFILE_DEFAULT_USER, routeOptions.user());
   }
 
   @Test
   public void profileIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC, routeOptions.profile());
   }
 
   @Test
   public void coordinatesAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(
       "-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835",
@@ -59,28 +56,28 @@ public class RouteOptionsTest extends TestUtils {
 
   @Test
   public void alternativesAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(false, routeOptions.alternatives());
   }
 
   @Test
   public void languageIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals("ru", routeOptions.language());
   }
 
   @Test
   public void radiusesAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(";unlimited;5.1", routeOptions.radiuses());
   }
 
   @Test
   public void radiusesListIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(3, routeOptions.radiusesList().size());
     assertNull(routeOptions.radiusesList().get(0));
@@ -90,14 +87,14 @@ public class RouteOptionsTest extends TestUtils {
 
   @Test
   public void bearingsAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals("0,90;90,0;", routeOptions.bearings());
   }
 
   @Test
   public void bearingsListIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(3, routeOptions.bearingsList().size());
     assertEquals(0.0, routeOptions.bearingsList().get(0).angle(), 0.00001);
@@ -109,154 +106,147 @@ public class RouteOptionsTest extends TestUtils {
 
   @Test
   public void continueStraightIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(false, routeOptions.continueStraight());
   }
 
   @Test
   public void roundaboutExitsIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(false, routeOptions.continueStraight());
   }
 
   @Test
   public void geometriesAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(DirectionsCriteria.GEOMETRY_POLYLINE6, routeOptions.geometries());
   }
 
   @Test
   public void stepsAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(true, routeOptions.steps());
   }
 
   @Test
   public void annotationsAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals("congestion,distance,duration", routeOptions.annotations());
   }
 
   @Test
   public void excludeIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals("toll", routeOptions.exclude());
   }
 
   @Test
   public void overviewIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals("full", routeOptions.overview());
   }
 
   @Test
   public void voiceInstructionsAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(true, routeOptions.voiceInstructions());
   }
 
   @Test
   public void bannerInstructionsAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(true, routeOptions.bannerInstructions());
   }
 
   @Test
   public void voiceUnitsAreValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(DirectionsCriteria.METRIC, routeOptions.voiceUnits());
   }
 
   @Test
-  public void accessTokenIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
-
-    assertEquals("token", routeOptions.accessToken());
-  }
-
-  @Test
   public void approachesStringIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(";curb;", routeOptions.approaches());
   }
 
   @Test
   public void waypointIndicesStringIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals("0;1;2", routeOptions.waypointIndices());
   }
 
   @Test
   public void waypointNamesStringIsValid_fromJson() {
-    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
     assertEquals(";two;", routeOptions.waypointNames());
   }
 
   @Test
   public void waypointTargetsStringIsValid_fromJson() {
-    RouteOptions options = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
 
     assertEquals(";12.2,21.2;", options.waypointTargets());
   }
 
   @Test
   public void snappingIncludeClosuresStringIsValid_fromJson() {
-    RouteOptions options = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
 
     assertEquals(";false;true", options.snappingIncludeClosures());
   }
 
   @Test
   public void alleyBiasIsValid_fromJson() {
-    RouteOptions options = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
 
     assertEquals(0.75, options.alleyBias(), 0.000001);
   }
 
   @Test
   public void walkingSpeedIsValid_fromJson() {
-    RouteOptions options = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
 
     assertEquals(5.11, options.walkingSpeed(), 0.000001);
   }
 
   @Test
   public void walkwayBiasIsValid_fromJson() {
-    RouteOptions options = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
 
     assertEquals(-0.2, options.walkwayBias(), 0.000001);
   }
 
   @Test
   public void arriveByIsValid_fromJson() {
-    RouteOptions options = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
 
     assertEquals("2021-01-01'T'01:01", options.arriveBy());
   }
 
   @Test
   public void departAtIsValid_fromJson() {
-    RouteOptions options = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
 
     assertEquals("2021-02-02'T'02:02", options.departAt());
   }
 
   @Test
   public void enableRefreshIsValid_fromJson() {
-    RouteOptions options = RouteOptions.fromJson(optionsJson, "token");
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
 
     assertEquals(true, options.enableRefresh());
   }
@@ -273,16 +263,6 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions options = routeOptionsList();
 
     assertEquals(parseString(optionsJson), parseString(options.toJson()));
-  }
-
-  @Test
-  public void routeOptions_toJson_tokenNotSerialized() {
-    String json = routeOptions().toJson();
-
-    Gson gson = new Gson();
-    JsonObject object = gson.fromJson(json, JsonObject.class);
-
-    Assert.assertNull(object.get("access_token"));
   }
 
   /**
@@ -322,7 +302,6 @@ public class RouteOptionsTest extends TestUtils {
       .arriveBy("2021-01-01'T'01:01")
       .departAt("2021-02-02'T'02:02")
       .snappingIncludeClosures(";false;true")
-      .accessToken("token")
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
       .enableRefresh(true)
       .build();
@@ -397,7 +376,6 @@ public class RouteOptionsTest extends TestUtils {
         add(false);
         add(true);
       }})
-      .accessToken("token")
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
       .enableRefresh(true)
       .build();

@@ -83,7 +83,6 @@ public class MapMatchingRouteOptionsTest extends TestUtils {
       .profile("hello")
       .user("user")
       .coordinatesList(pointList)
-      .accessToken(ACCESS_TOKEN)
       .build();
     assertNotNull(routeOptions);
     assertEquals("hello", routeOptions.profile());
