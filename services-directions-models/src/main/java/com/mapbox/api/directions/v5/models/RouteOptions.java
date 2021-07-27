@@ -6,7 +6,6 @@ import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
@@ -15,7 +14,6 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.geojson.Point;
-import com.ryanharter.auto.value.gson.Ignore;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -367,16 +365,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String voiceUnits();
 
   /**
-   * A valid Mapbox access token used to making the request.
-   *
-   * @return a string representing the Mapbox access token
-   */
-  @SerializedName("access_token")
-  @Ignore(Ignore.Type.SERIALIZATION)
-  @NonNull
-  public abstract String accessToken();
-
-  /**
    * A semicolon-separated list indicating from which side of the road
    * to approach a waypoint.
    * Accepts  {@link DirectionsCriteria#APPROACH_UNRESTRICTED} (default) or
@@ -675,20 +663,14 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Create a new instance of this class by passing in a formatted valid JSON String
    * with a Mapbox Access Token.
    *
-   * @param json        a formatted valid JSON string defining a RouteOptions
-   * @param accessToken a Mapbox Access Token since {@link #toJson()} does not serialize the token
+   * @param json a formatted valid JSON string defining a RouteOptions
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @see #fromUrl(URL)
    */
   @NonNull
-  public static RouteOptions fromJson(@NonNull String json, @NonNull String accessToken) {
-    GsonBuilder gson = new GsonBuilder();
-
-    JsonObject jsonObject = gson.create().fromJson(json, JsonObject.class);
-    jsonObject.addProperty("access_token", accessToken);
-
-    return fromJsonElement(jsonObject);
+  public static RouteOptions fromJson(@NonNull String json) {
+    return fromJsonString(json);
   }
 
   /**
@@ -710,7 +692,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * @param url request URL
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
-   * @see #fromJson(String, String)
+   * @see #fromJson(String)
    */
   @NonNull
   public static RouteOptions fromUrl(@NonNull URL url) {
@@ -744,13 +726,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     return gson.create().fromJson(json, RouteOptions.class);
-  }
-
-  @NonNull
-  private static RouteOptions fromJsonElement(@NonNull JsonElement jsonElement) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gson.create().fromJson(jsonElement, RouteOptions.class);
   }
 
   /**
@@ -1108,17 +1083,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder voiceUnits(@Nullable String voiceUnits);
-
-    /**
-     * A valid Mapbox access token used to making the request.
-     *
-     * @param accessToken a string containing a valid Mapbox access token.
-     *                    Avoiding to provide a token will most-likely result in a failure, however,
-     *                    it's annotated as nullable to prevent serialization of tokens.
-     * @return this builder for chaining options together
-     */
-    @NonNull
-    public abstract Builder accessToken(@Nullable String accessToken);
 
     /**
      * Exclude certain road types from routing. The default is to not exclude anything from the

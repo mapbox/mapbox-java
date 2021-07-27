@@ -69,7 +69,6 @@ public class DirectionsRouteTest extends TestUtils {
         add(Point.fromLngLat(1.0, 1.0));
         add(Point.fromLngLat(2.0, 2.0));
       }})
-      .accessToken("token")
       .build();
     String uuid = "123";
     DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
@@ -87,52 +86,14 @@ public class DirectionsRouteTest extends TestUtils {
         add(Point.fromLngLat(1.0, 1.0));
         add(Point.fromLngLat(2.0, 2.0));
       }})
-      .accessToken("token")
       .build();
     String uuid = "123";
     DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
 
     String newRouteJson = route.toJson();
 
-    DirectionsRoute newRoute = DirectionsRoute.fromJson(newRouteJson, "token");
+    DirectionsRoute newRoute = DirectionsRoute.fromJson(newRouteJson);
 
     assertEquals(route, newRoute);
-  }
-
-  @Test
-  public void directionsRoute_json_invalid_with_options() throws Exception {
-    thrown.expect(RuntimeException.class);
-    thrown.expectMessage(
-      "Provided serialized route contains RouteOptions. "
-        + "Use DirectionsRoute#fromJson(json, accessToken) instead.");
-    String json = loadJsonFixture("directions_v5-with-closure_precision_6.json");
-    RouteOptions options = RouteOptions.builder()
-      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
-      .coordinatesList(new ArrayList<Point>() {{
-        add(Point.fromLngLat(1.0, 1.0));
-        add(Point.fromLngLat(2.0, 2.0));
-      }})
-      .accessToken("token")
-      .build();
-    String uuid = "123";
-    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
-
-    String newRouteJson = route.toJson();
-
-    DirectionsRoute.fromJson(newRouteJson);
-  }
-
-  @Test
-  public void directionsRoute_json_invalid_without_options() throws Exception {
-    thrown.expect(RuntimeException.class);
-    thrown.expectMessage(
-      "Provided serialized route does not contain RouteOptions. "
-        + "Use DirectionsRoute#fromJson(json) instead.");
-    String json = loadJsonFixture("directions_v5-with-closure_precision_6.json");
-    DirectionsRoute route = DirectionsRoute.fromJson(json);
-
-    String newRouteJson = route.toJson();
-
-    DirectionsRoute.fromJson(newRouteJson, "token");
   }
 }

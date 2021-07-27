@@ -43,11 +43,15 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_V5_ANNOTATIONS_FIXTURE = "directions_annotations_v5.json";
   private static final String DIRECTIONS_V5_NO_ROUTE = "directions_v5_no_route.json";
   private static final String DIRECTIONS_V5_SPEED_LIMIT = "directions_v5_speedlimit.json";
-  private static final String DIRECTIONS_V5_MAX_SPEED_ANNOTATION = "directions_v5_max_speed_annotation.json";
-  private static final String DIRECTIONS_V5_BANNER_INSTRUCTIONS = "directions_v5_banner_instructions.json";
+  private static final String DIRECTIONS_V5_MAX_SPEED_ANNOTATION =
+    "directions_v5_max_speed_annotation.json";
+  private static final String DIRECTIONS_V5_BANNER_INSTRUCTIONS =
+    "directions_v5_banner_instructions.json";
   private static final String DIRECTIONS_V5_APPROACHES_REQUEST = "directions_v5_approaches.json";
-  private static final String DIRECTIONS_V5_WAYPOINT_NAMES_FIXTURE = "directions_v5_waypoint_names.json";
-  private static final String DIRECTIONS_V5_WAYPOINT_TARGETS_FIXTURE = "directions_v5_waypoint_targets.json";
+  private static final String DIRECTIONS_V5_WAYPOINT_NAMES_FIXTURE =
+    "directions_v5_waypoint_names.json";
+  private static final String DIRECTIONS_V5_WAYPOINT_TARGETS_FIXTURE =
+    "directions_v5_waypoint_targets.json";
   private static final String DIRECTIONS_V5_POST = "directions_v5_post.json";
   private static final String ROUTE_OPTIONS_V5 = "route_options_v5.json";
 
@@ -55,7 +59,8 @@ public class MapboxDirectionsTest extends TestUtils {
   private MockWebServer server;
   private HttpUrl mockUrl;
 
-  private final RouteOptions routeOptions = RouteOptions.fromJson(loadJsonFixture(ROUTE_OPTIONS_V5), "token");
+  private final RouteOptions routeOptions =
+    RouteOptions.fromJson(loadJsonFixture(ROUTE_OPTIONS_V5));
 
   public MapboxDirectionsTest() throws IOException {
   }
@@ -77,8 +82,8 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test
   public void testRouteOptionsFromUrl() throws IOException {
-    assertNotNull(routeOptions.accessToken());
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertEquals(
@@ -89,8 +94,8 @@ public class MapboxDirectionsTest extends TestUtils {
 
   @Test
   public void testRouteOptionsFromUrl_alreadyDecoded() throws IOException {
-    assertNotNull(routeOptions.accessToken());
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertEquals(
@@ -104,6 +109,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void sanity() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertNotNull(mapboxDirections);
@@ -113,6 +119,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void build_coordinatesListCreatedInCorrectOrder() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString()
@@ -122,6 +129,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void build_walkingWalkingSpeedOptions() {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("walking_speed=5.11"));
@@ -130,6 +138,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void build_walkingWalkwayBiasOptions() {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("walkway_bias=-0.2"));
@@ -138,6 +147,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void build_walkingAlleyBiasOptions() {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("alley_bias=0.75"));
@@ -146,6 +156,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void user_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("/mapbox/"));
@@ -154,6 +165,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void profile_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("/driving-traffic/"));
@@ -162,6 +174,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void waypointList_doesGetFormattedInUrlCorrectly() {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
 
@@ -171,6 +184,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void alternatives_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("alternatives=false"));
@@ -179,6 +193,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void geometries_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("geometries=polyline6"));
@@ -187,6 +202,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void overview_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("overview=full"));
@@ -195,6 +211,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void steps_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("steps=true"));
@@ -203,6 +220,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void continueStraight_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString()
@@ -212,6 +230,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void language_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("language=ru"));
@@ -220,6 +239,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void annotations_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertEquals("congestion,distance,duration",
@@ -229,6 +249,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void addBearing_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertEquals("0,90;90,0;",
@@ -238,6 +259,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void radiuses_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertEquals(";unlimited;5.1",
@@ -247,6 +269,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void clientAppName_doesGetAddedToRequestHeader1() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .clientAppName("APP")
       .build();
@@ -256,6 +279,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void clientAppName_doesGetAddedToRequestHeader2() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .clientAppName("APP")
       .build();
@@ -265,6 +289,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void accessToken_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("access_token=token"));
@@ -273,14 +298,17 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void baseUrl_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
-    assertTrue(directions.cloneCall().request().url().toString().startsWith("https://api.mapbox.com"));
+    assertTrue(
+      directions.cloneCall().request().url().toString().startsWith("https://api.mapbox.com"));
   }
 
   @Test
   public void voiceUnits_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
 
@@ -290,24 +318,29 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void bannerInstructions_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
 
-    assertTrue(directions.cloneCall().request().url().toString().contains("banner_instructions=true"));
+    assertTrue(
+      directions.cloneCall().request().url().toString().contains("banner_instructions=true"));
   }
 
   @Test
   public void voiceInstructions_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
 
-    assertTrue(directions.cloneCall().request().url().toString().contains("voice_instructions=true"));
+    assertTrue(
+      directions.cloneCall().request().url().toString().contains("voice_instructions=true"));
   }
 
   @Test
   public void exclude_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
 
@@ -317,6 +350,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void callFactoryNonNull() throws IOException {
     MapboxDirections client = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
 
@@ -331,6 +365,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void radiusWithUnlimitedDistance() throws IOException {
     MapboxDirections client = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
 
@@ -342,6 +377,7 @@ public class MapboxDirectionsTest extends TestUtils {
   public void noValidRouteTest() throws Exception {
     testDispatcher.currentResource = DIRECTIONS_V5_NO_ROUTE;
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
 
@@ -354,6 +390,7 @@ public class MapboxDirectionsTest extends TestUtils {
   public void setCoordinates_localeShouldNotMatter() {
     Locale.setDefault(Locale.GERMANY);
     MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
     assertTrue(directions.cloneCall().request().url().toString()
@@ -420,6 +457,7 @@ public class MapboxDirectionsTest extends TestUtils {
     testDispatcher.currentResource = DIRECTIONS_V5_BANNER_INSTRUCTIONS;
 
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
 
@@ -440,6 +478,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void sanityApproachesInstructions() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
 
@@ -450,6 +489,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void sanityWaypointNamesInstructions() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
     assertNotNull(mapboxDirections);
@@ -460,6 +500,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void withWaypointTargets() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions)
       .build();
 
@@ -479,6 +520,7 @@ public class MapboxDirectionsTest extends TestUtils {
       }
     };
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .interceptor(interceptor)
       .build();
@@ -496,6 +538,7 @@ public class MapboxDirectionsTest extends TestUtils {
     };
 
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .networkInterceptor(interceptor)
       .build();
@@ -513,6 +556,7 @@ public class MapboxDirectionsTest extends TestUtils {
     };
 
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .eventListener(eventListener)
       .build();
@@ -523,6 +567,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void post() throws IOException {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .usePostMethod(true)
       .build();
@@ -544,12 +589,12 @@ public class MapboxDirectionsTest extends TestUtils {
       fakeCoordinates.add(Point.fromLngLat(random.nextInt(50), random.nextInt(50)));
     }
     MapboxDirections.Builder builder = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(
         RouteOptions.builder()
           .baseUrl(mockUrl.toString())
           .coordinatesList(fakeCoordinates)
           .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
-          .accessToken("token")
           .build()
       );
 
@@ -561,6 +606,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void callForUrlLength_shortUrl() {
     MapboxDirections.Builder builder = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build());
 
     retrofit2.Call<DirectionsResponse> call = builder.build().initializeCall();
@@ -571,6 +617,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void postIsUsed() {
     MapboxDirections.Builder builder = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .usePostMethod(true);
 
@@ -582,6 +629,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void getIsUsed() {
     MapboxDirections.Builder builder = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .usePostMethod(false);
 
@@ -593,6 +641,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void getIsUsedByDefault() {
     MapboxDirections.Builder builder = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build());
 
     retrofit2.Call<DirectionsResponse> call = builder.build().initializeCall();
@@ -603,6 +652,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void withIncidents() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
 
@@ -639,6 +689,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void snappingIncludeClosures() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
 
@@ -649,6 +700,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void arrive_by() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
 
@@ -659,6 +711,7 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void depart_at() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
 
@@ -669,11 +722,19 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void enable_refresh() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
 
     assertEquals("true",
       mapboxDirections.cloneCall().request().url().queryParameter("enable_refresh"));
+  }
+
+  @Test(expected = Exception.class)
+  public void token_required() throws Exception {
+    MapboxDirections.builder()
+      .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+      .build();
   }
 
   class TestDispatcher extends okhttp3.mockwebserver.Dispatcher {
