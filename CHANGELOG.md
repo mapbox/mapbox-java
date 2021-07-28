@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.0-alpha.2 - July 28, 2021
+- Removed `accessToken` from `RouteOptions` and moved it to `MapboxDirections` instead. This simplifies serialization and deserialization of route objects without potential leaks of data under the assumption that an entity that makes a route request has an ability to provide an access token without the route object having to transport it. [#1276](https://github.com/mapbox/mapbox-java/pull/1276)
+
 ### v6.0.0-alpha.1 - July 20, 2021
 - Refactored `MapboxDirections` to accept `RouteOptions` as an argument that defines request parameters [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
 - Moved the `requestUuid` object out of `RouteOptions` and into `DirectionsRoute` since the UUID is not a request parameter, it's a response value [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
