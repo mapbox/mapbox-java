@@ -173,7 +173,7 @@ public class FormatUtils {
   /**
    * Converts list of Z-levels to a string ready for API consumption.
    *
-   * @param points a list representing Z-levels
+   * @param zLevels a list representing Z-levels
    * @return a formatted string with semicolon separated integers
    */
   @Nullable
