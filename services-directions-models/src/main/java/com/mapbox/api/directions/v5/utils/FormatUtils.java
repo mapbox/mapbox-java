@@ -178,7 +178,7 @@ public class FormatUtils {
    */
   @Nullable
   public static String formatZLevels(@Nullable List<Integer> zLevels) {
-    if (points == null) {
+    if (zLevels == null) {
       return null;
     }
 
