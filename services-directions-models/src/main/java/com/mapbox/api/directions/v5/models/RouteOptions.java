@@ -199,6 +199,29 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
+   * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous cases when
+   * there are multiple roads at the same point and only Z-level allows to differentiate them.
+   * <p>
+   * If provided, the list of z-levels must be the same length as the list of coordinates.
+   * @return a string representing the Z-levels with the ; separator. Each value may be negative or absent.
+   */
+  @SerializedName("z_levels")
+  @Nullable
+  public abstract String zLevels();
+
+  /**
+   * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous cases when
+   * there are multiple roads at the same point and only Z-level allows to differentiate them.
+   * <p>
+   * If provided, the list of z-levels must be the same length as the list of coordinates.
+   * @return a List of values representing Z-levels. Each value may be negative or null.
+   */
+  @Nullable
+  public List<Integer> zLevelsList() {
+    return ParseUtils.parseToIntegers(zLevels());
+  }
+
+  /**
    * The allowed direction of travel when departing intermediate waypoints. If true, the route
    * will continue in the same direction of travel. If false, the route may continue in the opposite
    * direction of travel. Defaults to true for {@link DirectionsCriteria#PROFILE_DRIVING} and false
@@ -920,6 +943,34 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       String result = FormatUtils.formatBearings(bearings);
       if (result != null) {
         bearings(result);
+      }
+      return this;
+    }
+
+    /**
+     * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous cases when
+     * there are multiple roads at the same point and only Z-level allows to differentiate them.
+     * <p>
+     * If provided, the list of z-levels must be the same length as the list of coordinates.
+     * @param zLevels a string representing the Z-levels with the ; separator.
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder zLevels(@Nullable String zLevels);
+
+    /**
+     * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous cases when
+     * there are multiple roads at the same point and only Z-level allows to differentiate them.
+     * <p>
+     * If provided, the list of z-levels must be the same length as the list of coordinates.
+     * @param zLevels a list of Z-levels. For unknown Z-level use `null`.
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public Builder zLevelsList(@Nullable List<Integer> zLevels) {
+      String result = FormatUtils.formatZLevels(zLevels);
+      if (result != null) {
+        zLevels(result);
       }
       return this;
     }

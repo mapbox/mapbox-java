@@ -12,7 +12,6 @@ import java.util.List;
 import org.junit.Test;
 
 public class RouteOptionsTest extends TestUtils {
-
   /**
    * Always update this file when new option is introduced.
    */
@@ -102,6 +101,31 @@ public class RouteOptionsTest extends TestUtils {
     assertEquals(90.0, routeOptions.bearingsList().get(1).angle(), 0.00001);
     assertEquals(0.0, routeOptions.bearingsList().get(1).degrees(), 0.00001);
     assertNull(routeOptions.bearingsList().get(2));
+  }
+
+  @Test
+  public void zLevelsAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
+
+    assertEquals("-42;1;0;;;73;", routeOptions.zLevels());
+  }
+
+
+  @Test
+  public void zLevelsListIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
+    
+    List<Integer> expected = new ArrayList<Integer>();
+    Collections.addAll(expected, -42, 1, 0, null, null, 73, null);
+
+    assertEquals(routeOptions.zLevelsList().size(), expected.size());
+    for (int i = 0; i < expected.size(); ++i) {
+      if (expected[i]) {
+        assertEquals(expected[i].equals(routeOptions.zLevelsList().get(i)));
+      } else {
+        assertNull(routeOptions.zLevelsList().get(i));
+      }
+    }
   }
 
   @Test
@@ -281,6 +305,7 @@ public class RouteOptionsTest extends TestUtils {
       .alternatives(false)
       .annotations("congestion,distance,duration")
       .bearings("0,90;90,0;")
+      .zLevels("-42;;0")
       .continueStraight(false)
       .exclude(DirectionsCriteria.EXCLUDE_TOLL)
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
@@ -330,6 +355,11 @@ public class RouteOptionsTest extends TestUtils {
         add(Bearing.builder().angle(0.0).degrees(90.0).build());
         add(Bearing.builder().angle(90.0).degrees(0.0).build());
         add(null);
+      }})
+      .zLevelsList(new ArrayList<Integer>() {{
+        add(-42);
+        add(null);
+        add(0);
       }})
       .continueStraight(false)
       .exclude(DirectionsCriteria.EXCLUDE_TOLL)

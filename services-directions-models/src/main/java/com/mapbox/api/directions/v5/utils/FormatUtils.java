@@ -169,4 +169,27 @@ public class FormatUtils {
     }
     return join(";", coordinatesToJoin);
   }
+
+  /**
+   * Converts list of Z-levels to a string ready for API consumption.
+   *
+   * @param points a list representing Z-levels
+   * @return a formatted string with semicolon separated integers
+   */
+  @Nullable
+  public static String formatZLevels(@Nullable List<Integer> zLevels) {
+    if (points == null) {
+      return null;
+    }
+
+    List<String> toJoin = new ArrayList<>();
+    for (Integer zLevel : zLevels) {
+      if (zLevel == null) {
+        toJoin.add(null);
+      } else {
+        toJoin.add(Integer.toString(zLevel));
+      }
+    }
+    return join(";", toJoin);
+  }
 }
