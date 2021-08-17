@@ -199,19 +199,22 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
-   * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous cases when
-   * there are multiple roads at the same point and only Z-level allows to differentiate them.
+   * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous
+   * cases when there are multiple roads at the same point and only Z-level allows
+   * to differentiate them.
    * <p>
    * If provided, the list of z-levels must be the same length as the list of coordinates.
-   * @return a string representing the Z-levels with the ; separator. Each value may be negative or absent.
+   * @return a string representing the Z-levels with the ; separator. Each value may be negative
+    or absent.
    */
   @SerializedName("z_levels")
   @Nullable
   public abstract String zLevels();
 
   /**
-   * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous cases when
-   * there are multiple roads at the same point and only Z-level allows to differentiate them.
+   * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous
+   * cases when there are multiple roads at the same point and only Z-level allows
+   * to differentiate them.
    * <p>
    * If provided, the list of z-levels must be the same length as the list of coordinates.
    * @return a List of values representing Z-levels. Each value may be negative or null.
@@ -948,8 +951,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     }
 
     /**
-     * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous cases when
-     * there are multiple roads at the same point and only Z-level allows to differentiate them.
+     * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous
+     * cases when there are multiple roads at the same point and only Z-level allows
+     * to differentiate them.
      * <p>
      * If provided, the list of z-levels must be the same length as the list of coordinates.
      * @param zLevels a string representing the Z-levels with the ; separator.
@@ -959,8 +963,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder zLevels(@Nullable String zLevels);
 
     /**
-     * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous cases when
-     * there are multiple roads at the same point and only Z-level allows to differentiate them.
+     * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous
+     * cases when there are multiple roads at the same point and only Z-level allows
+     * to differentiate them.
      * <p>
      * If provided, the list of z-levels must be the same length as the list of coordinates.
      * @param zLevels a list of Z-levels. For unknown Z-level use `null`.
@@ -968,7 +973,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public Builder zLevelsList(@Nullable List<Integer> zLevels) {
-      String result = FormatUtils.formatZLevels(zLevels);
+      String result = FormatUtils.formatIntegers(zLevels);
       if (result != null) {
         zLevels(result);
       }

@@ -171,23 +171,23 @@ public class FormatUtils {
   }
 
   /**
-   * Converts list of Z-levels to a string ready for API consumption.
+   * Converts list of integers to a string ready for API consumption.
    *
-   * @param zLevels a list representing Z-levels
+   * @param integers a list of integers
    * @return a formatted string with semicolon separated integers
    */
   @Nullable
-  public static String formatZLevels(@Nullable List<Integer> zLevels) {
-    if (zLevels == null) {
+  public static String formatIntegers(@Nullable List<Integer> integers) {
+    if (integers == null) {
       return null;
     }
 
     List<String> toJoin = new ArrayList<>();
-    for (Integer zLevel : zLevels) {
-      if (zLevel == null) {
+    for (Integer integer : integers) {
+      if (integer == null) {
         toJoin.add(null);
       } else {
-        toJoin.add(Integer.toString(zLevel));
+        toJoin.add(Integer.toString(integer));
       }
     }
     return join(";", toJoin);
