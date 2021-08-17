@@ -4,6 +4,29 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.0-alpha.2 - July 28, 2021
+- Removed `accessToken` from `RouteOptions` and moved it to `MapboxDirections` instead. This simplifies serialization and deserialization of route objects without potential leaks of data under the assumption that an entity that makes a route request has an ability to provide an access token without the route object having to transport it. [#1276](https://github.com/mapbox/mapbox-java/pull/1276)
+
+### v6.0.0-alpha.1 - July 20, 2021
+- Refactored `MapboxDirections` to accept `RouteOptions` as an argument that defines request parameters [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Moved the `requestUuid` object out of `RouteOptions` and into `DirectionsRoute` since the UUID is not a request parameter, it's a response value [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Added `enableRefresh` to `RouteOptions` since it is a route request parameter [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Removed a separate `WalkingOptions` in favor of storing the parameter directly in the `RouteOptions` [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Exposed `arriveBy` and `departAt` request parameters [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Exposed `ANNOTATION_CONGESTION_NUMERIC` parameter [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Updated documentation for various route request parameters [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Exposed `DirectionsResponse#fromJson(json, route options, request uuid)` that allows developers to provide information about the original route request which response they deserialize so that Nav SDK can operate correctly [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Exposed `DirectionsRoute#fromJson(json, route options, request uuid)` for same reason as above [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Exposed `RouteOptions#fromUrl` utility function that creates the object from the request URL which might be useful when paired with the above functions [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Added default values for `RouteOptions`: base URL, user, and geometry encoding (polyline6) [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Added a List overload in `RouteOptions` for coordinates, now there are `RouteOptions#coordinates(string)` and `RouteOptions#coordinatesList(list)`. ⚠️ If there are routes that were previously serialized with toJson methods and contained `RouteOptions`, they will not be possible to deserialize anymore since coordinates are now stored as a string and not an array. This breaking change can typically impact test fixtures [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Fixed an issue where coordinates were rounded to 6 decimal places instead of 7 decimal places that the `GeoJSON` specification expects [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Changed the default encoding for MapMatching to be polyline6 and aligns it with regular route requests [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Added a `Bearing` object that represents a pair of values for {angle, degrees} [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Removed route request parameters verification in favor of letting the service respond with a correct error [#1265](https://github.com/mapbox/mapbox-java/pull/1265)
+- Stopped serializing access tokens [#1267](https://github.com/mapbox/mapbox-java/pull/1267)
+- Replaced `Closure` `@Nullable` annotations with `@NonNull` [#1268](https://github.com/mapbox/mapbox-java/pull/1268)
+
 ### 5.9.0-alpha.5 - April 9, 2021
 - Exposed a method to pass a single boolean snapping closure parameter [#1253](https://github.com/mapbox/mapbox-java/pull/1253)
 

@@ -167,9 +167,6 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String.
    * <p>
-   * Use this method if the provided serialized route was not obtained by this library.
-   * Alternatively, use {@link #fromJson(String, String)}.
-   * <p>
    * If you're using the provided route with the Mapbox Navigation SDK, also see
    * {@link #fromJson(String, RouteOptions, String)}.
    *
@@ -180,41 +177,6 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   public static DirectionsRoute fromJson(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
     JsonObject jsonObject = gson.create().fromJson(json, JsonObject.class);
-    if (jsonObject.has("routeOptions")) {
-      throw new IllegalArgumentException(
-        "Provided serialized route contains RouteOptions. "
-          + "Use DirectionsRoute#fromJson(json, accessToken) instead."
-      );
-    }
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
-    return gson.create().fromJson(jsonObject, DirectionsRoute.class);
-  }
-
-  /**
-   * Create a new instance of this class by passing in a formatted valid JSON String.
-   * <p>
-   * Use this method if the provided serialized route was obtained by this library.
-   * This means that it includes {@link RouteOptions} and you need to supply a Mapbox Access Token.
-   * Alternatively, use {@link #fromJson(String)}.
-   *
-   * @param json        a formatted valid JSON string defining a GeoJson Directions Route
-   * @param accessToken a Mapbox Access Token
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   */
-  public static DirectionsRoute fromJson(@NonNull String json, @NonNull String accessToken) {
-    GsonBuilder gson = new GsonBuilder();
-    JsonObject jsonObject = gson.create().fromJson(json, JsonObject.class);
-    if (jsonObject.has("routeOptions")) {
-      JsonObject routeOptions = jsonObject.getAsJsonObject("routeOptions");
-      routeOptions.addProperty("access_token", accessToken);
-    } else {
-      throw new IllegalArgumentException(
-        "Provided serialized route does not contain RouteOptions. "
-          + "Use DirectionsRoute#fromJson(json) instead."
-      );
-    }
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     return gson.create().fromJson(jsonObject, DirectionsRoute.class);
@@ -234,7 +196,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @see RouteOptions#fromUrl(java.net.URL)
-   * @see RouteOptions#fromJson(String, String)
+   * @see RouteOptions#fromJson(String)
    */
   public static DirectionsRoute fromJson(
     @NonNull String json, @Nullable RouteOptions routeOptions, @Nullable String requestUuid

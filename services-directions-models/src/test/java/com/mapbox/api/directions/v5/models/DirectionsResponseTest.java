@@ -55,7 +55,6 @@ public class DirectionsResponseTest extends TestUtils {
         add(Point.fromLngLat(1.0, 1.0));
         add(Point.fromLngLat(2.0, 2.0));
       }})
-      .accessToken("token")
       .build();
     String uuid = "123";
     DirectionsResponse response = DirectionsResponse.fromJson(json, options, uuid);
