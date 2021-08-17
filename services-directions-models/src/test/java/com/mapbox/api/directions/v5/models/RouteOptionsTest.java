@@ -8,6 +8,7 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 
@@ -107,7 +108,7 @@ public class RouteOptionsTest extends TestUtils {
   public void zLevelsAreValid_fromJson() {
     RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
-    assertEquals("-42;1;0;;;73;", routeOptions.zLevels());
+    assertEquals("-42;;0", routeOptions.zLevels());
   }
 
 
@@ -116,12 +117,12 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
     
     List<Integer> expected = new ArrayList<Integer>();
-    Collections.addAll(expected, -42, 1, 0, null, null, 73, null);
+    Collections.addAll(expected, -42, null, 0);
 
     assertEquals(routeOptions.zLevelsList().size(), expected.size());
     for (int i = 0; i < expected.size(); ++i) {
-      if (expected[i]) {
-        assertEquals(expected[i].equals(routeOptions.zLevelsList().get(i)));
+      if (expected.get(i) != null) {
+        assertEquals(expected.get(i), routeOptions.zLevelsList().get(i));
       } else {
         assertNull(routeOptions.zLevelsList().get(i));
       }
