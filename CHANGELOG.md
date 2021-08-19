@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.0-alpha.3 - August 19, 2021
+- Bumped `okhttp` version to `4.9.0`. It requires java 1.8 for compatibility. [#1271](https://github.com/mapbox/mapbox-java/pull/1271)
+
 ### v6.0.0-alpha.2 - July 28, 2021
 - Removed `accessToken` from `RouteOptions` and moved it to `MapboxDirections` instead. This simplifies serialization and deserialization of route objects without potential leaks of data under the assumption that an entity that makes a route request has an ability to provide an access token without the route object having to transport it. [#1276](https://github.com/mapbox/mapbox-java/pull/1276)
 
