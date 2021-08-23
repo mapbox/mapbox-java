@@ -104,7 +104,8 @@ public abstract class MapboxDirections extends
       routeOptions().alleyBias(),
       routeOptions().snappingIncludeClosures(),
       routeOptions().arriveBy(),
-      routeOptions().departAt()
+      routeOptions().departAt(),
+      routeOptions().metadata()
     );
   }
 
@@ -139,7 +140,8 @@ public abstract class MapboxDirections extends
       routeOptions().alleyBias(),
       routeOptions().snappingIncludeClosures(),
       routeOptions().arriveBy(),
-      routeOptions().departAt()
+      routeOptions().departAt(),
+      routeOptions().metadata()
     );
   }
 

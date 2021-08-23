@@ -136,6 +136,15 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void build_metadataOptions() {
+    MapboxDirections directions = MapboxDirections.builder()
+        .accessToken("token")
+        .routeOptions(routeOptions)
+        .build();
+    assertTrue(directions.cloneCall().request().url().toString().contains("metadata=true"));
+  }
+
+  @Test
   public void build_walkingWalkwayBiasOptions() {
     MapboxDirections directions = MapboxDirections.builder()
       .accessToken("token")

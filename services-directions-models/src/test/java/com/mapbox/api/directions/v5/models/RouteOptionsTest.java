@@ -252,6 +252,13 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void metadataIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
+
+    assertEquals(true, options.metadata());
+  }
+
+  @Test
   public void routeOptions_toJson() {
     RouteOptions options = routeOptions();
 
@@ -304,6 +311,7 @@ public class RouteOptionsTest extends TestUtils {
       .snappingIncludeClosures(";false;true")
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
       .enableRefresh(true)
+      .metadata(true)
       .build();
   }
 
@@ -378,6 +386,7 @@ public class RouteOptionsTest extends TestUtils {
       }})
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
       .enableRefresh(true)
+      .metadata(true)
       .build();
   }
 }
