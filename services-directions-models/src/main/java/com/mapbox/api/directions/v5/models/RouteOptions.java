@@ -650,6 +650,16 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract Boolean enableRefresh();
 
   /**
+   * Whether the response should contain metadata holding versioning information.
+   * <p>
+   *
+   * @return whether the response should hold metadata
+   */
+  @SerializedName("metadata")
+  @Nullable
+  public abstract Boolean metadata();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -1420,6 +1430,16 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder enableRefresh(@Nullable Boolean enableRefresh);
+
+    /**
+     * Whether the response should contain metadata holding versioning information.
+     * <p>
+     *
+     * @param metadata whether the routes should be refreshable
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder metadata(@Nullable Boolean metadata);
 
     /**
      * Builds the object.
