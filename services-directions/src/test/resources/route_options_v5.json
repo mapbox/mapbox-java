@@ -27,6 +27,8 @@
   "walkway_bias": -0.2,
   "arrive_by": "2021-01-01'T'01:01",
   "depart_at": "2021-02-02'T'02:02",
+  "max_height": 1.5,
+  "max_width": 1.4,
   "enable_refresh": true,
   "metadata": true
 }

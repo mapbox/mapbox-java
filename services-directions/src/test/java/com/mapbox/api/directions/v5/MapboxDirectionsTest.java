@@ -731,6 +731,28 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void max_height() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .accessToken("token")
+            .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+            .build();
+
+    assertEquals("1.5",
+            mapboxDirections.cloneCall().request().url().queryParameter("max_height"));
+  }
+
+  @Test
+  public void max_width() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .accessToken("token")
+            .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+            .build();
+
+    assertEquals("1.4",
+            mapboxDirections.cloneCall().request().url().queryParameter("max_width"));
+  }
+
+  @Test
   public void enable_refresh() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .accessToken("token")

@@ -639,6 +639,30 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String departAt();
 
   /**
+   * The max vehicle height in meters. If this parameter is provided, the Directions API will
+   * compute a route that includes only roads with a height limit greater than or equal to the max
+   * vehicle height. max_height must be between 0 and 10 meters. The default value is 1.6 meters.
+   * <p>
+   * Available for {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} and
+   * {@link DirectionsCriteria#PROFILE_DRIVING}.
+   */
+  @SerializedName("max_height")
+  @Nullable
+  public abstract Double maxHeight();
+
+  /**
+   * The max vehicle width in meters. If this parameter is provided, the Directions API will
+   * compute a route that includes only roads with a width limit greater than or equal to the max
+   * vehicle width. max_width must be between 0 and 10 meters. The default value is 1.9 meters.
+   * <p>
+   * Available for {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} and
+   * {@link DirectionsCriteria#PROFILE_DRIVING}.
+   */
+  @SerializedName("max_width")
+  @Nullable
+  public abstract Double maxWidth();
+
+  /**
    * Whether the routes should be refreshable via the directions refresh API.
    * <p>
    * If false, the refresh requests will fail. Defaults to false if null.
@@ -1419,6 +1443,34 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder departAt(@Nullable String departAt);
+
+    /**
+     * The max vehicle height in meters. If this parameter is provided, the Directions API will
+     * compute a route that includes only roads with a height limit greater than or equal to the max
+     * vehicle height. The default value is 1.6 meters.
+     * <p>
+     * Available for {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} and
+     * {@link DirectionsCriteria#PROFILE_DRIVING}.
+     *
+     * @param maxHeight max vehicle height, in meters. Must be between 0 and 10.
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder maxHeight(@Nullable @FloatRange(from = 0, to = 10) Double maxHeight);
+
+    /**
+     * The max vehicle width in meters. If this parameter is provided, the Directions API will
+     * compute a route that includes only roads with a width limit greater than or equal to the max
+     * vehicle width. The default value is 1.9 meters.
+     * <p>
+     * Available for {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC} and
+     * {@link DirectionsCriteria#PROFILE_DRIVING}.
+     *
+     * @param maxWidth max vehicle width, in meters. Must be between 0 and 10.
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder maxWidth(@Nullable @FloatRange(from = 0, to = 10) Double maxWidth);
 
     /**
      * Whether the routes should be refreshable via the directions refresh API.
