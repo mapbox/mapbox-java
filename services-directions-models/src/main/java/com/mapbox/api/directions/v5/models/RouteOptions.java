@@ -199,29 +199,28 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
-   * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous
-   * cases when there are multiple roads at the same point and only Z-level allows
+   * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
+   * cases when there are multiple roads at the same point and only layer allows
    * to differentiate them.
    * <p>
-   * If provided, the list of z-levels must be the same length as the list of coordinates.
-   * @return a string representing the Z-levels with the ; separator. Each value may be negative
+   * If provided, the list of layers must be the same length as the list of coordinates.
+   * @return a string representing the layers with the ; separator. Each value may be negative
     or absent.
    */
-  @SerializedName("z_levels")
   @Nullable
-  public abstract String zLevels();
+  public abstract String layers();
 
   /**
-   * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous
-   * cases when there are multiple roads at the same point and only Z-level allows
+   * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
+   * cases when there are multiple roads at the same point and only layer allows
    * to differentiate them.
    * <p>
-   * If provided, the list of z-levels must be the same length as the list of coordinates.
-   * @return a List of values representing Z-levels. Each value may be negative or null.
+   * If provided, the list of layers must be the same length as the list of coordinates.
+   * @return a List of values representing layers. Each value may be negative or null.
    */
   @Nullable
-  public List<Integer> zLevelsList() {
-    return ParseUtils.parseToIntegers(zLevels());
+  public List<Integer> layersList() {
+    return ParseUtils.parseToIntegers(layers());
   }
 
   /**
@@ -951,31 +950,31 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     }
 
     /**
-     * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous
-     * cases when there are multiple roads at the same point and only Z-level allows
+     * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
+     * cases when there are multiple roads at the same point and only layer allows
      * to differentiate them.
      * <p>
-     * If provided, the list of z-levels must be the same length as the list of coordinates.
-     * @param zLevels a string representing the Z-levels with the ; separator.
+     * If provided, the list of layers must be the same length as the list of coordinates.
+     * @param layers a string representing the layers with the ; separator.
      * @return this builder for chaining options together
      */
     @NonNull
-    public abstract Builder zLevels(@Nullable String zLevels);
+    public abstract Builder layers(@Nullable String layers);
 
     /**
-     * Influences Z-level of road from where route starts from a waypoint. Useful in ambiguous
-     * cases when there are multiple roads at the same point and only Z-level allows
+     * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
+     * cases when there are multiple roads at the same point and only layer allows
      * to differentiate them.
      * <p>
-     * If provided, the list of z-levels must be the same length as the list of coordinates.
-     * @param zLevels a list of Z-levels. For unknown Z-level use `null`.
+     * If provided, the list of layers must be the same length as the list of coordinates.
+     * @param layers a list of layers. For unknown layer use `null`.
      * @return this builder for chaining options together
      */
     @NonNull
-    public Builder zLevelsList(@Nullable List<Integer> zLevels) {
-      String result = FormatUtils.formatIntegers(zLevels);
+    public Builder layersList(@Nullable List<Integer> layers) {
+      String result = FormatUtils.formatIntegers(layers);
       if (result != null) {
-        zLevels(result);
+        layers(result);
       }
       return this;
     }
