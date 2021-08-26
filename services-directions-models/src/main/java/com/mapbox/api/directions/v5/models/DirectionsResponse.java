@@ -96,9 +96,9 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
   public abstract String uuid();
 
   /**
-   * A complex data structure that provides versioning information.
+   * A complex data structure that provides information about the source of the response.
    *
-   * @return a Metadata holding versioning information
+   * @return a Metadata with additional source information
    */
   @Nullable
   public abstract Metadata metadata();
@@ -243,9 +243,9 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
     public abstract Builder uuid(@Nullable String uuid);
 
     /**
-     * A complex data structure that provides versioning information.
+     * A complex data structure that provides information about the source of the response.
      *
-     * @param metadata a Metadata holding versioning information
+     * @param metadata a Metadata with additional source information
      * @return this builder for chaining options together
      */
     public abstract Builder metadata(@Nullable Metadata metadata);

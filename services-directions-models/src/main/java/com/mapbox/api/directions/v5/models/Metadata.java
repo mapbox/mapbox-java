@@ -33,7 +33,7 @@ public abstract class Metadata extends DirectionsJsonObject {
    */
   @Nullable
   @SerializedName("map")
-  public abstract Map<String, String> mapInfo();
+  public abstract Map<String, String> infoMap();
 
   /**
    * Convert the current {@link Metadata} to its builder holding the currently assigned
@@ -80,7 +80,7 @@ public abstract class Metadata extends DirectionsJsonObject {
      * @param mapInfo indicating the key/value pairs
      * @return a {@link Metadata.Builder} object
      */
-    public abstract Builder mapInfo(Map<String, String> mapInfo);
+    public abstract Builder infoMap(Map<String, String> mapInfo);
 
     /**
      * Build a new {@link Metadata} object.
