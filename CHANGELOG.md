@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.0-alpha.4 - August 26, 2021
+ - Added support for `metadata` response from Directions API. [#1282](https://github.com/mapbox/mapbox-java/pull/1282)
+ - Added `max_width` and `max_height` to Directions API params. [#1283](https://github.com/mapbox/mapbox-java/pull/1283)
+
 ### v6.0.0-alpha.3 - August 19, 2021
 - Bumped `okhttp` version to `4.9.0`. It requires java 1.8 for compatibility. [#1271](https://github.com/mapbox/mapbox-java/pull/1271)
 
