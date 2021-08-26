@@ -50,6 +50,8 @@ interface DirectionsService {
    * @param snappingIncludeClosures {@link RouteOptions#snappingIncludeClosures()}
    * @param arriveBy                {@link RouteOptions#arriveBy()}
    * @param departAt                {@link RouteOptions#departAt()}
+   * @param maxHeight               {@link RouteOptions#maxHeight()}
+   * @param maxWidth                {@link RouteOptions#maxWidth()}
    * @param metadata                {@link RouteOptions#metadata()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
@@ -85,6 +87,8 @@ interface DirectionsService {
     @Query("snapping_include_closures") String snappingIncludeClosures,
     @Query("arrive_by") String arriveBy,
     @Query("depart_at") String departAt,
+    @Query("max_height") Double maxHeight,
+    @Query("max_width") Double maxWidth,
     @Query("metadata") Boolean metadata
   );
 
@@ -121,6 +125,8 @@ interface DirectionsService {
    * @param snappingIncludeClosures {@link RouteOptions#snappingIncludeClosures()}
    * @param arriveBy                {@link RouteOptions#arriveBy()}
    * @param departAt                {@link RouteOptions#departAt()}
+   * @param maxHeight               {@link RouteOptions#maxHeight()}
+   * @param maxWidth                {@link RouteOptions#maxWidth()}
    * @param metadata                {@link RouteOptions#metadata()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
@@ -157,6 +163,8 @@ interface DirectionsService {
     @Field("snapping_include_closures") String snappingIncludeClosures,
     @Field("arrive_by") String arriveBy,
     @Field("depart_at") String departAt,
+    @Field("max_height") Double maxHeight,
+    @Field("max_width") Double maxWidth,
     @Field("metadata") Boolean metadata
   );
 }

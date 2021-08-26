@@ -245,6 +245,20 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void maxHeightIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
+
+    assertEquals(1.5, options.maxHeight(), 0.000001);
+  }
+
+  @Test
+  public void maxWidthIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
+
+    assertEquals(1.4, options.maxWidth(), 0.000001);
+  }
+
+  @Test
   public void enableRefreshIsValid_fromJson() {
     RouteOptions options = RouteOptions.fromJson(optionsJson);
 
@@ -308,6 +322,8 @@ public class RouteOptionsTest extends TestUtils {
       .walkwayBias(-0.2)
       .arriveBy("2021-01-01'T'01:01")
       .departAt("2021-02-02'T'02:02")
+      .maxHeight(1.5)
+      .maxWidth(1.4)
       .snappingIncludeClosures(";false;true")
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
       .enableRefresh(true)
@@ -379,6 +395,8 @@ public class RouteOptionsTest extends TestUtils {
       .walkwayBias(-0.2)
       .arriveBy("2021-01-01'T'01:01")
       .departAt("2021-02-02'T'02:02")
+      .maxHeight(1.5)
+      .maxWidth(1.4)
       .snappingIncludeClosuresList(new ArrayList<Boolean>() {{
         add(null);
         add(false);
