@@ -50,6 +50,9 @@ interface DirectionsService {
    * @param snappingIncludeClosures {@link RouteOptions#snappingIncludeClosures()}
    * @param arriveBy                {@link RouteOptions#arriveBy()}
    * @param departAt                {@link RouteOptions#departAt()}
+   * @param maxHeight               {@link RouteOptions#maxHeight()}
+   * @param maxWidth                {@link RouteOptions#maxWidth()}
+   * @param metadata                {@link RouteOptions#metadata()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
   @GET("directions/v5/{user}/{profile}/{coordinates}")
@@ -83,7 +86,10 @@ interface DirectionsService {
     @Query("alley_bias") Double alleyBias,
     @Query("snapping_include_closures") String snappingIncludeClosures,
     @Query("arrive_by") String arriveBy,
-    @Query("depart_at") String departAt
+    @Query("depart_at") String departAt,
+    @Query("max_height") Double maxHeight,
+    @Query("max_width") Double maxWidth,
+    @Query("metadata") Boolean metadata
   );
 
   /**
@@ -119,6 +125,9 @@ interface DirectionsService {
    * @param snappingIncludeClosures {@link RouteOptions#snappingIncludeClosures()}
    * @param arriveBy                {@link RouteOptions#arriveBy()}
    * @param departAt                {@link RouteOptions#departAt()}
+   * @param maxHeight               {@link RouteOptions#maxHeight()}
+   * @param maxWidth                {@link RouteOptions#maxWidth()}
+   * @param metadata                {@link RouteOptions#metadata()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
   @FormUrlEncoded
@@ -153,6 +162,9 @@ interface DirectionsService {
     @Field("alley_bias") Double alleyBias,
     @Field("snapping_include_closures") String snappingIncludeClosures,
     @Field("arrive_by") String arriveBy,
-    @Field("depart_at") String departAt
+    @Field("depart_at") String departAt,
+    @Field("max_height") Double maxHeight,
+    @Field("max_width") Double maxWidth,
+    @Field("metadata") Boolean metadata
   );
 }

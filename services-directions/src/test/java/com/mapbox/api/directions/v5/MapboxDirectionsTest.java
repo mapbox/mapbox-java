@@ -11,6 +11,7 @@ import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.Incident;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
+import com.mapbox.api.directions.v5.models.Metadata;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.TestUtils;
@@ -21,6 +22,7 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import okhttp3.Call;
 import okhttp3.EventListener;
@@ -133,6 +135,15 @@ public class MapboxDirectionsTest extends TestUtils {
       .routeOptions(routeOptions)
       .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("walking_speed=5.11"));
+  }
+
+  @Test
+  public void build_metadataOptions() {
+    MapboxDirections directions = MapboxDirections.builder()
+        .accessToken("token")
+        .routeOptions(routeOptions)
+        .build();
+    assertTrue(directions.cloneCall().request().url().toString().contains("metadata=true"));
   }
 
   @Test
@@ -720,6 +731,28 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void max_height() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .accessToken("token")
+            .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+            .build();
+
+    assertEquals("1.5",
+            mapboxDirections.cloneCall().request().url().queryParameter("max_height"));
+  }
+
+  @Test
+  public void max_width() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .accessToken("token")
+            .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+            .build();
+
+    assertEquals("1.4",
+            mapboxDirections.cloneCall().request().url().queryParameter("max_width"));
+  }
+
+  @Test
   public void enable_refresh() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .accessToken("token")
@@ -735,6 +768,22 @@ public class MapboxDirectionsTest extends TestUtils {
     MapboxDirections.builder()
       .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
       .build();
+  }
+
+  @Test
+  public void metadata_doesGetCreatedInResponse() throws IOException {
+    Gson gson = new GsonBuilder()
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create()).create();
+    String body = loadJsonFixture(DIRECTIONS_V5_FIXTURE);
+    DirectionsResponse response = gson.fromJson(body, DirectionsResponse.class);
+
+    Metadata metadata = response.metadata();
+    assertNotNull(metadata);
+    Map<String, String> infoMap = metadata.infoMap();
+    assertNotNull(infoMap);
+
+    assertEquals("2021_07_14-03_00_00", infoMap.get("tileset_version"));
+    assertEquals("and its value", infoMap.get("some_other_property"));
   }
 
   class TestDispatcher extends okhttp3.mockwebserver.Dispatcher {

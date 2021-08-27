@@ -96,6 +96,14 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
   public abstract String uuid();
 
   /**
+   * A complex data structure that provides information about the source of the response.
+   *
+   * @return a Metadata with additional source information
+   */
+  @Nullable
+  public abstract Metadata metadata();
+
+  /**
    * Convert the current {@link DirectionsResponse} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link DirectionsResponse}.
@@ -233,6 +241,14 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder uuid(@Nullable String uuid);
+
+    /**
+     * A complex data structure that provides information about the source of the response.
+     *
+     * @param metadata a Metadata with additional source information
+     * @return this builder for chaining options together
+     */
+    public abstract Builder metadata(@Nullable Metadata metadata);
 
     abstract DirectionsResponse autoBuild();
 
