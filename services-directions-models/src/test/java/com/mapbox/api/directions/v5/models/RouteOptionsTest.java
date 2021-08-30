@@ -8,11 +8,11 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 
 public class RouteOptionsTest extends TestUtils {
-
   /**
    * Always update this file when new option is introduced.
    */
@@ -102,6 +102,31 @@ public class RouteOptionsTest extends TestUtils {
     assertEquals(90.0, routeOptions.bearingsList().get(1).angle(), 0.00001);
     assertEquals(0.0, routeOptions.bearingsList().get(1).degrees(), 0.00001);
     assertNull(routeOptions.bearingsList().get(2));
+  }
+
+  @Test
+  public void layersAreValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
+
+    assertEquals("-42;;0", routeOptions.layers());
+  }
+
+
+  @Test
+  public void layersListIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
+    
+    List<Integer> expected = new ArrayList<Integer>();
+    Collections.addAll(expected, -42, null, 0);
+
+    assertEquals(routeOptions.layersList().size(), expected.size());
+    for (int i = 0; i < expected.size(); ++i) {
+      if (expected.get(i) != null) {
+        assertEquals(expected.get(i), routeOptions.layersList().get(i));
+      } else {
+        assertNull(routeOptions.layersList().get(i));
+      }
+    }
   }
 
   @Test
@@ -302,6 +327,7 @@ public class RouteOptionsTest extends TestUtils {
       .alternatives(false)
       .annotations("congestion,distance,duration")
       .bearings("0,90;90,0;")
+      .layers("-42;;0")
       .continueStraight(false)
       .exclude(DirectionsCriteria.EXCLUDE_TOLL)
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
@@ -354,6 +380,11 @@ public class RouteOptionsTest extends TestUtils {
         add(Bearing.builder().angle(0.0).degrees(90.0).build());
         add(Bearing.builder().angle(90.0).degrees(0.0).build());
         add(null);
+      }})
+      .layersList(new ArrayList<Integer>() {{
+        add(-42);
+        add(null);
+        add(0);
       }})
       .continueStraight(false)
       .exclude(DirectionsCriteria.EXCLUDE_TOLL)

@@ -31,6 +31,7 @@ interface DirectionsService {
    * @param radiuses                {@link RouteOptions#radiuses()}
    * @param steps                   {@link RouteOptions#steps()}
    * @param bearings                {@link RouteOptions#bearings()}
+   * @param layers                  {@link RouteOptions#layers()}
    * @param continueStraight        {@link RouteOptions#continueStraight()}
    * @param annotations             {@link RouteOptions#annotations()}
    * @param language                {@link RouteOptions#language()}
@@ -68,6 +69,7 @@ interface DirectionsService {
     @Query("radiuses") String radiuses,
     @Query("steps") Boolean steps,
     @Query("bearings") String bearings,
+    @Query("layers") String layers,
     @Query("continue_straight") Boolean continueStraight,
     @Query("annotations") String annotations,
     @Query("language") String language,
@@ -106,6 +108,7 @@ interface DirectionsService {
    * @param radiuses                {@link RouteOptions#radiuses()}
    * @param steps                   {@link RouteOptions#steps()}
    * @param bearings                {@link RouteOptions#bearings()}
+   * @param layers                  {@link RouteOptions#layers()}
    * @param continueStraight        {@link RouteOptions#continueStraight()}
    * @param annotations             {@link RouteOptions#annotations()}
    * @param language                {@link RouteOptions#language()}
@@ -144,6 +147,7 @@ interface DirectionsService {
     @Field("radiuses") String radiuses,
     @Field("steps") Boolean steps,
     @Field("bearings") String bearings,
+    @Field("layers") String layers,
     @Field("continue_straight") Boolean continueStraight,
     @Field("annotations") String annotations,
     @Field("language") String language,

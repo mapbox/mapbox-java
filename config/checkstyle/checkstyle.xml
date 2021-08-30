@@ -85,7 +85,7 @@
     at least two characters long.
     -->
     <module name="MemberName">
-      <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+      <property name="format" value="^[a-z][a-z0-9]*[a-zA-Z0-9]*$"/>
       <property name="applyToPublic" value="false"/>
       <message key="name.invalidPattern"
                value="Member name ''{0}'' must start off lowercase and be at least two characters long."/>
@@ -96,7 +96,7 @@
     lower case letter.
     -->
     <module name="MethodName">
-      <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
+      <property name="format" value="^[a-z][a-z0-9]*[a-zA-Z0-9_]*$"/>
       <message key="name.invalidPattern"
                value="Method name ''{0}'' must be at least two characters long."/>
     </module>
@@ -123,7 +123,7 @@
 
     <!-- Require parameter names to be at least two characters long -->
     <module name="ParameterName">
-      <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+      <property name="format" value="^[a-z][a-z0-9]*[a-zA-Z0-9]*$"/>
       <message key="name.invalidPattern"
                value="Parameter name ''{0}'' must be at least two characters long."/>
     </module>
@@ -134,7 +134,7 @@
     -->
     <module name="LocalVariableName">
       <property name="tokens" value="VARIABLE_DEF"/>
-      <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+      <property name="format" value="^[a-z][a-z0-9]*[a-zA-Z0-9]*$"/>
       <property name="allowOneCharVarInForLoop" value="true"/>
       <message key="name.invalidPattern"
                value="Local variable name ''{0}'' must be at least two characters long."/>
@@ -173,7 +173,7 @@
     the format property.
     -->
     <module name="CatchParameterName">
-      <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+      <property name="format" value="^[a-z][a-z0-9]*[a-zA-Z0-9]*$"/>
       <message key="name.invalidPattern"
                value="Catch parameter name ''{0}'' must match pattern ''{1}''."/>
     </module>

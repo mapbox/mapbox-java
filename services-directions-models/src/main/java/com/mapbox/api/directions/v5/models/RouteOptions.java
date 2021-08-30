@@ -199,6 +199,31 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
+   * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
+   * cases when there are multiple roads at the same point and only layer allows
+   * to differentiate them.
+   * <p>
+   * If provided, the list of layers must be the same length as the list of coordinates.
+   * @return a string representing the layers with the ; separator. Each value may be negative
+    or absent.
+   */
+  @Nullable
+  public abstract String layers();
+
+  /**
+   * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
+   * cases when there are multiple roads at the same point and only layer allows
+   * to differentiate them.
+   * <p>
+   * If provided, the list of layers must be the same length as the list of coordinates.
+   * @return a List of values representing layers. Each value may be negative or null.
+   */
+  @Nullable
+  public List<Integer> layersList() {
+    return ParseUtils.parseToIntegers(layers());
+  }
+
+  /**
    * The allowed direction of travel when departing intermediate waypoints. If true, the route
    * will continue in the same direction of travel. If false, the route may continue in the opposite
    * direction of travel. Defaults to true for {@link DirectionsCriteria#PROFILE_DRIVING} and false
@@ -954,6 +979,36 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       String result = FormatUtils.formatBearings(bearings);
       if (result != null) {
         bearings(result);
+      }
+      return this;
+    }
+
+    /**
+     * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
+     * cases when there are multiple roads at the same point and only layer allows
+     * to differentiate them.
+     * <p>
+     * If provided, the list of layers must be the same length as the list of coordinates.
+     * @param layers a string representing the layers with the ; separator.
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder layers(@Nullable String layers);
+
+    /**
+     * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
+     * cases when there are multiple roads at the same point and only layer allows
+     * to differentiate them.
+     * <p>
+     * If provided, the list of layers must be the same length as the list of coordinates.
+     * @param layers a list of layers. For unknown layer use `null`.
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public Builder layersList(@Nullable List<Integer> layers) {
+      String result = FormatUtils.formatIntegers(layers);
+      if (result != null) {
+        layers(result);
       }
       return this;
     }

@@ -169,4 +169,27 @@ public class FormatUtils {
     }
     return join(";", coordinatesToJoin);
   }
+
+  /**
+   * Converts list of integers to a string ready for API consumption.
+   *
+   * @param integers a list of integers
+   * @return a formatted string with semicolon separated integers
+   */
+  @Nullable
+  public static String formatIntegers(@Nullable List<Integer> integers) {
+    if (integers == null) {
+      return null;
+    }
+
+    List<String> toJoin = new ArrayList<>();
+    for (Integer integer : integers) {
+      if (integer == null) {
+        toJoin.add(null);
+      } else {
+        toJoin.add(Integer.toString(integer));
+      }
+    }
+    return join(";", toJoin);
+  }
 }
