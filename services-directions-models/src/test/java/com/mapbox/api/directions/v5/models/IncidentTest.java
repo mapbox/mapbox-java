@@ -4,8 +4,9 @@ import com.google.common.collect.Lists;
 import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import java.util.ArrayList;
+
+import static org.junit.Assert.*;
 
 public class IncidentTest extends TestUtils {
 
@@ -32,6 +33,10 @@ public class IncidentTest extends TestUtils {
       .subType("sub type")
       .subTypeDescription("sub type desc")
       .type(Incident.INCIDENT_DISABLED_VEHICLE)
+      .lanesBlocked(Lists.<String>newArrayList())
+      .numLanesBlocked(null)
+      .countryCodeAlpha2("US")
+      .countryCodeAlpha3("USA")
       .build();
     byte[] serialized = TestUtils.serialize(incident);
     assertEquals(incident, deserialize(serialized, Incident.class));
@@ -57,6 +62,9 @@ public class IncidentTest extends TestUtils {
       "803" +
       "]," +
       "\"lanes_blocked\": []," +
+      "\"num_lanes_blocked\": null," +
+      "\"iso_3166_1_alpha2\": US," +
+      "\"iso_3166_1_alpha3\": USA," +
       "\"geometry_index_start\": 805," +
       "\"geometry_index_end\": 896" +
       "}";
@@ -78,6 +86,10 @@ public class IncidentTest extends TestUtils {
     assertEquals(fromJson.alertcCodes().size(), 2);
     assertEquals(fromJson.geometryIndexStart().longValue(), 805L);
     assertEquals(fromJson.geometryIndexEnd().longValue(), 896L);
+    assertEquals(fromJson.countryCodeAlpha2(), "US");
+    assertEquals(fromJson.countryCodeAlpha3(), "USA");
+    assertEquals(fromJson.lanesBlocked().size(), 0);
+    assertNull(fromJson.numLanesBlocked());
   }
 
   private Incident getDefault() {

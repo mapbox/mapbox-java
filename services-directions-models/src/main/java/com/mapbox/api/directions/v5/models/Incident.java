@@ -250,6 +250,36 @@ public abstract class Incident extends DirectionsJsonObject {
   public abstract String endTime();
 
   /**
+   * Two letter country code where the incident is located.
+   * @see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.">ISO Country code Wikipedia page</a>
+   */
+  @Nullable
+  @SerializedName("iso_3166_1_alpha2")
+  public abstract String countryCodeAlpha2();
+
+  /**
+   * Three letter country code where the incident is located.
+   * @see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3.">ISO Country code Wikipedia page</a>
+   */
+  @Nullable
+  @SerializedName("iso_3166_1_alpha3")
+  public abstract String countryCodeAlpha3();
+
+  /**
+   * A list of lanes that are blocked by the incident.
+   */
+  @Nullable
+  @SerializedName("lanes_blocked")
+  public abstract List<String> lanesBlocked();
+
+  /**
+   * The number of items in the {@link Incident#lanesBlocked()} list.
+   */
+  @Nullable
+  @SerializedName("num_lanes_blocked")
+  public abstract Integer numLanesBlocked();
+
+  /**
    * Create a new instance of this class by using the {@link Incident.Builder} class.
    *
    * @return this classes {@link Incident.Builder} for creating a new instance
@@ -405,6 +435,36 @@ public abstract class Incident extends DirectionsJsonObject {
      * @param endTime ISO8601 format
      */
     public abstract Builder endTime(@Nullable String endTime);
+
+    /**
+     * Two letter country code where the incident is located.
+     * @see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2.">ISO Country code Wikipedia page</a>
+     *
+     * @param countryCodeAlpha2 2 letter country code
+     */
+    public abstract Builder countryCodeAlpha2(@Nullable String countryCodeAlpha2);
+
+    /**
+     * Three letter country code where the incident is located.
+     * @see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3.">ISO Country code Wikipedia page</a>
+     *
+     * @param countryCodeAlpha3 3 letter country code
+     */
+    public abstract Builder countryCodeAlpha3(@Nullable String countryCodeAlpha3);
+
+    /**
+     * A list of lanes that are blocked by the incident.
+     *
+     * @param lanesBlocked lanes blocked
+     */
+    public abstract Builder lanesBlocked(@Nullable List<String> lanesBlocked);
+
+    /**
+     * The number of items in the {@link Incident#lanesBlocked()} list.
+     *
+     * @param numLanesBlocked number lanes blocked
+     */
+    public abstract Builder numLanesBlocked(@Nullable Integer numLanesBlocked);
 
     /**
      * Build a new instance of {@link Incident}.
