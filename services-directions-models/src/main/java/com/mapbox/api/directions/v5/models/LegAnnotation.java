@@ -5,6 +5,7 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 
 import java.util.List;
@@ -80,6 +81,16 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
    */
   @Nullable
   public abstract List<String> congestion();
+
+  /**
+   * The congestion between each pair of coordinates.
+   *
+   * @return a list of Integers with each entry being a congestion value between two of the
+   *   routeLeg geometry coordinates
+   */
+  @Nullable
+  @SerializedName("congestion_numeric")
+  public abstract List<Integer> congestionNumeric();
 
   /**
    * Convert the current {@link LegAnnotation} to its builder holding the currently assigned
@@ -175,6 +186,15 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder congestion(@Nullable List<String> congestion);
+
+    /**
+     * The congestion between each pair of coordinates.
+     *
+     * @param congestionNumeric a list of Integers with each entry being a congestion value between
+     *   two of the routeLeg geometry coordinates
+     * @return this builder for chaining options together
+     */
+    public abstract Builder congestionNumeric(@Nullable List<Integer> congestionNumeric);
 
     /**
      * Build a new {@link LegAnnotation} object.
