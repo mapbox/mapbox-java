@@ -15,6 +15,7 @@ public class LegAnnotationTest extends TestUtils {
   @Test
   public void sanity() throws Exception {
     LegAnnotation annotation = LegAnnotation.builder()
+      .congestionNumeric(new ArrayList<Integer>())
       .congestion(new ArrayList<String>())
       .distance(new ArrayList<Double>())
       .duration(new ArrayList<Double>())
@@ -30,6 +31,7 @@ public class LegAnnotationTest extends TestUtils {
     distance.add(40d);
     distance.add(60d);
     LegAnnotation annotation = LegAnnotation.builder()
+      .congestionNumeric(new ArrayList<Integer>())
       .congestion(new ArrayList<String>())
       .distance(distance)
       .duration(new ArrayList<Double>())
@@ -73,7 +75,6 @@ public class LegAnnotationTest extends TestUtils {
       4.2,
       4.2);
 
-
     List<String> congestionList = Arrays.asList(
       "low",
       "moderate",
@@ -84,8 +85,18 @@ public class LegAnnotationTest extends TestUtils {
       "heavy",
       "heavy");
 
+    List<Integer> congestionNumericList = Arrays.asList(
+        0,
+        4,
+        4,
+        4,
+        null,
+        0,
+        0,
+        0);
+
     LegAnnotation annotation = LegAnnotation.builder()
-      .congestion(new ArrayList<String>())
+      .congestionNumeric(congestionNumericList)
       .distance(distanceList)
       .duration(durationList)
       .speed(speedList)

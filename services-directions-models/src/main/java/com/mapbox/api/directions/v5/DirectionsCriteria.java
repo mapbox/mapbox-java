@@ -125,7 +125,7 @@ public final class DirectionsCriteria {
    * in the route leg.
    * This annotation is only available for the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
    */
-  public static final String ANNOTATION_CONGESTION_NUMERIC = "congestion_NUMERIC";
+  public static final String ANNOTATION_CONGESTION_NUMERIC = "congestion_numeric";
 
   /**
    * The maximum speed limit between the coordinates of a segment.
