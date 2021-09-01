@@ -4,6 +4,11 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.0-alpha.5 - September 1, 2021
+ - Added support for layers to `RouteOptions` object. [#1279](https://github.com/mapbox/mapbox-java/pull/1279)
+ - Added support for missing country code and lanes blocked properties to `Incident` object. [#1288](https://github.com/mapbox/mapbox-java/pull/1288)
+ - Added support for missing congestion numeric property to `LegAnnotation` object. [#1290](https://github.com/mapbox/mapbox-java/pull/1290)
+
 ### v6.0.0-alpha.4 - August 26, 2021
  - Added support for `metadata` response from Directions API. [#1282](https://github.com/mapbox/mapbox-java/pull/1282)
  - Added `max_width` and `max_height` to Directions API params. [#1283](https://github.com/mapbox/mapbox-java/pull/1283)
