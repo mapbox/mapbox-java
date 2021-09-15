@@ -251,6 +251,20 @@ public abstract class BannerComponents extends DirectionsJsonObject
   public abstract Boolean active();
 
   /**
+   * When components.active is set to true, this property shows which of the lane's
+   * {@link BannerComponents#directions()} is applicable to the current route, when there is
+   * more than one. For example, if a lane allows you to go left or straight but your current
+   * route is guiding you to the left, then this value will be set to left.
+   * See {@link BannerComponents#directions()} for possible values.
+   * When {@link BannerComponents#active()} is false, this property will not be included in
+   * the response. Only available on the mapbox/driving profile.
+   * @return applicable lane direction.
+   */
+  @Nullable
+  @SerializedName("active_direction")
+  public abstract String activeDirection();
+
+  /**
    * Convert the current {@link BannerComponents} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link BannerComponents}.
@@ -441,6 +455,20 @@ public abstract class BannerComponents extends DirectionsJsonObject
      * @since 3.2.0
      */
     public abstract Builder active(Boolean activeState);
+
+    /**
+     * When components.active is set to true, this property shows which of the lane's
+     * {@link BannerComponents#directions()} is applicable to the current route, when there is
+     * more than one. For example, if a lane allows you to go left or straight but your current
+     * route is guiding you to the left, then this value will be set to left.
+     * See {@link BannerComponents#directions()} for possible values.
+     * When {@link BannerComponents#active()} is false, this property will not be included in
+     * the response. Only available on the mapbox/driving profile.
+     *
+     * @param activeDirection applicable lane direction.
+     * @return this builder for chaining options together
+     */
+    public abstract Builder activeDirection(String activeDirection);
 
     /**
      * Build a new {@link BannerComponents} object.
