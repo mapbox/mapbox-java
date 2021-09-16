@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.0-alpha.6 - September 16, 2021
+ - Added support for `active_direction` encapsulated in lane banner component. [#1294](https://github.com/mapbox/mapbox-java/pull/1294)
+
 ### v6.0.0-alpha.5 - September 1, 2021
  - Added support for layers to `RouteOptions` object. [#1279](https://github.com/mapbox/mapbox-java/pull/1279)
  - Added support for missing country code and lanes blocked properties to `Incident` object. [#1288](https://github.com/mapbox/mapbox-java/pull/1288)
