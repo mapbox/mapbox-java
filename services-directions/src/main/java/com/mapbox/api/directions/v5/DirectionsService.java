@@ -24,7 +24,7 @@ interface DirectionsService {
    * @param user                    {@link RouteOptions#user()}
    * @param profile                 {@link RouteOptions#profile()}
    * @param coordinates             {@link RouteOptions#coordinatesList()}
-   * @param accessToken             {@link RouteOptions#accessToken()}
+   * @param accessToken             the access token
    * @param alternatives            {@link RouteOptions#alternatives()}
    * @param geometries              {@link RouteOptions#geometries()}
    * @param overview                {@link RouteOptions#overview()}
@@ -40,6 +40,7 @@ interface DirectionsService {
    * @param bannerInstructions      {@link RouteOptions#bannerInstructions()}
    * @param voiceUnits              {@link RouteOptions#voiceUnits()}
    * @param exclude                 {@link RouteOptions#exclude()}
+   * @param include                 {@link RouteOptions#include()}
    * @param approaches              {@link RouteOptions#approaches()}
    * @param waypointIndices         {@link RouteOptions#waypointIndices()}
    * @param waypointNames           {@link RouteOptions#waypointNames()}
@@ -78,6 +79,7 @@ interface DirectionsService {
     @Query("banner_instructions") Boolean bannerInstructions,
     @Query("voice_units") String voiceUnits,
     @Query("exclude") String exclude,
+    @Query("include") String include,
     @Query("approaches") String approaches,
     @Query("waypoints") String waypointIndices,
     @Query("waypoint_names") String waypointNames,
@@ -101,7 +103,7 @@ interface DirectionsService {
    * @param user                    {@link RouteOptions#user()}
    * @param profile                 {@link RouteOptions#profile()}
    * @param coordinates             {@link RouteOptions#coordinatesList()}
-   * @param accessToken             {@link RouteOptions#accessToken()}
+   * @param accessToken             the access token
    * @param alternatives            {@link RouteOptions#alternatives()}
    * @param geometries              {@link RouteOptions#geometries()}
    * @param overview                {@link RouteOptions#overview()}
@@ -117,6 +119,7 @@ interface DirectionsService {
    * @param bannerInstructions      {@link RouteOptions#bannerInstructions()}
    * @param voiceUnits              {@link RouteOptions#voiceUnits()}
    * @param exclude                 {@link RouteOptions#exclude()}
+   * @param include                 {@link RouteOptions#include()}
    * @param approaches              {@link RouteOptions#approaches()}
    * @param waypointIndices         {@link RouteOptions#waypointIndices()}
    * @param waypointNames           {@link RouteOptions#waypointNames()}
@@ -156,6 +159,7 @@ interface DirectionsService {
     @Field("banner_instructions") Boolean bannerInstructions,
     @Field("voice_units") String voiceUnits,
     @Field("exclude") String exclude,
+    @Field("include") String include,
     @Field("approaches") String approaches,
     @Field("waypoints") String waypointIndices,
     @Field("waypoint_names") String waypointNames,
