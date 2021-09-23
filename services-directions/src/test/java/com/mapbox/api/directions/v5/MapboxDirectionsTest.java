@@ -179,7 +179,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .accessToken("token")
       .routeOptions(routeOptions)
       .build();
-    assertTrue(directions.cloneCall().request().url().toString().contains("/driving-traffic/"));
+    assertTrue(directions.cloneCall().request().url().toString().contains("/driving/"));
   }
 
   @Test
@@ -356,6 +356,16 @@ public class MapboxDirectionsTest extends TestUtils {
       .build();
 
     assertTrue(directions.cloneCall().request().url().toString().contains("exclude=toll"));
+  }
+
+  @Test
+  public void include_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+            .accessToken("token")
+            .routeOptions(routeOptions)
+            .build();
+
+    assertTrue(directions.cloneCall().request().url().toString().contains("include=hot"));
   }
 
   @Test

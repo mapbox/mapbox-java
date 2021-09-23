@@ -1,7 +1,7 @@
 {
   "baseUrl": "https://api.mapbox.com",
   "user": "mapbox",
-  "profile": "driving-traffic",
+  "profile": "driving",
   "coordinates": "-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835",
   "alternatives": false,
   "language": "ru",
@@ -14,7 +14,8 @@
   "overview": "full",
   "steps": true,
   "annotations": "congestion,distance,duration",
-  "exclude": "toll",
+  "exclude": "toll,ferry",
+  "include": "hot,hov2",
   "voice_instructions": true,
   "banner_instructions": true,
   "voice_units": "metric",

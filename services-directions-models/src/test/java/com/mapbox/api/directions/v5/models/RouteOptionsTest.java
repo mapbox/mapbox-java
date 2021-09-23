@@ -41,7 +41,7 @@ public class RouteOptionsTest extends TestUtils {
   public void profileIsValid_fromJson() {
     RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
-    assertEquals(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC, routeOptions.profile());
+    assertEquals(DirectionsCriteria.PROFILE_DRIVING, routeOptions.profile());
   }
 
   @Test
@@ -168,7 +168,14 @@ public class RouteOptionsTest extends TestUtils {
   public void excludeIsValid_fromJson() {
     RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
-    assertEquals("toll", routeOptions.exclude());
+    assertEquals("toll,ferry", routeOptions.exclude());
+  }
+
+  @Test
+  public void includeIsValid_fromJson() {
+    RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
+
+    assertEquals("hot,hov2", routeOptions.include());
   }
 
   @Test
@@ -322,14 +329,15 @@ public class RouteOptionsTest extends TestUtils {
 
     return RouteOptions.builder()
       .baseUrl("https://api.mapbox.com")
-      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinatesList(coordinates)
       .alternatives(false)
       .annotations("congestion,distance,duration")
       .bearings("0,90;90,0;")
       .layers("-42;;0")
       .continueStraight(false)
-      .exclude(DirectionsCriteria.EXCLUDE_TOLL)
+      .exclude(DirectionsCriteria.EXCLUDE_TOLL + "," + DirectionsCriteria.EXCLUDE_FERRY)
+      .include(DirectionsCriteria.INCLUDE_HOT + "," + DirectionsCriteria.INCLUDE_HOV2)
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
       .overview(DirectionsCriteria.OVERVIEW_FULL)
       .radiuses(";unlimited;5.1")
@@ -358,7 +366,7 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   /**
-   * Fills up all the options using list variants. Values need ot be equal to the ones in {@link #optionsJson}.
+   * Fills up all the options using list variants. Values need to be equal to the ones in {@link #optionsJson}.
    */
   private RouteOptions routeOptionsList() {
     List<Point> coordinates = new ArrayList<>();
@@ -368,7 +376,7 @@ public class RouteOptionsTest extends TestUtils {
 
     return RouteOptions.builder()
       .baseUrl("https://api.mapbox.com")
-      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinatesList(coordinates)
       .alternatives(false)
       .annotationsList(new ArrayList<String>() {{
@@ -387,7 +395,14 @@ public class RouteOptionsTest extends TestUtils {
         add(0);
       }})
       .continueStraight(false)
-      .exclude(DirectionsCriteria.EXCLUDE_TOLL)
+      .excludeList(new ArrayList<String>() {{
+          add(DirectionsCriteria.EXCLUDE_TOLL);
+          add(DirectionsCriteria.EXCLUDE_FERRY);
+      }})
+      .includeList(new ArrayList<String>() {{
+          add(DirectionsCriteria.INCLUDE_HOT);
+          add(DirectionsCriteria.INCLUDE_HOV2);
+      }})
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
       .overview(DirectionsCriteria.OVERVIEW_FULL)
       .radiusesList(new ArrayList<Double>() {{

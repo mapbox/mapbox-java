@@ -179,6 +179,21 @@ public final class DirectionsCriteria {
   public static final String EXCLUDE_RESTRICTED = "restricted";
 
   /**
+   * A road type that requires a minimum of two vehicle occupants.
+   */
+  public static final String INCLUDE_HOV2 = "hov2";
+
+  /**
+   * A road type that requires a minimum of three vehicle occupants.
+   */
+  public static final String INCLUDE_HOV3 = "hov3";
+
+  /**
+   * An hov road that is tolled if your vehicle doesn't meet the minimum occupant requirement.
+   */
+  public static final String INCLUDE_HOT = "hot";
+
+  /**
    * Change the units to imperial for voice and visual information. Note that this won't change
    * other results such as raw distance measurements which will always be returned in meters.
    *
@@ -323,6 +338,18 @@ public final class DirectionsCriteria {
     EXCLUDE_RESTRICTED
   })
   public @interface ExcludeCriteria {
+  }
+
+  /**
+   * Retention policy for include key.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef( {
+    INCLUDE_HOV2,
+    INCLUDE_HOV3,
+    INCLUDE_HOT
+  })
+  public @interface IncludeCriteria {
   }
 
   /**

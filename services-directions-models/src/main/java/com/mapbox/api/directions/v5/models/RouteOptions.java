@@ -354,6 +354,72 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String exclude();
 
   /**
+   * A list of exclude.
+   * Exclude certain road types from routing. The default is to not exclude anything from the
+   * profile selected. The following exclude flags are available for each profile:
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#EXCLUDE_TOLL},
+   * {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or {@link DirectionsCriteria#EXCLUDE_FERRY}.
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
+   * {@link DirectionsCriteria#EXCLUDE_TOLL}, {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or
+   * {@link DirectionsCriteria#EXCLUDE_FERRY}.
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
+   *
+   * @return a string matching one of the {@link DirectionsCriteria.ExcludeCriteria} exclusions
+   */
+  @Nullable
+  public List<String> excludeList() {
+    return ParseUtils.parseToStrings(exclude(), ",");
+  }
+
+  /**
+   * Include certain road types in routing. By default, none of the road types listed below
+   * are included. The following include flags are available for each profile:
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#INCLUDE_HOV2},
+   * {@link DirectionsCriteria#INCLUDE_HOV3}, or {@link DirectionsCriteria#INCLUDE_HOT}.
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
+   * {@link DirectionsCriteria#INCLUDE_HOV2}, {@link DirectionsCriteria#INCLUDE_HOV3}, or
+   * {@link DirectionsCriteria#INCLUDE_HOT}.
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_WALKING}: No includes supported
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_CYCLING}: No includes supported
+   *
+   * @return a string matching one of the {@link DirectionsCriteria.IncludeCriteria} inclusions
+   */
+  @Nullable
+  public abstract String include();
+
+  /**
+   * A list of include.
+   * Include certain road types in routing. By default, none of the road types listed below
+   * are included. The following include flags are available for each profile:
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#INCLUDE_HOV2},
+   * {@link DirectionsCriteria#INCLUDE_HOV3}, or {@link DirectionsCriteria#INCLUDE_HOT}.
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
+   * {@link DirectionsCriteria#INCLUDE_HOV2}, {@link DirectionsCriteria#INCLUDE_HOV3}, or
+   * {@link DirectionsCriteria#INCLUDE_HOT}.
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_WALKING}: No includes supported
+   * <p>
+   * {@link DirectionsCriteria#PROFILE_CYCLING}: No includes supported
+   *
+   * @return a string matching one of the {@link DirectionsCriteria.IncludeCriteria} inclusions
+   */
+  @Nullable
+  public List<String> includeList() {
+    return ParseUtils.parseToStrings(include(), ",");
+  }
+
+  /**
    * Whether to return SSML marked-up text for voice guidance along the route (true) or not
    * (false, default if null).
    * Must be used in conjunction with {@link RouteOptions#steps()}=true.
@@ -1055,7 +1121,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder geometries(
-      @NonNull @DirectionsCriteria.GeometriesCriteria String geometries);
+      @NonNull @DirectionsCriteria.GeometriesCriteria String geometries
+    );
 
     /**
      * Displays the requested type of overview geometry. Can be
@@ -1194,6 +1261,84 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder exclude(@Nullable @DirectionsCriteria.ExcludeCriteria String exclude);
+
+    /**
+     * A list of exclude. Exclude certain road types from routing.
+     * The default is to not exclude anything from the profile selected.
+     * The following exclude flags are available for each profile:
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#EXCLUDE_TOLL},
+     * {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or {@link DirectionsCriteria#EXCLUDE_FERRY}.
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
+     * {@link DirectionsCriteria#EXCLUDE_TOLL}, {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or
+     * {@link DirectionsCriteria#EXCLUDE_FERRY}.
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
+     *
+     * @param exclude a list of exclude that were used during the request
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public Builder excludeList(@Nullable List<String> exclude) {
+      String result = FormatUtils.join(",", exclude);
+      if (result != null) {
+        exclude(result);
+      }
+      return this;
+    }
+
+    /**
+     * Include certain road types in routing. By default, none of the road types listed below
+     * are included. The following include flags are available for each profile:
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#INCLUDE_HOV2},
+     * {@link DirectionsCriteria#INCLUDE_HOV3}, or {@link DirectionsCriteria#INCLUDE_HOT}.
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
+     * {@link DirectionsCriteria#INCLUDE_HOV2}, {@link DirectionsCriteria#INCLUDE_HOV3}, or
+     * {@link DirectionsCriteria#INCLUDE_HOT}.
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_WALKING}: No includes supported
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_CYCLING}: No includes supported
+     *
+     * @param include a string matching one of the {@link DirectionsCriteria.IncludeCriteria}
+     *                inclusions
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder include(@Nullable @DirectionsCriteria.IncludeCriteria String include);
+
+    /**
+     * A list of include. Include certain road types in routing.
+     * By default, none of the road types listed below are included.
+     * The following include flags are available for each profile:
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#INCLUDE_HOV2},
+     * {@link DirectionsCriteria#INCLUDE_HOV3}, or {@link DirectionsCriteria#INCLUDE_HOT}.
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}: One of
+     * {@link DirectionsCriteria#INCLUDE_HOV2}, {@link DirectionsCriteria#INCLUDE_HOV3}, or
+     * {@link DirectionsCriteria#INCLUDE_HOT}.
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_WALKING}: No includes supported
+     * <p>
+     * {@link DirectionsCriteria#PROFILE_CYCLING}: No includes supported
+     *
+     * @param include a list of include that were used during the request
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public Builder includeList(@Nullable List<String> include) {
+      String result = FormatUtils.join(",", include);
+      if (result != null) {
+        include(result);
+      }
+      return this;
+    }
 
     /**
      * A semicolon-separated list indicating from which side of the road
