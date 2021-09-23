@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.0-alpha.7 - September 23, 2021
+ - Exposed include-hov/hot parameters and added exclude list option [#1296](https://github.com/mapbox/mapbox-java/pull/1296)
+
 ### v6.0.0-alpha.6 - September 16, 2021
  - Added support for `active_direction` encapsulated in lane banner component. [#1294](https://github.com/mapbox/mapbox-java/pull/1294)
 
