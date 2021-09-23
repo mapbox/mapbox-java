@@ -354,7 +354,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String exclude();
 
   /**
-   * A list of exclude.
    * Exclude certain road types from routing. The default is to not exclude anything from the
    * profile selected. The following exclude flags are available for each profile:
    * <p>
@@ -397,7 +396,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String include();
 
   /**
-   * A list of include.
    * Include certain road types in routing. By default, none of the road types listed below
    * are included. The following include flags are available for each profile:
    * <p>
@@ -1263,7 +1261,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder exclude(@Nullable @DirectionsCriteria.ExcludeCriteria String exclude);
 
     /**
-     * A list of exclude. Exclude certain road types from routing.
+     * Exclude certain road types from routing.
      * The default is to not exclude anything from the profile selected.
      * The following exclude flags are available for each profile:
      * <p>
@@ -1313,7 +1311,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder include(@Nullable @DirectionsCriteria.IncludeCriteria String include);
 
     /**
-     * A list of include. Include certain road types in routing.
+     * Include certain road types in routing.
      * By default, none of the road types listed below are included.
      * The following include flags are available for each profile:
      * <p>
