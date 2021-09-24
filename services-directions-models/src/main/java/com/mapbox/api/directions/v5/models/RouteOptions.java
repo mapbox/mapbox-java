@@ -15,6 +15,7 @@ import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.geojson.Point;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
@@ -842,6 +843,59 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     }
 
     return fromJsonString(optionsJson.toString());
+  }
+
+  /**
+   * Create a URL from RouteOptions instance.
+   *
+   * @param accessToken access token to make API request
+   * @return a URL object instance
+   */
+  @NonNull
+  public URL toUrl(@NonNull String accessToken) {
+    StringBuilder sb = new StringBuilder()
+      .append(baseUrl())
+      .append("/directions/v5")
+      .append(String.format("/%s", user()))
+      .append(String.format("/%s", profile()))
+      .append(String.format("/%s", coordinates()))
+      .append(String.format("?access_token=%s", accessToken))
+      .append(String.format("&alternatives=%s", alternatives()))
+      .append(String.format("&geometries=%s", geometries()))
+      .append(String.format("&overview=%s", overview()))
+      .append(String.format("&radiuses=%s", radiuses()))
+      .append(String.format("&steps=%s", steps()))
+      .append(String.format("&bearings=%s", bearings()))
+      .append(String.format("&layers=%s", layers()))
+      .append(String.format("&continue_straight=%s", continueStraight()))
+      .append(String.format("&annotations=%s", annotations()))
+      .append(String.format("&language=%s", language()))
+      .append(String.format("&roundabout_exits=%s", roundaboutExits()))
+      .append(String.format("&voice_instructions=%s", voiceInstructions()))
+      .append(String.format("&banner_instructions=%s", bannerInstructions()))
+      .append(String.format("&voice_units=%s", voiceUnits()))
+      .append(String.format("&exclude=%s", exclude()))
+      .append(String.format("&include=%s", include()))
+      .append(String.format("&approaches=%s", approaches()))
+      .append(String.format("&waypoints=%s", waypointIndices()))
+      .append(String.format("&waypoint_names=%s", waypointNames()))
+      .append(String.format("&waypoint_targets=%s", waypointTargets()))
+      .append(String.format("&enable_refresh=%s", enableRefresh()))
+      .append(String.format("&walking_speed=%s", walkingSpeed()))
+      .append(String.format("&walkway_bias=%s", walkwayBias()))
+      .append(String.format("&alley_bias=%s", alleyBias()))
+      .append(String.format("&snapping_include_closures=%s", snappingIncludeClosures()))
+      .append(String.format("&arrive_by=%s", arriveBy()))
+      .append(String.format("&depart_at=%s", departAt()))
+      .append(String.format("&max_height=%s", maxHeight()))
+      .append(String.format("&max_width=%s", maxWidth()))
+      .append(String.format("&metadata=%s", metadata()));
+
+    try {
+      return new URL(sb.toString());
+    } catch (MalformedURLException ex) {
+      throw new RuntimeException(ex);
+    }
   }
 
   @NonNull
