@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.0-alpha.8 - September 28, 2021
+- Exposed `RouteOptions#toUrl()` function.
+
 ### v6.0.0-alpha.7 - September 23, 2021
  - Exposed include-hov/hot parameters and added exclude list option [#1296](https://github.com/mapbox/mapbox-java/pull/1296)
 
