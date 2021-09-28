@@ -860,36 +860,95 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       .append(String.format("/%s", profile()))
       .append(String.format("/%s", coordinates()))
       .append(String.format("?access_token=%s", accessToken))
-      .append(String.format("&alternatives=%s", alternatives()))
-      .append(String.format("&geometries=%s", geometries()))
-      .append(String.format("&overview=%s", overview()))
-      .append(String.format("&radiuses=%s", radiuses()))
-      .append(String.format("&steps=%s", steps()))
-      .append(String.format("&bearings=%s", bearings()))
-      .append(String.format("&layers=%s", layers()))
-      .append(String.format("&continue_straight=%s", continueStraight()))
-      .append(String.format("&annotations=%s", annotations()))
-      .append(String.format("&language=%s", language()))
-      .append(String.format("&roundabout_exits=%s", roundaboutExits()))
-      .append(String.format("&voice_instructions=%s", voiceInstructions()))
-      .append(String.format("&banner_instructions=%s", bannerInstructions()))
-      .append(String.format("&voice_units=%s", voiceUnits()))
-      .append(String.format("&exclude=%s", exclude()))
-      .append(String.format("&include=%s", include()))
-      .append(String.format("&approaches=%s", approaches()))
-      .append(String.format("&waypoints=%s", waypointIndices()))
-      .append(String.format("&waypoint_names=%s", waypointNames()))
-      .append(String.format("&waypoint_targets=%s", waypointTargets()))
-      .append(String.format("&enable_refresh=%s", enableRefresh()))
-      .append(String.format("&walking_speed=%s", walkingSpeed()))
-      .append(String.format("&walkway_bias=%s", walkwayBias()))
-      .append(String.format("&alley_bias=%s", alleyBias()))
-      .append(String.format("&snapping_include_closures=%s", snappingIncludeClosures()))
-      .append(String.format("&arrive_by=%s", arriveBy()))
-      .append(String.format("&depart_at=%s", departAt()))
-      .append(String.format("&max_height=%s", maxHeight()))
-      .append(String.format("&max_width=%s", maxWidth()))
-      .append(String.format("&metadata=%s", metadata()));
+      .append(String.format("&geometries=%s", geometries()));
+
+    if (alternatives() != null) {
+      sb.append(String.format("&alternatives=%s", alternatives()));
+    }
+    if (overview() != null) {
+      sb.append(String.format("&overview=%s", overview()));
+    }
+    if (radiuses() != null) {
+      sb.append(String.format("&radiuses=%s", radiuses()));
+    }
+    if (steps() != null) {
+      sb.append(String.format("&steps=%s", steps()));
+    }
+    if (bearings() != null) {
+      sb.append(String.format("&bearings=%s", bearings()));
+    }
+    if (layers() != null) {
+      sb.append(String.format("&layers=%s", layers()));
+    }
+    if (continueStraight() != null) {
+      sb.append(String.format("&continue_straight=%s", continueStraight()));
+    }
+    if (annotations() != null) {
+      sb.append(String.format("&annotations=%s", annotations()));
+    }
+    if (language() != null) {
+      sb.append(String.format("&language=%s", language()));
+    }
+    if (roundaboutExits() != null) {
+      sb.append(String.format("&roundabout_exits=%s", roundaboutExits()));
+    }
+    if (voiceInstructions() != null) {
+      sb.append(String.format("&voice_instructions=%s", voiceInstructions()));
+    }
+    if (bannerInstructions() != null) {
+      sb.append(String.format("&banner_instructions=%s", bannerInstructions()));
+    }
+    if (voiceUnits() != null) {
+      sb.append(String.format("&voice_units=%s", voiceUnits()));
+    }
+    if (exclude() != null) {
+      sb.append(String.format("&exclude=%s", exclude()));
+    }
+    if (include() != null) {
+      sb.append(String.format("&include=%s", include()));
+    }
+    if (approaches() != null) {
+      sb.append(String.format("&approaches=%s", approaches()));
+    }
+    if (waypointIndices() != null) {
+      sb.append(String.format("&waypoints=%s", waypointIndices()));
+    }
+    if (waypointNames() != null) {
+      sb.append(String.format("&waypoint_names=%s", waypointNames()));
+    }
+    if (waypointTargets() != null) {
+      sb.append(String.format("&waypoint_targets=%s", waypointTargets()));
+    }
+    if (enableRefresh() != null) {
+      sb.append(String.format("&enable_refresh=%s", enableRefresh()));
+    }
+    if (walkingSpeed() != null) {
+      sb.append(String.format("&walking_speed=%s", walkingSpeed()));
+    }
+    if (walkwayBias() != null) {
+      sb.append(String.format("&walkway_bias=%s", walkwayBias()));
+    }
+    if (alleyBias() != null) {
+      sb.append(String.format("&alley_bias=%s", alleyBias()));
+    }
+    if (snappingIncludeClosures() != null) {
+      sb.append(String.format("&snapping_include_closures=%s", snappingIncludeClosures()));
+    }
+    if (arriveBy() != null) {
+      sb.append(String.format("&arrive_by=%s", arriveBy()));
+    }
+    if (departAt() != null) {
+      sb.append(String.format("&depart_at=%s", departAt()));
+    }
+    if (maxHeight() != null) {
+      sb.append(String.format("&max_height=%s", maxHeight()));
+    }
+    if (maxWidth() != null) {
+      sb.append(String.format("&max_width=%s", maxWidth()));
+    }
+    if (metadata() != null) {
+      sb.append(String.format("&metadata=%s", metadata()));
+    }
 
     try {
       return new URL(sb.toString());
