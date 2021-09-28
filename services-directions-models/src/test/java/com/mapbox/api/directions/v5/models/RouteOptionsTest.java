@@ -18,7 +18,7 @@ public class RouteOptionsTest extends TestUtils {
    * Always update this file when new option is introduced.
    */
   private static final String ROUTE_OPTIONS_JSON = "route_options_v5.json";
-  private static final String ROUTE_OPTIONS_URL = "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&alternatives=false&geometries=polyline6&overview=full&radiuses=;unlimited;5.1&steps=true&bearings=0,90;90,0;&layers=-42;;0&continue_straight=false&annotations=congestion,distance,duration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll,ferry&include=hot,hov2&approaches=;curb;&waypoints=0;1;2&waypoint_names=;two;&waypoint_targets=;12.2,21.2;&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=;false;true&arrive_by=2021-01-01'T'01:01&depart_at=2021-02-02'T'02:02&max_height=1.5&max_width=1.4&metadata=true";
+  private static final String ROUTE_OPTIONS_URL = "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=;unlimited;5.1&steps=true&bearings=0,90;90,0;&layers=-42;;0&continue_straight=false&annotations=congestion,distance,duration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll,ferry&include=hot,hov2&approaches=;curb;&waypoints=0;1;2&waypoint_names=;two;&waypoint_targets=;12.2,21.2;&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=;false;true&arrive_by=2021-01-01'T'01:01&depart_at=2021-02-02'T'02:02&max_height=1.5&max_width=1.4&metadata=true";
   private static final String ACCESS_TOKEN = "pk.token";
 
   private final String optionsJson = loadJsonFixture(ROUTE_OPTIONS_JSON);
@@ -345,6 +345,23 @@ public class RouteOptionsTest extends TestUtils {
     URL url = options.toUrl(ACCESS_TOKEN);
 
     assertEquals(ROUTE_OPTIONS_URL, url.toString());
+  }
+
+  @Test
+  public void routeOptionsWithDefaults_toUrl() {
+    String expectedUrl = "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6";
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
+    coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
+
+    RouteOptions options = RouteOptions.builder()
+            .profile(DirectionsCriteria.PROFILE_DRIVING)
+            .coordinatesList(coordinates)
+            .build();
+
+    URL url = options.toUrl(ACCESS_TOKEN);
+
+    assertEquals(expectedUrl, url.toString());
   }
 
   /**
