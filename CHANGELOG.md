@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.0-alpha.9 - September 29, 2021
+- Fixed `RouteOptions#toUrl()` function. [#1302](https://github.com/mapbox/mapbox-java/pull/1302)
+
 ### v6.0.0-alpha.8 - September 28, 2021
 - Exposed `RouteOptions#toUrl()` function.
 
