@@ -364,6 +364,24 @@ public class RouteOptionsTest extends TestUtils {
     assertEquals(expectedUrl, url.toString());
   }
 
+  @Test
+  public void baseUrlWithLastSlash() {
+    String expectedUrl = "https://mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6";
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
+    coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
+
+    RouteOptions options = RouteOptions.builder()
+            .baseUrl("https://mapbox.com/")
+            .profile(DirectionsCriteria.PROFILE_DRIVING)
+            .coordinatesList(coordinates)
+            .build();
+
+    URL url = options.toUrl(ACCESS_TOKEN);
+
+    assertEquals(expectedUrl, url.toString());
+  }
+
   /**
    * Fills up all the options using string variants. Values need ot be equal to the ones in {@link #optionsJson}.
    */
