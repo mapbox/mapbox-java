@@ -854,8 +854,14 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   @NonNull
   public URL toUrl(@NonNull String accessToken) {
     StringBuilder sb = new StringBuilder()
-      .append(baseUrl())
-      .append("/directions/v5")
+            .append(baseUrl());
+
+    Character lastBaseUrlChar = baseUrl().charAt(baseUrl().length() - 1);
+    if (!lastBaseUrlChar.equals('/')) {
+      sb.append('/');
+    }
+
+    sb.append("directions/v5")
       .append(String.format("/%s", user()))
       .append(String.format("/%s", profile()))
       .append(String.format("/%s", coordinates()))
