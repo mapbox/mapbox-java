@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.0.1 - November 04, 2021
+- Refactoring related to URL building for `RouteOptions.toUrl`. [#1313](https://github.com/mapbox/mapbox-java/pull/1314)
+
 ### v6.0.0 - October 13, 2021
 - No additional changes.
 
