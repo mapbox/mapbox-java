@@ -382,6 +382,43 @@ public class RouteOptionsTest extends TestUtils {
     assertEquals(expectedUrl, url.toString());
   }
 
+  @Test
+  public void routeOptionsWithDecodedChars_toUrlWithEncodedChars() {
+    String expectedEncodedUrl = "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=my%20starting%20position;my%20destination";
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
+    coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
+
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING)
+      .coordinatesList(coordinates)
+      .waypointNames("my starting position;my destination")
+      .build();
+
+    URL url = options.toUrl(ACCESS_TOKEN);
+
+    assertEquals(expectedEncodedUrl, url.toString());
+  }
+
+  @Test
+  public void routeOptions_toUrl_fromUrl_withEncodedChars() {
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
+    coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
+
+    RouteOptions expectedOptions = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING)
+      .coordinatesList(coordinates)
+      .waypointNames("my starting position;my destination")
+      .build();
+
+    URL url = expectedOptions.toUrl(ACCESS_TOKEN);
+
+    RouteOptions resultingOptions = RouteOptions.fromUrl(url);
+
+    assertEquals(expectedOptions, resultingOptions);
+  }
+
   /**
    * Fills up all the options using string variants. Values need ot be equal to the ones in {@link #optionsJson}.
    */
