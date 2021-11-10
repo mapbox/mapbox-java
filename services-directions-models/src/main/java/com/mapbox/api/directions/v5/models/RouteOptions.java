@@ -16,6 +16,8 @@ import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.geojson.Point;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
@@ -846,7 +848,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
-   * Create a URL from RouteOptions instance.
+   * Create an encoded URL from RouteOptions instance.
    *
    * @param accessToken access token to make API request
    * @return a URL object instance
@@ -957,8 +959,18 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     }
 
     try {
-      return new URL(sb.toString());
-    } catch (MalformedURLException ex) {
+      URL decodedUrl = new URL(sb.toString());
+      URI encodedUri = new URI(
+        decodedUrl.getProtocol(),
+        decodedUrl.getUserInfo(),
+        decodedUrl.getHost(),
+        decodedUrl.getPort(),
+        decodedUrl.getPath(),
+        decodedUrl.getQuery(),
+        decodedUrl.getRef()
+      );
+      return encodedUri.toURL();
+    } catch (MalformedURLException | URISyntaxException ex) {
       throw new RuntimeException(ex);
     }
   }
