@@ -21,14 +21,14 @@ build-cli:
 
 javadoc:
 	mkdir documentation
-	mkdir documentation/core/
-	mkdir documentation/geojson/
-	mkdir documentation/turf/
-	mkdir documentation/services/
-	./gradlew :services-core:javadoc; mv services-core/build/docs/javadoc/ ./documentation/core/javadoc/ ; \
-	./gradlew :services-geojson:javadoc; mv services-geojson/build/docs/javadoc/ ./documentation/geojson/javadoc/ ; \
-	./gradlew :services-turf:javadoc; mv services-turf/build/docs/javadoc/ ./documentation/turf/javadoc/ ; \
-	./gradlew :services:javadoc; mv services/build/docs/javadoc/ ./documentation/services/javadoc/ ; \
+	mkdir documentation/libjava-core/
+	mkdir documentation/libjava-geojson/
+	mkdir documentation/libjava-turf/
+	mkdir documentation/libjava-services/
+	./gradlew :services-core:javadoc; mv services-core/build/docs/javadoc/ ./documentation/libjava-core/javadoc/ ; \
+	./gradlew :services-geojson:javadoc; mv services-geojson/build/docs/javadoc/ ./documentation/libjava-geojson/javadoc/ ; \
+	./gradlew :services-turf:javadoc; mv services-turf/build/docs/javadoc/ ./documentation/libjava-turf/javadoc/ ; \
+	./gradlew :services:javadoc; mv services/build/docs/javadoc/ ./documentation/libjava-services/javadoc/ ; \
 
 sdk-registry-upload:
 	./gradlew mapboxSDKRegistryUpload
