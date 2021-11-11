@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.1.0 - November 11, 2021
+- Added `avoid_maneuver_radius` to Directions API params and `avoidManeuverRadius` to `RouteOptions`. [#1310](https://github.com/mapbox/mapbox-java/pull/1310)
+- Added encoding for parameters transformed with `RouteOptions.toUrl`. [#1317](https://github.com/mapbox/mapbox-java/pull/1317)
+
 ### v6.0.1 - November 04, 2021
 - Refactoring related to URL building for `RouteOptions.toUrl`. [#1313](https://github.com/mapbox/mapbox-java/pull/1314)
 
