@@ -201,6 +201,25 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     return ParseUtils.parseBearings(bearings());
   }
 
+
+  /**
+   * A radius around a starting point where the routes' provider tries to avoid any
+   * significant maneuvers. Use this option when the vehicle is traveling at a significant
+   * speed to avoid dangerous maneuvers when re-routing. If a route is not found using
+   * the specified value, it will be ignored. Note that if a large radius is used, the routers'
+   * provider may ignore an important turn and return a long straight path before the first
+   * maneuver.
+   * <p>
+   * Note: the param cannot be used with {@link #departAt()} and {@link #arriveBy()},
+   * since these modes are used for reference requests, not for real-time routing.
+   *
+   * @return a radius around a starting point where router's provider tries to avoid any
+   *   significant maneuvers. Possible range is [0, 1000] in meters.
+   */
+  @SerializedName("avoid_maneuver_radius")
+  @Nullable
+  public abstract Integer avoidManeuverRadius();
+
   /**
    * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
    * cases when there are multiple roads at the same point and only layer allows
@@ -882,6 +901,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     if (steps() != null) {
       sb.append(String.format("&steps=%s", steps()));
     }
+    if (avoidManeuverRadius() != null) {
+      sb.append(String.format("&avoid_maneuver_radius=%s", avoidManeuverRadius()));
+    }
     if (bearings() != null) {
       sb.append(String.format("&bearings=%s", bearings()));
     }
@@ -1177,6 +1199,25 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       }
       return this;
     }
+
+    /**
+     * A radius around a starting point where the routes' provider tries to avoid any
+     * significant maneuvers. Use this option when the vehicle is traveling at a significant
+     * speed to avoid dangerous maneuvers when re-routing. If a route is not found using
+     * the specified value, it will be ignored. Note that if a large radius is used, the routers'
+     * provider may ignore an important turn and return a long straight path before the first
+     * maneuver.
+     * <p>
+     * Note: the param cannot be used with {@link #departAt(String)} and {@link #arriveBy(String)},
+     * since these modes are used for reference requests, not for real-time routing.
+     *
+     * @param avoidManeuverRadius avoid maneuver radius, in meters. Possible range is [0, 1000].
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder avoidManeuverRadius(
+      @Nullable Integer avoidManeuverRadius
+    );
 
     /**
      * Influences layer of road from where route starts from a waypoint. Useful in ambiguous

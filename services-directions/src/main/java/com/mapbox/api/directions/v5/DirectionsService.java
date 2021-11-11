@@ -31,6 +31,7 @@ interface DirectionsService {
    * @param radiuses                {@link RouteOptions#radiuses()}
    * @param steps                   {@link RouteOptions#steps()}
    * @param bearings                {@link RouteOptions#bearings()}
+   * @param avoidManeuverRadius     {@link RouteOptions#avoidManeuverRadius()}
    * @param layers                  {@link RouteOptions#layers()}
    * @param continueStraight        {@link RouteOptions#continueStraight()}
    * @param annotations             {@link RouteOptions#annotations()}
@@ -70,6 +71,7 @@ interface DirectionsService {
     @Query("radiuses") String radiuses,
     @Query("steps") Boolean steps,
     @Query("bearings") String bearings,
+    @Query("avoid_maneuver_radius") Integer avoidManeuverRadius,
     @Query("layers") String layers,
     @Query("continue_straight") Boolean continueStraight,
     @Query("annotations") String annotations,
@@ -110,6 +112,7 @@ interface DirectionsService {
    * @param radiuses                {@link RouteOptions#radiuses()}
    * @param steps                   {@link RouteOptions#steps()}
    * @param bearings                {@link RouteOptions#bearings()}
+   * @param avoidManeuverRadius     {@link RouteOptions#avoidManeuverRadius()}
    * @param layers                  {@link RouteOptions#layers()}
    * @param continueStraight        {@link RouteOptions#continueStraight()}
    * @param annotations             {@link RouteOptions#annotations()}
@@ -150,6 +153,7 @@ interface DirectionsService {
     @Field("radiuses") String radiuses,
     @Field("steps") Boolean steps,
     @Field("bearings") String bearings,
+    @Query("avoid_maneuver_radius") Integer avoidManeuverRadius,
     @Field("layers") String layers,
     @Field("continue_straight") Boolean continueStraight,
     @Field("annotations") String annotations,
