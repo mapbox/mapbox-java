@@ -163,6 +163,29 @@ public class BannerComponentTest extends TestUtils {
   }
 
   @Test
+  public void testToFromJsonRouteShield() {
+
+    BannerComponents bannerComponents = BannerComponents.builder()
+        .mapboxShield(
+            MapboxShield
+                .builder()
+                .baseUrl("https://api.mapbox.com/styles/v1/")
+                .displayRef("242")
+                .name("us-interstate")
+                .textColor("black")
+                .build()
+        )
+        .text("I 95")
+        .type("icon")
+        .build();
+
+    String jsonString = bannerComponents.toJson();
+    BannerComponents bannerComponentsFromJson = BannerComponents.fromJson(jsonString);
+
+    assertEquals(bannerComponents, bannerComponentsFromJson);
+  }
+
+  @Test
   public void testToFromJsonLaneIcon() {
 
     BannerComponents bannerComponents = BannerComponents.builder()

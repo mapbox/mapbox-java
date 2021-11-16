@@ -216,6 +216,19 @@ public abstract class BannerComponents extends DirectionsJsonObject
   public abstract String imageBaseUrl();
 
   /**
+   * In some cases when the {@link LegStep} is a highway or major roadway, there might be a shield
+   * icon that's included to better identify to your user to roadway. Note that this doesn't
+   * return the image itself but rather a complex object that can used to formulate the url which
+   * in turn would be used to make a network request and download a file.
+   *
+   * @return a complex object which can be used to download the shield icon if one is available
+   * @since 3.0.0
+   */
+  @Nullable
+  @SerializedName("mapbox_shield")
+  public abstract MapboxShield mapboxShield();
+
+  /**
    * In some cases when the {@link StepManeuver} will be difficult to navigate, an image
    * can describe how to proceed. The domain name for this image is a Junction View.
    * Unlike the imageBaseUrl, this image url does not include image density encodings.
@@ -421,6 +434,17 @@ public abstract class BannerComponents extends DirectionsJsonObject
      * @since 3.0.0
      */
     public abstract Builder imageBaseUrl(@Nullable String imageBaseUrl);
+
+    /**
+     * In some cases when the {@link LegStep} is a highway or major roadway, there might be a shield
+     * icon that's included to better identify to your user to roadway. Note that this doesn't
+     * return the image itself but rather a complex object that can used to formulate the url which
+     * in turn would be used to make a network request and download a file.
+     *
+     * @param mapboxShield an object which can be used to download the shield icon if available
+     * @return this builder for chaining options together
+     */
+    public abstract Builder mapboxShield(@Nullable MapboxShield mapboxShield);
 
     /**
      * In some cases when the {@link StepManeuver} will be difficult to navigate, an image
