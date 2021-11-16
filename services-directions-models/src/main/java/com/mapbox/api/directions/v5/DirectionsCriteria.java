@@ -179,6 +179,16 @@ public final class DirectionsCriteria {
   public static final String EXCLUDE_RESTRICTED = "restricted";
 
   /**
+   * Exclude all cash only tolls along the returned directions route.
+   */
+  public static final String EXCLUDE_CASH_ONLY_TOLLS = "cash_only_tolls";
+
+  /**
+   * Exclude all unpaved roads along the returned directions route.
+   */
+  public static final String EXCLUDE_UNPAVED = "unpaved";
+
+  /**
    * A road type that requires a minimum of two vehicle occupants.
    */
   public static final String INCLUDE_HOV2 = "hov2";
@@ -335,7 +345,9 @@ public final class DirectionsCriteria {
     EXCLUDE_MOTORWAY,
     EXCLUDE_TOLL,
     EXCLUDE_TUNNEL,
-    EXCLUDE_RESTRICTED
+    EXCLUDE_RESTRICTED,
+    EXCLUDE_CASH_ONLY_TOLLS,
+    EXCLUDE_UNPAVED
   })
   public @interface ExcludeCriteria {
   }
