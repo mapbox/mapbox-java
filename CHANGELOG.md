@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `EXCLUDE_CASH_ONLY_TOLLS`([#1309](https://github.com/mapbox/mapbox-java/issues/1309)) and `EXCLUDE_UNPAVED`([#1308](https://github.com/mapbox/mapbox-java/issues/1308)) options to `DirectionsCriteria`
 
 ### v6.1.0 - November 11, 2021
 - Added `avoid_maneuver_radius` to Directions API params and `avoidManeuverRadius` to `RouteOptions`. [#1310](https://github.com/mapbox/mapbox-java/pull/1310)
