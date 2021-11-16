@@ -4,6 +4,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,6 +16,7 @@ import static org.junit.Assert.assertNotNull;
 public class DirectionsResponseTest extends TestUtils {
 
   private static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "directions_v5_precision_6.json";
+  private static final String DIRECTIONS_V5_MULTIPLE_ROUTES = "directions_v5_multiple_routes.json";
 
   @Test
   public void sanity() throws Exception {
@@ -41,7 +43,6 @@ public class DirectionsResponseTest extends TestUtils {
     String jsonString = responseFromJson1.toJson();
     DirectionsResponse responseFromJson2 = DirectionsResponse.fromJson(jsonString);
 
-
     Assert.assertEquals(responseFromJson1, responseFromJson2);
     Assert.assertEquals(responseFromJson2, responseFromJson1);
   }
@@ -61,5 +62,15 @@ public class DirectionsResponseTest extends TestUtils {
 
     assertEquals(options, response.routes().get(0).routeOptions());
     assertEquals(uuid, response.routes().get(0).requestUuid());
+  }
+
+  @Test
+  public void fromJson_multipleRoutesHaveCorrectIndices() throws Exception {
+    String json = loadJsonFixture(DIRECTIONS_V5_MULTIPLE_ROUTES);
+
+    List<DirectionsRoute> routes = DirectionsResponse.fromJson(json).routes();
+
+    assertEquals("0", routes.get(0).routeIndex());
+    assertEquals("1", routes.get(1).routeIndex());
   }
 }

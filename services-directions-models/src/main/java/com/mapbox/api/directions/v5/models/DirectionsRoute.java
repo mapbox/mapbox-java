@@ -322,8 +322,14 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
     @NonNull
     public abstract Builder requestUuid(@Nullable String requestUuid);
 
+    /**
+     * The index of the route in the list of routes returned by the original response.
+     *
+     * @param routeIndex string of an int value representing the index
+     * @return this builder for chaining options together
+     */
     @NonNull
-    abstract Builder routeIndex(String routeIndex);
+    public abstract Builder routeIndex(String routeIndex);
 
     /**
      * Build a new {@link DirectionsRoute} object.
