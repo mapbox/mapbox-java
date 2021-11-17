@@ -134,7 +134,11 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
    * @since 3.0.0
    */
   public static DirectionsResponse fromJson(@NonNull String json) {
-    return fromJson(json, null, null);
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
+    // rebuilding to ensure that underlying routes have assigned indices
+    return gson.create().fromJson(json, DirectionsResponse.class).toBuilder().build();
   }
 
   /**
