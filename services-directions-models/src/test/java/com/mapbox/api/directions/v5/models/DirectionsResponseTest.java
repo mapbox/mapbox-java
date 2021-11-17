@@ -17,6 +17,8 @@ public class DirectionsResponseTest extends TestUtils {
 
   private static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "directions_v5_precision_6.json";
   private static final String DIRECTIONS_V5_MULTIPLE_ROUTES = "directions_v5_multiple_routes.json";
+  private static final String DIRECTIONS_V5_MULTIPLE_ROUTES_WITH_OPTIONS =
+    "directions_v5_multiple_routes_with_options.json";
 
   @Test
   public void sanity() throws Exception {
@@ -72,5 +74,15 @@ public class DirectionsResponseTest extends TestUtils {
 
     assertEquals("0", routes.get(0).routeIndex());
     assertEquals("1", routes.get(1).routeIndex());
+  }
+
+  @Test
+  public void fromJson_deserializesOptions() throws Exception {
+    String json = loadJsonFixture(DIRECTIONS_V5_MULTIPLE_ROUTES_WITH_OPTIONS);
+
+    List<DirectionsRoute> routes = DirectionsResponse.fromJson(json).routes();
+
+    assertNotNull(routes.get(0).routeOptions());
+    assertNotNull(routes.get(1).routeOptions());
   }
 }
