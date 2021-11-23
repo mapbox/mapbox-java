@@ -129,12 +129,16 @@ createPullRequest() {
         <br/>**Staging**:
         <br/> mapbox-java-core:
         <a href='https://github.com/mapbox/mapbox-java/tree/publisher-staging/libjava-core/${VERSION_NUMBER}'>staging github</a>
+        <a href='https://docs.tilestream.net/android/java/api/libjava-core/${VERSION_NUMBER}'>staging docs</a>
         <br/>mapbox-java-geojson:
         <a href='https://github.com/mapbox/mapbox-java/tree/publisher-staging/libjava-geojson/${VERSION_NUMBER}'>staging github</a>
+        <a href='https://docs.tilestream.net/android/java/api/libjava-geojson/${VERSION_NUMBER}'>staging docs</a>
         <br/>mapbox-java-turf:
         <a href='https://github.com/mapbox/mapbox-java/tree/publisher-staging/libjava-turf/${VERSION_NUMBER}'>staging github</a>
+        <a href='https://docs.tilestream.net/android/java/api/libjava-turf/${VERSION_NUMBER}'>staging docs</a>
         <br/>mapbox-java-services:
-        <a href='https://github.com/mapbox/mapbox-java/tree/publisher-staging/libjava-core/${VERSION_NUMBER}'>staging github</a>
+        <a href='https://github.com/mapbox/mapbox-java/tree/publisher-staging/libjava-services/${VERSION_NUMBER}'>staging github</a>
+        <a href='https://docs.tilestream.net/android/java/api/libjava-services/${VERSION_NUMBER}'>staging docs</a>
         <br/>**cc** @mapbox/navigation-android" \
         --base ${DOCS_BASE_BRANCH_NAME_PRODUCTION} \
         --head ${BRANCH_NAME} \
