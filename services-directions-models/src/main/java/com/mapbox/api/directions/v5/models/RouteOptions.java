@@ -991,7 +991,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
         decodedUrl.getQuery(),
         decodedUrl.getRef()
       );
-      return encodedUri.toURL();
+      return new URL(encodedUri.toASCIIString());
     } catch (MalformedURLException | URISyntaxException ex) {
       throw new RuntimeException(ex);
     }
