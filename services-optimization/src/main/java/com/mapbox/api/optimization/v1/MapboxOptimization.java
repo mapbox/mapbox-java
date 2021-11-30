@@ -480,8 +480,6 @@ public abstract class MapboxOptimization
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException("At least two coordinates must be provided with your API"
           + "request.");
-      } else if (coordinates.size() > 12) {
-        throw new ServicesException("Maximum of 12 coordinates are allowed for this API.");
       }
 
       coordinates(formatCoordinates(coordinates));
