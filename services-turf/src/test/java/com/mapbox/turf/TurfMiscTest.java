@@ -34,6 +34,78 @@ public class TurfMiscTest extends TestUtils {
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
+  public void lineIntersect_intersectingEdge() {
+    List<Point> line1Coords = new ArrayList<>();
+    line1Coords.add(Point.fromLngLat(1.0, 2.0));
+    line1Coords.add(Point.fromLngLat(2.0, 3.0));
+    LineString line1 = LineString.fromLngLats(line1Coords);
+
+    List<Point> line2Coords = new ArrayList<>();
+    line2Coords.add(Point.fromLngLat(2.0, 3.0));
+    line2Coords.add(Point.fromLngLat(4.0, 2.0));
+    LineString line2 = LineString.fromLngLats(line2Coords);
+
+    List<Point> result1 = TurfMisc.lineIntersect(line1, line2);
+    assertEquals(1, result1.size());
+    assertEquals(Point.fromLngLat(2.0, 3.0), result1.get(0));
+
+    List<Point> line3Coords = new ArrayList<>();
+    line3Coords.add(Point.fromLngLat(0.0, 3.0));
+    line3Coords.add(Point.fromLngLat(1.0, 2.0));
+    LineString line3 = LineString.fromLngLats(line3Coords);
+
+    List<Point> result2 = TurfMisc.lineIntersect(line1, line3);
+    assertEquals(1, result2.size());
+    assertEquals(Point.fromLngLat(1.0, 2.0), result2.get(0));
+  }
+
+  @Test
+  public void lineIntersect_intersecting() {
+    List<Point> line1Coords = new ArrayList<>();
+    line1Coords.add(Point.fromLngLat(2.0, 1.0));
+    line1Coords.add(Point.fromLngLat(2.0, 5.0));
+    line1Coords.add(Point.fromLngLat(2.0, 9.0));
+    LineString line1 = LineString.fromLngLats(line1Coords);
+
+    List<Point> line2Coords = new ArrayList<>();
+    line2Coords.add(Point.fromLngLat(4.0, 1.0));
+    line2Coords.add(Point.fromLngLat(0.0, 5.0));
+    line2Coords.add(Point.fromLngLat(2.0, 9.0));
+    LineString line2 = LineString.fromLngLats(line2Coords);
+
+    List<Point> expected = new ArrayList<>();
+    expected.add(Point.fromLngLat(2.0, 3.0));
+    expected.add(Point.fromLngLat(2.0, 9.0));
+
+    List<Point> result = TurfMisc.lineIntersect(line1, line2);
+    for(int i = 0; i < result.size(); i++) {
+      assertEquals(expected.get(i), result.get(i));
+    }
+  }
+
+  @Test
+  public void lineIntersect_nonintersecting() {
+    List<Point> line1Coords = new ArrayList<>();
+    line1Coords.add(Point.fromLngLat(2.0, 1.0));
+    line1Coords.add(Point.fromLngLat(2.0, 5.0));
+    line1Coords.add(Point.fromLngLat(2.0, 9.0));
+    LineString line1 = LineString.fromLngLats(line1Coords);
+
+    List<Point> line2Coords = new ArrayList<>();
+    line2Coords.add(Point.fromLngLat(1.0, 1.0));
+    line2Coords.add(Point.fromLngLat(1.0, 5.0));
+    line2Coords.add(Point.fromLngLat(1.0, 9.0));
+    LineString line2 = LineString.fromLngLats(line2Coords);
+
+    List<Point> expected = new ArrayList<>();
+    expected.add(Point.fromLngLat(2.0, 3.0));
+    expected.add(Point.fromLngLat(2.0, 9.0));
+
+    List<Point> result = TurfMisc.lineIntersect(line1, line2);
+    assertEquals(0, result.size());
+  }
+
+  @Test
   public void lineSlice_throwsStartStopPointException() throws Exception {
     thrown.expect(TurfException.class);
     thrown.expectMessage(startsWith("Turf lineSlice requires a LineString made up of at least 2 "
