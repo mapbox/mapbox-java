@@ -3,12 +3,15 @@ package com.mapbox.turf;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
+import com.mapbox.turf.models.LineIntersectsResult;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -489,5 +492,28 @@ public class TurfMiscTest extends TestUtils {
       start_point.coordinates());
     assertEquals(sliced.coordinates().get(sliced.coordinates().size() - 1).coordinates(),
       end_point.coordinates());
+  }
+
+  @Test
+  public void testLineIntersects() throws
+          NoSuchMethodException, SecurityException,
+          IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    Method method = TurfMisc.class.getDeclaredMethod("lineIntersects",
+      double.class, double.class, double.class, double.class,  double.class, double.class, double.class, double.class);
+    method.setAccessible(true);
+
+    LineIntersectsResult result1 = (LineIntersectsResult)method.invoke(null, 1.0, 2.0, 2.0, 3.0, 2.0, 3.0, 4.0, 2.0);
+    assertNotNull(result1);
+    assertEquals(new Double(2.0), result1.horizontalIntersection());
+    assertEquals(new Double(3.0), result1.verticalIntersection());
+    assertTrue(result1.onLine1());
+    assertTrue(result1.onLine2());
+
+    LineIntersectsResult result2 = (LineIntersectsResult)method.invoke(null, 1.0, 2.0, 2.0, 3.0, 0.0, 3.0, 1.0, 2.0);
+    assertNotNull(result2);
+    assertEquals(new Double(1.0), result2.horizontalIntersection());
+    assertEquals(new Double(2.0), result2.verticalIntersection());
+    assertTrue(result2.onLine1());
+    assertTrue(result2.onLine2());
   }
 }

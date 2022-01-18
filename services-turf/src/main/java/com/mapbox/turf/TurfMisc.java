@@ -346,11 +346,11 @@ public final class TurfMisc {
       + (varA * (line1EndY - line1StartY))).build();
 
     // if line1 is a segment and line2 is infinite, they intersect if:
-    if (varA > 0 && varA < 1) {
+    if (varA >= 0 && varA <= 1) {
       result = result.toBuilder().onLine1(true).build();
     }
     // if line2 is a segment and line1 is infinite, they intersect if:
-    if (varB > 0 && varB < 1) {
+    if (varB >= 0 && varB <= 1) {
       result = result.toBuilder().onLine2(true).build();
     }
     // if line1 and line2 are segments, they intersect if both of the above are true
