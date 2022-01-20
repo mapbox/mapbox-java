@@ -4,6 +4,8 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.2.0 - January 20, 2022
+
 ### v6.2.0-beta.2 - November 30, 2021
 - Exposed `ShieldSprites`, `ShieldSprite` and `ShieldSpriteAttribute` in support for mapbox designed route shields. [#1336](https://github.com/mapbox/mapbox-java/pull/1336)
 - Added a fix so that no forbidden characters are found in the encoded URL. [#1337](https://github.com/mapbox/mapbox-java/pull/1337)
