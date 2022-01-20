@@ -128,11 +128,12 @@ jobs:
           name: Upload libraries to Mapbox SDK Registry
           command: |
             make sdk-registry-upload
-#      This is not yet supported, still need to be able to authenticate CI to create a Github pull request.
-#      - run:
-#          name: Create pull request in api-downloads
-#          command: |
-#            make sdk-registry-publish
+      - run:
+          name: Create pull request in api-downloads
+          command: |
+            export GITHUB_TOKEN=$(./mbx-ci github writer private token)
+            git config --global user.email no-reply@mapbox.com && git config --global user.name mapbox-ci
+            make sdk-registry-publish
   publish-documentation:
     environment:
       - MBX_CI_DOMAIN: o619qyc20d.execute-api.us-east-1.amazonaws.com

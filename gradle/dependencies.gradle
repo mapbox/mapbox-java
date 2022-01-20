@@ -26,7 +26,7 @@ ext {
       artifactory: '4.9.3',
       kotlin     : '1.3.72',
       shadowJar  : '4.0.4',
-      mapboxSdkRegistry    : '0.4.0'
+      mapboxSdkRegistry    : '0.7.0'
   ]
 
   dependenciesList = [
