@@ -27,6 +27,44 @@ public final class TurfMisc {
   }
 
   /**
+   * Takes lines {@link LineString} and returns intersect points. The time complexity is O(nm)
+   * that is not as efficient as Turf.js implementation.
+   *
+   * @param line1 LineString 1
+   * @param line2 LineString 2
+   * @return Intersect points
+   * @see <a href="https://turfjs.org/docs/#lineIntersect">Turf Line intersect documentation</a>
+   * @since 6.2.0
+   */
+  @NonNull
+  public static List<Point> lineIntersect(@NonNull LineString line1, @NonNull LineString line2) {
+    List<Point> result = new ArrayList<>();
+    Point[] line1Points = line1.coordinates().toArray(new Point[line1.coordinates().size()]);
+    Point[] line2Points = line2.coordinates().toArray(new Point[line2.coordinates().size()]);
+
+    for (int i = 0; i < line1Points.length - 1; i++) {
+      for (int j = 0; j < line2Points.length - 1; j++) {
+        LineIntersectsResult intersects = lineIntersects(
+          line1Points[i].longitude(),
+          line1Points[i].latitude(),
+          line1Points[i + 1].longitude(),
+          line1Points[i + 1].latitude(),
+          line2Points[j].longitude(),
+          line2Points[j].latitude(),
+          line2Points[j + 1].longitude(),
+          line2Points[j + 1].latitude());
+
+        if (intersects != null) {
+          result.add(Point.fromLngLat(
+            intersects.horizontalIntersection(),
+            intersects.verticalIntersection()));
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
    * Takes a line, a start {@link Point}, and a stop point and returns the line in between those
    * points.
    *
@@ -346,11 +384,11 @@ public final class TurfMisc {
       + (varA * (line1EndY - line1StartY))).build();
 
     // if line1 is a segment and line2 is infinite, they intersect if:
-    if (varA > 0 && varA < 1) {
+    if (varA >= 0 && varA <= 1) {
       result = result.toBuilder().onLine1(true).build();
     }
     // if line2 is a segment and line1 is infinite, they intersect if:
-    if (varB > 0 && varB < 1) {
+    if (varB >= 0 && varB <= 1) {
       result = result.toBuilder().onLine2(true).build();
     }
     // if line1 and line2 are segments, they intersect if both of the above are true
