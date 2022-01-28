@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.3.0-beta.1 - January 28, 2021
+- Exposed [turf.lineIntersect](https://turfjs.org/docs/#lineIntersect) via `TurfMisc#lineIntersect` using an algorithm with O(nm) time complexity which should suite small to medium sized geometries until a more performant solution is implemented. [#1348](https://github.com/mapbox/mapbox-java/pull/1348)
+- Fixed an issue where ends of lines where not considered as intersection points. [#1348](https://github.com/mapbox/mapbox-java/pull/1348)
+
 ### v6.2.0 - January 20, 2022
 
 ### v6.2.0-beta.2 - November 30, 2021
