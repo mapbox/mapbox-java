@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.EventListener;
 import okhttp3.HttpUrl;
@@ -32,13 +34,17 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MapboxDirectionsTest extends TestUtils {
 
   private static final String DIRECTIONS_V5_FIXTURE = "directions_v5.json";
+  private static final String DIRECTIONS_ALTERNATIVES_V5_FIXTURE =
+    "directions_alternatives_v5.json";
   private static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "directions_v5_precision_6.json";
   private static final String DIRECTIONS_TRAFFIC_FIXTURE = "directions_v5_traffic.json";
   private static final String DIRECTIONS_ROTARY_FIXTURE = "directions_v5_fixtures_rotary.json";
@@ -56,6 +62,7 @@ public class MapboxDirectionsTest extends TestUtils {
     "directions_v5_waypoint_targets.json";
   private static final String DIRECTIONS_V5_POST = "directions_v5_post.json";
   private static final String ROUTE_OPTIONS_V5 = "route_options_v5.json";
+  private static final String ROUTE_OPTIONS_ALTERNATIVES_V5 = "route_options_alternatives_v5.json";
 
   private final TestDispatcher testDispatcher = new TestDispatcher();
   private MockWebServer server;
@@ -140,9 +147,9 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void build_metadataOptions() {
     MapboxDirections directions = MapboxDirections.builder()
-        .accessToken("token")
-        .routeOptions(routeOptions)
-        .build();
+      .accessToken("token")
+      .routeOptions(routeOptions)
+      .build();
     assertTrue(directions.cloneCall().request().url().toString().contains("metadata=true"));
   }
 
@@ -361,9 +368,9 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void include_doesGetFormattedInUrlCorrectly() throws Exception {
     MapboxDirections directions = MapboxDirections.builder()
-            .accessToken("token")
-            .routeOptions(routeOptions)
-            .build();
+      .accessToken("token")
+      .routeOptions(routeOptions)
+      .build();
 
     assertTrue(directions.cloneCall().request().url().toString().contains("include=hot"));
   }
@@ -743,23 +750,23 @@ public class MapboxDirectionsTest extends TestUtils {
   @Test
   public void max_height() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
-            .accessToken("token")
-            .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
-            .build();
+      .accessToken("token")
+      .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+      .build();
 
     assertEquals("1.5",
-            mapboxDirections.cloneCall().request().url().queryParameter("max_height"));
+      mapboxDirections.cloneCall().request().url().queryParameter("max_height"));
   }
 
   @Test
   public void max_width() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
-            .accessToken("token")
-            .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
-            .build();
+      .accessToken("token")
+      .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+      .build();
 
     assertEquals("1.4",
-            mapboxDirections.cloneCall().request().url().queryParameter("max_width"));
+      mapboxDirections.cloneCall().request().url().queryParameter("max_width"));
   }
 
   @Test
@@ -794,6 +801,92 @@ public class MapboxDirectionsTest extends TestUtils {
 
     assertEquals("2021_07_14-03_00_00", infoMap.get("tileset_version"));
     assertEquals("and its value", infoMap.get("some_other_property"));
+  }
+
+  @Test
+  public void responseFactory_routesUpdatedWithRequestData() throws IOException {
+    testDispatcher.currentResource = DIRECTIONS_ALTERNATIVES_V5_FIXTURE;
+    RouteOptions altRouteOptions =
+      RouteOptions.fromJson(loadJsonFixture(ROUTE_OPTIONS_ALTERNATIVES_V5))
+        .toBuilder()
+        .baseUrl(mockUrl.toString())
+        .build();
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
+      .routeOptions(altRouteOptions)
+      .build();
+
+    Response<DirectionsResponse> response = mapboxDirections.executeCall();
+
+    DirectionsRoute route1 = response.body().routes().get(0);
+    DirectionsRoute route2 = response.body().routes().get(1);
+
+    assertEquals("0", route1.routeIndex());
+    assertEquals("1", route2.routeIndex());
+    assertEquals(
+      "qIutV-I6xWhBmE1SgzowNSiujLyTETZVGewuHL3E74foqlBbvC8S0A==",
+      route1.requestUuid()
+    );
+    assertEquals(
+      "qIutV-I6xWhBmE1SgzowNSiujLyTETZVGewuHL3E74foqlBbvC8S0A==",
+      route2.requestUuid()
+    );
+    assertEquals(altRouteOptions, route1.routeOptions());
+    assertEquals(altRouteOptions, route2.routeOptions());
+  }
+
+  @Test
+  public void responseFactory_routesUpdatedWithRequestData_async() throws IOException {
+    testDispatcher.currentResource = DIRECTIONS_ALTERNATIVES_V5_FIXTURE;
+    final RouteOptions altRouteOptions =
+      RouteOptions.fromJson(loadJsonFixture(ROUTE_OPTIONS_ALTERNATIVES_V5))
+        .toBuilder()
+        .baseUrl(mockUrl.toString())
+        .build();
+
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
+      .routeOptions(altRouteOptions)
+      .build();
+
+    final CountDownLatch latch = new CountDownLatch(1);
+    mapboxDirections.enqueueCall(
+      new Callback<DirectionsResponse>() {
+        @Override
+        public void onResponse(retrofit2.Call<DirectionsResponse> call,
+                               Response<DirectionsResponse> response) {
+          DirectionsRoute route1 = response.body().routes().get(0);
+          DirectionsRoute route2 = response.body().routes().get(1);
+
+          assertEquals("0", route1.routeIndex());
+          assertEquals("1", route2.routeIndex());
+          assertEquals(
+            "qIutV-I6xWhBmE1SgzowNSiujLyTETZVGewuHL3E74foqlBbvC8S0A==",
+            route1.requestUuid()
+          );
+          assertEquals(
+            "qIutV-I6xWhBmE1SgzowNSiujLyTETZVGewuHL3E74foqlBbvC8S0A==",
+            route2.requestUuid()
+          );
+          assertEquals(altRouteOptions, route1.routeOptions());
+          assertEquals(altRouteOptions, route2.routeOptions());
+          latch.countDown();
+        }
+
+        @Override
+        public void onFailure(retrofit2.Call<DirectionsResponse> call, Throwable t) {
+          Assert.fail();
+        }
+      }
+    );
+    try {
+      if (!latch.await(5, TimeUnit.SECONDS)) {
+        Assert.fail();
+      }
+    } catch (InterruptedException e) {
+      Assert.fail();
+    }
   }
 
   class TestDispatcher extends okhttp3.mockwebserver.Dispatcher {

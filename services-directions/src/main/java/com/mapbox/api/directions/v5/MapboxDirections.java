@@ -2,16 +2,13 @@ package com.mapbox.api.directions.v5;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.core.MapboxService;
 import com.mapbox.core.utils.ApiCallHelper;
-
 import java.io.IOException;
-
 import okhttp3.EventListener;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -171,8 +168,7 @@ public abstract class MapboxDirections extends
   @Override
   public Response<DirectionsResponse> executeCall() throws IOException {
     Response<DirectionsResponse> response = super.executeCall();
-    DirectionsResponseFactory factory = new DirectionsResponseFactory(this);
-    return factory.generate(response);
+    return DirectionsResponseFactory.generate(routeOptions(), response);
   }
 
   /**
@@ -187,14 +183,20 @@ public abstract class MapboxDirections extends
   public void enqueueCall(final Callback<DirectionsResponse> callback) {
     getCall().enqueue(new Callback<DirectionsResponse>() {
       @Override
-      public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-        DirectionsResponseFactory factory = new DirectionsResponseFactory(MapboxDirections.this);
-        Response<DirectionsResponse> generatedResponse = factory.generate(response);
+      public void onResponse(
+        @NonNull Call<DirectionsResponse> call,
+        @NonNull Response<DirectionsResponse> response
+      ) {
+        Response<DirectionsResponse> generatedResponse =
+          DirectionsResponseFactory.generate(routeOptions(), response);
         callback.onResponse(call, generatedResponse);
       }
 
       @Override
-      public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
+      public void onFailure(
+        @NonNull Call<DirectionsResponse> call,
+        @NonNull Throwable throwable
+      ) {
         callback.onFailure(call, throwable);
       }
     });
@@ -339,7 +341,7 @@ public abstract class MapboxDirections extends
      * @param usePost true to use POST method or false and null for GET method
      * @return this builder for chaining options together
      */
-    public abstract Builder usePostMethod(@Nullable  Boolean usePost);
+    public abstract Builder usePostMethod(@Nullable Boolean usePost);
 
     /**
      * This uses the provided parameters set using the {@link Builder} and first checks that all

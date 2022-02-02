@@ -1,0 +1,19 @@
+{
+  "baseUrl": "https://api.mapbox.com",
+  "user": "mapbox",
+  "profile": "driving-traffic",
+  "coordinates": "11.2194782,49.4769525;11.1238584,49.4540902",
+  "alternatives": true,
+  "language": "en",
+  "layers": ";",
+  "continue_straight": true,
+  "roundabout_exits": true,
+  "geometries": "polyline6",
+  "overview": "full",
+  "steps": true,
+  "annotations": "congestion_numeric,maxspeed,closure,speed,duration,distance",
+  "voice_instructions": true,
+  "banner_instructions": true,
+  "voice_units": "imperial",
+  "enable_refresh": true
+}
