@@ -67,6 +67,30 @@ public class DirectionsResponseTest extends TestUtils {
   }
 
   @Test
+  public void fromJson_correctlyBuildsFromJsonWithOptions() throws Exception {
+    String json = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    DirectionsResponse response = DirectionsResponse.fromJson(json, options);
+
+    assertEquals(options, response.routes().get(0).routeOptions());
+    assertEquals("cjhk3ov9e1voc3vp58hcgit34", response.routes().get(0).requestUuid());
+  }
+
+  @Test
+  public void fromJson_correctlyBuildsFromJsonWithUuid() throws Exception {
+    String json = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    DirectionsResponse response = DirectionsResponse.fromJson(json);
+
+    assertEquals("cjhk3ov9e1voc3vp58hcgit34", response.routes().get(0).requestUuid());
+  }
+
+  @Test
   public void fromJson_multipleRoutesHaveCorrectIndices() throws Exception {
     String json = loadJsonFixture(DIRECTIONS_V5_MULTIPLE_ROUTES);
 
