@@ -1,4 +1,13 @@
 version: 2.1
+
+executors:
+  java-executor:
+    docker:
+      - image: mbgl/android-ndk-r21e:f547210689
+    working_directory: ~/code
+    environment:
+      MBX_CI_DOMAIN: o619qyc20d.execute-api.us-east-1.amazonaws.com
+
 workflows:
   version: 2
   release-workflow:
@@ -75,18 +84,14 @@ commands:
 
 jobs:
   build:
-    working_directory: ~/code
-    docker:
-      - image: mbgl/android-ndk-r21e:latest
+    executor: java-executor
     steps:
       - checkout
       - build-release
       - build-cli
 
   test:
-    working_directory: ~/code
-    docker:
-      - image: mbgl/android-ndk-r21e:latest
+    executor: java-executor
     steps:
       - checkout
       - restore_cache:
@@ -99,11 +104,7 @@ jobs:
 
 # ------------------------------------------------------------------------------
   publish-snapshot:
-    environment:
-      - MBX_CI_DOMAIN: o619qyc20d.execute-api.us-east-1.amazonaws.com
-    docker:
-      - image: mbgl/android-ndk-r21e:latest
-    working_directory: ~/code
+    executor: java-executor
     steps:
       - checkout
       - setup-aws-credentials
@@ -113,11 +114,7 @@ jobs:
             make sdk-registry-publish-snapshot
 
   release:
-    environment:
-      - MBX_CI_DOMAIN: o619qyc20d.execute-api.us-east-1.amazonaws.com
-    docker:
-      - image: mbgl/android-ndk-r21e:latest
-    working_directory: ~/code
+    executor: java-executor
     steps:
       - checkout
       - build-release
@@ -135,11 +132,7 @@ jobs:
             git config --global user.email no-reply@mapbox.com && git config --global user.name mapbox-ci
             make sdk-registry-publish
   publish-documentation:
-    environment:
-      - MBX_CI_DOMAIN: o619qyc20d.execute-api.us-east-1.amazonaws.com
-    docker:
-      - image: mbgl/android-ndk-r21e:latest
-    working_directory: ~/code
+    executor: java-executor
     steps:
       - checkout
       - setup-aws-credentials
