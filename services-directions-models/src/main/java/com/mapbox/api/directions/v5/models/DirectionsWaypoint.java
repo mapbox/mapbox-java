@@ -1,6 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,7 +33,7 @@ public abstract class DirectionsWaypoint extends DirectionsJsonObject {
    * @return string with the name of the way the coordinate snapped to
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract String name();
 
   /**
@@ -42,7 +42,7 @@ public abstract class DirectionsWaypoint extends DirectionsJsonObject {
    * @return GeoJson Point representing this waypoint location
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   public Point location() {
     return Point.fromLngLat(rawLocation()[0], rawLocation()[1]);
   }
@@ -53,7 +53,7 @@ public abstract class DirectionsWaypoint extends DirectionsJsonObject {
    * @return GeoJson Point representing this waypoint location
    * @since 3.0.0
    */
-  @Nullable
+  @NonNull
   @SerializedName("location")
   @SuppressWarnings("mutable")
   abstract double[] rawLocation();
@@ -109,7 +109,7 @@ public abstract class DirectionsWaypoint extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder name(@Nullable String name);
+    public abstract Builder name(@NonNull String name);
 
     /**
      * The rawLocation as a double array. Once the {@link DirectionsWaypoint} objects created,
@@ -122,7 +122,7 @@ public abstract class DirectionsWaypoint extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    public abstract Builder rawLocation(@Nullable double[] rawLocation);
+    public abstract Builder rawLocation(@NonNull double[] rawLocation);
 
     /**
      * Build a new {@link DirectionsWaypoint} object.
