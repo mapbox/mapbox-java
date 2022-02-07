@@ -78,6 +78,7 @@ public class DirectionsWaypointTest extends TestUtils {
   public void sanity() throws Exception {
     DirectionsWaypoint waypoint = DirectionsWaypoint.builder()
       .name("foobar")
+      .rawLocation(new double[] {1.0, 2.0})
       .build();
     assertNotNull(waypoint);
   }
@@ -85,6 +86,7 @@ public class DirectionsWaypointTest extends TestUtils {
   @Test
   public void location_doesGetConvertedToGeoJsonPoint() throws Exception {
     DirectionsWaypoint waypoint = DirectionsWaypoint.builder()
+      .name("name")
       .rawLocation(new double[] {1.0, 2.0})
       .build();
     assertNotNull(waypoint.location());
