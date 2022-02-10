@@ -1,6 +1,7 @@
 package com.mapbox.api.directions.v5;
 
 import androidx.annotation.StringDef;
+import com.mapbox.geojson.Point;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -415,5 +416,9 @@ public final class DirectionsCriteria {
     APPROACH_CURB
   })
   public @interface ApproachesCriteria {
+  }
+
+  public static String excludePoint(Point point) {
+    return "point(" + point.longitude() + " " + point.latitude() + ")";
   }
 }

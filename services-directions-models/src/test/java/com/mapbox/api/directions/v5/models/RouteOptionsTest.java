@@ -1,14 +1,17 @@
 package com.mapbox.api.directions.v5.models;
 
 import static com.google.gson.JsonParser.parseString;
+import static org.junit.Assert.*;
+
+import java.net.MalformedURLException;
 import java.net.URL;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
@@ -435,6 +438,23 @@ public class RouteOptionsTest extends TestUtils {
     URL url = options.toUrl(ACCESS_TOKEN);
 
     assertEquals(expectedEncodedUrl, url.toString());
+  }
+
+  @Test
+  public void routeOptionWithExcludedWaypoint() {
+    RouteOptions options = RouteOptions.builder()
+        .coordinates("1.0,1.0;2.0,2.0")
+        .profile(DirectionsCriteria.PROFILE_DRIVING)
+        .excludeList(Collections.singletonList(
+            DirectionsCriteria.excludePoint(Point.fromLngLat(1.0, 2.0))
+        ))
+        .build();
+    URL url = options.toUrl("testToken");
+    List<String> queryParameters = Arrays.asList(url.getQuery().split("&"));
+    assertTrue(
+        "url is " + url.toString(),
+        queryParameters.contains("exclude=point(1.0%202.0)")
+    );
   }
 
   /**
