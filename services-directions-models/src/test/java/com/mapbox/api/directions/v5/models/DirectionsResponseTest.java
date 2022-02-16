@@ -125,4 +125,13 @@ public class DirectionsResponseTest extends TestUtils {
     assertEquals(616.839, waypoint.distanceFromStart(), 0.001);
     assertEquals(58, waypoint.geometryIndex());
   }
+
+  @Test
+  public void testFromToJsonForRouteWithSilentWaypoints() throws IOException {
+    String json = loadJsonFixture(DIRECTIONS_V5_SILENT_WAYPOINT);
+    DirectionsResponse initial = DirectionsResponse.fromJson(json);
+    String serialized = initial.toJson();
+    DirectionsResponse deserialized = DirectionsResponse.fromJson(serialized);
+    assertEquals(initial, deserialized);
+  }
 }
