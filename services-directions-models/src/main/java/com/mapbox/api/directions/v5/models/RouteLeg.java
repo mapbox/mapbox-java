@@ -28,6 +28,10 @@ public abstract class RouteLeg extends DirectionsJsonObject {
     return new AutoValue_RouteLeg.Builder();
   }
 
+  @Nullable
+  @SerializedName("via_waypoints")
+  public abstract List<SilentWaypoint> viaWaypoints();
+
   /**
    * The distance traveled from one waypoint to another.
    *
@@ -156,6 +160,8 @@ public abstract class RouteLeg extends DirectionsJsonObject {
    */
   @AutoValue.Builder
   public abstract static class Builder {
+
+    public abstract Builder viaWaypoints(@Nullable List<SilentWaypoint> viaWaypoints);
 
     /**
      * The distance traveled from one waypoint to another.
