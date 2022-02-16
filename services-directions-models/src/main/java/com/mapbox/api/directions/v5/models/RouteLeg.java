@@ -28,6 +28,13 @@ public abstract class RouteLeg extends DirectionsJsonObject {
     return new AutoValue_RouteLeg.Builder();
   }
 
+  /**
+   * When the semicolon-separated list waypoints parameter is used in the request,
+   * an array per leg is returned that describes where a particular waypoint from
+   * the root-level array matches to the route.
+   * This provides a way for tracking when a waypoint is passed along the route.
+   * @return a list of silent waypoints
+   */
   @Nullable
   @SerializedName("via_waypoints")
   public abstract List<SilentWaypoint> viaWaypoints();
@@ -161,6 +168,12 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   @AutoValue.Builder
   public abstract static class Builder {
 
+    /**
+     * A list of silent waypoints which were used to request a route.
+     *
+     * @param viaWaypoints a list of silent waypoints
+     * @return this builder for chaining options together
+     */
     public abstract Builder viaWaypoints(@Nullable List<SilentWaypoint> viaWaypoints);
 
     /**
