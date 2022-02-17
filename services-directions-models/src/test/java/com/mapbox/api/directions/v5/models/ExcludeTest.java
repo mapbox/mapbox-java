@@ -89,22 +89,50 @@ public class ExcludeTest {
     );
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void parsePointWithTextInsteadOfNumbers() {
     String invalidPoint = "point(one two)";
-    Exclude.fromUrlQueryParameter(invalidPoint);
+    Exclude exclude = Exclude.fromUrlQueryParameter(invalidPoint);
+    assertNull(exclude);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void parsePointWithSemicolonDelimiter() {
     String invalidPoint = "point(5.0;7.0)";
-    Exclude.fromUrlQueryParameter(invalidPoint);
+    Exclude exclude = Exclude.fromUrlQueryParameter(invalidPoint);
+    assertNull(exclude);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void parsePointWithCommaDelimiter() {
     String invalidPoint = "point(5.0,7.0)";
-    Exclude.fromUrlQueryParameter(invalidPoint);
+    Exclude exclude = Exclude.fromUrlQueryParameter(invalidPoint);
+    assertNull(exclude);
+  }
+
+  @Test
+  public void parseCorrectValuesMixedWithInvalid() {
+    String invalidPoint = "point(5.0;7.0),point(8.0 -9.0),toll";
+
+    Exclude exclude = Exclude.fromUrlQueryParameter(invalidPoint);
+
+    assertNotNull(exclude);
+    assertEquals(
+      Arrays.asList(DirectionsCriteria.EXCLUDE_TOLL),
+      exclude.criteria()
+    );
+    assertEquals(
+      Arrays.asList(Point.fromLngLat(8.0, -9.0)),
+      exclude.points()
+    );
+  }
+
+  @Test
+  public void buildExcludeUsingNotSupportedCriteria() {
+    Exclude exclude = Exclude.builder()
+      .criteria(Arrays.asList("test", DirectionsCriteria.EXCLUDE_MOTORWAY))
+      .build();
+    assertEquals(2, exclude.criteria().size());
   }
 
   @Test

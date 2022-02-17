@@ -340,6 +340,7 @@ public final class DirectionsCriteria {
    * @since 3.0.0
    */
   @Retention(RetentionPolicy.CLASS)
+  // Please update Exclude.VALID_EXCLUDE_CRITERIA adding new type of exclude
   @StringDef( {
     EXCLUDE_FERRY,
     EXCLUDE_MOTORWAY,

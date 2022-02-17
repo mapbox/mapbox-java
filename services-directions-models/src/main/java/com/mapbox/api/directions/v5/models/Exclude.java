@@ -8,11 +8,19 @@ import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Defines excludes for {@link RouteOptions.Builder#excludeObject(Exclude)}.
+ *
+ * This class provides type-safe way to read and build {@link RouteOptions#exclude()} parameter.
+ *
+ * All properties are strictly categorized after parsing. Unknown data types or flags
+ * are ignored. If you want to work with exclude criteria which is not yet supported,
+ * consider using raw {@link RouteOptions#exclude()} directly.
  */
 @AutoValue
 public abstract class Exclude {
@@ -110,13 +118,11 @@ public abstract class Exclude {
     if (excludeItems != null) {
       for (String excludeItem : excludeItems) {
         if (excludeItem.startsWith("point(") && excludeItem.endsWith(")")) {
-          Point point = parsePoint(excludeItem);
-          points.add(point);
-        } else if (excludeItem.contains("(") && excludeItem.contains(")")) {
-          // Ignoring the unexpected type of data. Update the library to get support of new types
-        } else if (excludeItem.contains("(") || excludeItem.contains(")")) {
-          throw new IllegalArgumentException("Can't parse parameter " + excludeItem);
-        } else {
+          Point point = parsePointOrNull(excludeItem);
+          if (point != null) {
+            points.add(point);
+          }
+        } else if (VALID_EXCLUDE_CRITERIA.contains(excludeItem)) {
           criteria.add(excludeItem);
         }
       }
@@ -174,29 +180,22 @@ public abstract class Exclude {
     }
   }
 
-  private static String pointParsingErrorMessage(String point) {
-    return "Can't parse a point:" + point + ". Expected format: point(lon lat)";
-  }
-
-  private static Point parsePoint(String point) {
+  @Nullable
+  private static Point parsePointOrNull(String point) {
     int delimiter = point.indexOf(' ');
     if (delimiter != -1) {
       String longitude = point.substring(6, delimiter);
       String latitude = point.substring(delimiter + 1, point.length() - 1);
       try {
-        Point result = Point.fromLngLat(
+        return Point.fromLngLat(
           Double.parseDouble(longitude),
           Double.parseDouble(latitude)
         );
-        return result;
       } catch (NumberFormatException numberFormatError) {
-        throw new IllegalArgumentException(
-          pointParsingErrorMessage(point),
-          numberFormatError
-        );
+        return null;
       }
     } else {
-      throw new IllegalArgumentException(pointParsingErrorMessage(point));
+      return null;
     }
   }
 
@@ -207,4 +206,16 @@ public abstract class Exclude {
       .append(point.latitude())
       .append(')');
   }
+
+  private static final Set<String> VALID_EXCLUDE_CRITERIA = new HashSet<String>() {
+    {
+      add(DirectionsCriteria.EXCLUDE_FERRY);
+      add(DirectionsCriteria.EXCLUDE_MOTORWAY);
+      add(DirectionsCriteria.EXCLUDE_TOLL);
+      add(DirectionsCriteria.EXCLUDE_TUNNEL);
+      add(DirectionsCriteria.EXCLUDE_RESTRICTED);
+      add(DirectionsCriteria.EXCLUDE_CASH_ONLY_TOLLS);
+      add(DirectionsCriteria.EXCLUDE_UNPAVED);
+    }
+  };
 }

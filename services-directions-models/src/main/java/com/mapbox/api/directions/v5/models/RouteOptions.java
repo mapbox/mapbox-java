@@ -397,10 +397,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @return a list of strings where each element matches one of the
    *   {@link DirectionsCriteria.ExcludeCriteria} exclusion or a point
-   * @deprecated use {@link #excludeObject()} instead
    */
   @Nullable
-  @Deprecated()
   public List<String> excludeList() {
     return ParseUtils.parseToStrings(exclude(), ",");
   }
@@ -1471,10 +1469,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *
      * @param exclude a list of exclude that were used during the request
      * @return this builder for chaining options together
-     * @deprecated Use {@link #excludeObject(Exclude)} instead
      */
     @NonNull
-    @Deprecated
     public Builder excludeList(@Nullable List<String> exclude) {
       String result = FormatUtils.join(",", exclude);
       if (result != null) {
@@ -1486,6 +1482,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     /**
      * Exclude certain road types or points from routing.
      * The default is to not exclude anything from the profile selected.
+     *
+     * Exclude object may not provide all features that are currently present by Direction API.
+     * See {@link Exclude} for more details.
      *
      * @param exclude an object of excludes that are used during the request.
      *   Use {@link Exclude.Builder} to build exclude.
