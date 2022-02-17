@@ -10,11 +10,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class RouteOptionsExcludeTest {
+public class ExcludeTest {
   @Test
   public void parseTwoPointsWithTwoCriteriaMixed() {
     String excludeQueryParameter = "point(4234.23423 -8482.49523445),motorway,point(-444.0 999.111111),ferry";
+
     Exclude exclude = Exclude.fromUrlQueryParameter(excludeQueryParameter);
+
     assertEquals(
         Arrays.asList(
             Point.fromLngLat(4234.23423, -8482.49523445),
@@ -46,7 +48,9 @@ public class RouteOptionsExcludeTest {
   @Test
   public void parseOnePoint() {
     String excludeQueryParameter = "point(555.5 2222.0)";
+
     Exclude exclude = Exclude.fromUrlQueryParameter(excludeQueryParameter);
+
     assertEquals(
         Arrays.asList(
             Point.fromLngLat(555.5, 2222.0)
@@ -59,7 +63,9 @@ public class RouteOptionsExcludeTest {
   @Test
   public void parseOneCriteria() {
     String excludeQueryParameter = DirectionsCriteria.EXCLUDE_TUNNEL;
+
     Exclude exclude = Exclude.fromUrlQueryParameter(excludeQueryParameter);
+
     assertEquals(
         Arrays.asList(
             DirectionsCriteria.EXCLUDE_TUNNEL
@@ -72,7 +78,9 @@ public class RouteOptionsExcludeTest {
   @Test
   public void parsePointWithAFewSpaces() {
     String invalidPoint = "point(3.0      4.0)";
+
     Exclude exclude = Exclude.fromUrlQueryParameter(invalidPoint);
+
     assertEquals(
         Arrays.asList(
             Point.fromLngLat(3.0, 4.0)
