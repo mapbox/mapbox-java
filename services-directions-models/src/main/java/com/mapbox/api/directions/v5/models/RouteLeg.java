@@ -185,6 +185,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder distance(@Nullable Double distance);
 
     /**
@@ -194,6 +195,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 1.0.0
      */
+    @NonNull
     public abstract Builder duration(@Nullable Double duration);
 
     /**
@@ -206,6 +208,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 5.5.0
      */
+    @NonNull
     public abstract Builder durationTypical(@Nullable Double durationTypical);
 
     /**
@@ -215,6 +218,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder summary(@Nullable String summary);
 
     /**
@@ -225,6 +229,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @param admins Array with admins
      * @return this builder for chaining options together
      */
+    @NonNull
     public abstract Builder admins(@Nullable List<Admin> admins);
 
     /**
@@ -234,6 +239,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder steps(@Nullable List<LegStep> steps);
 
     /**
@@ -242,6 +248,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @param incidents a list of {@link Incident}
      * @return this builder for chaining options together
      */
+    @NonNull
     public abstract Builder incidents(@Nullable List<Incident> incidents);
 
     /**
@@ -253,6 +260,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder annotation(@Nullable LegAnnotation annotation);
 
     /**
@@ -261,6 +269,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @param closures a list of {@link Closure}
      * @return this builder for chaining options together
      */
+    @NonNull
     public abstract Builder closures(@Nullable List<Closure> closures);
 
     /**
@@ -269,6 +278,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return a new {@link RouteLeg} using the provided values in this builder
      * @since 3.0.0
      */
+    @NonNull
     public abstract RouteLeg build();
   }
 }
