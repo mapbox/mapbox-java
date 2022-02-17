@@ -461,7 +461,9 @@ public class RouteOptionsTest extends TestUtils {
                 .build()
         )
         .build();
+
     URL url = options.toUrl("testToken");
+
     List<String> queryParameters = Arrays.asList(url.getQuery().split("&"));
     assertTrue(
         "url doesn't contain excluded point: " + url.toString(),
@@ -485,7 +487,9 @@ public class RouteOptionsTest extends TestUtils {
                 .build()
         )
         .build();
+
     URL url = options.toUrl("testToken");
+
     List<String> queryParameters = Arrays.asList(url.getQuery().split("&"));
     assertTrue(
         "url doesn't contain excluded point: " + url.toString(),
@@ -497,7 +501,9 @@ public class RouteOptionsTest extends TestUtils {
   public void routeOptionsWithExcludePointAndCriteriaFromUrl() throws MalformedURLException {
     URL testUrl = new URL(
         "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/18.60289583391497,54.41121871390118;18.59400217318438,54.40983705017376.json?access_token=testToken&alternatives=true&annotations=distance%2Cduration%2Ccongestion%2Cspeed&geometries=geojson&language=en&overview=full&steps=true&exclude=point(18.595875353791087%2054.41000119108463),toll");
+
     RouteOptions routeOptions = RouteOptions.fromUrl(testUrl);
+
     List<Point> excludedPoints = routeOptions.excludeObject().points();
     assertNotNull(excludedPoints);
     assertEquals(1, excludedPoints.size());
@@ -525,6 +531,7 @@ public class RouteOptionsTest extends TestUtils {
         .build();
 
     String json = options.toJson();
+
     String exclude = JsonParser.parseString(json)
         .getAsJsonObject()
         .get("exclude")
@@ -553,6 +560,7 @@ public class RouteOptionsTest extends TestUtils {
         .build();
 
     String rawExclude = options.exclude();
+
     assertTrue(
         "exclude doesn't contain point. exclude: " + rawExclude,
         rawExclude.contains("point(19.4567 -55.5677)")
