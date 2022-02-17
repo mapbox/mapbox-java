@@ -28,7 +28,7 @@ public class RouteOptionsTest extends TestUtils {
    */
   private static final String ROUTE_OPTIONS_JSON = "route_options_v5.json";
   private static final String ROUTE_OPTIONS_URL =
-      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=;unlimited;5.1&steps=true&avoid_maneuver_radius=200&bearings=0,90;90,0;&layers=-42;;0&continue_straight=false&annotations=congestion,distance,duration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll,ferry&include=hot,hov2&approaches=;curb;&waypoints=0;1;2&waypoint_names=;two;&waypoint_targets=;12.2,21.2;&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=;false;true&arrive_by=2021-01-01'T'01:01&depart_at=2021-02-02'T'02:02&max_height=1.5&max_width=1.4&metadata=true";
+      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=;unlimited;5.1&steps=true&avoid_maneuver_radius=200&bearings=0,90;90,0;&layers=-42;;0&continue_straight=false&annotations=congestion,distance,duration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll,ferry,point(11.0%20-22.0)&include=hot,hov2&approaches=;curb;&waypoints=0;1;2&waypoint_names=;two;&waypoint_targets=;12.2,21.2;&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=;false;true&arrive_by=2021-01-01'T'01:01&depart_at=2021-02-02'T'02:02&max_height=1.5&max_width=1.4&metadata=true";
   private static final String ACCESS_TOKEN = "pk.token";
 
   private final String optionsJson = loadJsonFixture(ROUTE_OPTIONS_JSON);
@@ -180,7 +180,7 @@ public class RouteOptionsTest extends TestUtils {
   public void excludeIsValid_fromJson() {
     RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
-    assertEquals("toll,ferry", routeOptions.exclude());
+    assertEquals("toll,ferry,point(11.0 -22.0)", routeOptions.exclude());
   }
 
   @Test
@@ -611,7 +611,7 @@ public class RouteOptionsTest extends TestUtils {
       .avoidManeuverRadius(200)
       .layers("-42;;0")
       .continueStraight(false)
-      .exclude(DirectionsCriteria.EXCLUDE_TOLL + "," + DirectionsCriteria.EXCLUDE_FERRY)
+      .exclude(DirectionsCriteria.EXCLUDE_TOLL + "," + DirectionsCriteria.EXCLUDE_FERRY + ",point(11.0 -22.0)")
       .include(DirectionsCriteria.INCLUDE_HOT + "," + DirectionsCriteria.INCLUDE_HOV2)
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
       .overview(DirectionsCriteria.OVERVIEW_FULL)
@@ -674,6 +674,7 @@ public class RouteOptionsTest extends TestUtils {
         .excludeList(new ArrayList<String>() {{
           add(DirectionsCriteria.EXCLUDE_TOLL);
           add(DirectionsCriteria.EXCLUDE_FERRY);
+          add("point(11.0 -22.0)");
         }})
         .includeList(new ArrayList<String>() {{
           add(DirectionsCriteria.INCLUDE_HOT);
