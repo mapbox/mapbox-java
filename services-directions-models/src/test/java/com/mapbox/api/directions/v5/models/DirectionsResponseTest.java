@@ -4,6 +4,8 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,6 +21,7 @@ public class DirectionsResponseTest extends TestUtils {
   private static final String DIRECTIONS_V5_MULTIPLE_ROUTES = "directions_v5_multiple_routes.json";
   private static final String DIRECTIONS_V5_MULTIPLE_ROUTES_WITH_OPTIONS =
     "directions_v5_multiple_routes_with_options.json";
+  private static final String DIRECTIONS_V5_SILENT_WAYPOINT = "directions_v5_silent_waypoints.json";
 
   @Test
   public void sanity() throws Exception {
@@ -108,5 +111,31 @@ public class DirectionsResponseTest extends TestUtils {
 
     assertNotNull(routes.get(0).routeOptions());
     assertNotNull(routes.get(1).routeOptions());
+  }
+
+  @Test
+  public void fromJson_deserializeWiaWaypoints() throws IOException {
+    String json = loadJsonFixture(DIRECTIONS_V5_SILENT_WAYPOINT);
+
+    DirectionsRoute route = DirectionsResponse.fromJson(json).routes().get(0);
+
+    List<SilentWaypoint> viaWaypoints = route.legs().get(0).viaWaypoints();
+    assertNotNull(viaWaypoints);
+    assertEquals(1, viaWaypoints.size());
+    SilentWaypoint waypoint = viaWaypoints.get(0);
+    assertEquals(1, waypoint.waypointIndex());
+    assertEquals(616.839, waypoint.distanceFromStart(), 0.001);
+    assertEquals(58, waypoint.geometryIndex());
+  }
+
+  @Test
+  public void fromToJsonForRouteWithSilentWaypoints() throws IOException {
+    String json = loadJsonFixture(DIRECTIONS_V5_SILENT_WAYPOINT);
+
+    DirectionsResponse initial = DirectionsResponse.fromJson(json);
+    String serialized = initial.toJson();
+    DirectionsResponse deserialized = DirectionsResponse.fromJson(serialized);
+
+    assertEquals(initial, deserialized);
   }
 }

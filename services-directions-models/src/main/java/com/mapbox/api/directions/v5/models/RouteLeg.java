@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -27,6 +28,17 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   public static Builder builder() {
     return new AutoValue_RouteLeg.Builder();
   }
+
+  /**
+   * When the semicolon-separated list waypoints parameter is used in the request,
+   * an array per leg is returned that describes where a particular waypoint from
+   * the root-level array matches to the route.
+   * This provides a way for tracking when a waypoint is passed along the route.
+   * @return a list of silent waypoints
+   */
+  @Nullable
+  @SerializedName("via_waypoints")
+  public abstract List<SilentWaypoint> viaWaypoints();
 
   /**
    * The distance traveled from one waypoint to another.
@@ -158,12 +170,22 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   public abstract static class Builder {
 
     /**
+     * A list of silent waypoints which were used to request a route.
+     *
+     * @param viaWaypoints a list of silent waypoints
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder viaWaypoints(@Nullable List<SilentWaypoint> viaWaypoints);
+
+    /**
      * The distance traveled from one waypoint to another.
      *
      * @param distance a double number with unit meters
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder distance(@Nullable Double distance);
 
     /**
@@ -173,6 +195,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 1.0.0
      */
+    @NonNull
     public abstract Builder duration(@Nullable Double duration);
 
     /**
@@ -185,6 +208,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 5.5.0
      */
+    @NonNull
     public abstract Builder durationTypical(@Nullable Double durationTypical);
 
     /**
@@ -194,6 +218,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder summary(@Nullable String summary);
 
     /**
@@ -204,6 +229,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @param admins Array with admins
      * @return this builder for chaining options together
      */
+    @NonNull
     public abstract Builder admins(@Nullable List<Admin> admins);
 
     /**
@@ -213,6 +239,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder steps(@Nullable List<LegStep> steps);
 
     /**
@@ -221,6 +248,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @param incidents a list of {@link Incident}
      * @return this builder for chaining options together
      */
+    @NonNull
     public abstract Builder incidents(@Nullable List<Incident> incidents);
 
     /**
@@ -232,6 +260,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder annotation(@Nullable LegAnnotation annotation);
 
     /**
@@ -240,6 +269,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @param closures a list of {@link Closure}
      * @return this builder for chaining options together
      */
+    @NonNull
     public abstract Builder closures(@Nullable List<Closure> closures);
 
     /**
@@ -248,6 +278,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @return a new {@link RouteLeg} using the provided values in this builder
      * @since 3.0.0
      */
+    @NonNull
     public abstract RouteLeg build();
   }
 }
