@@ -153,7 +153,7 @@ interface DirectionsService {
     @Field("radiuses") String radiuses,
     @Field("steps") Boolean steps,
     @Field("bearings") String bearings,
-    @Query("avoid_maneuver_radius") Integer avoidManeuverRadius,
+    @Field("avoid_maneuver_radius") Integer avoidManeuverRadius,
     @Field("layers") String layers,
     @Field("continue_straight") Boolean continueStraight,
     @Field("annotations") String annotations,
