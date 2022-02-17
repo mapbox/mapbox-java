@@ -116,7 +116,9 @@ public class DirectionsResponseTest extends TestUtils {
   @Test
   public void fromJson_deserializeWiaWaypoints() throws IOException {
     String json = loadJsonFixture(DIRECTIONS_V5_SILENT_WAYPOINT);
+
     DirectionsRoute route = DirectionsResponse.fromJson(json).routes().get(0);
+
     List<SilentWaypoint> viaWaypoints = route.legs().get(0).viaWaypoints();
     assertNotNull(viaWaypoints);
     assertEquals(1, viaWaypoints.size());
@@ -127,11 +129,13 @@ public class DirectionsResponseTest extends TestUtils {
   }
 
   @Test
-  public void testFromToJsonForRouteWithSilentWaypoints() throws IOException {
+  public void fromToJsonForRouteWithSilentWaypoints() throws IOException {
     String json = loadJsonFixture(DIRECTIONS_V5_SILENT_WAYPOINT);
+
     DirectionsResponse initial = DirectionsResponse.fromJson(json);
     String serialized = initial.toJson();
     DirectionsResponse deserialized = DirectionsResponse.fromJson(serialized);
+
     assertEquals(initial, deserialized);
   }
 }
