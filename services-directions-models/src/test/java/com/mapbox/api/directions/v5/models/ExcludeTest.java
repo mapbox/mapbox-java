@@ -18,18 +18,18 @@ public class ExcludeTest {
     Exclude exclude = Exclude.fromUrlQueryParameter(excludeQueryParameter);
 
     assertEquals(
-        Arrays.asList(
-            Point.fromLngLat(4234.23423, -8482.49523445),
-            Point.fromLngLat(-444.0, 999.111111)
-        ),
-        exclude.points()
+      Arrays.asList(
+        Point.fromLngLat(4234.23423, -8482.49523445),
+        Point.fromLngLat(-444.0, 999.111111)
+      ),
+      exclude.points()
     );
     assertEquals(
-        Arrays.asList(
-            DirectionsCriteria.EXCLUDE_MOTORWAY,
-            DirectionsCriteria.EXCLUDE_FERRY
-        ),
-        exclude.criteria()
+      Arrays.asList(
+        DirectionsCriteria.EXCLUDE_MOTORWAY,
+        DirectionsCriteria.EXCLUDE_FERRY
+      ),
+      exclude.criteria()
     );
   }
 
@@ -52,10 +52,10 @@ public class ExcludeTest {
     Exclude exclude = Exclude.fromUrlQueryParameter(excludeQueryParameter);
 
     assertEquals(
-        Arrays.asList(
-            Point.fromLngLat(555.5, 2222.0)
-        ),
-        exclude.points()
+      Arrays.asList(
+        Point.fromLngLat(555.5, 2222.0)
+      ),
+      exclude.points()
     );
     assertNull(exclude.criteria());
   }
@@ -67,10 +67,10 @@ public class ExcludeTest {
     Exclude exclude = Exclude.fromUrlQueryParameter(excludeQueryParameter);
 
     assertEquals(
-        Arrays.asList(
-            DirectionsCriteria.EXCLUDE_TUNNEL
-        ),
-        exclude.criteria()
+      Arrays.asList(
+        DirectionsCriteria.EXCLUDE_TUNNEL
+      ),
+      exclude.criteria()
     );
     assertNull(exclude.points());
   }
@@ -82,10 +82,10 @@ public class ExcludeTest {
     Exclude exclude = Exclude.fromUrlQueryParameter(invalidPoint);
 
     assertEquals(
-        Arrays.asList(
-            Point.fromLngLat(3.0, 4.0)
-        ),
-        exclude.points()
+      Arrays.asList(
+        Point.fromLngLat(3.0, 4.0)
+      ),
+      exclude.points()
     );
   }
 
@@ -110,18 +110,18 @@ public class ExcludeTest {
   @Test
   public void singleCriteriaToQueryUrl() {
     String queryParameter = Exclude.builder()
-        .criteria(Arrays.asList(DirectionsCriteria.EXCLUDE_FERRY))
-        .build()
-        .toUrlQueryParameter();
+      .criteria(Arrays.asList(DirectionsCriteria.EXCLUDE_FERRY))
+      .build()
+      .toUrlQueryParameter();
     assertEquals(DirectionsCriteria.EXCLUDE_FERRY, queryParameter);
   }
 
   @Test
   public void criteriaListToQueryUrl() {
     String queryParameter = Exclude.builder()
-        .criteria(Arrays.asList(DirectionsCriteria.EXCLUDE_FERRY, DirectionsCriteria.EXCLUDE_TOLL))
-        .build()
-        .toUrlQueryParameter();
+      .criteria(Arrays.asList(DirectionsCriteria.EXCLUDE_FERRY, DirectionsCriteria.EXCLUDE_TOLL))
+      .build()
+      .toUrlQueryParameter();
     assertEquals("ferry,toll", queryParameter);
   }
 

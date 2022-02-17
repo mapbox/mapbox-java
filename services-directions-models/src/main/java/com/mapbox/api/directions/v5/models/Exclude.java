@@ -133,9 +133,9 @@ public abstract class Exclude {
     }
 
     return Exclude.builder()
-        .criteria(criteria)
-        .points(points)
-        .build();
+      .criteria(criteria)
+      .points(points)
+      .build();
   }
 
   @Nullable
@@ -185,14 +185,14 @@ public abstract class Exclude {
       String latitude = point.substring(delimiter + 1, point.length() - 1);
       try {
         Point result = Point.fromLngLat(
-            Double.parseDouble(longitude),
-            Double.parseDouble(latitude)
+          Double.parseDouble(longitude),
+          Double.parseDouble(latitude)
         );
         return result;
       } catch (NumberFormatException numberFormatError) {
         throw new IllegalArgumentException(
-            pointParsingErrorMessage(point),
-            numberFormatError
+          pointParsingErrorMessage(point),
+          numberFormatError
         );
       }
     } else {
@@ -202,9 +202,9 @@ public abstract class Exclude {
 
   private void appendPoint(StringBuilder result, Point point) {
     result.append("point(")
-        .append(point.longitude())
-        .append(' ')
-        .append(point.latitude())
-        .append(')');
+      .append(point.longitude())
+      .append(' ')
+      .append(point.latitude())
+      .append(')');
   }
 }
