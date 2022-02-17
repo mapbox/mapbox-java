@@ -7,6 +7,7 @@
   "language": "ru",
   "radiuses": ";unlimited;5.1",
   "bearings": "0,90;90,0;",
+  "avoid_maneuver_radius": 200,
   "layers": "-42;;0",
   "continue_straight": false,
   "roundabout_exits": false,
@@ -32,5 +33,18 @@
   "max_height": 1.5,
   "max_width": 1.4,
   "enable_refresh": true,
-  "metadata": true
+  "metadata": true,
+  "experimental": {
+    "engine": "electric",
+    "ev_initial_charge": 80000,
+    "ev_max_charge": 80000,
+    "ev_connector_types": "ccs_combo_type1,ccs_combo_type2",
+    "energy_consumption_curve": "0,300;20,160;80,140;120,180",
+    "ev_ascent": 5.0,
+    "ev_descent": 6.0,
+    "ev_charging_curve": "0,100000;40000,70000;60000,30000;80000,10000",
+    "ev_max_ac_charging_power": 1,
+    "ev_min_charge_at_destination": 2,
+    "ev_min_charge_at_charging_station": 3
+  }
 }

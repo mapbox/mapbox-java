@@ -226,8 +226,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * to differentiate them.
    * <p>
    * If provided, the list of layers must be the same length as the list of coordinates.
+   *
    * @return a string representing the layers with the ; separator. Each value may be negative
-    or absent.
+   *   or absent.
    */
   @Nullable
   public abstract String layers();
@@ -238,6 +239,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * to differentiate them.
    * <p>
    * If provided, the list of layers must be the same length as the list of coordinates.
+   *
    * @return a List of values representing layers. Each value may be negative or null.
    */
   @Nullable
@@ -369,7 +371,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
    * <p>
    * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
-   *
+   * <p>
    * Excluded points are formatted like: point(longitude latitude)
    *
    * @return a comma separated string where each element matches one of
@@ -392,7 +394,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
    * <p>
    * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
-   *
+   * <p>
    * Excluded points are formatted like: point(longitude latitude)
    *
    * @return a list of strings where each element matches one of the
@@ -406,7 +408,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   /**
    * Exclude certain road types and points from routing. The default is to not exclude anything
    * from the profile selected.
-   *
+   * <p>
    * Exclude object may not provide all features that are currently present by Direction API.
    * See {@link Exclude} for more details.
    */
@@ -813,6 +815,14 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract Boolean metadata();
 
   /**
+   * Object representing experimental value.
+   * <p>
+   * All available experimental values are subject to change at any time.
+   */
+  @Nullable
+  public abstract Experimental experimental();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -872,10 +882,28 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     for (String query : queryElements) {
       int idx = query.indexOf("=");
       try {
-        optionsJson.addProperty(
-          URLDecoder.decode(query.substring(0, idx), UTF_8),
-          URLDecoder.decode(query.substring(idx + 1), UTF_8)
-        );
+        String property = URLDecoder.decode(query.substring(0, idx), UTF_8);
+        String value = URLDecoder.decode(query.substring(idx + 1), UTF_8);
+
+        boolean isExperimental = false;
+        for (int i = 0; i < Experimental.experimentalParameters.length; i++) {
+          if (property.equals(Experimental.experimentalParameters[i])) {
+            isExperimental = true;
+            if (!optionsJson.has("experimental")) {
+              optionsJson.add("experimental", new JsonObject());
+            }
+            JsonObject experimental = optionsJson.getAsJsonObject("experimental");
+            experimental.addProperty(property, value);
+            break;
+          }
+        }
+
+        if (!isExperimental) {
+          optionsJson.addProperty(
+            property,
+            value
+          );
+        }
       } catch (UnsupportedEncodingException ex) {
         throw new RuntimeException(ex);
       }
@@ -893,7 +921,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   @NonNull
   public URL toUrl(@NonNull String accessToken) {
     StringBuilder sb = new StringBuilder()
-            .append(baseUrl());
+      .append(baseUrl());
 
     Character lastBaseUrlChar = baseUrl().charAt(baseUrl().length() - 1);
     if (!lastBaseUrlChar.equals('/')) {
@@ -996,6 +1024,68 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     }
     if (metadata() != null) {
       sb.append(String.format("&metadata=%s", metadata()));
+    }
+
+    // experimental
+    if (experimental() != null) {
+      if (experimental().engine() != null) {
+        sb.append(String.format("&engine=%s", experimental().engine()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().evInitialCharge() != null) {
+        sb.append(String.format("&ev_initial_charge=%s", experimental().evInitialCharge()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().evMaxCharge() != null) {
+        sb.append(String.format("&ev_max_charge=%s", experimental().evMaxCharge()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().evConnectorTypes() != null) {
+        sb.append(String.format("&ev_connector_types=%s", experimental().evConnectorTypes()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().energyConsumptionCurve() != null) {
+        sb.append(
+          String.format("&energy_consumption_curve=%s", experimental().energyConsumptionCurve()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().evAscent() != null) {
+        sb.append(String.format("&ev_ascent=%s", experimental().evAscent()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().evDescent() != null) {
+        sb.append(String.format("&ev_descent=%s", experimental().evDescent()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().evChargingCurve() != null) {
+        sb.append(String.format("&ev_charging_curve=%s", experimental().evChargingCurve()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().evMaxAcChargingPower() != null) {
+        sb.append(
+          String.format("&ev_max_ac_charging_power=%s", experimental().evMaxAcChargingPower()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().evMinChargeAtDestination() != null) {
+        sb.append(
+          String
+            .format("&ev_min_charge_at_destination=%s", experimental().evMinChargeAtDestination()));
+      }
+    }
+    if (experimental() != null) {
+      if (experimental().evMinChargeAtChargingStation() != null) {
+        sb.append(String.format("&ev_min_charge_at_charging_station=%s",
+          experimental().evMinChargeAtChargingStation()));
+      }
     }
 
     try {
@@ -1243,6 +1333,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * to differentiate them.
      * <p>
      * If provided, the list of layers must be the same length as the list of coordinates.
+     *
      * @param layers a string representing the layers with the ; separator.
      * @return this builder for chaining options together
      */
@@ -1255,6 +1346,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * to differentiate them.
      * <p>
      * If provided, the list of layers must be the same length as the list of coordinates.
+     *
      * @param layers a list of layers. For unknown layer use `null`.
      * @return this builder for chaining options together
      */
@@ -1442,11 +1534,11 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
      * <p>
      * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
-     *
+     * <p>
      * Use following format to exclude a point: point(longitude latitude)
      *
      * @param exclude a comma separated string. Each value matches one of
-     *   the {@link DirectionsCriteria.ExcludeCriteria} exclusions or point format.
+     *                the {@link DirectionsCriteria.ExcludeCriteria} exclusions or point format.
      * @return this builder for chaining options together
      */
     @NonNull
@@ -1467,7 +1559,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * {@link DirectionsCriteria#PROFILE_WALKING}: No excludes supported
      * <p>
      * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
-     *
+     * <p>
      * Use following format to exclude a point: point(longitude latitude)
      *
      * @param exclude a list of exclude that were used during the request
@@ -1485,14 +1577,14 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     /**
      * Exclude certain road types or points from routing.
      * The default is to not exclude anything from the profile selected.
-     *
+     * <p>
      * Exclude object may not provide all features that are currently present by Direction API.
      * See {@link Exclude} for more details.
      *
      * @param exclude an object of excludes that are used during the request.
-     *   Use {@link Exclude.Builder} to build exclude.
+     *                Use {@link Exclude.Builder} to build exclude.
      * @return this builder for chaining options together
-    */
+     */
     @NonNull
     public Builder excludeObject(@Nullable Exclude exclude) {
       if (exclude != null) {
@@ -1907,11 +1999,310 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder metadata(@Nullable Boolean metadata);
 
     /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     *
+     * @param experimental experimental
+     */
+    @NonNull
+    public abstract Builder experimental(@Nullable Experimental experimental);
+
+    /**
      * Builds the object.
      *
      * @return a new instance of {@link RouteOptions}
      */
     @NonNull
     public abstract RouteOptions build();
+  }
+
+  /**
+   * Object representing experimental value.
+   * <p>
+   * All available experimental values are subject to change at any time.
+   */
+  @AutoValue
+  public abstract static class Experimental extends DirectionsJsonObject {
+
+    static String[] experimentalParameters = new String[] {
+      "engine",
+      "ev_initial_charge",
+      "ev_max_charge",
+      "ev_connector_types",
+      "energy_consumption_curve",
+      "ev_ascent",
+      "ev_descent",
+      "ev_charging_curve",
+      "ev_max_ac_charging_power",
+      "ev_min_charge_at_destination",
+      "ev_min_charge_at_charging_station",
+    };
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("engine")
+    @Nullable
+    public abstract String engine();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("ev_initial_charge")
+    @Nullable
+    public abstract Integer evInitialCharge();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("ev_max_charge")
+    @Nullable
+    public abstract Integer evMaxCharge();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("ev_connector_types")
+    @Nullable
+    public abstract String evConnectorTypes();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("energy_consumption_curve")
+    @Nullable
+    public abstract String energyConsumptionCurve();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("ev_ascent")
+    @Nullable
+    public abstract Double evAscent();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("ev_descent")
+    @Nullable
+    public abstract Double evDescent();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("ev_charging_curve")
+    @Nullable
+    public abstract String evChargingCurve();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("ev_max_ac_charging_power")
+    @Nullable
+    public abstract Integer evMaxAcChargingPower();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("ev_min_charge_at_destination")
+    @Nullable
+    public abstract Integer evMinChargeAtDestination();
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     */
+    @SerializedName("ev_min_charge_at_charging_station")
+    @Nullable
+    public abstract Integer evMinChargeAtChargingStation();
+
+    /**
+     * Create a new instance of this class by using the {@link Builder} class.
+     *
+     * @return {@link Builder} for creating a new instance
+     */
+    public static Builder builder() {
+      return new AutoValue_RouteOptions_Experimental.Builder();
+    }
+
+    /**
+     * Convert the current {@link Experimental} to its builder holding the currently assigned
+     * values. This allows you to modify a single property and then rebuild the object resulting in
+     * an updated and modified {@link Experimental}.
+     *
+     * @return a {@link Builder} with the same values set to match the ones defined
+     *   in this {@link Experimental}
+     */
+    public abstract Builder toBuilder();
+
+    /**
+     * Gson type adapter for parsing Gson to this class.
+     *
+     * @param gson the built {@link Gson} object
+     * @return the type adapter for this class
+     */
+    public static TypeAdapter<Experimental> typeAdapter(Gson gson) {
+      return new AutoValue_RouteOptions_Experimental.GsonTypeAdapter(gson);
+    }
+
+    /**
+     * Create a new instance of this class by passing in a formatted valid JSON String.
+     *
+     * @param json a formatted valid JSON string defining a Metadata
+     * @return a new instance of this class defined by the values passed inside this static factory
+     *   method
+     */
+    public static Experimental fromJson(String json) {
+      GsonBuilder gson = new GsonBuilder();
+      gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+      return gson.create().fromJson(json, Experimental.class);
+    }
+
+    /**
+     * This builder can be used to set the values describing the {@link Experimental}.
+     */
+    @AutoValue.Builder
+    public abstract static class Builder {
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param engine engine
+       */
+      @NonNull
+      public abstract Builder engine(@Nullable String engine);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param evInitialCharge evInitialCharge
+       */
+      @NonNull
+      public abstract Builder evInitialCharge(@Nullable Integer evInitialCharge);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param evMaxCharge evMaxCharge
+       */
+      @NonNull
+      public abstract Builder evMaxCharge(@Nullable Integer evMaxCharge);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param evConnectorTypes evConnectorTypes
+       */
+      @NonNull
+      public abstract Builder evConnectorTypes(@Nullable String evConnectorTypes);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param energyConsumptionCurve energyConsumptionCurve
+       */
+      @NonNull
+      public abstract Builder energyConsumptionCurve(@Nullable String energyConsumptionCurve);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param evAscent evAscent
+       */
+      @NonNull
+      public abstract Builder evAscent(@Nullable Double evAscent);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param evDescent evDescent
+       */
+      @NonNull
+      public abstract Builder evDescent(@Nullable Double evDescent);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param evChargingCurve evChargingCurve
+       */
+      @NonNull
+      public abstract Builder evChargingCurve(@Nullable String evChargingCurve);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param evMaxAcChargingPower evMaxAcChargingPower
+       */
+      @NonNull
+      public abstract Builder evMaxAcChargingPower(@Nullable Integer evMaxAcChargingPower);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param evMinChargeAtDestination evMinChargeAtDestination
+       */
+      @NonNull
+      public abstract Builder evMinChargeAtDestination(@Nullable Integer evMinChargeAtDestination);
+
+      /**
+       * Object representing experimental value.
+       * <p>
+       * All available experimental values are subject to change at any time.
+       *
+       * @param evMinChargeAtChargingStation evMinChargeAtChargingStation
+       */
+      @NonNull
+      public abstract Builder evMinChargeAtChargingStation(
+        @Nullable Integer evMinChargeAtChargingStation);
+
+      /**
+       * Build a new {@link Experimental} object.
+       *
+       * @return a new {@link Experimental} using the provided values in this builder
+       */
+      public abstract Experimental build();
+    }
   }
 }

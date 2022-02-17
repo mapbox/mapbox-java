@@ -15,6 +15,7 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class RouteOptionsTest extends TestUtils {
    */
   private static final String ROUTE_OPTIONS_JSON = "route_options_v5.json";
   private static final String ROUTE_OPTIONS_URL =
-    "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=;unlimited;5.1&steps=true&avoid_maneuver_radius=200&bearings=0,90;90,0;&layers=-42;;0&continue_straight=false&annotations=congestion,distance,duration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll,ferry,point(11.0%20-22.0)&include=hot,hov2&approaches=;curb;&waypoints=0;1;2&waypoint_names=;two;&waypoint_targets=;12.2,21.2;&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=;false;true&arrive_by=2021-01-01'T'01:01&depart_at=2021-02-02'T'02:02&max_height=1.5&max_width=1.4&metadata=true";
+    "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=;unlimited;5.1&steps=true&avoid_maneuver_radius=200&bearings=0,90;90,0;&layers=-42;;0&continue_straight=false&annotations=congestion,distance,duration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll,ferry,point(11.0%20-22.0)&include=hot,hov2&approaches=;curb;&waypoints=0;1;2&waypoint_names=;two;&waypoint_targets=;12.2,21.2;&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=;false;true&arrive_by=2021-01-01'T'01:01&depart_at=2021-02-02'T'02:02&max_height=1.5&max_width=1.4&metadata=true&engine=electric&ev_initial_charge=80000&ev_max_charge=80000&ev_connector_types=ccs_combo_type1,ccs_combo_type2&energy_consumption_curve=0,300;20,160;80,140;120,180&ev_ascent=5.0&ev_descent=6.0&ev_charging_curve=0,100000;40000,70000;60000,30000;80000,10000&ev_max_ac_charging_power=1&ev_min_charge_at_destination=2&ev_min_charge_at_charging_station=3";
   private static final String ACCESS_TOKEN = "pk.token";
 
   private final String optionsJson = loadJsonFixture(ROUTE_OPTIONS_JSON);
@@ -637,6 +638,21 @@ public class RouteOptionsTest extends TestUtils {
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
       .enableRefresh(true)
       .metadata(true)
+      .experimental(
+        RouteOptions.Experimental.builder()
+          .engine("electric")
+          .evInitialCharge(80000)
+          .evMaxCharge(80000)
+          .evConnectorTypes("ccs_combo_type1,ccs_combo_type2")
+          .energyConsumptionCurve("0,300;20,160;80,140;120,180")
+          .evAscent(5.0)
+          .evDescent(6.0)
+          .evChargingCurve("0,100000;40000,70000;60000,30000;80000,10000")
+          .evMaxAcChargingPower(1)
+          .evMinChargeAtDestination(2)
+          .evMinChargeAtChargingStation(3)
+          .build()
+      )
       .build();
   }
 
@@ -728,6 +744,21 @@ public class RouteOptionsTest extends TestUtils {
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
       .enableRefresh(true)
       .metadata(true)
+      .experimental(
+        RouteOptions.Experimental.builder()
+          .engine("electric")
+          .evInitialCharge(80000)
+          .evMaxCharge(80000)
+          .evConnectorTypes("ccs_combo_type1,ccs_combo_type2")
+          .energyConsumptionCurve("0,300;20,160;80,140;120,180")
+          .evAscent(5.0)
+          .evDescent(6.0)
+          .evChargingCurve("0,100000;40000,70000;60000,30000;80000,10000")
+          .evMaxAcChargingPower(1)
+          .evMinChargeAtDestination(2)
+          .evMinChargeAtChargingStation(3)
+          .build()
+      )
       .build();
   }
 }
