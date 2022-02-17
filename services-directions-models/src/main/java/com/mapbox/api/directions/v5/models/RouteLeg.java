@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -174,6 +175,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      * @param viaWaypoints a list of silent waypoints
      * @return this builder for chaining options together
      */
+    @NonNull
     public abstract Builder viaWaypoints(@Nullable List<SilentWaypoint> viaWaypoints);
 
     /**

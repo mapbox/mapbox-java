@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.NonNull;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -17,6 +18,7 @@ public abstract class SilentWaypoint extends DirectionsJsonObject {
    *
    * @return {@link SilentWaypoint.Builder} for creating a new instance
    */
+  @NonNull
   public static Builder builder() {
     return new AutoValue_SilentWaypoint.Builder();
   }
@@ -51,6 +53,7 @@ public abstract class SilentWaypoint extends DirectionsJsonObject {
    * @param gson the built {@link Gson} object
    * @return the type adapter for this class
    */
+  @NonNull
   public static TypeAdapter<SilentWaypoint> typeAdapter(Gson gson) {
     return new AutoValue_SilentWaypoint.GsonTypeAdapter(gson);
   }
@@ -66,18 +69,21 @@ public abstract class SilentWaypoint extends DirectionsJsonObject {
      *   the origin (index 0) and destination.
      * @return this builder
      */
+    @NonNull
     public abstract Builder waypointIndex(int waypointIndex);
 
     /**
      * @param distanceFromStart the calculated distance, in meters, from the leg origin.
      * @return this builder
      */
+    @NonNull
     public abstract Builder distanceFromStart(double distanceFromStart);
 
     /**
      * @param geometryIndex the associated leg shape index of the via waypoint location.
      * @return this builder
      */
+    @NonNull
     public abstract Builder geometryIndex(int geometryIndex);
 
     /**
@@ -85,6 +91,7 @@ public abstract class SilentWaypoint extends DirectionsJsonObject {
      *
      * @return a new {@link SilentWaypoint} object
      */
+    @NonNull
     public abstract SilentWaypoint build();
   }
 }
