@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Exposed `viaWaypoints` in `RouteLeg` [#1364](https://github.com/mapbox/mapbox-java/pull/1364)
 
 ### v6.3.0-beta.1 - January 28, 2021
 - Exposed [turf.lineIntersect](https://turfjs.org/docs/#lineIntersect) via `TurfMisc#lineIntersect` using an algorithm with O(nm) time complexity which should suite small to medium sized geometries until a more performant solution is implemented. [#1348](https://github.com/mapbox/mapbox-java/pull/1348)
