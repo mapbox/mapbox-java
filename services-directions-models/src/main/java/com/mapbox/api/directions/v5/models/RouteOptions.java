@@ -406,6 +406,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   /**
    * Exclude certain road types and points from routing. The default is to not exclude anything
    * from the profile selected.
+   *
+   * Exclude object may not provide all features that are currently present by Direction API.
+   * See {@link Exclude} for more details.
    */
   @Nullable
   public Exclude excludeObject() {
