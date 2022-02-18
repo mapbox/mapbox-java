@@ -15,7 +15,7 @@
   "overview": "full",
   "steps": true,
   "annotations": "congestion,distance,duration",
-  "exclude": "toll,ferry",
+  "exclude": "toll,ferry,point(11.0 -22.0)",
   "include": "hot,hov2",
   "voice_instructions": true,
   "banner_instructions": true,

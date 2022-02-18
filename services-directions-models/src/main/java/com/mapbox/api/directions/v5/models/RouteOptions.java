@@ -356,8 +356,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
-   * Exclude certain road types from routing. The default is to not exclude anything from the
-   * profile selected. The following exclude flags are available for each profile:
+   * Exclude certain road types or points from routing. The default is to not exclude anything
+   * from the profile selected. The following exclude flags are available for each profile:
    * <p>
    * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#EXCLUDE_TOLL},
    * {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or {@link DirectionsCriteria#EXCLUDE_FERRY}.
@@ -370,14 +370,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * <p>
    * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
    *
-   * @return a string matching one of the {@link DirectionsCriteria.ExcludeCriteria} exclusions
+   * Excluded points are formatted like: point(longitude latitude)
+   *
+   * @return a comma separated string where each element matches one of
+   *   the {@link DirectionsCriteria.ExcludeCriteria} exclusion or a point
    */
   @Nullable
   public abstract String exclude();
 
   /**
-   * Exclude certain road types from routing. The default is to not exclude anything from the
-   * profile selected. The following exclude flags are available for each profile:
+   * Exclude certain road types and points from routing. The default is to not exclude anything
+   * from the profile selected. The following exclude flags are available for each profile:
    * <p>
    * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#EXCLUDE_TOLL},
    * {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or {@link DirectionsCriteria#EXCLUDE_FERRY}.
@@ -390,11 +393,26 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * <p>
    * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
    *
-   * @return a string matching one of the {@link DirectionsCriteria.ExcludeCriteria} exclusions
+   * Excluded points are formatted like: point(longitude latitude)
+   *
+   * @return a list of strings where each element matches one of the
+   *   {@link DirectionsCriteria.ExcludeCriteria} exclusion or a point
    */
   @Nullable
   public List<String> excludeList() {
     return ParseUtils.parseToStrings(exclude(), ",");
+  }
+
+  /**
+   * Exclude certain road types and points from routing. The default is to not exclude anything
+   * from the profile selected.
+   *
+   * Exclude object may not provide all features that are currently present by Direction API.
+   * See {@link Exclude} for more details.
+   */
+  @Nullable
+  public Exclude excludeObject() {
+    return Exclude.fromUrlQueryParameter(exclude());
   }
 
   /**
@@ -1411,8 +1429,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder voiceUnits(@Nullable String voiceUnits);
 
     /**
-     * Exclude certain road types from routing. The default is to not exclude anything from the
-     * profile selected. The following exclude flags are available for each profile:
+     * Exclude certain road types or points from routing. The default is to not exclude anything
+     * from the profile selected. The following exclude flags are available for each profile:
      * <p>
      * {@link DirectionsCriteria#PROFILE_DRIVING}: One of {@link DirectionsCriteria#EXCLUDE_TOLL},
      * {@link DirectionsCriteria#EXCLUDE_MOTORWAY}, or {@link DirectionsCriteria#EXCLUDE_FERRY}.
@@ -1425,15 +1443,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * <p>
      * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
      *
-     * @param exclude a string matching one of the {@link DirectionsCriteria.ExcludeCriteria}
-     *                exclusions
+     * Use following format to exclude a point: point(longitude latitude)
+     *
+     * @param exclude a comma separated string. Each value matches one of
+     *   the {@link DirectionsCriteria.ExcludeCriteria} exclusions or point format.
      * @return this builder for chaining options together
      */
     @NonNull
     public abstract Builder exclude(@Nullable @DirectionsCriteria.ExcludeCriteria String exclude);
 
     /**
-     * Exclude certain road types from routing.
+     * Exclude certain road types or points from routing.
      * The default is to not exclude anything from the profile selected.
      * The following exclude flags are available for each profile:
      * <p>
@@ -1448,6 +1468,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * <p>
      * {@link DirectionsCriteria#PROFILE_CYCLING}: {@link DirectionsCriteria#EXCLUDE_FERRY}
      *
+     * Use following format to exclude a point: point(longitude latitude)
+     *
      * @param exclude a list of exclude that were used during the request
      * @return this builder for chaining options together
      */
@@ -1456,6 +1478,27 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       String result = FormatUtils.join(",", exclude);
       if (result != null) {
         exclude(result);
+      }
+      return this;
+    }
+
+    /**
+     * Exclude certain road types or points from routing.
+     * The default is to not exclude anything from the profile selected.
+     *
+     * Exclude object may not provide all features that are currently present by Direction API.
+     * See {@link Exclude} for more details.
+     *
+     * @param exclude an object of excludes that are used during the request.
+     *   Use {@link Exclude.Builder} to build exclude.
+     * @return this builder for chaining options together
+    */
+    @NonNull
+    public Builder excludeObject(@Nullable Exclude exclude) {
+      if (exclude != null) {
+        exclude(exclude.toUrlQueryParameter());
+      } else {
+        exclude(null);
       }
       return this;
     }
