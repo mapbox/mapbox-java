@@ -3,14 +3,23 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v6.4.0-beta.1 - February 22, 2021
 - Exposed `viaWaypoints` in `RouteLeg` [#1364](https://github.com/mapbox/mapbox-java/pull/1364)
-- Added an API for providing points to exclude. [#1362](https://github.com/mapbox/mapbox-java/pull/1362)
+- Added `RouteOptions#excludeObject` for providing points that should be avoided in the returned route. [#1362](https://github.com/mapbox/mapbox-java/pull/1362)
+- Updated nullability of `DirectionsWaypoint` properties to reflect the API structure. [#1360](https://github.com/mapbox/mapbox-java/pull/1360)
+- Added `DirectionsWaypoint#distance` property. [#1360](https://github.com/mapbox/mapbox-java/pull/1360)
+- Added experimental EV routing request/response parameters. These change will only be part of pre-releases (removed from final versions) until refactored into stable APIs in the future. [#1365](https://github.com/mapbox/mapbox-java/pull/1365)
+
+### v6.3.0 - February 22, 2021
+- No additional changes.
 
 ### v6.3.0-beta.1 - January 28, 2021
 - Exposed [turf.lineIntersect](https://turfjs.org/docs/#lineIntersect) via `TurfMisc#lineIntersect` using an algorithm with O(nm) time complexity which should suite small to medium sized geometries until a more performant solution is implemented. [#1348](https://github.com/mapbox/mapbox-java/pull/1348)
 - Fixed an issue where ends of lines where not considered as intersection points. [#1348](https://github.com/mapbox/mapbox-java/pull/1348)
 
 ### v6.2.0 - January 20, 2022
+- No additional changes.
 
 ### v6.2.0-beta.2 - November 30, 2021
 - Exposed `ShieldSprites`, `ShieldSprite` and `ShieldSpriteAttribute` in support for mapbox designed route shields. [#1336](https://github.com/mapbox/mapbox-java/pull/1336)
