@@ -433,6 +433,25 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void routeOptions_fromUrl_withEncodedCoordinates() throws MalformedURLException {
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
+    coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
+
+    RouteOptions expectedOptions = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING)
+      .coordinatesList(coordinates)
+      .waypointNames("my starting position;my destination")
+      .build();
+
+    String url = "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312%2C37.7736941;-122.4187529%2C37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=my%20starting%20position;my%20destination";
+
+    RouteOptions resultingOptions = RouteOptions.fromUrl(new URL(url));
+
+    assertEquals(expectedOptions, resultingOptions);
+  }
+
+  @Test
   public void routeOptionsWithUTF8Chars_toUrlWithEncodedChars() {
     String expectedEncodedUrl =
       "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=;%D0%A3%D0%BB%D0%B8%D1%86%D0%B0%20%D0%AF%D0%BD%D0%B0%20%D0%A7%D0%B5%D1%87%D0%BE%D1%82%D0%B0%207,%20Minsk%20220045,%20Belarus";

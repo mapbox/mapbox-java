@@ -873,15 +873,15 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
     optionsJson.addProperty("baseUrl", url.getProtocol() + "://" + url.getHost());
 
-    String[] pathElements = url.getPath().split("/");
-    optionsJson.addProperty("user", pathElements[3]);
-    optionsJson.addProperty("profile", pathElements[4]);
-    optionsJson.addProperty("coordinates", pathElements[5]);
+    try {
+      String[] pathElements = url.getPath().split("/");
+      optionsJson.addProperty("user", URLDecoder.decode(pathElements[3], UTF_8));
+      optionsJson.addProperty("profile", URLDecoder.decode(pathElements[4], UTF_8));
+      optionsJson.addProperty("coordinates", URLDecoder.decode(pathElements[5], UTF_8));
 
-    String[] queryElements = url.getQuery().split("&");
-    for (String query : queryElements) {
-      int idx = query.indexOf("=");
-      try {
+      String[] queryElements = url.getQuery().split("&");
+      for (String query : queryElements) {
+        int idx = query.indexOf("=");
         String property = URLDecoder.decode(query.substring(0, idx), UTF_8);
         String value = URLDecoder.decode(query.substring(idx + 1), UTF_8);
 
@@ -904,9 +904,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
             value
           );
         }
-      } catch (UnsupportedEncodingException ex) {
-        throw new RuntimeException(ex);
       }
+    } catch (UnsupportedEncodingException ex) {
+      throw new RuntimeException(ex);
     }
 
     return fromJsonString(optionsJson.toString());
