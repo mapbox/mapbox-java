@@ -77,7 +77,6 @@ public class StepIntersectionTest extends TestUtils {
     assertEquals(intersection, intersectionFromJson);
   }
 
-
   @Test
   public void testFromJson() {
     String stepIntersectionJsonString = "{"
@@ -88,7 +87,8 @@ public class StepIntersectionTest extends TestUtils {
     + "\"geometry_index\": 123,"
     + "\"is_urban\": true,"
     + "\"mapbox_streets_v8\": {\"class\": \"street\"},"
-    + "\"tunnel_name\": \"test tunnel name\""
+    + "\"tunnel_name\": \"test tunnel name\","
+    + "\"railway_crossing\": true"
     + "}";
 
     StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
@@ -96,6 +96,7 @@ public class StepIntersectionTest extends TestUtils {
     assertTrue(stepIntersection.isUrban());
     assertEquals("street", stepIntersection.mapboxStreetsV8().roadClass());
     assertEquals("test tunnel name", stepIntersection.tunnelName());
+    assertTrue(stepIntersection.railwayCrossing());
 
     Point location = stepIntersection.location();
     assertEquals(13.426579, location.longitude(), 0.0001);
