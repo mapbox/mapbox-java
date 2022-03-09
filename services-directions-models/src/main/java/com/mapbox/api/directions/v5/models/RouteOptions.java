@@ -218,7 +218,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    */
   @SerializedName("avoid_maneuver_radius")
   @Nullable
-  public abstract Integer avoidManeuverRadius();
+  public abstract Double avoidManeuverRadius();
 
   /**
    * Influences layer of road from where route starts from a waypoint. Useful in ambiguous
@@ -1324,7 +1324,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder avoidManeuverRadius(
-      @Nullable Integer avoidManeuverRadius
+      @Nullable Double avoidManeuverRadius
     );
 
     /**
