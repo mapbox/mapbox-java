@@ -4,6 +4,11 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.4.0-beta.2 - March 10, 2022
+- :warning: Fixed an issue where `RouteOptions#avoidManeuverRadius` field was represented as integer instead of double. This change is breaking but necessary to correctly represent the Directions API structure. [#1376](https://github.com/mapbox/mapbox-java/pull/1376)
+- Added `railwayCrossing` field to `StepIntersection` which indicates whether there is a railway crossing at the intersection. [#1375](https://github.com/mapbox/mapbox-java/pull/1375)
+- Added ability to handle encoded coordinates in `RouteOptions#toUrl`. [#1377](https://github.com/mapbox/mapbox-java/pull/1377)
+
 ### v6.4.0-beta.1 - February 22, 2022
 - Exposed `viaWaypoints` in `RouteLeg` [#1364](https://github.com/mapbox/mapbox-java/pull/1364)
 - Added `RouteOptions#excludeObject` for providing points that should be avoided in the returned route. [#1362](https://github.com/mapbox/mapbox-java/pull/1362)
