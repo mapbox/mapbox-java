@@ -3,6 +3,8 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v6.4.0-beta.3 - March 25, 2022
 - Fixed an issue where `RouteOptions#fromUrl` didn't deserialize the port number. [#1382](https://github.com/mapbox/mapbox-java/pull/1382)
 
 ### v6.4.0-beta.2 - March 10, 2022
