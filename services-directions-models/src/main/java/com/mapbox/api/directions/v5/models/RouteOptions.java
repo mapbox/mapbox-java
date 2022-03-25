@@ -871,7 +871,12 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public static RouteOptions fromUrl(@NonNull URL url) {
     JsonObject optionsJson = new JsonObject();
 
-    optionsJson.addProperty("baseUrl", url.getProtocol() + "://" + url.getHost());
+    String baseUrl = url.getProtocol() + "://" + url.getHost();
+    int port = url.getPort();
+    if (port != -1) {
+      baseUrl +=  ":" + port;
+    }
+    optionsJson.addProperty("baseUrl", baseUrl);
 
     try {
       String[] pathElements = url.getPath().split("/");

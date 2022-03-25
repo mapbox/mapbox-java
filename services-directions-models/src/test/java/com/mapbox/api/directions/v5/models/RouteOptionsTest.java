@@ -376,6 +376,27 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void routeOptionsWithPort_roundtripping() {
+    String expectedUrl =
+      "https://api.mapbox.com:12345/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6";
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
+    coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
+
+    RouteOptions options = RouteOptions.builder()
+      .baseUrl("https://api.mapbox.com:12345")
+      .profile(DirectionsCriteria.PROFILE_DRIVING)
+      .coordinatesList(coordinates)
+      .build();
+
+    URL url = options.toUrl(ACCESS_TOKEN);
+    assertEquals(expectedUrl, url.toString());
+
+    RouteOptions recreatedOptions = RouteOptions.fromUrl(url);
+    assertEquals(options, recreatedOptions);
+  }
+
+  @Test
   public void baseUrlWithLastSlash() {
     String expectedUrl =
       "https://mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6";
