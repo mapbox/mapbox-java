@@ -9,6 +9,7 @@ import static org.junit.Assert.assertNull;
 
 public class MapMatchingMatchingTest extends TestUtils {
 
+  private static final String MAP_MATCHING_V5_ROUTE_INDEX_JSON = "map_matching_v5_post.json";
   private static final String MAP_MATCHING_V5_VOICE_LANGUAGE_JSON = "map_matching_v5_voice_language.json";
   private static final String MAP_MATCHING_V5_INVALID_VOICE_LANGUAGE_JSON = "map_matching_v5_invalid_voice_language.json";
   private static final int FIRST_ROUTE = 0;
@@ -33,5 +34,14 @@ public class MapMatchingMatchingTest extends TestUtils {
     String voiceLanguage = matching.voiceLanguage();
 
     assertNull(voiceLanguage);
+  }
+
+  @Test
+  public void directionsRoute_includesRouteIndex() throws Exception {
+    String json = loadJsonFixture(MAP_MATCHING_V5_ROUTE_INDEX_JSON);
+
+    MapMatchingResponse response = MapMatchingResponse.fromJson(json);
+
+    assertEquals("0", response.matchings().get(0).routeIndex());
   }
 }

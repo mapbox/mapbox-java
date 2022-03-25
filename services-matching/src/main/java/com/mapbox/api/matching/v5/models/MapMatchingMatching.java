@@ -34,6 +34,14 @@ public abstract class MapMatchingMatching implements Serializable {
   }
 
   /**
+   * The index of this route in the original network response.
+   *
+   * @return string of an int value representing the index
+   */
+  @Nullable
+  public abstract String routeIndex();
+
+  /**
    * The distance traveled from origin to destination.
    *
    * @return a double number with unit meters
@@ -153,6 +161,7 @@ public abstract class MapMatchingMatching implements Serializable {
       .routeOptions(routeOptions())
       .voiceLanguage(voiceLanguage())
       .requestUuid(requestUuid())
+      .routeIndex(routeIndex())
       .build();
   }
 
@@ -270,6 +279,15 @@ public abstract class MapMatchingMatching implements Serializable {
      */
     @NonNull
     public abstract Builder requestUuid(@Nullable String requestUuid);
+
+    /**
+     * The index of the route in the list of routes returned by the original response.
+     *
+     * @param routeIndex string of an int value representing the index
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder routeIndex(String routeIndex);
 
     /**
      * Build a new {@link MapMatchingMatching} object.
