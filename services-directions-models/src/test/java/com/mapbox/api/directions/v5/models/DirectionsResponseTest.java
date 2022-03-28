@@ -5,7 +5,6 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,6 +21,8 @@ public class DirectionsResponseTest extends TestUtils {
   private static final String DIRECTIONS_V5_MULTIPLE_ROUTES_WITH_OPTIONS =
     "directions_v5_multiple_routes_with_options.json";
   private static final String DIRECTIONS_V5_SILENT_WAYPOINT = "directions_v5_silent_waypoints.json";
+  private static final String DIRECTIONS_WAYPOINTS_WITHOUT_NAMES =
+    "directions_response_waypoints_without_names.json";
 
   @Test
   public void sanity() throws Exception {
@@ -114,7 +115,7 @@ public class DirectionsResponseTest extends TestUtils {
   }
 
   @Test
-  public void fromJson_deserializeWiaWaypoints() throws IOException {
+  public void fromJson_deserializeViaWaypoints() throws IOException {
     String json = loadJsonFixture(DIRECTIONS_V5_SILENT_WAYPOINT);
 
     DirectionsRoute route = DirectionsResponse.fromJson(json).routes().get(0);
@@ -137,5 +138,15 @@ public class DirectionsResponseTest extends TestUtils {
     DirectionsResponse deserialized = DirectionsResponse.fromJson(serialized);
 
     assertEquals(initial, deserialized);
+  }
+
+  @Test
+  public void fromJson_deserializeWaypointsWithoutNames() throws Exception {
+    String json = loadJsonFixture(DIRECTIONS_WAYPOINTS_WITHOUT_NAMES);
+
+    DirectionsResponse response = DirectionsResponse.fromJson(json);
+
+    assertNotNull(response);
+    assertEquals(2, response.routes().size());
   }
 }
