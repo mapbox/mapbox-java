@@ -34,7 +34,7 @@ public abstract class DirectionsWaypoint extends DirectionsJsonObject {
    * @return string with the name of the way the coordinate snapped to
    * @since 1.0.0
    */
-  @Nullable
+  @NonNull
   public abstract String name();
 
   /**
@@ -121,7 +121,7 @@ public abstract class DirectionsWaypoint extends DirectionsJsonObject {
      * @since 3.0.0
      */
     @NonNull
-    public abstract Builder name(@Nullable String name);
+    public abstract Builder name(@NonNull String name);
 
     /**
      * The rawLocation as a double array representing a location snapped to the road network.
