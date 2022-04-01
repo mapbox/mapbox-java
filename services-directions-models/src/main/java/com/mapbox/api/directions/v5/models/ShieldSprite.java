@@ -12,7 +12,7 @@ import java.io.Serializable;
  * ShieldSprite.
  */
 @AutoValue
-public abstract class ShieldSprite implements Serializable {
+public abstract class ShieldSprite extends DirectionsJsonObject implements Serializable {
 
   /**
    * Create a new instance of this class by using the {@link ShieldSprite.Builder} class.
@@ -59,7 +59,7 @@ public abstract class ShieldSprite implements Serializable {
    * This builder can be used to set the values describing the {@link ShieldSprite}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Shield sprite's name.

@@ -298,7 +298,7 @@ public abstract class LegStep extends DirectionsJsonObject {
    * @since 3.0.0
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * The distance traveled from the maneuver to the next {@link LegStep}.

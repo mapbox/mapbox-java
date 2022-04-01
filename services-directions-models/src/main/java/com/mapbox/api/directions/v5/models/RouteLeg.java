@@ -167,7 +167,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
    * @since 3.0.0
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * A list of silent waypoints which were used to request a route.

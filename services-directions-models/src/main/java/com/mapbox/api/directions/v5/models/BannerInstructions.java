@@ -124,7 +124,7 @@ public abstract class BannerInstructions extends DirectionsJsonObject {
    * @since 3.0.0
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Distance in meters from the beginning of the step at which the visual instruction should be

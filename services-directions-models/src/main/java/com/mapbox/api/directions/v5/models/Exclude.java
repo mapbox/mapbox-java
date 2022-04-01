@@ -23,7 +23,7 @@ import java.util.Set;
  * consider using raw {@link RouteOptions#exclude()} directly.
  */
 @AutoValue
-public abstract class Exclude {
+public abstract class Exclude extends DirectionsJsonObject {
 
   /**
    * Build a new instance of {@link Exclude}. Nothing is excluded by default.
@@ -66,7 +66,7 @@ public abstract class Exclude {
    * Use this builder to build an {@link Exclude} object.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Exclude certain road types from routing. The default is to not exclude anything from the

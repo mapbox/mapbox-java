@@ -8,7 +8,7 @@ import com.google.auto.value.AutoValue;
  * and a {@link #degrees()} which is the range of degrees by which the angle can deviate.
  */
 @AutoValue
-public abstract class Bearing {
+public abstract class Bearing extends DirectionsJsonObject {
 
   /**
    * Build a new instance of this builder.
@@ -54,7 +54,7 @@ public abstract class Bearing {
    * This builder can be used to set the values describing the {@link Bearing}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Clockwise value from true north between 0 and 360.

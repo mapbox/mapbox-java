@@ -2,6 +2,7 @@ buildscript {
   apply from: "${rootDir}/gradle/dependencies.gradle"
 
   repositories {
+    mavenLocal()
     maven { url 'https://plugins.gradle.org/m2' }
     google()
     mavenCentral()
@@ -38,6 +39,7 @@ tasks.withType(JavaCompile) {
 
 allprojects {
   repositories {
+    mavenLocal()
     maven { url 'https://plugins.gradle.org/m2' }
     google()
     mavenCentral()

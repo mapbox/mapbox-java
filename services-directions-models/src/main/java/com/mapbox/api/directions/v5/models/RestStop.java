@@ -69,7 +69,7 @@ public abstract class RestStop extends DirectionsJsonObject {
    * This builder can be used to set the values describing the {@link RestStop}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * The type of rest stop, either `rest_area` (includes parking only) or `service_area`

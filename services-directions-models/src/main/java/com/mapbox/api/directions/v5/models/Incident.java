@@ -324,7 +324,7 @@ public abstract class Incident extends DirectionsJsonObject {
    * This builder can be used to set the values describing the {@link Incident}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Unique identifier for incident. It might be the only one <b>non-null</b> filed which meant

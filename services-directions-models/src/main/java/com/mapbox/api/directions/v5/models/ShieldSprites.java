@@ -20,7 +20,7 @@ import java.util.Set;
  * ShieldSprites.
  */
 @AutoValue
-public abstract class ShieldSprites implements Serializable {
+public abstract class ShieldSprites extends DirectionsJsonObject implements Serializable {
 
   /**
    * Create a new instance of this class by using the {@link ShieldSprites.Builder} class.
@@ -107,7 +107,7 @@ public abstract class ShieldSprites implements Serializable {
    * This builder can be used to set the values describing the {@link ShieldSprites}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * List of {@link ShieldSprite}.

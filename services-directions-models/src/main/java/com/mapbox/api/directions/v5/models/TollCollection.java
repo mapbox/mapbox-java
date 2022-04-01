@@ -9,6 +9,7 @@ import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 
+
 /**
  * An object containing information about a toll collection point along the route.
  * This is a payment booth or overhead electronic gantry
@@ -72,7 +73,7 @@ public abstract class TollCollection extends DirectionsJsonObject {
    * This builder can be used to set the values describing the {@link TollCollection}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * The type of toll collection point, either `toll_booth` or `toll_gantry`.

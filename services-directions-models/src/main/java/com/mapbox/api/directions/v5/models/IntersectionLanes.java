@@ -123,7 +123,7 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
    * @since 3.0.0
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Provide a boolean value you can use to determine if the given lane is valid for the user to

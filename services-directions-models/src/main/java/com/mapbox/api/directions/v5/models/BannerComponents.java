@@ -345,7 +345,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
    * @since 3.0.0
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * A snippet of the full {@link BannerText#text()} which can be used for visually altering parts
