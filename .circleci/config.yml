@@ -58,21 +58,19 @@ commands:
           name: Check Java code style
           command: make checkstyle
       - run:
-          name: Jacoco test report
-          command: ./gradlew jacocoTestReport
-      - run:
           name: Run unit-test for all modules
           command: make test
+      - run:
+          name: Jacoco test report
+          command: ./gradlew jacocoTestReport
       - store_artifacts:
           path: mapbox/app/build/reports
           destination: reports
       - store_test_results:
           path: mapbox/app/build/test-results
-#      Disabling Codecov (for now) due to https://about.codecov.io/security-update/
-#      - run:
-#          name: Post code coverage report to Codecov.io
-#          command: |
-#            bash <(curl -s https://codecov.io/bash)
+      - run:
+          name: Post code coverage report to Codecov.io
+          command: sh scripts/coverage.sh
 
   setup-aws-credentials:
     steps:

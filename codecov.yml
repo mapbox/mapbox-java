@@ -1,0 +1,12 @@
+codecov:
+  require_ci_to_pass: false
+  notify:
+    wait_for_ci: false
+    threshold': 1%
+
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
