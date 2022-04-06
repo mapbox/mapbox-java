@@ -1,6 +1,5 @@
 package com.mapbox.api.directions.v5.models;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -92,15 +91,6 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
   @Nullable
   @SerializedName("congestion_numeric")
   public abstract List<Integer> congestionNumeric();
-
-  /**
-   * Object representing experimental value.
-   * <p>
-   * All available experimental values are subject to change at any time.
-   */
-  @Nullable
-  @SerializedName("state_of_charge")
-  public abstract List<Integer> experimentalStateOfCharge();
 
   /**
    * Convert the current {@link LegAnnotation} to its builder holding the currently assigned
@@ -205,17 +195,6 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
      * @return this builder for chaining options together
      */
     public abstract Builder congestionNumeric(@Nullable List<Integer> congestionNumeric);
-
-    /**
-     * Object representing experimental value.
-     * <p>
-     * All available experimental values are subject to change at any time.
-     *
-     * @param experimentalStateOfCharge experimentalStateOfCharge
-     */
-    @NonNull
-    public abstract Builder experimentalStateOfCharge(
-      @Nullable List<Integer> experimentalStateOfCharge);
 
     /**
      * Build a new {@link LegAnnotation} object.

@@ -417,47 +417,4 @@ public final class DirectionsCriteria {
   })
   public @interface ApproachesCriteria {
   }
-
-  // EXPERIMENTAL
-  /**
-   * Object representing experimental value.
-   * <p>
-   * All available experimental values are subject to change at any time.
-   */
-  public static final String EXPERIMENTAL_ANNOTATION_STATE_OF_CHARGE = "state_of_charge";
-
-  /**
-   * Object representing experimental value.
-   * <p>
-   * All available experimental values are subject to change at any time.
-   */
-  public static final String EXPERIMENTAL_ENGINE_ELECTRIC = "electric";
-
-  /**
-   * Object representing experimental value.
-   * <p>
-   * All available experimental values are subject to change at any time.
-   */
-  public static final String EXPERIMENTAL_CONNECTOR_TYPE_CCS_COMBO_TYPE1 = "ccs_combo_type1";
-
-  /**
-   * Object representing experimental value.
-   * <p>
-   * All available experimental values are subject to change at any time.
-   */
-  public static final String EXPERIMENTAL_CONNECTOR_TYPE_CCS_COMBO_TYPE2 = "ccs_combo_type2";
-
-  /**
-   * Object representing experimental value.
-   * <p>
-   * All available experimental values are subject to change at any time.
-   */
-  public static final String EXPERIMENTAL_CONNECTOR_TYPE_TESLA = "tesla";
-
-  /**
-   * Object representing experimental value.
-   * <p>
-   * All available experimental values are subject to change at any time.
-   */
-  public static final String EXPERIMENTAL_CONNECTOR_TYPE_MENNEKES_TYPE2 = "mennekes_type2";
 }
