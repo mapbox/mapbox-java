@@ -25,10 +25,14 @@ javadoc:
 	mkdir documentation/libjava-geojson/
 	mkdir documentation/libjava-turf/
 	mkdir documentation/libjava-services/
+	mkdir documentation/libjava-services-directions-models/
+	mkdir documentation/libjava-services-directions-refresh-models/
 	./gradlew :services-core:javadoc; mv services-core/build/docs/javadoc/ ./documentation/libjava-core/javadoc/ ; \
 	./gradlew :services-geojson:javadoc; mv services-geojson/build/docs/javadoc/ ./documentation/libjava-geojson/javadoc/ ; \
 	./gradlew :services-turf:javadoc; mv services-turf/build/docs/javadoc/ ./documentation/libjava-turf/javadoc/ ; \
 	./gradlew :services:javadoc; mv services/build/docs/javadoc/ ./documentation/libjava-services/javadoc/ ; \
+	./gradlew :services-directions-models:javadoc; mv services-directions-models/build/docs/javadoc/ ./documentation/libjava-services-directions-models/javadoc/ ; \
+	./gradlew :services-directions-refresh-models:javadoc; mv services-directions-refresh-models/build/docs/javadoc/ ./documentation/libjava-services-directions-refresh-models/javadoc/ ; \
 
 sdk-registry-upload:
 	./gradlew mapboxSDKRegistryUpload
