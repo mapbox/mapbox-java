@@ -422,6 +422,10 @@ public abstract class MapboxMapMatching extends
      * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
      * set to either true or false to enable or disable respectively. null can also optionally be
      * passed in to set the default behavior to match what the API does by default.
+     *<p>
+     * If `steps` is set to `true`, the following guidance-related parameters will be available:
+     * `banner_instructions`, `language`, `roundabout_exits`, `voice_instructions`,
+     * `voice_units`, `waypoint_names`, and `waypoints`.
      *
      * @param steps true if you'd like step information
      * @return this builder for chaining options together
@@ -443,11 +447,12 @@ public abstract class MapboxMapMatching extends
     public abstract Builder overview(@Nullable @OverviewCriteria String overview);
 
     /**
-     * Setting this will determine Whether or not to return banner objects associated with
-     * the `routeSteps`. Should be used in conjunction with `steps`.
-     * Can be set to either true or false to enable or
+     * Setting this will determine whether or not to return banner objects associated with
+     * the `routeSteps`. Can be set to either true or false to enable or
      * disable respectively. null can also optionally be
      * passed in to set the default behavior to match what the API does by default.
+     * <p>
+     * Must be used in conjunction with `steps=true`.
      *
      * @param bannerInstructions true if you'd like step information
      * @return this builder for chaining options together
@@ -457,9 +462,11 @@ public abstract class MapboxMapMatching extends
 
 
     /**
-     * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
-     * set to either true or false to enable or disable respectively. null can also optionally be
-     * passed in to set the default behavior to match what the API does by default.
+     * Setting can be set to either true or false to enable or disable SSML marked-up text for
+     * voice guidance along the route. null can also optionally be passed in to set the default
+     * behavior to match what the API does by default.
+     * <p>
+     * Must be used in conjunction with `steps=true`.
      *
      * @param voiceInstructions true if you'd like step information
      * @return this builder for chaining options together
@@ -469,7 +476,8 @@ public abstract class MapboxMapMatching extends
 
     /**
      * Specify what unit you'd like voice and banner instructions to use.
-     *
+     * <p>
+     * Must be used in conjunction with `steps=true` and `voice_instructions=true`.
      * @param voiceUnits either Imperial (default) or Metric
      * @return this builder for chaining options together
      * @since 3.0.0
@@ -479,9 +487,11 @@ public abstract class MapboxMapMatching extends
     );
 
     /**
-     * Setting this will determine whether to return steps and turn-by-turn instructions. Can be
-     * set to either true or false to enable or disable respectively. null can also optionally be
-     * passed in to set the default behavior to match what the API does by default.
+     * Setting can be set to either true or false to enable or disable respectively.
+     * null can also optionally be passed in to set the default behavior to match what the API
+     * does by default.
+     * <p>
+     * Must be used in conjunction with `steps=true`.
      *
      * @param roundaboutExits true if you'd like step information
      * @return this builder for chaining options together
@@ -568,6 +578,8 @@ public abstract class MapboxMapMatching extends
      * Set the instruction language for the map matching request, the default is english. Only a
      * select number of languages are currently supported, reference the table provided in the see
      * link below.
+     * <p>
+     * Must be used in conjunction with `steps=true`.
      *
      * @param language a Locale value representing the language you'd like the instructions to be
      *                 written in when returned
