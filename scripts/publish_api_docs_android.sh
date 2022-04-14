@@ -91,7 +91,7 @@ copyDocumentsToDocsFolders() {
     for fullPath in `find $GENERATED_DOCS_FOLDER -type d -maxdepth 1 -mindepth 1 | grep $DOCS_PREFIX` ; do
         docsDirectory=`basename $fullPath`
         targetDirectory=$PATH_TO_REPO/$docsDirectory/$VERSION_NUMBER
-        mkdir $targetDirectory
+        mkdir -p $targetDirectory
         cp -r $fullPath/javadoc/. $targetDirectory
     done
 }
