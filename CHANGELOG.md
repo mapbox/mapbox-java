@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.5.0-beta.1 - April 14, 2022
+- Added experimental EV routing request/response parameters. These params will only be part of pre-releases (removed from final versions) until refactored into stable APIs in the future.[#1405](https://github.com/mapbox/mapbox-java/pull/1405)
+
 ### v6.4.0 - April 14, 2022
 - Removed experimental EV routing request/response parameters. These params will only be part of pre-releases until refactored into stable APIs in the future.[#1395](https://github.com/mapbox/mapbox-java/pull/1395)
 
