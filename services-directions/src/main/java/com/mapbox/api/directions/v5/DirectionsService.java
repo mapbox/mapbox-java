@@ -95,7 +95,20 @@ interface DirectionsService {
     @Query("depart_at") String departAt,
     @Query("max_height") Double maxHeight,
     @Query("max_width") Double maxWidth,
-    @Query("metadata") Boolean metadata
+    @Query("metadata") Boolean metadata,
+
+    // experimental
+    @Query("engine") String engine,
+    @Query("ev_initial_charge") Integer evInitialCharge,
+    @Query("ev_max_charge") Integer evMaxCharge,
+    @Query("ev_connector_types") String evConnectorTypes,
+    @Query("energy_consumption_curve") String energyConsumptionCurve,
+    @Query("ev_ascent") Double evAscent,
+    @Query("ev_descent") Double evDescent,
+    @Query("ev_charging_curve") String evChargingCurve,
+    @Query("ev_max_ac_charging_power") Integer evMaxAcChargingPower,
+    @Query("ev_min_charge_at_destination") Integer evMinChargeAtDestination,
+    @Query("ev_min_charge_at_charging_station") Integer evMinChargeAtChargingStation
   );
 
   /**
@@ -177,6 +190,19 @@ interface DirectionsService {
     @Field("depart_at") String departAt,
     @Field("max_height") Double maxHeight,
     @Field("max_width") Double maxWidth,
-    @Field("metadata") Boolean metadata
+    @Field("metadata") Boolean metadata,
+
+    // experimental
+    @Field("engine") String engine,
+    @Field("ev_initial_charge") Integer evInitialCharge,
+    @Field("ev_max_charge") Integer evMaxCharge,
+    @Field("ev_connector_types") String evConnectorTypes,
+    @Field("energy_consumption_curve") String energyConsumptionCurve,
+    @Field("ev_ascent") Double evAscent,
+    @Field("ev_descent") Double evDescent,
+    @Field("ev_charging_curve") String evChargingCurve,
+    @Field("ev_max_ac_charging_power") Integer evMaxAcChargingPower,
+    @Field("ev_min_charge_at_destination") Integer evMinChargeAtDestination,
+    @Field("ev_min_charge_at_charging_station") Integer evMinChargeAtChargingStation
   );
 }
