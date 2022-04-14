@@ -4,6 +4,12 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.4.0 - April 14, 2022
+- Removed experimental EV routing request/response parameters. These params will only be part of pre-releases until refactored into stable APIs in the future.[#1395](https://github.com/mapbox/mapbox-java/pull/1395)
+
+### v6.4.0-beta.4 - March 30, 2022
+- Added route index to `MapMatchingMatching`. [#1385](https://github.com/mapbox/mapbox-java/pull/1385)
+
 ### v6.4.0-beta.3 - March 25, 2022
 - Fixed an issue where `RouteOptions#fromUrl` didn't deserialize the port number. [#1382](https://github.com/mapbox/mapbox-java/pull/1382)
 
