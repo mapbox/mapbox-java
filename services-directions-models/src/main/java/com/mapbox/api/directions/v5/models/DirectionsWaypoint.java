@@ -61,6 +61,15 @@ public abstract class DirectionsWaypoint extends DirectionsJsonObject {
   public abstract Double distance();
 
   /**
+   * Object representing experimental value.
+   * <p>
+   * All available experimental values are subject to change at any time.
+   */
+  @SerializedName("metadata")
+  @Nullable
+  public abstract ExperimentalWaypointMetadata experimentalMetadata();
+
+  /**
    * Convert the current {@link DirectionsWaypoint} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link DirectionsWaypoint}.
@@ -137,6 +146,16 @@ public abstract class DirectionsWaypoint extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder distance(@Nullable Double distance);
+
+    /**
+     * Object representing experimental value.
+     * <p>
+     * All available experimental values are subject to change at any time.
+     *
+     * @param metadata metadata
+     */
+    @NonNull
+    public abstract Builder experimentalMetadata(@Nullable ExperimentalWaypointMetadata metadata);
 
     /**
      * Build a new {@link DirectionsWaypoint} object.

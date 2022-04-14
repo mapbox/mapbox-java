@@ -71,6 +71,7 @@ public abstract class MapboxDirections extends
   }
 
   private Call<DirectionsResponse> get() {
+    RouteOptions.Experimental experimental = routeOptions().experimental();
     return getService().getCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       routeOptions().user(),
@@ -107,11 +108,25 @@ public abstract class MapboxDirections extends
       routeOptions().departAt(),
       routeOptions().maxHeight(),
       routeOptions().maxWidth(),
-      routeOptions().metadata()
+      routeOptions().metadata(),
+
+      // experimental
+      experimental != null ? experimental.engine() : null,
+      experimental != null ? experimental.evInitialCharge() : null,
+      experimental != null ? experimental.evMaxCharge() : null,
+      experimental != null ? experimental.evConnectorTypes() : null,
+      experimental != null ? experimental.energyConsumptionCurve() : null,
+      experimental != null ? experimental.evAscent() : null,
+      experimental != null ? experimental.evDescent() : null,
+      experimental != null ? experimental.evChargingCurve() : null,
+      experimental != null ? experimental.evMaxAcChargingPower() : null,
+      experimental != null ? experimental.evMinChargeAtDestination() : null,
+      experimental != null ? experimental.evMinChargeAtChargingStation() : null
     );
   }
 
   private Call<DirectionsResponse> post() {
+    RouteOptions.Experimental experimental = routeOptions().experimental();
     return getService().postCall(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       routeOptions().user(),
@@ -148,7 +163,20 @@ public abstract class MapboxDirections extends
       routeOptions().departAt(),
       routeOptions().maxHeight(),
       routeOptions().maxWidth(),
-      routeOptions().metadata()
+      routeOptions().metadata(),
+
+      // experimental
+      experimental != null ? experimental.engine() : null,
+      experimental != null ? experimental.evInitialCharge() : null,
+      experimental != null ? experimental.evMaxCharge() : null,
+      experimental != null ? experimental.evConnectorTypes() : null,
+      experimental != null ? experimental.energyConsumptionCurve() : null,
+      experimental != null ? experimental.evAscent() : null,
+      experimental != null ? experimental.evDescent() : null,
+      experimental != null ? experimental.evChargingCurve() : null,
+      experimental != null ? experimental.evMaxAcChargingPower() : null,
+      experimental != null ? experimental.evMinChargeAtDestination() : null,
+      experimental != null ? experimental.evMinChargeAtChargingStation() : null
     );
   }
 
