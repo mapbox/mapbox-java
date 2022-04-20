@@ -1,8 +1,5 @@
 package com.mapbox.api.directions.v5.models;
 
-import androidx.annotation.FloatRange;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,13 +11,20 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.geojson.Point;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Defines route request parameters.
@@ -71,7 +75,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * {@link DirectionsCriteria#PROFILE_WALKING}, or {@link DirectionsCriteria#PROFILE_CYCLING}.
    *
    * @return string value representing the profile defined in
-   *   {@link DirectionsCriteria.ProfileCriteria}
+   * {@link DirectionsCriteria.ProfileCriteria}
    */
   @NonNull
   @DirectionsCriteria.ProfileCriteria
@@ -87,7 +91,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * found in the {@link DirectionsResponse} which are snapped to a road.
    *
    * @return a list of {@link Point}s which represent the route origin, destination,
-   *   and optionally waypoints
+   * and optionally waypoints
    */
   @NonNull
   public abstract String coordinates();
@@ -102,7 +106,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * found in the {@link DirectionsResponse} which are snapped to a road.
    *
    * @return a list of {@link Point}s which represent the route origin, destination,
-   *   and optionally waypoints
+   * and optionally waypoints
    */
   @NonNull
   public List<Point> coordinatesList() {
@@ -179,7 +183,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * However, you can skip a coordinate and show its position in the list with the ; separator.
    *
    * @return a string representing the bearings with the ; separator. Angle and degrees for every
-   *   bearing value are comma-separated.
+   * bearing value are comma-separated.
    */
   @Nullable
   public abstract String bearings();
@@ -194,7 +198,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * If provided, the list of bearings must be the same length as the list of coordinates.
    *
    * @return a List of list of doubles representing the bearings used in the original request.
-   *   The first value in the list is the angle, the second one is the degrees.
+   * The first value in the list is the angle, the second one is the degrees.
    */
   @Nullable
   public List<Bearing> bearingsList() {
@@ -214,7 +218,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * since these modes are used for reference requests, not for real-time routing.
    *
    * @return a radius around a starting point where router's provider tries to avoid any
-   *   significant maneuvers. Possible range is [0, 1000] in meters.
+   * significant maneuvers. Possible range is [0, 1000] in meters.
    */
   @SerializedName("avoid_maneuver_radius")
   @Nullable
@@ -228,7 +232,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * If provided, the list of layers must be the same length as the list of coordinates.
    *
    * @return a string representing the layers with the ; separator. Each value may be negative
-   *   or absent.
+   * or absent.
    */
   @Nullable
   public abstract String layers();
@@ -254,7 +258,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * for {@link DirectionsCriteria#PROFILE_WALKING} and {@link DirectionsCriteria#PROFILE_CYCLING}.
    *
    * @return a boolean value representing whether or not continueStraight was enabled or
-   *   not during the initial request
+   * not during the initial request
    */
   @SerializedName("continue_straight")
   @Nullable
@@ -375,7 +379,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Excluded points are formatted like: point(longitude latitude)
    *
    * @return a comma separated string where each element matches one of
-   *   the {@link DirectionsCriteria.ExcludeCriteria} exclusion or a point
+   * the {@link DirectionsCriteria.ExcludeCriteria} exclusion or a point
    */
   @Nullable
   public abstract String exclude();
@@ -398,7 +402,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * Excluded points are formatted like: point(longitude latitude)
    *
    * @return a list of strings where each element matches one of the
-   *   {@link DirectionsCriteria.ExcludeCriteria} exclusion or a point
+   * {@link DirectionsCriteria.ExcludeCriteria} exclusion or a point
    */
   @Nullable
   public List<String> excludeList() {
@@ -838,7 +842,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @param json a formatted valid JSON string defining a RouteOptions
    * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
+   * method
    * @see #fromUrl(URL)
    */
   @NonNull
@@ -864,7 +868,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *
    * @param url request URL
    * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
+   * method
    * @see #fromJson(String)
    */
   @NonNull
@@ -874,7 +878,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     String baseUrl = url.getProtocol() + "://" + url.getHost();
     int port = url.getPort();
     if (port != -1) {
-      baseUrl +=  ":" + port;
+      baseUrl += ":" + port;
     }
     optionsJson.addProperty("baseUrl", baseUrl);
 
@@ -937,160 +941,53 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       .append(String.format("/%s", user()))
       .append(String.format("/%s", profile()))
       .append(String.format("/%s", coordinates()))
-      .append(String.format("?access_token=%s", accessToken))
-      .append(String.format("&geometries=%s", geometries()));
+      .append(String.format("?access_token=%s", accessToken));
 
-    if (alternatives() != null) {
-      sb.append(String.format("&alternatives=%s", alternatives()));
-    }
-    if (overview() != null) {
-      sb.append(String.format("&overview=%s", overview()));
-    }
-    if (radiuses() != null) {
-      sb.append(String.format("&radiuses=%s", radiuses()));
-    }
-    if (steps() != null) {
-      sb.append(String.format("&steps=%s", steps()));
-    }
-    if (avoidManeuverRadius() != null) {
-      sb.append(String.format("&avoid_maneuver_radius=%s", avoidManeuverRadius()));
-    }
-    if (bearings() != null) {
-      sb.append(String.format("&bearings=%s", bearings()));
-    }
-    if (layers() != null) {
-      sb.append(String.format("&layers=%s", layers()));
-    }
-    if (continueStraight() != null) {
-      sb.append(String.format("&continue_straight=%s", continueStraight()));
-    }
-    if (annotations() != null) {
-      sb.append(String.format("&annotations=%s", annotations()));
-    }
-    if (language() != null) {
-      sb.append(String.format("&language=%s", language()));
-    }
-    if (roundaboutExits() != null) {
-      sb.append(String.format("&roundabout_exits=%s", roundaboutExits()));
-    }
-    if (voiceInstructions() != null) {
-      sb.append(String.format("&voice_instructions=%s", voiceInstructions()));
-    }
-    if (bannerInstructions() != null) {
-      sb.append(String.format("&banner_instructions=%s", bannerInstructions()));
-    }
-    if (voiceUnits() != null) {
-      sb.append(String.format("&voice_units=%s", voiceUnits()));
-    }
-    if (exclude() != null) {
-      sb.append(String.format("&exclude=%s", exclude()));
-    }
-    if (include() != null) {
-      sb.append(String.format("&include=%s", include()));
-    }
-    if (approaches() != null) {
-      sb.append(String.format("&approaches=%s", approaches()));
-    }
-    if (waypointIndices() != null) {
-      sb.append(String.format("&waypoints=%s", waypointIndices()));
-    }
-    if (waypointNames() != null) {
-      sb.append(String.format("&waypoint_names=%s", waypointNames()));
-    }
-    if (waypointTargets() != null) {
-      sb.append(String.format("&waypoint_targets=%s", waypointTargets()));
-    }
-    if (enableRefresh() != null) {
-      sb.append(String.format("&enable_refresh=%s", enableRefresh()));
-    }
-    if (walkingSpeed() != null) {
-      sb.append(String.format("&walking_speed=%s", walkingSpeed()));
-    }
-    if (walkwayBias() != null) {
-      sb.append(String.format("&walkway_bias=%s", walkwayBias()));
-    }
-    if (alleyBias() != null) {
-      sb.append(String.format("&alley_bias=%s", alleyBias()));
-    }
-    if (snappingIncludeClosures() != null) {
-      sb.append(String.format("&snapping_include_closures=%s", snappingIncludeClosures()));
-    }
-    if (arriveBy() != null) {
-      sb.append(String.format("&arrive_by=%s", arriveBy()));
-    }
-    if (departAt() != null) {
-      sb.append(String.format("&depart_at=%s", departAt()));
-    }
-    if (maxHeight() != null) {
-      sb.append(String.format("&max_height=%s", maxHeight()));
-    }
-    if (maxWidth() != null) {
-      sb.append(String.format("&max_width=%s", maxWidth()));
-    }
-    if (metadata() != null) {
-      sb.append(String.format("&metadata=%s", metadata()));
-    }
+    appendQueryParameter(sb, "geometries", geometries());
+    appendQueryParameter(sb, "alternatives", alternatives());
+    appendQueryParameter(sb, "overview", overview());
+    appendQueryParameter(sb, "radiuses", radiuses(), ";");
+    appendQueryParameter(sb, "steps", steps());
+    appendQueryParameter(sb, "avoid_maneuver_radius", avoidManeuverRadius());
+    appendQueryParameter(sb, "bearings", bearings(), new String[] {";", ","});
+    appendQueryParameter(sb, "layers", layers(), ";");
+    appendQueryParameter(sb, "continue_straight", continueStraight());
+    appendQueryParameter(sb, "annotations", annotations(), ",");
+    appendQueryParameter(sb, "language", language());
+    appendQueryParameter(sb, "roundabout_exits", roundaboutExits());
+    appendQueryParameter(sb, "voice_instructions", voiceInstructions());
+    appendQueryParameter(sb, "banner_instructions", bannerInstructions());
+    appendQueryParameter(sb, "voice_units", voiceUnits());
+    appendQueryParameter(sb, "exclude", exclude(), new String[] {",", "(", ")"});
+    appendQueryParameter(sb, "include", include(), new String[] {",", "(", ")"});
+    appendQueryParameter(sb, "approaches", approaches(), ";");
+    appendQueryParameter(sb, "waypoints", waypointIndices(), ";");
+    appendQueryParameter(sb, "waypoint_names", waypointNames(), ";");
+    appendQueryParameter(sb, "waypoint_targets", waypointTargets(), ";");
+    appendQueryParameter(sb, "enable_refresh", enableRefresh());
+    appendQueryParameter(sb, "walking_speed", walkingSpeed());
+    appendQueryParameter(sb, "walkway_bias", walkwayBias());
+    appendQueryParameter(sb, "alley_bias", alleyBias());
+    appendQueryParameter(sb, "snapping_include_closures", snappingIncludeClosures(), ";");
+    appendQueryParameter(sb, "arrive_by", arriveBy());
+    appendQueryParameter(sb, "depart_at", departAt());
+    appendQueryParameter(sb, "max_height", maxHeight());
+    appendQueryParameter(sb, "max_width", maxWidth());
+    appendQueryParameter(sb, "metadata", metadata());
 
     // experimental
     if (experimental() != null) {
-      if (experimental().engine() != null) {
-        sb.append(String.format("&engine=%s", experimental().engine()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().evInitialCharge() != null) {
-        sb.append(String.format("&ev_initial_charge=%s", experimental().evInitialCharge()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().evMaxCharge() != null) {
-        sb.append(String.format("&ev_max_charge=%s", experimental().evMaxCharge()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().evConnectorTypes() != null) {
-        sb.append(String.format("&ev_connector_types=%s", experimental().evConnectorTypes()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().energyConsumptionCurve() != null) {
-        sb.append(
-          String.format("&energy_consumption_curve=%s", experimental().energyConsumptionCurve()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().evAscent() != null) {
-        sb.append(String.format("&ev_ascent=%s", experimental().evAscent()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().evDescent() != null) {
-        sb.append(String.format("&ev_descent=%s", experimental().evDescent()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().evChargingCurve() != null) {
-        sb.append(String.format("&ev_charging_curve=%s", experimental().evChargingCurve()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().evMaxAcChargingPower() != null) {
-        sb.append(
-          String.format("&ev_max_ac_charging_power=%s", experimental().evMaxAcChargingPower()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().evMinChargeAtDestination() != null) {
-        sb.append(
-          String
-            .format("&ev_min_charge_at_destination=%s", experimental().evMinChargeAtDestination()));
-      }
-    }
-    if (experimental() != null) {
-      if (experimental().evMinChargeAtChargingStation() != null) {
-        sb.append(String.format("&ev_min_charge_at_charging_station=%s",
-          experimental().evMinChargeAtChargingStation()));
-      }
+      appendQueryParameter(sb, "engine", experimental().engine());
+      appendQueryParameter(sb, "ev_initial_charge", experimental().evInitialCharge());
+      appendQueryParameter(sb, "ev_max_charge", experimental().evMaxCharge());
+      appendQueryParameter(sb, "ev_connector_types", experimental().evConnectorTypes(), ",");
+      appendQueryParameter(sb, "energy_consumption_curve", experimental().energyConsumptionCurve(), new String[] {";", ","});
+      appendQueryParameter(sb, "ev_ascent", experimental().evAscent());
+      appendQueryParameter(sb, "ev_descent", experimental().evDescent());
+      appendQueryParameter(sb, "ev_charging_curve", experimental().evChargingCurve(), ";");
+      appendQueryParameter(sb, "ev_max_ac_charging_power", experimental().evMaxAcChargingPower());
+      appendQueryParameter(sb, "ev_min_charge_at_destination", experimental().evMinChargeAtDestination());
+      appendQueryParameter(sb, "ev_min_charge_at_charging_station", experimental().evMinChargeAtChargingStation());
     }
 
     try {
@@ -1110,6 +1007,77 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     }
   }
 
+  private static void appendQueryParameter(
+    @NonNull StringBuilder builder,
+    @NonNull String name,
+    @Nullable Number value) {
+    if (value != null) {
+      appendQueryParameter(builder, name, String.valueOf(value), new String[] {});
+    }
+  }
+
+  private static void appendQueryParameter(
+    @NonNull StringBuilder builder,
+    @NonNull String name,
+    @Nullable Boolean value) {
+    if (value != null) {
+      appendQueryParameter(builder, name, String.valueOf(value), new String[] {});
+    }
+  }
+
+  private static void appendQueryParameter(
+    @NonNull StringBuilder builder,
+    @NonNull String name,
+    @Nullable String value) {
+    appendQueryParameter(builder, name, value, new String[] {});
+  }
+
+  private static void appendQueryParameter(
+    @NonNull StringBuilder builder,
+    @NonNull String name,
+    @Nullable String value,
+    @Nullable String additionalSafeCharacter) {
+    appendQueryParameter(builder, name, value, new String[] {additionalSafeCharacter});
+  }
+
+  private static void appendQueryParameter(
+    @NonNull StringBuilder builder,
+    @NonNull String name,
+    @Nullable String value,
+    @NonNull String[] additionalSafeCharacters) {
+    if (value != null) {
+      builder
+        .append("&")
+        .append(name)
+        .append("=")
+        .append(escape(value, additionalSafeCharacters));
+    }
+  }
+
+  private static String escape(
+    @NonNull String value,
+    @NonNull String[] additionalSafeCharacters) {
+    try {
+      if (additionalSafeCharacters.length == 0) {
+        return URLEncoder.encode(value, UTF_8);
+      }
+
+      StringBuilder sb = new StringBuilder();
+      String separator = additionalSafeCharacters[0];
+      String[] remainingSeparators = Arrays.copyOfRange(additionalSafeCharacters, 1, additionalSafeCharacters.length);
+      String[] valueParts = value.split(separator, -1);
+      for (int j = 0; j < valueParts.length; j++) {
+        if (j > 0) {
+          sb.append(separator);
+        }
+        sb.append(escape(valueParts[j], remainingSeparators));
+      }
+      return sb.toString();
+    } catch (UnsupportedEncodingException ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
   @NonNull
   private static RouteOptions fromJsonString(@NonNull String json) {
     GsonBuilder gson = new GsonBuilder();
@@ -1123,7 +1091,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * an updated and modified {@link RouteOptions}.
    *
    * @return a {@link RouteOptions.Builder} with the same values set to match the ones defined
-   *   in this {@link RouteOptions}
+   * in this {@link RouteOptions}
    */
   @NonNull
   public abstract Builder toBuilder();
@@ -2158,7 +2126,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * an updated and modified {@link Experimental}.
      *
      * @return a {@link Builder} with the same values set to match the ones defined
-     *   in this {@link Experimental}
+     * in this {@link Experimental}
      */
     public abstract Builder toBuilder();
 
@@ -2177,7 +2145,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      *
      * @param json a formatted valid JSON string defining a Metadata
      * @return a new instance of this class defined by the values passed inside this static factory
-     *   method
+     * method
      */
     public static Experimental fromJson(String json) {
       GsonBuilder gson = new GsonBuilder();

@@ -29,7 +29,7 @@ public class RouteOptionsTest extends TestUtils {
    */
   private static final String ROUTE_OPTIONS_JSON = "route_options_v5.json";
   private static final String ROUTE_OPTIONS_URL =
-    "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=;unlimited;5.1&steps=true&avoid_maneuver_radius=200.0&bearings=0,90;90,0;&layers=-42;;0&continue_straight=false&annotations=congestion,distance,duration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll,ferry,point(11.0%20-22.0)&include=hot,hov2&approaches=;curb;&waypoints=0;1;2&waypoint_names=;two;&waypoint_targets=;12.2,21.2;&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=;false;true&arrive_by=2021-01-01'T'01:01&depart_at=2021-02-02'T'02:02&max_height=1.5&max_width=1.4&metadata=true&engine=electric&ev_initial_charge=80000&ev_max_charge=80000&ev_connector_types=ccs_combo_type1,ccs_combo_type2&energy_consumption_curve=0,300;20,160;80,140;120,180&ev_ascent=5.0&ev_descent=6.0&ev_charging_curve=0,100000;40000,70000;60000,30000;80000,10000&ev_max_ac_charging_power=1&ev_min_charge_at_destination=2&ev_min_charge_at_charging_station=3";
+    "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=;unlimited;5.1&steps=true&avoid_maneuver_radius=200.0&bearings=0,90;90,0;&layers=-42;;0&continue_straight=false&annotations=congestion,distance,duration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll,ferry,point(11.0+-22.0)&include=hot,hov2&approaches=;curb;&waypoints=0;1;2&waypoint_names=;two;&waypoint_targets=;12.2,21.2;&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=;false;true&arrive_by=2021-01-01'T'01:01&depart_at=2021-02-02'T'02:02&max_height=1.5&max_width=1.4&metadata=true&engine=electric&ev_initial_charge=80000&ev_max_charge=80000&ev_connector_types=ccs_combo_type1,ccs_combo_type2&energy_consumption_curve=0,300;20,160;80,140;120,180&ev_ascent=5.0&ev_descent=6.0&ev_charging_curve=0,100000;40000,70000;60000,30000;80000,10000&ev_max_ac_charging_power=1&ev_min_charge_at_destination=2&ev_min_charge_at_charging_station=3";
   private static final String ACCESS_TOKEN = "pk.token";
 
   private final String optionsJson = loadJsonFixture(ROUTE_OPTIONS_JSON);
@@ -418,7 +418,7 @@ public class RouteOptionsTest extends TestUtils {
   @Test
   public void routeOptionsWithDecodedChars_toUrlWithEncodedChars() {
     String expectedEncodedUrl =
-      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=my%20starting%20position;my%20destination";
+      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=my+starting+position;Coffee+Bean+%2526+Tea";
     List<Point> coordinates = new ArrayList<>();
     coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
     coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
@@ -426,7 +426,7 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions options = RouteOptions.builder()
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinatesList(coordinates)
-      .waypointNames("my starting position;my destination")
+      .waypointNames("my starting position;Coffee Bean & Tea")
       .build();
 
     URL url = options.toUrl(ACCESS_TOKEN);
@@ -443,7 +443,7 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions expectedOptions = RouteOptions.builder()
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinatesList(coordinates)
-      .waypointNames("my starting position;my destination")
+      .waypointNames("my starting position;Coffee Bean & Tea")
       .build();
 
     URL url = expectedOptions.toUrl(ACCESS_TOKEN);
@@ -465,7 +465,7 @@ public class RouteOptionsTest extends TestUtils {
       .waypointNames("my starting position;my destination")
       .build();
 
-    String url = "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312%2C37.7736941;-122.4187529%2C37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=my%20starting%20position;my%20destination";
+    String url = "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312%2C37.7736941;-122.4187529%2C37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=my+starting+position;my+destination";
 
     RouteOptions resultingOptions = RouteOptions.fromUrl(new URL(url));
 
@@ -475,7 +475,7 @@ public class RouteOptionsTest extends TestUtils {
   @Test
   public void routeOptionsWithUTF8Chars_toUrlWithEncodedChars() {
     String expectedEncodedUrl =
-      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=;%D0%A3%D0%BB%D0%B8%D1%86%D0%B0%20%D0%AF%D0%BD%D0%B0%20%D0%A7%D0%B5%D1%87%D0%BE%D1%82%D0%B0%207,%20Minsk%20220045,%20Belarus";
+      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=;%D0%A3%D0%BB%D0%B8%D1%86%D0%B0+%D0%AF%D0%BD%D0%B0+%D0%A7%D0%B5%D1%87%D0%BE%D1%82%D0%B0+7,+Minsk+220045,+Belarus";
     List<Point> coordinates = new ArrayList<>();
     coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
     coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
@@ -508,7 +508,7 @@ public class RouteOptionsTest extends TestUtils {
     List<String> queryParameters = Arrays.asList(url.getQuery().split("&"));
     assertTrue(
       "url doesn't contain excluded point: " + url.toString(),
-      queryParameters.contains("exclude=point(1.0%202.0)")
+      queryParameters.contains("exclude=point(1.0+2.0)")
     );
   }
 
@@ -534,14 +534,14 @@ public class RouteOptionsTest extends TestUtils {
     List<String> queryParameters = Arrays.asList(url.getQuery().split("&"));
     assertTrue(
       "url doesn't contain excluded point: " + url.toString(),
-      queryParameters.contains("exclude=point(1.0%202.0),point(6.03%208.07)")
+      queryParameters.contains("exclude=point(1.0+2.0),point(6.03+8.07)")
     );
   }
 
   @Test
   public void routeOptionsWithExcludePointAndCriteriaFromUrl() throws MalformedURLException {
     URL testUrl = new URL(
-      "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/18.60289583391497,54.41121871390118;18.59400217318438,54.40983705017376.json?access_token=testToken&alternatives=true&annotations=distance%2Cduration%2Ccongestion%2Cspeed&geometries=geojson&language=en&overview=full&steps=true&exclude=point(18.595875353791087%2054.41000119108463),toll");
+      "https://api.mapbox.com/directions/v5/mapbox/driving-traffic/18.60289583391497,54.41121871390118;18.59400217318438,54.40983705017376.json?access_token=testToken&alternatives=true&annotations=distance%2Cduration%2Ccongestion%2Cspeed&geometries=geojson&language=en&overview=full&steps=true&exclude=point(18.595875353791087+54.41000119108463),toll");
 
     RouteOptions routeOptions = RouteOptions.fromUrl(testUrl);
 
