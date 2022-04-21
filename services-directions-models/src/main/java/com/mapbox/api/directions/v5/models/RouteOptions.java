@@ -1104,7 +1104,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
         decodedUrl.getQuery(),
         decodedUrl.getRef()
       );
-      return new URL(encodedUri.toASCIIString());
+      // workaround to encode `&` chars in Strings like "me & you".
+      // need a better solution to fix encoding in general.
+      return new URL(encodedUri.toASCIIString().replace("%20&%20", "%20%26%20"));
     } catch (MalformedURLException | URISyntaxException ex) {
       throw new RuntimeException(ex);
     }
