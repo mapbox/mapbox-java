@@ -118,7 +118,7 @@ public abstract class ExperimentalWaypointMetadata extends DirectionsJsonObject 
    * This builder can be used to set the values describing the {@link ExperimentalWaypointMetadata}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Object representing experimental value.

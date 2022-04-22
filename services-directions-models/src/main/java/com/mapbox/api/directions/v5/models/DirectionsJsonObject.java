@@ -35,7 +35,7 @@ public abstract class DirectionsJsonObject implements Serializable {
 
   @Nullable
   @UnrecognizedJsonProperties
-  public abstract Map<String, SerializableJsonElement> unrecognised();
+  abstract Map<String, SerializableJsonElement> unrecognised();
 
   abstract static class Builder<T extends Builder> {
     @NonNull

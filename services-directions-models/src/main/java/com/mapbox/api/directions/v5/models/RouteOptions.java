@@ -2195,7 +2195,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * This builder can be used to set the values describing the {@link Experimental}.
      */
     @AutoValue.Builder
-    public abstract static class Builder {
+    public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
       /**
        * Object representing experimental value.
