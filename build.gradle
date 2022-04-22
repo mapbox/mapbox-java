@@ -2,7 +2,16 @@ buildscript {
   apply from: "${rootDir}/gradle/dependencies.gradle"
 
   repositories {
-    mavenLocal()
+    maven {
+      url 'https://api.mapbox.com/downloads/v2/snapshots/maven'
+      authentication {
+        basic(BasicAuthentication)
+      }
+      credentials {
+        username = "mapbox"
+        password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
+      }
+    }
     maven { url 'https://plugins.gradle.org/m2' }
     google()
     mavenCentral()
@@ -39,7 +48,16 @@ tasks.withType(JavaCompile) {
 
 allprojects {
   repositories {
-    mavenLocal()
+    maven {
+      url 'https://api.mapbox.com/downloads/v2/snapshots/maven'
+      authentication {
+        basic(BasicAuthentication)
+      }
+      credentials {
+        username = "mapbox"
+        password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
+      }
+    }
     maven { url 'https://plugins.gradle.org/m2' }
     google()
     mavenCentral()
@@ -54,6 +72,7 @@ allprojects {
         password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
       }
     }
+
     // uncomment if snapshots access is needed
     // maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
   }
