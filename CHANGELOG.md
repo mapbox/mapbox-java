@@ -4,6 +4,12 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.5.0-beta.2 - April 14, 2022
+- Added correct escaping for `<white space>&<white space>` pattern in query parameters for `RouteOptions#toUrl`. [#1410](https://github.com/mapbox/mapbox-java/pull/1410).
+
+#### Known issues
+- `RouteOptions#toUrl` might still produce invalid URLs (and fail a request or later crash on `RouteOptions#fromUrl`) if query parameters contain `&` chars that do not exactly match the `<white space>&<white space>` pattern. Only this specific pattern is escaped correctly.
+
 ### v6.5.0-beta.1 - April 14, 2022
 - Added experimental EV routing request/response parameters. These params will only be part of pre-releases (removed from final versions) until refactored into stable APIs in the future.[#1405](https://github.com/mapbox/mapbox-java/pull/1405)
 
