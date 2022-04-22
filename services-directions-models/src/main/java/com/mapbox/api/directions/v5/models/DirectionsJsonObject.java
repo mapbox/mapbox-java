@@ -6,8 +6,8 @@ import com.google.gson.GsonBuilder;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
-import com.ryanharter.auto.value.gson.SerializableJsonElement;
-import com.ryanharter.auto.value.gson.UnrecognizedJsonProperties;
+import com.mapbox.auto.value.gson.SerializableJsonElement;
+import com.mapbox.auto.value.gson.UnrecognizedJsonProperties;
 
 import java.io.Serializable;
 import java.util.Map;

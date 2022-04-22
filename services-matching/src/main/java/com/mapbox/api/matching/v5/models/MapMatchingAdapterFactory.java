@@ -1,7 +1,7 @@
 package com.mapbox.api.matching.v5.models;
 
 import com.google.gson.TypeAdapterFactory;
-import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterFactory;
 
 /**
  * A MapMatching type adapter factory for convenience when using AutoValue and handling
