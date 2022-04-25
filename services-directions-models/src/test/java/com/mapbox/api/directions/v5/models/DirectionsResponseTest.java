@@ -73,6 +73,20 @@ public class DirectionsResponseTest extends TestUtils {
   }
 
   @Test
+  public void accessUnrecognisedString() throws Exception {
+    Gson gson = new GsonBuilder().create();
+    JsonObject directionsResponseJson = gson.fromJson(loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS), JsonObject.class);
+    String unrecognisedPropertyName = "testUnrecognisedProperty";
+    String unrecognisedPropertyValue = "test";
+    directionsResponseJson.add(unrecognisedPropertyName, new JsonPrimitive(unrecognisedPropertyValue));
+    DirectionsResponse response = DirectionsResponse.fromJson(directionsResponseJson.toString());
+
+    String value = response.getUnrecognisedProperty(unrecognisedPropertyName).getAsString();
+
+    assertEquals(unrecognisedPropertyValue, value);
+  }
+
+  @Test
   public void fromJson_correctlyBuildsFromJsonWithOptionsAndUuid() throws Exception {
     String json = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
     RouteOptions options = RouteOptions.builder()
