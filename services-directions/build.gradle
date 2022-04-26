@@ -11,7 +11,7 @@ dependencies {
   compileOnly dependenciesList.autoValue
   compileOnly dependenciesList.autoValueGson
   implementation dependenciesList.autoValueGsonRuntime
-  annotationProcessor dependenciesList.autoValue
+  annotationProcessor(dependenciesList.autoValueGson)
 
   // Test Dependencies
   testImplementation dependenciesList.okhttp3Mockwebserver
