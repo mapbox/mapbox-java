@@ -116,11 +116,6 @@ public class DirectionsResponseTest extends TestUtils {
     assertTrue(properties.contains("3"));
   }
 
-  private JsonObject readJsonObject(String file) throws IOException {
-    Gson gson = new GsonBuilder().create();
-    return gson.fromJson(loadJsonFixture(file), JsonObject.class);
-  }
-
   @Test
   public void fromJson_correctlyBuildsFromJsonWithOptionsAndUuid() throws Exception {
     String json = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
@@ -206,5 +201,10 @@ public class DirectionsResponseTest extends TestUtils {
     DirectionsResponse deserialized = DirectionsResponse.fromJson(serialized);
 
     assertEquals(initial, deserialized);
+  }
+
+  private JsonObject readJsonObject(String file) throws IOException {
+    Gson gson = new GsonBuilder().create();
+    return gson.fromJson(loadJsonFixture(file), JsonObject.class);
   }
 }
