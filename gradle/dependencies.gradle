@@ -2,7 +2,7 @@ ext {
 
   version = [
       autoValue        : '1.7',
-      autoValueGson    : '0.0.1-SNAPSHOT',
+      autoValueGson    : '0.0.1',
       junit            : '4.12',
       annotation       : '1.0.0',
       gson             : '2.8.6',
