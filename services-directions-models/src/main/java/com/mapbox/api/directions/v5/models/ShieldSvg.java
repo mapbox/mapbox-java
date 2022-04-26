@@ -14,7 +14,7 @@ import java.io.Serializable;
  * ShieldSvg.
  */
 @AutoValue
-public abstract class ShieldSvg implements Serializable {
+public abstract class ShieldSvg extends DirectionsJsonObject implements Serializable {
 
   /**
    * Create a new instance of this class by using the {@link ShieldSvg.Builder} class.
@@ -82,7 +82,7 @@ public abstract class ShieldSvg implements Serializable {
    * This builder can be used to set the values describing the {@link ShieldSvg}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * SVG.

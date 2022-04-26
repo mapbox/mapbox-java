@@ -75,7 +75,7 @@ public abstract class Admin extends DirectionsJsonObject {
    * This builder can be used to set the values describing the {@link Admin}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * The 2 character ISO 3166-1 alpha-2 code that applies to a country boundary.

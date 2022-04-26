@@ -74,7 +74,7 @@ public abstract class Closure extends DirectionsJsonObject {
    * This builder can be used to set the values describing the {@link Closure}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Closure's geometry index start point.

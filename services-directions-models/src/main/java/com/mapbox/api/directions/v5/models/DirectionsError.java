@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @since 3.0.0
  */
 @AutoValue
-public abstract class DirectionsError implements Serializable {
+public abstract class DirectionsError extends DirectionsJsonObject implements Serializable {
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -82,7 +82,7 @@ public abstract class DirectionsError implements Serializable {
    * @since 3.0.0
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * String indicating the state of the response. This is a separate code than the HTTP status

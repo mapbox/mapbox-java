@@ -72,7 +72,7 @@ public abstract class Metadata extends DirectionsJsonObject {
    * This builder can be used to set the values describing the {@link Metadata}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Map indicating the key/value pairs.

@@ -16,7 +16,7 @@ import java.util.List;
  * ShieldSpriteAttribute.
  */
 @AutoValue
-public abstract class ShieldSpriteAttribute implements Serializable {
+public abstract class ShieldSpriteAttribute extends DirectionsJsonObject implements Serializable {
 
   /**
    * Create a new instance of this class by using the {@link ShieldSpriteAttribute.Builder} class.
@@ -120,7 +120,7 @@ public abstract class ShieldSpriteAttribute implements Serializable {
    * This builder can be used to set the values describing the {@link ShieldSpriteAttribute}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Shield sprite's width.

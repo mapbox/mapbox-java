@@ -33,6 +33,7 @@ import java.util.List;
 public abstract class RouteOptions extends DirectionsJsonObject {
 
   private static final String UTF_8 = "UTF-8";
+  private static final String ACCESS_TOKEN_URL_PARAM_NAME = "access_token";
 
   /**
    * Build a new instance of {@link RouteOptions} and sets default values for:
@@ -889,6 +890,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
         int idx = query.indexOf("=");
         String property = URLDecoder.decode(query.substring(0, idx), UTF_8);
         String value = URLDecoder.decode(query.substring(idx + 1), UTF_8);
+        if (property.equals(ACCESS_TOKEN_URL_PARAM_NAME)) {
+          continue;
+        }
 
         boolean isExperimental = false;
         for (int i = 0; i < Experimental.experimentalParameters.length; i++) {
@@ -937,7 +941,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       .append(String.format("/%s", user()))
       .append(String.format("/%s", profile()))
       .append(String.format("/%s", coordinates()))
-      .append(String.format("?access_token=%s", accessToken))
+      .append(String.format("?%s=%s", ACCESS_TOKEN_URL_PARAM_NAME, accessToken))
       .append(String.format("&geometries=%s", geometries()));
 
     if (alternatives() != null) {
@@ -1134,7 +1138,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * This builder can be used to set the values describing the {@link RouteOptions}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Base URL for the request.
@@ -2191,7 +2195,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * This builder can be used to set the values describing the {@link Experimental}.
      */
     @AutoValue.Builder
-    public abstract static class Builder {
+    public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
       /**
        * Object representing experimental value.

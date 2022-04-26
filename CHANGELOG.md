@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added roundtrip of unrecognized JSON properties [#1394](https://github.com/mapbox/mapbox-java/pull/1394)
 
 ### v6.4.1 - April 22, 2022
 - Added correct escaping for `<white space>&<white space>` pattern in query parameters for `RouteOptions#toUrl`. [#1410](https://github.com/mapbox/mapbox-java/pull/1410).

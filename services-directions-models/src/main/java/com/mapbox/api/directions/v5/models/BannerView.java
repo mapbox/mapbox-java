@@ -115,7 +115,7 @@ public abstract class BannerView extends DirectionsJsonObject {
    * @since 5.0.0
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * Plain text with all the {@link BannerComponents} text combined.

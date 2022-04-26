@@ -1,7 +1,7 @@
 package com.mapbox.api.geocoding.v5.models;
 
 import com.google.gson.TypeAdapterFactory;
-import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterFactory;
 
 /**
  * A Geocoding type adapter factory for convenience when using AutoValue and handling

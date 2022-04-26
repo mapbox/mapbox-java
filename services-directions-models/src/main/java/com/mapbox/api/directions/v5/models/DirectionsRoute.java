@@ -214,7 +214,7 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
    * @since 3.0.0
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
      * The distance traveled from origin to destination.
