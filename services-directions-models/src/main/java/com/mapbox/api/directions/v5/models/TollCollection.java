@@ -9,7 +9,6 @@ import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 
-
 /**
  * An object containing information about a toll collection point along the route.
  * This is a payment booth or overhead electronic gantry
