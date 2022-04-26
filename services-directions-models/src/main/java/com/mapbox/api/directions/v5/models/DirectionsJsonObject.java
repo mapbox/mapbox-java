@@ -11,7 +11,10 @@ import com.mapbox.auto.value.gson.SerializableJsonElement;
 import com.mapbox.auto.value.gson.UnrecognizedJsonProperties;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Provides a base class for Directions model classes.
@@ -35,20 +38,35 @@ public abstract class DirectionsJsonObject implements Serializable {
   }
 
   /**
-   * Access JSON property that wasn't recognised during JSON serialization.
+   * Access JSON property that wasn't recognized during JSON serialization.
    * This may be useful to access experimental properties.
    * @param propertyName name of a json property
    * @return value of a requested property or null if the requested property doesn't exist.
    */
   @Nullable
-  public JsonElement getUnrecognisedProperty(String propertyName) {
+  public final JsonElement getUnrecognizedProperty(String propertyName) {
     JsonElement result = null;
-    Map<String, SerializableJsonElement> recognisedProperties = unrecognised();
-    if (recognisedProperties != null) {
-      SerializableJsonElement property = recognisedProperties.get(propertyName);
+    Map<String, SerializableJsonElement> unrecognizedProperties = unrecognized();
+    if (unrecognizedProperties != null) {
+      SerializableJsonElement property = unrecognizedProperties.get(propertyName);
       if (property != null) {
         result = property.getElement();
       }
+    }
+    return result;
+  }
+
+  /**
+   * @return names of unrecognized JSON properties or an empty set
+   */
+  @NonNull
+  public final Set<String> getUnrecognizedPropertiesNames() {
+    Set<String> result;
+    Map<String, SerializableJsonElement> unrecognizedProperties = unrecognized();
+    if (unrecognizedProperties != null) {
+      result = unrecognizedProperties.keySet();
+    } else {
+      result = Collections.emptySet();
     }
     return result;
   }
