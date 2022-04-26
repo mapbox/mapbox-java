@@ -12,7 +12,6 @@ import com.mapbox.auto.value.gson.UnrecognizedJsonProperties;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,6 +56,7 @@ public abstract class DirectionsJsonObject implements Serializable {
   }
 
   /**
+   * Get names of unrecognized JSON properties.
    * @return names of unrecognized JSON properties or an empty set
    */
   @NonNull
