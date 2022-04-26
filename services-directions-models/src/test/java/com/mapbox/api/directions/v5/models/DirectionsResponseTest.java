@@ -2,7 +2,6 @@ package com.mapbox.api.directions.v5.models;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -16,11 +15,13 @@ import java.util.List;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Set;
 
 import static com.mapbox.api.directions.v5.utils.MutateJsonUtil.mutateJson;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class DirectionsResponseTest extends TestUtils {
 
@@ -70,6 +71,49 @@ public class DirectionsResponseTest extends TestUtils {
     JsonObject jsonFromObject = gson.fromJson(responseFromJson1.toJson(), JsonObject.class);
 
     assertEquals(mutatedJson, jsonFromObject);
+  }
+
+  @Test
+  public void accessUnrecognizedProperties() throws Exception {
+    JsonObject directionsResponseJson = readJsonObject(DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS);
+    String unrecognizedPropertyName = "testUnrecognizedProperty";
+    String unrecognizedPropertyValue = "test";
+    directionsResponseJson.add(unrecognizedPropertyName, new JsonPrimitive(unrecognizedPropertyValue));
+    DirectionsResponse response = DirectionsResponse.fromJson(directionsResponseJson.toString());
+
+    String value = response.getUnrecognizedProperty(unrecognizedPropertyName).getAsString();
+    JsonElement notExistingProperty = response.getUnrecognizedProperty("notExisting");
+
+    assertEquals(unrecognizedPropertyValue, value);
+    assertNull(notExistingProperty);
+  }
+
+  @Test
+  public void noUnrecognizedProperties() throws Exception {
+    JsonObject directionsResponseJson = readJsonObject(DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS);
+    DirectionsResponse response = DirectionsResponse.fromJson(directionsResponseJson.toString());
+
+    JsonElement value = response.getUnrecognizedProperty("");
+    Set<String> propertiesNames = response.getUnrecognizedPropertiesNames();
+
+    assertNull(value);
+    assertEquals(0, propertiesNames.size());
+  }
+
+  @Test
+  public void getUnrecognizedPropertiesNames() throws Exception {
+    JsonObject directionsResponseJson = readJsonObject(DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS);
+    directionsResponseJson.add("1", new JsonPrimitive(1));
+    directionsResponseJson.add("2", new JsonPrimitive(2));
+    directionsResponseJson.add("3", new JsonPrimitive(3));
+    DirectionsResponse response = DirectionsResponse.fromJson(directionsResponseJson.toString());
+
+    Set<String> properties = response.getUnrecognizedPropertiesNames();
+
+    assertEquals(3, properties.size());
+    assertTrue(properties.contains("1"));
+    assertTrue(properties.contains("2"));
+    assertTrue(properties.contains("3"));
   }
 
   @Test
@@ -157,5 +201,10 @@ public class DirectionsResponseTest extends TestUtils {
     DirectionsResponse deserialized = DirectionsResponse.fromJson(serialized);
 
     assertEquals(initial, deserialized);
+  }
+
+  private JsonObject readJsonObject(String file) throws IOException {
+    Gson gson = new GsonBuilder().create();
+    return gson.fromJson(loadJsonFixture(file), JsonObject.class);
   }
 }
