@@ -37,7 +37,7 @@ public abstract class DirectionsJsonObject implements Serializable {
   }
 
   /**
-   * Access JSON property that wasn't recognized during JSON serialization.
+   * Use this method to access JSON property that wasn't recognized during JSON serialization.
    * This may be useful to access experimental properties.
    * @param propertyName name of a json property
    * @return value of a requested property or null if the requested property doesn't exist.
@@ -56,7 +56,7 @@ public abstract class DirectionsJsonObject implements Serializable {
   }
 
   /**
-   * Get names of unrecognized JSON properties.
+   * Use this method to get names of unrecognized JSON properties.
    * @return names of unrecognized JSON properties or an empty set
    */
   @NonNull
