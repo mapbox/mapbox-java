@@ -8,7 +8,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 
-
 /**
  * An objects describing the administrative boundaries the route leg travels through.
  */
