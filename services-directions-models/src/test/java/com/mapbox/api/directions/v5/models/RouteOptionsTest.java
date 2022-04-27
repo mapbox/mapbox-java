@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -646,14 +647,8 @@ public class RouteOptionsTest extends TestUtils {
     URL url = routeOptions.toUrl("test");
     String query = url.getQuery();
 
-    assertTrue(
-      "url doesn't contain requested parameter" + query.toString(),
-      query.contains("testName=testValue")
-    );
-    assertTrue(
-      "url doesn't contain requested parameter" + query.toString(),
-      query.contains("testName2=true")
-    );
+    assertContains(query, "testName=testValue");
+    assertContains(query, "testName2=true");
   }
 
   @Test
@@ -672,34 +667,21 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
-  public void unrecognizedOptionsFromJsonToUrl() throws IOException {
-    Gson gson = new GsonBuilder().create();
-    JsonObject routeOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
-    routeOptionsJson.add("testString", new JsonPrimitive("string"));
-    routeOptionsJson.add("testBoolean", new JsonPrimitive(false));
-    routeOptionsJson.add("testInteger", new JsonPrimitive(88));
-    routeOptionsJson.add("testDouble", new JsonPrimitive(36.6));
-    JsonArray testArray = new JsonArray();
-    testArray.add(1);
-    testArray.add(2.5);
-    testArray.add(false);
-    routeOptionsJson.add("testArray", testArray);
-    JsonObject testObject = new JsonObject();
-    testObject.add("testField", new JsonPrimitive("a"));
-    routeOptionsJson.add("testObject", testObject);
-    RouteOptions routeOptions = RouteOptions.fromJson(routeOptionsJson.toString());
+  public void unrecognizedOptionsFromJsonToUrl() {
+    RouteOptions sourceRouteOptions = routeOptions().toBuilder()
+      .unrecognizedProperties(new LinkedHashMap<String, String>(){{
+        put("test1", "1");
+        put("test2", "2");
+      }})
+    .build();
 
-    String query = routeOptions.toUrl("testToken").getQuery();
-    assertContains(query, "testString=string");
-    assertContains(query, "testBoolean=false");
-    assertContains(query, "testInteger=88");
-    assertContains(query, "testDouble=36.6");
-    assertDoesNotContain(query, "testArray");
-    assertDoesNotContain(query, "testObject");
+    RouteOptions routeOptions = RouteOptions.fromUrl(sourceRouteOptions.toUrl("testToken"));
+
+    assertEquals(sourceRouteOptions, routeOptions);
   }
 
   @Test
-  public void allUnrecognisedPropertiesSurviveToFromJson() throws IOException {
+  public void allUnrecognisedPropertiesSurviveDuringToFromJson() throws IOException {
     Gson gson = new GsonBuilder().create();
     JsonObject mutatedRouteOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
     MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
@@ -710,17 +692,13 @@ public class RouteOptionsTest extends TestUtils {
     assertEquals(mutatedRouteOptionsJson, deserializedRouteOptions);
   }
 
-  @Test
-  public void someUnrecognisedPropertiesDoNotSurviveToFromUrl() throws IOException {
+  @Test(expected = IllegalStateException.class)
+  public void routeOptionsWithUnrecognizedObjectsAndArrays() throws IOException {
     Gson gson = new GsonBuilder().create();
     JsonObject mutatedRouteOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
     MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
 
-    URL routeOptionsUrl = RouteOptions.fromJson(mutatedRouteOptionsJson.toString()).toUrl("testToken");
-    RouteOptions routeOptionsFromUrl = RouteOptions.fromUrl(routeOptionsUrl);
-    JsonObject deserializedRouteOptionsUrl = gson.fromJson(routeOptionsFromUrl.toJson(), JsonObject.class);
-
-    assertNotEquals(mutatedRouteOptionsJson, deserializedRouteOptionsUrl);
+    RouteOptions.fromJson(mutatedRouteOptionsJson.toString()).toUrl("testToken");
   }
 
   @Test

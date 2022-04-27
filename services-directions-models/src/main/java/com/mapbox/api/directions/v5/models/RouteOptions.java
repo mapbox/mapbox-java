@@ -1044,6 +1044,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
         JsonElement element = entry.getValue().getElement();
         if (element.isJsonPrimitive()) {
           sb.append(String.format("&%s=%s", entry.getKey(), element.getAsString()));
+        } else {
+          throw new IllegalStateException(
+            String.format(
+              "RouteOptions.toUrl supports only primitive unrecognized properties. %s isn't a primitive value",
+              entry.getKey()
+            )
+          );
         }
       }
     }
