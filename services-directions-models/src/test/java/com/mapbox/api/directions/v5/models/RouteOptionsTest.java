@@ -652,6 +652,14 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void nullCustomRouteOptions() {
+    RouteOptions routeOptions = routeOptions().toBuilder()
+      .unrecognizedProperties(null)
+      .build();
+    assertEquals(0, routeOptions.getUnrecognizedPropertiesNames().size());
+  }
+
+  @Test
   public void readCustomRouteOptionsParamsFromUrl() throws MalformedURLException {
     String url = ROUTE_OPTIONS_URL + "&testString=test&testNumber=4.9&testBoolean=true";
 

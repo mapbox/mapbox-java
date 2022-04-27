@@ -2046,15 +2046,18 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * @param unrecognizedProperties parameters to add to request
      */
     @NonNull
-    public Builder unrecognizedProperties(Map<String, String> unrecognizedProperties) {
-      LinkedHashMap<String, SerializableJsonElement> mapped = new LinkedHashMap<>();
-      for (Map.Entry<String, String> entry : unrecognizedProperties.entrySet()) {
-        mapped.put(
-          entry.getKey(),
-          new SerializableJsonElement(new JsonPrimitive(entry.getValue()))
-        );
+    public Builder unrecognizedProperties(@Nullable Map<String, String> unrecognizedProperties) {
+      if (unrecognizedProperties != null) {
+        LinkedHashMap<String, SerializableJsonElement> mapped = new LinkedHashMap<>();
+        for (Map.Entry<String, String> entry : unrecognizedProperties.entrySet()) {
+          mapped.put(
+            entry.getKey(),
+            new SerializableJsonElement(new JsonPrimitive(entry.getValue()))
+          );
+        }
+        return unrecognized(mapped);
       }
-      return unrecognized(mapped);
+      return unrecognized(null);
     }
 
     /**
