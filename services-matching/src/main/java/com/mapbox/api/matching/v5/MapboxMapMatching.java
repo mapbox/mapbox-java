@@ -67,7 +67,7 @@ public abstract class MapboxMapMatching extends
   /**
    * Ignore other restrictions, such as time-based or turn restrictions.
    */
-  public static final String IGNORE_RESTRICTIONS = "oneways";
+  public static final String IGNORE_RESTRICTIONS = "restrictions";
 
   protected MapboxMapMatching() {
     super(MapMatchingService.class);

@@ -706,7 +706,11 @@ public class MapboxMapMatchingTest extends TestUtils {
       .coordinates(Arrays.asList(
           Point.fromLngLat(2.344003915786743,48.85805170891599),
           Point.fromLngLat(2.346750497817993,48.85727523615161)))
-      .addIgnore(MapboxMapMatching.IGNORE_ONEWAYS, MapboxMapMatching.IGNORE_ACCESS)
+      .addIgnore(
+        MapboxMapMatching.IGNORE_ONEWAYS,
+        MapboxMapMatching.IGNORE_ACCESS,
+        MapboxMapMatching.IGNORE_RESTRICTIONS
+      )
       .accessToken(ACCESS_TOKEN)
       .baseUrl(mockUrl.toString())
       .build();
@@ -716,8 +720,8 @@ public class MapboxMapMatchingTest extends TestUtils {
     assertEquals(200, response.code());
     assertEquals("Ok", response.body().code());
 
-    assertEquals("oneways,access", mapMatching.ignore());
-    assertEquals("oneways,access",
+    assertEquals("oneways,access,restrictions", mapMatching.ignore());
+    assertEquals("oneways,access,restrictions",
       mapMatching.cloneCall().request().url().queryParameter("ignore"));
   }
 
