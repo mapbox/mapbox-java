@@ -1,27 +1,32 @@
 package com.mapbox.api.directions.v5.models;
 
-import static com.google.gson.JsonParser.parseString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.utils.MutateJsonUtil;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
+import org.junit.Test;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
-import org.junit.Test;
+import static com.google.gson.JsonParser.parseString;
+import static com.mapbox.api.directions.v5.utils.Asserts.assertContains;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class RouteOptionsTest extends TestUtils {
   /**
@@ -620,6 +625,80 @@ public class RouteOptionsTest extends TestUtils {
       .build();
 
     assertNull(routeOptions.exclude());
+  }
+
+  @Test
+  public void putCustomRouteOptionsParamsToUrl() {
+    RouteOptions routeOptions = routeOptions().toBuilder()
+      .unrecognizedProperties(new HashMap<String, String>(){{
+        put("testName", "testValue");
+        put("testName2", "true");
+      }})
+      .build();
+
+    URL url = routeOptions.toUrl("test");
+    String query = url.getQuery();
+
+    assertContains(query, "testName=testValue");
+    assertContains(query, "testName2=true");
+  }
+
+  @Test
+  public void nullCustomRouteOptions() {
+    RouteOptions routeOptions = routeOptions().toBuilder()
+      .unrecognizedProperties(null)
+      .build();
+    assertEquals(0, routeOptions.getUnrecognizedPropertiesNames().size());
+  }
+
+  @Test
+  public void readCustomRouteOptionsParamsFromUrl() throws MalformedURLException {
+    String url = ROUTE_OPTIONS_URL + "&testString=test&testNumber=4.9&testBoolean=true";
+
+    RouteOptions routeOptions = RouteOptions.fromUrl(new URL(url));
+
+    Set<String> unrecognizedProperties = routeOptions.getUnrecognizedPropertiesNames();
+    assertContains(unrecognizedProperties, "testString");
+    assertEquals("test", routeOptions.getUnrecognizedProperty("testString").getAsString());
+    assertContains(unrecognizedProperties, "testNumber");
+    assertEquals(4.9, routeOptions.getUnrecognizedProperty("testNumber").getAsDouble(), 0);
+    assertContains(unrecognizedProperties, "testBoolean");
+    assertTrue(routeOptions.getUnrecognizedProperty("testBoolean").getAsBoolean());
+  }
+
+  @Test
+  public void unrecognizedOptionsFromJsonToUrl() {
+    RouteOptions sourceRouteOptions = routeOptions().toBuilder()
+      .unrecognizedProperties(new LinkedHashMap<String, String>(){{
+        put("test1", "1");
+        put("test2", "2");
+      }})
+    .build();
+
+    RouteOptions routeOptions = RouteOptions.fromUrl(sourceRouteOptions.toUrl("testToken"));
+
+    assertEquals(sourceRouteOptions, routeOptions);
+  }
+
+  @Test
+  public void allUnrecognizedPropertiesStaysAfterTransformingModelToJsonAndBack() throws IOException {
+    Gson gson = new GsonBuilder().create();
+    JsonObject mutatedRouteOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
+    MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
+
+    RouteOptions routeOptions = RouteOptions.fromJson(mutatedRouteOptionsJson.toString());
+    JsonObject deserializedRouteOptions = gson.fromJson(routeOptions.toJson(), JsonObject.class);
+
+    assertEquals(mutatedRouteOptionsJson, deserializedRouteOptions);
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void routeOptionsWithUnrecognizedObjectsAndArrays() throws IOException {
+    Gson gson = new GsonBuilder().create();
+    JsonObject mutatedRouteOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
+    MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
+
+    RouteOptions.fromJson(mutatedRouteOptionsJson.toString()).toUrl("testToken");
   }
 
   @Test
