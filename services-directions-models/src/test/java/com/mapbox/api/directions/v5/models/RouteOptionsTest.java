@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -624,7 +625,7 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
-  public void customRouteOptionsParams() {
+  public void putCustomRouteOptionsParamsToUrl() {
     RouteOptions routeOptions = routeOptions().toBuilder()
       .customFields(new HashMap<String, String>(){{
         put("testName", "testValue");
@@ -643,6 +644,21 @@ public class RouteOptionsTest extends TestUtils {
       "url doesn't contain requested parameter" + query.toString(),
       query.contains("testName2=true")
     );
+  }
+
+  @Test
+  public void readCustomRouteOptionsParamsFromUrl() throws MalformedURLException {
+    String url = ROUTE_OPTIONS_URL + "&testString=test&testNumber=4.9&testBoolean=true";
+
+    RouteOptions routeOptions = RouteOptions.fromUrl(new URL(url));
+
+    Set<String> unrecognisedProperties = routeOptions.getUnrecognizedPropertiesNames();
+    assertContains(unrecognisedProperties, "testString");
+    assertEquals("test", routeOptions.getUnrecognizedProperty("testString").getAsString());
+    assertContains(unrecognisedProperties, "testNumber");
+    assertEquals(4.9, routeOptions.getUnrecognizedProperty("testNumber").getAsDouble(), 0);
+    assertContains(unrecognisedProperties, "testBoolean");
+    assertTrue(routeOptions.getUnrecognizedProperty("testBoolean").getAsBoolean());
   }
 
   @Test
@@ -823,5 +839,12 @@ public class RouteOptionsTest extends TestUtils {
           .build()
       )
       .build();
+  }
+
+  private <T> void assertContains(Set<T> set, T object) {
+    assertTrue(
+      "Set doesn't contain an object " + object.toString() + ", set: " + set.toString(),
+      set.contains(object)
+    );
   }
 }
