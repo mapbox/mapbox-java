@@ -5,6 +5,7 @@ import static com.mapbox.api.directions.v5.utils.Asserts.assertContains;
 import static com.mapbox.api.directions.v5.utils.Asserts.assertDoesNotContain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -20,6 +21,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.utils.MutateJsonUtil;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
@@ -694,6 +696,31 @@ public class RouteOptionsTest extends TestUtils {
     assertContains(query, "testDouble=36.6");
     assertDoesNotContain(query, "testArray");
     assertDoesNotContain(query, "testObject");
+  }
+
+  @Test
+  public void allUnrecognisedPropertiesSurviveToFromJson() throws IOException {
+    Gson gson = new GsonBuilder().create();
+    JsonObject mutatedRouteOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
+    MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
+
+    RouteOptions routeOptions = RouteOptions.fromJson(mutatedRouteOptionsJson.toString());
+    JsonObject deserializedRouteOptions = gson.fromJson(routeOptions.toJson(), JsonObject.class);
+
+    assertEquals(mutatedRouteOptionsJson, deserializedRouteOptions);
+  }
+
+  @Test
+  public void someUnrecognisedPropertiesDoNotSurviveToFromUrl() throws IOException {
+    Gson gson = new GsonBuilder().create();
+    JsonObject mutatedRouteOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
+    MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
+
+    URL routeOptionsUrl = RouteOptions.fromJson(mutatedRouteOptionsJson.toString()).toUrl("testToken");
+    RouteOptions routeOptionsFromUrl = RouteOptions.fromUrl(routeOptionsUrl);
+    JsonObject deserializedRouteOptionsUrl = gson.fromJson(routeOptionsFromUrl.toJson(), JsonObject.class);
+
+    assertNotEquals(mutatedRouteOptionsJson, deserializedRouteOptionsUrl);
   }
 
   @Test
