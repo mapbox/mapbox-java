@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Test;
@@ -620,6 +621,28 @@ public class RouteOptionsTest extends TestUtils {
       .build();
 
     assertNull(routeOptions.exclude());
+  }
+
+  @Test
+  public void customRouteOptionsParams() {
+    RouteOptions routeOptions = routeOptions().toBuilder()
+      .customFields(new HashMap<String, String>(){{
+        put("testName", "testValue");
+        put("testName2", "true");
+      }})
+      .build();
+
+    URL url = routeOptions.toUrl("test");
+    String query = url.getQuery();
+
+    assertTrue(
+      "url doesn't contain requested parameter" + query.toString(),
+      query.contains("testName=testValue")
+    );
+    assertTrue(
+      "url doesn't contain requested parameter" + query.toString(),
+      query.contains("testName2=true")
+    );
   }
 
   @Test

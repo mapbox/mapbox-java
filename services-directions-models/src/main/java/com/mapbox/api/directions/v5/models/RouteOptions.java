@@ -6,13 +6,16 @@ import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
+import com.mapbox.auto.value.gson.SerializableJsonElement;
 import com.mapbox.geojson.Point;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -20,7 +23,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Defines route request parameters.
@@ -1034,6 +1039,12 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     if (metadata() != null) {
       sb.append(String.format("&metadata=%s", metadata()));
     }
+    if (unrecognized() != null) {
+      for (Map.Entry<String, SerializableJsonElement> entry : unrecognized().entrySet()) {
+        JsonElement element = entry.getValue().getElement();
+        sb.append(String.format("&%s=%s", entry.getKey(), element.getAsString()));
+      }
+    }
 
     // experimental
     if (experimental() != null) {
@@ -2018,6 +2029,15 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder experimental(@Nullable Experimental experimental);
+
+    @NonNull
+    public Builder customFields(Map<String, String> customFields) {
+      LinkedHashMap<String, SerializableJsonElement> mapped = new LinkedHashMap<>();
+      for (Map.Entry<String, String> entry : customFields.entrySet()) {
+        mapped.put(entry.getKey(), new SerializableJsonElement(new JsonPrimitive(entry.getValue())));
+      }
+      return unrecognized(mapped);
+    }
 
     /**
      * Builds the object.
