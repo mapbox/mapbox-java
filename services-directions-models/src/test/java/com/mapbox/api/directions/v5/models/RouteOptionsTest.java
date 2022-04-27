@@ -689,7 +689,7 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
-  public void allUnrecognisedPropertiesSurviveDuringToFromJson() throws IOException {
+  public void allUnrecognizedPropertiesStaysAfterTransformingModelToJsonAndBack() throws IOException {
     Gson gson = new GsonBuilder().create();
     JsonObject mutatedRouteOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
     MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
