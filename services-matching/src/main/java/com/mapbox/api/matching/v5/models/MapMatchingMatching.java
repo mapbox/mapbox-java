@@ -191,6 +191,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder distance(double distance);
 
     /**
@@ -200,6 +201,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder duration(double duration);
 
     /**
@@ -209,6 +211,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder geometry(@Nullable String geometry);
 
     /**
@@ -218,6 +221,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder weight(double weight);
 
     /**
@@ -229,6 +233,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder weightName(String weightName);
 
     /**
@@ -238,6 +243,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder legs(List<RouteLeg> legs);
 
     /**
@@ -247,6 +253,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder confidence(double confidence);
 
     /**
@@ -257,6 +264,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder routeOptions(@Nullable RouteOptions routeOptions);
 
     /**
@@ -269,6 +277,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return this builder for chaining options together
      * @since 3.4.0
      */
+    @NonNull
     public abstract Builder voiceLanguage(@Nullable String voiceLanguage);
 
     /**
@@ -295,6 +304,7 @@ public abstract class MapMatchingMatching implements Serializable {
      * @return a new {@link MapMatchingMatching} using the provided values in this builder
      * @since 3.0.0
      */
+    @NonNull
     public abstract MapMatchingMatching build();
   }
 }

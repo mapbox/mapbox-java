@@ -62,6 +62,7 @@ public interface MapMatchingService {
    * @param waypointIndices    which input coordinates should be treated as waypoints/separate legs.
    *                           Note: coordinate indices not added here act as silent waypoints
    * @param waypointNames      custom names for waypoints used for the arrival instruction.
+   * @param ignore             ignore certain routing restrictions when map matching.
    * @param approaches         which side of the road to approach a waypoint.
    * @return the MapMatchingResponse in a Call wrapper
    * @since 2.0.0
@@ -87,6 +88,7 @@ public interface MapMatchingService {
     @Query("voice_units") String voiceUnits,
     @Query("waypoints") String waypointIndices,
     @Query("waypoint_names") String waypointNames,
+    @Query("ignore") String ignore,
     @Query("approaches") String approaches);
 
 
@@ -134,6 +136,7 @@ public interface MapMatchingService {
    * @param waypointIndices    which input coordinates should be treated as waypoints/separate legs.
    *                           Note: coordinate indices not added here act as silent waypoints
    * @param waypointNames      custom names for waypoints used for the arrival instruction.
+   * @param ignore             ignore certain routing restrictions when map matching.
    * @param approaches         which side of the road to approach a waypoint.
    * @return the MapMatchingResponse in a Call wrapper
    * @since 4.4.0
@@ -160,5 +163,6 @@ public interface MapMatchingService {
           @Field("voice_units") String voiceUnits,
           @Field("waypoints") String waypointIndices,
           @Field("waypoint_names") String waypointNames,
+          @Field("ignore") String ignore,
           @Field("approaches") String approaches);
 }
