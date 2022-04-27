@@ -657,12 +657,12 @@ public class RouteOptionsTest extends TestUtils {
 
     RouteOptions routeOptions = RouteOptions.fromUrl(new URL(url));
 
-    Set<String> unrecognisedProperties = routeOptions.getUnrecognizedPropertiesNames();
-    assertContains(unrecognisedProperties, "testString");
+    Set<String> unrecognizedProperties = routeOptions.getUnrecognizedPropertiesNames();
+    assertContains(unrecognizedProperties, "testString");
     assertEquals("test", routeOptions.getUnrecognizedProperty("testString").getAsString());
-    assertContains(unrecognisedProperties, "testNumber");
+    assertContains(unrecognizedProperties, "testNumber");
     assertEquals(4.9, routeOptions.getUnrecognizedProperty("testNumber").getAsDouble(), 0);
-    assertContains(unrecognisedProperties, "testBoolean");
+    assertContains(unrecognizedProperties, "testBoolean");
     assertTrue(routeOptions.getUnrecognizedProperty("testBoolean").getAsBoolean());
   }
 
