@@ -1047,7 +1047,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
         } else {
           throw new IllegalStateException(
             String.format(
-              "RouteOptions.toUrl supports only primitive unrecognized properties. %s isn't a primitive value",
+              "RouteOptions.toUrl supports only primitive unrecognized properties."
+                + "%s isn't a primitive value.",
               entry.getKey()
             )
           );
