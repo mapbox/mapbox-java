@@ -119,7 +119,7 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   /**
    * A list of closures that occur on this leg.
    *
-   * @return a list of {@link Incident}
+   * @return a list of {@link Closure}
    */
   @Nullable
   public abstract List<Closure> closures();
