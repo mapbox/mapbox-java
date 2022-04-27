@@ -1042,7 +1042,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     if (unrecognized() != null) {
       for (Map.Entry<String, SerializableJsonElement> entry : unrecognized().entrySet()) {
         JsonElement element = entry.getValue().getElement();
-        sb.append(String.format("&%s=%s", entry.getKey(), element.getAsString()));
+        if (element.isJsonPrimitive()) {
+          sb.append(String.format("&%s=%s", entry.getKey(), element.getAsString()));
+        }
       }
     }
 

@@ -1,7 +1,10 @@
 package com.mapbox.api.directions.v5.models;
 
 import static com.google.gson.JsonParser.parseString;
+import static com.mapbox.api.directions.v5.utils.Asserts.assertContains;
+import static com.mapbox.api.directions.v5.utils.Asserts.assertDoesNotContain;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -9,7 +12,13 @@ import static org.junit.Assert.assertTrue;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
@@ -661,6 +670,33 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void unrecognizedOptionsFromJsonToUrl() throws IOException {
+    Gson gson = new GsonBuilder().create();
+    JsonObject routeOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
+    routeOptionsJson.add("testString", new JsonPrimitive("string"));
+    routeOptionsJson.add("testBoolean", new JsonPrimitive(false));
+    routeOptionsJson.add("testInteger", new JsonPrimitive(88));
+    routeOptionsJson.add("testDouble", new JsonPrimitive(36.6));
+    JsonArray testArray = new JsonArray();
+    testArray.add(1);
+    testArray.add(2.5);
+    testArray.add(false);
+    routeOptionsJson.add("testArray", testArray);
+    JsonObject testObject = new JsonObject();
+    testObject.add("testField", new JsonPrimitive("a"));
+    routeOptionsJson.add("testObject", testObject);
+    RouteOptions routeOptions = RouteOptions.fromJson(routeOptionsJson.toString());
+
+    String query = routeOptions.toUrl("testToken").getQuery();
+    assertContains(query, "testString=string");
+    assertContains(query, "testBoolean=false");
+    assertContains(query, "testInteger=88");
+    assertContains(query, "testDouble=36.6");
+    assertDoesNotContain(query, "testArray");
+    assertDoesNotContain(query, "testObject");
+  }
+
+  @Test
   public void emptyExcludeObjectsCleansUpExcludes() {
     RouteOptions routeOptions = routeOptions().toBuilder()
       .excludeObject(
@@ -838,12 +874,5 @@ public class RouteOptionsTest extends TestUtils {
           .build()
       )
       .build();
-  }
-
-  private <T> void assertContains(Set<T> set, T object) {
-    assertTrue(
-      "Set doesn't contain an object " + object.toString() + ", set: " + set.toString(),
-      set.contains(object)
-    );
   }
 }
