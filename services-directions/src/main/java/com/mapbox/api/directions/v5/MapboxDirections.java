@@ -320,6 +320,7 @@ public abstract class MapboxDirections extends
      * The options defined here reflect
      * <a href="https://www.mapbox.com/api-documentation/navigation/#directions">Directions API
      * documentation</a>.
+     * Warning: `MapboxDirections` doesn't support unrecognized properties from `RouteOptions`.
      *
      * @param routeOptions route request options
      * @return this builder for chaining options together
