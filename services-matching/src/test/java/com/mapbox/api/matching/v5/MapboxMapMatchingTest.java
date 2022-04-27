@@ -700,6 +700,32 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
   @Test
+  public void testIgnore() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
+      .coordinates(Arrays.asList(
+          Point.fromLngLat(2.344003915786743,48.85805170891599),
+          Point.fromLngLat(2.346750497817993,48.85727523615161)))
+      .addIgnore(
+        MapboxMapMatching.IGNORE_ONEWAYS,
+        MapboxMapMatching.IGNORE_ACCESS,
+        MapboxMapMatching.IGNORE_RESTRICTIONS
+      )
+      .accessToken(ACCESS_TOKEN)
+      .baseUrl(mockUrl.toString())
+      .build();
+
+    mapMatching.setCallFactory(null);
+    Response<MapMatchingResponse> response = mapMatching.executeCall();
+    assertEquals(200, response.code());
+    assertEquals("Ok", response.body().code());
+
+    assertEquals("oneways,access,restrictions", mapMatching.ignore());
+    assertEquals("oneways,access,restrictions",
+      mapMatching.cloneCall().request().url().queryParameter("ignore"));
+  }
+
+  @Test
   public void testUsePostMethod() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
         .accessToken(ACCESS_TOKEN)

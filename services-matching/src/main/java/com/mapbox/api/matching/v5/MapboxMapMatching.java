@@ -4,6 +4,7 @@ import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.GsonBuilder;
@@ -25,6 +26,10 @@ import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +53,21 @@ import retrofit2.Response;
 @AutoValue
 public abstract class MapboxMapMatching extends
   MapboxService<MapMatchingResponse, MapMatchingService> {
+
+  /**
+   * Ignore access restrictions related to mode of travel.
+   */
+  public static final String IGNORE_ACCESS = "access";
+
+  /**
+   * Ignore one-way restrictions.
+   */
+  public static final String IGNORE_ONEWAYS = "oneways";
+
+  /**
+   * Ignore other restrictions, such as time-based or turn restrictions.
+   */
+  public static final String IGNORE_RESTRICTIONS = "restrictions";
 
   protected MapboxMapMatching() {
     super(MapMatchingService.class);
@@ -102,6 +122,7 @@ public abstract class MapboxMapMatching extends
       voiceUnits(),
       waypointIndices(),
       waypointNames(),
+      ignore(),
       approaches());
   }
 
@@ -126,6 +147,7 @@ public abstract class MapboxMapMatching extends
       voiceUnits(),
       waypointIndices(),
       waypointNames(),
+      ignore(),
       approaches());
   }
 
@@ -233,6 +255,9 @@ public abstract class MapboxMapMatching extends
   abstract String waypointNames();
 
   @Nullable
+  abstract String ignore();
+
+  @Nullable
   abstract String approaches();
 
   @NonNull
@@ -268,6 +293,7 @@ public abstract class MapboxMapMatching extends
     private Integer[] waypointIndices;
     private String[] waypointNames;
     private String[] approaches;
+    private String[] ignores;
 
     /**
      * Use POST method to request data.
@@ -276,6 +302,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 4.4.0
      */
+    @NonNull
     public Builder post() {
       usePostMethod(true);
       return this;
@@ -287,11 +314,14 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 4.4.0
      */
+    @NonNull
     public Builder get() {
       usePostMethod(false);
       return this;
     }
 
+
+    @NonNull
     abstract Builder usePostMethod(@NonNull Boolean usePost);
 
     /**
@@ -303,6 +333,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 2.1.0
      */
+    @NonNull
     public abstract Builder accessToken(@NonNull String accessToken);
 
     /**
@@ -314,6 +345,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder tidy(@Nullable Boolean tidy);
 
     /**
@@ -325,6 +357,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 2.1.0
      */
+    @NonNull
     public abstract Builder user(@NonNull String user);
 
     /**
@@ -336,6 +369,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 2.1.0
      */
+    @NonNull
     public abstract Builder profile(@NonNull @ProfileCriteria String profile);
 
     /**
@@ -353,6 +387,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 2.0.0
      */
+    @NonNull
     public abstract Builder geometries(@NonNull @GeometriesCriteria String geometries);
 
     /**
@@ -368,12 +403,14 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 1.0.0
      */
+    @NonNull
     public Builder radiuses(@Nullable @FloatRange(from = 0) Double... radiuses) {
       this.radiuses = radiuses;
       return this;
     }
 
     // Required for matching with MapboxMapMatching radiuses() method.
+    @NonNull
     abstract Builder radiuses(@Nullable String radiuses);
 
 
@@ -392,6 +429,7 @@ public abstract class MapboxMapMatching extends
      * @deprecated you should now use {@link #waypointIndices(Integer[])}
      */
     @Deprecated
+    @NonNull
     public Builder waypoints(@Nullable @IntRange(from = 0) Integer... waypoints) {
       this.waypointIndices = waypoints;
       return this;
@@ -411,11 +449,13 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public Builder waypointIndices(@Nullable @IntRange(from = 0) Integer... waypointIndices) {
       this.waypointIndices = waypointIndices;
       return this;
     }
 
+    @NonNull
     abstract Builder waypointIndices(@Nullable String waypointIndices);
 
     /**
@@ -431,6 +471,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 1.0.0
      */
+    @NonNull
     public abstract Builder steps(@Nullable Boolean steps);
 
     /**
@@ -444,6 +485,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 1.0.0
      */
+    @NonNull
     public abstract Builder overview(@Nullable @OverviewCriteria String overview);
 
     /**
@@ -458,6 +500,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder bannerInstructions(@Nullable Boolean bannerInstructions);
 
 
@@ -472,6 +515,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder voiceInstructions(@Nullable Boolean voiceInstructions);
 
     /**
@@ -482,6 +526,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder voiceUnits(
       @Nullable @DirectionsCriteria.VoiceUnitCriteria String voiceUnits
     );
@@ -497,6 +542,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public abstract Builder roundaboutExits(@Nullable Boolean roundaboutExits);
 
     /**
@@ -514,6 +560,7 @@ public abstract class MapboxMapMatching extends
      * documentation</a>
      * @since 2.1.0
      */
+    @NonNull
     public Builder annotations(@Nullable @AnnotationCriteria String... annotations) {
       this.annotations = annotations;
       return this;
@@ -521,6 +568,7 @@ public abstract class MapboxMapMatching extends
 
     // Required for matching with MapboxMapMatching annotations() method.
     @SuppressWarnings("WeakerAccess")
+    @NonNull
     protected abstract Builder annotations(@Nullable String annotations);
 
     /**
@@ -532,6 +580,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 2.1.0
      */
+    @NonNull
     public Builder timestamps(@Nullable String... timestamps) {
       this.timestamps = timestamps;
       return this;
@@ -539,6 +588,7 @@ public abstract class MapboxMapMatching extends
 
     // Required for matching with MapboxMapMatching timestamps() method.
     @SuppressWarnings("WeakerAccess")
+    @NonNull
     protected abstract Builder timestamps(@Nullable String timestamps);
 
     /**
@@ -551,6 +601,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 2.1.0
      */
+    @NonNull
     public Builder coordinates(@NonNull List<Point> coordinates) {
       this.coordinates.addAll(coordinates);
       return this;
@@ -558,6 +609,7 @@ public abstract class MapboxMapMatching extends
 
     // Required for matching with MapboxMapMatching coordinates() method.
     @SuppressWarnings("WeakerAccess")
+    @NonNull
     protected abstract Builder coordinates(@NonNull String coordinates);
 
     /**
@@ -569,6 +621,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.0.0
      */
+    @NonNull
     public Builder coordinate(@NonNull Point coordinate) {
       this.coordinates.add(coordinate);
       return this;
@@ -588,6 +641,7 @@ public abstract class MapboxMapMatching extends
      * Languages</a>
      * @since 3.0.0
      */
+    @NonNull
     public Builder language(@Nullable Locale language) {
       if (language != null) {
         language(language.getLanguage());
@@ -607,6 +661,7 @@ public abstract class MapboxMapMatching extends
      * Languages</a>
      * @since 2.2.0
      */
+    @NonNull
     public abstract Builder language(String language);
 
     /**
@@ -616,6 +671,7 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 1.0.0
      */
+    @NonNull
     public abstract Builder clientAppName(@NonNull String clientAppName);
 
     /**
@@ -634,11 +690,13 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.2.0
      */
+    @NonNull
     public Builder addApproaches(@Nullable String... approaches) {
       this.approaches = approaches;
       return this;
     }
 
+    @NonNull
     abstract Builder approaches(@Nullable String approaches);
 
     /**
@@ -651,12 +709,31 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 3.3.0
      */
+    @NonNull
     public Builder addWaypointNames(@Nullable String... waypointNames) {
       this.waypointNames = waypointNames;
       return this;
     }
 
+    @NonNull
     abstract Builder waypointNames(@Nullable String waypointNames);
+
+    /**
+     * Ignore certain routing restrictions when map matching.
+     * <p>
+     * This option is only available for the <strong>mapbox/driving profile</strong>.
+     *
+     * @param ignore routing restrictions
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public Builder addIgnore(@IgnoreScope @Nullable String... ignore) {
+      this.ignores = ignore;
+      return this;
+    }
+
+    @NonNull
+    abstract Builder ignore(@Nullable String ignore);
 
     /**
      * Optionally change the APIs base URL to something other then the default Mapbox one.
@@ -665,9 +742,11 @@ public abstract class MapboxMapMatching extends
      * @return this builder for chaining options together
      * @since 2.1.0
      */
+    @NonNull
     public abstract Builder baseUrl(String baseUrl);
 
     @SuppressWarnings("WeakerAccess")
+    @NonNull
     protected abstract MapboxMapMatching autoBuild();
 
     /**
@@ -679,6 +758,7 @@ public abstract class MapboxMapMatching extends
      * @throws ServicesException when a provided parameter is detected to be incorrect
      * @since 2.1.0
      */
+    @NonNull
     public MapboxMapMatching build() {
       if (coordinates == null || coordinates.size() < 2) {
         throw new ServicesException("At least two coordinates must be provided with your API"
@@ -732,6 +812,11 @@ public abstract class MapboxMapMatching extends
         approaches(formattedApproaches);
       }
 
+      if (ignores != null) {
+        String formattedIgnores = FormatUtils.join(",", Arrays.asList(ignores));
+        ignore(formattedIgnores);
+      }
+
       coordinates(formatCoordinates(coordinates));
       timestamps(TextUtils.join(";", timestamps));
       annotations(TextUtils.join(",", annotations));
@@ -757,5 +842,18 @@ public abstract class MapboxMapMatching extends
 
       return TextUtils.join(";", coordinatesFormatted.toArray());
     }
+  }
+
+  /**
+   * Ignore certain routing restrictions when map matching.
+   *
+   * @see <a href="https://docs.mapbox.com/api/navigation/map-matching/">MapMetching docs</a>
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef( {
+    IGNORE_ACCESS, IGNORE_RESTRICTIONS, IGNORE_ONEWAYS
+  })
+  @Target({ElementType.ANNOTATION_TYPE, ElementType.PARAMETER})
+  public @interface IgnoreScope {
   }
 }
