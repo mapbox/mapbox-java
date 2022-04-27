@@ -2031,7 +2031,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder experimental(@Nullable Experimental experimental);
 
     @NonNull
-    public Builder customFields(Map<String, String> customFields) {
+    public Builder unrecognizedProperties(Map<String, String> customFields) {
       LinkedHashMap<String, SerializableJsonElement> mapped = new LinkedHashMap<>();
       for (Map.Entry<String, String> entry : customFields.entrySet()) {
         mapped.put(entry.getKey(), new SerializableJsonElement(new JsonPrimitive(entry.getValue())));

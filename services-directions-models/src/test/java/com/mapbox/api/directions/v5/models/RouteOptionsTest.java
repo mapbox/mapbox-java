@@ -15,7 +15,6 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -627,7 +626,7 @@ public class RouteOptionsTest extends TestUtils {
   @Test
   public void putCustomRouteOptionsParamsToUrl() {
     RouteOptions routeOptions = routeOptions().toBuilder()
-      .customFields(new HashMap<String, String>(){{
+      .unrecognizedProperties(new HashMap<String, String>(){{
         put("testName", "testValue");
         put("testName2", "true");
       }})
