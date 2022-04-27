@@ -2032,11 +2032,19 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public abstract Builder experimental(@Nullable Experimental experimental);
 
+    /**
+     * Use this method to add request parameters which are not present in model yet but supported
+     * on the Directions API, for example experimental parameters.
+     * @param unrecognisedProperties parameters to add to request
+     */
     @NonNull
-    public Builder unrecognizedProperties(Map<String, String> customFields) {
+    public Builder unrecognizedProperties(Map<String, String> unrecognisedProperties) {
       LinkedHashMap<String, SerializableJsonElement> mapped = new LinkedHashMap<>();
-      for (Map.Entry<String, String> entry : customFields.entrySet()) {
-        mapped.put(entry.getKey(), new SerializableJsonElement(new JsonPrimitive(entry.getValue())));
+      for (Map.Entry<String, String> entry : unrecognisedProperties.entrySet()) {
+        mapped.put(
+          entry.getKey(),
+          new SerializableJsonElement(new JsonPrimitive(entry.getValue()))
+        );
       }
       return unrecognized(mapped);
     }
