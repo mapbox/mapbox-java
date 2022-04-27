@@ -1,7 +1,6 @@
 package com.mapbox.api.directions.v5;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import com.google.gson.Gson;
@@ -64,7 +63,6 @@ public class MapboxDirectionsTest extends TestUtils {
   private static final String DIRECTIONS_V5_POST = "directions_v5_post.json";
   private static final String ROUTE_OPTIONS_V5 = "route_options_v5.json";
   private static final String ROUTE_OPTIONS_ALTERNATIVES_V5 = "route_options_alternatives_v5.json";
-  private static final String DIRECTIONS_V5_EV_EXPERIMENTAL = "directions_v5_ev_experimental.json";
 
   private final TestDispatcher testDispatcher = new TestDispatcher();
   private MockWebServer server;
@@ -889,168 +887,6 @@ public class MapboxDirectionsTest extends TestUtils {
     } catch (InterruptedException e) {
       Assert.fail();
     }
-  }
-
-  @Test
-  public void ev_url_engine() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(directions.cloneCall().request().url().toString().contains("engine=electric"));
-  }
-
-  @Test
-  public void ev_url_ev_initial_charge() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(
-      directions.cloneCall().request().url().toString().contains("ev_initial_charge=80000"));
-  }
-
-  @Test
-  public void ev_url_ev_max_charge() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(directions.cloneCall().request().url().toString().contains("ev_max_charge=80000"));
-  }
-
-  @Test
-  public void ev_url_ev_connector_types() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(directions.cloneCall().request().url().toString()
-      .contains("ev_connector_types=ccs_combo_type1%2Cccs_combo_type2"));
-  }
-
-  @Test
-  public void ev_url_energy_consumption_curve() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(directions.cloneCall().request().url().toString()
-      .contains("energy_consumption_curve=0%2C300%3B20%2C160%3B80%2C140%3B120%2C180"));
-  }
-
-  @Test
-  public void ev_url_ev_ascent() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(
-      directions.cloneCall().request().url().toString().contains("ev_ascent=5"));
-  }
-
-  @Test
-  public void ev_url_ev_descent() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(
-      directions.cloneCall().request().url().toString().contains("ev_descent=6"));
-  }
-
-  @Test
-  public void ev_url_ev_charging_curve() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(directions.cloneCall().request().url().toString()
-      .contains("ev_charging_curve=0%2C100000%3B40000%2C70000%3B60000%2C30000%3B80000%2C10000"));
-  }
-
-  @Test
-  public void ev_url_ev_max_ac_charging_power() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(
-      directions.cloneCall().request().url().toString().contains("ev_max_ac_charging_power=1"));
-  }
-
-  @Test
-  public void ev_url_ev_min_charge_at_destination() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(directions.cloneCall().request().url().toString()
-      .contains("ev_min_charge_at_destination=2"));
-  }
-
-  @Test
-  public void ev_url_ev_min_charge_at_charging_station() throws Exception {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-
-    assertTrue(directions.cloneCall().request().url().toString()
-      .contains("ev_min_charge_at_charging_station=3"));
-  }
-
-  @Test
-  public void ev_response_waypoints_sanity() throws IOException {
-    testDispatcher.currentResource = DIRECTIONS_V5_EV_EXPERIMENTAL;
-    RouteOptions options = routeOptions
-      .toBuilder()
-      .baseUrl(mockUrl.toString())
-      .build();
-
-    MapboxDirections mapboxDirections = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(options)
-      .build();
-
-    Response<DirectionsResponse> response = mapboxDirections.executeCall();
-
-    assertEquals(4, response.body().waypoints().size());
-    assertEquals(
-      34711,
-      response.body().waypoints().get(1).experimentalMetadata().chargeTo().intValue()
-    );
-  }
-
-  @Test
-  public void ev_response_state_of_charge_annotation_sanity() throws IOException {
-    testDispatcher.currentResource = DIRECTIONS_V5_EV_EXPERIMENTAL;
-    RouteOptions options = routeOptions
-      .toBuilder()
-      .baseUrl(mockUrl.toString())
-      .build();
-
-    MapboxDirections mapboxDirections = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(options)
-      .build();
-
-    Response<DirectionsResponse> response = mapboxDirections.executeCall();
-
-    assertFalse(
-      response.body().routes().get(0).legs().get(0).annotation().experimentalStateOfCharge()
-        .isEmpty()
-    );
   }
 
   class TestDispatcher extends okhttp3.mockwebserver.Dispatcher {
