@@ -1,31 +1,18 @@
 package com.mapbox.api.directions.v5.models;
 
-import static com.google.gson.JsonParser.parseString;
-import static com.mapbox.api.directions.v5.utils.Asserts.assertContains;
-import static com.mapbox.api.directions.v5.utils.Asserts.assertDoesNotContain;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.MutateJsonUtil;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
+import org.junit.Test;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,7 +21,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
+import static com.google.gson.JsonParser.parseString;
+import static com.mapbox.api.directions.v5.utils.Asserts.assertContains;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class RouteOptionsTest extends TestUtils {
   /**
