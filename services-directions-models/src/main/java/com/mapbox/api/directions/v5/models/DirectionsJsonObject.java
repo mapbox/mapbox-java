@@ -37,8 +37,16 @@ public abstract class DirectionsJsonObject implements Serializable {
   }
 
   /**
-   * Use this method to access a JSON property that wasn't recognized during JSON serialization.
-   * This may be useful to access experimental properties.
+   * Use this method to access a JSON property that wasn't recognized during JSON serialization
+   * by the model. This may be useful to access experimental API properties.
+   * When an experimental API property becomes stable,
+   * it will eventually have static field in a model introduced
+   * and it won't be available via this dynamic method anymore.
+   *
+   * See
+   * <a href="https://docs.mapbox.com/api/navigation/directions/">Directions API documentation</a>
+   * for available experimental fields.
+   *
    * @param propertyName name of a json property
    * @return value of a requested property or null if the requested property doesn't exist.
    */
@@ -56,7 +64,17 @@ public abstract class DirectionsJsonObject implements Serializable {
   }
 
   /**
-   * Use this method to get names of unrecognized JSON properties.
+   * Use this method to get names of JSON properties that weren't recognized during JSON
+   * serialization by the model. This may be useful to access experimental API properties
+   * via {@link #getUnrecognizedProperty(String)}.
+   * When an experimental API property becomes stable,
+   * it will eventually have static field in a model introduced
+   * and it won't be available via this dynamic method anymore.
+   *
+   * See
+   * <a href="https://docs.mapbox.com/api/navigation/directions/">Directions API documentation</a>
+   * for available experimental fields.
+   *
    * @return names of unrecognized JSON properties or an empty set
    */
   @NonNull
