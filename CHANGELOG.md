@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `RestStop#name` field which contains a name of the service/rest area, when available. [#1428](https://github.com/mapbox/mapbox-java/pull/1428)
 
 ### v6.5.0-beta.3 - April 27, 2022
 - Added `ignore` parameter to Map Matching API. [#1424](https://github.com/mapbox/mapbox-java/pull/1424)

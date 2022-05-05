@@ -25,6 +25,12 @@ public abstract class RestStop extends DirectionsJsonObject {
   public abstract String type();
 
   /**
+   * The name of the rest stop. Optionally included if data is available.
+   */
+  @Nullable
+  public abstract String name();
+
+  /**
    * Create a new instance of this class by using the {@link Builder} class.
    *
    * @return this classes {@link Builder} for creating a new instance
@@ -79,6 +85,13 @@ public abstract class RestStop extends DirectionsJsonObject {
      * @param type rest stop type
      */
     public abstract Builder type(@Nullable String type);
+
+    /**
+     * The name of the rest stop. Optionally included if data is available.
+     *
+     * @param name rest stop name
+     */
+    public abstract Builder name(@Nullable String name);
 
     /**
      * Build a new {@link RestStop} object.
