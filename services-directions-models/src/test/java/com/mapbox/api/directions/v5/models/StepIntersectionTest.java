@@ -46,7 +46,7 @@ public class StepIntersectionTest extends TestUtils {
       .rawLocation(new double[]{13.426579, 52.508068})
       .geometryIndex(123)
       .isUrban(true)
-      .restStop(RestStop.builder().type("rest_area").build())
+      .restStop(RestStop.builder().type("rest_area").name("stop_name").build())
       .tollCollection(TollCollection.builder().type("toll_gantry").build())
       .adminIndex(2)
       .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
@@ -125,12 +125,13 @@ public class StepIntersectionTest extends TestUtils {
   public void testRestStop() {
     String stepIntersectionJsonString = "{"
     + "\"location\": [ 13.426579, 52.508068 ],"
-    + "\"rest_stop\": { \"type\": \"rest_area\" }"
+    + "\"rest_stop\": { \"type\": \"rest_area\", \"name\": \"stop_name\" }"
     + "}";
 
     StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
 
     Assert.assertEquals("rest_area", stepIntersection.restStop().type());
+    Assert.assertEquals("stop_name", stepIntersection.restStop().name());
     String jsonStr = stepIntersection.toJson();
     compareJson(stepIntersectionJsonString, jsonStr);
   }
