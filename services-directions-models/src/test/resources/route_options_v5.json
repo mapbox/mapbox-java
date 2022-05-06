@@ -22,7 +22,7 @@
   "voice_units": "metric",
   "approaches": ";curb;",
   "waypoints": "0;1;2",
-  "waypoint_names": "one;Serangoon Garden Market & Food Centre;",
+  "waypoint_names": ";Serangoon Garden Market & Food Centre;Funky &nAmE*",
   "waypoint_targets": ";12.2,21.2;",
   "snapping_include_closures": ";false;true",
   "alley_bias": 0.75,

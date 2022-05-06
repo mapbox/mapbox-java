@@ -1,5 +1,11 @@
 package com.mapbox.api.directions.v5.models;
 
+import static com.google.gson.JsonParser.parseString;
+import static com.mapbox.api.directions.v5.utils.Asserts.assertContains;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -8,8 +14,6 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.MutateJsonUtil;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,20 +24,15 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
-
-import static com.google.gson.JsonParser.parseString;
-import static com.mapbox.api.directions.v5.utils.Asserts.assertContains;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 public class RouteOptionsTest extends TestUtils {
   /**
    * Always update this file when new option is introduced.
    */
   private static final String ROUTE_OPTIONS_JSON = "route_options_v5.json";
-  private static final String ROUTE_OPTIONS_URL = "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=;unlimited;5.1&steps=true&avoid_maneuver_radius=200.0&bearings=0,90;90,0;&layers=-42;;0&continue_straight=false&annotations=congestion,distance,duration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll,ferry,point(11.0%20-22.0)&include=hot,hov2&approaches=;curb;&waypoints=0;1;2&waypoint_names=one;Serangoon%20Garden%20Market%20%26%20Food%20Centre;&waypoint_targets=;12.2,21.2;&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=;false;true&arrive_by=2021-01-01'T'01:01&depart_at=2021-02-02'T'02:02&max_height=1.5&max_width=1.4&metadata=true";
+  private static final String ROUTE_OPTIONS_URL =
+    "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=%3Bunlimited%3B5.1&steps=true&avoid_maneuver_radius=200.0&bearings=0%2C90%3B90%2C0%3B&layers=-42%3B%3B0&continue_straight=false&annotations=congestion%2Cdistance%2Cduration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll%2Cferry%2Cpoint%2811.0+-22.0%29&include=hot%2Chov2&approaches=%3Bcurb%3B&waypoints=0%3B1%3B2&waypoint_names=%3BSerangoon+Garden+Market+%26+Food+Centre%3BFunky+%26nAmE*&waypoint_targets=%3B12.2%2C21.2%3B&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=%3Bfalse%3Btrue&arrive_by=2021-01-01%27T%2701%3A01&depart_at=2021-02-02%27T%2702%3A02&max_height=1.5&max_width=1.4&metadata=true";
   private static final String ACCESS_TOKEN = "pk.token";
 
   private final String optionsJson = loadJsonFixture(ROUTE_OPTIONS_JSON);
@@ -241,7 +240,10 @@ public class RouteOptionsTest extends TestUtils {
   public void waypointNamesStringIsValid_fromJson() {
     RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
-    assertEquals("one;Serangoon Garden Market & Food Centre;", routeOptions.waypointNames());
+    assertEquals(
+      ";Serangoon Garden Market & Food Centre;Funky &nAmE*",
+      routeOptions.waypointNames()
+    );
   }
 
   @Test
@@ -422,7 +424,7 @@ public class RouteOptionsTest extends TestUtils {
   @Test
   public void routeOptionsWithDecodedChars_toUrlWithEncodedChars() {
     String expectedEncodedUrl =
-      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=my%20starting%20position;my%20destination";
+      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=%3BFunky+%26nAmE*";
     List<Point> coordinates = new ArrayList<>();
     coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
     coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
@@ -430,7 +432,7 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions options = RouteOptions.builder()
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinatesList(coordinates)
-      .waypointNames("my starting position;my destination")
+      .waypointNames(";Funky &nAmE*")
       .build();
 
     URL url = options.toUrl(ACCESS_TOKEN);
@@ -447,7 +449,7 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions expectedOptions = RouteOptions.builder()
       .profile(DirectionsCriteria.PROFILE_DRIVING)
       .coordinatesList(coordinates)
-      .waypointNames("my starting position;my destination")
+      .waypointNames("Funky &nAmE*;my destination")
       .build();
 
     URL url = expectedOptions.toUrl(ACCESS_TOKEN);
@@ -469,7 +471,8 @@ public class RouteOptionsTest extends TestUtils {
       .waypointNames("my starting position;my destination")
       .build();
 
-    String url = "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312%2C37.7736941;-122.4187529%2C37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=my%20starting%20position;my%20destination";
+    String url =
+      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312%2C37.7736941;-122.4187529%2C37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=my%20starting%20position;my%20destination";
 
     RouteOptions resultingOptions = RouteOptions.fromUrl(new URL(url));
 
@@ -479,7 +482,7 @@ public class RouteOptionsTest extends TestUtils {
   @Test
   public void routeOptionsWithUTF8Chars_toUrlWithEncodedChars() {
     String expectedEncodedUrl =
-      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=;%D0%A3%D0%BB%D0%B8%D1%86%D0%B0%20%D0%AF%D0%BD%D0%B0%20%D0%A7%D0%B5%D1%87%D0%BE%D1%82%D0%B0%207,%20Minsk%20220045,%20Belarus";
+      "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6&waypoint_names=%3B%D0%A3%D0%BB%D0%B8%D1%86%D0%B0+%D0%AF%D0%BD%D0%B0+%D0%A7%D0%B5%D1%87%D0%BE%D1%82%D0%B0+7%2C+Minsk+220045%2C+Belarus";
     List<Point> coordinates = new ArrayList<>();
     coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
     coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
@@ -511,8 +514,8 @@ public class RouteOptionsTest extends TestUtils {
 
     List<String> queryParameters = Arrays.asList(url.getQuery().split("&"));
     assertTrue(
-      "url doesn't contain excluded point: " + url.toString(),
-      queryParameters.contains("exclude=point(1.0%202.0)")
+      "url doesn't contain excluded point: " + url,
+      queryParameters.contains("exclude=point%281.0+2.0%29")
     );
   }
 
@@ -537,8 +540,8 @@ public class RouteOptionsTest extends TestUtils {
 
     List<String> queryParameters = Arrays.asList(url.getQuery().split("&"));
     assertTrue(
-      "url doesn't contain excluded point: " + url.toString(),
-      queryParameters.contains("exclude=point(1.0%202.0),point(6.03%208.07)")
+      "url doesn't contain excluded point: " + url,
+      queryParameters.contains("exclude=point%281.0+2.0%29%2Cpoint%286.03+8.07%29")
     );
   }
 
@@ -629,7 +632,7 @@ public class RouteOptionsTest extends TestUtils {
   @Test
   public void putCustomRouteOptionsParamsToUrl() {
     RouteOptions routeOptions = routeOptions().toBuilder()
-      .unrecognizedProperties(new HashMap<String, String>(){{
+      .unrecognizedProperties(new HashMap<String, String>() {{
         put("testName", "testValue");
         put("testName2", "true");
       }})
@@ -668,11 +671,11 @@ public class RouteOptionsTest extends TestUtils {
   @Test
   public void unrecognizedOptionsFromJsonToUrl() {
     RouteOptions sourceRouteOptions = routeOptions().toBuilder()
-      .unrecognizedProperties(new LinkedHashMap<String, String>(){{
+      .unrecognizedProperties(new LinkedHashMap<String, String>() {{
         put("test1", "1");
         put("test2", "2");
       }})
-    .build();
+      .build();
 
     RouteOptions routeOptions = RouteOptions.fromUrl(sourceRouteOptions.toUrl("testToken"));
 
@@ -680,9 +683,11 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
-  public void allUnrecognizedPropertiesStaysAfterTransformingModelToJsonAndBack() throws IOException {
+  public void allUnrecognizedPropertiesStaysAfterTransformingModelToJsonAndBack()
+    throws IOException {
     Gson gson = new GsonBuilder().create();
-    JsonObject mutatedRouteOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
+    JsonObject mutatedRouteOptionsJson =
+      gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
     MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
 
     RouteOptions routeOptions = RouteOptions.fromJson(mutatedRouteOptionsJson.toString());
@@ -694,7 +699,8 @@ public class RouteOptionsTest extends TestUtils {
   @Test(expected = IllegalStateException.class)
   public void routeOptionsWithUnrecognizedObjectsAndArrays() throws IOException {
     Gson gson = new GsonBuilder().create();
-    JsonObject mutatedRouteOptionsJson = gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
+    JsonObject mutatedRouteOptionsJson =
+      gson.fromJson(loadJsonFixture(ROUTE_OPTIONS_JSON), JsonObject.class);
     MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
 
     RouteOptions.fromJson(mutatedRouteOptionsJson.toString()).toUrl("testToken");
@@ -730,7 +736,8 @@ public class RouteOptionsTest extends TestUtils {
       .avoidManeuverRadius(200.0)
       .layers("-42;;0")
       .continueStraight(false)
-      .exclude(DirectionsCriteria.EXCLUDE_TOLL + "," + DirectionsCriteria.EXCLUDE_FERRY + ",point(11.0 -22.0)")
+      .exclude(DirectionsCriteria.EXCLUDE_TOLL + "," + DirectionsCriteria.EXCLUDE_FERRY +
+        ",point(11.0 -22.0)")
       .include(DirectionsCriteria.INCLUDE_HOT + "," + DirectionsCriteria.INCLUDE_HOV2)
       .geometries(DirectionsCriteria.GEOMETRY_POLYLINE6)
       .overview(DirectionsCriteria.OVERVIEW_FULL)
@@ -742,7 +749,7 @@ public class RouteOptionsTest extends TestUtils {
       .roundaboutExits(false)
       .voiceInstructions(true)
       .voiceUnits(DirectionsCriteria.METRIC)
-      .waypointNames("one;Serangoon Garden Market & Food Centre;")
+      .waypointNames(";Serangoon Garden Market & Food Centre;Funky &nAmE*")
       .waypointTargets(";12.2,21.2;")
       .waypointIndices("0;1;2")
       .alleyBias(0.75)
@@ -818,9 +825,9 @@ public class RouteOptionsTest extends TestUtils {
       .voiceInstructions(true)
       .voiceUnits(DirectionsCriteria.METRIC)
       .waypointNamesList(new ArrayList<String>() {{
-        add("one");
-        add("Serangoon Garden Market & Food Centre");
         add(null);
+        add("Serangoon Garden Market & Food Centre");
+        add("Funky &nAmE*");
       }})
       .waypointTargetsList(new ArrayList<Point>() {{
         add(null);
