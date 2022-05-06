@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `TollCollection#name` field which contains a name of the toll booth/gantry, when available. [#1432](https://github.com/mapbox/mapbox-java/pull/1432)
 
 ### v6.5.0-beta.4 - May 5, 2022
 - Added `RestStop#name` field which contains a name of the service/rest area, when available. [#1428](https://github.com/mapbox/mapbox-java/pull/1428)
