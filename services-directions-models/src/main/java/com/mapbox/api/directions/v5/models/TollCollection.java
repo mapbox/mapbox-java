@@ -28,6 +28,12 @@ public abstract class TollCollection extends DirectionsJsonObject {
   public abstract String type();
 
   /**
+   * The name of toll collection point. Optionally included if data is available.
+   */
+  @Nullable
+  public abstract String name();
+
+  /**
    * Create a new instance of this class by using the {@link Builder} class.
    *
    * @return this classes {@link Builder} for creating a new instance
@@ -81,6 +87,13 @@ public abstract class TollCollection extends DirectionsJsonObject {
      * @param type toll collection type
      */
     public abstract Builder type(@Nullable String type);
+
+    /**
+     * The name of toll collection point. Optionally included if data is available.
+     *
+     * @param name toll collection name
+     */
+    public abstract Builder name(@Nullable String name);
 
     /**
      * Build a new {@link TollCollection} object.
