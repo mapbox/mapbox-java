@@ -19,10 +19,9 @@ import com.mapbox.auto.value.gson.SerializableJsonElement;
 import com.mapbox.geojson.Point;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -232,8 +231,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * to differentiate them.
    * <p>
    * If provided, the list of layers must be the same length as the list of coordinates.
+   *
    * @return a string representing the layers with the ; separator. Each value may be negative
-  or absent.
+   *   or absent.
    */
   @Nullable
   public abstract String layers();
@@ -871,7 +871,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     String baseUrl = url.getProtocol() + "://" + url.getHost();
     int port = url.getPort();
     if (port != -1) {
-      baseUrl +=  ":" + port;
+      baseUrl += ":" + port;
     }
     optionsJson.addProperty("baseUrl", baseUrl);
 
@@ -921,101 +921,43 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       .append(String.format("?%s=%s", ACCESS_TOKEN_URL_PARAM_NAME, accessToken))
       .append(String.format("&geometries=%s", geometries()));
 
-    if (alternatives() != null) {
-      sb.append(String.format("&alternatives=%s", alternatives()));
-    }
-    if (overview() != null) {
-      sb.append(String.format("&overview=%s", overview()));
-    }
-    if (radiuses() != null) {
-      sb.append(String.format("&radiuses=%s", radiuses()));
-    }
-    if (steps() != null) {
-      sb.append(String.format("&steps=%s", steps()));
-    }
-    if (avoidManeuverRadius() != null) {
-      sb.append(String.format("&avoid_maneuver_radius=%s", avoidManeuverRadius()));
-    }
-    if (bearings() != null) {
-      sb.append(String.format("&bearings=%s", bearings()));
-    }
-    if (layers() != null) {
-      sb.append(String.format("&layers=%s", layers()));
-    }
-    if (continueStraight() != null) {
-      sb.append(String.format("&continue_straight=%s", continueStraight()));
-    }
-    if (annotations() != null) {
-      sb.append(String.format("&annotations=%s", annotations()));
-    }
-    if (language() != null) {
-      sb.append(String.format("&language=%s", language()));
-    }
-    if (roundaboutExits() != null) {
-      sb.append(String.format("&roundabout_exits=%s", roundaboutExits()));
-    }
-    if (voiceInstructions() != null) {
-      sb.append(String.format("&voice_instructions=%s", voiceInstructions()));
-    }
-    if (bannerInstructions() != null) {
-      sb.append(String.format("&banner_instructions=%s", bannerInstructions()));
-    }
-    if (voiceUnits() != null) {
-      sb.append(String.format("&voice_units=%s", voiceUnits()));
-    }
-    if (exclude() != null) {
-      sb.append(String.format("&exclude=%s", exclude()));
-    }
-    if (include() != null) {
-      sb.append(String.format("&include=%s", include()));
-    }
-    if (approaches() != null) {
-      sb.append(String.format("&approaches=%s", approaches()));
-    }
-    if (waypointIndices() != null) {
-      sb.append(String.format("&waypoints=%s", waypointIndices()));
-    }
-    if (waypointNames() != null) {
-      sb.append(String.format("&waypoint_names=%s", waypointNames()));
-    }
-    if (waypointTargets() != null) {
-      sb.append(String.format("&waypoint_targets=%s", waypointTargets()));
-    }
-    if (enableRefresh() != null) {
-      sb.append(String.format("&enable_refresh=%s", enableRefresh()));
-    }
-    if (walkingSpeed() != null) {
-      sb.append(String.format("&walking_speed=%s", walkingSpeed()));
-    }
-    if (walkwayBias() != null) {
-      sb.append(String.format("&walkway_bias=%s", walkwayBias()));
-    }
-    if (alleyBias() != null) {
-      sb.append(String.format("&alley_bias=%s", alleyBias()));
-    }
-    if (snappingIncludeClosures() != null) {
-      sb.append(String.format("&snapping_include_closures=%s", snappingIncludeClosures()));
-    }
-    if (arriveBy() != null) {
-      sb.append(String.format("&arrive_by=%s", arriveBy()));
-    }
-    if (departAt() != null) {
-      sb.append(String.format("&depart_at=%s", departAt()));
-    }
-    if (maxHeight() != null) {
-      sb.append(String.format("&max_height=%s", maxHeight()));
-    }
-    if (maxWidth() != null) {
-      sb.append(String.format("&max_width=%s", maxWidth()));
-    }
-    if (metadata() != null) {
-      sb.append(String.format("&metadata=%s", metadata()));
-    }
-    if (unrecognized() != null) {
-      for (Map.Entry<String, SerializableJsonElement> entry : unrecognized().entrySet()) {
+    appendQueryParameter(sb, "alternatives", alternatives());
+    appendQueryParameter(sb, "overview", overview());
+    appendQueryParameter(sb, "radiuses", radiuses());
+    appendQueryParameter(sb, "steps", steps());
+    appendQueryParameter(sb, "avoid_maneuver_radius", avoidManeuverRadius());
+    appendQueryParameter(sb, "bearings", bearings());
+    appendQueryParameter(sb, "layers", layers());
+    appendQueryParameter(sb, "continue_straight", continueStraight());
+    appendQueryParameter(sb, "annotations", annotations());
+    appendQueryParameter(sb, "language", language());
+    appendQueryParameter(sb, "roundabout_exits", roundaboutExits());
+    appendQueryParameter(sb, "voice_instructions", voiceInstructions());
+    appendQueryParameter(sb, "banner_instructions", bannerInstructions());
+    appendQueryParameter(sb, "voice_units", voiceUnits());
+    appendQueryParameter(sb, "exclude", exclude());
+    appendQueryParameter(sb, "include", include());
+    appendQueryParameter(sb, "approaches", approaches());
+    appendQueryParameter(sb, "waypoints", waypointIndices());
+    appendQueryParameter(sb, "waypoint_names", waypointNames());
+    appendQueryParameter(sb, "waypoint_targets", waypointTargets());
+    appendQueryParameter(sb, "enable_refresh", enableRefresh());
+    appendQueryParameter(sb, "walking_speed", walkingSpeed());
+    appendQueryParameter(sb, "walkway_bias", walkwayBias());
+    appendQueryParameter(sb, "alley_bias", alleyBias());
+    appendQueryParameter(sb, "snapping_include_closures", snappingIncludeClosures());
+    appendQueryParameter(sb, "arrive_by", arriveBy());
+    appendQueryParameter(sb, "depart_at", departAt());
+    appendQueryParameter(sb, "max_height", maxHeight());
+    appendQueryParameter(sb, "max_width", maxWidth());
+    appendQueryParameter(sb, "metadata", metadata());
+
+    Map<String, SerializableJsonElement> unrecognized = unrecognized();
+    if (unrecognized != null) {
+      for (Map.Entry<String, SerializableJsonElement> entry : unrecognized.entrySet()) {
         JsonElement element = entry.getValue().getElement();
         if (element.isJsonPrimitive()) {
-          sb.append(String.format("&%s=%s", entry.getKey(), element.getAsString()));
+          appendQueryParameter(sb, entry.getKey(), element.getAsString());
         } else {
           throw new IllegalStateException(
             String.format(
@@ -1029,20 +971,47 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     }
 
     try {
-      URL decodedUrl = new URL(sb.toString());
-      URI encodedUri = new URI(
-        decodedUrl.getProtocol(),
-        decodedUrl.getUserInfo(),
-        decodedUrl.getHost(),
-        decodedUrl.getPort(),
-        decodedUrl.getPath(),
-        decodedUrl.getQuery(),
-        decodedUrl.getRef()
-      );
-      // workaround to encode `&` chars in Strings like "me & you".
-      // need a better solution to fix encoding in general.
-      return new URL(encodedUri.toASCIIString().replace("%20&%20", "%20%26%20"));
-    } catch (MalformedURLException | URISyntaxException ex) {
+      return new URL(sb.toString());
+    } catch (MalformedURLException ex) {
+      throw new RuntimeException(ex);
+    }
+  }
+
+  private static void appendQueryParameter(
+    @NonNull StringBuilder builder,
+    @NonNull String name,
+    @Nullable Number value) {
+    if (value != null) {
+      appendQueryParameter(builder, name, String.valueOf(value));
+    }
+  }
+
+  private static void appendQueryParameter(
+    @NonNull StringBuilder builder,
+    @NonNull String name,
+    @Nullable Boolean value) {
+    if (value != null) {
+      appendQueryParameter(builder, name, String.valueOf(value));
+    }
+  }
+
+  private static void appendQueryParameter(
+    @NonNull StringBuilder builder,
+    @NonNull String name,
+    @Nullable String value) {
+    if (value != null) {
+      builder
+        .append("&")
+        .append(name)
+        .append("=")
+        .append(escape(value));
+    }
+  }
+
+  private static String escape(@NonNull String value) {
+    try {
+      return URLEncoder.encode(value, UTF_8);
+    } catch (UnsupportedEncodingException ex) {
       throw new RuntimeException(ex);
     }
   }
@@ -1945,6 +1914,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * which are not present in the model yet but are supported on the Directions API,
      * to a URL generated by `RouteOptions#toUrl`.
      * Use it for experimental parameters.
+     *
      * @param unrecognizedProperties parameters to add to request
      */
     @NonNull

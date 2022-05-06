@@ -18,7 +18,6 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -98,20 +97,6 @@ public class MapboxDirectionsTest extends TestUtils {
     assertEquals(
       routeOptions,
       RouteOptions.fromUrl(new URL(directions.cloneCall().request().url().toString()))
-    );
-  }
-
-  @Test
-  public void testRouteOptionsFromUrl_alreadyDecoded() throws IOException {
-    MapboxDirections directions = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions)
-      .build();
-    assertEquals(
-      routeOptions,
-      RouteOptions.fromUrl(
-        new URL(URLDecoder.decode(directions.cloneCall().request().url().toString(), "UTF-8"))
-      )
     );
   }
 
@@ -521,7 +506,7 @@ public class MapboxDirectionsTest extends TestUtils {
       .routeOptions(routeOptions)
       .build();
     assertNotNull(mapboxDirections);
-    assertEquals(";two;",
+    assertEquals(";Serangoon Garden Market & Food Centre;Funky &nAmE*",
       mapboxDirections.cloneCall().request().url().queryParameter("waypoint_names"));
   }
 
