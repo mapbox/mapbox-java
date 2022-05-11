@@ -1,5 +1,6 @@
 package com.mapbox.api.directionsrefresh.v1.models;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -7,8 +8,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.models.DirectionsWaypoint;
+import com.mapbox.api.directions.v5.models.Incident;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
 import com.mapbox.api.directionsrefresh.v1.DirectionsRefreshAdapterFactory;
+
+import java.util.List;
 
 /**
  * A route refresh data between only two {@link DirectionsWaypoint}.
@@ -24,6 +28,14 @@ public abstract class RouteLegRefresh extends DirectionsRefreshJsonObject {
   public static Builder builder() {
     return new AutoValue_RouteLegRefresh.Builder();
   }
+
+  /**
+   * A list of incidents that occur on this leg.
+   *
+   * @return a list of {@link Incident}
+   */
+  @Nullable
+  public abstract List<Incident> incidents();
 
   /**
    * A {@link LegAnnotation} that contains additional details about each line segment along the
@@ -77,6 +89,15 @@ public abstract class RouteLegRefresh extends DirectionsRefreshJsonObject {
   public abstract static class Builder {
 
     /**
+     * A list of incidents that occur on this leg.
+     *
+     * @param incidents a list of {@link Incident}
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder incidents(@Nullable List<Incident> incidents);
+
+    /**
      * A {@link LegAnnotation} that contains additional details about each line segment along the
      * route geometry. If you'd like to receiving this, you must request it inside your Directions
      * request before executing the call.
@@ -84,6 +105,7 @@ public abstract class RouteLegRefresh extends DirectionsRefreshJsonObject {
      * @param annotation a {@link LegAnnotation} object
      * @return this builder for chaining options together
      */
+    @NonNull
     public abstract Builder annotation(@Nullable LegAnnotation annotation);
 
     /**
