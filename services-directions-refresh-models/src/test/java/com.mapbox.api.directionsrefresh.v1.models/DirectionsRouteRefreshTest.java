@@ -10,6 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class DirectionsRouteRefreshTest extends TestUtils {
 
@@ -32,6 +33,8 @@ public class DirectionsRouteRefreshTest extends TestUtils {
     assertNotNull(directionsRouteRefresh.legs());
     assertNotNull(directionsRouteRefresh.legs().get(0).annotation());
     assertNotNull(directionsRouteRefresh.legs().get(0).annotation().congestion());
+    assertNotNull(directionsRouteRefresh.legs().get(0).incidents());
+    assertTrue(directionsRouteRefresh.legs().get(0).incidents().size() > 0);
   }
 
   @Test
@@ -46,6 +49,7 @@ public class DirectionsRouteRefreshTest extends TestUtils {
     assertNull(directionsRouteRefresh.legs().get(0).annotation().duration());
     assertNull(directionsRouteRefresh.legs().get(0).annotation().maxspeed());
     assertNull(directionsRouteRefresh.legs().get(0).annotation().speed());
+    assertNull(directionsRouteRefresh.legs().get(0).incidents());
   }
 
   @Test
