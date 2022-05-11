@@ -3,6 +3,8 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v6.5.0-beta.5 - May 11, 2022
 - Added `TollCollection#name` field which contains a name of the toll booth/gantry, when available. [#1432](https://github.com/mapbox/mapbox-java/pull/1432)
 - Improved `RouteOptions#toUrl` query parameters encoding. This (in between other improvements) adds handling for rarer unescaped characters occurrences (like '&' baked within other string). [#1433](https://github.com/mapbox/mapbox-java/pull/1433)
 - Added `Incidents` to `RouteLegRefresh` which allow to refresh incidents along a route. [#1421](https://github.com/mapbox/mapbox-java/pull/1421)
