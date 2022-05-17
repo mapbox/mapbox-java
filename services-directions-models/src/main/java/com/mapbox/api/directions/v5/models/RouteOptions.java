@@ -799,6 +799,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract Double maxWidth();
 
   /**
+   * The max vehicle weight, in metric tons (1000 kg). If this parameter is provided,
+   * the Directions API will compute a route that includes only roads with a weight limit greater
+   * than or equal to the max vehicle weight. max_weight must be between 0 and 100 metric tons.
+   * <p>
+   * The default value is 2.5 metric tons.
+   */
+  @SerializedName("max_weight")
+  @Nullable
+  public abstract Double maxWeight();
+
+  /**
    * Whether the routes should be refreshable via the directions refresh API.
    * <p>
    * If false, the refresh requests will fail. Defaults to false if null.
@@ -950,6 +961,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     appendQueryParameter(sb, "depart_at", departAt());
     appendQueryParameter(sb, "max_height", maxHeight());
     appendQueryParameter(sb, "max_width", maxWidth());
+    appendQueryParameter(sb, "max_weight", maxWeight());
     appendQueryParameter(sb, "metadata", metadata());
 
     Map<String, SerializableJsonElement> unrecognized = unrecognized();
@@ -1887,6 +1899,19 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder maxWidth(@Nullable @FloatRange(from = 0, to = 10) Double maxWidth);
+
+    /**
+     * The max vehicle weight, in metric tons (1000 kg). If this parameter is provided,
+     * the Directions API will compute a route that includes only roads with a weight limit greater
+     * than or equal to the max vehicle weight. max_weight must be between 0 and 100 metric tons.
+     * <p>
+     * The default value is 2.5 metric tons.
+     *
+     * @param maxWeight max vehicle weight, in tons. Must be between 0 and 100.
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder maxWeight(@Nullable @FloatRange(from = 0, to = 100) Double maxWeight);
 
     /**
      * Whether the routes should be refreshable via the directions refresh API.

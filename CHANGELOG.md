@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `max_weight` field to `RouteOptions` to provide max vehicle weight, metric tons. [#1439](https://github.com/mapbox/mapbox-java/pull/1439)
 
 ### v6.5.0-beta.5 - May 11, 2022
 - Added `TollCollection#name` field which contains a name of the toll booth/gantry, when available. [#1432](https://github.com/mapbox/mapbox-java/pull/1432)
