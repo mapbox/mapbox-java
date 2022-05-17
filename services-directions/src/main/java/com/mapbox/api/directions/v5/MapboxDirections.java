@@ -107,6 +107,7 @@ public abstract class MapboxDirections extends
       routeOptions().departAt(),
       routeOptions().maxHeight(),
       routeOptions().maxWidth(),
+      routeOptions().maxWeight(),
       routeOptions().metadata()
     );
   }
@@ -148,6 +149,7 @@ public abstract class MapboxDirections extends
       routeOptions().departAt(),
       routeOptions().maxHeight(),
       routeOptions().maxWidth(),
+      routeOptions().maxWeight(),
       routeOptions().metadata()
     );
   }

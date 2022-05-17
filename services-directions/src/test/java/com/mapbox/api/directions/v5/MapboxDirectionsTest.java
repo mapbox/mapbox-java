@@ -755,6 +755,17 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void max_weight() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
+      .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+      .build();
+
+    assertEquals("2.9",
+      mapboxDirections.cloneCall().request().url().queryParameter("max_weight"));
+  }
+
+  @Test
   public void enable_refresh() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .accessToken("token")

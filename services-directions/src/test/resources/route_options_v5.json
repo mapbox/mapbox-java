@@ -32,6 +32,7 @@
   "depart_at": "2021-02-02'T'02:02",
   "max_height": 1.5,
   "max_width": 1.4,
+  "max_weight": 2.9,
   "enable_refresh": true,
   "metadata": true
 }

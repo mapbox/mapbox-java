@@ -95,6 +95,7 @@ interface DirectionsService {
     @Query("depart_at") String departAt,
     @Query("max_height") Double maxHeight,
     @Query("max_width") Double maxWidth,
+    @Query("max_weight") Double maxWeight,
     @Query("metadata") Boolean metadata
   );
 
@@ -177,6 +178,7 @@ interface DirectionsService {
     @Field("depart_at") String departAt,
     @Field("max_height") Double maxHeight,
     @Field("max_width") Double maxWidth,
+    @Field("max_weight") Double maxWeight,
     @Field("metadata") Boolean metadata
   );
 }
