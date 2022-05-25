@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.5.0 - May 25, 2022
+- No additional changes
+
 ### v6.5.0-beta.6 - May 17, 2022
 - Added `max_weight` field to `RouteOptions` to provide max vehicle weight, metric tons. [#1439](https://github.com/mapbox/mapbox-java/pull/1439)
 

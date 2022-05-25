@@ -41,8 +41,16 @@ If you want to test recent bugfixes or features that have not been packaged in a
 
 ```gradle
 repositories {
-    jcenter()
-    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+    maven {
+        url 'https://api.mapbox.com/downloads/v2/snapshots/maven'
+        authentication {
+          basic(BasicAuthentication)
+        }
+        credentials {
+          username = "mapbox"
+          password = "{secret Mapbox token with DOWNLOADS:READ scope, the same as the token used for the release repository}"
+        }
+    }
 }
 
 dependencies {
