@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
@@ -8,6 +9,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+
+import java.util.List;
 
 /**
  * An object containing information about passing rest stops along the route.
@@ -29,6 +32,12 @@ public abstract class RestStop extends DirectionsJsonObject {
    */
   @Nullable
   public abstract String name();
+
+  /**
+   * The list of amenities at the rest stop if available.
+   */
+  @Nullable
+  public abstract List<Amenities> amenities();
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -84,6 +93,7 @@ public abstract class RestStop extends DirectionsJsonObject {
      *
      * @param type rest stop type
      */
+    @NonNull
     public abstract Builder type(@Nullable String type);
 
     /**
@@ -91,13 +101,23 @@ public abstract class RestStop extends DirectionsJsonObject {
      *
      * @param name rest stop name
      */
+    @NonNull
     public abstract Builder name(@Nullable String name);
+
+    /**
+     * The list of amenities at the rest stop if available.
+     *
+     * @param amenities list of amenities
+     */
+    @NonNull
+    public abstract Builder amenities(@Nullable List<Amenities> amenities);
 
     /**
      * Build a new {@link RestStop} object.
      *
      * @return a new {@link RestStop} using the provided values in this builder
      */
+    @NonNull
     public abstract RestStop build();
   }
 }
