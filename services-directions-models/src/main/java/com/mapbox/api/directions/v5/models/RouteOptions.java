@@ -22,9 +22,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Defines route request parameters.
@@ -38,6 +40,19 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   private static final String UTF_8 = "UTF-8";
   private static final String ACCESS_TOKEN_URL_PARAM_NAME = "access_token";
+
+  /**
+   *  Fields that aren't supposed to be serialized.
+   * - <b>access_token</b> - token must not be a part of RouteOptions,
+   *   it is provided via {@link RouteOptions#toUrl}
+   * - <b>uuid</b> - legacy field, skipped for backward compatibility
+   */
+  private static final Set<String> DEPRECATED_SERIALIZED_FIELDS = new HashSet<String>() {
+    {
+      add(ACCESS_TOKEN_URL_PARAM_NAME);
+      add("uuid");
+    }
+  };
 
   /**
    * Build a new instance of {@link RouteOptions} and sets default values for:
@@ -968,6 +983,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     if (unrecognized != null) {
       for (Map.Entry<String, SerializableJsonElement> entry : unrecognized.entrySet()) {
         JsonElement element = entry.getValue().getElement();
+        if (DEPRECATED_SERIALIZED_FIELDS.contains(entry.getKey())) {
+          continue;
+        }
         if (element.isJsonPrimitive()) {
           appendQueryParameter(sb, entry.getKey(), element.getAsString());
         } else {
