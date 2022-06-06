@@ -17,11 +17,13 @@ import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
 import com.mapbox.auto.value.gson.SerializableJsonElement;
 import com.mapbox.geojson.Point;
+
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,12 +49,13 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    *   it is provided via {@link RouteOptions#toUrl}
    * - <b>uuid</b> - legacy field, skipped for backward compatibility
    */
-  private static final Set<String> DEPRECATED_SERIALIZED_FIELDS = new HashSet<String>() {
-    {
-      add(ACCESS_TOKEN_URL_PARAM_NAME);
-      add("uuid");
-    }
-  };
+  private static final Set<String> DEPRECATED_SERIALIZED_FIELDS = Collections.unmodifiableSet(
+    new HashSet<String>() {
+      {
+        add(ACCESS_TOKEN_URL_PARAM_NAME);
+        add("uuid");
+      }
+    });
 
   /**
    * Build a new instance of {@link RouteOptions} and sets default values for:
