@@ -1,11 +1,5 @@
 package com.mapbox.api.directions.v5.models;
 
-import static com.google.gson.JsonParser.parseString;
-import static com.mapbox.api.directions.v5.utils.Asserts.assertContains;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -14,6 +8,8 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.MutateJsonUtil;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,7 +20,16 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
-import org.junit.Test;
+
+import static com.google.gson.JsonParser.parseString;
+import static com.mapbox.api.directions.v5.utils.Asserts.assertContains;
+import static com.mapbox.api.directions.v5.utils.Asserts.assertContainsExactCount;
+import static com.mapbox.api.directions.v5.utils.Asserts.assertNoDuplicatedParameters;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class RouteOptionsTest extends TestUtils {
   /**
@@ -711,6 +716,45 @@ public class RouteOptionsTest extends TestUtils {
     MutateJsonUtil.mutateJson(mutatedRouteOptionsJson);
 
     RouteOptions.fromJson(mutatedRouteOptionsJson.toString()).toUrl("testToken");
+  }
+
+  @Test
+  public void routeOptionsDoNotAddAccessTokenFromJsonToUrl() {
+    Gson gson = new GsonBuilder().create();
+    JsonObject routeOptionsJson = gson.fromJson(optionsJson, JsonObject.class);
+    routeOptionsJson.addProperty("access_token", "wrong");
+    String routeOptionsJsonString = routeOptionsJson.toString();
+
+    URL url = RouteOptions.fromJson(routeOptionsJsonString).toUrl("right");
+
+    String query = url.getQuery();
+    assertContainsExactCount(query, "access_token", 1);
+    assertContains(query, "access_token=right");
+  }
+
+  @Test
+  public void routeOptionsDoNotAddUUIDFromJsonToUrl() {
+    Gson gson = new GsonBuilder().create();
+    JsonObject routeOptionsJson = gson.fromJson(optionsJson, JsonObject.class);
+    routeOptionsJson.addProperty("uuid", "test");
+    String routeOptionsJsonString = routeOptionsJson.toString();
+
+    URL url = RouteOptions.fromJson(routeOptionsJsonString).toUrl("test");
+
+    assertFalse(
+      "url shouldn't contain uuid: " + url,
+      url.getQuery().contains("uuid")
+    );
+  }
+
+  @Test
+  public void sanityCheckForPreviouslySerializedRouteResponse() throws IOException {
+    String serializedDirectionResponse = loadJsonFixture("directions_v5_serialized_with_legacy_fields.json");
+    DirectionsResponse response = DirectionsResponse.fromJson(serializedDirectionResponse);
+
+    URL url = response.routes().get(0).routeOptions().toUrl("token");
+
+    assertNoDuplicatedParameters(url);
   }
 
   @Test
