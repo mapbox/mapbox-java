@@ -314,6 +314,86 @@ public final class DirectionsCriteria {
   @SuppressWarnings("checkstyle:javadocvariable")
   public static final int TRAFFIC_TENDENCY_RAPIDLY_DECREASING_CONGESTION = 5;
 
+  /*
+   * Used in Japan for all payments other than transponder such as ETC or ETCX.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_GENERAL = "general";
+
+  /*
+   * A transponder in any country, for any transponder system (e.g. EZ-PASS, Peach Pass).
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_ETC = "etc";
+
+  /*
+   * A transponder only used for several specific roads in Japan.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_ETCX = "etcx";
+
+  /*
+   * Payment can be done in cash (coins or notes) of the locally common currency.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_CASH = "cash";
+
+  /*
+   * Exact cash payment or tokens at a toll structure.
+   * Tokens are pre-purchased coins used to pay toll.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_EXACT_CASH = "exact_cash";
+
+  /*
+   * Payment can be done by coins.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_COINS = "coins";
+
+  /*
+   * Payment can be done by notes (paper money).
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_NOTES = "notes";
+
+  /*
+   * Payment can be done with common debit cards.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_DEBIT_CARDS = "debit_cards";
+
+  /*
+   * A pre-purchased pass or subscription.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_PASS_CARD = "pass_card";
+
+  /*
+   * Payment can be done with common credit cards.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_CREDIT_CARDS = "credit_cards";
+
+  /*
+   * Automatic monitor of vehicles that enter the toll road without a transponder.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_VIDEO = "video";
+
+  /*
+   * Generic tag for any cryptocurrency.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_CRYPTOCURRENCIES = "cryptocurrencies";
+
+  /*
+   * Payment possible via phone or other personal device's app
+   * (e.g. Bluetooth, barcode, CR code, etc.).
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_APP = "app";
+
   private DirectionsCriteria() {
     //not called
   }
@@ -480,5 +560,28 @@ public final class DirectionsCriteria {
     TRAFFIC_TENDENCY_RAPIDLY_DECREASING_CONGESTION
   })
   public @interface TrafficTendencyCriteria {
+  }
+
+  /*
+   * Supported payment methods. See {@link RouteOptions#paymentMethods()}.
+   */
+  @SuppressWarnings("checkstyle:javadoctype")
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    PAYMENT_METHOD_GENERAL,
+    PAYMENT_METHOD_ETC,
+    PAYMENT_METHOD_ETCX,
+    PAYMENT_METHOD_CASH,
+    PAYMENT_METHOD_EXACT_CASH,
+    PAYMENT_METHOD_COINS,
+    PAYMENT_METHOD_NOTES,
+    PAYMENT_METHOD_DEBIT_CARDS,
+    PAYMENT_METHOD_PASS_CARD,
+    PAYMENT_METHOD_CREDIT_CARDS,
+    PAYMENT_METHOD_VIDEO,
+    PAYMENT_METHOD_CRYPTOCURRENCIES,
+    PAYMENT_METHOD_APP,
+  })
+  public @interface PaymentMethodsCriteria {
   }
 }

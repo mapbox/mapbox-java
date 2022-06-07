@@ -37,5 +37,6 @@
   "enable_refresh": true,
   "metadata": true,
   "waypoints_per_route": true,
-  "compute_toll_cost": true
+  "compute_toll_cost": true,
+  "payment_methods": "general"
 }

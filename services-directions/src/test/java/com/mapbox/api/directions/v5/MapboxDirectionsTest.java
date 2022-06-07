@@ -809,6 +809,17 @@ public class MapboxDirectionsTest extends TestUtils {
       mapboxDirections.cloneCall().request().url().queryParameter("enable_refresh"));
   }
 
+  @Test
+  public void paymentMethods() {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
+      .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+      .build();
+
+    assertEquals("general,etcx",
+      mapboxDirections.cloneCall().request().url().queryParameter("payment_methods"));
+  }
+
   @Test(expected = Exception.class)
   public void token_required() throws Exception {
     MapboxDirections.builder()
