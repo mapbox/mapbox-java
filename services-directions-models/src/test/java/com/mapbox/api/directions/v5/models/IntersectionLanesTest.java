@@ -3,12 +3,14 @@ package com.mapbox.api.directions.v5.models;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class IntersectionLanesTest extends TestUtils {
 
@@ -67,6 +69,21 @@ public class IntersectionLanesTest extends TestUtils {
       .build();
 
     String jsonString = "{\"valid_indication\":\"straight\"}";
+    IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
+
+    assertEquals(intersectionLanes, intersectionLanesFromJson);
+  }
+
+  @Test
+  public void testFromJson_etcAndGeneralPayment() {
+    IntersectionLanes intersectionLanes = IntersectionLanes.builder()
+      .paymentMethods(Arrays.asList(
+        DirectionsCriteria.PAYMENT_METHOD_GENERAL,
+        DirectionsCriteria.PAYMENT_METHOD_ETC
+      ))
+      .build();
+
+    String jsonString = "{\"payment_methods\": [\"general\", \"etc\"]}";
     IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
 
     assertEquals(intersectionLanes, intersectionLanesFromJson);

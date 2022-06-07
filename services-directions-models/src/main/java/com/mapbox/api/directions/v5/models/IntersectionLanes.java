@@ -1,7 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -80,6 +79,16 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
    */
   @Nullable
   public abstract List<String> indications();
+
+  /*
+   * Available payment methods for the lane.
+   * @return A list of strings where each value
+   *         matches {@link DirectionsCriteria.PaymentMethodsCriteria}
+   */
+  @SuppressWarnings("checkstyle:javadocmethod")
+  @Nullable
+  @SerializedName("payment_methods")
+  public abstract List<String> paymentMethods();
 
   /**
    * Convert the current {@link IntersectionLanes} to its builder holding the currently assigned
@@ -166,6 +175,14 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
      * @since 3.0.0
      */
     public abstract Builder indications(@Nullable List<String> indications);
+
+    /*
+     * Set available payment methods for the lane.
+     * @param paymentMethods is a list of strings where each value
+     *         matches {@link DirectionsCriteria.PaymentMethodsCriteria}
+     */
+    @SuppressWarnings("checkstyle:javadocmethod")
+    public abstract Builder paymentMethods(@Nullable List<String> paymentMethods);
 
     /**
      * Build a new {@link IntersectionLanes} object.

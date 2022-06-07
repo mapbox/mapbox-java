@@ -102,7 +102,8 @@ interface DirectionsService {
     @Query("max_weight") Double maxWeight,
     @Query("compute_toll_cost") Boolean computeTollCost,
     @Query("waypoints_per_route") Boolean waypointsPerRoute,
-    @Query("metadata") Boolean metadata
+    @Query("metadata") Boolean metadata,
+    @Query("payment_methods") String paymentMethods
   );
 
   /**
@@ -191,6 +192,7 @@ interface DirectionsService {
     @Field("max_weight") Double maxWeight,
     @Field("compute_toll_cost") Boolean computeTollCost,
     @Field("waypoints_per_route") Boolean waypointsPerRoute,
-    @Field("metadata") Boolean metadata
+    @Field("metadata") Boolean metadata,
+    @Field("payment_methods") String paymentMethods
   );
 }

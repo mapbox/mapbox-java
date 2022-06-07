@@ -909,6 +909,29 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   @Nullable
   public abstract Boolean metadata();
 
+  /*
+   * Enables filtering the route and valid lanes by payment methods. Default is no filtering.
+   * Available payment methods match {@link DirectionsCriteria.PaymentMethodsCriteria}
+   * @return a comma separated string where each value
+   *         matches {@link DirectionsCriteria.PaymentMethodsCriteria}
+   */
+  @SuppressWarnings("checkstyle:javadocmethod")
+  @SerializedName("payment_methods")
+  @Nullable
+  public abstract String paymentMethods();
+
+  /*
+   * Enables filtering the route and valid lanes by payment methods. Default is no filtering.
+   * Available payment methods match {@link DirectionsCriteria.PaymentMethodsCriteria}
+   * @return a list of strings where each value
+   *         matches {@link DirectionsCriteria.PaymentMethodsCriteria}
+   */
+  @SuppressWarnings("checkstyle:javadocmethod")
+  @Nullable
+  public List<String> paymentMethodsList() {
+    return ParseUtils.parseToStrings(paymentMethods(), ",");
+  }
+
   /**
    * Gson type adapter for parsing Gson to this class.
    *
@@ -1045,6 +1068,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     appendQueryParameter(sb, "compute_toll_cost", computeTollCost());
     appendQueryParameter(sb, "waypoints_per_route", waypointsPerRoute());
     appendQueryParameter(sb, "metadata", metadata());
+    appendQueryParameter(sb, "payment_methods", paymentMethods());
 
     Map<String, SerializableJsonElement> unrecognized = unrecognized();
     if (unrecognized != null) {
@@ -2088,6 +2112,31 @@ public abstract class RouteOptions extends DirectionsJsonObject {
         return unrecognized(mapped);
       }
       return unrecognized(null);
+    }
+
+    /*
+     * Enables filtering the route and valid lanes by payment methods. Default is no filtering.
+     * Available payment methods match {@link DirectionsCriteria.PaymentMethodsCriteria}
+     * @param paymentMethods is a comma separated string where each value
+     *                       matches {@link DirectionsCriteria.PaymentMethodsCriteria}
+     * @return this builder
+     */
+    @SuppressWarnings("checkstyle:javadocmethod")
+    @NonNull
+    public abstract Builder paymentMethods(@Nullable String paymentMethods);
+
+    /*
+     * Enables filtering the route and valid lanes by payment methods. Default is no filtering.
+     * Available payment methods match {@link DirectionsCriteria.PaymentMethodsCriteria}
+     * @param paymentMethods is a list of strings where each value
+     *                       matches {@link DirectionsCriteria.PaymentMethodsCriteria}
+     * @return this builder
+     */
+    @SuppressWarnings("checkstyle:javadocmethod")
+    @NonNull
+    public Builder paymentMethodsList(@Nullable List<String> paymentMethods) {
+      String result = FormatUtils.join(",", paymentMethods);
+      return paymentMethods(result);
     }
 
     /**
