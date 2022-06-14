@@ -145,10 +145,9 @@ public final class DirectionsCriteria {
   public static final String ANNOTATION_CLOSURE = "closure";
 
   /**
-   * An integer array of traffic tendencies for each line segment
-   * along the route geometry. The tendency value conveys the changing
+   * The tendency value conveys the changing
    * state of traffic congestion (increasing, decreasing, constant etc).
-   * All values matches {@link TrafficTendencyCriteria}. New values
+   * Values match {@link TrafficTendencyCriteria}. New values
    * could be introduced in the future without an API version change.
    */
   public static final String ANNOTATION_TRAFFIC_TENDENCY = "traffic_tendency";
