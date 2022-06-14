@@ -147,8 +147,6 @@ public final class DirectionsCriteria {
   /**
    * The tendency value conveys the changing
    * state of traffic congestion (increasing, decreasing, constant etc).
-   * Values match {@link TrafficTendencyCriteria}. New values
-   * could be introduced in the future without an API version change.
    */
   public static final String ANNOTATION_TRAFFIC_TENDENCY = "traffic_tendency";
 
