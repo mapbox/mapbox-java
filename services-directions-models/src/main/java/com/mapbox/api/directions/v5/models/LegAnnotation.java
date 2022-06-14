@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
@@ -91,6 +92,17 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
   @Nullable
   @SerializedName("congestion_numeric")
   public abstract List<Integer> congestionNumeric();
+
+  /**
+   * The traffic tendency between each pair of coordinates.
+   * @return a list of {@link Integer} where each value matches
+   *   {@link DirectionsCriteria.TrafficTendencyCriteria}. The tendency value conveys the changing
+   *   state of traffic congestion (increasing, decreasing, constant etc). New values
+   *   could be introduced in the future without an API version change.
+   */
+  @Nullable
+  @SerializedName("traffic_tendency")
+  public abstract List<Integer> trafficTendency();
 
   /**
    * Convert the current {@link LegAnnotation} to its builder holding the currently assigned
@@ -197,11 +209,21 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
     public abstract Builder congestionNumeric(@Nullable List<Integer> congestionNumeric);
 
     /**
+     * The traffic tendency between each pair of coordinates.
+     * @param trafficTendency is a list of {@link Integer} where each value matches
+     *   {@link DirectionsCriteria.TrafficTendencyCriteria}. The tendency value conveys the changing
+     *   state of traffic congestion (increasing, decreasing, constant etc).
+     */
+    @NonNull
+    public abstract Builder trafficTendency(@Nullable List<Integer> trafficTendency);
+
+    /**
      * Build a new {@link LegAnnotation} object.
      *
      * @return a new {@link LegAnnotation} using the provided values in this builder
      * @since 3.0.0
      */
     public abstract LegAnnotation build();
+
   }
 }
