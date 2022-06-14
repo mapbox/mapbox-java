@@ -18,10 +18,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_CONGESTION;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_DISTANCE;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_DURATION;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_MAXSPEED;
-import static com.mapbox.api.directions.v5.DirectionsCriteria.ANNOTATION_TRAFFIC_TENDENCY;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.OVERVIEW_FULL;
 import static com.mapbox.api.directions.v5.DirectionsCriteria.PROFILE_DRIVING_TRAFFIC;
 
@@ -56,7 +53,7 @@ public class BasicDirectionsRefresh {
       .enableRefresh(true)
       .overview(OVERVIEW_FULL)
       .profile(PROFILE_DRIVING_TRAFFIC)
-      .annotationsList(Arrays.asList(ANNOTATION_CONGESTION, ANNOTATION_MAXSPEED, ANNOTATION_TRAFFIC_TENDENCY, ANNOTATION_DISTANCE, ANNOTATION_DURATION))
+      .annotationsList(Arrays.asList(ANNOTATION_CONGESTION, ANNOTATION_MAXSPEED))
       .build();
     builder.routeOptions(routeOptions);
     builder.accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN);
