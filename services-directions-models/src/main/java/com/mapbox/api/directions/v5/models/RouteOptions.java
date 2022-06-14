@@ -369,6 +369,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * {@link DirectionsCriteria#ANNOTATION_CONGESTION_NUMERIC}
    * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
    * {@link DirectionsCriteria#ANNOTATION_CLOSURE}
+   * {@link DirectionsCriteria#ANNOTATION_TRAFFIC_TENDENCY}
    * See the {@link RouteLeg} object for more details on what is included with annotations.
    * <p>
    * Must be used in conjunction with {@link DirectionsCriteria#OVERVIEW_FULL}
@@ -1392,6 +1393,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * {@link DirectionsCriteria#ANNOTATION_CONGESTION_NUMERIC}
      * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
      * {@link DirectionsCriteria#ANNOTATION_CLOSURE}
+     * {@link DirectionsCriteria#ANNOTATION_TRAFFIC_TENDENCY}
      * See the {@link RouteLeg} object for more details on what is included with annotations.
      * <p>
      * Must be used in conjunction with {@link DirectionsCriteria#OVERVIEW_FULL}
@@ -1413,6 +1415,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * {@link DirectionsCriteria#ANNOTATION_CONGESTION_NUMERIC}
      * {@link DirectionsCriteria#ANNOTATION_MAXSPEED}
      * {@link DirectionsCriteria#ANNOTATION_CLOSURE}
+     * {@link DirectionsCriteria#ANNOTATION_TRAFFIC_TENDENCY}
      * See the {@link RouteLeg} object for more details on what is included with annotations.
      * <p>
      * Must be used in conjunction with {@link DirectionsCriteria#OVERVIEW_FULL}
