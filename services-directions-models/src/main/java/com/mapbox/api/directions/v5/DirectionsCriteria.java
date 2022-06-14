@@ -461,6 +461,9 @@ public final class DirectionsCriteria {
 
   /**
    * Retention policy for the traffic tendency annotations.
+   * The tendency value conveys the changing state of traffic
+   * congestion (increasing, decreasing, constant etc). New values
+   * could be introduced in the future without an API version change.
    */
   @Retention(RetentionPolicy.CLASS)
   @IntDef({
