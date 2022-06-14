@@ -38,6 +38,7 @@ public class DirectionsRefreshResponseTest extends TestUtils {
     assertNotNull(directionsRefreshResponse.route().legs().get(0).annotation());
     assertTrue(directionsRefreshResponse.route().legs().get(0).annotation().congestion().size() > 0);
     assertTrue(directionsRefreshResponse.route().legs().get(0).incidents().size() > 0);
+    assertTrue(directionsRefreshResponse.route().legs().get(0).annotation().trafficTendency().size() > 0);
   }
 
   @Test
