@@ -1,6 +1,5 @@
 package com.mapbox.api.directions.v5;
 
-import androidx.annotation.IntDef;
 import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
@@ -145,12 +144,6 @@ public final class DirectionsCriteria {
   public static final String ANNOTATION_CLOSURE = "closure";
 
   /**
-   * The tendency value conveys the changing
-   * state of traffic congestion (increasing, decreasing, constant etc).
-   */
-  public static final String ANNOTATION_TRAFFIC_TENDENCY = "traffic_tendency";
-
-  /**
    * Exclude all tolls along the returned directions route.
    *
    * @since 3.0.0
@@ -277,36 +270,6 @@ public final class DirectionsCriteria {
    */
   public static final String APPROACH_CURB = "curb";
 
-  /***
-   * Conveys the changing state of traffic congestion: unknown.
-   */
-  public static final int TRAFFIC_TENDENCY_UNKNOWN = 0;
-
-  /***
-   * Conveys the changing state of traffic congestion: constant.
-   */
-  public static final int TRAFFIC_TENDENCY_CONSTANT_CONGESTION = 1;
-
-  /***
-   * Conveys the changing state of traffic congestion: increasing.
-   */
-  public static final int TRAFFIC_TENDENCY_INCREASING_CONGESTION = 2;
-
-  /***
-   * Conveys the changing state of traffic congestion: decreasing.
-   */
-  public static final int TRAFFIC_TENDENCY_DECREASING_CONGESTION = 3;
-
-  /***
-   * Conveys the changing state of traffic congestion: rapidly increasing.
-   */
-  public static final int TRAFFIC_TENDENCY_RAPIDLY_INCREASING_CONGESTION = 4;
-
-  /***
-   * Conveys the changing state of traffic congestion: rapidly decreasing.
-   */
-  public static final int TRAFFIC_TENDENCY_RAPIDLY_DECREASING_CONGESTION = 5;
-
   private DirectionsCriteria() {
     //not called
   }
@@ -366,8 +329,7 @@ public final class DirectionsCriteria {
     ANNOTATION_CONGESTION,
     ANNOTATION_CONGESTION_NUMERIC,
     ANNOTATION_MAXSPEED,
-    ANNOTATION_CLOSURE,
-    ANNOTATION_TRAFFIC_TENDENCY
+    ANNOTATION_CLOSURE
   })
   public @interface AnnotationCriteria {
   }
@@ -454,23 +416,5 @@ public final class DirectionsCriteria {
     APPROACH_CURB
   })
   public @interface ApproachesCriteria {
-  }
-
-  /**
-   * Retention policy for the traffic tendency annotations.
-   * The tendency value conveys the changing state of traffic
-   * congestion (increasing, decreasing, constant etc). New values
-   * could be introduced in the future without an API version change.
-   */
-  @Retention(RetentionPolicy.CLASS)
-  @IntDef({
-    TRAFFIC_TENDENCY_UNKNOWN,
-    TRAFFIC_TENDENCY_CONSTANT_CONGESTION,
-    TRAFFIC_TENDENCY_INCREASING_CONGESTION,
-    TRAFFIC_TENDENCY_DECREASING_CONGESTION,
-    TRAFFIC_TENDENCY_RAPIDLY_INCREASING_CONGESTION,
-    TRAFFIC_TENDENCY_RAPIDLY_DECREASING_CONGESTION
-  })
-  public @interface TrafficTendencyCriteria {
   }
 }
