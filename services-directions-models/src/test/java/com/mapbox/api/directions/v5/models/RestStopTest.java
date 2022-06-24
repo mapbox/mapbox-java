@@ -17,7 +17,6 @@ public class RestStopTest extends TestUtils {
     RestStop restStop = RestStop.builder()
         .name("ABCD")
         .type("service_area")
-        .amenities(Collections.<Amenities>emptyList())
         .build();
     assertNotNull(restStop);
   }
@@ -28,7 +27,6 @@ public class RestStopTest extends TestUtils {
         .builder()
         .name("ABCD")
         .type("service_area")
-        .amenities(Collections.<Amenities>emptyList())
         .build();
 
     RestStop actual = deserialize(
@@ -45,7 +43,6 @@ public class RestStopTest extends TestUtils {
         .builder()
         .name("ABCD")
         .type("service_area")
-        .amenities(Collections.<Amenities>emptyList())
         .build();
 
     RestStop actual = RestStop.fromJson(expected.toJson());
@@ -61,7 +58,6 @@ public class RestStopTest extends TestUtils {
     RestStop restStop = response.routes().get(0).legs().get(0).steps().get(1).intersections().get(0).restStop();
 
     assertNotNull(restStop);
-    assertNotNull(restStop.amenities());
     assertEquals("SA", restStop.name());
     assertEquals("service_area", restStop.type());
   }
