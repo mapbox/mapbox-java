@@ -14,7 +14,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
  * Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
  */
 @AutoValue
-public abstract class Amenities extends DirectionsJsonObject {
+public abstract class Amenity extends DirectionsJsonObject {
 
   /**
    * The type of amenities such as gas, restaurants, shopping, bank, atm etc.
@@ -36,23 +36,23 @@ public abstract class Amenities extends DirectionsJsonObject {
   public abstract String brand();
 
   /**
-   * Create a new instance of this class by using the {@link Amenities.Builder} class.
+   * Create a new instance of this class by using the {@link Amenity.Builder} class.
    *
-   * @return this classes {@link Amenities.Builder} for creating a new instance
+   * @return this classes {@link Amenity.Builder} for creating a new instance
    */
-  public static Amenities.Builder builder() {
-    return new AutoValue_Amenities.Builder();
+  public static Amenity.Builder builder() {
+    return new AutoValue_Amenity.Builder();
   }
 
   /**
-   * Convert the current {@link Amenities} to its builder holding the currently assigned
+   * Convert the current {@link Amenity} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
-   * an updated and modified {@link Amenities}.
+   * an updated and modified {@link Amenity}.
    *
-   * @return a {@link Amenities.Builder} with the same values set to match the ones
-   *   defined in this {@link Amenities}
+   * @return a {@link Amenity.Builder} with the same values set to match the ones
+   *   defined in this {@link Amenity}
    */
-  public abstract Amenities.Builder toBuilder();
+  public abstract Amenity.Builder toBuilder();
 
   /**
    * Gson type adapter for parsing Gson to this class.
@@ -60,8 +60,8 @@ public abstract class Amenities extends DirectionsJsonObject {
    * @param gson the built {@link Gson} object
    * @return the type adapter for this class
    */
-  public static TypeAdapter<Amenities> typeAdapter(Gson gson) {
-    return new AutoValue_Amenities.GsonTypeAdapter(gson);
+  public static TypeAdapter<Amenity> typeAdapter(Gson gson) {
+    return new AutoValue_Amenity.GsonTypeAdapter(gson);
   }
 
   /**
@@ -70,17 +70,17 @@ public abstract class Amenities extends DirectionsJsonObject {
    * @param json a formatted valid JSON string defining an Incident
    * @return a new instance of this class defined by the values passed in the method
    */
-  public static Amenities fromJson(String json) {
+  public static Amenity fromJson(String json) {
     GsonBuilder gson = new GsonBuilder();
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gson.create().fromJson(json, Amenities.class);
+    return gson.create().fromJson(json, Amenity.class);
   }
 
   /**
-   * This builder can be used to set the values describing the {@link Amenities}.
+   * This builder can be used to set the values describing the {@link Amenity}.
    */
   @AutoValue.Builder
-  public abstract static class Builder extends DirectionsJsonObject.Builder<Amenities.Builder> {
+  public abstract static class Builder extends DirectionsJsonObject.Builder<Amenity.Builder> {
 
     /**
      * The type of amenity, includes amenities such as gas, restaurants etc.
@@ -108,11 +108,11 @@ public abstract class Amenities extends DirectionsJsonObject {
     public abstract Builder brand(@Nullable String brand);
 
     /**
-     * Build a new {@link Amenities} object.
+     * Build a new {@link Amenity} object.
      *
-     * @return a new {@link Amenities} using the provided values in this builder
+     * @return a new {@link Amenity} using the provided values in this builder
      */
     @NonNull
-    public abstract Amenities build();
+    public abstract Amenity build();
   }
 }

@@ -37,7 +37,7 @@ public abstract class RestStop extends DirectionsJsonObject {
    * The list of amenities at the rest stop if available.
    */
   @Nullable
-  public abstract List<Amenities> amenities();
+  public abstract List<Amenity> amenities();
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -110,7 +110,7 @@ public abstract class RestStop extends DirectionsJsonObject {
      * @param amenities list of amenities
      */
     @NonNull
-    public abstract Builder amenities(@Nullable List<Amenities> amenities);
+    public abstract Builder amenities(@Nullable List<Amenity> amenities);
 
     /**
      * Build a new {@link RestStop} object.
