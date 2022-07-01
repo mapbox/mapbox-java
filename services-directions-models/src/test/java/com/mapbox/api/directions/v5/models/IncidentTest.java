@@ -37,6 +37,7 @@ public class IncidentTest extends TestUtils {
       .numLanesBlocked(null)
       .countryCodeAlpha2("US")
       .countryCodeAlpha3("USA")
+      .affectedRoadNames(Lists.newArrayList("test1", "test2"))
       .build();
     byte[] serialized = TestUtils.serialize(incident);
     assertEquals(incident, deserialize(serialized, Incident.class));
@@ -66,7 +67,8 @@ public class IncidentTest extends TestUtils {
       "\"iso_3166_1_alpha2\": US," +
       "\"iso_3166_1_alpha3\": USA," +
       "\"geometry_index_start\": 805," +
-      "\"geometry_index_end\": 896" +
+      "\"geometry_index_end\": 896," +
+      "\"affected_road_names\": [\"S6/E 28/Obwodnica Trójmiasta\"]" +
       "}";
 
     Incident fromJson = Incident.fromJson(json);
@@ -89,6 +91,7 @@ public class IncidentTest extends TestUtils {
     assertEquals(fromJson.countryCodeAlpha2(), "US");
     assertEquals(fromJson.countryCodeAlpha3(), "USA");
     assertEquals(fromJson.lanesBlocked().size(), 0);
+    assertEquals(Lists.newArrayList("S6/E 28/Obwodnica Trójmiasta"), fromJson.affectedRoadNames());
     assertNull(fromJson.numLanesBlocked());
   }
 

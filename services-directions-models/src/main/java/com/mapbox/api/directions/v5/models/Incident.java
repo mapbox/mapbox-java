@@ -280,6 +280,13 @@ public abstract class Incident extends DirectionsJsonObject {
   public abstract Integer numLanesBlocked();
 
   /**
+   * List of roads names affected by the incident.
+   */
+  @Nullable
+  @SerializedName("affected_road_names")
+  public abstract List<String> affectedRoadNames();
+
+  /**
    * Create a new instance of this class by using the {@link Incident.Builder} class.
    *
    * @return this classes {@link Incident.Builder} for creating a new instance
@@ -465,6 +472,12 @@ public abstract class Incident extends DirectionsJsonObject {
      * @param numLanesBlocked number lanes blocked
      */
     public abstract Builder numLanesBlocked(@Nullable Integer numLanesBlocked);
+
+    /**
+     * Sets list of roads names affected by the incident.
+     * @param affectedRoadNames list of roads names affected by the incident.
+     */
+    public abstract Builder affectedRoadNames(@Nullable List<String> affectedRoadNames);
 
     /**
      * Build a new instance of {@link Incident}.
