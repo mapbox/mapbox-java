@@ -339,6 +339,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param id String
      */
+    @NonNull
     public abstract Builder id(@NonNull String id);
 
     /**
@@ -347,6 +348,7 @@ public abstract class Incident extends DirectionsJsonObject {
      * @param type incident type
      * @see IncidentType
      */
+    @NonNull
     public abstract Builder type(@Nullable @IncidentType String type);
 
     /**
@@ -355,6 +357,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param closed is way closed
      */
+    @NonNull
     public abstract Builder closed(@Nullable Boolean closed);
 
     /**
@@ -362,6 +365,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param congestion congestion
      */
+    @NonNull
     public abstract Builder congestion(@Nullable Congestion congestion);
 
     /**
@@ -369,6 +373,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param description incident description
      */
+    @NonNull
     public abstract Builder description(@Nullable String description);
 
     /**
@@ -376,6 +381,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param longDescription incident long description
      */
+    @NonNull
     public abstract Builder longDescription(@Nullable String longDescription);
 
     /**
@@ -384,6 +390,7 @@ public abstract class Incident extends DirectionsJsonObject {
      * @param impact impact type
      * @see ImpactType
      */
+    @NonNull
     public abstract Builder impact(@Nullable @ImpactType String impact);
 
     /**
@@ -391,6 +398,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param subType syp-type
      */
+    @NonNull
     public abstract Builder subType(@Nullable String subType);
 
     /**
@@ -398,6 +406,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param subTypeDescription sub-type description
      */
+    @NonNull
     public abstract Builder subTypeDescription(@Nullable String subTypeDescription);
 
     /**
@@ -406,6 +415,7 @@ public abstract class Incident extends DirectionsJsonObject {
      * @param alertcCodes list of alert codes
      * @see <a href="https://www.iso.org/standard/59231.html">AlertC</a>
      */
+    @NonNull
     public abstract Builder alertcCodes(@Nullable List<Integer> alertcCodes);
 
     /**
@@ -413,6 +423,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param geometryIndexStart start index
      */
+    @NonNull
     public abstract Builder geometryIndexStart(@Nullable Integer geometryIndexStart);
 
     /**
@@ -420,6 +431,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param geometryIndexEnd end index
      */
+    @NonNull
     public abstract Builder geometryIndexEnd(@Nullable Integer geometryIndexEnd);
 
     /**
@@ -427,6 +439,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param creationTime ISO8601 format
      */
+    @NonNull
     public abstract Builder creationTime(@Nullable String creationTime);
 
     /**
@@ -434,6 +447,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param startTime ISO8601 format
      */
+    @NonNull
     public abstract Builder startTime(@Nullable String startTime);
 
     /**
@@ -441,6 +455,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param endTime ISO8601 format
      */
+    @NonNull
     public abstract Builder endTime(@Nullable String endTime);
 
     /**
@@ -449,6 +464,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param countryCodeAlpha2 2 letter country code
      */
+    @NonNull
     public abstract Builder countryCodeAlpha2(@Nullable String countryCodeAlpha2);
 
     /**
@@ -457,6 +473,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param countryCodeAlpha3 3 letter country code
      */
+    @NonNull
     public abstract Builder countryCodeAlpha3(@Nullable String countryCodeAlpha3);
 
     /**
@@ -464,6 +481,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param lanesBlocked lanes blocked
      */
+    @NonNull
     public abstract Builder lanesBlocked(@Nullable List<String> lanesBlocked);
 
     /**
@@ -471,12 +489,14 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @param numLanesBlocked number lanes blocked
      */
+    @NonNull
     public abstract Builder numLanesBlocked(@Nullable Integer numLanesBlocked);
 
     /**
      * Sets list of roads names affected by the incident.
      * @param affectedRoadNames list of roads names affected by the incident.
      */
+    @NonNull
     public abstract Builder affectedRoadNames(@Nullable List<String> affectedRoadNames);
 
     /**
@@ -484,6 +504,7 @@ public abstract class Incident extends DirectionsJsonObject {
      *
      * @return a new instance of {@link Incident}.
      */
+    @NonNull
     public abstract Incident build();
   }
 }
