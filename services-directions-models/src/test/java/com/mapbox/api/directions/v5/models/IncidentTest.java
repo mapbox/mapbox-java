@@ -16,14 +16,14 @@ public class IncidentTest extends TestUtils {
   }
 
   @Test
-  public void testSerializableObject() throws Exception {
+  public void serialize() throws Exception {
     Incident incident = getFilledIncident();
     byte[] serialized = TestUtils.serialize(incident);
     assertEquals(incident, deserialize(serialized, Incident.class));
   }
 
   @Test
-  public void testToAndFromJson() {
+  public void toAndFromJson() {
     Incident source = getFilledIncident();
 
     String json = source.toJson();
@@ -33,7 +33,7 @@ public class IncidentTest extends TestUtils {
   }
 
   @Test
-  public void testSerializableFromJson(){
+  public void deserializeFromJson(){
     String json = "{" +
       "\"id\": \"15985415522454461962\"," +
       "\"type\": \"construction\"," +
