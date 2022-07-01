@@ -17,30 +17,19 @@ public class IncidentTest extends TestUtils {
 
   @Test
   public void testSerializableObject() throws Exception {
-    Incident incident = Incident.builder()
-      .id("some_id")
-      .alertcCodes(Lists.newArrayList(431, 2123, 934))
-      .closed(true)
-      .congestion(Congestion.builder().value(10).build())
-      .creationTime("2020-11-18T11:34:14Z")
-      .startTime("2021-11-18T11:32:14Z")
-      .endTime("2021-11-18T12:12:08Z")
-      .description("description")
-      .longDescription("long description")
-      .geometryIndexStart(1)
-      .geometryIndexEnd(943)
-      .impact(Incident.IMPACT_MAJOR)
-      .subType("sub type")
-      .subTypeDescription("sub type desc")
-      .type(Incident.INCIDENT_DISABLED_VEHICLE)
-      .lanesBlocked(Lists.<String>newArrayList())
-      .numLanesBlocked(null)
-      .countryCodeAlpha2("US")
-      .countryCodeAlpha3("USA")
-      .affectedRoadNames(Lists.newArrayList("test1", "test2"))
-      .build();
+    Incident incident = getFilledIncident();
     byte[] serialized = TestUtils.serialize(incident);
     assertEquals(incident, deserialize(serialized, Incident.class));
+  }
+
+  @Test
+  public void testToAndFromJson() {
+    Incident source = getFilledIncident();
+
+    String json = source.toJson();
+    Incident serialized = Incident.fromJson(json);
+
+    assertEquals(source, serialized);
   }
 
   @Test
@@ -98,6 +87,31 @@ public class IncidentTest extends TestUtils {
   private Incident getDefault() {
     return Incident.builder()
       .id("id")
+      .build();
+  }
+
+  private Incident getFilledIncident() {
+    return Incident.builder()
+      .id("some_id")
+      .alertcCodes(Lists.newArrayList(431, 2123, 934))
+      .closed(true)
+      .congestion(Congestion.builder().value(10).build())
+      .creationTime("2020-11-18T11:34:14Z")
+      .startTime("2021-11-18T11:32:14Z")
+      .endTime("2021-11-18T12:12:08Z")
+      .description("description")
+      .longDescription("long description")
+      .geometryIndexStart(1)
+      .geometryIndexEnd(943)
+      .impact(Incident.IMPACT_MAJOR)
+      .subType("sub type")
+      .subTypeDescription("sub type desc")
+      .type(Incident.INCIDENT_DISABLED_VEHICLE)
+      .lanesBlocked(Lists.<String>newArrayList())
+      .numLanesBlocked(null)
+      .countryCodeAlpha2("US")
+      .countryCodeAlpha3("USA")
+      .affectedRoadNames(Lists.newArrayList("test1", "test2"))
       .build();
   }
 }
