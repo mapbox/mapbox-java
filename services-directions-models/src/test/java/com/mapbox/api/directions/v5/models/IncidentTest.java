@@ -16,34 +16,24 @@ public class IncidentTest extends TestUtils {
   }
 
   @Test
-  public void testSerializableObject() throws Exception {
-    Incident incident = Incident.builder()
-      .id("some_id")
-      .alertcCodes(Lists.newArrayList(431, 2123, 934))
-      .closed(true)
-      .congestion(Congestion.builder().value(10).build())
-      .creationTime("2020-11-18T11:34:14Z")
-      .startTime("2021-11-18T11:32:14Z")
-      .endTime("2021-11-18T12:12:08Z")
-      .description("description")
-      .longDescription("long description")
-      .geometryIndexStart(1)
-      .geometryIndexEnd(943)
-      .impact(Incident.IMPACT_MAJOR)
-      .subType("sub type")
-      .subTypeDescription("sub type desc")
-      .type(Incident.INCIDENT_DISABLED_VEHICLE)
-      .lanesBlocked(Lists.<String>newArrayList())
-      .numLanesBlocked(null)
-      .countryCodeAlpha2("US")
-      .countryCodeAlpha3("USA")
-      .build();
+  public void serialize() throws Exception {
+    Incident incident = getFilledIncident();
     byte[] serialized = TestUtils.serialize(incident);
     assertEquals(incident, deserialize(serialized, Incident.class));
   }
 
   @Test
-  public void testSerializableFromJson(){
+  public void toAndFromJson() {
+    Incident source = getFilledIncident();
+
+    String json = source.toJson();
+    Incident serialized = Incident.fromJson(json);
+
+    assertEquals(source, serialized);
+  }
+
+  @Test
+  public void deserializeFromJson(){
     String json = "{" +
       "\"id\": \"15985415522454461962\"," +
       "\"type\": \"construction\"," +
@@ -66,7 +56,8 @@ public class IncidentTest extends TestUtils {
       "\"iso_3166_1_alpha2\": US," +
       "\"iso_3166_1_alpha3\": USA," +
       "\"geometry_index_start\": 805," +
-      "\"geometry_index_end\": 896" +
+      "\"geometry_index_end\": 896," +
+      "\"affected_road_names\": [\"S6/E 28/Obwodnica Trójmiasta\"]" +
       "}";
 
     Incident fromJson = Incident.fromJson(json);
@@ -89,12 +80,38 @@ public class IncidentTest extends TestUtils {
     assertEquals(fromJson.countryCodeAlpha2(), "US");
     assertEquals(fromJson.countryCodeAlpha3(), "USA");
     assertEquals(fromJson.lanesBlocked().size(), 0);
+    assertEquals(Lists.newArrayList("S6/E 28/Obwodnica Trójmiasta"), fromJson.affectedRoadNames());
     assertNull(fromJson.numLanesBlocked());
   }
 
   private Incident getDefault() {
     return Incident.builder()
       .id("id")
+      .build();
+  }
+
+  private Incident getFilledIncident() {
+    return Incident.builder()
+      .id("some_id")
+      .alertcCodes(Lists.newArrayList(431, 2123, 934))
+      .closed(true)
+      .congestion(Congestion.builder().value(10).build())
+      .creationTime("2020-11-18T11:34:14Z")
+      .startTime("2021-11-18T11:32:14Z")
+      .endTime("2021-11-18T12:12:08Z")
+      .description("description")
+      .longDescription("long description")
+      .geometryIndexStart(1)
+      .geometryIndexEnd(943)
+      .impact(Incident.IMPACT_MAJOR)
+      .subType("sub type")
+      .subTypeDescription("sub type desc")
+      .type(Incident.INCIDENT_DISABLED_VEHICLE)
+      .lanesBlocked(Lists.<String>newArrayList())
+      .numLanesBlocked(null)
+      .countryCodeAlpha2("US")
+      .countryCodeAlpha3("USA")
+      .affectedRoadNames(Lists.newArrayList("test1", "test2"))
       .build();
   }
 }
