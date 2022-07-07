@@ -35,5 +35,6 @@
   "max_width": 1.4,
   "max_weight": 2.9,
   "enable_refresh": true,
-  "metadata": true
+  "metadata": true,
+  "compute_toll_cost": true
 }

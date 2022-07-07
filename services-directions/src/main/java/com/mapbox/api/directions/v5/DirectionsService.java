@@ -56,6 +56,7 @@ interface DirectionsService {
    * @param departAt                      {@link RouteOptions#departAt()}
    * @param maxHeight                     {@link RouteOptions#maxHeight()}
    * @param maxWidth                      {@link RouteOptions#maxWidth()}
+   * @param computeTollCost               {@link RouteOptions#computeTollCost()}
    * @param metadata                      {@link RouteOptions#metadata()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
@@ -98,6 +99,7 @@ interface DirectionsService {
     @Query("max_height") Double maxHeight,
     @Query("max_width") Double maxWidth,
     @Query("max_weight") Double maxWeight,
+    @Query("compute_toll_cost") Boolean computeTollCost,
     @Query("metadata") Boolean metadata
   );
 
@@ -140,6 +142,7 @@ interface DirectionsService {
    * @param departAt                      {@link RouteOptions#departAt()}
    * @param maxHeight                     {@link RouteOptions#maxHeight()}
    * @param maxWidth                      {@link RouteOptions#maxWidth()}
+   * @param computeTollCost               {@link RouteOptions#computeTollCost()}
    * @param metadata                      {@link RouteOptions#metadata()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
@@ -183,6 +186,7 @@ interface DirectionsService {
     @Field("max_height") Double maxHeight,
     @Field("max_width") Double maxWidth,
     @Field("max_weight") Double maxWeight,
+    @Field("compute_toll_cost") Boolean computeTollCost,
     @Field("metadata") Boolean metadata
   );
 }
