@@ -142,6 +142,16 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   @Nullable
   public abstract String requestUuid();
 
+  /*
+   * List of calculated toll costs for the route. See `TollCost`.
+   *
+   * return list of toll costs
+   */
+  @Nullable
+  @SerializedName("toll_costs")
+  @SuppressWarnings("checkstyle:javadocmethod")
+  public abstract List<TollCost> tollCosts();
+
   /**
    * Convert the current {@link DirectionsRoute} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
@@ -330,6 +340,16 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder routeIndex(String routeIndex);
+
+    /*
+     * List of calculated toll costs for the route. See `TollCost`.
+     *
+     * param tollCosts list of toll costs
+     * return this builder for chaining options together
+     */
+    @NonNull
+    @SuppressWarnings("checkstyle:javadocmethod")
+    public abstract Builder tollCosts(@Nullable List<TollCost> tollCosts);
 
     /**
      * Build a new {@link DirectionsRoute} object.

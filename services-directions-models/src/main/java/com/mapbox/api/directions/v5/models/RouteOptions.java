@@ -876,6 +876,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   @Nullable
   public abstract Boolean enableRefresh();
 
+  /*
+   * Whether to return calculated toll cost for the route, if data is available.
+   * If null, default is false.
+   *
+   * return true if the request includes toll cost
+   */
+  @SerializedName("compute_toll_cost")
+  @Nullable
+  @SuppressWarnings("checkstyle:javadocmethod")
+  public abstract Boolean computeTollCost();
+
   /**
    * Whether the response should contain metadata holding versioning information.
    * <p>
@@ -1019,6 +1030,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     appendQueryParameter(sb, "max_height", maxHeight());
     appendQueryParameter(sb, "max_width", maxWidth());
     appendQueryParameter(sb, "max_weight", maxWeight());
+    appendQueryParameter(sb, "compute_toll_cost", computeTollCost());
     appendQueryParameter(sb, "metadata", metadata());
 
     Map<String, SerializableJsonElement> unrecognized = unrecognized();
@@ -2007,6 +2019,17 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder enableRefresh(@Nullable Boolean enableRefresh);
+
+    /*
+     * Whether to return calculated toll cost for the route, if data is available.
+     * Default is false.
+     *
+     * param computeTollCost whether computed toll cost should be requested
+     * return this builder
+     */
+    @NonNull
+    @SuppressWarnings("checkstyle:javadocmethod")
+    public abstract Builder computeTollCost(@Nullable Boolean computeTollCost);
 
     /**
      * Whether the response should contain metadata holding versioning information.
