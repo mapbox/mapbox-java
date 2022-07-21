@@ -51,7 +51,8 @@ class MatchingResponseFactory {
   private List<MapMatchingMatching> generateRouteOptions(Response<MapMatchingResponse> response) {
     List<MapMatchingMatching> matchings = response.body().matchings();
     List<MapMatchingMatching> modifiedMatchings = new ArrayList<>();
-    for (MapMatchingMatching matching : matchings) {
+    for (int i = 0; i < matchings.size(); i++) {
+      MapMatchingMatching matching = matchings.get(i);
       modifiedMatchings.add(
         matching.toBuilder()
           .routeOptions(
@@ -76,6 +77,7 @@ class MatchingResponseFactory {
               .build()
           )
           .requestUuid(PLACEHOLDER_UUID)
+          .routeIndex(String.valueOf(i))
           .build()
       );
     }
