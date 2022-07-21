@@ -49,6 +49,9 @@ public class StepIntersectionTest extends TestUtils {
       .restStop(RestStop.builder().type("rest_area").name("stop_name").build())
       .tollCollection(TollCollection.builder().type("toll_gantry").name("toll_name").build())
       .adminIndex(2)
+      .stopSign(true)
+      .yieldSign(true)
+      .trafficSignal(true)
       .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
       .tunnelName("tunnel_name")
       .build();
@@ -88,7 +91,10 @@ public class StepIntersectionTest extends TestUtils {
     + "\"is_urban\": true,"
     + "\"mapbox_streets_v8\": {\"class\": \"street\"},"
     + "\"tunnel_name\": \"test tunnel name\","
-    + "\"railway_crossing\": true"
+    + "\"railway_crossing\": true,"
+    + "\"traffic_signal\": true,"
+    + "\"stop_sign\": true,"
+    + "\"yield_sign\": true"
     + "}";
 
     StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
@@ -97,6 +103,9 @@ public class StepIntersectionTest extends TestUtils {
     assertEquals("street", stepIntersection.mapboxStreetsV8().roadClass());
     assertEquals("test tunnel name", stepIntersection.tunnelName());
     assertTrue(stepIntersection.railwayCrossing());
+    assertTrue(stepIntersection.trafficSignal());
+    assertTrue(stepIntersection.stopSign());
+    assertTrue(stepIntersection.yieldSign());
 
     Point location = stepIntersection.location();
     assertEquals(13.426579, location.longitude(), 0.0001);
