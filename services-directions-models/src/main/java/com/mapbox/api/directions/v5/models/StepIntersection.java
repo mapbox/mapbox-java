@@ -215,6 +215,33 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract Boolean railwayCrossing();
 
   /**
+   * Indicates whether there is a traffic signal at the intersection.
+   *
+   * @return whether there is a traffic signal at the intersection
+   */
+  @Nullable
+  @SerializedName("traffic_signal")
+  public abstract Boolean trafficSignal();
+
+  /**
+   * Indicates whether there is a stop sign at the intersection.
+   *
+   * @return whether there is a stop sign at the intersection
+   */
+  @Nullable
+  @SerializedName("stop_sign")
+  public abstract Boolean stopSign();
+
+  /**
+   * Indicates whether there is a yield sign at the intersection.
+   *
+   * @return whether there is a yield sign at the intersection
+   */
+  @Nullable
+  @SerializedName("yield_sign")
+  public abstract Boolean yieldSign();
+
+  /**
    * Convert the current {@link StepIntersection} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link StepIntersection}.
@@ -425,6 +452,33 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder railwayCrossing(@Nullable Boolean railwayCrossing);
+
+    /**
+     * Indicates whether there is a traffic signal at the intersection.
+     *
+     * @param trafficSignal whether there is a traffic signal at the intersection.
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder trafficSignal(@Nullable Boolean trafficSignal);
+
+    /**
+     * Indicates whether there is a stop sign at the intersection.
+     *
+     * @param stopSign whether there is a stop sign at the intersection.
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder stopSign(@Nullable Boolean stopSign);
+
+    /**
+     * Indicates whether there is a yield sign at the intersection.
+     *
+     * @param yieldSign whether there is a yield sign at the intersection.
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder yieldSign(@Nullable Boolean yieldSign);
 
     /**
      * The rawLocation as a double array. Once the {@link StepIntersection} object's created,
