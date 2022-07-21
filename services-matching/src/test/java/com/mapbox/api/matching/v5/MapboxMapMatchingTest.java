@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 import com.mapbox.api.directions.v5.utils.FormatUtils;
+import com.mapbox.api.matching.v5.models.MapMatchingMatching;
 import com.mapbox.api.matching.v5.models.MapMatchingResponse;
 import com.mapbox.core.TestUtils;
 import com.mapbox.core.exceptions.ServicesException;
@@ -38,6 +39,8 @@ import retrofit2.Response;
 public class MapboxMapMatchingTest extends TestUtils {
 
   private static final String MAP_MATCHING_FIXTURE = "map_matching_v5_polyline.json";
+  private static final String MAP_MATCHING_FIXTURE_MULTI =
+    "map_matching_v5_polyline_multi_match.json";
   private static final String MAP_MATCHING_ERROR_FIXTURE = "mapmatching_nosegment_v5_polyline.json";
   private static final String MAP_MATCHING_APPROACHES = "mapmatching_v5_approaches.json";
   private static final String MAP_MATCHING_WAYPOINT_NAMES_FIXTURE = "mapmatching_v5_waypoint_names.json";
@@ -214,7 +217,7 @@ public class MapboxMapMatchingTest extends TestUtils {
   }
 
   @Test
-  public void mapMatchingToDirectionsRoute() throws Exception {
+  public void toDirectionsRoute() throws Exception {
     MapboxMapMatching mapMatching = MapboxMapMatching.builder()
       .profile(PROFILE_DRIVING)
       .coordinates(coordinates)
@@ -224,6 +227,51 @@ public class MapboxMapMatchingTest extends TestUtils {
     assertNotNull(mapMatching.executeCall().body().matchings().get(0).toDirectionRoute());
   }
 
+  @Test
+  public void toDirectionsRoute_routeIndex() throws Exception {
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
+      .coordinates(coordinates)
+      .baseUrl(mockUrl.toString())
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    assertEquals(
+      "0",
+      mapMatching.executeCall().body().matchings().get(0).toDirectionRoute().routeIndex()
+    );
+  }
+
+  @Test
+  public void toDirectionsRoute_routeIndex_multi_match() throws Exception {
+    server.setDispatcher(new okhttp3.mockwebserver.Dispatcher() {
+      @Override
+      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+        String resource = MAP_MATCHING_FIXTURE_MULTI;
+        try {
+          String response = loadJsonFixture(resource);
+          return new MockResponse().setBody(response);
+        } catch (IOException ioException) {
+          throw new RuntimeException(ioException);
+        }
+      }
+    });
+
+    MapboxMapMatching mapMatching = MapboxMapMatching.builder()
+      .profile(PROFILE_DRIVING)
+      .coordinates(coordinates)
+      .baseUrl(mockUrl.toString())
+      .accessToken(ACCESS_TOKEN)
+      .build();
+    List<MapMatchingMatching> matchings = mapMatching.executeCall().body().matchings();
+    assertEquals(
+      "0",
+      matchings.get(0).toDirectionRoute().routeIndex()
+    );
+    assertEquals(
+      "1",
+      matchings.get(1).toDirectionRoute().routeIndex()
+    );
+  }
 
   @Test
   public void accessToken_doesGetPlacedInUrlCorrectly() throws Exception {
