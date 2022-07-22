@@ -3,6 +3,8 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v6.7.0-beta.1 - Jul 22, 2022
 - Added `Incident.affectedRoadNames`. [#1457](https://github.com/mapbox/mapbox-java/pull/1457)
 - Added `StepIntersections.trafficSignal`,`StepIntersections.stopSign` and `StepIntersections.yieldSign`. [#1464](https://github.com/mapbox/mapbox-java/pull/1464)
 - Fixed an issue where the `MapMatchingMathcing#routeIndex` wasn't correctly assigned. [#1463](https://github.com/mapbox/mapbox-java/pull/1463)
