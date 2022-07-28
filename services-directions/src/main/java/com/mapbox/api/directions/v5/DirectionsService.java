@@ -20,42 +20,43 @@ interface DirectionsService {
   /**
    * Request definition.
    *
-   * @param userAgent               the user agent
-   * @param user                    {@link RouteOptions#user()}
-   * @param profile                 {@link RouteOptions#profile()}
-   * @param coordinates             {@link RouteOptions#coordinatesList()}
-   * @param accessToken             the access token
-   * @param alternatives            {@link RouteOptions#alternatives()}
-   * @param geometries              {@link RouteOptions#geometries()}
-   * @param overview                {@link RouteOptions#overview()}
-   * @param radiuses                {@link RouteOptions#radiuses()}
-   * @param steps                   {@link RouteOptions#steps()}
-   * @param bearings                {@link RouteOptions#bearings()}
-   * @param avoidManeuverRadius     {@link RouteOptions#avoidManeuverRadius()}
-   * @param layers                  {@link RouteOptions#layers()}
-   * @param continueStraight        {@link RouteOptions#continueStraight()}
-   * @param annotations             {@link RouteOptions#annotations()}
-   * @param language                {@link RouteOptions#language()}
-   * @param roundaboutExits         {@link RouteOptions#roundaboutExits()}
-   * @param voiceInstructions       {@link RouteOptions#voiceInstructions()}
-   * @param bannerInstructions      {@link RouteOptions#bannerInstructions()}
-   * @param voiceUnits              {@link RouteOptions#voiceUnits()}
-   * @param exclude                 {@link RouteOptions#exclude()}
-   * @param include                 {@link RouteOptions#include()}
-   * @param approaches              {@link RouteOptions#approaches()}
-   * @param waypointIndices         {@link RouteOptions#waypointIndices()}
-   * @param waypointNames           {@link RouteOptions#waypointNames()}
-   * @param waypointTargets         {@link RouteOptions#waypointTargets()}
-   * @param enableRefresh           {@link RouteOptions#enableRefresh()}
-   * @param walkingSpeed            {@link RouteOptions#walkingSpeed()}
-   * @param walkwayBias             {@link RouteOptions#walkwayBias()}
-   * @param alleyBias               {@link RouteOptions#alleyBias()}
-   * @param snappingIncludeClosures {@link RouteOptions#snappingIncludeClosures()}
-   * @param arriveBy                {@link RouteOptions#arriveBy()}
-   * @param departAt                {@link RouteOptions#departAt()}
-   * @param maxHeight               {@link RouteOptions#maxHeight()}
-   * @param maxWidth                {@link RouteOptions#maxWidth()}
-   * @param metadata                {@link RouteOptions#metadata()}
+   * @param userAgent                     the user agent
+   * @param user                          {@link RouteOptions#user()}
+   * @param profile                       {@link RouteOptions#profile()}
+   * @param coordinates                   {@link RouteOptions#coordinatesList()}
+   * @param accessToken                   the access token
+   * @param alternatives                  {@link RouteOptions#alternatives()}
+   * @param geometries                    {@link RouteOptions#geometries()}
+   * @param overview                      {@link RouteOptions#overview()}
+   * @param radiuses                      {@link RouteOptions#radiuses()}
+   * @param steps                         {@link RouteOptions#steps()}
+   * @param bearings                      {@link RouteOptions#bearings()}
+   * @param avoidManeuverRadius           {@link RouteOptions#avoidManeuverRadius()}
+   * @param layers                        {@link RouteOptions#layers()}
+   * @param continueStraight              {@link RouteOptions#continueStraight()}
+   * @param annotations                   {@link RouteOptions#annotations()}
+   * @param language                      {@link RouteOptions#language()}
+   * @param roundaboutExits               {@link RouteOptions#roundaboutExits()}
+   * @param voiceInstructions             {@link RouteOptions#voiceInstructions()}
+   * @param bannerInstructions            {@link RouteOptions#bannerInstructions()}
+   * @param voiceUnits                    {@link RouteOptions#voiceUnits()}
+   * @param exclude                       {@link RouteOptions#exclude()}
+   * @param include                       {@link RouteOptions#include()}
+   * @param approaches                    {@link RouteOptions#approaches()}
+   * @param waypointIndices               {@link RouteOptions#waypointIndices()}
+   * @param waypointNames                 {@link RouteOptions#waypointNames()}
+   * @param waypointTargets               {@link RouteOptions#waypointTargets()}
+   * @param enableRefresh                 {@link RouteOptions#enableRefresh()}
+   * @param walkingSpeed                  {@link RouteOptions#walkingSpeed()}
+   * @param walkwayBias                   {@link RouteOptions#walkwayBias()}
+   * @param alleyBias                     {@link RouteOptions#alleyBias()}
+   * @param snappingIncludeClosures       {@link RouteOptions#snappingIncludeClosures()}
+   * @param snappingIncludeStaticClosures {@link RouteOptions#snappingIncludeStaticClosures()}
+   * @param arriveBy                      {@link RouteOptions#arriveBy()}
+   * @param departAt                      {@link RouteOptions#departAt()}
+   * @param maxHeight                     {@link RouteOptions#maxHeight()}
+   * @param maxWidth                      {@link RouteOptions#maxWidth()}
+   * @param metadata                      {@link RouteOptions#metadata()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
   @GET("directions/v5/{user}/{profile}/{coordinates}")
@@ -91,6 +92,7 @@ interface DirectionsService {
     @Query("walkway_bias") Double walkwayBias,
     @Query("alley_bias") Double alleyBias,
     @Query("snapping_include_closures") String snappingIncludeClosures,
+    @Query("snapping_include_static_closures") String snappingIncludeStaticClosures,
     @Query("arrive_by") String arriveBy,
     @Query("depart_at") String departAt,
     @Query("max_height") Double maxHeight,
@@ -102,42 +104,43 @@ interface DirectionsService {
   /**
    * Request definition.
    *
-   * @param userAgent               the user agent
-   * @param user                    {@link RouteOptions#user()}
-   * @param profile                 {@link RouteOptions#profile()}
-   * @param coordinates             {@link RouteOptions#coordinatesList()}
-   * @param accessToken             the access token
-   * @param alternatives            {@link RouteOptions#alternatives()}
-   * @param geometries              {@link RouteOptions#geometries()}
-   * @param overview                {@link RouteOptions#overview()}
-   * @param radiuses                {@link RouteOptions#radiuses()}
-   * @param steps                   {@link RouteOptions#steps()}
-   * @param bearings                {@link RouteOptions#bearings()}
-   * @param avoidManeuverRadius     {@link RouteOptions#avoidManeuverRadius()}
-   * @param layers                  {@link RouteOptions#layers()}
-   * @param continueStraight        {@link RouteOptions#continueStraight()}
-   * @param annotations             {@link RouteOptions#annotations()}
-   * @param language                {@link RouteOptions#language()}
-   * @param roundaboutExits         {@link RouteOptions#roundaboutExits()}
-   * @param voiceInstructions       {@link RouteOptions#voiceInstructions()}
-   * @param bannerInstructions      {@link RouteOptions#bannerInstructions()}
-   * @param voiceUnits              {@link RouteOptions#voiceUnits()}
-   * @param exclude                 {@link RouteOptions#exclude()}
-   * @param include                 {@link RouteOptions#include()}
-   * @param approaches              {@link RouteOptions#approaches()}
-   * @param waypointIndices         {@link RouteOptions#waypointIndices()}
-   * @param waypointNames           {@link RouteOptions#waypointNames()}
-   * @param waypointTargets         {@link RouteOptions#waypointTargets()}
-   * @param enableRefresh           {@link RouteOptions#enableRefresh()}
-   * @param walkingSpeed            {@link RouteOptions#walkingSpeed()}
-   * @param walkwayBias             {@link RouteOptions#walkwayBias()}
-   * @param alleyBias               {@link RouteOptions#alleyBias()}
-   * @param snappingIncludeClosures {@link RouteOptions#snappingIncludeClosures()}
-   * @param arriveBy                {@link RouteOptions#arriveBy()}
-   * @param departAt                {@link RouteOptions#departAt()}
-   * @param maxHeight               {@link RouteOptions#maxHeight()}
-   * @param maxWidth                {@link RouteOptions#maxWidth()}
-   * @param metadata                {@link RouteOptions#metadata()}
+   * @param userAgent                     the user agent
+   * @param user                          {@link RouteOptions#user()}
+   * @param profile                       {@link RouteOptions#profile()}
+   * @param coordinates                   {@link RouteOptions#coordinatesList()}
+   * @param accessToken                   the access token
+   * @param alternatives                  {@link RouteOptions#alternatives()}
+   * @param geometries                    {@link RouteOptions#geometries()}
+   * @param overview                      {@link RouteOptions#overview()}
+   * @param radiuses                      {@link RouteOptions#radiuses()}
+   * @param steps                         {@link RouteOptions#steps()}
+   * @param bearings                      {@link RouteOptions#bearings()}
+   * @param avoidManeuverRadius           {@link RouteOptions#avoidManeuverRadius()}
+   * @param layers                        {@link RouteOptions#layers()}
+   * @param continueStraight              {@link RouteOptions#continueStraight()}
+   * @param annotations                   {@link RouteOptions#annotations()}
+   * @param language                      {@link RouteOptions#language()}
+   * @param roundaboutExits               {@link RouteOptions#roundaboutExits()}
+   * @param voiceInstructions             {@link RouteOptions#voiceInstructions()}
+   * @param bannerInstructions            {@link RouteOptions#bannerInstructions()}
+   * @param voiceUnits                    {@link RouteOptions#voiceUnits()}
+   * @param exclude                       {@link RouteOptions#exclude()}
+   * @param include                       {@link RouteOptions#include()}
+   * @param approaches                    {@link RouteOptions#approaches()}
+   * @param waypointIndices               {@link RouteOptions#waypointIndices()}
+   * @param waypointNames                 {@link RouteOptions#waypointNames()}
+   * @param waypointTargets               {@link RouteOptions#waypointTargets()}
+   * @param enableRefresh                 {@link RouteOptions#enableRefresh()}
+   * @param walkingSpeed                  {@link RouteOptions#walkingSpeed()}
+   * @param walkwayBias                   {@link RouteOptions#walkwayBias()}
+   * @param alleyBias                     {@link RouteOptions#alleyBias()}
+   * @param snappingIncludeClosures       {@link RouteOptions#snappingIncludeClosures()}
+   * @param snappingIncludeStaticClosures {@link RouteOptions#snappingIncludeStaticClosures()}
+   * @param arriveBy                      {@link RouteOptions#arriveBy()}
+   * @param departAt                      {@link RouteOptions#departAt()}
+   * @param maxHeight                     {@link RouteOptions#maxHeight()}
+   * @param maxWidth                      {@link RouteOptions#maxWidth()}
+   * @param metadata                      {@link RouteOptions#metadata()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
   @FormUrlEncoded
@@ -174,6 +177,7 @@ interface DirectionsService {
     @Field("walkway_bias") Double walkwayBias,
     @Field("alley_bias") Double alleyBias,
     @Field("snapping_include_closures") String snappingIncludeClosures,
+    @Field("snapping_include_static_closures") String snappingIncludeStaticClosures,
     @Field("arrive_by") String arriveBy,
     @Field("depart_at") String departAt,
     @Field("max_height") Double maxHeight,

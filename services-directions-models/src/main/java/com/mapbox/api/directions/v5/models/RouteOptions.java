@@ -744,6 +744,25 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String snappingIncludeClosures();
 
   /**
+   *  A semicolon-separated list of booleans affecting snapping of
+   *  waypoint locations to road segments.
+   *  If true, road segments statically closed, that is long-term, will be considered for snapping
+   *  (for example, road under construction).
+   *  If false, they will not be considered for snapping.
+   *  If provided, the number of snappingIncludeStaticClosures must be the same
+   *  as the number of waypoints.
+   *  However, you can skip a coordinate and show its position in the list with the ; separator.
+   *  If null, this parameter defaults to false.
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
+   *
+   * @return a String representing a list of booleans
+   */
+  @SerializedName("snapping_include_static_closures")
+  @Nullable
+  public abstract String snappingIncludeStaticClosures();
+
+  /**
    * A list of booleans affecting snapping of waypoint locations to road segments.
    * If true, road segments closed due to live-traffic closures will be considered for snapping.
    * If false, they will not be considered for snapping.
@@ -759,6 +778,25 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   @Nullable
   public List<Boolean> snappingIncludeClosuresList() {
     return ParseUtils.parseToBooleans(snappingIncludeClosures());
+  }
+
+  /**
+   *  A list of booleans affecting snapping of waypoint locations to road segments.
+   *  If true, road segments statically closed, that is long-term, will be considered for snapping
+   *  (for example, road under construction).
+   *  If false, they will not be considered for snapping.
+   *  If provided, the number of snappingIncludeStaticClosures must be the same
+   *  as the number of waypoints.
+   *  However, you can skip a coordinate and show its position in the list with the null.
+   *  If null, this parameter defaults to false.
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
+   *
+   * @return a list of booleans
+   */
+  @Nullable
+  public List<Boolean> snappingIncludeStaticClosuresList() {
+    return ParseUtils.parseToBooleans(snappingIncludeStaticClosures());
   }
 
   /**
@@ -975,6 +1013,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     appendQueryParameter(sb, "walkway_bias", walkwayBias());
     appendQueryParameter(sb, "alley_bias", alleyBias());
     appendQueryParameter(sb, "snapping_include_closures", snappingIncludeClosures());
+    appendQueryParameter(sb, "snapping_include_static_closures", snappingIncludeStaticClosures());
     appendQueryParameter(sb, "arrive_by", arriveBy());
     appendQueryParameter(sb, "depart_at", departAt());
     appendQueryParameter(sb, "max_height", maxHeight());
@@ -1854,6 +1893,51 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       String result = FormatUtils.join(";", snappingClosures);
       if (result != null) {
         snappingIncludeClosures(result);
+      }
+      return this;
+    }
+
+    /**
+     *  A semicolon-separated list of booleans affecting snapping of
+     *  waypoint locations to road segments.
+     *  If true, road segments statically closed, that is long-term, will be considered for snapping
+     *  (for example, road under construction).
+     *  If false, they will not be considered for snapping.
+     *  If provided, the number of snappingIncludeStaticClosures must be the same
+     *  as the number of waypoints.
+     *  However, you can skip a coordinate and show its position in the list with the ; separator.
+     *  If null, this parameter defaults to false.
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
+     *
+     * @param snappingStaticClosures a String representing a list of booleans
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder snappingIncludeStaticClosures(@Nullable String snappingStaticClosures);
+
+    /**
+     *  A list of booleans affecting snapping of waypoint locations to road segments.
+     *  If true, road segments statically closed, that is long-term, will be considered for snapping
+     *  (for example, road under construction).
+     *  If false, they will not be considered for snapping.
+     *  If provided, the number of snappingIncludeStaticClosures must be the same
+     *  as the number of waypoints.
+     *  However, you can skip a coordinate and show its position in the list with the null.
+     *  If null, this parameter defaults to false.
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
+     *
+     * @param snappingStaticClosures a list of booleans
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public Builder snappingIncludeStaticClosuresList(
+            @Nullable List<Boolean> snappingStaticClosures
+    ) {
+      String result = FormatUtils.join(";", snappingStaticClosures);
+      if (result != null) {
+        snappingIncludeStaticClosures(result);
       }
       return this;
     }

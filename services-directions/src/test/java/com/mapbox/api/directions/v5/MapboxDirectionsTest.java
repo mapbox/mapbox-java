@@ -711,6 +711,17 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void snappingIncludeStaticClosures() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+            .accessToken("token")
+            .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+            .build();
+
+    assertEquals("true;;false",
+            mapboxDirections.cloneCall().request().url().queryParameter("snapping_include_static_closures"));
+  }
+
+  @Test
   public void arrive_by() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .accessToken("token")

@@ -37,7 +37,7 @@ public class RouteOptionsTest extends TestUtils {
    */
   private static final String ROUTE_OPTIONS_JSON = "route_options_v5.json";
   private static final String ROUTE_OPTIONS_URL =
-    "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=%3Bunlimited%3B5.1&steps=true&avoid_maneuver_radius=200.0&bearings=0%2C90%3B90%2C0%3B&layers=-42%3B%3B0&continue_straight=false&annotations=congestion%2Cdistance%2Cduration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll%2Cferry%2Cpoint%2811.0+-22.0%29&include=hot%2Chov2&approaches=%3Bcurb%3B&waypoints=0%3B1%3B2&waypoint_names=%3BSerangoon+Garden+Market+%26+Food+Centre%3BFunky+%26nAmE*&waypoint_targets=%3B12.2%2C21.2%3B&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=%3Bfalse%3Btrue&arrive_by=2021-01-01%27T%2701%3A01&depart_at=2021-02-02%27T%2702%3A02&max_height=1.5&max_width=1.4&max_weight=2.9&metadata=true";
+    "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=%3Bunlimited%3B5.1&steps=true&avoid_maneuver_radius=200.0&bearings=0%2C90%3B90%2C0%3B&layers=-42%3B%3B0&continue_straight=false&annotations=congestion%2Cdistance%2Cduration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll%2Cferry%2Cpoint%2811.0+-22.0%29&include=hot%2Chov2&approaches=%3Bcurb%3B&waypoints=0%3B1%3B2&waypoint_names=%3BSerangoon+Garden+Market+%26+Food+Centre%3BFunky+%26nAmE*&waypoint_targets=%3B12.2%2C21.2%3B&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=%3Bfalse%3Btrue&snapping_include_static_closures=true%3B%3Bfalse&arrive_by=2021-01-01%27T%2701%3A01&depart_at=2021-02-02%27T%2702%3A02&max_height=1.5&max_width=1.4&max_weight=2.9&metadata=true";
   private static final String ACCESS_TOKEN = "pk.token";
 
   private final String optionsJson = loadJsonFixture(ROUTE_OPTIONS_JSON);
@@ -266,6 +266,13 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void snappingIncludeStaticClosuresStringIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
+
+    assertEquals("true;;false", options.snappingIncludeStaticClosures());
+  }
+
+  @Test
   public void alleyBiasIsValid_fromJson() {
     RouteOptions options = RouteOptions.fromJson(optionsJson);
 
@@ -391,6 +398,57 @@ public class RouteOptionsTest extends TestUtils {
     URL url = options.toUrl(ACCESS_TOKEN);
 
     assertEquals(expectedUrl, url.toString());
+  }
+
+  @Test
+  public void snappingIncludeStaticClosuresList_Null_toUrl() {
+    String expectedUrl =
+            "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6";
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
+    coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
+
+    RouteOptions options = RouteOptions.builder()
+            .profile(DirectionsCriteria.PROFILE_DRIVING)
+            .coordinatesList(coordinates)
+            .snappingIncludeStaticClosuresList(null)
+            .build();
+
+    URL url = options.toUrl(ACCESS_TOKEN);
+
+    assertEquals(expectedUrl, url.toString());
+  }
+
+  @Test
+  public void snappingIncludeStaticClosuresList_Empty_toUrl() {
+    String expectedUrl =
+            "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715?access_token=pk.token&geometries=polyline6";
+    List<Point> coordinates = new ArrayList<>();
+    coordinates.add(Point.fromLngLat(-122.4003312, 37.7736941));
+    coordinates.add(Point.fromLngLat(-122.4187529, 37.7689715));
+
+    RouteOptions options = RouteOptions.builder()
+            .profile(DirectionsCriteria.PROFILE_DRIVING)
+            .coordinatesList(coordinates)
+            .snappingIncludeStaticClosuresList(new ArrayList<>())
+            .build();
+
+    URL url = options.toUrl(ACCESS_TOKEN);
+
+    assertEquals(expectedUrl, url.toString());
+  }
+
+  @Test
+  public void snappingIncludeStaticClosures_reconstruct() {
+    RouteOptions options = routeOptions().toBuilder().build();
+    assertEquals("true;;false", options.snappingIncludeStaticClosures());
+    assertEquals(Arrays.asList(true, null, false), options.snappingIncludeStaticClosuresList());
+  }
+  @Test
+  public void snappingIncludeStaticClosuresList_reconstruct() {
+    RouteOptions options = routeOptionsList().toBuilder().build();
+    assertEquals("true;;false", options.snappingIncludeStaticClosures());
+    assertEquals(Arrays.asList(true, null, false), options.snappingIncludeStaticClosuresList());
   }
 
   @Test
@@ -812,6 +870,7 @@ public class RouteOptionsTest extends TestUtils {
       .maxWidth(1.4)
       .maxWeight(2.9)
       .snappingIncludeClosures(";false;true")
+      .snappingIncludeStaticClosures("true;;false")
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
       .enableRefresh(true)
       .metadata(true)
@@ -903,6 +962,11 @@ public class RouteOptionsTest extends TestUtils {
         add(null);
         add(false);
         add(true);
+      }})
+      .snappingIncludeStaticClosuresList(new ArrayList<Boolean>() {{
+        add(true);
+        add(null);
+        add(false);
       }})
       .user(DirectionsCriteria.PROFILE_DEFAULT_USER)
       .enableRefresh(true)
