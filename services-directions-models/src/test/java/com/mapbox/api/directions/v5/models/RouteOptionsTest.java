@@ -437,18 +437,175 @@ public class RouteOptionsTest extends TestUtils {
 
     assertEquals(expectedUrl, url.toString());
   }
+
+  @Test
+  public void radiusesList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().radiusesList(null).build();
+    assertNull(options.radiuses());
+    assertNull(options.radiusesList());
+  }
+
+  @Test
+  public void radiusesList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().radiusesList(new ArrayList<>()).build();
+    assertNull(options.radiuses());
+    assertNull(options.radiusesList());
+  }
+
+  @Test
+  public void bearingsList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().bearingsList(null).build();
+    assertNull(options.bearings());
+    assertNull(options.bearingsList());
+  }
+
+  @Test
+  public void bearingsList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().bearingsList(new ArrayList<>()).build();
+    assertNull(options.bearings());
+    assertNull(options.bearingsList());
+  }
+
+  @Test
+  public void layersList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().layersList(null).build();
+    assertNull(options.layers());
+    assertNull(options.layersList());
+  }
+
+  @Test
+  public void layersList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().layersList(new ArrayList<>()).build();
+    assertNull(options.layers());
+    assertNull(options.layersList());
+  }
+
+  @Test
+  public void annotationsList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().annotationsList(null).build();
+    assertNull(options.annotations());
+    assertNull(options.annotationsList());
+  }
+
+  @Test
+  public void annotationsList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().annotationsList(new ArrayList<>()).build();
+    assertNull(options.annotations());
+    assertNull(options.annotationsList());
+  }
+
+  @Test
+  public void excludeList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().excludeList(null).build();
+    assertNull(options.exclude());
+    assertNull(options.excludeList());
+    assertNull(options.excludeObject());
+  }
+
+  @Test
+  public void excludeList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().excludeList(new ArrayList<>()).build();
+    assertNull(options.exclude());
+    assertNull(options.excludeList());
+    assertNull(options.excludeObject());
+  }
+
+  @Test
+  public void includeList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().includeList(null).build();
+    assertNull(options.include());
+    assertNull(options.includeList());
+  }
+
+  @Test
+  public void includeList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().includeList(new ArrayList<>()).build();
+    assertNull(options.include());
+    assertNull(options.includeList());
+  }
+
+  @Test
+  public void approachesList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().approachesList(null).build();
+    assertNull(options.approaches());
+    assertNull(options.approachesList());
+  }
+
+  @Test
+  public void approachesList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().approachesList(new ArrayList<>()).build();
+    assertNull(options.approaches());
+    assertNull(options.approachesList());
+  }
+
+  @Test
+  public void waypointIndicesList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().waypointIndicesList(null).build();
+    assertNull(options.waypointIndices());
+    assertNull(options.waypointIndicesList());
+  }
+
+  @Test
+  public void waypointIndicesList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().waypointIndicesList(new ArrayList<>()).build();
+    assertNull(options.waypointIndices());
+    assertNull(options.waypointIndicesList());
+  }
+
+  @Test
+  public void waypointNamesList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().waypointNamesList(null).build();
+    assertNull(options.waypointNames());
+    assertNull(options.waypointNamesList());
+  }
+
+  @Test
+  public void waypointNamesList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().waypointNamesList(new ArrayList<>()).build();
+    assertNull(options.waypointNames());
+    assertNull(options.waypointNamesList());
+  }
+
+  @Test
+  public void waypointTargetsList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().waypointTargetsList(null).build();
+    assertNull(options.waypointTargets());
+    assertNull(options.waypointTargetsList());
+  }
+
+  @Test
+  public void waypointTargetsList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().waypointTargetsList(new ArrayList<>()).build();
+    assertNull(options.waypointTargets());
+    assertNull(options.waypointTargetsList());
+  }
+
+  @Test
+  public void snappingIncludeClosuresList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().snappingIncludeClosuresList(null).build();
+    assertNull(options.snappingIncludeClosures());
+    assertNull(options.snappingIncludeClosuresList());
+  }
+
+  @Test
+  public void snappingIncludeClosuresList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().snappingIncludeClosuresList(new ArrayList<>()).build();
+    assertNull(options.snappingIncludeClosures());
+    assertNull(options.snappingIncludeClosuresList());
+  }
+
   @Test
   public void snappingIncludeStaticClosuresList_resetToNull() {
     RouteOptions options = routeOptionsList().toBuilder().snappingIncludeStaticClosuresList(null).build();
-    assertEquals("true;;false", options.snappingIncludeStaticClosures());
-    assertEquals(Arrays.asList(true, null, false), options.snappingIncludeStaticClosuresList());
+    assertNull(options.snappingIncludeStaticClosures());
+    assertNull(options.snappingIncludeStaticClosuresList());
   }
 
   @Test
   public void snappingIncludeStaticClosuresList_resetToEmpty() {
     RouteOptions options = routeOptionsList().toBuilder().snappingIncludeStaticClosuresList(new ArrayList<>()).build();
-    assertEquals("true;;false", options.snappingIncludeStaticClosures());
-    assertEquals(Arrays.asList(true, null, false), options.snappingIncludeStaticClosuresList());
+    assertNull(options.snappingIncludeStaticClosures());
+    assertNull(options.snappingIncludeStaticClosuresList());
   }
 
   @Test

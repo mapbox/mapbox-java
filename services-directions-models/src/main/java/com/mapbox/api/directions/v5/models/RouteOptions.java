@@ -1175,9 +1175,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder coordinatesList(@NonNull List<Point> coordinates) {
       String result = FormatUtils.formatPointsList(coordinates);
-      if (result != null) {
-        coordinates(result);
+      if (result == null) {
+        result = "";
       }
+      coordinates(result);
       return this;
     }
 
@@ -1241,9 +1242,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder radiusesList(@Nullable List<Double> radiuses) {
       String result = FormatUtils.formatRadiuses(radiuses);
-      if (result != null) {
-        radiuses(result);
-      }
+      radiuses(result);
       return this;
     }
 
@@ -1285,9 +1284,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder bearingsList(@Nullable List<Bearing> bearings) {
       String result = FormatUtils.formatBearings(bearings);
-      if (result != null) {
-        bearings(result);
-      }
+      bearings(result);
       return this;
     }
 
@@ -1336,9 +1333,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder layersList(@Nullable List<Integer> layers) {
       String result = FormatUtils.formatIntegers(layers);
-      if (result != null) {
-        layers(result);
-      }
+      layers(result);
       return this;
     }
 
@@ -1462,9 +1457,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder annotationsList(@Nullable List<String> annotations) {
       String result = FormatUtils.join(",", annotations);
-      if (result != null) {
-        annotations(result);
-      }
+      annotations(result);
       return this;
     }
 
@@ -1551,9 +1544,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder excludeList(@Nullable List<String> exclude) {
       String result = FormatUtils.join(",", exclude);
-      if (result != null) {
-        exclude(result);
-      }
+      exclude(result);
       return this;
     }
 
@@ -1622,9 +1613,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder includeList(@Nullable List<String> include) {
       String result = FormatUtils.join(",", include);
-      if (result != null) {
-        include(result);
-      }
+      include(result);
       return this;
     }
 
@@ -1669,9 +1658,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder approachesList(@Nullable List<String> approaches) {
       String result = FormatUtils.join(";", approaches);
-      if (result != null) {
-        approaches(result);
-      }
+      approaches(result);
       return this;
     }
 
@@ -1734,9 +1721,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder waypointIndicesList(@Nullable List<Integer> indices) {
       String result = FormatUtils.join(";", indices);
-      if (result != null) {
-        waypointIndices(result);
-      }
+      waypointIndices(result);
       return this;
     }
 
@@ -1772,9 +1757,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder waypointNamesList(@Nullable List<String> waypointNames) {
       String result = FormatUtils.join(";", waypointNames);
-      if (result != null) {
-        waypointNames(result);
-      }
+      waypointNames(result);
       return this;
     }
 
@@ -1891,9 +1874,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder snappingIncludeClosuresList(@Nullable List<Boolean> snappingClosures) {
       String result = FormatUtils.join(";", snappingClosures);
-      if (result != null) {
-        snappingIncludeClosures(result);
-      }
+      snappingIncludeClosures(result);
       return this;
     }
 
@@ -1936,9 +1917,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
             @Nullable List<Boolean> snappingStaticClosures
     ) {
       String result = FormatUtils.join(";", snappingStaticClosures);
-      if (result != null) {
-        snappingIncludeStaticClosures(result);
-      }
+      snappingIncludeStaticClosures(result);
       return this;
     }
 

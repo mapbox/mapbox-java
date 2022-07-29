@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Fixed an issue where the `RouteOptions#...List` parameters were not reset correctly (for example, `routeOptions.toBuilder().bearingsList(null).build()` did not reset bearings to null). [#1469](https://github.com/mapbox/mapbox-java/pull/1469)
 - Added `RouteOptions.snappingIncludeStaticClosures` and `RouteOptions.snappingIncludeStaticClosuresList`. [#1469](https://github.com/mapbox/mapbox-java/pull/1469) 
 
 ### v6.7.0-beta.1 - Jul 22, 2022
