@@ -437,16 +437,16 @@ public class RouteOptionsTest extends TestUtils {
 
     assertEquals(expectedUrl, url.toString());
   }
-
   @Test
-  public void snappingIncludeStaticClosures_reconstruct() {
-    RouteOptions options = routeOptions().toBuilder().build();
+  public void snappingIncludeStaticClosuresList_resetToNull() {
+    RouteOptions options = routeOptionsList().toBuilder().snappingIncludeStaticClosuresList(null).build();
     assertEquals("true;;false", options.snappingIncludeStaticClosures());
     assertEquals(Arrays.asList(true, null, false), options.snappingIncludeStaticClosuresList());
   }
+
   @Test
-  public void snappingIncludeStaticClosuresList_reconstruct() {
-    RouteOptions options = routeOptionsList().toBuilder().build();
+  public void snappingIncludeStaticClosuresList_resetToEmpty() {
+    RouteOptions options = routeOptionsList().toBuilder().snappingIncludeStaticClosuresList(new ArrayList<>()).build();
     assertEquals("true;;false", options.snappingIncludeStaticClosures());
     assertEquals(Arrays.asList(true, null, false), options.snappingIncludeStaticClosuresList());
   }
