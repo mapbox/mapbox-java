@@ -79,6 +79,12 @@ public abstract class BannerComponents extends DirectionsJsonObject
    */
   public static final String SIGNBOARD = "signboard";
 
+  /*
+   * This view gives guidance through guide maps and is used to complete maneuvers.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String SAPAGUIDEMAP = "sapaguidemap";
+
   /**
    * This view gives guidance through junctions and is used to complete maneuvers.
    */
@@ -111,7 +117,8 @@ public abstract class BannerComponents extends DirectionsJsonObject
   @Retention(RetentionPolicy.CLASS)
   @StringDef( {
       JCT,
-      SIGNBOARD
+      SIGNBOARD,
+      SAPAGUIDEMAP
   })
   public @interface BannerComponentsSubType {
   }

@@ -7,6 +7,7 @@ import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 
@@ -38,6 +39,16 @@ public abstract class RestStop extends DirectionsJsonObject {
    */
   @Nullable
   public abstract List<Amenity> amenities();
+
+  /*
+   * The guideMap image URL without extension. Optionally included if data is available.
+   * The guideMap image can be retrieved as `svg`, `png` by appending `.svg`, `.png` to
+   * the URL string accordingly.
+   */
+  @SuppressWarnings("checkstyle:javadocmethod")
+  @Nullable
+  @SerializedName("guidemap")
+  public abstract String guideMap();
 
   /**
    * Create a new instance of this class by using the {@link Builder} class.
@@ -111,6 +122,15 @@ public abstract class RestStop extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder amenities(@Nullable List<Amenity> amenities);
+
+    /*
+     * The guideMap image URL without extension. Optionally included if data is available.
+     * The guideMap image can be retrieved as `svg`, `png` by appending `.svg`, `.png` to
+     * the URL string accordingly.
+     */
+    @SuppressWarnings("checkstyle:javadocmethod")
+    @NonNull
+    public abstract Builder guideMap(@Nullable String guideMap);
 
     /**
      * Build a new {@link RestStop} object.
