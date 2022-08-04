@@ -17,6 +17,7 @@ public class RestStopTest extends TestUtils {
     RestStop restStop = RestStop.builder()
         .name("ABCD")
         .type("service_area")
+        .guideMap("https://mapbox.guidemap.test.com")
         .amenities(Collections.emptyList())
         .build();
     assertNotNull(restStop);
@@ -28,6 +29,7 @@ public class RestStopTest extends TestUtils {
         .builder()
         .name("ABCD")
         .type("service_area")
+        .guideMap("https://mapbox.guidemap.test.com")
         .amenities(Collections.emptyList())
         .build();
 
@@ -45,6 +47,7 @@ public class RestStopTest extends TestUtils {
         .builder()
         .name("ABCD")
         .type("service_area")
+        .guideMap("https://mapbox.guidemap.test.com")
         .amenities(Collections.emptyList())
         .build();
 
@@ -61,6 +64,7 @@ public class RestStopTest extends TestUtils {
     RestStop restStop = response.routes().get(0).legs().get(0).steps().get(1).intersections().get(0).restStop();
 
     assertNotNull(restStop);
+    assertNotNull(restStop.guideMap());
     assertNotNull(restStop.amenities());
     assertEquals("SA", restStop.name());
     assertEquals("service_area", restStop.type());

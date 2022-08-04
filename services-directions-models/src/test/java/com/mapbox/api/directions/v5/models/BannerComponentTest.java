@@ -245,4 +245,19 @@ public class BannerComponentTest extends TestUtils {
 
     assertEquals(bannerComponents, bannerComponentsFromJson);
   }
+
+  @Test
+  public void testToFromJsonSapaMapSubType() {
+
+    BannerComponents bannerComponents = BannerComponents.builder()
+        .text("")
+        .type("guidance-view")
+        .subType("sapaguidemap")
+        .build();
+
+    String jsonString = bannerComponents.toJson();
+    BannerComponents bannerComponentsFromJson = BannerComponents.fromJson(jsonString);
+
+    assertEquals(bannerComponents, bannerComponentsFromJson);
+  }
 }
