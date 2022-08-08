@@ -744,6 +744,25 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract String snappingIncludeClosures();
 
   /**
+   *  A semicolon-separated list of booleans affecting snapping of
+   *  waypoint locations to road segments.
+   *  If true, road segments statically closed, that is long-term, will be considered for snapping
+   *  (for example, road under construction).
+   *  If false, they will not be considered for snapping.
+   *  If provided, the number of snappingIncludeStaticClosures must be the same
+   *  as the number of waypoints.
+   *  However, you can skip a coordinate and show its position in the list with the ; separator.
+   *  If null, this parameter defaults to false.
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
+   *
+   * @return a String representing a list of booleans
+   */
+  @SerializedName("snapping_include_static_closures")
+  @Nullable
+  public abstract String snappingIncludeStaticClosures();
+
+  /**
    * A list of booleans affecting snapping of waypoint locations to road segments.
    * If true, road segments closed due to live-traffic closures will be considered for snapping.
    * If false, they will not be considered for snapping.
@@ -759,6 +778,25 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   @Nullable
   public List<Boolean> snappingIncludeClosuresList() {
     return ParseUtils.parseToBooleans(snappingIncludeClosures());
+  }
+
+  /**
+   *  A list of booleans affecting snapping of waypoint locations to road segments.
+   *  If true, road segments statically closed, that is long-term, will be considered for snapping
+   *  (for example, road under construction).
+   *  If false, they will not be considered for snapping.
+   *  If provided, the number of snappingIncludeStaticClosures must be the same
+   *  as the number of waypoints.
+   *  However, you can skip a coordinate and show its position in the list with the null.
+   *  If null, this parameter defaults to false.
+   * <p>
+   * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
+   *
+   * @return a list of booleans
+   */
+  @Nullable
+  public List<Boolean> snappingIncludeStaticClosuresList() {
+    return ParseUtils.parseToBooleans(snappingIncludeStaticClosures());
   }
 
   /**
@@ -975,6 +1013,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     appendQueryParameter(sb, "walkway_bias", walkwayBias());
     appendQueryParameter(sb, "alley_bias", alleyBias());
     appendQueryParameter(sb, "snapping_include_closures", snappingIncludeClosures());
+    appendQueryParameter(sb, "snapping_include_static_closures", snappingIncludeStaticClosures());
     appendQueryParameter(sb, "arrive_by", arriveBy());
     appendQueryParameter(sb, "depart_at", departAt());
     appendQueryParameter(sb, "max_height", maxHeight());
@@ -1136,9 +1175,10 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder coordinatesList(@NonNull List<Point> coordinates) {
       String result = FormatUtils.formatPointsList(coordinates);
-      if (result != null) {
-        coordinates(result);
+      if (result == null) {
+        result = "";
       }
+      coordinates(result);
       return this;
     }
 
@@ -1202,9 +1242,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder radiusesList(@Nullable List<Double> radiuses) {
       String result = FormatUtils.formatRadiuses(radiuses);
-      if (result != null) {
-        radiuses(result);
-      }
+      radiuses(result);
       return this;
     }
 
@@ -1246,9 +1284,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder bearingsList(@Nullable List<Bearing> bearings) {
       String result = FormatUtils.formatBearings(bearings);
-      if (result != null) {
-        bearings(result);
-      }
+      bearings(result);
       return this;
     }
 
@@ -1297,9 +1333,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder layersList(@Nullable List<Integer> layers) {
       String result = FormatUtils.formatIntegers(layers);
-      if (result != null) {
-        layers(result);
-      }
+      layers(result);
       return this;
     }
 
@@ -1423,9 +1457,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder annotationsList(@Nullable List<String> annotations) {
       String result = FormatUtils.join(",", annotations);
-      if (result != null) {
-        annotations(result);
-      }
+      annotations(result);
       return this;
     }
 
@@ -1512,9 +1544,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder excludeList(@Nullable List<String> exclude) {
       String result = FormatUtils.join(",", exclude);
-      if (result != null) {
-        exclude(result);
-      }
+      exclude(result);
       return this;
     }
 
@@ -1583,9 +1613,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder includeList(@Nullable List<String> include) {
       String result = FormatUtils.join(",", include);
-      if (result != null) {
-        include(result);
-      }
+      include(result);
       return this;
     }
 
@@ -1630,9 +1658,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder approachesList(@Nullable List<String> approaches) {
       String result = FormatUtils.join(";", approaches);
-      if (result != null) {
-        approaches(result);
-      }
+      approaches(result);
       return this;
     }
 
@@ -1695,9 +1721,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder waypointIndicesList(@Nullable List<Integer> indices) {
       String result = FormatUtils.join(";", indices);
-      if (result != null) {
-        waypointIndices(result);
-      }
+      waypointIndices(result);
       return this;
     }
 
@@ -1733,9 +1757,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder waypointNamesList(@Nullable List<String> waypointNames) {
       String result = FormatUtils.join(";", waypointNames);
-      if (result != null) {
-        waypointNames(result);
-      }
+      waypointNames(result);
       return this;
     }
 
@@ -1852,9 +1874,50 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public Builder snappingIncludeClosuresList(@Nullable List<Boolean> snappingClosures) {
       String result = FormatUtils.join(";", snappingClosures);
-      if (result != null) {
-        snappingIncludeClosures(result);
-      }
+      snappingIncludeClosures(result);
+      return this;
+    }
+
+    /**
+     *  A semicolon-separated list of booleans affecting snapping of
+     *  waypoint locations to road segments.
+     *  If true, road segments statically closed, that is long-term, will be considered for snapping
+     *  (for example, road under construction).
+     *  If false, they will not be considered for snapping.
+     *  If provided, the number of snappingIncludeStaticClosures must be the same
+     *  as the number of waypoints.
+     *  However, you can skip a coordinate and show its position in the list with the ; separator.
+     *  If null, this parameter defaults to false.
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
+     *
+     * @param snappingStaticClosures a String representing a list of booleans
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder snappingIncludeStaticClosures(@Nullable String snappingStaticClosures);
+
+    /**
+     *  A list of booleans affecting snapping of waypoint locations to road segments.
+     *  If true, road segments statically closed, that is long-term, will be considered for snapping
+     *  (for example, road under construction).
+     *  If false, they will not be considered for snapping.
+     *  If provided, the number of snappingIncludeStaticClosures must be the same
+     *  as the number of waypoints.
+     *  However, you can skip a coordinate and show its position in the list with the null.
+     *  If null, this parameter defaults to false.
+     * <p>
+     * Only available with the {@link DirectionsCriteria#PROFILE_DRIVING_TRAFFIC}.
+     *
+     * @param snappingStaticClosures a list of booleans
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public Builder snappingIncludeStaticClosuresList(
+            @Nullable List<Boolean> snappingStaticClosures
+    ) {
+      String result = FormatUtils.join(";", snappingStaticClosures);
+      snappingIncludeStaticClosures(result);
       return this;
     }
 

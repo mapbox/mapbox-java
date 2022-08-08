@@ -25,6 +25,7 @@
   "waypoint_names": ";Serangoon Garden Market & Food Centre;Funky &nAmE*",
   "waypoint_targets": ";12.2,21.2;",
   "snapping_include_closures": ";false;true",
+  "snapping_include_static_closures": "true;;false",
   "alley_bias": 0.75,
   "walking_speed": 5.11,
   "walkway_bias": -0.2,
