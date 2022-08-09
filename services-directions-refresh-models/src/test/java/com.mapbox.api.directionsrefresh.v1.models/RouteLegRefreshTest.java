@@ -3,6 +3,7 @@ package com.mapbox.api.directionsrefresh.v1.models;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.models.Congestion;
 import com.mapbox.api.directions.v5.models.Incident;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
@@ -70,6 +71,14 @@ public class RouteLegRefreshTest extends TestUtils {
       0.1,
       10.2
     );
+    List<Integer> trafficTendency = Arrays.asList(
+      DirectionsCriteria.TRAFFIC_TENDENCY_UNKNOWN,
+      DirectionsCriteria.TRAFFIC_TENDENCY_CONSTANT_CONGESTION,
+      DirectionsCriteria.TRAFFIC_TENDENCY_INCREASING_CONGESTION,
+      DirectionsCriteria.TRAFFIC_TENDENCY_DECREASING_CONGESTION,
+      DirectionsCriteria.TRAFFIC_TENDENCY_RAPIDLY_INCREASING_CONGESTION,
+      DirectionsCriteria.TRAFFIC_TENDENCY_RAPIDLY_DECREASING_CONGESTION
+    );
 
     List<Incident> incidents = Arrays.asList(
       Incident.builder()
@@ -110,6 +119,7 @@ public class RouteLegRefreshTest extends TestUtils {
           .duration(durations)
           .maxspeed(maxSpeeds)
           .speed(speeds)
+          .trafficTendency(trafficTendency)
           .build()
       )
       .incidents(incidents)
@@ -123,4 +133,22 @@ public class RouteLegRefreshTest extends TestUtils {
     assertEquals(routeLegRefresh, fromJson);
   }
 
+  @Test
+  public void trafficTendencyFromJson() {
+    String json = "{\"traffic_tendency\": [0,1,2,3,4,5]}";
+    LegAnnotation expectedAnnotations = LegAnnotation.builder()
+      .trafficTendency(Arrays.asList(
+        DirectionsCriteria.TRAFFIC_TENDENCY_UNKNOWN,
+        DirectionsCriteria.TRAFFIC_TENDENCY_CONSTANT_CONGESTION,
+        DirectionsCriteria.TRAFFIC_TENDENCY_INCREASING_CONGESTION,
+        DirectionsCriteria.TRAFFIC_TENDENCY_DECREASING_CONGESTION,
+        DirectionsCriteria.TRAFFIC_TENDENCY_RAPIDLY_INCREASING_CONGESTION,
+        DirectionsCriteria.TRAFFIC_TENDENCY_RAPIDLY_DECREASING_CONGESTION
+      ))
+      .build();
+
+    LegAnnotation fromJson = LegAnnotation.fromJson(json);
+
+    assertEquals(expectedAnnotations, fromJson);
+  }
 }
