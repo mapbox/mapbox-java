@@ -445,6 +445,7 @@
     </module>
 
     <module name="JavadocType">
+      <property name="id" value="checkstyle:javadoctype"/>
       <property name="scope" value="public"/>
     </module>
 
