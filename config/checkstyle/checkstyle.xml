@@ -45,12 +45,18 @@
   <!--################ Non-AST checks ################-->
   <!--################################################-->
 
+  <module name="SuppressWarningsFilter" />
+
   <module name="TreeWalker">
 
     <!--#################################################################-->
     <!--################ NAMING CHECKS ##################################-->
     <!--#################################################################-->
 
+    <module name="SuppressWarningsHolder" />
+    <module name="SuppressWarnings">
+      <property name="id" value="checkstyle:suppresswarnings"/>
+    </module>
 
     <!-- allow the dev to switch the checker OFF in a single file or a method -->
     <!-- <module name="SuppressionCommentFilter"/> -->
@@ -389,7 +395,9 @@
     https://source.android.com/source/code-style.html#use-javadoc-standard-comments
     -->
     <module name="JavadocMethod">
-      <property name="scope" value="public"/>
+      <property name="id" value="checkstyle:javadocmethod"/>
+
+      <property name="scope" value="public" />
 
       <!-- exception: property methods (getX, setX, isX) -->
       <property name="allowMissingPropertyJavadoc" value="true"/>
@@ -412,6 +420,8 @@
 
     <!-- Javadoc required for public fields (part of API) -->
     <module name="JavadocVariable">
+      <property name="id" value="checkstyle:javadocvariable"/>
+
       <property name="scope" value="public"/>
     </module>
 
