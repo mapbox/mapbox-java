@@ -6,6 +6,9 @@ Mapbox welcomes participation and contributions from everyone.
 - Fixed an issue where the `RouteOptions#...List` parameters were not reset correctly (for example, `routeOptions.toBuilder().bearingsList(null).build()` did not reset bearings to null). [#1469](https://github.com/mapbox/mapbox-java/pull/1469)
 - Added `RouteOptions.snappingIncludeStaticClosures` and `RouteOptions.snappingIncludeStaticClosuresList`. [#1469](https://github.com/mapbox/mapbox-java/pull/1469) 
 
+### v6.7.0 - August 12, 2022
+- No additional changes
+
 ### v6.7.0-beta.1 - Jul 22, 2022
 - Added `Incident.affectedRoadNames`. [#1457](https://github.com/mapbox/mapbox-java/pull/1457)
 - Added `StepIntersections.trafficSignal`,`StepIntersections.stopSign` and `StepIntersections.yieldSign`. [#1464](https://github.com/mapbox/mapbox-java/pull/1464)
