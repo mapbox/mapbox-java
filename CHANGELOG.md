@@ -3,8 +3,11 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v6.8.0-beta.1 - August 12, 2022
 - Fixed an issue where the `RouteOptions#...List` parameters were not reset correctly (for example, `routeOptions.toBuilder().bearingsList(null).build()` did not reset bearings to null). [#1469](https://github.com/mapbox/mapbox-java/pull/1469)
 - Added `RouteOptions.snappingIncludeStaticClosures` and `RouteOptions.snappingIncludeStaticClosuresList`. [#1469](https://github.com/mapbox/mapbox-java/pull/1469) 
+- Added `RouteOptions#computeTollCost` request parameter that when set to `true` can return `DirectionsRoute#tollCosts`, if data is available. [#1458](https://github.com/mapbox/mapbox-java/pull/1458)
 
 ### v6.7.0 - August 12, 2022
 - No additional changes
