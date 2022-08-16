@@ -144,10 +144,7 @@ public final class DirectionsCriteria {
    */
   public static final String ANNOTATION_CLOSURE = "closure";
 
-  /**
-   * The tendency value conveys the changing
-   * state of traffic congestion (increasing, decreasing, constant etc).
-   */
+  @SuppressWarnings("checkstyle:javadocvariable")
   public static final String ANNOTATION_TRAFFIC_TENDENCY = "traffic_tendency";
 
   /**
@@ -277,34 +274,22 @@ public final class DirectionsCriteria {
    */
   public static final String APPROACH_CURB = "curb";
 
-  /***
-   * Conveys the changing state of traffic congestion: unknown.
-   */
+  @SuppressWarnings("checkstyle:javadocvariable")
   public static final int TRAFFIC_TENDENCY_UNKNOWN = 0;
 
-  /***
-   * Conveys the changing state of traffic congestion: constant.
-   */
+  @SuppressWarnings("checkstyle:javadocvariable")
   public static final int TRAFFIC_TENDENCY_CONSTANT_CONGESTION = 1;
 
-  /***
-   * Conveys the changing state of traffic congestion: increasing.
-   */
+  @SuppressWarnings("checkstyle:javadocvariable")
   public static final int TRAFFIC_TENDENCY_INCREASING_CONGESTION = 2;
 
-  /***
-   * Conveys the changing state of traffic congestion: decreasing.
-   */
+  @SuppressWarnings("checkstyle:javadocvariable")
   public static final int TRAFFIC_TENDENCY_DECREASING_CONGESTION = 3;
 
-  /***
-   * Conveys the changing state of traffic congestion: rapidly increasing.
-   */
+  @SuppressWarnings("checkstyle:javadocvariable")
   public static final int TRAFFIC_TENDENCY_RAPIDLY_INCREASING_CONGESTION = 4;
 
-  /***
-   * Conveys the changing state of traffic congestion: rapidly decreasing.
-   */
+  @SuppressWarnings("checkstyle:javadocvariable")
   public static final int TRAFFIC_TENDENCY_RAPIDLY_DECREASING_CONGESTION = 5;
 
   private DirectionsCriteria() {
@@ -456,12 +441,7 @@ public final class DirectionsCriteria {
   public @interface ApproachesCriteria {
   }
 
-  /**
-   * Retention policy for the traffic tendency annotations.
-   * The tendency value conveys the changing state of traffic
-   * congestion (increasing, decreasing, constant etc). New values
-   * could be introduced in the future without an API version change.
-   */
+  @SuppressWarnings("checkstyle:javadoctype")
   @Retention(RetentionPolicy.CLASS)
   @IntDef({
     TRAFFIC_TENDENCY_UNKNOWN,
