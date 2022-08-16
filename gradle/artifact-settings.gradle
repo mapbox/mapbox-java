@@ -33,8 +33,18 @@ private static def getReleaseVersion(String version) {
 }
 
 private static def getSnapshotVersion(String version) {
-    def matcher = version =~ /^[v|V](\d+).(\d+)?.*/
+    def matcher = version =~ /^[v|V](\d+)\.(\d+)\.(\d+.*)/
     def major = (matcher[0][1] as Integer)
-    def minor = (matcher[0][2] as Integer) + 1
+    def isPreRelease
+    try {
+        Integer.parseInt(matcher[0][3])
+        isPreRelease = false
+    } catch (NumberFormatException ignored) {
+        isPreRelease = true
+    }
+    def minor = (matcher[0][2] as Integer)
+    if (!isPreRelease) {
+        minor += 1
+    }
     return "${major}.${minor}.0-SNAPSHOT"
 }
