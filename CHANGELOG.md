@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added traffic tendency annotations. [#1479](https://github.com/mapbox/mapbox-java/pull/1479)
 
 ### v6.8.0-beta.1 - August 12, 2022
 - Fixed an issue where the `RouteOptions#...List` parameters were not reset correctly (for example, `routeOptions.toBuilder().bearingsList(null).build()` did not reset bearings to null). [#1469](https://github.com/mapbox/mapbox-java/pull/1469)
