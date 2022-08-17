@@ -3,6 +3,8 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v6.8.0-beta.2 - August 17, 2022
 - Added traffic tendency annotations. [#1479](https://github.com/mapbox/mapbox-java/pull/1479)
 
 ### v6.8.0-beta.1 - August 12, 2022
