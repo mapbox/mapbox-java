@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `TurfSimplify#simplify` method to simplify `LineString` using Ramer-Douglas-Peucker algorithm. [1486](https://github.com/mapbox/mapbox-java/pull/1486)
 
 ### v6.8.0-beta.2 - August 17, 2022
 - Added traffic tendency annotations. [#1479](https://github.com/mapbox/mapbox-java/pull/1479)

@@ -33,12 +33,15 @@ public class TestUtils {
   }
 
   protected String loadJsonFixture(String filename) {
+    return readFile("src/test/resources/" + filename);
+  }
+
+  public String readFile(String filepath) {
     try {
-      String filepath = "src/test/resources/" + filename;
       byte[] encoded = Files.readAllBytes(Paths.get(filepath));
       return new String(encoded, UTF_8);
     } catch (IOException e) {
-      fail("Unable to load " + filename);
+      fail("Unable to load " + filepath);
       return "";
     }
   }
