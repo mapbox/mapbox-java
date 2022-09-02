@@ -69,26 +69,76 @@ public abstract class BannerComponents extends DirectionsJsonObject
    */
   public static final String LANE = "lane";
 
-  /**
+  /*
    * This view gives guidance through junctions and is used to complete maneuvers.
    */
+  @SuppressWarnings("checkstyle:javadocvariable")
   public static final String GUIDANCE_VIEW = "guidance-view";
 
-  /**
-   * This view gives guidance through signboards and is used to complete maneuvers.
+  /*
+   * Sign Image After a Toll Gate. Used immediately after exiting a toll gate containing just the
+   * overhead signboard. The preferred road (not the lane) arrow is highlighted on the signboard.
    */
-  public static final String SIGNBOARD = "signboard";
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String AFTERTOLL = "aftertoll";
 
   /*
-   * This view gives guidance through guide maps and is used to complete maneuvers.
+   * 3D City Real. Bird’s-eye artist’s rendition view of a general road intersection
+   * and preferred road lane arrow. There is no overhead signage.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String CITYREAL = "cityreal";
+
+  /*
+   * Expressway Entrance. Bird’s-eye artist’s rendition view of the overhead signage
+   * and preferred road lane arrow at an entrance ramp onto an expressway.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String EXPRESSWAY_ENTRANCE = "entrance";
+
+  /*
+   * Expressway Exit. Bird’s-eye artist’s rendition view of the overhead signage and
+   * preferred road lane arrow at an exit ramp from an expressway.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String EXPRESSWAY_EXIT = "exit";
+
+  /*
+   * Junction View. Bird’s-eye artist’s rendition view of the overhead signage and
+   * preferred road lane arrow on motorways where the road bifurcates into 2 or
+   * more motorway trunk roads.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String JCT = "jct";
+
+  /*
+   * Service Area-Parking Area. Bird’s-eye artist’s rendition view of the overhead
+   * signage and preferred road lane arrow at a rest area ramp where the route
+   * leaves the main road.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String SAPA = "sapa";
+
+  /*
+   * SAPA Guide Map. Vertical artist’s rendition guide map of an SAPA rest area
+   * showing various facilities icons such as restaurants, restrooms and parking areas.
+   * The scale is approx. 1:5K.
    */
   @SuppressWarnings("checkstyle:javadocvariable")
   public static final String SAPAGUIDEMAP = "sapaguidemap";
 
-  /**
-   * This view gives guidance through junctions and is used to complete maneuvers.
+  /*
+   * Advanced 2D signboard. These are vendor enhanced detailed signboards.
    */
-  public static final String JCT = "jct";
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String SIGNBOARD = "signboard";
+
+  /*
+   * Branched Image After Toll Gate. Bird’s-eye artist’s rendition view of the overhead
+   * signage and preferred road lane arrow immediately after exiting a toll gate.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String TOLLBRANCH = "tollbranch";
 
   /**
    * Banner component types.
@@ -112,13 +162,18 @@ public abstract class BannerComponents extends DirectionsJsonObject
   /**
    * Banner component types.
    * https://docs.mapbox.com/api/navigation/#banner-instruction-object
-   *
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef( {
+      AFTERTOLL,
+      CITYREAL,
+      EXPRESSWAY_ENTRANCE,
+      EXPRESSWAY_EXIT,
       JCT,
+      SAPA,
+      SAPAGUIDEMAP,
       SIGNBOARD,
-      SAPAGUIDEMAP
+      TOLLBRANCH
   })
   public @interface BannerComponentsSubType {
   }
@@ -165,20 +220,13 @@ public abstract class BannerComponents extends DirectionsJsonObject
   @BannerComponentsType
   public abstract String type();
 
-  /**
+  /*
    * String giving you more context about {@link BannerComponentsType} which
    * may help in visual markup/display choices.
-   * <p>
-   * Possible values:
-   * <ul>
-   * <li><strong>jct</strong>: indicates a junction guidance view.</li>
-   * <li><strong>signboard</strong>: indicates a signboard guidance view.</li>
-   * </ul>
-   *
-   * @return String type from above list
    */
   @Nullable
-  @BannerComponentsType
+  @BannerComponentsSubType
+  @SuppressWarnings("checkstyle:javadocmethod")
   public abstract String subType();
 
   /**
@@ -388,21 +436,13 @@ public abstract class BannerComponents extends DirectionsJsonObject
 
 
 
-    /**
+    /*
      * String giving you more context about {@link BannerComponentsType}
      * which may help in visual markup/display choices.
-     * <p>
-     * Possible values:
-     * <ul>
-     * <li><strong>jct</strong>: indicates a junction guidance view.</li>
-     * <li><strong>signboard</strong>: indicates a signboard guidance view.</li>
-     * </ul>
-     *
-     * @param subType String subType from above list
-     * @return String type from above list
      */
     @NonNull
     @BannerComponentsType
+    @SuppressWarnings("checkstyle:javadocmethod")
     public abstract Builder subType(@Nullable @BannerComponentsSubType String subType);
 
 
