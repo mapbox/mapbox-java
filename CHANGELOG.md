@@ -3,6 +3,8 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v6.8.0-beta.3 - September 5, 2022
 - Added `TurfSimplify#simplify` method to simplify `LineString` using Ramer-Douglas-Peucker algorithm. [#1486](https://github.com/mapbox/mapbox-java/pull/1486)
 - Added `List<Closure>` to `RouteLegRefresh` to make `DirectionsRoute#RouteLeg` refreshed with closures. [#1489](https://github.com/mapbox/mapbox-java/pull/1489)
 
