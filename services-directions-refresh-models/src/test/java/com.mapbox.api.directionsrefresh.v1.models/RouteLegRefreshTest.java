@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.models.Closure;
 import com.mapbox.api.directions.v5.models.Congestion;
 import com.mapbox.api.directions.v5.models.Incident;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
@@ -37,6 +38,14 @@ public class RouteLegRefreshTest extends TestUtils {
             .id("incident_id")
             .build()
         )
+      )
+      .closures(
+        Arrays.asList(
+          Closure.builder()
+            .geometryIndexStart(1)
+            .geometryIndexEnd(2)
+            .build()
+          )
       )
       .build();
   }
@@ -111,6 +120,17 @@ public class RouteLegRefreshTest extends TestUtils {
         .build()
     );
 
+    List<Closure> closures = Arrays.asList(
+      Closure.builder()
+        .geometryIndexStart(2)
+        .geometryIndexEnd(4)
+        .build(),
+      Closure.builder()
+        .geometryIndexStart(10)
+        .geometryIndexEnd(20)
+        .build()
+    );
+
     RouteLegRefresh routeLegRefresh = RouteLegRefresh.builder()
       .annotation(
         LegAnnotation.builder()
@@ -123,6 +143,7 @@ public class RouteLegRefreshTest extends TestUtils {
           .build()
       )
       .incidents(incidents)
+      .closures(closures)
       .build();
 
     String json = routeLegRefresh.toJson();
@@ -130,6 +151,7 @@ public class RouteLegRefreshTest extends TestUtils {
 
     assertNotNull(routeLegRefresh.annotation());
     assertNotNull(routeLegRefresh.incidents());
+    assertNotNull(routeLegRefresh.closures());
     assertEquals(routeLegRefresh, fromJson);
   }
 
