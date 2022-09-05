@@ -6,10 +6,6 @@
 <h4 align="center">Build powerful Java apps using Mapbox's tools and services</h4>
 
 <p align="center">
-  <a href="https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-sdk-services">
-    <img src="https://maven-badges.herokuapp.com/maven-central/com.mapbox.mapboxsdk/mapbox-sdk-services/badge.svg"
-         alt="Maven Central">
-  </a>
   <a href="https://circleci.com/gh/mapbox/mapbox-java">
     <img src="https://circleci.com/gh/mapbox/mapbox-java.svg?style=shield&circle-token=:circle-token">
   </a>
