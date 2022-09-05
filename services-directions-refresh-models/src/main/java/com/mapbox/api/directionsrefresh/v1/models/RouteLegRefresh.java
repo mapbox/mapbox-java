@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.models.Closure;
 import com.mapbox.api.directions.v5.models.DirectionsWaypoint;
 import com.mapbox.api.directions.v5.models.Incident;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
@@ -46,6 +47,15 @@ public abstract class RouteLegRefresh extends DirectionsRefreshJsonObject {
    */
   @Nullable
   public abstract LegAnnotation annotation();
+
+
+  /**
+   * A list of closures that occur on this leg.
+   *
+   * @return a list of {@link Closure}
+   */
+  @Nullable
+  public abstract List<Closure> closures();
 
   /**
    * Convert the current {@link RouteLegRefresh} to its builder holding the currently assigned
@@ -107,6 +117,15 @@ public abstract class RouteLegRefresh extends DirectionsRefreshJsonObject {
      */
     @NonNull
     public abstract Builder annotation(@Nullable LegAnnotation annotation);
+
+    /**
+     * A list of closures that occur on this leg.
+     *
+     * @param closures a list of {@link Closure}
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder closures(@Nullable List<Closure> closures);
 
     /**
      * Build a new {@link RouteLegRefresh} object.
