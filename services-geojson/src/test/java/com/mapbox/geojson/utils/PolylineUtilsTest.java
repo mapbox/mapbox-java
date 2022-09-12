@@ -123,12 +123,14 @@ public class PolylineUtilsTest extends TestUtils {
   }
 
   @Test
+  @Deprecated
   public void simplify_neverReturnsNullButRatherAnEmptyList() throws Exception {
     List<Point> simplifiedPath = simplify(new ArrayList<Point>(), PRECISION_6);
     assertNotNull(simplifiedPath);
   }
 
   @Test
+  @Deprecated
   public void simplify_returnSameListWhenListSizeIsLessThanOrEqualToTwo(){
     final List<Point> path = new ArrayList<>();
     path.add(Point.fromLngLat(0, 0));
@@ -138,6 +140,7 @@ public class PolylineUtilsTest extends TestUtils {
   }
 
   @Test
+  @Deprecated
   public void simplify_withHighestQuality() throws IOException{
     List<Point> path = createPointListFromResourceFile(SIMPLIFICATION_INPUT);
     List<Point> simplifiedPath = simplify(path, PRECISION_5, true);

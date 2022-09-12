@@ -3,6 +3,8 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Replaced `TurfSimplify#simplify` with `TurfTransformation#simplify`. [#1496](https://github.com/mapbox/mapbox-java/pull/1496)
+- Deprecated `PolylineUtils#simplify` in favour of `TurfTransformation#simplify`. [#1496](https://github.com/mapbox/mapbox-java/pull/1496)
 
 ### v6.8.0-beta.4 - September 5, 2022
 - Added `TurfSimplify#simplify` method to simplify `LineString` using Ramer-Douglas-Peucker algorithm. [#1486](https://github.com/mapbox/mapbox-java/pull/1486)

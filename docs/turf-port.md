@@ -48,7 +48,7 @@ Below's an on going list of the Turf functions which currently exist inside the 
 - [ ] turf-dissolve
 - [ ] turf-intersect
 - [ ] turf-line-offset
-- [ ] turf-simplify
+- [x] turf-simplify
 - [ ] turf-tesselate
 - [ ] turf-transform-rotate
 - [ ] turf-transform-translate
