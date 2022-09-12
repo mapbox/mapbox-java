@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class TurfSimplifyTest {
+public class TurfTransformationSimplifyTest {
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object[]> data() {
@@ -29,7 +29,7 @@ public class TurfSimplifyTest {
     private final String fileName;
     private final TestUtils testUtils = new TestUtils();
 
-    public TurfSimplifyTest(String fileName) {
+    public TurfTransformationSimplifyTest(String fileName) {
         this.fileName = fileName;
     }
 
@@ -44,7 +44,7 @@ public class TurfSimplifyTest {
         String expectedContent = testUtils.readFile("src/test/resources/turf-simplify/output/" + fileName);
         List<Point> expected = parseCoordinates(JsonParser.parseString(expectedContent).getAsJsonObject());
 
-        List<Point> output = TurfSimplify.simplify(input, tolerance, highQuality);
+        List<Point> output = TurfTransformation.simplify(input, tolerance, highQuality);
 
         checkPointsEquality(output, expected, 0.00001);
     }

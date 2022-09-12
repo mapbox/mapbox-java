@@ -8,7 +8,7 @@ import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.sample.BuildConfig;
-import com.mapbox.turf.TurfSimplify;
+import com.mapbox.turf.TurfTransformation;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class BasicTurfSimplify {
     public static void main(String[] args) throws IOException {
         LineString complexLineString = generateLineString();
         LineString simplifiedLineString = LineString.fromLngLats(
-          TurfSimplify.simplify(complexLineString.coordinates(), 0.001, true),
+          TurfTransformation.simplify(complexLineString.coordinates(), 0.001, true),
           complexLineString.bbox()
         );
         System.out.println("[Turf] complex: " + complexLineString.coordinates());

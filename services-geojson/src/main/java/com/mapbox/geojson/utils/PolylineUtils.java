@@ -133,7 +133,9 @@ public final class PolylineUtils {
    * @return an array of simplified points
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
+   * @deprecated Use TurfTransformation#simplify.
    */
+  @Deprecated
   @NonNull
   public static List<Point> simplify(@NonNull List<Point> points) {
     return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
@@ -149,7 +151,9 @@ public final class PolylineUtils {
    * @return an array of simplified points
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
+   * @deprecated Use TurfTransformation#simplify.
    */
+  @Deprecated
   @NonNull
   public static List<Point> simplify(@NonNull List<Point> points, double tolerance) {
     return simplify(points, tolerance, SIMPLIFY_DEFAULT_HIGHEST_QUALITY);
@@ -165,7 +169,9 @@ public final class PolylineUtils {
    * @return an array of simplified points
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
+   * @deprecated Use TurfTransformation#simplify.
    */
+  @Deprecated
   @NonNull
   public static List<Point> simplify(@NonNull List<Point> points, boolean highestQuality) {
     return simplify(points, SIMPLIFY_DEFAULT_TOLERANCE, highestQuality);
@@ -183,7 +189,9 @@ public final class PolylineUtils {
    * @return an array of simplified points
    * @see <a href="http://mourner.github.io/simplify-js/">JavaScript implementation</a>
    * @since 1.2.0
+   * @deprecated Use TurfTransformation#simplify.
    */
+  @Deprecated
   @NonNull
   public static List<Point> simplify(@NonNull List<Point> points, double tolerance,
                                      boolean highestQuality) {
