@@ -214,14 +214,14 @@ public abstract class Incident extends DirectionsJsonObject {
   public abstract List<Integer> alertcCodes();
 
   /**
-   * Incident's geometry index start point.
+   * Incident's leg-wise geometry index start point.
    */
   @Nullable
   @SerializedName("geometry_index_start")
   public abstract Integer geometryIndexStart();
 
   /**
-   * Incident's geometry index end point.
+   * Incident's leg-wise geometry index end point.
    */
   @Nullable
   @SerializedName("geometry_index_end")
@@ -419,7 +419,7 @@ public abstract class Incident extends DirectionsJsonObject {
     public abstract Builder alertcCodes(@Nullable List<Integer> alertcCodes);
 
     /**
-     * Incident's geometry index start point.
+     * Incident's leg-wise geometry index start point.
      *
      * @param geometryIndexStart start index
      */
@@ -427,7 +427,7 @@ public abstract class Incident extends DirectionsJsonObject {
     public abstract Builder geometryIndexStart(@Nullable Integer geometryIndexStart);
 
     /**
-     * Incident's geometry index end point.
+     * Incident's leg-wise geometry index end point.
      *
      * @param geometryIndexEnd end index
      */

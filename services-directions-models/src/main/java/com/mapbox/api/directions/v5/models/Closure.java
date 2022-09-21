@@ -16,14 +16,14 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 public abstract class Closure extends DirectionsJsonObject {
 
   /**
-   * Closure's geometry index start point.
+   * Closure's leg-wise geometry index start point.
    */
   @NonNull
   @SerializedName("geometry_index_start")
   public abstract Integer geometryIndexStart();
 
   /**
-   * Closure's geometry index end point.
+   * Closure's leg-wise geometry index end point.
    */
   @NonNull
   @SerializedName("geometry_index_end")
@@ -77,14 +77,14 @@ public abstract class Closure extends DirectionsJsonObject {
   public abstract static class Builder extends DirectionsJsonObject.Builder<Builder> {
 
     /**
-     * Closure's geometry index start point.
+     * Closure's leg-wise geometry index start point.
      *
      * @param geometryIndexStart start index
      */
     public abstract Builder geometryIndexStart(@NonNull Integer geometryIndexStart);
 
     /**
-     * Closure's geometry index end point.
+     * Closure's leg-wise geometry index end point.
      *
      * @param geometryIndexEnd end index
      */
