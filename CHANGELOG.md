@@ -3,6 +3,8 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v6.8.0 - September 29, 2022
 - Replaced `TurfSimplify#simplify` with `TurfTransformation#simplify`. [#1496](https://github.com/mapbox/mapbox-java/pull/1496)
 - Deprecated `PolylineUtils#simplify` in favour of `TurfTransformation#simplify`. [#1496](https://github.com/mapbox/mapbox-java/pull/1496)
 
