@@ -99,7 +99,7 @@ public abstract class DirectionsRefreshResponse extends DirectionsRefreshJsonObj
    * @since 4.4.0
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsRefreshJsonObject.Builder<Builder> {
 
     /**
      * String indicating the state of the response. This is a separate code than the HTTP status

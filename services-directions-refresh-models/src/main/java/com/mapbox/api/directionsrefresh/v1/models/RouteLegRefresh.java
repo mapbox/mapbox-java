@@ -96,7 +96,7 @@ public abstract class RouteLegRefresh extends DirectionsRefreshJsonObject {
    * This builder can be used to set the values describing the {@link RouteLegRefresh}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsRefreshJsonObject.Builder<Builder> {
 
     /**
      * A list of incidents that occur on this leg.
