@@ -3,6 +3,10 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `getUnrecognizedJsonProperties()` method to `DirectionsRefreshJsonObject` so that unrecognized properties can be received from refresh response.
+- Added `DirectionsRefreshJsonObject.Builder#unrecognizedJsonProperties`. [#1500](https://github.com/mapbox/mapbox-java/pull/1500)
+- Added `getUnrecognizedJsonProperties()` method to `DirectionsJsonObject` so that a map of unrecognized properties can be received from route response.
+- Added `DirectionsJsonObject.Builder#unrecognizedJsonProperties`. [#1500](https://github.com/mapbox/mapbox-java/pull/1500)
 
 ### v6.8.0 - September 29, 2022
 - Replaced `TurfSimplify#simplify` with `TurfTransformation#simplify`. [#1496](https://github.com/mapbox/mapbox-java/pull/1496)

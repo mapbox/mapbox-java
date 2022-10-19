@@ -10,11 +10,15 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 import static com.mapbox.api.directions.v5.utils.MutateJsonUtil.mutateJson;
@@ -34,11 +38,41 @@ public class DirectionsResponseTest extends TestUtils {
 
   @Test
   public void sanity() throws Exception {
+    Metadata metadata = Metadata.builder().infoMap(Collections.singletonMap("aaa", "bbb")).build();
+    List<DirectionsWaypoint> waypoints = Arrays.asList(
+      DirectionsWaypoint
+        .builder()
+        .rawLocation(new double[0])
+        .distance(9.8)
+        .name("aaa")
+        .build()
+    );
+    List<DirectionsRoute> routes = Arrays.asList(
+      DirectionsRoute
+        .builder()
+        .distance(1.2)
+        .duration(7.8)
+        .build()
+    );
+    Map<String, JsonElement> unrecognizedProperties = Collections.singletonMap("ccc", new JsonPrimitive("ddd"));
     DirectionsResponse response = DirectionsResponse.builder()
       .code("100")
-      .routes(new ArrayList<DirectionsRoute>())
+      .routes(routes)
+      .message("Message")
+      .metadata(metadata)
+      .uuid("uuid")
+      .waypoints(waypoints)
+      .unrecognizedJsonProperties(unrecognizedProperties)
       .build();
+
     assertNotNull(response);
+   assertEquals("100", response.code());
+   assertEquals("Message", response.message());
+   assertEquals(1, response.routes().size());
+   assertEquals(metadata, response.metadata());
+   assertEquals("uuid", response.uuid());
+   assertEquals(waypoints, response.waypoints());
+   assertEquals(unrecognizedProperties, response.getUnrecognizedJsonProperties());
   }
 
   @Test
@@ -89,15 +123,32 @@ public class DirectionsResponseTest extends TestUtils {
   }
 
   @Test
+  public void accessUnrecognizedJsonProperties() throws Exception {
+    JsonObject directionsResponseJson = readJsonObject(DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS);
+    String unrecognizedPropertyName = "testUnrecognizedProperty";
+    String unrecognizedPropertyValue = "test";
+    directionsResponseJson.add(unrecognizedPropertyName, new JsonPrimitive(unrecognizedPropertyValue));
+    Map<String, JsonElement> expected = new HashMap<>();
+    expected.put(unrecognizedPropertyName, new JsonPrimitive(unrecognizedPropertyValue));
+    DirectionsResponse response = DirectionsResponse.fromJson(directionsResponseJson.toString());
+
+    Map<String, JsonElement> actual = response.getUnrecognizedJsonProperties();
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
   public void noUnrecognizedProperties() throws Exception {
     JsonObject directionsResponseJson = readJsonObject(DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS);
     DirectionsResponse response = DirectionsResponse.fromJson(directionsResponseJson.toString());
 
     JsonElement value = response.getUnrecognizedProperty("");
     Set<String> propertiesNames = response.getUnrecognizedPropertiesNames();
+    Map<String, JsonElement> jsonProperties = response.getUnrecognizedJsonProperties();
 
     assertNull(value);
     assertEquals(0, propertiesNames.size());
+    assertNull(jsonProperties);
   }
 
   @Test

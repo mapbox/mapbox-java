@@ -71,7 +71,7 @@ public abstract class DirectionsRouteRefresh extends DirectionsRefreshJsonObject
    * This builder can be used to set the values describing the {@link DirectionsRouteRefresh}.
    */
   @AutoValue.Builder
-  public abstract static class Builder {
+  public abstract static class Builder extends DirectionsRefreshJsonObject.Builder<Builder> {
 
     /**
      * A Leg Refresh is an object contain refresh data between only two {@link DirectionsWaypoint}.

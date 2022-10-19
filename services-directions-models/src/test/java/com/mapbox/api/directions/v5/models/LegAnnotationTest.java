@@ -3,12 +3,16 @@ package com.mapbox.api.directions.v5.models;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LegAnnotationTest extends TestUtils {
 
@@ -20,12 +24,15 @@ public class LegAnnotationTest extends TestUtils {
       .distance(new ArrayList<Double>())
       .duration(new ArrayList<Double>())
       .speed(new ArrayList<Double>())
+      .unrecognizedJsonProperties(new HashMap<>())
       .build();
     assertNotNull(annotation);
   }
 
   @Test
   public void testSerializable() throws Exception {
+    Map<String, JsonElement> unrecognizedProperties = new HashMap<>();
+    unrecognizedProperties.put("aaa", new JsonPrimitive("bbb"));
     List<Double> distance = new ArrayList<>();
     distance.add(20d);
     distance.add(40d);
@@ -36,6 +43,7 @@ public class LegAnnotationTest extends TestUtils {
       .distance(distance)
       .duration(new ArrayList<Double>())
       .speed(new ArrayList<Double>())
+      .unrecognizedJsonProperties(unrecognizedProperties)
       .build();
     byte[] serialized = TestUtils.serialize(annotation);
     assertEquals(annotation, deserialize(serialized, LegAnnotation.class));
@@ -43,6 +51,8 @@ public class LegAnnotationTest extends TestUtils {
 
   @Test
   public void testToFromJson1() {
+    Map<String, JsonElement> unrecognizedProperties = new HashMap<>();
+    unrecognizedProperties.put("aaa", new JsonPrimitive("bbb"));
 
     List<Double> distanceList = Arrays.asList(
       4.294596842089401,
@@ -101,6 +111,7 @@ public class LegAnnotationTest extends TestUtils {
       .duration(durationList)
       .speed(speedList)
       .congestion(congestionList)
+      .unrecognizedJsonProperties(unrecognizedProperties)
       .build();
 
 
