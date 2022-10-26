@@ -3,7 +3,8 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
-- Added `RouteOptions#waypointsPerRoute()` and `RouteOption.Builders#waypointsPerRoute()` methods.
+- Added `RouteOptions#waypointsPerRoute()` and `RouteOption.Builders#waypointsPerRoute()` methods. [#1503](https://github.com/mapbox/mapbox-java/pull/1503)
+- Added `DirectionsRoute#waypoints` and deprecated `DirectionsResponse#waypoints`. [#1503](https://github.com/mapbox/mapbox-java/pull/1503)
 
 ### v6.9.0-beta.1 - October 21, 2022
 - Added `getUnrecognizedJsonProperties()` method to `DirectionsRefreshJsonObject` so that unrecognized properties can be received from refresh response. [#1500](https://github.com/mapbox/mapbox-java/pull/1500)
