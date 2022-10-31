@@ -110,6 +110,7 @@ public abstract class MapboxDirections extends
       routeOptions().maxWidth(),
       routeOptions().maxWeight(),
       routeOptions().computeTollCost(),
+      routeOptions().waypointsPerRoute(),
       routeOptions().metadata()
     );
   }
@@ -154,6 +155,7 @@ public abstract class MapboxDirections extends
       routeOptions().maxWidth(),
       routeOptions().maxWeight(),
       routeOptions().computeTollCost(),
+      routeOptions().waypointsPerRoute(),
       routeOptions().metadata()
     );
   }

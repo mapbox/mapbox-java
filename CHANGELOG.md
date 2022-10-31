@@ -3,6 +3,8 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `RouteOptions#waypointsPerRoute()` and `RouteOption.Builders#waypointsPerRoute()` methods. [#1503](https://github.com/mapbox/mapbox-java/pull/1503)
+- Added `DirectionsRoute#waypoints` and deprecated `DirectionsResponse#waypoints`. [#1503](https://github.com/mapbox/mapbox-java/pull/1503)
 
 ### v6.9.0 - November 09, 2022
 - Removed `RouteOptions#waypointsPerRoute()` and `RouteOption.Builders#waypointsPerRoute()` methods. [#1506](https://github.com/mapbox/mapbox-java/pull/1506)
