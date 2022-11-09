@@ -689,18 +689,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   }
 
   /**
-   * If true, the waypoints array is returned within the route object, else its returned
-   * at the root of the response body. Defaults to false if unspecified.
-   * Setting `waypoints_per_route` to true is necessary when asking for an EV-optimized
-   * route with alternatives, since each alternative route may produce separate
-   * sets of waypoints (charging stations).
-   * @return boolean representing the waypoints_per_route value
-   */
-  @SerializedName("waypoints_per_route")
-  @Nullable
-  public abstract Boolean waypointsPerRoute();
-
-  /**
    * A scale from -1 to 1, where -1 biases the route against alleys
    * and 1 biases the route toward alleys. If null, default is 0, which is neutral.
    *
@@ -1043,7 +1031,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     appendQueryParameter(sb, "max_width", maxWidth());
     appendQueryParameter(sb, "max_weight", maxWeight());
     appendQueryParameter(sb, "compute_toll_cost", computeTollCost());
-    appendQueryParameter(sb, "waypoints_per_route", waypointsPerRoute());
     appendQueryParameter(sb, "metadata", metadata());
 
     Map<String, SerializableJsonElement> unrecognized = unrecognized();
@@ -2043,19 +2030,6 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     @SuppressWarnings("checkstyle:javadocmethod")
     public abstract Builder computeTollCost(@Nullable Boolean computeTollCost);
-
-    /**
-     * If true, the waypoints array is returned within the route object, else its returned
-     * at the root of the response body. Defaults to false if unspecified.
-     * Setting `waypoints_per_route` to true is necessary when asking for an EV-optimized
-     * route with alternatives, since each alternative route may produce separate
-     * sets of waypoints (charging stations).
-     *
-     * @param waypointsPerRoute boolean representing the `waypoints_per_route` value
-     * @return this builder
-     */
-    @NonNull
-    public abstract Builder waypointsPerRoute(@Nullable Boolean waypointsPerRoute);
 
     /**
      * Whether the response should contain metadata holding versioning information.

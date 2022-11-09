@@ -66,16 +66,10 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
    * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
    * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
    * the input coordinates.
-   * @deprecated the waypoints are returned in the root of the response only if
-   *   {@link RouteOptions#waypointsPerRoute()} is false. Otherwise they are returned in
-   *   {@link DirectionsRoute#waypoints()}. You can continue to use this and it will work as-is.
-   *   However, it's recommended to use the new approach to distinguish waypoints between routes
-   *   (for example, this is necessary when asking for an EV-optimized route with alternatives).
    *
    * @return list of {@link DirectionsWaypoint} objects ordered from start of route till the end
    * @since 1.0.0
    */
-  @Deprecated
   @Nullable
   public abstract List<DirectionsWaypoint> waypoints();
 
@@ -269,18 +263,12 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
      * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
      * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
      * the input coordinates.
-     * @deprecated the waypoints are returned in the root of the response only if
-     *   {@link RouteOptions#waypointsPerRoute()} is false. Otherwise they are returned in
-     *   {@link DirectionsRoute#waypoints()}. You can continue to use this and it will work as-is.
-     *   However, it's recommended to use the new approach to distinguish waypoints between routes
-     *   (for example, this is necessary when asking for an EV-optimized route with alternatives).
      *
      * @param waypoints list of {@link DirectionsWaypoint} objects ordered from start of route till
      *                  the end
      * @return this builder for chaining options together
      * @since 3.0.0
      */
-    @Deprecated
     public abstract Builder waypoints(@Nullable List<DirectionsWaypoint> waypoints);
 
     /**
