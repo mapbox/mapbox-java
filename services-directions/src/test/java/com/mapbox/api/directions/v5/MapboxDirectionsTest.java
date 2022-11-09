@@ -733,17 +733,6 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
-  public void waypointsPerRoute() throws Exception {
-    MapboxDirections mapboxDirections = MapboxDirections.builder()
-      .accessToken("token")
-      .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
-      .build();
-
-    assertEquals("true",
-      mapboxDirections.cloneCall().request().url().queryParameter("waypoints_per_route"));
-  }
-
-  @Test
   public void arrive_by() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .accessToken("token")
