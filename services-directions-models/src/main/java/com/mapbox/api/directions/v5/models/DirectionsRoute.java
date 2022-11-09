@@ -111,6 +111,19 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   public abstract List<RouteLeg> legs();
 
   /**
+   * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
+   * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
+   * the input coordinates.
+   * Waypoints are returned in the {@link DirectionsRoute} object only when
+   * {@link RouteOptions#waypointsPerRoute()} is set to true. Otherwise they are returned
+   * in the root: {@link DirectionsResponse#waypoints()}.
+   *
+   * @return list of {@link DirectionsWaypoint} objects ordered from start of route till the end
+   */
+  @Nullable
+  public abstract List<DirectionsWaypoint> waypoints();
+
+  /**
    * Holds onto the parameter information used when making the directions request. Useful for
    * re-requesting a directions route using the same information previously used.
    *
@@ -300,6 +313,21 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder legs(@Nullable List<RouteLeg> legs);
+
+    /**
+     * List of {@link DirectionsWaypoint} objects. Each {@code waypoint} is an input coordinate
+     * snapped to the road and path network. The {@code waypoint} appear in the list in the order of
+     * the input coordinates.
+     * Waypoints are returned in the {@link DirectionsRoute} object only when
+     * {@link RouteOptions#waypointsPerRoute()} is set to true. Otherwise they are returned
+     * in the root: {@link DirectionsResponse#waypoints()}.
+     *
+     * @param waypoints list of {@link DirectionsWaypoint} objects ordered from start of route
+     *                  till the end
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder waypoints(@Nullable List<DirectionsWaypoint> waypoints);
 
     /**
      * Holds onto the parameter information used when making the directions request.

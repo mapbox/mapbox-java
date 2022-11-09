@@ -36,5 +36,6 @@
   "max_weight": 2.9,
   "enable_refresh": true,
   "metadata": true,
+  "waypoints_per_route": true,
   "compute_toll_cost": true
 }
