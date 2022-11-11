@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `paymentMethods` parameter for `RouteOptions` and `IntersectionLanes`. [#1449](https://github.com/mapbox/mapbox-java/pull/1449)
 
 ### v6.10.0-beta.1 - November 09, 2022
 - Added `RouteOptions#waypointsPerRoute()` and `RouteOption.Builders#waypointsPerRoute()` methods. [#1509](https://github.com/mapbox/mapbox-java/pull/1509)
