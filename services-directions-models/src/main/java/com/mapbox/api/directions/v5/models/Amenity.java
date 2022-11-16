@@ -18,9 +18,11 @@ public abstract class Amenity extends DirectionsJsonObject {
 
   /**
    * The type of amenities such as gas, restaurants, shopping, bank, atm etc.
-   * Note that adding new possible types is not considered a breaking change.
+   * For a list of supported amenity types
+   * see {@link com.mapbox.api.directions.v5.DirectionsCriteria.AmenityTypeCriteria}.
    */
   @NonNull
+  @DirectionsCriteria.AmenityTypeCriteria
   public abstract String type();
 
   /**
