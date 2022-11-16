@@ -733,6 +733,17 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void suppressVoiceInstructionLocalNames() throws Exception {
+    MapboxDirections mapboxDirections = MapboxDirections.builder()
+      .accessToken("token")
+      .routeOptions(routeOptions.toBuilder().baseUrl(mockUrl.toString()).build())
+      .build();
+
+    assertEquals("true",
+      mapboxDirections.cloneCall().request().url().queryParameter("suppress_voice_instruction_local_names"));
+  }
+
+  @Test
   public void waypointsPerRoute() throws Exception {
     MapboxDirections mapboxDirections = MapboxDirections.builder()
       .accessToken("token")

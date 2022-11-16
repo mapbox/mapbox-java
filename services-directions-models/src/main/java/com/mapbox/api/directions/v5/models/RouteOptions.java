@@ -932,6 +932,20 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     return ParseUtils.parseToStrings(paymentMethods(), ",");
   }
 
+  /*
+   * If true, steps.voiceInstructions will omit any named maneuever points along the route
+   * (e.g. street name, intersection name, JCT, IC) when the language parameter does not match
+   * the default language(s) for that region. For example, if the `language` parameter is `de`
+   * and a user is routing in France, a user would hear "turn left" instead of "turn
+   * left onto Champs Elysee".
+   *
+   * @return boolean representing the `suppressVoiceInstructionLocalNames` value
+   */
+  @SuppressWarnings("checkstyle:javadocmethod")
+  @SerializedName("suppress_voice_instruction_local_names")
+  @Nullable
+  public abstract Boolean suppressVoiceInstructionLocalNames();
+
   /**
    * Gson type adapter for parsing Gson to this class.
    *
@@ -1069,6 +1083,11 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     appendQueryParameter(sb, "waypoints_per_route", waypointsPerRoute());
     appendQueryParameter(sb, "metadata", metadata());
     appendQueryParameter(sb, "payment_methods", paymentMethods());
+    appendQueryParameter(
+      sb,
+      "suppress_voice_instruction_local_names",
+      suppressVoiceInstructionLocalNames()
+    );
 
     Map<String, SerializableJsonElement> unrecognized = unrecognized();
     if (unrecognized != null) {
@@ -2090,6 +2109,23 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder metadata(@Nullable Boolean metadata);
+
+    /*
+     * If true, steps.voiceInstructions will omit any named maneuever points along the route
+     * (e.g. street name, intersection name, JCT, IC) when the language parameter does not match
+     * the default language(s) for that region. For example, if the `language` parameter is `de`
+     * and a user is routing in France, a user would hear "turn left" instead of "turn
+     * left onto Champs Elysee".
+     *
+     * @param suppressVoiceInstructionLocalNames boolean representing
+     *                                           the `suppressVoiceInstructionLocalNames` value
+     * @return this builder
+     */
+    @SuppressWarnings("checkstyle:javadocmethod")
+    @NonNull
+    public abstract Builder suppressVoiceInstructionLocalNames(
+      @Nullable Boolean suppressVoiceInstructionLocalNames
+    );
 
     /**
      * Use this method to add request parameters,

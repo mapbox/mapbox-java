@@ -103,7 +103,8 @@ interface DirectionsService {
     @Query("compute_toll_cost") Boolean computeTollCost,
     @Query("waypoints_per_route") Boolean waypointsPerRoute,
     @Query("metadata") Boolean metadata,
-    @Query("payment_methods") String paymentMethods
+    @Query("payment_methods") String paymentMethods,
+    @Query("suppress_voice_instruction_local_names") Boolean suppressVoiceInstructionLocalNames
   );
 
   /**
@@ -193,6 +194,7 @@ interface DirectionsService {
     @Field("compute_toll_cost") Boolean computeTollCost,
     @Field("waypoints_per_route") Boolean waypointsPerRoute,
     @Field("metadata") Boolean metadata,
-    @Field("payment_methods") String paymentMethods
+    @Field("payment_methods") String paymentMethods,
+    @Field("suppress_voice_instruction_local_names") Boolean suppressVoiceInstructionLocalNames
   );
 }
