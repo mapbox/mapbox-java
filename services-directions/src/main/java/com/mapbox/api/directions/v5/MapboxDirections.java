@@ -112,7 +112,8 @@ public abstract class MapboxDirections extends
       routeOptions().computeTollCost(),
       routeOptions().waypointsPerRoute(),
       routeOptions().metadata(),
-      routeOptions().paymentMethods()
+      routeOptions().paymentMethods(),
+      routeOptions().suppressVoiceInstructionLocalNames()
     );
   }
 
@@ -158,7 +159,8 @@ public abstract class MapboxDirections extends
       routeOptions().computeTollCost(),
       routeOptions().waypointsPerRoute(),
       routeOptions().metadata(),
-      routeOptions().paymentMethods()
+      routeOptions().paymentMethods(),
+      routeOptions().suppressVoiceInstructionLocalNames()
     );
   }
 

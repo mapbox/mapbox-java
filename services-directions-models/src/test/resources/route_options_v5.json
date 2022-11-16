@@ -38,5 +38,6 @@
   "metadata": true,
   "waypoints_per_route": true,
   "compute_toll_cost": true,
-  "payment_methods": "general"
+  "payment_methods": "general",
+  "suppress_voice_instruction_local_names": true
 }

@@ -38,7 +38,7 @@ public class RouteOptionsTest extends TestUtils {
    */
   private static final String ROUTE_OPTIONS_JSON = "route_options_v5.json";
   private static final String ROUTE_OPTIONS_URL =
-    "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=%3Bunlimited%3B5.1&steps=true&avoid_maneuver_radius=200.0&bearings=0%2C90%3B90%2C0%3B&layers=-42%3B%3B0&continue_straight=false&annotations=congestion%2Cdistance%2Cduration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll%2Cferry%2Cpoint%2811.0+-22.0%29&include=hot%2Chov2&approaches=%3Bcurb%3B&waypoints=0%3B1%3B2&waypoint_names=%3BSerangoon+Garden+Market+%26+Food+Centre%3BFunky+%26nAmE*&waypoint_targets=%3B12.2%2C21.2%3B&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=%3Bfalse%3Btrue&snapping_include_static_closures=true%3B%3Bfalse&arrive_by=2021-01-01%27T%2701%3A01&depart_at=2021-02-02%27T%2702%3A02&max_height=1.5&max_width=1.4&max_weight=2.9&compute_toll_cost=true&waypoints_per_route=true&metadata=true&payment_methods=general";
+    "https://api.mapbox.com/directions/v5/mapbox/driving/-122.4003312,37.7736941;-122.4187529,37.7689715;-122.4255172,37.7775835?access_token=pk.token&geometries=polyline6&alternatives=false&overview=full&radiuses=%3Bunlimited%3B5.1&steps=true&avoid_maneuver_radius=200.0&bearings=0%2C90%3B90%2C0%3B&layers=-42%3B%3B0&continue_straight=false&annotations=congestion%2Cdistance%2Cduration&language=ru&roundabout_exits=false&voice_instructions=true&banner_instructions=true&voice_units=metric&exclude=toll%2Cferry%2Cpoint%2811.0+-22.0%29&include=hot%2Chov2&approaches=%3Bcurb%3B&waypoints=0%3B1%3B2&waypoint_names=%3BSerangoon+Garden+Market+%26+Food+Centre%3BFunky+%26nAmE*&waypoint_targets=%3B12.2%2C21.2%3B&enable_refresh=true&walking_speed=5.11&walkway_bias=-0.2&alley_bias=0.75&snapping_include_closures=%3Bfalse%3Btrue&snapping_include_static_closures=true%3B%3Bfalse&arrive_by=2021-01-01%27T%2701%3A01&depart_at=2021-02-02%27T%2702%3A02&max_height=1.5&max_width=1.4&max_weight=2.9&compute_toll_cost=true&waypoints_per_route=true&metadata=true&payment_methods=general&suppress_voice_instruction_local_names=true";
   private static final String ACCESS_TOKEN = "pk.token";
 
   private final String optionsJson = loadJsonFixture(ROUTE_OPTIONS_JSON);
@@ -351,6 +351,13 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void suppressVoiceInstructionLocalNamesIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
+
+    assertEquals(true, options.suppressVoiceInstructionLocalNames());
+  }
+
+  @Test
   public void waypointsPerRouteAreValid_fromJson() {
     RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
@@ -362,6 +369,13 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions options = defaultRouteOptions();
 
     assertNull(options.computeTollCost());
+  }
+
+  @Test
+  public void defaultSuppressVoiceInstructionLocalNames() {
+    RouteOptions options = defaultRouteOptions();
+
+    assertNull(options.suppressVoiceInstructionLocalNames());
   }
 
   @Test
@@ -1102,6 +1116,7 @@ public class RouteOptionsTest extends TestUtils {
       .computeTollCost(true)
       .waypointsPerRoute(true)
       .paymentMethods(DirectionsCriteria.PAYMENT_METHOD_GENERAL)
+      .suppressVoiceInstructionLocalNames(true)
       .build();
   }
 
@@ -1209,6 +1224,7 @@ public class RouteOptionsTest extends TestUtils {
       .metadata(true)
       .computeTollCost(true)
       .waypointsPerRoute(true)
+      .suppressVoiceInstructionLocalNames(true)
       .paymentMethodsList(Arrays.asList(DirectionsCriteria.PAYMENT_METHOD_GENERAL))
       .build();
   }
