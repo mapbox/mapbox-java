@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.StringDef;
+import com.mapbox.api.directions.v5.models.Amenity;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -394,6 +395,79 @@ public final class DirectionsCriteria {
   @SuppressWarnings("checkstyle:javadocvariable")
   public static final String PAYMENT_METHOD_APP = "app";
 
+  /**
+   * Gas station amenity type.
+   */
+  public static final String AMENITY_TYPE_GAS_STATION = "gas_station";
+  /**
+   * Electric charging station amenity type.
+   */
+  public static final String AMENITY_TYPE_ELECTRIC_CHARGING_STATION = "electric_charging_station";
+  /**
+   * Toilet amenity type.
+   */
+  public static final String AMENITY_TYPE_TOILET = "toilet";
+  /**
+   * Coffee amenity type.
+   */
+  public static final String AMENITY_TYPE_COFFEE = "coffee";
+  /**
+   * Restaurant amenity type.
+   */
+  public static final String AMENITY_TYPE_RESTAURANT = "restaurant";
+  /**
+   * Snack amenity type.
+   */
+  public static final String AMENITY_TYPE_SNACK = "snack";
+  /**
+   * ATM amenity type.
+   */
+  public static final String AMENITY_TYPE_ATM = "ATM";
+  /**
+   * Info amenity type.
+   */
+  public static final String AMENITY_TYPE_INFO = "info";
+  /**
+   * Baby care amenity type.
+   */
+  public static final String AMENITY_TYPE_BABY_CARE = "baby_care";
+  /**
+   * Facilities for disabled amenity type.
+   */
+  public static final String AMENITY_TYPE_FACILITIES_FOR_DISABLED = "facilities_for_disabled";
+  /**
+   * Shop amenity type.
+   */
+  public static final String AMENITY_TYPE_SHOP = "shop";
+  /**
+   * Telephone amenity type.
+   */
+  public static final String AMENITY_TYPE_TELEPHONE = "telephone";
+  /**
+   * Hotel amenity type.
+   */
+  public static final String AMENITY_TYPE_HOTEL = "hotel";
+  /**
+   * Hotspring amenity type.
+   */
+  public static final String AMENITY_TYPE_HOTSPRING = "hotspring";
+  /**
+   * Shower amenity type.
+   */
+  public static final String AMENITY_TYPE_SHOWER = "shower";
+  /**
+   * Picnic shelter amenity type.
+   */
+  public static final String AMENITY_TYPE_PICNIC_SHELTER = "picnic_shelter";
+  /**
+   * Post amenity type.
+   */
+  public static final String AMENITY_TYPE_POST = "post";
+  /**
+   * FAX amenity type.
+   */
+  public static final String AMENITY_TYPE_FAX = "FAX";
+
   private DirectionsCriteria() {
     //not called
   }
@@ -583,5 +657,32 @@ public final class DirectionsCriteria {
     PAYMENT_METHOD_APP,
   })
   public @interface PaymentMethodsCriteria {
+  }
+
+  /**
+   * Supported amenity types. See {@link Amenity#type()}.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    AMENITY_TYPE_GAS_STATION,
+    AMENITY_TYPE_ELECTRIC_CHARGING_STATION,
+    AMENITY_TYPE_TOILET,
+    AMENITY_TYPE_COFFEE,
+    AMENITY_TYPE_RESTAURANT,
+    AMENITY_TYPE_SNACK,
+    AMENITY_TYPE_ATM,
+    AMENITY_TYPE_INFO,
+    AMENITY_TYPE_BABY_CARE,
+    AMENITY_TYPE_FACILITIES_FOR_DISABLED,
+    AMENITY_TYPE_SHOP,
+    AMENITY_TYPE_TELEPHONE,
+    AMENITY_TYPE_HOTEL,
+    AMENITY_TYPE_HOTSPRING,
+    AMENITY_TYPE_SHOWER,
+    AMENITY_TYPE_PICNIC_SHELTER,
+    AMENITY_TYPE_POST,
+    AMENITY_TYPE_FAX,
+  })
+  public @interface AmenityTypeCriteria {
   }
 }
