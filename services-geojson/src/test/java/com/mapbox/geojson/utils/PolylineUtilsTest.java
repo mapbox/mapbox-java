@@ -48,6 +48,25 @@ public class PolylineUtilsTest extends TestUtils {
   }
 
   @Test
+  public void testDecodeLargeFile() throws IOException {
+    final String testLine = loadJsonFixture("polyline-sfo-nyc.txt");
+    List<Point> latLngs = decode(testLine, PRECISION_6);
+    assertEquals(34102, latLngs.size());
+  }
+
+  @Test
+  public void testDecodeCoordinates() {
+    List<Point> latLngs = decode("_p~iF~ps|U_ulLnnqC_mqNvxq`@", PRECISION_5);
+    assertEquals(3, latLngs.size());
+    assertEquals(38.5, latLngs.get(0).latitude(), 0.0);
+    assertEquals(-120.2, latLngs.get(0).longitude(), 0.0);
+    assertEquals(40.7, latLngs.get(1).latitude(), 0.0);
+    assertEquals(-120.95, latLngs.get(1).longitude(), 0.0);
+    assertEquals(43.252, latLngs.get(2).latitude(), 0.0);
+    assertEquals(-126.453, latLngs.get(2).longitude(), 0.0);
+  }
+
+  @Test
   public void testEncodePath5() {
     List<Point> path = decode(TEST_LINE, PRECISION_5);
     String encoded = encode(path, PRECISION_5);
@@ -89,7 +108,6 @@ public class PolylineUtilsTest extends TestUtils {
       assertEquals(path1.get(i), path2.get(i));
     }
   }
-
 
   @Test
   public void testEncodeDecodePath6() {
