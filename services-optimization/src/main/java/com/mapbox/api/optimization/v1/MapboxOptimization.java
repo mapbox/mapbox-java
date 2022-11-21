@@ -23,10 +23,14 @@ import com.mapbox.core.utils.ApiCallHelper;
 import com.mapbox.core.utils.MapboxUtils;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.Point;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * The Mapbox Optimization API returns a duration-optimized trip between the input coordinates.
@@ -79,6 +83,32 @@ public abstract class MapboxOptimization
       source(),
       language(),
       distributions());
+  }
+
+  @Override
+  public Response<OptimizationResponse> executeCall() throws IOException {
+    Response<OptimizationResponse> response = getCall().execute();
+    OptimizationResponseFactory factory = new OptimizationResponseFactory(MapboxOptimization.this);
+    return factory.generate(response);
+  }
+
+  @Override
+  public void enqueueCall(Callback<OptimizationResponse> callback) {
+    getCall().enqueue(new Callback<OptimizationResponse>() {
+      @Override
+      public void onResponse(Call<OptimizationResponse> call,
+                             Response<OptimizationResponse> response) {
+        OptimizationResponseFactory factory =
+          new OptimizationResponseFactory(MapboxOptimization.this);
+        Response<OptimizationResponse> generatedResponse = factory.generate(response);
+        callback.onResponse(call, generatedResponse);
+      }
+
+      @Override
+      public void onFailure(Call<OptimizationResponse> call, Throwable throwable) {
+        callback.onFailure(call, throwable);
+      }
+    });
   }
 
   @NonNull

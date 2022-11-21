@@ -4,6 +4,7 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 - Specified supported amenity types via `DirectionsCriteria#AmenityTypeCriteria`. [#1515](https://github.com/mapbox/mapbox-java/pull/1515)
+- Fixed an issue where the `OptimizationResponse#trips#routeIndex` and `OptimizationResponse#trips#routeOptions` weren't correctly assigned. [#1517](https://github.com/mapbox/mapbox-java/pull/1517)
 
 ### v6.10.0-beta.2 - November 11, 2022
 - Added `paymentMethods` parameter for `RouteOptions` and `IntersectionLanes`. [#1449](https://github.com/mapbox/mapbox-java/pull/1449)
