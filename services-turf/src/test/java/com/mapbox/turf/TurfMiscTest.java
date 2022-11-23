@@ -460,6 +460,121 @@ public class TurfMiscTest extends TestUtils {
   }
 
   @Test
+  public void testLineSliceAlongLine1WithDistances() throws TurfException {
+    Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
+    LineString lineStringLine1 = (LineString) line1.geometry();
+    List<Double> distances = Arrays.asList(
+      186.84406574649304,
+      100.69192860431227,
+      87.93612331551124,
+      124.62114438458583,
+      110.6378229611394,
+      107.1185834364626,
+      112.74125942778711,
+      126.32880459146213,
+      106.08835507916929,
+      104.8758009157191,
+      183.8476756899308,
+      86.6797647250738
+    );
+    List<DistanceProvider> distanceProviders = new ArrayList<>();
+    for (double distance : distances) {
+      distanceProviders.add(() -> distance);
+    }
+
+    double start = 500;
+    double stop = 750;
+
+    Point start_point = TurfMeasurement.along(lineStringLine1, start, TurfConstants.UNIT_MILES);
+    Point end_point = TurfMeasurement.along(lineStringLine1, stop, TurfConstants.UNIT_MILES);
+    LineString sliced = TurfMisc.lineSliceAlong(lineStringLine1, distanceProviders, start, stop, TurfConstants.UNIT_MILES);
+
+    assertEquals(sliced.coordinates().get(0).coordinates(),
+      start_point.coordinates());
+    assertEquals(sliced.coordinates().get(sliced.coordinates().size() - 1).coordinates(),
+      end_point.coordinates());
+  }
+
+  @Test
+  public void testLineSliceAlongLine1WithEmptyDistances() throws TurfException {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("distanceProviders in Turf lineSliceAlong should be of size coordinates - 1. Expected: 12, actual: 0"));
+
+    Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
+    LineString lineStringLine1 = (LineString) line1.geometry();
+    List<DistanceProvider> distanceProviders = new ArrayList<>();
+
+    double start = 500;
+    double stop = 750;
+
+    TurfMisc.lineSliceAlong(lineStringLine1, distanceProviders, start, stop, TurfConstants.UNIT_MILES);
+  }
+
+  @Test
+  public void testLineSliceAlongLine1WithTooFewDistances() throws TurfException {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("distanceProviders in Turf lineSliceAlong should be of size coordinates - 1. Expected: 12, actual: 11"));
+
+    Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
+    LineString lineStringLine1 = (LineString) line1.geometry();
+    List<Double> distances = Arrays.asList(
+      186.84406574649304,
+      100.69192860431227,
+      87.93612331551124,
+      124.62114438458583,
+      110.6378229611394,
+      107.1185834364626,
+      112.74125942778711,
+      126.32880459146213,
+      106.08835507916929,
+      104.8758009157191,
+      183.8476756899308
+    );
+    List<DistanceProvider> distanceProviders = new ArrayList<>();
+    for (double distance : distances) {
+      distanceProviders.add(() -> distance);
+    }
+
+    double start = 500;
+    double stop = 750;
+
+    TurfMisc.lineSliceAlong(lineStringLine1, distanceProviders, start, stop, TurfConstants.UNIT_MILES);
+  }
+
+  @Test
+  public void testLineSliceAlongLine1WithTooManyDistances() throws TurfException {
+    thrown.expect(TurfException.class);
+    thrown.expectMessage(startsWith("distanceProviders in Turf lineSliceAlong should be of size coordinates - 1. Expected: 12, actual: 13"));
+
+    Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
+    LineString lineStringLine1 = (LineString) line1.geometry();
+    List<Double> distances = Arrays.asList(
+      186.84406574649304,
+      100.69192860431227,
+      87.93612331551124,
+      124.62114438458583,
+      110.6378229611394,
+      107.1185834364626,
+      112.74125942778711,
+      126.32880459146213,
+      106.08835507916929,
+      104.8758009157191,
+      183.8476756899308,
+      1.2,
+      3.4
+    );
+    List<DistanceProvider> distanceProviders = new ArrayList<>();
+    for (double distance : distances) {
+      distanceProviders.add(() -> distance);
+    }
+
+    double start = 500;
+    double stop = 750;
+
+    TurfMisc.lineSliceAlong(lineStringLine1, distanceProviders, start, stop, TurfConstants.UNIT_MILES);
+  }
+
+  @Test
    public void testLineSliceAlongOvershootLine1() throws IOException, TurfException {
     Feature line1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_LINE_ONE));
     LineString lineStringLine1 = (LineString) line1.geometry();

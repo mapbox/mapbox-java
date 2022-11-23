@@ -169,6 +169,9 @@ public final class TurfMisc {
    * Takes a {@link LineString}, a specified distance along the line to a start {@link Point},
    * and a specified distance along the line to a stop point,
    * returns a subsection of the line in-between those points.
+   * NOTE: use {@link TurfMisc#lineSliceAlong(LineString, List, double, double, String)}
+   * instead of this method if you invoke the method often enough with the same `line` parameter.
+   * This way you can calculate and cache the distances which might boost the performance.
    *
    * This can be useful for extracting only the part of a route between two distances.
    *
@@ -187,6 +190,48 @@ public final class TurfMisc {
                                           @FloatRange(from = 0) double startDist,
                                           @FloatRange(from = 0) double stopDist,
                                           @NonNull @TurfConstants.TurfUnitCriteria String units) {
+    List<Point> coords = line.coordinates();
+    List<DistanceProvider> distanceProviders = new ArrayList<>();
+    for (int i = 0; i < coords.size() - 1; i++) {
+      final int index = i;
+      distanceProviders.add(new DistanceProvider() {
+        @Override
+        public double get() {
+          return TurfMeasurement.distance(coords.get(index), coords.get(index + 1), units);
+        }
+      });
+    }
+    return lineSliceAlong(line, distanceProviders, startDist, stopDist, units);
+  }
+
+  /**
+   * Takes a {@link LineString}, a specified distance along the line to a start {@link Point},
+   * and a specified distance along the line to a stop point,
+   * returns a subsection of the line in-between those points.
+   * NOTE: use this method instead of
+   * {@link TurfMisc#lineSliceAlong(LineString, double, double, String)} if you invoke the method
+   * often enough with the same `line` parameter.
+   * This way you can calculate and cache the distances which might boost the performance.
+   *
+   * This can be useful for extracting only the part of a route between two distances.
+   *
+   * @param line input line
+   * @param distanceProviders list of {@link DistanceProvider}
+   * @param startDist distance along the line to starting point
+   * @param stopDist distance along the line to ending point
+   * @param units one of the units found inside {@link TurfConstants.TurfUnitCriteria}
+   *              can be degrees, radians, miles, or kilometers
+   * @return sliced line
+   * @throws TurfException signals that a Turf exception of some sort has occurred.
+   * @see <a href="http://turfjs.org/docs/#lineslicealong">Turf Line slice documentation</a>
+   * @since 3.1.0
+   */
+  @NonNull
+  public static LineString lineSliceAlong(@NonNull LineString line,
+                                          @NonNull List<DistanceProvider> distanceProviders,
+                                          @FloatRange(from = 0) double startDist,
+                                          @FloatRange(from = 0) double stopDist,
+                                          @NonNull @TurfConstants.TurfUnitCriteria String units) {
 
     List<Point> coords = line.coordinates();
 
@@ -196,6 +241,10 @@ public final class TurfMisc {
     } else if (startDist == stopDist) {
       throw new TurfException("Start and stop distance in Turf lineSliceAlong "
         + "cannot equal each other.");
+    } else if (distanceProviders.size() != coords.size() - 1) {
+      throw new TurfException("distanceProviders in Turf lineSliceAlong should be of size "
+        + "coordinates - 1. Expected: " + (coords.size() - 1)
+        + ", actual: " + distanceProviders.size());
     }
 
     List<Point> slice = new ArrayList<>(2);
@@ -237,7 +286,7 @@ public final class TurfMisc {
         return LineString.fromLngLats(slice);
       }
 
-      travelled += TurfMeasurement.distance(coords.get(i), coords.get(i + 1), units);
+      travelled += distanceProviders.get(i).get();
     }
 
     if (travelled < startDist) {
