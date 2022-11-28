@@ -7,6 +7,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Decodes an encoded path string as an iterator of {@link Point}.
@@ -60,9 +61,15 @@ public class PolylineDecoder implements Iterator<Point>, Closeable {
 
   /**
    * Returns the next point in the geometry.
+   *
+   * @throws NoSuchElementException if the geometry has no more points
    */
   @Override
-  public Point next() {
+  public Point next() throws NoSuchElementException {
+    if (!hasNext()) {
+      throw new NoSuchElementException("Next element is not available when hasNext is false.");
+    }
+
     int result = 1;
     int shift = 0;
     int temp;

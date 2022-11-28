@@ -6,10 +6,12 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 public class PolylineDecoderTest extends TestUtils {
@@ -61,5 +63,15 @@ public class PolylineDecoderTest extends TestUtils {
     assertEquals(polylineDecoder.next(), polylineDecoder.getCurrent());
     assertEquals(polylineDecoder.next(), polylineDecoder.getCurrent());
     assertEquals(polylineDecoder.next(), polylineDecoder.getCurrent());
+  }
+
+  @Test
+  public void testThrowsExceptionWhenNoMoreElements() {
+    String geometry = "";
+
+    InputStream inputStream = new ByteArrayInputStream(geometry.getBytes());
+    PolylineDecoder polylineDecoder = new PolylineDecoder(inputStream, 5);
+
+    assertThrows(NoSuchElementException.class, polylineDecoder::next);
   }
 }
