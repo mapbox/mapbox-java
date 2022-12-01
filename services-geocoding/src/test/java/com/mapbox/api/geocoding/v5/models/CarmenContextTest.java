@@ -19,7 +19,7 @@ import retrofit2.Response;
 public class CarmenContextTest extends GeocodingTestUtils {
 
   @Test
-  public void sanity() throws Exception {
+  public void sanity() {
     CarmenContext carmenContext = CarmenContext.builder().build();
     assertNotNull(carmenContext);
   }

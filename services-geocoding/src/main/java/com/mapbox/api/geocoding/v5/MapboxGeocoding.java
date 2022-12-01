@@ -97,7 +97,8 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
       limit(),
       languages(),
       reverseMode(),
-      fuzzyMatch());
+      fuzzyMatch(),
+      routing());
   }
 
   private Call<List<GeocodingResponse>> getBatchCall() {
@@ -214,6 +215,9 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
 
   @Nullable
   abstract Boolean fuzzyMatch();
+
+  @Nullable
+  abstract Boolean routing();
 
   @Nullable
   abstract String clientAppName();
@@ -559,6 +563,24 @@ public abstract class MapboxGeocoding extends MapboxService<GeocodingResponse, G
      * @since 4.9.0
      */
     public abstract Builder fuzzyMatch(Boolean fuzzyMatch);
+
+    /**
+     * Specify whether to request additional metadata about the recommended navigation destination
+     * corresponding to the feature (true) or not (false, default).
+     * Only applicable for address features.
+     *
+     * For example, if routing=true the response could include data about a point
+     * on the road the feature fronts.
+     * Response features may include an array containing one or more routable points.
+     * Routable points cannot always be determined. Consuming applications should fall back to
+     * using the feature's normal geometry for routing if a separate routable point
+     * is not returned.
+     *
+     * @param routing optionally set whether to request
+     *                additional metadata about the recommended navigation destination
+     * @return this builder for chaining options together
+     */
+    public abstract Builder routing(Boolean routing);
 
     /**
      * Required to call when this is being built. If no access token provided,

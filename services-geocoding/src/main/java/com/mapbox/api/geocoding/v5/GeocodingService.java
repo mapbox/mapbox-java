@@ -35,6 +35,8 @@ public interface GeocodingService {
    * @param language     The locale in which results should be returned.
    * @param reverseMode  Set the factors that are used to sort nearby results.
    * @param fuzzyMatch   Set whether to allow the geocoding API to attempt exact matching or not.
+   * @param routing      Set whether to request additional metadata
+   *                     about the recommended navigation destination.
    * @return A retrofit Call object
    * @since 1.0.0
    */
@@ -52,7 +54,8 @@ public interface GeocodingService {
     @Query("limit") String limit,
     @Query("language") String language,
     @Query("reverseMode") String reverseMode,
-    @Query("fuzzyMatch") Boolean fuzzyMatch);
+    @Query("fuzzyMatch") Boolean fuzzyMatch,
+    @Query("routing") Boolean routing);
 
   /**
    * Constructs the html call using the information passed in through the

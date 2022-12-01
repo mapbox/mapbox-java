@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * Array representing a hierarchy of parents. Each parent includes id, text keys along with
- * (if avaliable) a wikidata, short_code, and Maki key.
+ * (if available) a wikidata, short_code, and Maki key.
  *
  * @see <a href="https://github.com/mapbox/carmen/blob/master/carmen-geojson.md">Carmen Geojson information</a>
  * @see <a href="https://www.mapbox.com/api-documentation/search/#geocoding">Mapbox geocoder documentation</a>

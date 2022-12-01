@@ -15,6 +15,7 @@ import retrofit2.Response;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -313,6 +314,44 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
+  public void routingSanity() throws Exception {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("wahsington")
+        .routing(true)
+        .baseUrl(mockUrl.toString())
+        .build();
+    assertNotNull(mapboxGeocoding);
+    Response<GeocodingResponse> response = mapboxGeocoding.executeCall();
+    assertEquals(200, response.code());
+  }
+
+  @Test
+  public void routing_defaultIsNotSpecified() {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("wahsington")
+        .baseUrl(mockUrl.toString())
+        .build();
+    assertNotNull(mapboxGeocoding);
+    assertFalse(mapboxGeocoding.cloneCall().request().url().toString()
+        .contains("routing="));
+  }
+
+  @Test
+  public void routing_getsAddedToUrlCorrectly() {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("wahsington")
+        .routing(true)
+        .baseUrl(mockUrl.toString())
+        .build();
+    assertNotNull(mapboxGeocoding);
+    assertTrue(mapboxGeocoding.cloneCall().request().url().toString()
+        .contains("routing=true"));
+  }
+
+  @Test
   public void intersectionSearchSanity() throws IOException {
     MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
       .accessToken(ACCESS_TOKEN)
@@ -382,7 +421,7 @@ public class MapboxGeocodingTest extends GeocodingTestUtils {
   }
 
   @Test
-  public void intersectionSearch_EmptyPromixity() {
+  public void intersectionSearch_EmptyProximity() {
     thrown.expect(ServicesException.class);
     thrown.expectMessage(
             startsWith("Geocoding proximity must be set for intersection search."));
