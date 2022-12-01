@@ -33,7 +33,7 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
   private static final String FORWARD_FEATURE_VALID = "forward_feature_valid.json";
 
   @Test
-  public void sanity() throws Exception {
+  public void sanity() {
     CarmenFeature carmenFeature = CarmenFeature.builder()
       .properties(new JsonObject())
       .address("1234")
@@ -104,6 +104,32 @@ public class CarmenFeatureTest extends GeocodingTestUtils {
     assertThat(feature.center().latitude(), equalTo(38.897702));
     assertThat(feature.center().longitude(), equalTo(-77.036543));
     assertThat(feature.language(), nullValue());
+    assertThat(feature.routablePoints(), notNullValue());
+  }
+
+  @Test
+  public void routablePoints_handlesCorrectly() throws IOException {
+    MapboxGeocoding mapboxGeocoding = MapboxGeocoding.builder()
+        .accessToken(ACCESS_TOKEN)
+        .query("1600 pennsylvania ave nw")
+        .baseUrl(mockUrl.toString())
+        .build();
+    GeocodingResponse response = mapboxGeocoding.executeCall().body();
+    assertNotNull(response);
+
+    assertThat(response.features().size(), equalTo(5));
+
+    CarmenFeature feature = response.features().get(0);
+    assertThat(feature.routablePoints(), notNullValue());
+    assertThat(feature.routablePoints().points(), notNullValue());
+    assertThat(feature.routablePoints().points().size(), equalTo(1));
+    assertThat(feature.routablePoints().points().get(0).name(), equalTo("default_routable_point"));
+    assertThat(feature.routablePoints().points().get(0).coordinate(), equalTo(Point.fromLngLat(-77.036544, 38.897703)));
+
+    assertThat(response.features().get(1).routablePoints(), notNullValue());
+    assertThat(response.features().get(1).routablePoints().points(), nullValue());
+
+    assertThat(response.features().get(2).routablePoints(), nullValue());
   }
 
   @Test

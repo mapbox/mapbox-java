@@ -262,6 +262,15 @@ public abstract class CarmenFeature implements GeoJson {
   public abstract String matchingPlaceName();
 
   /**
+   * An object with the routable points for the {@link CarmenFeature}.
+   *
+   * @return an object with the routable points for the {@link CarmenFeature}
+   */
+  @Nullable
+  @SerializedName("routable_points")
+  public abstract RoutablePoints routablePoints();
+
+  /**
    * A string of the IETF language tag of the query's primary language.
    *
    * @return string containing the query's primary language
@@ -481,6 +490,14 @@ public abstract class CarmenFeature implements GeoJson {
      * @since 2.2.0
      */
     public abstract Builder language(@Nullable String language);
+
+    /**
+     * An object with the routable points for the {@link CarmenFeature}.
+     *
+     * @param routablePoints an object with the routable points for the {@link CarmenFeature}
+     * @return this builder for chaining options together
+     */
+    public abstract Builder routablePoints(@Nullable RoutablePoints routablePoints);
 
     /**
      * Build a new {@link CarmenFeature} object.
