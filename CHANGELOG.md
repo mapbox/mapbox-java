@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added "routable points" support for `services-geocoding` [#1522](https://github.com/mapbox/mapbox-java/pull/1522)
 
 ### v6.10.0-beta.3 - November 30, 2022
 - Specified supported amenity types via `DirectionsCriteria#AmenityTypeCriteria`. [#1515](https://github.com/mapbox/mapbox-java/pull/1515)
