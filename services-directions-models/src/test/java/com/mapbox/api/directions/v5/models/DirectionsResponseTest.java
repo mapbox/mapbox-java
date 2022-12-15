@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -10,6 +11,9 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -81,6 +85,25 @@ public class DirectionsResponseTest extends TestUtils {
     DirectionsResponse response = DirectionsResponse.fromJson(json);
     assertNotNull(response);
     assertEquals(1, response.routes().size());
+  }
+
+  @Test
+  public void deserialization_from_byte_buffer() throws Exception {
+    String textJson = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    ByteBuffer buffer = putTextToDirectByteBuffer(textJson, StandardCharsets.UTF_8);
+
+    DirectionsResponse responseFromBuffer = DirectionsResponse.fromJson(buffer, StandardCharsets.UTF_8);
+    DirectionsResponse responseFromText = DirectionsResponse.fromJson(textJson);
+
+    assertEquals(responseFromText, responseFromBuffer);
+  }
+
+  @NonNull private ByteBuffer putTextToDirectByteBuffer(String textJson, Charset charset) {
+    byte[] json = textJson.getBytes(charset);
+    ByteBuffer buffer = ByteBuffer.allocateDirect(json.length);
+    buffer.put(json);
+    buffer.position(0);
+    return buffer;
   }
 
   @Test
