@@ -9,6 +9,14 @@ import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,6 +152,49 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     // rebuilding to ensure that underlying routes have assigned indices and UUID
     return gson.create().fromJson(json, DirectionsResponse.class).toBuilder().build();
+  }
+
+  public static DirectionsResponse fromJson(@NonNull ByteBuffer json, Charset charsets) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
+    // rebuilding to ensure that underlying routes have assigned indices and UUID
+
+    InputStream is = new ByteBufferBackedInputStream(json);
+    InputStreamReader r = new InputStreamReader(is, charsets);
+    BufferedReader br = new BufferedReader(r);
+    return gson.create().fromJson(br, DirectionsResponse.class).toBuilder().build();
+  }
+
+  private static class ByteBufferBackedInputStream extends InputStream {
+
+    ByteBuffer buf;
+
+    public ByteBufferBackedInputStream(ByteBuffer buf) {
+      this.buf = buf;
+    }
+
+    public synchronized int read() throws IOException {
+      if (!buf.hasRemaining()) {
+        return -1;
+      }
+      return buf.get() & 0xFF;
+    }
+
+    @Override
+    public int available() throws IOException {
+      return buf.remaining();
+    }
+
+    public synchronized int read(byte[] bytes, int off, int len) throws IOException {
+      if (!buf.hasRemaining()) {
+        return -1;
+      }
+
+      len = Math.min(len, buf.remaining());
+      buf.get(bytes, off, len);
+      return len;
+    }
   }
 
   /**

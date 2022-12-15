@@ -10,6 +10,8 @@ import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -79,6 +81,15 @@ public class DirectionsResponseTest extends TestUtils {
   public void fromJson_correctlyBuildsFromJson() throws Exception {
     String json = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
     DirectionsResponse response = DirectionsResponse.fromJson(json);
+    assertNotNull(response);
+    assertEquals(1, response.routes().size());
+  }
+
+  @Test
+  public void deserialization_from_byte_buffer() throws Exception {
+    String json = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    ByteBuffer buffer = ByteBuffer.wrap(json.getBytes(StandardCharsets.UTF_8));
+    DirectionsResponse response = DirectionsResponse.fromJson(buffer, StandardCharsets.UTF_8);
     assertNotNull(response);
     assertEquals(1, response.routes().size());
   }
