@@ -87,8 +87,10 @@ public class DirectionsResponseTest extends TestUtils {
 
   @Test
   public void deserialization_from_byte_buffer() throws Exception {
-    String json = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
-    ByteBuffer buffer = ByteBuffer.wrap(json.getBytes(StandardCharsets.UTF_8));
+    byte[] json = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE).getBytes(StandardCharsets.UTF_8);
+    ByteBuffer buffer = ByteBuffer.allocateDirect(json.length);
+    buffer.put(json);
+    buffer.position(0);
     DirectionsResponse response = DirectionsResponse.fromJson(buffer, StandardCharsets.UTF_8);
     assertNotNull(response);
     assertEquals(1, response.routes().size());
