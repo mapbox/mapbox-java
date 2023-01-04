@@ -162,8 +162,7 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
 
     InputStream is = new ByteBufferBackedInputStream(json);
     InputStreamReader r = new InputStreamReader(is, charsets);
-    BufferedReader br = new BufferedReader(r);
-    return gson.create().fromJson(br, DirectionsResponse.class).toBuilder().build();
+    return gson.create().fromJson(r, DirectionsResponse.class).toBuilder().build();
   }
 
   private static class ByteBufferBackedInputStream extends InputStream {
