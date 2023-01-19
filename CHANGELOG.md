@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v.6.10.0 - January 19, 2023
+- No additional changes
+
+
 ### v6.10.0-beta.4 - December 02, 2022
 - Added "routable points" support for `services-geocoding` [#1522](https://github.com/mapbox/mapbox-java/pull/1522)
 
