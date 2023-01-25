@@ -54,6 +54,8 @@ public class StepIntersectionTest extends TestUtils {
       .trafficSignal(true)
       .mapboxStreetsV8(MapboxStreetsV8.builder().roadClass("street").build())
       .tunnelName("tunnel_name")
+      .junction(Junction.builder().name("jct_name").build())
+      .interchange(Interchange.builder().name("ic_name").build())
       .build();
 
     String jsonString = intersection.toJson();
@@ -156,6 +158,60 @@ public class StepIntersectionTest extends TestUtils {
 
     Assert.assertEquals("toll_gantry", stepIntersection.tollCollection().type());
     Assert.assertEquals("toll_name", stepIntersection.tollCollection().name());
+    String jsonStr = stepIntersection.toJson();
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testJunction() {
+    String stepIntersectionJsonString = "{"
+        + "\"location\": [ 13.426579, 52.508068 ],"
+        + "\"jct\": { \"name\": \"jct_name\" }"
+        + "}";
+
+    StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    Assert.assertEquals("jct_name", stepIntersection.junction().name());
+    String jsonStr = stepIntersection.toJson();
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testNullJunction() {
+    String stepIntersectionJsonString = "{"
+        + "\"location\": [ 13.426579, 52.508068 ]"
+        + "}";
+
+    StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    Assert.assertNull(stepIntersection.junction());
+    String jsonStr = stepIntersection.toJson();
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testInterchange() {
+    String stepIntersectionJsonString = "{"
+        + "\"location\": [ 13.426579, 52.508068 ],"
+        + "\"ic\": { \"name\": \"ic_name\" }"
+        + "}";
+
+    StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    Assert.assertEquals("ic_name", stepIntersection.interchange().name());
+    String jsonStr = stepIntersection.toJson();
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testNullInterchange() {
+    String stepIntersectionJsonString = "{"
+        + "\"location\": [ 13.426579, 52.508068 ]"
+        + "}";
+
+    StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    Assert.assertNull(stepIntersection.interchange());
     String jsonStr = stepIntersection.toJson();
     compareJson(stepIntersectionJsonString, jsonStr);
   }

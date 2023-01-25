@@ -241,6 +241,30 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   @SerializedName("yield_sign")
   public abstract Boolean yieldSign();
 
+  /*
+   * An object containing information about routing and passing interchange(s) along the route.
+   * The object is optionally included if the data is available.
+   *
+   * @return an object containing information about routing and passing interchange(s) along the
+   *   route if data is available, otherwise null.
+   */
+  @Nullable
+  @SerializedName("ic")
+  @SuppressWarnings("checkstyle:javadocmethod")
+  public abstract Interchange interchange();
+
+  /*
+   * An object containing information about routing and passing junction(s) along the route.
+   * The object is optionally included if the data is available.
+   *
+   * @return an object containing information about routing and passing junction(s) along the
+   * route if data is available, otherwise null.
+   */
+  @Nullable
+  @SerializedName("jct")
+  @SuppressWarnings("checkstyle:javadocmethod")
+  public abstract Junction junction();
+
   /**
    * Convert the current {@link StepIntersection} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
@@ -479,6 +503,30 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder yieldSign(@Nullable Boolean yieldSign);
+
+    /*
+     * An object containing information about routing and passing interchange(s) along the route.
+     *
+     * @param interchange object containing information about routing and passing interchange(s)
+     *   along the route.
+     * @return Builder containing information about routing and passing interchange(s) along the
+     *   route if data is available, otherwise null.
+     */
+    @NonNull
+    @SuppressWarnings("checkstyle:javadocmethod")
+    public abstract Builder interchange(@Nullable Interchange interchange);
+
+    /*
+     * An object containing information about routing and passing junction(s) along the route.
+     *
+     * @param junction object containing information about routing and passing junction(s)
+     *   along the route.
+     * @return Builder containing information about routing and passing junction(s) along the
+     *   route if data is available, otherwise null.
+     */
+    @NonNull
+    @SuppressWarnings("checkstyle:javadocmethod")
+    public abstract Builder junction(@Nullable Junction junction);
 
     /**
      * The rawLocation as a double array. Once the {@link StepIntersection} object's created,
