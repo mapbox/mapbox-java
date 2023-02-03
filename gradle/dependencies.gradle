@@ -5,7 +5,7 @@ ext {
       autoValueGson    : '0.0.1',
       junit            : '4.12',
       annotation       : '1.0.0',
-      gson             : '2.8.6',
+      gson             : '2.8.9',
       retrofit         : '2.7.2',
       okhttp3          : '4.9.0',
       mockito          : '4.2.0',
