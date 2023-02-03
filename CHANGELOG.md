@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- No additional changes
 
 ### v.6.10.0 - January 19, 2023
 - No additional changes
