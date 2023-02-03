@@ -3,10 +3,16 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v6.11.0-beta.1 - February 03, 2023
 - No additional changes
 
+
 ### v.6.10.0 - January 19, 2023
+
+### v6.11.0-beta.1 - February 03, 2023
 - No additional changes
+
 
 
 ### v6.10.0-beta.4 - December 02, 2022
@@ -65,7 +71,10 @@ Mapbox welcomes participation and contributions from everyone.
 - Added `RouteOptions#computeTollCost` request parameter that when set to `true` can return `DirectionsRoute#tollCosts`, if data is available. [#1458](https://github.com/mapbox/mapbox-java/pull/1458)
 
 ### v6.7.0 - August 12, 2022
+
+### v6.11.0-beta.1 - February 03, 2023
 - No additional changes
+
 
 ### v6.7.0-beta.1 - Jul 22, 2022
 - Added `Incident.affectedRoadNames`. [#1457](https://github.com/mapbox/mapbox-java/pull/1457)
@@ -77,7 +86,10 @@ Mapbox welcomes participation and contributions from everyone.
 - Added support for `Amenities` by exposing them as a part of `RestStop`. [#1454](https://github.com/mapbox/mapbox-java/pull/1454)
 
 ### v6.5.0 - May 25, 2022
+
+### v6.11.0-beta.1 - February 03, 2023
 - No additional changes
+
 
 ### v6.5.0-beta.6 - May 17, 2022
 - Added `max_weight` field to `RouteOptions` to provide max vehicle weight, metric tons. [#1439](https://github.com/mapbox/mapbox-java/pull/1439)
