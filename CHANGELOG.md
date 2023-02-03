@@ -9,8 +9,6 @@ Mapbox welcomes participation and contributions from everyone.
 
 
 ### v.6.10.0 - January 19, 2023
-
-### v6.11.0-beta.1 - February 03, 2023
 - No additional changes
 
 
@@ -71,8 +69,6 @@ Mapbox welcomes participation and contributions from everyone.
 - Added `RouteOptions#computeTollCost` request parameter that when set to `true` can return `DirectionsRoute#tollCosts`, if data is available. [#1458](https://github.com/mapbox/mapbox-java/pull/1458)
 
 ### v6.7.0 - August 12, 2022
-
-### v6.11.0-beta.1 - February 03, 2023
 - No additional changes
 
 
@@ -86,8 +82,6 @@ Mapbox welcomes participation and contributions from everyone.
 - Added support for `Amenities` by exposing them as a part of `RestStop`. [#1454](https://github.com/mapbox/mapbox-java/pull/1454)
 
 ### v6.5.0 - May 25, 2022
-
-### v6.11.0-beta.1 - February 03, 2023
 - No additional changes
 
 
