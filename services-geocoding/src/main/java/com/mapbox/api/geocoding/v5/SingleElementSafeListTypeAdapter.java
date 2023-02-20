@@ -28,9 +28,9 @@ import java.util.List;
  *
  * @since 5.4.0
  */
-class SingleElementSafeListTypeAdapter<E> extends TypeAdapter<List<E>> {
+public class SingleElementSafeListTypeAdapter<E> extends TypeAdapter<List<E>> {
 
-  static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
+  public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
 
     @Override
     public <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> typeToken) {
