@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.11.0 - March 03, 2023
+- No additional changes
+
 ### v6.11.0-beta.1 - February 03, 2023
 - No additional changes
 
