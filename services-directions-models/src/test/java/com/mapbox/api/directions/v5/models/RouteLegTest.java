@@ -3,6 +3,7 @@ package com.mapbox.api.directions.v5.models;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 
 import org.junit.Test;
@@ -85,6 +86,15 @@ public class RouteLegTest extends TestUtils {
       .congestion(congestionList)
       .build();
 
+    List<Notification> notifications = Arrays.asList(
+      Notification.builder()
+        .type(DirectionsCriteria.NOTIFICATION_TYPE_VIOLATION)
+        .subtype(DirectionsCriteria.NOTIFICATION_SUBTYPE_MAX_HEIGHT)
+        .geometryIndexStart(123)
+        .geometryIndexEnd(145)
+        .build()
+    );
+
     RouteLeg routeLeg = RouteLeg.builder()
       .annotation(annotation)
       .distance(53.4)
@@ -93,6 +103,7 @@ public class RouteLegTest extends TestUtils {
       .incidents(incidents)
       .closures(closures)
       .summary("")
+      .notifications(notifications)
       .build();
 
     String jsonString = routeLeg.toJson();
@@ -109,7 +120,8 @@ public class RouteLegTest extends TestUtils {
       + "\"summary\": \"route summary\","
       + "\"admins\": [{ \"iso_3166_1_alpha3\": \"USA\", \"iso_3166_1\": \"US\" }],"
       + "\"incidents\": [{ \"id\": \"15985415522454461962\" }],"
-      + "\"closures\": [{ \"geometry_index_start\": 1,\"geometry_index_end\": 4}]}";
+      + "\"closures\": [{ \"geometry_index_start\": 1,\"geometry_index_end\": 4}],"
+      + "\"notifications\": [{ \"geometry_index_start\": 123,\"geometry_index_end\": 145, \"type\": \"violation\", \"subtype\": \"maxHeight\"}]}";
     List<Admin> admins = new ArrayList<>();
     admins.add(Admin.builder().countryCode("US").countryCodeAlpha3("USA").build());
 
@@ -119,6 +131,15 @@ public class RouteLegTest extends TestUtils {
     List<Closure> closures = new ArrayList<>();
     closures.add(Closure.builder().geometryIndexStart(1).geometryIndexEnd(4).build());
 
+    List<Notification> notifications = Arrays.asList(
+      Notification.builder()
+        .type(DirectionsCriteria.NOTIFICATION_TYPE_VIOLATION)
+        .subtype(DirectionsCriteria.NOTIFICATION_SUBTYPE_MAX_HEIGHT)
+        .geometryIndexStart(123)
+        .geometryIndexEnd(145)
+        .build()
+    );
+
     RouteLeg routeLeg = RouteLeg.builder()
       .distance(53.4)
       .duration(14.3)
@@ -126,6 +147,7 @@ public class RouteLegTest extends TestUtils {
       .admins(admins)
       .incidents(incidents)
       .closures(closures)
+      .notifications(notifications)
       .build();
 
     RouteLeg routeLegFromJson = RouteLeg.fromJson(routeLegJsonString);
