@@ -234,10 +234,10 @@ public class BoundingBox implements Serializable {
   }
 
   /**
-   * Convenience method for getting the bounding box most westerly point (longitude) as a double
+   * Convenience method for getting the bounding box most northerly point (latitude) as a double
    * coordinate.
    *
-   * @return the most westerly coordinate inside this bounding box
+   * @return the most northerly coordinate inside this bounding box
    * @since 3.0.0
    */
   public final double north() {
