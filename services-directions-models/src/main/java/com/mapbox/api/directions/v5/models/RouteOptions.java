@@ -947,6 +947,18 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract Boolean suppressVoiceInstructionLocalNames();
 
   /**
+   * Which notifications the response should contain (see {@link RouteLeg#notifications()}).
+   * For possible values see
+   * {@link com.mapbox.api.directions.v5.DirectionsCriteria.NotificationsFlowCriteria}.
+   * If null is passed, {@link DirectionsCriteria#NOTIFICATION_FLOW_ALL} value wil be used.
+   *
+   * @return string representing `notifications` value.
+   */
+  @Nullable
+  @DirectionsCriteria.NotificationsFlowCriteria
+  public abstract String notifications();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -1083,6 +1095,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     appendQueryParameter(sb, "waypoints_per_route", waypointsPerRoute());
     appendQueryParameter(sb, "metadata", metadata());
     appendQueryParameter(sb, "payment_methods", paymentMethods());
+    appendQueryParameter(sb, "notifications", notifications());
     appendQueryParameter(
       sb,
       "suppress_voice_instruction_local_names",
@@ -2125,6 +2138,20 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public abstract Builder suppressVoiceInstructionLocalNames(
       @Nullable Boolean suppressVoiceInstructionLocalNames
+    );
+
+    /**
+     * Which notifications the response should contain (see {@link RouteLeg#notifications()}).
+     * For possible values see
+     * {@link com.mapbox.api.directions.v5.DirectionsCriteria.NotificationsFlowCriteria}.
+     * If null is passed, {@link DirectionsCriteria#NOTIFICATION_FLOW_ALL} value wil be used.
+     *
+     * @param notifications  string representing `notifications` value.
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder notifications(
+      @Nullable @DirectionsCriteria.NotificationsFlowCriteria String notifications
     );
 
     /**
