@@ -361,6 +361,16 @@ public class MapboxDirectionsTest extends TestUtils {
   }
 
   @Test
+  public void notifications_doesGetFormattedInUrlCorrectly() throws Exception {
+    MapboxDirections directions = MapboxDirections.builder()
+      .accessToken("token")
+      .routeOptions(routeOptions)
+      .build();
+
+    assertTrue(directions.cloneCall().request().url().toString().contains("notifications=none"));
+  }
+
+  @Test
   public void callFactoryNonNull() throws IOException {
     MapboxDirections client = MapboxDirections.builder()
       .accessToken("token")

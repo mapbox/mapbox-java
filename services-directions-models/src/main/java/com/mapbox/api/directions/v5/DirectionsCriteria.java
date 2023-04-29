@@ -4,6 +4,7 @@ import androidx.annotation.IntDef;
 import androidx.annotation.StringDef;
 import com.mapbox.api.directions.v5.models.Amenity;
 import com.mapbox.api.directions.v5.models.Notification;
+import com.mapbox.api.directions.v5.models.RouteLeg;
 import com.mapbox.api.directions.v5.models.RouteOptions;
 
 import java.lang.annotation.Retention;
@@ -540,6 +541,16 @@ public final class DirectionsCriteria {
    */
   public static final String NOTIFICATION_SUBTYPE_POINT_EXCLUSION = "pointExclusion";
 
+  /**
+   * Include all notifications in the route response (see {@link RouteLeg#notifications()}).
+   */
+  public static final String NOTIFICATION_FLOW_ALL = "all";
+
+  /**
+   * Include none of the notifications in the route response (see {@link RouteLeg#notifications()}).
+   */
+  public static final String NOTIFICATION_FLOW_NONE = "none";
+
   private DirectionsCriteria() {
     //not called
   }
@@ -784,5 +795,16 @@ public final class DirectionsCriteria {
     NOTIFICATION_SUBTYPE_POINT_EXCLUSION,
   })
   public @interface NotificationsSubtypeCriteria {
+  }
+
+  /**
+   * Supported {@link RouteOptions#notifications()} parameter values.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    NOTIFICATION_FLOW_ALL,
+    NOTIFICATION_FLOW_NONE,
+  })
+  public @interface NotificationsFlowCriteria {
   }
 }

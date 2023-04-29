@@ -59,6 +59,7 @@ interface DirectionsService {
    * @param computeTollCost               {@link RouteOptions#computeTollCost()}
    * @param waypointsPerRoute             {@link RouteOptions#waypointsPerRoute()}
    * @param metadata                      {@link RouteOptions#metadata()}
+   * @param notifications                 {@link RouteOptions#notifications()} ()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
   @GET("directions/v5/{user}/{profile}/{coordinates}")
@@ -104,7 +105,8 @@ interface DirectionsService {
     @Query("waypoints_per_route") Boolean waypointsPerRoute,
     @Query("metadata") Boolean metadata,
     @Query("payment_methods") String paymentMethods,
-    @Query("suppress_voice_instruction_local_names") Boolean suppressVoiceInstructionLocalNames
+    @Query("suppress_voice_instruction_local_names") Boolean suppressVoiceInstructionLocalNames,
+    @Query("notifications") String notifications
   );
 
   /**
@@ -149,6 +151,7 @@ interface DirectionsService {
    * @param computeTollCost               {@link RouteOptions#computeTollCost()}
    * @param waypointsPerRoute             {@link RouteOptions#waypointsPerRoute()}
    * @param metadata                      {@link RouteOptions#metadata()}
+   * @param notifications                 {@link RouteOptions#notifications()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
   @FormUrlEncoded
@@ -195,6 +198,7 @@ interface DirectionsService {
     @Field("waypoints_per_route") Boolean waypointsPerRoute,
     @Field("metadata") Boolean metadata,
     @Field("payment_methods") String paymentMethods,
-    @Field("suppress_voice_instruction_local_names") Boolean suppressVoiceInstructionLocalNames
+    @Field("suppress_voice_instruction_local_names") Boolean suppressVoiceInstructionLocalNames,
+    @Field("notifications") String notifications
   );
 }
