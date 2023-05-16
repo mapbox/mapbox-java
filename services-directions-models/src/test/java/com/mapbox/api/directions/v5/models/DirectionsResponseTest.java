@@ -1,6 +1,5 @@
 package com.mapbox.api.directions.v5.models;
 
-import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -9,19 +8,16 @@ import com.google.gson.JsonPrimitive;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
+import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import org.junit.Test;
-
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -88,22 +84,15 @@ public class DirectionsResponseTest extends TestUtils {
   }
 
   @Test
-  public void deserialization_from_byte_buffer() throws Exception {
-    String textJson = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
-    ByteBuffer buffer = putTextToDirectByteBuffer(textJson, StandardCharsets.UTF_8);
+  public void deserialization_from_reader() throws Exception {
+    InputStream jsonStream = getResourceInputSteam(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    String jsonText = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    InputStreamReader reader = new InputStreamReader(jsonStream);
 
-    DirectionsResponse responseFromBuffer = DirectionsResponse.fromJson(buffer, StandardCharsets.UTF_8);
-    DirectionsResponse responseFromText = DirectionsResponse.fromJson(textJson);
+    DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader);
+    DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText);
 
-    assertEquals(responseFromText, responseFromBuffer);
-  }
-
-  @NonNull private ByteBuffer putTextToDirectByteBuffer(String textJson, Charset charset) {
-    byte[] json = textJson.getBytes(charset);
-    ByteBuffer buffer = ByteBuffer.allocateDirect(json.length);
-    buffer.put(json);
-    buffer.position(0);
-    return buffer;
+    assertEquals(responseFromText, responseFromReader);
   }
 
   @Test
