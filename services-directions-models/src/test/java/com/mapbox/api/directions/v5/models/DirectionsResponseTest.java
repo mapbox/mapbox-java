@@ -96,6 +96,25 @@ public class DirectionsResponseTest extends TestUtils {
   }
 
   @Test
+  public void deserialization_from_reader_with_route_options() throws Exception {
+    RouteOptions testRouteOptions = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    InputStream jsonStream = getResourceInputSteam(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    String jsonText = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    InputStreamReader reader = new InputStreamReader(jsonStream);
+
+    DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader, testRouteOptions);
+    DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText, testRouteOptions);
+
+    assertEquals(responseFromText, responseFromReader);
+  }
+
+  @Test
   public void testToFromJsonWithRealResponse() throws Exception {
     Gson gson = new GsonBuilder().create();
     String originalJson = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS);
