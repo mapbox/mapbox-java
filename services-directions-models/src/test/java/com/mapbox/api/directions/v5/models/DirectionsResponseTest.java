@@ -85,8 +85,9 @@ public class DirectionsResponseTest extends TestUtils {
 
   @Test
   public void deserialization_from_reader() throws Exception {
-    InputStream jsonStream = getResourceInputSteam(DIRECTIONS_V5_PRECISION6_FIXTURE);
-    String jsonText = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    String testJsonFileName = DIRECTIONS_V5_PRECISION6_FIXTURE;
+    InputStream jsonStream = getResourceInputSteam(testJsonFileName);
+    String jsonText = loadJsonFixture(testJsonFileName);
     InputStreamReader reader = new InputStreamReader(jsonStream);
 
     DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader);
@@ -104,8 +105,9 @@ public class DirectionsResponseTest extends TestUtils {
         add(Point.fromLngLat(2.0, 2.0));
       }})
       .build();
-    InputStream jsonStream = getResourceInputSteam(DIRECTIONS_V5_PRECISION6_FIXTURE);
-    String jsonText = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    String testJsonFileName = DIRECTIONS_V5_PRECISION6_FIXTURE;
+    InputStream jsonStream = getResourceInputSteam(testJsonFileName);
+    String jsonText = loadJsonFixture(testJsonFileName);
     InputStreamReader reader = new InputStreamReader(jsonStream);
 
     DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader, testRouteOptions);
