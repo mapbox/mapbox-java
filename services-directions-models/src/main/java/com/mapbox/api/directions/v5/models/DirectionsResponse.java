@@ -141,19 +141,26 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
    * @since 3.0.0
    */
   public static DirectionsResponse fromJson(@NonNull String json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     // rebuilding to ensure that underlying routes have assigned indices and UUID
-    return gson.create().fromJson(json, DirectionsResponse.class).toBuilder().build();
+    return createGson().fromJson(json, DirectionsResponse.class).toBuilder().build();
   }
 
+  /**
+   * Deserializes a new instance of this class reading from the specified reader.
+   * <p>
+   * Consider using {@link #fromJson(Reader, RouteOptions)} if the result is used with
+   * downstream consumers of the directions models (like Mapbox Navigation SDK)
+   * to provide rerouting and route refreshing features.
+   *
+   * @param json a reader producing a valid JSON defining a GeoJson Directions Response
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @see #fromJson(Reader, RouteOptions)
+   * @since 3.0.0
+   */
   public static DirectionsResponse fromJson(@NonNull Reader json) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     // rebuilding to ensure that underlying routes have assigned indices and UUID
-    return gson.create().fromJson(json, DirectionsResponse.class).toBuilder().build();
+    return createGson().fromJson(json, DirectionsResponse.class).toBuilder().build();
   }
 
   /**
@@ -176,10 +183,7 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
   @Deprecated
   public static DirectionsResponse fromJson(
     @NonNull String json, @Nullable RouteOptions routeOptions, @Nullable String requestUuid) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
-    DirectionsResponse response = gson.create().fromJson(json, DirectionsResponse.class);
+    DirectionsResponse response = createGson().fromJson(json, DirectionsResponse.class);
     if (routeOptions != null) {
       response = response.updateWithRequestData(routeOptions);
     }
@@ -206,11 +210,33 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
    * @see RouteOptions#fromJson(String)
    */
   public static DirectionsResponse fromJson(
-    @NonNull String json, @NonNull RouteOptions routeOptions) {
-    GsonBuilder gson = new GsonBuilder();
-    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
-    DirectionsResponse response = gson.create().fromJson(json, DirectionsResponse.class);
+    @NonNull String json,
+    @NonNull RouteOptions routeOptions
+  ) {
+    DirectionsResponse response = createGson().fromJson(json, DirectionsResponse.class);
+    // rebuilding to ensure that underlying routes have assigned indices and UUID
+    return response.updateWithRequestData(routeOptions);
+  }
+
+  /**
+   * Deserializes a new instance of this class reading from the specified reader.
+   * <p>
+   * The parameter of {@link RouteOptions} that were used to make the original route request
+   * which might be required by downstream consumers of the directions models
+   * (like Mapbox Navigation SDK) to provide rerouting and route refreshing features.
+   *
+   * @param json         a reader producing a valid JSON defining a GeoJson Directions Response
+   * @param routeOptions options that were used during the original route request
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @see RouteOptions#fromUrl(java.net.URL)
+   * @see RouteOptions#fromJson(String)
+   */
+  public static DirectionsResponse fromJson(
+    @NonNull Reader json,
+    @NonNull RouteOptions routeOptions
+  ) {
+    DirectionsResponse response = createGson().fromJson(json, DirectionsResponse.class);
     // rebuilding to ensure that underlying routes have assigned indices and UUID
     return response.updateWithRequestData(routeOptions);
   }
@@ -341,5 +367,12 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
 
       return autoBuild();
     }
+  }
+
+  @NonNull private static Gson createGson() {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
+    return gson.create();
   }
 }
