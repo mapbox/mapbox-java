@@ -93,6 +93,11 @@ public class DirectionsResponseTest extends TestUtils {
     DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader);
     DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText);
 
+    System.out.println("vadzim-test: " + responseFromText.routes().get(0).legs().get(0).steps().get(6).pronunciation());
+    assertEquals(
+      responseFromText.routes().get(0).legs().get(0).steps().get(6).pronunciation(),
+      responseFromReader.routes().get(0).legs().get(0).steps().get(6).pronunciation()
+    );
     assertEquals(responseFromText, responseFromReader);
   }
 
