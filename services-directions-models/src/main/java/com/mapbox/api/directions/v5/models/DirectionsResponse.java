@@ -156,7 +156,6 @@ public abstract class DirectionsResponse extends DirectionsJsonObject {
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
    * @see #fromJson(Reader, RouteOptions)
-   * @since 3.0.0
    */
   public static DirectionsResponse fromJson(@NonNull Reader json) {
     // rebuilding to ensure that underlying routes have assigned indices and UUID
