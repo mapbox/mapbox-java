@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -85,11 +86,10 @@ public class DirectionsResponseTest extends TestUtils {
 
   @Test
   public void deserialization_from_reader() throws Exception {
-    System.setProperty("file.encoding", "UTF-8");
     String testJsonFileName = DIRECTIONS_V5_PRECISION6_FIXTURE;
     InputStream jsonStream = getResourceInputSteam(testJsonFileName);
     String jsonText = loadJsonFixture(testJsonFileName);
-    InputStreamReader reader = new InputStreamReader(jsonStream);
+    InputStreamReader reader = new InputStreamReader(jsonStream, StandardCharsets.UTF_8);
 
     DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader);
     DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText);
