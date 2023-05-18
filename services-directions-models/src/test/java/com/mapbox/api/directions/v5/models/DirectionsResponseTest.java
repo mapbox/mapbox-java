@@ -93,12 +93,7 @@ public class DirectionsResponseTest extends TestUtils {
 
     DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader);
     DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText);
-    System.out.println("vadzim-test: " + System.getProperty("file.encoding"));
-    System.out.println("vadzim-test: " + responseFromText.routes().get(0).legs().get(0).steps().get(6).pronunciation());
-    assertEquals(
-      responseFromText.routes().get(0).legs().get(0).steps().get(6).pronunciation(),
-      responseFromReader.routes().get(0).legs().get(0).steps().get(6).pronunciation()
-    );
+
     assertEquals(responseFromText, responseFromReader);
   }
 
@@ -114,7 +109,7 @@ public class DirectionsResponseTest extends TestUtils {
     String testJsonFileName = DIRECTIONS_V5_PRECISION6_FIXTURE;
     InputStream jsonStream = getResourceInputSteam(testJsonFileName);
     String jsonText = loadJsonFixture(testJsonFileName);
-    InputStreamReader reader = new InputStreamReader(jsonStream);
+    InputStreamReader reader = new InputStreamReader(jsonStream, StandardCharsets.UTF_8);
 
     DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader, testRouteOptions);
     DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText, testRouteOptions);
