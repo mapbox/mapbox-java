@@ -85,6 +85,7 @@ public class DirectionsResponseTest extends TestUtils {
 
   @Test
   public void deserialization_from_reader() throws Exception {
+    System.setProperty("file.encoding", "UTF-8");
     String testJsonFileName = DIRECTIONS_V5_PRECISION6_FIXTURE;
     InputStream jsonStream = getResourceInputSteam(testJsonFileName);
     String jsonText = loadJsonFixture(testJsonFileName);
