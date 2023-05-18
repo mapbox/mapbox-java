@@ -8,16 +8,15 @@ import com.google.gson.JsonPrimitive;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
+import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import org.junit.Test;
-
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -81,6 +80,37 @@ public class DirectionsResponseTest extends TestUtils {
     DirectionsResponse response = DirectionsResponse.fromJson(json);
     assertNotNull(response);
     assertEquals(1, response.routes().size());
+  }
+
+  @Test
+  public void deserialization_from_reader() throws Exception {
+    String testJsonFileName = DIRECTIONS_V5_PRECISION6_FIXTURE;
+    String jsonText = loadJsonFixture(testJsonFileName);
+    InputStreamReader jsonReader = getResourceInputSteamReader(testJsonFileName);
+
+    DirectionsResponse responseFromReader = DirectionsResponse.fromJson(jsonReader);
+    DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText);
+
+    assertEquals(responseFromText, responseFromReader);
+  }
+
+  @Test
+  public void deserialization_from_reader_with_route_options() throws Exception {
+    RouteOptions testRouteOptions = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    String testJsonFileName = DIRECTIONS_V5_PRECISION6_FIXTURE;
+    InputStreamReader jsonReader = getResourceInputSteamReader(testJsonFileName);
+    String jsonText = loadJsonFixture(testJsonFileName);
+
+    DirectionsResponse responseFromReader = DirectionsResponse.fromJson(jsonReader, testRouteOptions);
+    DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText, testRouteOptions);
+
+    assertEquals(responseFromText, responseFromReader);
   }
 
   @Test

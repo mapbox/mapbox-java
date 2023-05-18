@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `DirectionsResponse.fromJson(Reader)` and `DirectionsResponse.fromJson(Reader, RouteOptions)` to support streaming serialisation of `DirectionsResponse`.
 
 ### v6.11.0 - March 03, 2023
 - No additional changes
