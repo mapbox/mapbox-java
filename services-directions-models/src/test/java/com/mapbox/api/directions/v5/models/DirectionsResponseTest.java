@@ -11,9 +11,7 @@ import com.mapbox.geojson.Point;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -87,11 +85,10 @@ public class DirectionsResponseTest extends TestUtils {
   @Test
   public void deserialization_from_reader() throws Exception {
     String testJsonFileName = DIRECTIONS_V5_PRECISION6_FIXTURE;
-    InputStream jsonStream = getResourceInputSteam(testJsonFileName);
     String jsonText = loadJsonFixture(testJsonFileName);
-    InputStreamReader reader = new InputStreamReader(jsonStream, StandardCharsets.UTF_8);
+    InputStreamReader jsonReader = getResourceInputSteamReader(testJsonFileName);
 
-    DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader);
+    DirectionsResponse responseFromReader = DirectionsResponse.fromJson(jsonReader);
     DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText);
 
     assertEquals(responseFromText, responseFromReader);
@@ -107,11 +104,10 @@ public class DirectionsResponseTest extends TestUtils {
       }})
       .build();
     String testJsonFileName = DIRECTIONS_V5_PRECISION6_FIXTURE;
-    InputStream jsonStream = getResourceInputSteam(testJsonFileName);
+    InputStreamReader jsonReader = getResourceInputSteamReader(testJsonFileName);
     String jsonText = loadJsonFixture(testJsonFileName);
-    InputStreamReader reader = new InputStreamReader(jsonStream, StandardCharsets.UTF_8);
 
-    DirectionsResponse responseFromReader = DirectionsResponse.fromJson(reader, testRouteOptions);
+    DirectionsResponse responseFromReader = DirectionsResponse.fromJson(jsonReader, testRouteOptions);
     DirectionsResponse responseFromText = DirectionsResponse.fromJson(jsonText, testRouteOptions);
 
     assertEquals(responseFromText, responseFromReader);

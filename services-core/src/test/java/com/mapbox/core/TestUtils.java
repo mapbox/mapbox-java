@@ -8,9 +8,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -33,7 +35,11 @@ public class TestUtils {
     return scanner.hasNext() ? scanner.next() : "";
   }
 
-  protected InputStream getResourceInputSteam(String filename) {
+  protected InputStreamReader getResourceInputSteamReader(String filename) {
+    return new InputStreamReader(getResourceInputSteam(filename), StandardCharsets.UTF_8);
+  }
+
+  private InputStream getResourceInputSteam(String filename) {
     ClassLoader classLoader = getClass().getClassLoader();
     return classLoader.getResourceAsStream(filename);
   }
