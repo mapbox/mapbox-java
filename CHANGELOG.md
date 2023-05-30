@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.12.0 - May 30, 2023
+
+- No additional changes
+
 ### v6.12.0-beta.1 - May 25, 2023
 - Added `DirectionsResponse.fromJson(Reader)` and `DirectionsResponse.fromJson(Reader, RouteOptions)` to support streaming serialisation of `DirectionsResponse`.
 
