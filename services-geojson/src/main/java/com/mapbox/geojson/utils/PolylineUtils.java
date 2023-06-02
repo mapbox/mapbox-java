@@ -3,6 +3,8 @@ package com.mapbox.geojson.utils;
 import androidx.annotation.NonNull;
 import com.mapbox.geojson.Point;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,43 +39,13 @@ public final class PolylineUtils {
    */
   @NonNull
   public static List<Point> decode(@NonNull final String encodedPath, int precision) {
-    int len = encodedPath.length();
-
-    // OSRM uses precision=6, the default Polyline spec divides by 1E5, capping at precision=5
-    double factor = Math.pow(10, precision);
-
-    // For speed we preallocate to an upper bound on the final length, then
-    // truncate the array before returning.
     final List<Point> path = new ArrayList<>();
-    int index = 0;
-    int lat = 0;
-    int lng = 0;
-
-    while (index < len) {
-      int result = 1;
-      int shift = 0;
-      int temp;
-      do {
-        temp = encodedPath.charAt(index++) - 63 - 1;
-        result += temp << shift;
-        shift += 5;
+    InputStream inputStream = new ByteArrayInputStream(encodedPath.getBytes());
+    try (PolylineDecoder polylineDecoder = new PolylineDecoder(inputStream, precision)) {
+      while (polylineDecoder.hasNext()) {
+        path.add(polylineDecoder.next());
       }
-      while (temp >= 0x1f);
-      lat += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
-
-      result = 1;
-      shift = 0;
-      do {
-        temp = encodedPath.charAt(index++) - 63 - 1;
-        result += temp << shift;
-        shift += 5;
-      }
-      while (temp >= 0x1f);
-      lng += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
-
-      path.add(Point.fromLngLat(lng / factor, lat / factor));
     }
-
     return path;
   }
 
