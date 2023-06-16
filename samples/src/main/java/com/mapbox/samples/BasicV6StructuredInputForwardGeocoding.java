@@ -1,9 +1,11 @@
 package com.mapbox.samples;
 
-import com.mapbox.api.geocoding.v6.V6Response;
-import com.mapbox.api.geocoding.v6.MapboxGeocodingV6;
-import com.mapbox.api.geocoding.v6.V6Feature;
-import com.mapbox.api.geocoding.v6.V6FeatureType;
+import com.mapbox.api.geocoding.v6.V6StructuredInputQuery;
+import com.mapbox.api.geocoding.v6.MapboxV6Geocoding;
+import com.mapbox.api.geocoding.v6.V6ForwardGeocodingRequestOptions;
+import com.mapbox.api.geocoding.v6.models.V6Feature;
+import com.mapbox.api.geocoding.v6.models.V6FeatureType;
+import com.mapbox.api.geocoding.v6.models.V6Response;
 import com.mapbox.sample.BuildConfig;
 
 import java.util.stream.Collectors;
@@ -12,13 +14,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BasicGeocodingV6 {
+public class BasicV6StructuredInputForwardGeocoding {
 
   public static void main(String[] args) {
-    final MapboxGeocodingV6 geocoding = MapboxGeocodingV6.builder()
-      .accessToken(BuildConfig.MAPBOX_ACCESS_TOKEN)
-      .query("740 15th St NW, Washington, DC 20005")
-      .geocodingTypes(V6FeatureType.ADDRESS)
+    final V6StructuredInputQuery query = V6StructuredInputQuery.builder()
+      .addressNumber("740")
+      .street("15th St")
+      .place("Washington")
+      .postcode("20005")
+      .build();
+
+    final V6ForwardGeocodingRequestOptions requestOptions = V6ForwardGeocodingRequestOptions
+      .builder(query)
+      .country("United States")
+      .types(V6FeatureType.ADDRESS)
+      .autocomplete(false)
+      .build();
+
+    final MapboxV6Geocoding geocoding = MapboxV6Geocoding
+      .builder(BuildConfig.MAPBOX_ACCESS_TOKEN, requestOptions)
       .build();
 
     geocoding.enqueueCall(new Callback<V6Response>() {
