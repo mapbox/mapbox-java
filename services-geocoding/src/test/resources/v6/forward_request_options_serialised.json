@@ -1,0 +1,19 @@
+{
+  "q": "test query",
+  "autocomplete": false,
+  "bbox": [
+    10.1,
+    20.2,
+    30.3,
+    50.5
+  ],
+  "country": "FR,IT",
+  "language": "fr",
+  "limit": 7,
+  "proximity": "10.1,20.2",
+  "types": [
+    "country",
+    "place"
+  ],
+  "worldview": "us"
+}

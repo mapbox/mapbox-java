@@ -1,0 +1,12 @@
+{
+  "longitude": 10.1,
+  "latitude": 20.2,
+  "country": "FR,IT",
+  "language": "fr",
+  "limit": 3,
+  "types": [
+    "country",
+    "place"
+  ],
+  "worldview": "us"
+}
