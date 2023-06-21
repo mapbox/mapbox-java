@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Base class for V6 types.
  */
-public abstract class V6Object implements Serializable {
+public abstract class V6JsonObject implements Serializable {
 
   /**
    * Use this method to get JSON properties that weren't recognized during JSON

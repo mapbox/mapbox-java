@@ -25,7 +25,7 @@ import com.mapbox.api.geocoding.v6.V6GeocodingAdapterFactory;
  * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#smart-address-match">Smart Address Match</a>
  */
 @AutoValue
-public abstract class V6MatchCode extends V6Object {
+public abstract class V6MatchCode extends V6JsonObject {
 
   /**
    * Match code for address number.

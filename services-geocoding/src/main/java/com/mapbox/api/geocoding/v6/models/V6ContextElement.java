@@ -14,7 +14,7 @@ import com.google.gson.annotations.SerializedName;
  * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#the-context-object">The Context Object</a>
  */
 @AutoValue
-public abstract class V6ContextElement extends V6Object {
+public abstract class V6ContextElement extends V6JsonObject {
 
   /**
    * Element id. This id can be queried directly via a forward geocoding search to traverse into

@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.geocoding.v6.models.V6FeatureType;
+import com.mapbox.api.geocoding.v6.models.V6Worldview;
 import com.mapbox.core.exceptions.ServicesException;
 import com.mapbox.core.utils.TextUtils;
 import com.mapbox.geojson.BoundingBox;
@@ -352,7 +353,7 @@ public abstract class V6ForwardGeocodingRequestOptions implements V6RequestOptio
      * @return this builder for chaining options together
      * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#worldviews">Worldviews</a>
      */
-    public abstract Builder worldview(@NonNull String worldview);
+    public abstract Builder worldview(@V6Worldview.Worldview @NonNull String worldview);
 
     /**
      * Build a new {@link V6ForwardGeocodingRequestOptions} object.

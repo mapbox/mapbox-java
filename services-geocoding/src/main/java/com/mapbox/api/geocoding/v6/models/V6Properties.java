@@ -14,7 +14,7 @@ import com.mapbox.api.geocoding.v6.V6GeocodingAdapterFactory;
  * A type which contains the majority of information returned by the Geocoding V6 API.
  */
 @AutoValue
-public abstract class V6Properties extends V6Object {
+public abstract class V6Properties extends V6JsonObject {
 
   /**
    * Feature id.
@@ -31,6 +31,7 @@ public abstract class V6Properties extends V6Object {
    * @return a string describing the type of the feature
    */
   @NonNull
+  @V6FeatureType.FeatureType
   @SerializedName("feature_type")
   public abstract String featureType();
 

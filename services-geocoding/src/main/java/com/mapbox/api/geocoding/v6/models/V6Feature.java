@@ -12,7 +12,7 @@ import com.mapbox.geojson.Geometry;
  * A type which contains a description for returned by the Geocoding V6 API object.
  */
 @AutoValue
-public abstract class V6Feature extends V6Object {
+public abstract class V6Feature extends V6JsonObject {
 
   /**
    * Feature id.
