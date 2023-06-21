@@ -28,12 +28,12 @@ import java.util.List;
  *
  * @since 5.4.0
  */
-public class SingleElementSafeListTypeAdapter<E> extends TypeAdapter<List<E>> {
+class SingleElementSafeListTypeAdapter<E> extends TypeAdapter<List<E>> {
 
   /**
    * A type adapter factory instance for serialization/deserialization.
    */
-  public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
+  static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
 
     @Override
     public <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> typeToken) {
@@ -47,7 +47,7 @@ public class SingleElementSafeListTypeAdapter<E> extends TypeAdapter<List<E>> {
 
       @SuppressWarnings("unchecked")
       final TypeAdapter<T> adapter =
-          (TypeAdapter<T>) new SingleElementSafeListTypeAdapter<>(elementTypeAdapter);
+        (TypeAdapter<T>) new SingleElementSafeListTypeAdapter<>(elementTypeAdapter);
       return adapter;
     }
   };
