@@ -266,6 +266,15 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract Junction junction();
 
   /**
+   * Object containing information about merging area starting at intersection.
+   *
+   * @return MergingArea object if present, null otherwise.
+   */
+  @Nullable
+  @SerializedName("merging_area")
+  public abstract MergingArea mergingArea();
+
+  /**
    * Convert the current {@link StepIntersection} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link StepIntersection}.
@@ -541,6 +550,15 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder rawLocation(@NonNull double[] rawLocation);
+
+    /**
+     * Object containing information about merging area starting at intersection.
+     *
+     * @param mergingArea MergingArea object
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder mergingArea(@Nullable MergingArea mergingArea);
 
     /**
      * Build a new {@link StepIntersection} object.
