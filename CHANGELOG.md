@@ -4,6 +4,8 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+- Added `StepIntersection.mergingArea`.
+
 ### v6.12.0 - May 30, 2023
 
 - No additional changes
