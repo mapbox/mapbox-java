@@ -4,7 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.13.0-beta.1 - July 11, 2023
+
 - Added `StepIntersection.mergingArea`.
+
 
 ### v6.12.0 - May 30, 2023
 
