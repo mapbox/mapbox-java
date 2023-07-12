@@ -38,7 +38,7 @@ sdk-registry-upload:
 	./gradlew mapboxSDKRegistryUpload
 
 sdk-registry-publish:
-	if [ -z "$(GITHUB_TOKEN)" ]; then \
+	@if [ -z "$(GITHUB_TOKEN)" ]; then \
 		echo "GITHUB_TOKEN env variable has to be set"; \
 	else \
 		python3 -m pip install git-pull-request; \
