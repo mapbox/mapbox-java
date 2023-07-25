@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +30,8 @@ import static org.junit.Assert.assertTrue;
 public class DirectionsResponseTest extends TestUtils {
 
   private static final String DIRECTIONS_V5_PRECISION6_FIXTURE = "directions_v5_precision_6.json";
-  private static final String DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS = "directions_v5_precision_6_with_artificial_fields.json";
+  private static final String DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS =
+    "directions_v5_precision_6_with_artificial_fields.json";
   private static final String DIRECTIONS_V5_MULTIPLE_ROUTES = "directions_v5_multiple_routes.json";
   private static final String DIRECTIONS_V5_MULTIPLE_ROUTES_WITH_OPTIONS =
     "directions_v5_multiple_routes_with_options.json";
@@ -65,13 +67,13 @@ public class DirectionsResponseTest extends TestUtils {
       .build();
 
     assertNotNull(response);
-   assertEquals("100", response.code());
-   assertEquals("Message", response.message());
-   assertEquals(1, response.routes().size());
-   assertEquals(metadata, response.metadata());
-   assertEquals("uuid", response.uuid());
-   assertEquals(waypoints, response.waypoints());
-   assertEquals(unrecognizedProperties, response.getUnrecognizedJsonProperties());
+    assertEquals("100", response.code());
+    assertEquals("Message", response.message());
+    assertEquals(1, response.routes().size());
+    assertEquals(metadata, response.metadata());
+    assertEquals("uuid", response.uuid());
+    assertEquals(waypoints, response.waypoints());
+    assertEquals(unrecognizedProperties, response.getUnrecognizedJsonProperties());
   }
 
   @Test
@@ -80,6 +82,27 @@ public class DirectionsResponseTest extends TestUtils {
     DirectionsResponse response = DirectionsResponse.fromJson(json);
     assertNotNull(response);
     assertEquals(1, response.routes().size());
+  }
+
+  @Test
+  public void read_from_string_write_to_writer() throws Exception {
+    String sourceJson = loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE);
+    DirectionsResponse sourceObject = DirectionsResponse.fromJson(sourceJson);
+
+    StringWriter writer = new StringWriter();
+    sourceObject.writeJson(writer);
+    String resultJson = writer.toString();
+    DirectionsResponse resultObject = DirectionsResponse.fromJson(resultJson);
+
+    assertEquals(sourceObject, resultObject);
+    assertTrue(
+      String.format(
+        "result length %d is expected to be less or equals than source %d",
+        resultJson.length(),
+        sourceJson.length()
+        ),
+      resultJson.length() <= sourceJson.length()
+    );
   }
 
   @Test
@@ -128,7 +151,8 @@ public class DirectionsResponseTest extends TestUtils {
   @Test
   public void testToFromJsonWithMutatedResponse() throws Exception {
     Gson gson = new GsonBuilder().create();
-    JsonObject mutatedJson = gson.fromJson(loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS), JsonObject.class);
+    JsonObject mutatedJson =
+      gson.fromJson(loadJsonFixture(DIRECTIONS_V5_PRECISION6_FIXTURE_ARTIFICIAL_FIELDS), JsonObject.class);
     mutateJson(mutatedJson);
 
     DirectionsResponse responseFromJson1 = DirectionsResponse.fromJson(mutatedJson.toString());

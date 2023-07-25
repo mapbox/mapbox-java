@@ -11,7 +11,9 @@ import com.mapbox.auto.value.gson.UnrecognizedJsonProperties;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.PointAsCoordinatesTypeAdapter;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +37,19 @@ public abstract class DirectionsJsonObject implements Serializable {
     gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
     gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
     return gson.create().toJson(this);
+  }
+
+  /**
+   * This takes the currently defined values found inside this instance and writes it as a json
+   * to provided writer.
+   *
+   * @param  writer - a writer to which the Json representation needs to be written
+   */
+  public void writeJson(Writer writer) {
+    GsonBuilder gson = new GsonBuilder();
+    gson.registerTypeAdapterFactory(DirectionsAdapterFactory.create());
+    gson.registerTypeAdapter(Point.class, new PointAsCoordinatesTypeAdapter());
+    gson.create().toJson(this, writer);
   }
 
   /**
