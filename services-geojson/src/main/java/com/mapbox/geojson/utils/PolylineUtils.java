@@ -44,10 +44,11 @@ public final class PolylineUtils {
 
     // For speed we preallocate to an upper bound on the final length, then
     // truncate the array before returning.
-    final List<Point> path = new ArrayList<>();
+    final List<Point> path = new ArrayList<>((len + 1) / 2);
     int index = 0;
     int lat = 0;
     int lng = 0;
+    int itemsCount = 0;
 
     while (index < len) {
       int result = 1;
@@ -72,9 +73,10 @@ public final class PolylineUtils {
       lng += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
 
       path.add(Point.fromLngLat(lng / factor, lat / factor));
+      itemsCount++;
     }
 
-    return path;
+    return path.subList(0, itemsCount);
   }
 
   /**
