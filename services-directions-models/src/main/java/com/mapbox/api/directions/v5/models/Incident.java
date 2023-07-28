@@ -214,6 +214,15 @@ public abstract class Incident extends DirectionsJsonObject {
   public abstract List<Integer> alertcCodes();
 
   /**
+   * Traffic codes. See {@link TrafficCodes}.
+   *
+   * @return traffic codes
+   */
+  @Nullable
+  @SerializedName("traffic_codes")
+  public abstract TrafficCodes trafficCodes();
+
+  /**
    * Incident's leg-wise geometry index start point.
    */
   @Nullable
@@ -417,6 +426,14 @@ public abstract class Incident extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder alertcCodes(@Nullable List<Integer> alertcCodes);
+
+    /**
+     * Traffic codes.
+     *
+     * @param trafficCodes traffic cods. See {@link TrafficCodes}.
+     */
+    @NonNull
+    public abstract Builder trafficCodes(@Nullable TrafficCodes trafficCodes);
 
     /**
      * Incident's leg-wise geometry index start point.

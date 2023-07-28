@@ -1,10 +1,12 @@
 package com.mapbox.api.directions.v5.models;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonPrimitive;
 import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 
@@ -51,6 +53,11 @@ public class IncidentTest extends TestUtils {
       "501," +
       "803" +
       "]," +
+      "\"traffic_codes\": {" +
+      "\"jartic_cause_code\": 400," +
+      "\"jartic_regulation_code\": 600," +
+      "\"unknown_code\": 700" +
+      "}," +
       "\"lanes_blocked\": []," +
       "\"num_lanes_blocked\": null," +
       "\"iso_3166_1_alpha2\": US," +
@@ -75,6 +82,9 @@ public class IncidentTest extends TestUtils {
     assertEquals(fromJson.subType(), "CONSTRUCTION");
     assertEquals(fromJson.subTypeDescription(), "construction");
     assertEquals(fromJson.alertcCodes().size(), 2);
+    assertEquals(400, (int) fromJson.trafficCodes().jarticCauseCode());
+    assertEquals(600, (int) fromJson.trafficCodes().jarticRegulationCode());
+    assertEquals(700, fromJson.trafficCodes().getUnrecognizedJsonProperties().get("unknown_code").getAsInt());
     assertEquals(fromJson.geometryIndexStart().longValue(), 805L);
     assertEquals(fromJson.geometryIndexEnd().longValue(), 896L);
     assertEquals(fromJson.countryCodeAlpha2(), "US");
@@ -94,6 +104,15 @@ public class IncidentTest extends TestUtils {
     return Incident.builder()
       .id("some_id")
       .alertcCodes(Lists.newArrayList(431, 2123, 934))
+      .trafficCodes(
+        TrafficCodes.builder()
+          .jarticCauseCode(400)
+          .jarticRegulationCode(600)
+          .unrecognizedJsonProperties(
+            Collections.singletonMap("unknown_code", new JsonPrimitive((700)))
+          )
+          .build()
+      )
       .closed(true)
       .congestion(Congestion.builder().value(10).build())
       .creationTime("2020-11-18T11:34:14Z")
