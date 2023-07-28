@@ -12,6 +12,7 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Reproduces one of road incidents type ({@link IncidentType}) that might be on the way.
@@ -212,6 +213,15 @@ public abstract class Incident extends DirectionsJsonObject {
   @Nullable
   @SerializedName("alertc_codes")
   public abstract List<Integer> alertcCodes();
+
+  /**
+   * Map of traffic code names to their values.
+   *
+   * @return traffic codes map
+   */
+  @Nullable
+  @SerializedName("traffic_codes")
+  public abstract Map<String, Integer> trafficCodes();
 
   /**
    * Incident's leg-wise geometry index start point.
@@ -417,6 +427,14 @@ public abstract class Incident extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder alertcCodes(@Nullable List<Integer> alertcCodes);
+
+    /**
+     * Traffic codes.
+     *
+     * @param trafficCodes map of traffic code names to their values.
+     */
+    @NonNull
+    public abstract Builder trafficCodes(@Nullable Map<String, Integer> trafficCodes);
 
     /**
      * Incident's leg-wise geometry index start point.

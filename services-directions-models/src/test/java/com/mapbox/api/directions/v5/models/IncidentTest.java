@@ -5,6 +5,8 @@ import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -51,6 +53,10 @@ public class IncidentTest extends TestUtils {
       "501," +
       "803" +
       "]," +
+      "\"traffic_codes\": {" +
+      "\"jartic_cause_code\": 400," +
+      "\"jartic_regulation_code\": 600" +
+      "}," +
       "\"lanes_blocked\": []," +
       "\"num_lanes_blocked\": null," +
       "\"iso_3166_1_alpha2\": US," +
@@ -75,6 +81,9 @@ public class IncidentTest extends TestUtils {
     assertEquals(fromJson.subType(), "CONSTRUCTION");
     assertEquals(fromJson.subTypeDescription(), "construction");
     assertEquals(fromJson.alertcCodes().size(), 2);
+    assertEquals(fromJson.trafficCodes().size(), 2);
+    assertEquals(400, (int) fromJson.trafficCodes().get("jartic_cause_code"));
+    assertEquals(600, (int) fromJson.trafficCodes().get("jartic_regulation_code"));
     assertEquals(fromJson.geometryIndexStart().longValue(), 805L);
     assertEquals(fromJson.geometryIndexEnd().longValue(), 896L);
     assertEquals(fromJson.countryCodeAlpha2(), "US");
@@ -91,9 +100,13 @@ public class IncidentTest extends TestUtils {
   }
 
   private Incident getFilledIncident() {
+    Map<String, Integer> trafficCodes = new HashMap<>();
+    trafficCodes.put("jartic_cause_code", 400);
+    trafficCodes.put("jartic_regulation_code", 600);
     return Incident.builder()
       .id("some_id")
       .alertcCodes(Lists.newArrayList(431, 2123, 934))
+      .trafficCodes(trafficCodes)
       .closed(true)
       .congestion(Congestion.builder().value(10).build())
       .creationTime("2020-11-18T11:34:14Z")
