@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `Incident#trafficCodes`.
 
 ### v6.13.0-beta.1 - July 11, 2023
 
