@@ -4,6 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.13.0-beta.2 - July 28, 2023
+- Added `Incident#trafficCodes`.
+
+
 ### v6.13.0-beta.1 - July 11, 2023
 
 - Added `StepIntersection.mergingArea`.
