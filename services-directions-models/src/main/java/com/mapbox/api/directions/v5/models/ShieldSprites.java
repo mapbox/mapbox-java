@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
 
+import java.io.Reader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,24 +41,43 @@ public abstract class ShieldSprites extends DirectionsJsonObject implements Seri
    */
   @NonNull
   public static ShieldSprites fromJson(@NonNull String json) {
-    List<ShieldSprite> sprites = new ArrayList<>();
     GsonBuilder gson = new GsonBuilder();
     JsonObject jsonObject = gson.create().fromJson(json, JsonObject.class);
+    return fromJson(jsonObject);
+  }
+
+  /**
+   * Create a new instance of this class by passing in a formatted valid JSON String.
+   *
+   * @param json a reader producing a valid JSON defining a shield sprite
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   */
+  @NonNull
+  public static ShieldSprites fromJson(@NonNull Reader json) {
+    GsonBuilder gson = new GsonBuilder();
+    JsonObject jsonObject = gson.create().fromJson(json, JsonObject.class);
+    return fromJson(jsonObject);
+  }
+
+  @NonNull
+  private static ShieldSprites fromJson(@NonNull JsonObject jsonObject) {
+    List<ShieldSprite> sprites = new ArrayList<>();
     Set<Map.Entry<String, JsonElement>> entries = jsonObject.entrySet();
     for (Map.Entry<String, JsonElement> entry : entries) {
       String spriteName = entry.getKey();
       ShieldSpriteAttribute spriteAttribute = ShieldSpriteAttribute.fromJson(
-          jsonObject.get(spriteName).toString()
+        jsonObject.get(spriteName).toString()
       );
       ShieldSprite sprite = ShieldSprite.builder()
-          .spriteName(spriteName)
-          .spriteAttributes(spriteAttribute)
-          .build();
+        .spriteName(spriteName)
+        .spriteAttributes(spriteAttribute)
+        .build();
       sprites.add(sprite);
     }
     return ShieldSprites.builder()
-        .sprites(sprites)
-        .build();
+      .sprites(sprites)
+      .build();
   }
 
   /**

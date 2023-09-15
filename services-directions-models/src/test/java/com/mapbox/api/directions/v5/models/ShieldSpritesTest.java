@@ -7,6 +7,7 @@ import com.mapbox.core.TestUtils;
 
 import org.junit.Test;
 
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,18 @@ public class ShieldSpritesTest extends TestUtils {
     String spritesJson = sprites.toJson();
 
     compareJson(json, spritesJson);
+  }
+
+  @Test
+  public void jsonFromReader() throws Exception {
+    String expected = loadJsonFixture("styles_shield_sprites.json");
+
+    InputStreamReader reader = getResourceInputSteamReader("styles_shield_sprites.json");
+    ShieldSprites sprites = ShieldSprites.fromJson(reader);
+
+    String spritesJson = sprites.toJson();
+
+    compareJson(expected, spritesJson);
   }
 
   private ShieldSprites getDefault() {

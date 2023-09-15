@@ -4,6 +4,8 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+- Added `ShieldSprites#fromJson` for Reader.
+
 ### v6.13.0 - July 31, 2023
 - No additional changes
 
