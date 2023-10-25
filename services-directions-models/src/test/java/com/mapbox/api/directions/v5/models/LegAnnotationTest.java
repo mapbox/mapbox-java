@@ -1,5 +1,6 @@
 package com.mapbox.api.directions.v5.models;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -8,11 +9,14 @@ import com.google.gson.JsonPrimitive;
 import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class LegAnnotationTest extends TestUtils {
 
@@ -105,12 +109,36 @@ public class LegAnnotationTest extends TestUtils {
         0,
         0);
 
+    List<Integer> freeflowSpeed = Arrays.asList(
+      0,
+      1,
+      2,
+      3,
+      4,
+      null,
+      0,
+      9
+    );
+
+    List<Integer> currentSpeed = Arrays.asList(
+      0,
+      4,
+      2,
+      7,
+      4,
+      null,
+      0,
+      2
+    );
+
     LegAnnotation annotation = LegAnnotation.builder()
       .congestionNumeric(congestionNumericList)
       .distance(distanceList)
       .duration(durationList)
       .speed(speedList)
       .congestion(congestionList)
+      .freeflowSpeed(freeflowSpeed)
+      .currentSpeed(currentSpeed)
       .unrecognizedJsonProperties(unrecognizedProperties)
       .build();
 
@@ -119,5 +147,36 @@ public class LegAnnotationTest extends TestUtils {
     LegAnnotation annotationFromJson = LegAnnotation.fromJson(jsonString);
 
     assertEquals(annotation, annotationFromJson);
+  }
+
+  @Test
+  public void testExampleResponse() throws IOException {
+    String responseString = loadJsonFixture("directions_freeflow_speed_and_current_speed_annotations.json");
+    DirectionsResponse response = DirectionsResponse.fromJson(responseString);
+
+    List<Integer> freeflowSpeed = response.routes().get(0).legs().get(0).annotation().freeflowSpeed();
+    assertEquals(341, freeflowSpeed.size());
+    assertEquals((Integer) 11, freeflowSpeed.get(0));
+    assertEquals(null, freeflowSpeed.get(24));
+    assertEquals((Integer) 27, freeflowSpeed.get(113));
+    assertEquals((Integer) 8, freeflowSpeed.get(340));
+
+    List<Integer> currentSpeed = response.routes().get(0).legs().get(0).annotation().currentSpeed();
+    assertEquals(341, currentSpeed.size());
+    assertEquals(null, currentSpeed.get(0));
+    assertEquals((Integer) 5, currentSpeed.get(33));
+    assertEquals((Integer) 9, currentSpeed.get(317));
+    assertEquals(null, currentSpeed.get(340));
+  }
+
+  protected String loadJsonFixture(String filename) throws IOException {
+    InputStream inputStream = getResourceInputSteam(filename);
+    Scanner scanner = new Scanner(inputStream, UTF_8.name()).useDelimiter("\\A");
+    return scanner.hasNext() ? scanner.next() : "";
+  }
+
+  private InputStream getResourceInputSteam(String filename) {
+    ClassLoader classLoader = getClass().getClassLoader();
+    return classLoader.getResourceAsStream(filename);
   }
 }

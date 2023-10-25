@@ -106,6 +106,26 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
   public abstract List<Integer> trafficTendency();
 
   /**
+   * @return The freeflow speed for each line segment along the route geometry.
+   * The speed may be either a positive integer in kilometers per hour or `null` where attribution is missing.
+   * The freeflow value conveys the typical speed at low traffic times of day such as nights or early mornings.
+   * Available only for `mapbox/driving` and `mapbox/driving-traffic` profiles.
+   */
+  @Nullable
+  @SerializedName("freeflow_speed")
+  public abstract List<Integer> freeflowSpeed();
+
+  /**
+   * @return The current speed for each line segment along the route geometry.
+   * The speed may be either a positive integer in kilometers per hour or `null` where attribution is missing.
+   * The current speed value conveys the instantaneous (at the time of the request) speed.
+   * Available only for `mapbox/driving` and `mapbox/driving-traffic` profiles.
+   */
+  @Nullable
+  @SerializedName("current_speed")
+  public abstract List<Integer> currentSpeed();
+
+  /**
    * Convert the current {@link LegAnnotation} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link LegAnnotation}.
@@ -218,6 +238,12 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
     @SuppressWarnings("checkstyle:javadocmethod")
     @NonNull
     public abstract Builder trafficTendency(@Nullable List<Integer> trafficTendency);
+
+    @NonNull
+    public abstract Builder freeflowSpeed(@Nullable List<Integer> freeflowSpeed);
+
+    @NonNull
+    public abstract Builder currentSpeed(@Nullable List<Integer> currentSpeed);
 
     /**
      * Build a new {@link LegAnnotation} object.
