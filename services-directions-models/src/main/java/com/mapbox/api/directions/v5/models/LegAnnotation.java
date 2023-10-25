@@ -239,9 +239,19 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
     @NonNull
     public abstract Builder trafficTendency(@Nullable List<Integer> trafficTendency);
 
+    /**
+     * @param freeflowSpeed speed for each line segment along the route geometry.
+     * The speed may be either a positive integer in kilometers per hour or `null` where attribution is missing.
+     * @return
+     */
     @NonNull
     public abstract Builder freeflowSpeed(@Nullable List<Integer> freeflowSpeed);
 
+    /**
+     * @param currentSpeed The current speed for each line segment along the route geometry.
+     * The speed may be either a positive integer in kilometers per hour or `null` where attribution is missing.
+     * @return this builder for chaining options together
+     */
     @NonNull
     public abstract Builder currentSpeed(@Nullable List<Integer> currentSpeed);
 
