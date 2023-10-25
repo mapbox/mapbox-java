@@ -153,7 +153,8 @@ public final class DirectionsCriteria {
   public static final String ANNOTATION_TRAFFIC_TENDENCY = "traffic_tendency";
 
   /**
-   * The freeflow value conveys the typical speed at low traffic times of day such as nights or early mornings.
+   * The freeflow value conveys the typical speed at low traffic times of day
+   * such as nights or early mornings.
    */
   public static final String ANNOTATION_FREEFLOW_SPEED = "freeflow_speed";
 

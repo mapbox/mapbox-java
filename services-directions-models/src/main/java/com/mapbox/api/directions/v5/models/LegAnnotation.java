@@ -106,20 +106,24 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
   public abstract List<Integer> trafficTendency();
 
   /**
-   * @return The freeflow speed for each line segment along the route geometry.
-   * The speed may be either a positive integer in kilometers per hour or `null` where attribution is missing.
-   * The freeflow value conveys the typical speed at low traffic times of day such as nights or early mornings.
+   * The speed may be either a positive integer in kilometers per hour
+   * or `null` where attribution is missing.
+   * The freeflow value conveys the typical speed at low traffic times of day
+   * such as nights or early mornings.
    * Available only for `mapbox/driving` and `mapbox/driving-traffic` profiles.
+   * @return The freeflow speed for each line segment along the route geometry.
    */
   @Nullable
   @SerializedName("freeflow_speed")
   public abstract List<Integer> freeflowSpeed();
 
   /**
-   * @return The current speed for each line segment along the route geometry.
-   * The speed may be either a positive integer in kilometers per hour or `null` where attribution is missing.
-   * The current speed value conveys the instantaneous (at the time of the request) speed.
+   * The speed may be either a positive integer in kilometers per hour
+   * or `null` where attribution is missing.
+   * The current speed value conveys the instantaneous
+   * (at the time of the request) speed.
    * Available only for `mapbox/driving` and `mapbox/driving-traffic` profiles.
+   * @return The current speed for each line segment along the route geometry.
    */
   @Nullable
   @SerializedName("current_speed")
@@ -241,15 +245,17 @@ public abstract class LegAnnotation extends DirectionsJsonObject {
 
     /**
      * @param freeflowSpeed speed for each line segment along the route geometry.
-     * The speed may be either a positive integer in kilometers per hour or `null` where attribution is missing.
-     * @return
+     *   The speed may be either a positive integer in kilometers per hour or
+     *   `null` where attribution is missing.
+     * @return this builder for chaining options together
      */
     @NonNull
     public abstract Builder freeflowSpeed(@Nullable List<Integer> freeflowSpeed);
 
     /**
      * @param currentSpeed The current speed for each line segment along the route geometry.
-     * The speed may be either a positive integer in kilometers per hour or `null` where attribution is missing.
+     *   The speed may be either a positive integer in kilometers per hour
+     *   or `null` where attribution is missing.
      * @return this builder for chaining options together
      */
     @NonNull
