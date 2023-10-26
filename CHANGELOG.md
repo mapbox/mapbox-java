@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `LegAnnotation#freeflowSpeed` and `LegAnnotation#currentSpeed`. To receive these annotations, pass `DirectionsCriteria.ANNOTATION_FREEFLOW_SPEED` and `DirectionsCriteria.ANNOTATION_CURRENT_SPEED` in the request in the "annotations" parameter.
 
 ### v6.13.0 - July 31, 2023
 - No additional changes
