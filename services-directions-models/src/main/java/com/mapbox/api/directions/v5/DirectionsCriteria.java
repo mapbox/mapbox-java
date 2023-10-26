@@ -153,6 +153,17 @@ public final class DirectionsCriteria {
   public static final String ANNOTATION_TRAFFIC_TENDENCY = "traffic_tendency";
 
   /**
+   * The freeflow value conveys the typical speed at low traffic times of day
+   * such as nights or early mornings.
+   */
+  public static final String ANNOTATION_FREEFLOW_SPEED = "freeflow_speed";
+
+  /**
+   * The current speed value conveys the instantaneous (at the time of the request) speed.
+   */
+  public static final String ANNOTATION_CURRENT_SPEED = "current_speed";
+
+  /**
    * Exclude all tolls along the returned directions route.
    *
    * @since 3.0.0
@@ -528,7 +539,9 @@ public final class DirectionsCriteria {
     ANNOTATION_CONGESTION_NUMERIC,
     ANNOTATION_MAXSPEED,
     ANNOTATION_CLOSURE,
-    ANNOTATION_TRAFFIC_TENDENCY
+    ANNOTATION_TRAFFIC_TENDENCY,
+    ANNOTATION_CURRENT_SPEED,
+    ANNOTATION_FREEFLOW_SPEED
   })
   public @interface AnnotationCriteria {
   }
