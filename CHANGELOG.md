@@ -4,6 +4,8 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+- Added `DirectionsCriteria#PAYMENT_METHOD_ETC2` option to pass as `RouteOptions#computeTollCosts` and to receive in `IntersectionsLanes#paymentMethods`.
+
 ### v6.14.0 - October 26, 2023
 
 - Added `LegAnnotation#freeflowSpeed` and `LegAnnotation#currentSpeed`. To receive these annotations, pass `DirectionsCriteria.ANNOTATION_FREEFLOW_SPEED` and `DirectionsCriteria.ANNOTATION_CURRENT_SPEED` in the request in the "annotations" parameter.

@@ -1038,6 +1038,17 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void etc2PaymentMethod() {
+    RouteOptions routeOptions = routeOptions().toBuilder()
+      .paymentMethodsList(Arrays.asList(DirectionsCriteria.PAYMENT_METHOD_ETC2))
+      .build();
+    String query = routeOptions.toUrl("test").getQuery();
+
+    assertEquals("etc2", routeOptions.paymentMethods());
+    assertContains(query, "payment_methods=etc2");
+  }
+
+  @Test
   public void generalAndEtcPaymentsMethod() {
     List<String> paymentMethods = Arrays.asList(
       DirectionsCriteria.PAYMENT_METHOD_ETC,
