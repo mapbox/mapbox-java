@@ -4,7 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v6.15.0 - November 13, 2023
+
 - Added `DirectionsCriteria#PAYMENT_METHOD_ETC2` option to pass as `RouteOptions#computeTollCosts` and to receive in `IntersectionsLanes#paymentMethods`.
+
 
 ### v6.14.0 - October 26, 2023
 
