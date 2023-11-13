@@ -88,4 +88,18 @@ public class IntersectionLanesTest extends TestUtils {
 
     assertEquals(intersectionLanes, intersectionLanesFromJson);
   }
+
+  @Test
+  public void testFromJson_etc2Payment() {
+    IntersectionLanes intersectionLanes = IntersectionLanes.builder()
+      .paymentMethods(Arrays.asList(
+        DirectionsCriteria.PAYMENT_METHOD_ETC2
+      ))
+      .build();
+
+    String jsonString = "{\"payment_methods\": [\"etc2\"]}";
+    IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
+
+    assertEquals(intersectionLanes, intersectionLanesFromJson);
+  }
 }

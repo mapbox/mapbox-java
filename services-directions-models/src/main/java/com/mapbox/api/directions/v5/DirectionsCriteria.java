@@ -339,6 +339,15 @@ public final class DirectionsCriteria {
   public static final String PAYMENT_METHOD_ETC = "etc";
 
   /*
+   * A ETC 2.0 transponder.
+   * NOTE: If the specified `payment_methods` parameter includes `etc2`,
+   *  `etc` lane will be validated and activated.
+   *  This is because ETC2 user can pass through ETC tollbooths.
+   */
+  @SuppressWarnings("checkstyle:javadocvariable")
+  public static final String PAYMENT_METHOD_ETC2 = "etc2";
+
+  /*
    * A transponder only used for several specific roads in Japan.
    */
   @SuppressWarnings("checkstyle:javadocvariable")
@@ -668,6 +677,7 @@ public final class DirectionsCriteria {
     PAYMENT_METHOD_VIDEO,
     PAYMENT_METHOD_CRYPTOCURRENCIES,
     PAYMENT_METHOD_APP,
+    PAYMENT_METHOD_ETC2,
   })
   public @interface PaymentMethodsCriteria {
   }
