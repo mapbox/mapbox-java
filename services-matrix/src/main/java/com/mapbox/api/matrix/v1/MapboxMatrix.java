@@ -123,7 +123,12 @@ public abstract class MapboxMatrix extends MapboxService<MatrixResponse, MatrixS
    * <p>
    * By default, the directions profile is set to driving (without traffic) but can be changed to
    * reflect your users use-case.
-   * </p><p>
+   * </p>
+   * <p>
+   * Create a fresh instance of the builder for new requests given the fact that
+   * some methods like {@link #coordinates(List)} accumulate values.
+   * </p>
+   * <p>
    * Note to contributors: All optional booleans in this builder use the object {@code Boolean}
    * rather than the primitive to allow for unset (null) values.
    * </p>
