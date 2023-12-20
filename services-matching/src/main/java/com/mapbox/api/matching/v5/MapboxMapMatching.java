@@ -280,6 +280,8 @@ public abstract class MapboxMapMatching extends
 
   /**
    * Builds your map matching query by adding parameters.
+   * Create a fresh instance of the builder for new requests given the fact that
+   * some methods like {@link #coordinates(List)} accumulate values.
    *
    * @since 2.0.0
    */
