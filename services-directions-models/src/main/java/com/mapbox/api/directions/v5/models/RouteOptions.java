@@ -1004,9 +1004,9 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
     try {
       String[] pathElements = url.getPath().split("/");
-      optionsJson.addProperty("user", URLDecoder.decode(pathElements[3], UTF_8));
-      optionsJson.addProperty("profile", URLDecoder.decode(pathElements[4], UTF_8));
-      optionsJson.addProperty("coordinates", URLDecoder.decode(pathElements[5], UTF_8));
+      optionsJson.addProperty("user", URLDecoder.decode(pathElements[pathElements.length - 3], UTF_8));
+      optionsJson.addProperty("profile", URLDecoder.decode(pathElements[pathElements.length - 2], UTF_8));
+      optionsJson.addProperty("coordinates", URLDecoder.decode(pathElements[pathElements.length - 1], UTF_8));
 
       String[] queryElements = url.getQuery().split("&");
       for (String query : queryElements) {
