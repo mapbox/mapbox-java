@@ -3,6 +3,9 @@ package com.mapbox.api.directions.v5;
 import androidx.annotation.IntDef;
 import androidx.annotation.StringDef;
 import com.mapbox.api.directions.v5.models.Amenity;
+import com.mapbox.api.directions.v5.models.Notification;
+import com.mapbox.api.directions.v5.models.RouteLeg;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -488,6 +491,59 @@ public final class DirectionsCriteria {
    */
   public static final String AMENITY_TYPE_FAX = "FAX";
 
+  /**
+   * Violation notification type. {@link Notification#type()} will have this value
+   * if some request parameters were violated.
+   */
+  public static final String NOTIFICATION_TYPE_VIOLATION = "violation";
+
+  /**
+   * Max height notification subtype of type {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#maxHeight()} parameter is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_MAX_HEIGHT = "maxHeight";
+
+  /**
+   * Max width notification subtype of type {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#maxWidth()} parameter is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_MAX_WIDTH = "maxWidth";
+
+  /**
+   * Max weight notification subtype of type {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#maxWeight()} parameter is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_MAX_WEIGHT = "maxWeight";
+
+  /**
+   * Unpaved notification subtype of type {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#exclude()} parameter with value
+   * {@link DirectionsCriteria#EXCLUDE_UNPAVED} is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_UNPAVED = "unpaved";
+
+  /**
+   * Point exclusion notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#exclude()} parameter with point value is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_POINT_EXCLUSION = "pointExclusion";
+
+  /**
+   * Include all notifications in the route response (see {@link RouteLeg#notifications()}).
+   */
+  public static final String NOTIFICATION_FLOW_ALL = "all";
+
+  /**
+   * Include none of the notifications in the route response (see {@link RouteLeg#notifications()}).
+   */
+  public static final String NOTIFICATION_FLOW_NONE = "none";
+
   private DirectionsCriteria() {
     //not called
   }
@@ -707,5 +763,40 @@ public final class DirectionsCriteria {
     AMENITY_TYPE_FAX,
   })
   public @interface AmenityTypeCriteria {
+  }
+
+  /**
+   * Supported notification types. See {@link Notification#type()}.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    NOTIFICATION_TYPE_VIOLATION,
+  })
+  public @interface NotificationsTypeCriteria {
+  }
+
+  /**
+   * Supported notification subtypes. See {@link Notification#subtype()}.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    NOTIFICATION_SUBTYPE_MAX_HEIGHT,
+    NOTIFICATION_SUBTYPE_MAX_WIDTH,
+    NOTIFICATION_SUBTYPE_MAX_WEIGHT,
+    NOTIFICATION_SUBTYPE_UNPAVED,
+    NOTIFICATION_SUBTYPE_POINT_EXCLUSION,
+  })
+  public @interface NotificationsSubtypeCriteria {
+  }
+
+  /**
+   * Supported {@link RouteOptions#notifications()} parameter values.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    NOTIFICATION_FLOW_ALL,
+    NOTIFICATION_FLOW_NONE,
+  })
+  public @interface NotificationsFlowCriteria {
   }
 }
