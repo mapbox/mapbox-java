@@ -61,3 +61,4 @@ View [the CLI samples](https://github.com/mapbox/mapbox-java/tree/main/samples/s
 ## Contributing
 
 All libraries are contained within the `mapbox` folder. You can import the project using Android Studio or IntelliJ IDEA. Read [the contribution guide](https://github.com/mapbox/mapbox-java/blob/main/CONTRIBUTING.md) to get setup properly.
+
