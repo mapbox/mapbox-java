@@ -33,6 +33,10 @@ public abstract class V6ForwardGeocodingRequestOptions implements V6RequestOptio
   @Nullable
   abstract String query();
 
+  @SerializedName("address_line1")
+  @Nullable
+  abstract String addressLine1();
+
   @SerializedName("address_number")
   @Nullable
   abstract String addressNumber();
@@ -147,6 +151,7 @@ public abstract class V6ForwardGeocodingRequestOptions implements V6RequestOptio
     @NonNull V6StructuredInputQuery query
   ) {
     return new $AutoValue_V6ForwardGeocodingRequestOptions.Builder()
+      .addressLine1(query.addressLine1())
       .addressNumber(query.addressNumber())
       .street(query.street())
       .block(query.block())
@@ -186,6 +191,8 @@ public abstract class V6ForwardGeocodingRequestOptions implements V6RequestOptio
     abstract Builder query(@NonNull String query);
 
     // Structured input options
+    abstract Builder addressLine1(String addressLine1);
+
     abstract Builder addressNumber(String addressNumber);
 
     abstract Builder street(String street);

@@ -68,6 +68,7 @@ public abstract class V6GeocodingTestUtils extends TestUtils {
 
   public static final V6StructuredInputQuery TEST_COMPLETE_STRUCTURED_INPUT =
     V6StructuredInputQuery.builder()
+      .addressLine1("test-address-line1")
       .addressNumber("test-address-number")
       .street("test-street")
       .block("test-block")

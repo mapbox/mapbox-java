@@ -87,6 +87,7 @@ public abstract class MapboxV6Geocoding extends MapboxV6BaseGeocoding<V6Response
     return getService().structureInputForwardGeocoding(
       ApiCallHelper.getHeaderUserAgent(clientAppName()),
       accessToken(),
+      options.addressLine1(),
       options.addressNumber(),
       options.street(),
       options.block(),

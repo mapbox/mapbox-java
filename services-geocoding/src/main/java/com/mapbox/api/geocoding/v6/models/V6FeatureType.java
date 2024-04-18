@@ -85,6 +85,11 @@ public class V6FeatureType {
   public static final String ADDRESS = "address";
 
   /**
+   * Sub-unit, suite, or lot within a single parent address. Currently available in the US only.
+   */
+  public static final String SECONDARY_ADDRESS = "secondary_address";
+
+  /**
    * Retention policy for the types.
    */
   @Retention(RetentionPolicy.CLASS)
@@ -98,7 +103,8 @@ public class V6FeatureType {
     NEIGHBORHOOD,
     STREET,
     BLOCK,
-    ADDRESS
+    ADDRESS,
+    SECONDARY_ADDRESS
   })
   public @interface FeatureType {
   }

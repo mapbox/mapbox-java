@@ -19,6 +19,10 @@ import com.mapbox.core.exceptions.ServicesException;
 @AutoValue
 public abstract class V6StructuredInputQuery {
 
+  @SerializedName("address_line1")
+  @Nullable
+  abstract String addressLine1();
+
   @SerializedName("address_number")
   @Nullable
   abstract String addressNumber();
@@ -64,6 +68,15 @@ public abstract class V6StructuredInputQuery {
    */
   @AutoValue.Builder
   public abstract static class Builder {
+
+    /**
+     * A string including address_number and street. These values can be provided as separate
+     * parameters address_number and street listed below.
+     *
+     * @param addressLine1 structured input component.
+     * @return this builder for chaining options together
+     */
+    public abstract Builder addressLine1(@NonNull String addressLine1);
 
     /**
      * The number associated with the house.
@@ -147,7 +160,8 @@ public abstract class V6StructuredInputQuery {
     public V6StructuredInputQuery build() {
       final V6StructuredInputQuery query = autoBuild();
 
-      if (query.addressNumber() == null
+      if (query.addressLine1() == null
+        && query.addressNumber() == null
         && query.street() == null
         && query.block() == null
         && query.place() == null

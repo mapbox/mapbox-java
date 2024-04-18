@@ -157,6 +157,7 @@ public class MapboxV6GeocodingTest extends V6GeocodingTestUtils {
 
     final HttpUrl url = request.getRequestUrl();
     assertEquals("/search/geocode/v6/forward", Objects.requireNonNull(url).encodedPath());
+    assertEquals(options.addressLine1(), url.queryParameter("address_line1"));
     assertEquals(options.addressNumber(), url.queryParameter("address_number"));
     assertEquals(options.street(), url.queryParameter("street"));
     assertEquals(options.block(), url.queryParameter("block"));
@@ -192,6 +193,7 @@ public class MapboxV6GeocodingTest extends V6GeocodingTestUtils {
     assertEquals(geocoding.accessToken(), url.queryParameter("access_token"));
     assertNull(url.queryParameter("q"));
     assertEquals(structuredInputQuery.addressNumber(), url.queryParameter("address_number"));
+    assertNull(url.queryParameter("address_line1"));
     assertNull(url.queryParameter("street"));
     assertNull(url.queryParameter("block"));
     assertNull(url.queryParameter("place"));

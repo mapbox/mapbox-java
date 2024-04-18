@@ -54,6 +54,7 @@ interface V6GeocodingService {
    *
    * @param userAgent     the user agent
    * @param accessToken   {@link MapboxV6Geocoding#accessToken()}
+   * @param addressLine1  {@link V6StructuredInputQuery#addressLine1()}
    * @param addressNumber {@link V6StructuredInputQuery#addressNumber()}
    * @param street        {@link V6StructuredInputQuery#street()}
    * @param block         {@link V6StructuredInputQuery#block()}
@@ -77,6 +78,7 @@ interface V6GeocodingService {
   Call<V6Response> structureInputForwardGeocoding(
     @Header("User-Agent") String userAgent,
     @Query("access_token") String accessToken,
+    @Query("address_line1") String addressLine1,
     @Query("address_number") String addressNumber,
     @Query("street") String street,
     @Query("block") String block,

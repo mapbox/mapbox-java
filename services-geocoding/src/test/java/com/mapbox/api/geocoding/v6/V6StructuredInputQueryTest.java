@@ -27,6 +27,7 @@ public class V6StructuredInputQueryTest {
   @Test
   public void testStructuredInputWithAllValuesSet() {
     final V6StructuredInputQuery query = V6StructuredInputQuery.builder()
+      .addressLine1("test-address-line1")
       .addressNumber("test-address-number")
       .street("test-street")
       .block("test-block")
@@ -37,6 +38,7 @@ public class V6StructuredInputQueryTest {
       .neighborhood("test-neighborhood")
       .build();
 
+    assertEquals("test-address-line1", query.addressLine1());
     assertEquals("test-address-number", query.addressNumber());
     assertEquals("test-street", query.street());
     assertEquals("test-block", query.block());
@@ -61,6 +63,13 @@ public class V6StructuredInputQueryTest {
     assertNull(queryWithAddress.postcode());
     assertNull(queryWithAddress.locality());
     assertNull(queryWithAddress.neighborhood());
+
+    final V6StructuredInputQuery queryWithAddressLine1 = V6StructuredInputQuery.builder()
+      .addressLine1("test-address-line1")
+      .build();
+
+    assertEquals("test-address-line1", queryWithAddressLine1.addressLine1());
+    assertNull(queryWithAddressLine1.addressNumber());
 
     final V6StructuredInputQuery queryWithStreet = V6StructuredInputQuery.builder()
       .street("test-street")
