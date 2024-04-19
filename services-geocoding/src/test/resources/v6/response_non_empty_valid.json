@@ -20,7 +20,15 @@
           "latitude": 38.899929,
           "accuracy": "rooftop"
         },
+        "name_preferred": "Washington, D.C.",
         "place_formatted": "Washington, District of Columbia 20005, United States",
+        "full_address": "740 15th Street Northwest, DC 20005, USA",
+        "bbox": [
+          -80.0,
+          35.0,
+          -70.0,
+          40.0
+        ],
         "match_code": {
           "address_number": "matched",
           "street": "matched",

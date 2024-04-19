@@ -10,6 +10,8 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.geocoding.v6.V6GeocodingAdapterFactory;
 
+import java.util.List;
+
 /**
  * A type which contains the majority of information returned by the Geocoding V6 API.
  */
@@ -45,6 +47,17 @@ public abstract class V6Properties extends V6JsonObject {
   public abstract String name();
 
   /**
+   * The canonical or otherwise more common alias for the feature name.
+   * For example, searching for "America" will return "America" as the name,
+   * and "United States" as name_preferred.
+   *
+   * @return canonical or otherwise more common alias for the feature name
+   */
+  @Nullable
+  @SerializedName("name_preferred")
+  public abstract String namePreferred();
+
+  /**
    * Formatted string of result context: place region country postcode.
    * The part of the result which comes after {@link V6Properties#name()}.
    *
@@ -53,6 +66,16 @@ public abstract class V6Properties extends V6JsonObject {
   @Nullable
   @SerializedName("place_formatted")
   public abstract String placeFormatted();
+
+  /**
+   * Full formatted string of the feature, combining name_preferred
+   * and place_formatted.
+   *
+   * @return full formatted string of the feature
+   */
+  @Nullable
+  @SerializedName("full_address")
+  public abstract String fullAddress();
 
   /**
    * An object representing the hierarchy of encompassing parent features.
@@ -73,6 +96,17 @@ public abstract class V6Properties extends V6JsonObject {
   @Nullable
   @SerializedName("coordinates")
   public abstract V6Coordinates coordinates();
+
+  /**
+   * The bounding box of the feature in minLon,minLat,maxLon,maxLat order.
+   * This property is only provided with features of type country, region,
+   * postcode, district, place, locality, or neighborhood.
+   *
+   * @return bounding box of the feature
+   */
+  @Nullable
+  @SerializedName("bbox")
+  abstract List<Double> bbox();
 
   /**
    * Additional metadata indicating how the result components match to the input query.
@@ -117,11 +151,17 @@ public abstract class V6Properties extends V6JsonObject {
 
     abstract Builder name(String name);
 
+    abstract Builder namePreferred(String namePreferred);
+
     abstract Builder placeFormatted(String placeFormatted);
+
+    abstract Builder fullAddress(String fullAddress);
 
     abstract Builder context(V6Context context);
 
     abstract Builder coordinates(V6Coordinates coordinates);
+
+    abstract Builder bbox(List<Double> bbox);
 
     abstract Builder matchCode(V6MatchCode matchCode);
 

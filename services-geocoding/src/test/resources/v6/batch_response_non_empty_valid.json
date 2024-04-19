@@ -22,7 +22,15 @@
               "latitude": 38.89768,
               "accuracy": "rooftop"
             },
+            "name_preferred": "Washington, D.C.",
             "place_formatted": "Washington, District of Columbia 20500, United States",
+            "full_address": "1600 Pennsylvania Avenue Northwest, DC 20005, USA",
+            "bbox": [
+              -81.0,
+              31.0,
+              -71.0,
+              41.0
+            ],
             "match_code": {
               "address_number": "matched",
               "street": "matched",
@@ -110,7 +118,15 @@
               "longitude": -77.0336269,
               "latitude": 38.8988057
             },
+            "name_preferred": "Washington, D.C.",
             "place_formatted": "Washington, District of Columbia 20005, United States",
+            "full_address": "Pennsylvania Ave Northwest, DC 20005, USA",
+            "bbox": [
+              -82.0,
+              32.0,
+              -72.0,
+              42.0
+            ],
             "context": {
               "street": {
                 "mapbox_id": "address.6017514948318094",

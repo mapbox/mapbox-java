@@ -6,6 +6,7 @@ import com.mapbox.geojson.Point;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -44,11 +45,23 @@ public class V6ResponseTest extends TestUtils {
       properties.placeFormatted()
     );
 
+    assertEquals(
+      "Washington, D.C.",
+      properties.namePreferred()
+    );
+
+    assertEquals(
+      "740 15th Street Northwest, DC 20005, USA",
+      properties.fullAddress()
+    );
+
     final V6Coordinates coordinates = ModelDataFactory.createV6Coordinates(
       -77.03394, 38.899929, "rooftop"
     );
     assertEquals(coordinates, properties.coordinates());
     assertEquals(Point.fromLngLat(-77.03394, 38.899929), coordinates.point());
+
+    assertEquals(Arrays.asList(-80.0, 35.0, -70.0, 40.0), properties.bbox());
 
     final V6MatchCode matchCode = ModelDataFactory.createV6MatchCode(
       "matched",

@@ -7,6 +7,7 @@ import com.mapbox.geojson.Point;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +53,18 @@ public class V6BatchResponseTest extends TestUtils {
       "Washington, District of Columbia 20500, United States",
       properties.placeFormatted()
     );
+
+    assertEquals(
+      "Washington, D.C.",
+      properties.namePreferred()
+    );
+
+    assertEquals(
+      "1600 Pennsylvania Avenue Northwest, DC 20005, USA",
+      properties.fullAddress()
+    );
+
+    assertEquals(Arrays.asList(-81.0, 31.0, -71.0, 41.0), properties.bbox());
 
     final V6Coordinates coordinates = ModelDataFactory.createV6Coordinates(
       -77.03655, 38.89768, "rooftop"
