@@ -56,7 +56,8 @@ public class V6ResponseTest extends TestUtils {
     );
 
     final V6Coordinates coordinates = ModelDataFactory.createV6Coordinates(
-      -77.03394, 38.899929, "rooftop"
+      -77.03394, 38.899929, "rooftop",
+      Arrays.asList(ModelDataFactory.createV6RoutablePoint(-81.5244, 39.3454, "default"))
     );
     assertEquals(coordinates, properties.coordinates());
     assertEquals(Point.fromLngLat(-77.03394, 38.899929), coordinates.point());

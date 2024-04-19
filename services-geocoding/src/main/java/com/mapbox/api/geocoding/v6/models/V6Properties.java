@@ -89,7 +89,8 @@ public abstract class V6Properties extends V6JsonObject {
   public abstract V6Context context();
 
   /**
-   * Object containing coordinate parameters (lat, long) and accuracy.
+   * Object containing coordinate parameters (lat, long), accuracy and
+   * routable points.
    *
    * @return object containing coordinate parameters (lat, long) and accuracy
    */

@@ -18,7 +18,14 @@
         "coordinates": {
           "longitude": -77.03394,
           "latitude": 38.899929,
-          "accuracy": "rooftop"
+          "accuracy": "rooftop",
+          "routable_points": [
+            {
+              "name": "default",
+              "longitude": -81.5244,
+              "latitude": 39.3454
+            }
+          ]
         },
         "name_preferred": "Washington, D.C.",
         "place_formatted": "Washington, District of Columbia 20005, United States",

@@ -67,7 +67,7 @@ public class V6BatchResponseTest extends TestUtils {
     assertEquals(Arrays.asList(-81.0, 31.0, -71.0, 41.0), properties.bbox());
 
     final V6Coordinates coordinates = ModelDataFactory.createV6Coordinates(
-      -77.03655, 38.89768, "rooftop"
+      -77.03655, 38.89768, "rooftop", null
     );
     assertEquals(coordinates, properties.coordinates());
     assertEquals(Point.fromLngLat(-77.03655, 38.89768), coordinates.point());
