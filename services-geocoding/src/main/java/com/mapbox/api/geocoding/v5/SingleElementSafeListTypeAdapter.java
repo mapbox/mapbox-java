@@ -30,9 +30,6 @@ import java.util.List;
  */
 class SingleElementSafeListTypeAdapter<E> extends TypeAdapter<List<E>> {
 
-  /**
-   * A type adapter factory instance for serialization/deserialization.
-   */
   static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
 
     @Override
@@ -47,7 +44,7 @@ class SingleElementSafeListTypeAdapter<E> extends TypeAdapter<List<E>> {
 
       @SuppressWarnings("unchecked")
       final TypeAdapter<T> adapter =
-        (TypeAdapter<T>) new SingleElementSafeListTypeAdapter<>(elementTypeAdapter);
+          (TypeAdapter<T>) new SingleElementSafeListTypeAdapter<>(elementTypeAdapter);
       return adapter;
     }
   };

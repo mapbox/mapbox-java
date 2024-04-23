@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName;
  * Element of the {@link V6Context} which holds complete geographical hierarchy for a given address
  * or place.
  *
- * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#the-context-object">The Context Object</a>
+ * @see <a href="https://docs.mapbox.com/api/search/geocoding/#the-context-object">The Context Object</a>
  */
 @AutoValue
 public abstract class V6ContextElement extends V6JsonObject {

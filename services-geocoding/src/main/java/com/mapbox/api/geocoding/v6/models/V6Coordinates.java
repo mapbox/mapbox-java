@@ -50,7 +50,7 @@ public abstract class V6Coordinates implements Serializable {
    * Point accuracy metric for the returned address feature.
    *
    * @return accuracy metric for the returned address feature
-   * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#point-accuracy-for-address-features">Point accuracy for address features</a>
+   * @see <a href="https://docs.mapbox.com/api/search/geocoding/#point-accuracy-for-address-features">Point accuracy for address features</a>
    */
   @Nullable
   @SerializedName("accuracy")

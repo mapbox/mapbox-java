@@ -14,7 +14,7 @@ import com.mapbox.core.exceptions.ServicesException;
  *
  * Structured input replaces string query parameter in the forward geocoding.
  *
- * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#structured-input">Structured input</a>
+ * @see <a href="https://docs.mapbox.com/api/search/geocoding/#forward-geocoding-with-structured-input">Structured input</a>
  */
 @AutoValue
 public abstract class V6StructuredInputQuery {

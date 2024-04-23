@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
  * component part of an address, plus contains feature-specific data such as the Wikidata id and
  * 3-letter alpha country code.
  *
- * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#the-context-object">The Context Object</a>
+ * @see <a href="https://docs.mapbox.com/api/search/geocoding/#the-context-object">The Context Object</a>
  */
 @AutoValue
 public abstract class V6Context extends V6JsonObject {

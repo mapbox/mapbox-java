@@ -22,7 +22,7 @@ import com.mapbox.api.geocoding.v6.V6GeocodingAdapterFactory;
  * an address type feature. It works best when using Structured Input forward queries,
  * as the request components must be typed explicitly.
  *
- * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#smart-address-match">Smart Address Match</a>
+ * @see <a href="https://docs.mapbox.com/api/search/geocoding/#smart-address-match">Smart Address Match</a>
  */
 @AutoValue
 public abstract class V6MatchCode extends V6JsonObject {

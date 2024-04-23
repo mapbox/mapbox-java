@@ -16,7 +16,7 @@ import java.lang.annotation.RetentionPolicy;
  * hierarchies.
  * <p>
  * Learn more about Feature Types
- * <a href="https://docs.mapbox.com/api/search/geocoding-v6/#geographic-feature-types">here</a>.
+ * <a href="https://docs.mapbox.com/api/search/geocoding/#geographic-feature-types">here</a>.
  */
 public class V6FeatureType {
 

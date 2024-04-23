@@ -14,7 +14,7 @@ import java.lang.annotation.RetentionPolicy;
  * but may expand to additional data types in the future.
  *
  * Learn more about worldviews
- * <a href="https://docs.mapbox.com/api/search/geocoding-v6/#worldviews">here</a>.
+ * <a href="https://docs.mapbox.com/api/search/geocoding/#worldviews">here</a>.
  */
 public class V6Worldview {
 

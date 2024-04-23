@@ -113,7 +113,7 @@ public abstract class V6Properties extends V6JsonObject {
    * Additional metadata indicating how the result components match to the input query.
    *
    * @return additional metadata indicating how the result components match to the input query
-   * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#smart-address-match">Smart Address Match</a>
+   * @see <a href="https://docs.mapbox.com/api/search/geocoding/#smart-address-match">Smart Address Match</a>
    */
   @Nullable
   @SerializedName("match_code")

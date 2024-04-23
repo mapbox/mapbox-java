@@ -90,7 +90,7 @@ public class V6GeocodingUtilsTest extends V6GeocodingTestUtils {
   }
 
   /**
-   * Test case from docs https://docs.mapbox.com/api/search/geocoding-v6/#example-request-batch-geocoding
+   * Test case from docs https://docs.mapbox.com/api/search/geocoding/#example-request-batch-geocoding
    */
   @Test
   public void testArbitraryOptionsSerialization() throws IOException {

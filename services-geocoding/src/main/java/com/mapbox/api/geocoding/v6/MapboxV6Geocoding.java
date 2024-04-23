@@ -24,8 +24,8 @@ import retrofit2.Call;
  * The reverse geocoding query type allows you to look up a pair of coordinates and returns the
  * geographic features there, including a standardized address or place and full geographic context.
  *
- * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#forward-geocoding">Forward Geocoding</a>
- * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#reverse-geocoding">Reverse Geocoding</a>
+ * @see <a href="https://docs.mapbox.com/api/search/geocoding/#forward-geocoding-with-search-text-input">Forward Geocoding</a>
+ * @see <a href="https://docs.mapbox.com/api/search/geocoding/#reverse-geocoding">Reverse Geocoding</a>
  */
 @AutoValue
 public abstract class MapboxV6Geocoding extends MapboxV6BaseGeocoding<V6Response> {

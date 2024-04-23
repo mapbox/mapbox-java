@@ -23,7 +23,7 @@ import retrofit2.Call;
  * The batch geocoding query type allows you to request up to 1000 forward or reverse geocoding
  * queries in a single request.
  *
- * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#batch-geocoding">Batch Geocoding</a>
+ * @see <a href="https://docs.mapbox.com/api/search/geocoding/#batch-geocoding">Batch Geocoding</a>
  */
 @AutoValue
 public abstract class MapboxV6BatchGeocoding extends MapboxV6BaseGeocoding<V6BatchResponse> {

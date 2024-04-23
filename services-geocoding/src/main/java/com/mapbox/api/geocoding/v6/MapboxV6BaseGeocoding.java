@@ -43,7 +43,7 @@ public abstract class MapboxV6BaseGeocoding<T> extends MapboxService<T, V6Geocod
      * @param permanent specify whether you intend to store the results
      * @return this builder for chaining options together
      *
-     * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#data-storage">Data storage</a>
+     * @see <a href="https://docs.mapbox.com/api/search/geocoding/#storing-geocoding-results">Storing Geocoding Results</a>
      */
     public abstract T permanent(@NonNull Boolean permanent);
 

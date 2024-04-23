@@ -24,7 +24,7 @@ import java.util.Locale;
 /**
  * Request parameters used to refine the results of a V6 forward geocoding query.
  *
- * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#forward-geocoding">Forward geocoding</a>
+ * @see <a href="https://docs.mapbox.com/api/search/geocoding/#forward-geocoding-with-search-text-input">Forward geocoding</a>
  */
 @AutoValue
 public abstract class V6ForwardGeocodingRequestOptions implements V6RequestOptions {
@@ -341,7 +341,7 @@ public abstract class V6ForwardGeocodingRequestOptions implements V6RequestOptio
      *
      * @param types filter results to include only a subset of the available feature types
      * @return this builder for chaining options together
-     * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#geographic-feature-types">Geographic Feature Types</a>
+     * @see <a href="https://docs.mapbox.com/api/search/geocoding/#geographic-feature-types">Geographic Feature Types</a>
      */
     public Builder types(@NonNull @V6FeatureType.FeatureType String... types) {
       return types(Arrays.asList(types));
@@ -358,7 +358,7 @@ public abstract class V6ForwardGeocodingRequestOptions implements V6RequestOptio
      *
      * @param worldview worldview code
      * @return this builder for chaining options together
-     * @see <a href="https://docs.mapbox.com/api/search/geocoding-v6/#worldviews">Worldviews</a>
+     * @see <a href="https://docs.mapbox.com/api/search/geocoding/#worldviews">Worldviews</a>
      */
     public abstract Builder worldview(@V6Worldview.Worldview @NonNull String worldview);
 
