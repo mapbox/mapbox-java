@@ -91,6 +91,12 @@ public class V6BatchResponseTest extends TestUtils {
     final V6ContextElement neighborhoodContext = context.neighborhood();
     assertNotNull(neighborhoodContext);
 
+    final V6ContextAddress addressContext = context.address();
+    assertNotNull(addressContext);
+    assertEquals("1600", addressContext.addressNumber());
+    assertEquals("Pennsylvania Avenue Northwest", addressContext.streetName());
+
+
     final Map<String, JsonElement> unrecognized =
       neighborhoodContext.getUnrecognizedJsonProperties();
     assertNotNull(unrecognized);

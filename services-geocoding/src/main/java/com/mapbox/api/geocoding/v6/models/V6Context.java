@@ -25,7 +25,7 @@ public abstract class V6Context extends V6JsonObject {
    */
   @SerializedName("address")
   @Nullable
-  public abstract V6ContextElement address();
+  public abstract V6ContextAddress address();
 
   /**
    * Street context element.
@@ -94,7 +94,7 @@ public abstract class V6Context extends V6JsonObject {
   @AutoValue.Builder
   abstract static class Builder extends BaseBuilder<Builder> {
 
-    abstract Builder address(V6ContextElement address);
+    abstract Builder address(V6ContextAddress address);
 
     abstract Builder street(V6ContextElement street);
 
