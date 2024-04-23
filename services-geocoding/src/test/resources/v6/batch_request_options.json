@@ -1,0 +1,29 @@
+[
+  {
+    "q": "1600 Pennsylvania Avenue NW, Washington, DC 20500, United States",
+    "bbox": [
+      -80.0,
+      35.0,
+      -70.0,
+      40.0
+    ],
+    "limit": 1,
+    "types": [
+      "address"
+    ]
+  },
+  {
+    "address_number": "1600",
+    "street": "Pennsylvania Avenue NW",
+    "place": "Washington, DC",
+    "postcode": "20500",
+    "country": "us"
+  },
+  {
+    "longitude": -73.986136,
+    "latitude": 40.748895,
+    "types": [
+      "address"
+    ]
+  }
+]

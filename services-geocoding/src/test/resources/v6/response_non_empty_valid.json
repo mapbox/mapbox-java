@@ -1,0 +1,171 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "dXJuOm1ieGFkcjowMmVhNDY5OS0zY2IxLTRkOTctOGJhMi0yNWRkMDA3NDIzNGQ",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.03394,
+          38.899929
+        ]
+      },
+      "properties": {
+        "mapbox_id": "dXJuOm1ieGFkcjowMmVhNDY5OS0zY2IxLTRkOTctOGJhMi0yNWRkMDA3NDIzNGQ",
+        "feature_type": "address",
+        "name": "740 15th Street Northwest",
+        "coordinates": {
+          "longitude": -77.03394,
+          "latitude": 38.899929,
+          "accuracy": "rooftop",
+          "routable_points": [
+            {
+              "name": "default",
+              "longitude": -81.5244,
+              "latitude": 39.3454
+            }
+          ]
+        },
+        "name_preferred": "Washington, D.C.",
+        "place_formatted": "Washington, District of Columbia 20005, United States",
+        "full_address": "740 15th Street Northwest, DC 20005, USA",
+        "bbox": [
+          -80.0,
+          35.0,
+          -70.0,
+          40.0
+        ],
+        "match_code": {
+          "address_number": "matched",
+          "street": "matched",
+          "postcode": "matched",
+          "place": "matched",
+          "region": "matched",
+          "locality": "not_applicable",
+          "country": "inferred",
+          "confidence": "exact"
+        },
+        "context": {
+          "address": {
+            "mapbox_id": "dXJuOm1ieGFkcjowMmVhNDY5OS0zY2IxLTRkOTctOGJhMi0yNWRkMDA3NDIzNGQ",
+            "address_number": "740",
+            "street_name": "15th Street Northwest",
+            "name": "740 15th Street Northwest"
+          },
+          "street": {
+            "mapbox_id": "dXJuOm1ieGFkcjowMmVhNDY5OS0zY2IxLTRkOTctOGJhMi0yNWRkMDA3NDIzNGQ",
+            "name": "15th Street Northwest"
+          },
+          "neighborhood": {
+            "mapbox_id": "dXJuOm1ieHBsYzpDaXpzN0E",
+            "name": "Downtown",
+            "alternate": {
+              "mapbox_id": "dXJuOm1ieHBsYzpEY1ZNN0E",
+              "name": "Franklin Mcpherson Square"
+            }
+          },
+          "postcode": {
+            "mapbox_id": "dXJuOm1ieHBsYzpBNTd1N0E",
+            "name": "20005"
+          },
+          "place": {
+            "mapbox_id": "dXJuOm1ieHBsYzpGSmlvN0E",
+            "name": "Washington",
+            "wikidata_id": "Q61"
+          },
+          "region": {
+            "mapbox_id": "dXJuOm1ieHBsYzpCUVRz",
+            "name": "District of Columbia",
+            "wikidata_id": "Q3551781",
+            "region_code": "DC",
+            "region_code_full": "US-DC"
+          },
+          "country": {
+            "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+            "name": "United States",
+            "wikidata_id": "Q30",
+            "country_code": "US",
+            "country_code_alpha_3": "USA"
+          }
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dXJuOm1ieGFkcjpkOGViMTNiMC0wMGYxLTRiZWYtODRkNC01YzNlZjE1ZDYzYzM",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.983637,
+          38.899496
+        ]
+      },
+      "properties": {
+        "mapbox_id": "dXJuOm1ieGFkcjpkOGViMTNiMC0wMGYxLTRiZWYtODRkNC01YzNlZjE1ZDYzYzM",
+        "feature_type": "address",
+        "name": "740 15th Street Northeast",
+        "coordinates": {
+          "longitude": -76.983637,
+          "latitude": 38.899496,
+          "accuracy": "proximate"
+        },
+        "place_formatted": "Washington, District of Columbia 20002, United States",
+        "match_code": {
+          "address_number": "plausible",
+          "street": "unmatched",
+          "postcode": "unmatched",
+          "place": "matched",
+          "region": "matched",
+          "locality": "not_applicable",
+          "country": "inferred",
+          "confidence": "low"
+        },
+        "context": {
+          "address": {
+            "mapbox_id": "dXJuOm1ieGFkcjpkOGViMTNiMC0wMGYxLTRiZWYtODRkNC01YzNlZjE1ZDYzYzM",
+            "address_number": "740",
+            "street_name": "15th Street Northeast",
+            "name": "740 15th Street Northeast"
+          },
+          "street": {
+            "mapbox_id": "dXJuOm1ieGFkcjpkOGViMTNiMC0wMGYxLTRiZWYtODRkNC01YzNlZjE1ZDYzYzM",
+            "name": "15th Street Northeast"
+          },
+          "neighborhood": {
+            "mapbox_id": "dXJuOm1ieHBsYzpHaUlNN0E",
+            "name": "NoMa",
+            "alternate": {
+              "mapbox_id": "dXJuOm1ieHBsYzpJT3lzN0E",
+              "name": "Rosedale"
+            }
+          },
+          "postcode": {
+            "mapbox_id": "dXJuOm1ieHBsYzpBNTZPN0E",
+            "name": "20002"
+          },
+          "place": {
+            "mapbox_id": "dXJuOm1ieHBsYzpGSmlvN0E",
+            "name": "Washington",
+            "wikidata_id": "Q61"
+          },
+          "region": {
+            "mapbox_id": "dXJuOm1ieHBsYzpCUVRz",
+            "name": "District of Columbia",
+            "wikidata_id": "Q3551781",
+            "region_code": "DC",
+            "region_code_full": "US-DC"
+          },
+          "country": {
+            "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+            "name": "United States",
+            "wikidata_id": "Q30",
+            "country_code": "US",
+            "country_code_alpha_3": "USA"
+          }
+        }
+      }
+    }
+  ],
+  "attribution": "Test attribution"
+}

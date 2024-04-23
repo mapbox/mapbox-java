@@ -1,0 +1,220 @@
+{
+  "batch": [
+    {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": "dXJuOm1ieGFkcjo2YzdhYjM4Yi05YzM4LTQ3ZDItODFkMS1jYzZlYjg5YzliMWM",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -77.03655,
+              38.89768
+            ]
+          },
+          "properties": {
+            "mapbox_id": "dXJuOm1ieGFkcjo2YzdhYjM4Yi05YzM4LTQ3ZDItODFkMS1jYzZlYjg5YzliMWM",
+            "feature_type": "address",
+            "name": "1600 Pennsylvania Avenue Northwest",
+            "coordinates": {
+              "longitude": -77.03655,
+              "latitude": 38.89768,
+              "accuracy": "rooftop"
+            },
+            "name_preferred": "Washington, D.C.",
+            "place_formatted": "Washington, District of Columbia 20500, United States",
+            "full_address": "1600 Pennsylvania Avenue Northwest, DC 20005, USA",
+            "bbox": [
+              -81.0,
+              31.0,
+              -71.0,
+              41.0
+            ],
+            "match_code": {
+              "address_number": "matched",
+              "street": "matched",
+              "postcode": "matched",
+              "place": "matched",
+              "region": "matched",
+              "locality": "not_applicable",
+              "country": "inferred",
+              "confidence": "exact"
+            },
+            "context": {
+              "address": {
+                "mapbox_id": "dXJuOm1ieGFkcjo2YzdhYjM4Yi05YzM4LTQ3ZDItODFkMS1jYzZlYjg5YzliMWM",
+                "address_number": "1600",
+                "street_name": "Pennsylvania Avenue Northwest",
+                "name": "1600 Pennsylvania Avenue Northwest"
+              },
+              "street": {
+                "mapbox_id": "dXJuOm1ieGFkcjo2YzdhYjM4Yi05YzM4LTQ3ZDItODFkMS1jYzZlYjg5YzliMWM",
+                "name": "Pennsylvania Avenue Northwest"
+              },
+              "neighborhood": {
+                "mapbox_id": "dXJuOm1ieHBsYzpHYUVzN0E",
+                "name": "National Mall",
+                "alternate": {
+                  "mapbox_id": "dXJuOm1ieHBsYzpEY1ZNN0E",
+                  "name": "Franklin Mcpherson Square"
+                },
+                "translations": {
+                  "en": {
+                    "language": "en",
+                    "name": "National Mall"
+                  },
+                  "ar": {
+                    "language": "ar",
+                    "name": "National Mall"
+                  },
+                  "ja": {
+                    "language": "ja",
+                    "name": "National Mall"
+                  }
+                }
+              },
+              "postcode": {
+                "mapbox_id": "dXJuOm1ieHBsYzpBOEZPN0E",
+                "name": "20500"
+              },
+              "place": {
+                "mapbox_id": "dXJuOm1ieHBsYzpGSmlvN0E",
+                "name": "Washington",
+                "wikidata_id": "Q61"
+              },
+              "region": {
+                "mapbox_id": "dXJuOm1ieHBsYzpCUVRz",
+                "name": "District of Columbia",
+                "wikidata_id": "Q3551781",
+                "region_code": "DC",
+                "region_code_full": "US-DC"
+              },
+              "country": {
+                "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+                "name": "United States",
+                "wikidata_id": "Q30",
+                "country_code": "US",
+                "country_code_alpha_3": "USA"
+              }
+            }
+          }
+        },
+        {
+          "type": "Feature",
+          "id": "address.6017514948318094",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -77.0336269,
+              38.8988057
+            ]
+          },
+          "properties": {
+            "mapbox_id": "address.6017514948318094",
+            "feature_type": "street",
+            "name": "Pennsylvania Ave Northwest",
+            "coordinates": {
+              "longitude": -77.0336269,
+              "latitude": 38.8988057
+            },
+            "name_preferred": "Washington, D.C.",
+            "place_formatted": "Washington, District of Columbia 20005, United States",
+            "full_address": "Pennsylvania Ave Northwest, DC 20005, USA",
+            "bbox": [
+              -82.0,
+              32.0,
+              -72.0,
+              42.0
+            ],
+            "context": {
+              "street": {
+                "mapbox_id": "address.6017514948318094",
+                "name": "Pennsylvania Ave Northwest"
+              },
+              "neighborhood": {
+                "mapbox_id": "dXJuOm1ieHBsYzpDaXpzN0E",
+                "name": "Downtown",
+                "alternate": {
+                  "mapbox_id": "dXJuOm1ieHBsYzpEY1ZNN0E",
+                  "name": "Franklin Mcpherson Square"
+                }
+              },
+              "postcode": {
+                "mapbox_id": "dXJuOm1ieHBsYzpBNTd1N0E",
+                "name": "20005"
+              },
+              "place": {
+                "mapbox_id": "dXJuOm1ieHBsYzpGSmlvN0E",
+                "name": "Washington",
+                "wikidata_id": "Q61"
+              },
+              "region": {
+                "mapbox_id": "dXJuOm1ieHBsYzpCUVRz",
+                "name": "District of Columbia",
+                "wikidata_id": "Q3551781",
+                "region_code": "DC",
+                "region_code_full": "US-DC"
+              },
+              "country": {
+                "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+                "name": "United States",
+                "wikidata_id": "Q30",
+                "country_code": "US",
+                "country_code_alpha_3": "USA"
+              }
+            }
+          }
+        }
+      ],
+      "attribution": "Test attribution"
+    },
+    {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": "dXJuOm1ieHBsYzpJdXc",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -97.9222112121185,
+              39.3812661305678
+            ]
+          },
+          "properties": {
+            "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+            "feature_type": "country",
+            "name": "United States",
+            "coordinates": {
+              "longitude": -97.9222112121185,
+              "latitude": 39.3812661305678
+            },
+            "bbox": [
+              -179.9,
+              18.8164227,
+              -66.8847656,
+              71.420291
+            ],
+            "context": {
+              "country": {
+                "mapbox_id": "dXJuOm1ieHBsYzpJdXc",
+                "name": "United States",
+                "country_code": "US",
+                "country_code_alpha_3": "USA",
+                "wikidata_id": "Q30"
+              }
+            }
+          }
+        }
+      ],
+      "attribution": "NOTICE: © 2023 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained."
+    },
+    {
+      "type": "FeatureCollection",
+      "features": [
+      ],
+      "attribution": "NOTICE: © 2023 Mapbox and its suppliers. All rights reserved. Use of this data is subject to the Mapbox Terms of Service (https://www.mapbox.com/about/maps/). This response and the information it contains may not be retained."
+    }
+  ]
+}
