@@ -4,6 +4,11 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v7.0.0 - April 23, 2024
+
+- Added Geocoding V6 Support.
+
+
 ### v6.15.0 - November 13, 2023
 
 - Added `DirectionsCriteria#PAYMENT_METHOD_ETC2` option to pass as `RouteOptions#computeTollCosts` and to receive in `IntersectionsLanes#paymentMethods`.
