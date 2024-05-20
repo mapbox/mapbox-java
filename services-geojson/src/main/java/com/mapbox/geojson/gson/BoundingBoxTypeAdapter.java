@@ -60,7 +60,7 @@ public class BoundingBoxTypeAdapter extends TypeAdapter<BoundingBox> {
   @Override
   public BoundingBox read(JsonReader in) throws IOException {
 
-    List<Double> rawCoordinates = new ArrayList<Double>();
+    List<Double> rawCoordinates = new ArrayList<Double>(6);
     in.beginArray();
     while (in.hasNext()) {
       rawCoordinates.add(in.nextDouble());
