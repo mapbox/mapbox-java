@@ -71,7 +71,7 @@ abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
       throw new NullPointerException();
     }
 
-    List<Double> coordinates = new ArrayList<Double>();
+    List<Double> coordinates = new ArrayList<Double>(3);
     in.beginArray();
     while (in.hasNext()) {
       coordinates.add(in.nextDouble());
