@@ -18,7 +18,7 @@ ext {
 
 def getVersionName() {
     def cmd = "git describe --tag --abbrev=0"
-    def version = cmd.execute().text.trim()
+    def version = cmd.execute([], project.rootDir).text.trim()
     return isSnapshot() ? getSnapshotVersion(version) : getReleaseVersion(version)
 }
 
