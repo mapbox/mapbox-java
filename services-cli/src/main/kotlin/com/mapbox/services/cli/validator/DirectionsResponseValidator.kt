@@ -13,39 +13,50 @@ class DirectionsResponseValidator {
      * @param filePath path to the json file or directory
      * @return results for all the files
      */
-    fun parse(filePath: String): List<ValidatorResult> {
+    fun parseFile(filePath: String): List<ValidatorResult> {
         val inputFile = File(filePath)
 
         val results = mutableListOf<ValidatorResult>()
         inputFile.forEachFile { file ->
-            val result = validateJson(file)
+            val result = validateFile(file, ValidatorInput.File(file.name))
             results.add(result)
         }
         return results
     }
 
+    /**
+     * @param json JSON formatted string
+     * @return results parsed from the JSON
+     */
+    fun parseJson(json: String): ValidatorResult = validateJson(json, ValidatorInput.Json)
+
     private fun File.forEachFile(function: (File) -> Unit) = walk()
         .filter { !it.isDirectory }
         .forEach(function)
 
-    private fun validateJson(file: File): ValidatorResult {
+    private fun validateFile(file: File, input: ValidatorInput): ValidatorResult {
         val json = file.readText(UTF_8)
+        return validateJson(json, input)
+    }
+
+    private fun validateJson(json: String, input: ValidatorInput): ValidatorResult {
         return try {
             val directionsResponse = DirectionsResponse.fromJson(json)
             val toJson = directionsResponse.toJson()
             val convertsBack = json == toJson
             ValidatorResult(
-                filename = file.name,
+                input = input,
                 success = true,
                 convertsBack = convertsBack
             )
         } catch (throwable: Throwable) {
             ValidatorResult(
-                filename = file.name,
+                input = input,
                 success = false,
                 convertsBack = false,
-                throwable = throwable
+                error = throwable.message
             )
         }
     }
+
 }
