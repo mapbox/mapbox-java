@@ -113,7 +113,8 @@ public abstract class MapboxDirections extends
       routeOptions().waypointsPerRoute(),
       routeOptions().metadata(),
       routeOptions().paymentMethods(),
-      routeOptions().suppressVoiceInstructionLocalNames()
+      routeOptions().suppressVoiceInstructionLocalNames(),
+      routeOptions().notifications()
     );
   }
 
@@ -160,7 +161,8 @@ public abstract class MapboxDirections extends
       routeOptions().waypointsPerRoute(),
       routeOptions().metadata(),
       routeOptions().paymentMethods(),
-      routeOptions().suppressVoiceInstructionLocalNames()
+      routeOptions().suppressVoiceInstructionLocalNames(),
+      routeOptions().notifications()
     );
   }
 
