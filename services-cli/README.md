@@ -11,7 +11,7 @@ and we can help. Also, pull requests are always welcome!
 From the command line
 1. cd mapbox-java
 1. Build with ./gradlew shadowJar, or make build-cli
-1. Run with java -jar services-cli/build/libs/services-cli-all.jar
+1. Run with java -jar services-cli/build/libs/services-cli.jar
 
 From Android Studio
 1. Open mapbox-java with Android Studio

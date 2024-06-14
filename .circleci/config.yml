@@ -51,6 +51,9 @@ commands:
       - run:
           name: Build command line interface
           command: make build-cli
+      - store_artifacts:
+           path: services-cli/build/libs/services-cli.jar
+           destination: services-cli.jar
 
   run-tests:
     steps:
