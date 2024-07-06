@@ -109,7 +109,7 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
    * @since 3.0.0
    */
   public static TypeAdapter<IntersectionLanes> typeAdapter(Gson gson) {
-    return new AutoValue_IntersectionLanes.GsonTypeAdapter(gson);
+    return new IntersectionLanesTypeAdapter(new AutoValue_IntersectionLanes.GsonTypeAdapter(gson));
   }
 
   /**
