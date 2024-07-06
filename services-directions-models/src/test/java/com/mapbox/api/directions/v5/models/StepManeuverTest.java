@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
@@ -70,5 +71,43 @@ public class StepManeuverTest extends TestUtils {
     String jsonStr = stepManeuver.toJson();
 
     compareJson(stepManeuverJsonString, jsonStr);
+  }
+
+  @Test
+  public void testTypesAreInterned() {
+    StepManeuver stepManeuver1 = StepManeuver.builder()
+      .rawLocation(new double[] {1.0, 2.0})
+      .type(StepManeuver.TURN)
+      .build();
+
+    StepManeuver stepManeuver2 = StepManeuver.builder()
+      .rawLocation(new double[] {1.0, 3.0})
+      .type(StepManeuver.TURN)
+      .build();
+
+    StepManeuver deserialized1 = StepManeuver.fromJson(stepManeuver1.toJson());
+    StepManeuver deserialized2 = StepManeuver.fromJson(stepManeuver2.toJson());
+
+    assertEquals(deserialized1.type(), deserialized2.type());
+    assertSame(deserialized1.type(), deserialized2.type());
+  }
+
+  @Test
+  public void testModifierAreInterned() {
+    StepManeuver stepManeuver1 = StepManeuver.builder()
+      .rawLocation(new double[] {1.0, 2.0})
+      .modifier("slight right")
+      .build();
+
+    StepManeuver stepManeuver2 = StepManeuver.builder()
+      .rawLocation(new double[] {1.0, 3.0})
+      .modifier("slight right")
+      .build();
+
+    StepManeuver deserialized1 = StepManeuver.fromJson(stepManeuver1.toJson());
+    StepManeuver deserialized2 = StepManeuver.fromJson(stepManeuver2.toJson());
+
+    assertEquals(deserialized1.modifier(), deserialized2.modifier());
+    assertSame(deserialized1.modifier(), deserialized2.modifier());
   }
 }
