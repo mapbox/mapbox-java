@@ -2,6 +2,8 @@ package com.mapbox.api.directions.v5.utils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.gson.JsonArray;
 import com.mapbox.api.directions.v5.models.Bearing;
 import com.mapbox.geojson.Point;
 import java.util.ArrayList;
@@ -212,5 +214,20 @@ public class ParseUtils {
   @Nullable
   public static List<Boolean> parseToBooleans(@Nullable String original) {
     return parseToList(SEMICOLON, original, BOOLEAN_PARSER);
+  }
+
+  /**
+   * Parses strings from json array and invokes {@link String#intern()} on each item.
+   *
+   * @param jsonArray json array with string items
+   * @return List of interned parsed strings
+   */
+  @NonNull
+  public static List<String> parseAndInternJsonStringArray(JsonArray jsonArray) {
+    final List<String> result = new ArrayList<>(jsonArray.size());
+    for (int i = 0; i < jsonArray.size(); ++i) {
+      result.add(jsonArray.get(i).getAsString().intern());
+    }
+    return result;
   }
 }

@@ -301,7 +301,7 @@ public abstract class StepManeuver extends DirectionsJsonObject {
    * @since 3.0.0
    */
   public static TypeAdapter<StepManeuver> typeAdapter(Gson gson) {
-    return new AutoValue_StepManeuver.GsonTypeAdapter(gson);
+    return new StepManeuverTypeAdapter(new AutoValue_StepManeuver.GsonTypeAdapter(gson));
   }
 
   /**

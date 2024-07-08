@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.core.TestUtils;
@@ -101,5 +102,47 @@ public class IntersectionLanesTest extends TestUtils {
     IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
 
     assertEquals(intersectionLanes, intersectionLanesFromJson);
+  }
+
+  @Test
+  public void testIndicationsAreInterned() {
+    IntersectionLanes intersectionLanes = IntersectionLanes.builder()
+      .validIndication("straight")
+      .indications(Arrays.asList("straight","straight"))
+      .build();
+
+    IntersectionLanes deserialized = IntersectionLanes.fromJson(
+      intersectionLanes.toJson()
+    );
+
+    List<String> indications = deserialized.indications();
+    assertEquals(Arrays.asList("straight","straight"), indications);
+    assertEquals("straight", deserialized.validIndication());
+
+    assertSame(indications.get(0), indications.get(1));
+    assertSame(indications.get(0), deserialized.validIndication());
+  }
+
+  @Test
+  public void testPaymentMethodsAreInterned() {
+    List<String> paymentMethods = Arrays.asList(
+      DirectionsCriteria.PAYMENT_METHOD_GENERAL,
+      DirectionsCriteria.PAYMENT_METHOD_GENERAL
+    );
+
+    IntersectionLanes intersectionLanes = IntersectionLanes.builder()
+      .paymentMethods(paymentMethods)
+      .build();
+
+    IntersectionLanes deserialized = IntersectionLanes.fromJson(
+      intersectionLanes.toJson()
+    );
+
+    assertEquals(paymentMethods, deserialized.paymentMethods());
+
+    assertSame(
+      deserialized.paymentMethods().get(0),
+      deserialized.paymentMethods().get(1)
+    );
   }
 }
