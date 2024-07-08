@@ -1,0 +1,5 @@
+com.mapbox.core
+com.mapbox.core.constants
+com.mapbox.core.exceptions
+com.mapbox.core.internal
+com.mapbox.core.utils
