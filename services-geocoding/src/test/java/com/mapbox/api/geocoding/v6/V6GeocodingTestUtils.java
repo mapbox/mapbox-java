@@ -77,6 +77,7 @@ public abstract class V6GeocodingTestUtils extends TestUtils {
       .postcode("test-postcode")
       .locality("test-locality")
       .neighborhood("test-neighborhood")
+      .country("test-country")
       .build();
 
 

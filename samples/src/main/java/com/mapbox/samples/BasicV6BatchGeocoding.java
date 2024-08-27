@@ -36,11 +36,11 @@ public class BasicV6BatchGeocoding {
       .street("Pennsylvania Avenue NW")
       .postcode("20500")
       .place("Washington, DC")
+      .country("us")
       .build();
 
     final V6ForwardGeocodingRequestOptions structuredInputOptions = V6ForwardGeocodingRequestOptions
       .builder(structuredInputQuery)
-      .country("us")
       .build();
 
     final V6ReverseGeocodingRequestOptions reverseOptions = V6ReverseGeocodingRequestOptions

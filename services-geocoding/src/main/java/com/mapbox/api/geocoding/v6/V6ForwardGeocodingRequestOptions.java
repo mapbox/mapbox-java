@@ -159,7 +159,8 @@ public abstract class V6ForwardGeocodingRequestOptions implements V6RequestOptio
       .region(query.region())
       .postcode(query.postcode())
       .locality(query.locality())
-      .neighborhood(query.neighborhood());
+      .neighborhood(query.neighborhood())
+      .country(query.country());
   }
 
   /**

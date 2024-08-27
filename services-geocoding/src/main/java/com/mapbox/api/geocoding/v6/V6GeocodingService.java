@@ -66,7 +66,7 @@ interface V6GeocodingService {
    * @param permanent     {@link MapboxV6Geocoding#permanent()}
    * @param autocomplete  {@link V6ForwardGeocodingRequestOptions#autocomplete()}
    * @param bbox          {@link V6ForwardGeocodingRequestOptions#bbox()}
-   * @param country       {@link V6ForwardGeocodingRequestOptions#country()}
+   * @param country       {@link V6StructuredInputQuery#country()}
    * @param language      {@link V6ForwardGeocodingRequestOptions#language()}
    * @param limit         {@link V6ForwardGeocodingRequestOptions#limit()}
    * @param proximity     {@link V6ForwardGeocodingRequestOptions#proximity()}

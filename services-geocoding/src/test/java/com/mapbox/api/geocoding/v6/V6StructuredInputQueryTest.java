@@ -36,6 +36,7 @@ public class V6StructuredInputQueryTest {
       .postcode("test-postcode")
       .locality("test-locality")
       .neighborhood("test-neighborhood")
+      .country("test-country")
       .build();
 
     assertEquals("test-address-line1", query.addressLine1());
@@ -47,6 +48,7 @@ public class V6StructuredInputQueryTest {
     assertEquals("test-postcode", query.postcode());
     assertEquals("test-locality", query.locality());
     assertEquals("test-neighborhood", query.neighborhood());
+    assertEquals("test-country", query.country());
   }
 
   @Test
@@ -63,6 +65,7 @@ public class V6StructuredInputQueryTest {
     assertNull(queryWithAddress.postcode());
     assertNull(queryWithAddress.locality());
     assertNull(queryWithAddress.neighborhood());
+    assertNull(queryWithAddress.country());
 
     final V6StructuredInputQuery queryWithAddressLine1 = V6StructuredInputQuery.builder()
       .addressLine1("test-address-line1")
