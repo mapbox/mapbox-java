@@ -12,6 +12,10 @@
         "etc": {
           "middle": 5566
         },
+        "etc2": {
+          "middle": 6789,
+          "standard": 7890
+        },
         "cash": {
           "small": 123,
           "large": 4567
