@@ -4,6 +4,8 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+
+
 ### v7.2.0 - August 28, 2024
 
 - Added `PaymentMethods#etc2` payment method.
