@@ -4,6 +4,17 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v7.2.0 - August 28, 2024
+
+- Added `PaymentMethods#etc2` payment method.
+- Added `V6StructuredInputQuery#country` option.
+
+
+### v7.1.0 - July 8, 2024
+
+- Optimize memory usage in Directions API model classes by interning frequently occurring strings in JSON
+
+
 ### v7.0.0 - April 23, 2024
 
 - Added Geocoding V6 Support.

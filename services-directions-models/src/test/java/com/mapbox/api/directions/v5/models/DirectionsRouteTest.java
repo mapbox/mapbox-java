@@ -134,6 +134,25 @@ public class DirectionsRouteTest extends TestUtils {
     DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
 
     assertEquals(2, route.tollCosts().size());
+
+    PaymentMethods paymentMethods = route.tollCosts().get(0).paymentMethods();
+
+    CostPerVehicleSize etc = CostPerVehicleSize.builder()
+      .middle(5566.0)
+      .build();
+    assertEquals(etc, paymentMethods.etc());
+
+    CostPerVehicleSize etc2 = CostPerVehicleSize.builder()
+      .middle(6789.0)
+      .standard(7890.0)
+      .build();
+    assertEquals(etc2, paymentMethods.etc2());
+
+    CostPerVehicleSize cash = CostPerVehicleSize.builder()
+      .small(123.0)
+      .large(4567.0)
+      .build();
+    assertEquals(cash, paymentMethods.cash());
   }
 
   @Test

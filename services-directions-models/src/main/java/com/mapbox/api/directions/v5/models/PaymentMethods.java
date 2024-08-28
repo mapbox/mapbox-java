@@ -33,6 +33,14 @@ public abstract class PaymentMethods extends DirectionsJsonObject {
   public abstract CostPerVehicleSize etc();
 
   /*
+   * Information about payment by etc2.
+   *
+   * return etc2 payment method
+   */
+  @Nullable
+  public abstract CostPerVehicleSize etc2();
+
+  /*
    * Information about payment by cash.
    *
    * return cash payment method
@@ -88,6 +96,15 @@ public abstract class PaymentMethods extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder etc(@Nullable CostPerVehicleSize etc);
+
+    /*
+     * Information about payment by etc2.
+     *
+     * param etc2 payment method
+     * return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder etc2(@Nullable CostPerVehicleSize etc2);
 
     /*
      * Information about payment by cash.
