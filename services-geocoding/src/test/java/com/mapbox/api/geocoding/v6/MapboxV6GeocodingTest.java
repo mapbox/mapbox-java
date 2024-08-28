@@ -166,6 +166,7 @@ public class MapboxV6GeocodingTest extends V6GeocodingTestUtils {
     assertEquals(options.postcode(), url.queryParameter("postcode"));
     assertEquals(options.locality(), url.queryParameter("locality"));
     assertEquals(options.neighborhood(), url.queryParameter("neighborhood"));
+    assertEquals(options.country(), url.queryParameter("country"));
   }
 
   @Test
@@ -201,6 +202,7 @@ public class MapboxV6GeocodingTest extends V6GeocodingTestUtils {
     assertNull(url.queryParameter("postcode"));
     assertNull(url.queryParameter("locality"));
     assertNull(url.queryParameter("neighborhood"));
+    assertNull(url.queryParameter("country"));
   }
 
   @Test

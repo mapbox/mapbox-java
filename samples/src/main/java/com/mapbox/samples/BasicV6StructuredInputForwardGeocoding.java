@@ -22,11 +22,11 @@ public class BasicV6StructuredInputForwardGeocoding {
       .street("15th St")
       .place("Washington")
       .postcode("20005")
+      .country("United States")
       .build();
 
     final V6ForwardGeocodingRequestOptions requestOptions = V6ForwardGeocodingRequestOptions
       .builder(query)
-      .country("United States")
       .types(V6FeatureType.ADDRESS)
       .autocomplete(false)
       .build();

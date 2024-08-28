@@ -55,6 +55,10 @@ public abstract class V6StructuredInputQuery {
   @Nullable
   abstract String neighborhood();
 
+  @SerializedName("country")
+  @Nullable
+  abstract String country();
+
   /**
    * Creates a new {@link V6StructuredInputQuery.Builder} object.
    * @return Builder object.
@@ -149,6 +153,15 @@ public abstract class V6StructuredInputQuery {
      */
     public abstract Builder neighborhood(@NonNull String neighborhood);
 
+    /**
+     * Generally recognized countries or, in some cases like Hong Kong, an area of quasi-national
+     * administrative status that has a designated country code under <a href="https://www.iso.org/iso-3166-country-codes.html">ISO 3166-1</a>.
+     *
+     * @param country structured input component.
+     * @return this builder for chaining options together
+     */
+    public abstract Builder country(@NonNull String country);
+
     abstract V6StructuredInputQuery autoBuild();
 
     /**
@@ -169,6 +182,7 @@ public abstract class V6StructuredInputQuery {
         && query.postcode() == null
         && query.locality() == null
         && query.neighborhood() == null
+        && query.country() == null
       ) {
         throw new ServicesException("At least one component must be non null");
       }
