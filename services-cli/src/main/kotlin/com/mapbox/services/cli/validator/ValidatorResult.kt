@@ -15,6 +15,7 @@ data class ValidatorResult(
 sealed class ValidatorInput {
     data class File(val name: String) : ValidatorInput()
     object Json : ValidatorInput()
+    object Stdin : ValidatorInput()
 
     companion object {
         fun gsonAdapter(): RuntimeTypeAdapterFactory<ValidatorInput> {
@@ -27,6 +28,10 @@ sealed class ValidatorInput {
                 .registerSubtype(
                     Json::class.java,
                     Json::class.simpleName
+                )
+                .registerSubtype(
+                    Stdin::class.java,
+                    Stdin::class.simpleName
                 )
         }
     }
