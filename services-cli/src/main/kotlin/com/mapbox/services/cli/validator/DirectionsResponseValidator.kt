@@ -1,7 +1,10 @@
 package com.mapbox.services.cli.validator
 
 import com.mapbox.api.directions.v5.models.DirectionsResponse
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
+import java.util.stream.Collectors
 import kotlin.text.Charsets.UTF_8
 
 /**
@@ -29,6 +32,16 @@ class DirectionsResponseValidator {
      * @return results parsed from the JSON
      */
     fun parseJson(json: String): ValidatorResult = validateJson(json, ValidatorInput.Json)
+
+    /**
+     * Parses
+     * @return results parsed from the JSON
+     */
+    fun parseStdin(): ValidatorResult {
+        val json: String = BufferedReader(InputStreamReader(System.`in`))
+            .lines().collect(Collectors.joining("\n"))
+        return validateJson(json, ValidatorInput.Stdin)
+    }
 
     private fun File.forEachFile(function: (File) -> Unit) = walk()
         .filter { !it.isDirectory }

@@ -38,6 +38,12 @@ workflows:
             branches:
               only:
                 - main
+      - start-store-cli-to-s3:
+          type: approval
+      - store-cli-to-s3:
+          requires:
+            - build
+            - start-android-build
 
 commands:
   build-release:
@@ -103,7 +109,14 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}
       - run-tests
 
-# ------------------------------------------------------------------------------
+    store-cli-to-s3:
+      executor: java-executor
+      steps:
+        - run:
+            name: 'Store cli to S3 in: mapbox-java/services-cli.jar'
+            command: aws s3 cp services-cli/build/libs/services-cli.jar s3://utility-234858372212-us-east-1/mapbox-java/services-cli.jar
+
+  # ------------------------------------------------------------------------------
   publish-snapshot:
     executor: java-executor
     steps:
@@ -119,9 +132,9 @@ jobs:
     steps:
       - checkout
       - build-release
-      - build-cli
       - run-tests
       - setup-aws-credentials
+      - build-cli
       - deploy:
           name: Upload libraries to Mapbox SDK Registry
           command: |
