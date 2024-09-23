@@ -17,7 +17,9 @@ import com.mapbox.geojson.GeometryAdapterFactory;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import retrofit2.Call;
 
@@ -50,6 +52,8 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
 
   @Override
   protected GsonBuilder getGsonBuilder() {
+    MapboxIsochrone.Builder b = MapboxIsochrone.builder();
+
     return new GsonBuilder()
       .registerTypeAdapterFactory(GeoJsonAdapterFactory.create())
       .registerTypeAdapterFactory(GeometryAdapterFactory.create());
@@ -66,7 +70,10 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
       contoursColors(),
       polygons(),
       denoise(),
-      generalize()
+      generalize(),
+      contoursMeters(),
+      exclusions(),
+      departAt()
     );
   }
 
@@ -80,6 +87,8 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
   public static Builder builder() {
     return new AutoValue_MapboxIsochrone.Builder()
       .baseUrl(Constants.BASE_API_URL)
+      .contoursMinutes("")
+      .contoursMeters("")
       .user(IsochroneCriteria.PROFILE_DEFAULT_USER);
   }
 
@@ -114,6 +123,15 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
   @Nullable
   abstract Float generalize();
 
+  @Nullable
+  abstract String contoursMeters();
+
+  @Nullable
+  abstract String exclusions();
+
+  @Nullable
+  abstract String departAt();
+
   /**
    * This builder is used to create a new request to the Mapbox Isochrone API. At a bare minimum,
    * your request must include an access token, a directions routing profile (driving, walking,
@@ -131,9 +149,11 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
 
     private Integer[] contoursMinutes;
     private String[] contoursColors;
+    private Integer[] contoursMeters;
+    private Set<String> exclusions = new HashSet<>();
 
     /**
-     * Optionally change the APIs base URL to something other then the default Mapbox one.
+     * Optionally change the APIs base URL to something other than the default Mapbox one.
      *
      * @param baseUrl base url used as end point
      * @return this builder for chaining options together
@@ -164,6 +184,8 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
     /**
      * A Mapbox Directions routing profile ID. Options are
      * {@link IsochroneCriteria#PROFILE_DRIVING} for travel times by car,
+     * {@link IsochroneCriteria#PROFILE_DRIVING_TRAFFIC} for fastest travel by car using
+     * current and historic traffic,
      * {@link IsochroneCriteria#PROFILE_WALKING} for pedestrian and hiking travel times,
      * and {@link IsochroneCriteria#PROFILE_CYCLING} for travel times by bicycle.
      *
@@ -218,6 +240,22 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
     }
 
     /**
+     * An integer list of meter values to use for each isochrone contour.
+     * The distances, in meters, to use for each isochrone contour. You
+     * must be in increasing order. The default maximum distance that can be specified
+     * is 100000 meters (100km), if you need a bigger range contact support.
+     *
+     * @param listOfMeterValues an integer list with at least one number
+     *                           for the meters which represent each contour
+     * @return this builder for chaining options together
+     * @since 7.3.0
+     */
+    public Builder addContoursMeters(Integer... listOfMeterValues) {
+      this.contoursMeters = listOfMeterValues;
+      return this;
+    }
+
+    /**
      * A single String which is a comma-separated list of time(s) in minutes
      * to use for each isochrone contour. You must pass in at least one minute
      * amount and you can specify up to four contours. Times must be in increasing order.
@@ -226,11 +264,24 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
      *
      * @param stringListOfMinuteValues a String of at least one number for the
      *                                 minutes which represent each contour
-     * @return this builder for chaining optio.ns together
+     * @return this builder for chaining options together
      */
     // Required for matching with MapboxIsochrone addContoursMinutes() method.
     @SuppressWarnings("WeakerAccess")
     abstract Builder contoursMinutes(@NonNull String stringListOfMinuteValues);
+
+    /**
+     * A single String which is a comma-separated list of values(s) in meters
+     * to use for each isochrone contour. The distances, in meters, to use for each
+     * isochrone contour. You can specify up to four contours. Distances must be in
+     * increasing order. The default maximum distance that can be specified
+     * is 100000 meters (100km), if you need a bigger range contact support.
+     *
+     * @param stringListOfMeterValues a String of at least one number for the
+     *                                 meters which represent each contour
+     * @return this builder for chaining options together
+     */
+    abstract Builder contoursMeters(@NonNull String stringListOfMeterValues);
 
     /**
      * A list of separate String which has a list of comma-separated
@@ -300,6 +351,107 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
      */
     public abstract Builder generalize(@Nullable @FloatRange(from = 0.0) Float generalize);
 
+    abstract Builder exclusions(@Nullable String exclusions);
+
+    /**
+     * Exclude highways or motorways. Available in mapbox/driving and
+     * mapbox/driving-traffic profiles.
+     * @param exclude indicates whether motorways should be excluded
+     * @return this builder for chaining options together
+     *
+     * @since 7.3.0
+     */
+    public Builder excludeMotorways(Boolean exclude) {
+      if (exclude != null && exclude) {
+        exclusions.add("motorway");
+      } else {
+        exclusions.remove("motorway");
+      }
+      return this;
+    }
+
+    /**
+     * Exclude tolls. Available in mapbox/driving and
+     * mapbox/driving-traffic profiles.
+     * @param exclude indicates whether tolls should be excluded
+     * @return this builder for chaining options together
+     *
+     * @since 7.3.0
+     */
+    public Builder excludeTolls(Boolean exclude) {
+      if (exclude != null && exclude) {
+        exclusions.add("toll");
+      } else {
+        exclusions.remove("toll");
+      }
+      return this;
+    }
+
+    /**
+     * Exclude ferries. Available in mapbox/driving and
+     * mapbox/driving-traffic profiles.
+     * @param exclude indicates whether ferries should be excluded
+     * @return this builder for chaining options together
+     *
+     * @since 7.3.0
+     */
+    public Builder excludeFerries(Boolean exclude) {
+      if (exclude != null && exclude) {
+        exclusions.add("ferry");
+      } else {
+        exclusions.remove("ferry");
+      }
+      return this;
+    }
+
+    /**
+     * Exclude unpaved roads. Available in mapbox/driving and
+     * mapbox/driving-traffic profiles.
+     * @param exclude indicates whether unpaved roads should be excluded
+     * @return this builder for chaining options together
+     *
+     * @since 7.3.0
+     */
+    public Builder excludeUnpavedRoads(Boolean exclude) {
+      if (exclude != null && exclude) {
+        exclusions.add("unpaved");
+      } else {
+        exclusions.remove("unpaved");
+      }
+      return this;
+    }
+
+    /**
+     * Exclude cash only toll roads. Available in mapbox/driving and
+     * mapbox/driving-traffic profiles.
+     * @param exclude indicates whether cash only toll roads should be excluded
+     * @return this builder for chaining options together
+     *
+     * @since 7.3.0
+     */
+    public Builder excludeCashOnlyTollRoads(Boolean exclude) {
+      if (exclude != null && exclude) {
+        exclusions.add("cash_only_tolls");
+      } else {
+        exclusions.remove("cash_only_tolls");
+      }
+      return this;
+    }
+
+    /**
+     * The departure time from the given coordinates.
+     * <a href="https://docs.mapbox.com/api/navigation/isochrone/">One of three formats.</a>.
+     * If not provided then 'depart at' is considered to be the present time in the local
+     * timezone of the coordinates. The isochrone contours will reflect traffic
+     * conditions at the time provided.
+     *
+     * @param depart the departure date/time
+     * @return this builder for chaining options together
+     *
+     * @since 7.3.0
+     */
+    public abstract Builder departAt(@NonNull String depart);
+
     /**
      * @return this builder for chaining options together
      * @since 4.6.0
@@ -313,6 +465,8 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
      * @since 4.6.0
      */
     public MapboxIsochrone build() {
+
+      exclusions(TextUtils.join(",", exclusions.toArray()));
 
       if (contoursMinutes != null) {
         if (contoursMinutes.length < 1) {
@@ -331,6 +485,23 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
         contoursMinutes(TextUtils.join(",", contoursMinutes));
       }
 
+      if (contoursMeters != null) {
+        if (contoursMeters.length < 1) {
+          throw new ServicesException("A query with at least one specified "
+                  + "meter value is required.");
+        }
+
+        if (contoursMeters.length >= 2) {
+          for (int x = 0; x < contoursMeters.length - 1; x++) {
+            if (contoursMeters[x] > contoursMeters[x + 1]) {
+              throw new ServicesException("The meters must be listed"
+                      + " in order from the lowest number to the highest number.");
+            }
+          }
+          contoursMeters(TextUtils.join(",", contoursMeters));
+        }
+      }
+
       if (contoursColors != null) {
         contoursColors(TextUtils.join(",", contoursColors));
       }
@@ -340,6 +511,17 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
         && contoursColors.length != contoursMinutes.length) {
         throw new ServicesException("Number of color elements "
           + "must match number of minute elements provided.");
+      }
+
+      if (contoursColors != null
+        && contoursMeters != null
+        && contoursColors.length != contoursMeters.length) {
+        throw new ServicesException("Number of color elements "
+                + "must match number of meter elements provided.");
+      }
+
+      if (contoursMinutes != null && contoursMeters != null) {
+        throw new ServicesException("Cannot specify both contoursMinutes and contoursMeters.");
       }
 
       MapboxIsochrone isochrone = autoBuild();
@@ -359,9 +541,10 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
           + " walking, or driving) is required.");
       }
 
-      if (TextUtils.isEmpty(isochrone.contoursMinutes())) {
+      if (TextUtils.isEmpty(isochrone.contoursMinutes())
+        && TextUtils.isEmpty(isochrone.contoursMeters())) {
         throw new ServicesException("A query with at least one specified minute amount"
-          + " is required.");
+        + " or meter value is required.");
       }
 
       if (isochrone.contoursColors() != null) {

@@ -45,6 +45,12 @@ public class IsochroneCriteria {
   public static final String PROFILE_CYCLING = "cycling";
 
   /**
+   * For fastest travel by car using current and historic traffic conditions.
+   * Traffic information is available for the supported geographies listed in our Traffic Data page.
+   */
+  public static final String PROFILE_DRIVING_TRAFFIC = "driving-traffic";
+
+  /**
    * Queries for a specific geometry type selector.
    *
    * @since 4.6.0
@@ -53,7 +59,8 @@ public class IsochroneCriteria {
   @StringDef( {
       PROFILE_WALKING,
       PROFILE_DRIVING,
-      PROFILE_CYCLING
+      PROFILE_CYCLING,
+      PROFILE_DRIVING_TRAFFIC
   })
   public @interface IsochroneProfile {
   }

@@ -13,6 +13,7 @@ import java.io.IOException;
 import retrofit2.Response;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -234,9 +235,9 @@ public class MapboxIsochroneTest extends IsochroneTestUtils {
   }
 
   @Test
-  public void build_noCountourMinutesExceptionThrown() throws Exception {
-    thrown.expect(IllegalStateException.class);
-    thrown.expectMessage("Missing required properties: contoursMinutes");
+  public void build_noCountourMinutesOrMetersExceptionThrown() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("A query with at least one specified minute amount or meter value is required.");
     MapboxIsochrone.builder()
       .accessToken(ACCESS_TOKEN)
       .profile(testProfile)
@@ -254,6 +255,18 @@ public class MapboxIsochroneTest extends IsochroneTestUtils {
       .coordinates(testPoint)
       .addContoursMinutes()
       .build();
+  }
+
+  @Test
+  public void build_invalidCountourMetersExceptionThrown() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("A query with at least one specified meter value is required.");
+    MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .profile(testProfile)
+            .coordinates(testPoint)
+            .addContoursMeters()
+            .build();
   }
 
   @Test
@@ -320,6 +333,20 @@ public class MapboxIsochroneTest extends IsochroneTestUtils {
   }
 
   @Test
+  public void build_colorAndMeterAmountMismatchThrowsException() throws Exception {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("Number of color elements must match number of meter elements provided.");
+    MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursColors("4286f4")
+            .addContoursMeters(5,30,55)
+            .baseUrl(mockUrl.toString())
+            .build();
+  }
+
+  @Test
   public void build_multipleColorsGetsAddedToListCorrectly() throws Exception {
     MapboxIsochrone client = MapboxIsochrone.builder()
       .accessToken(ACCESS_TOKEN)
@@ -334,6 +361,23 @@ public class MapboxIsochroneTest extends IsochroneTestUtils {
     String requestUrlString = client.cloneCall().request().url().toString();
     assertTrue(requestUrlString.contains("contours_colors=6706ce" + commaEquivalent
       + "04e813" + commaEquivalent + "4286f4"));
+  }
+
+  @Test
+  public void build_multipleColorsGetsAddedToListCorrectlyWithMeters() throws Exception {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursColors("6706ce","04e813","4286f4")
+            .addContoursMeters(5,30,55)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+
+    String requestUrlString = client.cloneCall().request().url().toString();
+    assertTrue(requestUrlString.contains("contours_colors=6706ce" + commaEquivalent
+            + "04e813" + commaEquivalent + "4286f4"));
   }
 
   @Test
@@ -364,5 +408,183 @@ public class MapboxIsochroneTest extends IsochroneTestUtils {
       .addContoursMinutes(10,52,30)
       .baseUrl(mockUrl.toString())
       .build();
+  }
+
+  @Test
+  public void sanityUsingIntegerListForMeters() throws ServicesException, IOException {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .addContoursMeters(5,30,55)
+            .profile(testProfile)
+            .baseUrl(mockUrl.toString())
+            .build();
+    Response<FeatureCollection> response = client.executeCall();
+    assertEquals(200, response.code());
+    assertNotNull(response.body());
+    assertNotNull(response.body().features());
+  }
+
+  @Test
+  public void cannotSpecifyContourMinutesAndMeters() throws ServicesException, IOException {
+    thrown.expect(ServicesException.class);
+    thrown.expectMessage("Cannot specify both contoursMinutes and contoursMeters.");
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .addContoursMeters(15,35,75)
+            .addContoursMinutes(5,30,55)
+            .profile(testProfile)
+            .baseUrl(mockUrl.toString())
+            .build();
+    Response<FeatureCollection> response = client.executeCall();
+    assertEquals(200, response.code());
+    assertNotNull(response.body());
+    assertNotNull(response.body().features());
+  }
+
+  @Test
+  public void excludeMotorways() {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursMeters(5,30,55)
+            .excludeMotorways(true)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    assertTrue(client.cloneCall().request().url().toString()
+            .contains("exclude=motorway"));
+  }
+
+  @Test
+  public void excludeTolls() {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursMeters(5,30,55)
+            .excludeTolls(true)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    assertTrue(client.cloneCall().request().url().toString()
+            .contains("exclude=toll"));
+  }
+
+  @Test
+  public void excludeFerries() {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursMeters(5,30,55)
+            .excludeFerries(true)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    assertTrue(client.cloneCall().request().url().toString()
+            .contains("exclude=ferry"));
+  }
+
+  @Test
+  public void excludeUnpavedRoads() {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursMeters(5,30,55)
+            .excludeUnpavedRoads(true)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    assertTrue(client.cloneCall().request().url().toString()
+            .contains("exclude=unpaved"));
+  }
+
+  @Test
+  public void excludeCashOnlyTollRoads() {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursMeters(5,30,55)
+            .excludeCashOnlyTollRoads(true)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    assertTrue(client.cloneCall().request().url().toString()
+            .contains("exclude=cash_only_tolls"));
+  }
+
+  @Test
+  public void allExclusions() {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursMeters(5,30,55)
+            .excludeMotorways(true)
+            .excludeTolls(true)
+            .excludeFerries(true)
+            .excludeUnpavedRoads(true)
+            .excludeCashOnlyTollRoads(true)
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    assertTrue(client.cloneCall().request().url().toString()
+            .contains("exclude=ferry%2Cmotorway%2Ctoll%2Cunpaved%2Ccash_only_tolls"));
+  }
+
+  @Test
+  public void exclusionsOmitted() {
+    MapboxIsochrone.Builder builder = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursMeters(5,30,55)
+            .excludeMotorways(true)
+            .excludeTolls(true)
+            .excludeFerries(true)
+            .excludeUnpavedRoads(true)
+            .excludeCashOnlyTollRoads(true)
+            .baseUrl(mockUrl.toString());
+
+    MapboxIsochrone client = builder.excludeMotorways(false)
+            .excludeMotorways(false)
+            .excludeTolls(false)
+            .excludeFerries(false)
+            .excludeUnpavedRoads(false)
+            .excludeCashOnlyTollRoads(false)
+            .build();
+
+    assertFalse(client.cloneCall().request().url().toString()
+            .contains("motorway"));
+    assertFalse(client.cloneCall().request().url().toString()
+            .contains("toll"));
+    assertFalse(client.cloneCall().request().url().toString()
+            .contains("ferry"));
+    assertFalse(client.cloneCall().request().url().toString()
+            .contains("unpaved"));
+    assertFalse(client.cloneCall().request().url().toString()
+            .contains("cash_only_tolls"));
+  }
+
+  @Test
+  public void departureTest() {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .profile(testProfile)
+            .addContoursMeters(5,30,55)
+            .departAt("2000-11-21T13:33")
+            .baseUrl(mockUrl.toString())
+            .build();
+
+    System.out.println(client.cloneCall().request().url().toString());
+
+    assertTrue(client.cloneCall().request().url().toString()
+            .contains("depart_at=2000-11-21T13%3A33"));
   }
 }
