@@ -39,6 +39,13 @@ workflows:
               only:
                 - main
 
+  publish-cli-workflow:
+    jobs:
+      - start-publish-cli:
+          type: approval
+      - publish-cli:
+          requires:
+            - start-publish-cli
 commands:
   build-release:
     steps:
@@ -103,7 +110,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}
       - run-tests
 
-# ------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------
   publish-snapshot:
     executor: java-executor
     steps:
@@ -119,9 +126,9 @@ jobs:
     steps:
       - checkout
       - build-release
-      - build-cli
       - run-tests
       - setup-aws-credentials
+      - build-cli
       - deploy:
           name: Upload libraries to Mapbox SDK Registry
           command: |
@@ -144,3 +151,13 @@ jobs:
             git remote set-url origin "https://x-access-token:$GITHUB_WRITER_TOKEN@github.com/mapbox/mapbox-java.git"
             git config --global user.email no-reply@mapbox.com && git config --global user.name mapbox-ci
             ./scripts/publish_api_docs_android.sh -p $GITHUB_WRITER_TOKEN -t $CIRCLE_TAG
+
+  publish-cli:
+    executor: java-executor
+    steps:
+      - checkout
+      - setup-aws-credentials
+      - build-cli
+      - run:
+          name: 'Upload cli to S3 in: mapbox-java/services-cli.jar'
+          command: aws s3 cp services-cli/build/libs/services-cli.jar s3://utility-234858372212-us-east-1/mapbox-java/services-cli.jar

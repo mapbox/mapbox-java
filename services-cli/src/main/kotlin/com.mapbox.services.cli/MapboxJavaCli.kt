@@ -19,6 +19,7 @@ object MapboxJavaCli {
     private const val COMMAND_HELP = "h"
     private const val COMMAND_FILE_INPUT = "f"
     private const val COMMAND_JSON_INPUT = "j"
+    private const val COMMAND_STDIN_INPUT = "s"
     private const val COMMAND_PRETTY_PRINT = "p"
     private const val COMMAND_FAIL_ON_CONVERT_BACK = "c"
 
@@ -45,7 +46,16 @@ object MapboxJavaCli {
                     .longOpt("json")
                     .hasArg(true)
                     .desc("String containing the json. Instead of providing files it " +
-                            "is possible to relay the json directly.")
+                            "is possible to relay on the json directly.")
+                    .required(false)
+                    .build()
+            )
+            .addOption(
+                Option.builder(COMMAND_STDIN_INPUT)
+                    .longOpt("stdin")
+                    .hasArg(false)
+                    .desc("Stream redirection to the executable instead of file or " +
+                            "string.")
                     .required(false)
                     .build()
             )
@@ -96,6 +106,10 @@ object MapboxJavaCli {
             commandLine.hasOption(COMMAND_FILE_INPUT) -> {
                 val fileInput = commandLine.getOptionValue(COMMAND_FILE_INPUT)
                 results.addAll(directionsResponseValidator.parseFile(fileInput))
+            }
+
+            commandLine.hasOption(COMMAND_STDIN_INPUT) -> {
+                results.add(directionsResponseValidator.parseStdin())
             }
         }
 
