@@ -51,6 +51,17 @@ public interface IsochroneService {
    *                        optimized generalization to use for the request. Note that the
    *                        generalization of contours can lead to self-intersections, as well
    *                        as intersections of adjacent contours.
+   * @param contoursMeters  A single String which has a comma-separated integers in meters
+   *                        to use for each isochrone contour.
+   * @param exclude         Exclude certain road types and custom locations from routing. Default
+   *                        is to not exclude anything from the list below. You can specify
+   *                        multiple values as a comma-separated list.
+   * @param depart          The departure time from the given coordinates. Formatted in one of
+   *                        three ISO 8601 formats.
+   *                        See https://docs.mapbox.com/api/navigation/isochrone/
+   *                        If not provided then depart_at is considered to be the present time
+   *                        in the local timezone of the coordinates. The isochrone contours will
+   *                        traffic conditions at the time provided.
    * @return a {@link FeatureCollection} in a Call wrapper
    * @since 4.7.0
    */
@@ -64,5 +75,8 @@ public interface IsochroneService {
     @Query("contours_colors") String contoursColors,
     @Query("polygons") Boolean polygons,
     @Query("denoise") Float denoise,
-    @Query("generalize") Float generalize);
+    @Query("generalize") Float generalize,
+    @Query("contours_meters") String contoursMeters,
+    @Query("exclude") String exclude,
+    @Query("depart_at") String depart);
 }
