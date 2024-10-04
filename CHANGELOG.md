@@ -4,8 +4,11 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v7.3.0 - October 04, 2024
+
 - Updated IsoChrone API to support new query parameters including contours_meters, road/route exclusions and departure time. [#1596](https://github.com/mapbox/mapbox-java/pull/1596)
 - Bumped `okhttp` version to `4.10.0`. [#1595](https://github.com/mapbox/mapbox-java/pull/1595)
+
 
 ### v7.2.0 - August 28, 2024
 
