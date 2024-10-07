@@ -61,7 +61,7 @@ subprojects {
   apply from: "${rootDir}/gradle/dependencies.gradle"
   apply plugin: 'java'
   apply plugin: 'idea'
-  apply plugin: 'net.ltgt.errorprone'
+//  apply plugin: 'net.ltgt.errorprone'
 
   // Fixes issue with test resources not being found inside Intellij
   idea {
@@ -75,7 +75,7 @@ subprojects {
 
   dependencies {
 
-    errorprone dependenciesList.errorprone
+//    errorprone dependenciesList.errorprone
 
     // Test Dependencies
     testCompile dependenciesList.junit
