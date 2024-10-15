@@ -4,6 +4,8 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+- Fixed an issue where Isochrone API's `contours_meters` required at least two input values, instead of only one.
+
 ### v7.3.0 - October 04, 2024
 
 - Updated IsoChrone API to support new query parameters including contours_meters, road/route exclusions and departure time. [#1596](https://github.com/mapbox/mapbox-java/pull/1596)
