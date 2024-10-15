@@ -498,8 +498,8 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
                       + " in order from the lowest number to the highest number.");
             }
           }
-          contoursMeters(TextUtils.join(",", contoursMeters));
         }
+        contoursMeters(TextUtils.join(",", contoursMeters));
       }
 
       if (contoursColors != null) {
