@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Fixed malformed URL that resulted from previous inclusion of `contours_meters` as an Isochrone option. [#1599](https://github.com/mapbox/mapbox-java/pull/1599)
 
 - Fixed an issue where Isochrone API's `contours_meters` required at least two input values, instead of only one.
 

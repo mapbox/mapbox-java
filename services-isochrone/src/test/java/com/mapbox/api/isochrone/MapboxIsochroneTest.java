@@ -153,6 +153,25 @@ public class MapboxIsochroneTest extends IsochroneTestUtils {
 
     assertTrue(requestUrlString.contains("contours_minutes=14" + commaEquivalent
         + "36" + commaEquivalent + "52"));
+    assertFalse(requestUrlString.contains("contours_meters"));
+  }
+
+  @Test
+  public void build_usingIntegerListForMeters() throws ServicesException, IOException {
+    MapboxIsochrone client = MapboxIsochrone.builder()
+            .accessToken(ACCESS_TOKEN)
+            .coordinates(testPoint)
+            .addContoursMeters(14,36,52)
+            .profile(testProfile)
+            .baseUrl(mockUrl.toString())
+            .build();
+    String requestUrlString = client.cloneCall().request().url().toString();
+
+    System.out.print(requestUrlString);
+
+    assertTrue(requestUrlString.contains("contours_meters=14" + commaEquivalent
+            + "36" + commaEquivalent + "52"));
+    assertFalse(requestUrlString.contains("contours_minutes"));
   }
 
   @Test
@@ -200,6 +219,7 @@ public class MapboxIsochroneTest extends IsochroneTestUtils {
     String requestUrlString = client.cloneCall().request().url().toString();
     assertTrue(requestUrlString.contains("contours_minutes=5" + commaEquivalent +
       "30" + commaEquivalent + "55"));
+    assertFalse(requestUrlString.contains("contours_meters"));
   }
 
   @Test

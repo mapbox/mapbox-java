@@ -87,8 +87,8 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
   public static Builder builder() {
     return new AutoValue_MapboxIsochrone.Builder()
       .baseUrl(Constants.BASE_API_URL)
-      .contoursMinutes("")
-      .contoursMeters("")
+      .contoursMinutes(null)
+      .contoursMeters(null)
       .user(IsochroneCriteria.PROFILE_DEFAULT_USER);
   }
 
@@ -108,7 +108,7 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
   @NonNull
   abstract String coordinates();
 
-  @NonNull
+  @Nullable
   abstract String contoursMinutes();
 
   @Nullable
@@ -268,7 +268,7 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
      */
     // Required for matching with MapboxIsochrone addContoursMinutes() method.
     @SuppressWarnings("WeakerAccess")
-    abstract Builder contoursMinutes(@NonNull String stringListOfMinuteValues);
+    abstract Builder contoursMinutes(@Nullable String stringListOfMinuteValues);
 
     /**
      * A single String which is a comma-separated list of values(s) in meters
@@ -281,7 +281,7 @@ public abstract class MapboxIsochrone extends MapboxService<FeatureCollection, I
      *                                 meters which represent each contour
      * @return this builder for chaining options together
      */
-    abstract Builder contoursMeters(@NonNull String stringListOfMeterValues);
+    abstract Builder contoursMeters(@Nullable String stringListOfMeterValues);
 
     /**
      * A list of separate String which has a list of comma-separated
