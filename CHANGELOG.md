@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `RouteLeg#notifications`.
 
 ### v7.3.1 - October 15, 2024
 - Fixed malformed URL that resulted from previous inclusion of `contours_meters` as an Isochrone option. [#1599](https://github.com/mapbox/mapbox-java/pull/1599)
