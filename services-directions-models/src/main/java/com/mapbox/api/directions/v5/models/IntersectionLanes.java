@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.api.directions.v5.DirectionsCriteria.PaymentMethodsCriteria;
 
 import java.util.List;
 
@@ -72,7 +73,7 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
   /**
    * Array that can be made up of multiple signs such as {@code left}, {@code right}, etc.
    *
-   * @return Array of signs for each turn lane. There can be multiple signs. For example, a turning
+   * @return List of signs for each turn lane. There can be multiple signs. For example, a turning
    *   lane can have a sign with an arrow pointing left and another sign with an arrow pointing
    *   straight.
    * @since 2.0.0
@@ -80,15 +81,24 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
   @Nullable
   public abstract List<String> indications();
 
-  /*
+  /**
    * Available payment methods for the lane.
    * @return A list of strings where each value
-   *         matches {@link DirectionsCriteria.PaymentMethodsCriteria}
+   *         matches {@link PaymentMethodsCriteria}
    */
-  @SuppressWarnings("checkstyle:javadocmethod")
   @Nullable
   @SerializedName("payment_methods")
   public abstract List<String> paymentMethods();
+
+  /**
+   * A {@link IntersectionLaneAccess} object representing the access attributes of the lane.
+   * This can include information such as the vehicle types for which the lane is designated.
+   *
+   * @return an object representing the access attributes of the lane.
+   */
+  @Nullable
+  @SerializedName("access")
+  public abstract IntersectionLaneAccess access();
 
   /**
    * Convert the current {@link IntersectionLanes} to its builder holding the currently assigned
@@ -109,7 +119,11 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
    * @since 3.0.0
    */
   public static TypeAdapter<IntersectionLanes> typeAdapter(Gson gson) {
-    return new IntersectionLanesTypeAdapter(new AutoValue_IntersectionLanes.GsonTypeAdapter(gson));
+    final Gson customGson = gson.newBuilder()
+      .registerTypeAdapter(String.class, new InterningStringAdapter())
+      .create();
+
+    return new AutoValue_IntersectionLanes.GsonTypeAdapter(customGson);
   }
 
   /**
@@ -176,13 +190,21 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
      */
     public abstract Builder indications(@Nullable List<String> indications);
 
-    /*
+    /**
      * Set available payment methods for the lane.
      * @param paymentMethods is a list of strings where each value
-     *         matches {@link DirectionsCriteria.PaymentMethodsCriteria}
+     *         matches {@link PaymentMethodsCriteria}
      */
-    @SuppressWarnings("checkstyle:javadocmethod")
     public abstract Builder paymentMethods(@Nullable List<String> paymentMethods);
+
+    /**
+     * A {@link IntersectionLaneAccess} object representing the access attributes of the lane.
+     * This can include information such as the vehicle types for which the lane is designated.
+     *
+     * @param access an object representing the access attributes of the lane.
+     * @return this builder for chaining options together
+     */
+    public abstract Builder access(@Nullable IntersectionLaneAccess access);
 
     /**
      * Build a new {@link IntersectionLanes} object.

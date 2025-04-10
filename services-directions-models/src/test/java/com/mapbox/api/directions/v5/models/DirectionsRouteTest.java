@@ -122,7 +122,7 @@ public class DirectionsRouteTest extends TestUtils {
 
   @Test
   public void directionsRoute_hasTollCosts() throws IOException {
-    String json = loadJsonFixture("directions_v5_with_toll_costs.json");
+    String json = loadJsonFixture("directions_v5_with_toll_costs_and_lanes.json");
     RouteOptions options = RouteOptions.builder()
             .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
             .coordinatesList(new ArrayList<Point>() {{
@@ -235,5 +235,30 @@ public class DirectionsRouteTest extends TestUtils {
       .build();
 
     assertNull(route.waypoints());
+  }
+
+  @Test
+  public void directionsRoute_hasLaneAttributes() throws IOException {
+    String json = loadJsonFixture("directions_v5_with_toll_costs_and_lanes.json");
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    String uuid = "123";
+    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
+
+    final List<IntersectionLanes> lanes = route.legs().get(0).steps().get(0).intersections().get(0)
+      .lanes();
+
+    assertEquals(1, lanes.size());
+
+    final IntersectionLanes lane = lanes.get(0);
+    final IntersectionLaneAccess access = IntersectionLaneAccess.builder()
+      .designated(Arrays.asList("taxi", "bus", "hov"))
+      .build();
+    assertEquals(access, lane.access());
   }
 }
