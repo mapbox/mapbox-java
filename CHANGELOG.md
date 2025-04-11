@@ -4,7 +4,10 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v7.4.0 - April 11, 2025
+
 - Added `IntersectionLanes#access` property which provides lane access attributes, such as allowed vehicle types for designated lanes. [#1608](https://github.com/mapbox/mapbox-java/pull/1608)
+
 
 ### v7.3.2 - March 13, 2025
 
