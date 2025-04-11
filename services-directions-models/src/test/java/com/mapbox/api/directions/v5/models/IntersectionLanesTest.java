@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class IntersectionLanesTest extends TestUtils {
 
@@ -31,6 +31,7 @@ public class IntersectionLanesTest extends TestUtils {
       .active(true)
       .validIndication("straight")
       .indications(Arrays.asList("straight","slight left"))
+      .access(IntersectionLaneAccess.builder().designated(Arrays.asList("bus", "taxi")).build())
       .build();
     byte[] serialized = TestUtils.serialize(intersectionLanes);
     assertEquals(intersectionLanes, deserialize(serialized, IntersectionLanes.class));
@@ -43,6 +44,11 @@ public class IntersectionLanesTest extends TestUtils {
       .active(true)
       .validIndication("straight")
       .indications(Arrays.asList("straight","slight left"))
+      .access(
+        IntersectionLaneAccess.builder()
+          .designated(Arrays.asList("bus", "taxi", "hov")).
+          build()
+      )
       .build();
 
     String jsonString = intersectionLanes.toJson();
@@ -105,6 +111,26 @@ public class IntersectionLanesTest extends TestUtils {
   }
 
   @Test
+  public void testFromJson_access() {
+    final IntersectionLanes intersectionLanes = IntersectionLanes.builder()
+      .active(true)
+      .indications(Arrays.asList("straight", "right"))
+      .access(IntersectionLaneAccess.builder().designated(Arrays.asList("hov", "bus")).build())
+      .build();
+
+    final String jsonString = "{\n" +
+      "  \"active\": true,\n" +
+      "  \"indications\": [\"straight\", \"right\"],\n" +
+      "  \"access\": {\n" +
+      "    \"designated\": [\"hov\", \"bus\"]\n" +
+      "  }\n" +
+      "}";
+
+    final IntersectionLanes intersectionLanesFromJson = IntersectionLanes.fromJson(jsonString);
+    assertEquals(intersectionLanes, intersectionLanesFromJson);
+  }
+
+  @Test
   public void testIndicationsAreInterned() {
     IntersectionLanes intersectionLanes = IntersectionLanes.builder()
       .validIndication("straight")
@@ -144,5 +170,29 @@ public class IntersectionLanesTest extends TestUtils {
       deserialized.paymentMethods().get(0),
       deserialized.paymentMethods().get(1)
     );
+  }
+
+  @Test
+  public void testAccessValuesAreInterned() {
+    final List<String> designated = Arrays.asList("bus", "taxi");
+
+    final IntersectionLanes intersectionLanes = IntersectionLanes.builder()
+      .access(
+        IntersectionLaneAccess.builder()
+          .designated(designated)
+          .build()
+      )
+      .build();
+
+    final IntersectionLanes deserialized = IntersectionLanes.fromJson(intersectionLanes.toJson());
+    final List<String> designatedDeserialized = Objects.requireNonNull(deserialized.access())
+      .designated();
+
+    assertNotNull(designatedDeserialized);
+    assertEquals(designated, designatedDeserialized);
+
+    for (int i = 0; i < designated.size(); ++i) {
+      assertSame(designated.get(i), designatedDeserialized.get(i));
+    }
   }
 }
