@@ -143,10 +143,29 @@
                 }
               ],
               "entry": [
-                true
+                true,
+                true,
+                false
               ],
               "bearings": [
-                198
+                90,
+                180,
+                270
+              ],
+              "geometries": [
+                "k}fiyAcxhgOjCRrD?rDS~CSrDSbQ{@rIg@nFSfES~HSjMSrNRjMz@jHz@jMjCnK~CzJrD~MvG",
+                null,
+                null
+              ],
+              "form_of_way": [
+                [
+                  "ramp"
+                ],
+                [
+                  "ramp",
+                  "elevated"
+                ],
+                null
               ],
               "duration": 3.749,
               "mapbox_streets_v8": {
