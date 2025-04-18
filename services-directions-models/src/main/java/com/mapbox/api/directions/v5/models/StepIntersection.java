@@ -93,6 +93,44 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   public abstract List<Boolean> entry();
 
   /**
+   * A list representing the "form of way" values for all roads at the step intersection.
+   * This list has a 1:1 correspondence with the {@link #bearings()}, {@link #entry()},
+   * and {@link #geometries()} lists.
+   * Each element is either:
+   * - A list of strings representing the form(s) of way for a specific road, or
+   * - `null` if the form of way is unknown.
+   * Possible values for the form of way include:
+   * - "ramp"
+   * - "elevated"
+   * - "roundabout"
+   * - "service_road"
+   * Example:
+   * "form_of_way": [
+   *     ["ramp", "elevated"],
+   *     ["ramp"],
+   *     null
+   * ]
+   *
+   * @return A list of form of way values for all roads at the step intersection
+   */
+  @Nullable
+  @SerializedName("form_of_way")
+  public abstract List<List<String>> formOfWays();
+
+  /**
+   * A list representing geometry for all roads at the step intersection.
+   * This list has a 1:1 correspondence with the {@link #bearings()}, {@link #entry()},
+   * and {@link #formOfWays()} lists.
+   * Each element is either:
+   * - A strings representing geometry of a specific road, or
+   * - `null` if the geometry is unknown.
+   * @return A list of geometry for all roads at the step intersection
+   */
+  @Nullable
+  @SerializedName("geometries")
+  public abstract List<String> geometries();
+
+  /**
    * Index into bearings/entry array. Used to calculate the bearing before the turn. Namely, the
    * clockwise angle from true north to the direction of travel before the maneuver/passing the
    * intersection. To get the bearing in the direction of driving, the bearing has to be rotated by
@@ -359,6 +397,45 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder entry(@Nullable List<Boolean> entry);
+
+    /**
+     * A list representing the "form of way" values for all roads at the step intersection.
+     * This list has a 1:1 correspondence with the {@link #bearings()}, {@link #entry()},
+     * and {@link #geometries()} lists.
+     * Each element is either:
+     * - A list of strings representing the form(s) of way for a specific road, or
+     * - `null` if the form of way is unknown.
+     * Possible values for the form of way include:
+     * - "ramp"
+     * - "elevated"
+     * - "roundabout"
+     * - "service_road"
+     * Example:
+     * "form_of_way": [
+     *     ["ramp", "elevated"],
+     *     ["ramp"],
+     *     null
+     * ]
+     *
+     * @param formOfWays a list of form of way values for all roads at the step intersection
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder formOfWays(List<List<String>> formOfWays);
+
+    /**
+     * A list representing geometry for all roads at the step intersection.
+     * This list has a 1:1 correspondence with the {@link #bearings()}, {@link #entry()},
+     * and {@link #formOfWays()} lists.
+     * Each element is either:
+     * - A strings representing geometry of a specific road, or
+     * - `null` if the geometry is unknown.
+     *
+     * @param geometries a list of geometry for all roads at the step intersection
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder geometries(List<String> geometries);
 
     /**
      * Index into bearings/entry array. Used to calculate the bearing before the turn. Namely, the

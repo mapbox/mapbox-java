@@ -10,6 +10,7 @@ import com.mapbox.geojson.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.hamcrest.junit.ExpectedException;
@@ -260,5 +261,55 @@ public class DirectionsRouteTest extends TestUtils {
       .designated(Arrays.asList("taxi", "bus", "hov"))
       .build();
     assertEquals(access, lane.access());
+  }
+
+  @Test
+  public void directionsRoute_hasFormOfWays() throws IOException {
+    String json = loadJsonFixture("directions_v5_with_toll_costs_and_lanes.json");
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    String uuid = "123";
+    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
+
+    final List<List<String>> formOfWays = route.legs().get(0).steps().get(0).intersections().get(0)
+      .formOfWays();
+
+    final List<List<String>> expectedFormOfWays = Arrays.asList(
+      Collections.singletonList("ramp"),
+      Arrays.asList("ramp", "elevated"),
+      null
+    );
+
+    assertEquals(expectedFormOfWays, formOfWays);
+  }
+
+  @Test
+  public void directionsRoute_hasGeometries() throws IOException {
+    String json = loadJsonFixture("directions_v5_with_toll_costs_and_lanes.json");
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    String uuid = "123";
+    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
+
+    final List<String> geometries = route.legs().get(0).steps().get(0).intersections().get(0)
+      .geometries();
+
+    final List<String> expectedGeometries = Arrays.asList(
+      "k}fiyAcxhgOjCRrD?rDS~CSrDSbQ{@rIg@nFSfES~HSjMSrNRjMz@jHz@jMjCnK~CzJrD~MvG",
+      null,
+      null
+    );
+
+    assertEquals(expectedGeometries, geometries);
   }
 }

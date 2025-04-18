@@ -947,6 +947,40 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract Boolean suppressVoiceInstructionLocalNames();
 
   /**
+   * Defines whether to return "form of way" values for roads at each {@link StepIntersection}.
+   * See {@link StepIntersection#formOfWays()} for details.
+   *
+   * @return boolean representing the `intersectionLinkFormOfWay` value
+   */
+  @SerializedName("intersection_link_form_of_way")
+  @Nullable
+  public abstract Boolean intersectionLinkFormOfWay();
+
+  /**
+   * A comma-separated list of road types for which intersection geometry data should be included
+   * at each {@link StepIntersection}. See {@link StepIntersection#geometries()} for details.
+   * Possible values include:
+   * - "motorway"
+   * - "trunk"
+   * - "primary"
+   * - "secondary"
+   * - "tertiary"
+   * - "unclassified"
+   * - "residential"
+   * - "service_other"
+   * Geometry data will be provided for each intersection along the requested route.
+   * Be aware that enabling this option can significantly increase the response size
+   * and the memory required to store the response object. Use this option selectively, for example,
+   * if geometry is only needed for motorways, specify only "motorway".
+   *
+   * @return a comma-separated list of road types for which intersection geometry data
+   *   should be included
+   */
+  @SerializedName("intersection_link_geometry")
+  @Nullable
+  public abstract String intersectionLinkGeometry();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -1088,6 +1122,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       "suppress_voice_instruction_local_names",
       suppressVoiceInstructionLocalNames()
     );
+    appendQueryParameter(sb, "intersection_link_form_of_way", intersectionLinkFormOfWay());
+    appendQueryParameter(sb, "intersection_link_geometry", intersectionLinkGeometry());
 
     Map<String, SerializableJsonElement> unrecognized = unrecognized();
     if (unrecognized != null) {
@@ -2126,6 +2162,71 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     public abstract Builder suppressVoiceInstructionLocalNames(
       @Nullable Boolean suppressVoiceInstructionLocalNames
     );
+
+    /**
+     * Defines whether to return "form of way" values for roads at each {@link StepIntersection}.
+     * See {@link StepIntersection#formOfWays()} for details.
+     *
+     * @param intersectionLinkFormOfWay whether to return "form of way" values
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder intersectionLinkFormOfWay(
+      @Nullable Boolean intersectionLinkFormOfWay
+    );
+
+    /**
+     * A comma-separated list of road types for which intersection geometry data should be included
+     * at each {@link StepIntersection}. See {@link StepIntersection#geometries()} for details.
+     * Possible values include:
+     * - "motorway"
+     * - "trunk"
+     * - "primary"
+     * - "secondary"
+     * - "tertiary"
+     * - "unclassified"
+     * - "residential"
+     * - "service_other"
+     * Geometry data will be provided for each intersection along the requested route.
+     * Be aware that enabling this option can significantly increase the response size
+     * and the memory required to store the response object. Use this option selectively,
+     * for example, if geometry is only needed for motorways, specify only "motorway".
+     *
+     * @param intersectionLinkGeometry a comma-separated list of road types for which intersection
+     *                                 geometry data should be included
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder intersectionLinkGeometry(
+      @Nullable String intersectionLinkGeometry
+    );
+
+    /**
+     * A list of road types for which intersection geometry data should be included
+     * at each {@link StepIntersection}. See {@link StepIntersection#geometries()} for details.
+     * Possible values include:
+     * - "motorway"
+     * - "trunk"
+     * - "primary"
+     * - "secondary"
+     * - "tertiary"
+     * - "unclassified"
+     * - "residential"
+     * - "service_other"
+     * Geometry data will be provided for each intersection along the requested route.
+     * Be aware that enabling this option can significantly increase the response size
+     * and the memory required to store the response object. Use this option selectively,
+     * for example, if geometry is only needed for motorways, specify only "motorway".
+     *
+     * @param intersectionLinkGeometry a list of road types for which intersection geometry data
+     *                                 should be included
+     * @return this builder
+     */
+    @NonNull
+    public Builder intersectionLinkGeometry(@Nullable List<String> intersectionLinkGeometry) {
+      String result = FormatUtils.join(",", intersectionLinkGeometry);
+      return intersectionLinkGeometry(result);
+    }
 
     /**
      * Use this method to add request parameters,

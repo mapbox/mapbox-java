@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+- Added `StepIntersection#formOfWays` property which provides a list representing the "form of way" values for all roads at the step intersection. [#1611](https://github.com/mapbox/mapbox-java/pull/1611)
+- Added `StepIntersection#geometries` property which provides a list representing geometry for all roads at the step intersection. [#1611](https://github.com/mapbox/mapbox-java/pull/1611)
+
 ### v7.4.0 - April 11, 2025
 
 - Added `IntersectionLanes#access` property which provides lane access attributes, such as allowed vehicle types for designated lanes. [#1608](https://github.com/mapbox/mapbox-java/pull/1608)
