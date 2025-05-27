@@ -46,6 +46,23 @@ public class TurfConversionTest extends TestUtils {
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
+  public void degreesToRadians() {
+    assertEquals(1, TurfConversion.degreesToRadians(57.295), 0.0001);
+    assertEquals(3.1416, TurfConversion.degreesToRadians(180), 0.0001);
+    assertEquals(2.1817 , TurfConversion.degreesToRadians(125), 0.0001);
+    assertEquals(0, TurfConversion.degreesToRadians(360), 0.0001);
+    assertEquals(0, TurfConversion.degreesToRadians(0), 0.0001);
+  }
+
+  @Test
+  public void radiansToDegrees() {
+    assertEquals(57.295, TurfConversion.radiansToDegrees(1), 0.01);
+    assertEquals(180, TurfConversion.radiansToDegrees(3.1416), 0.01);
+    assertEquals(125, TurfConversion.radiansToDegrees(2.1817), 0.01);
+    assertEquals(0, TurfConversion.radiansToDegrees(0), 0.01);
+  }
+
+  @Test
   public void radiansToDistance() {
     assertEquals(
       1, TurfConversion.radiansToLength(1, TurfConstants.UNIT_RADIANS), DELTA);

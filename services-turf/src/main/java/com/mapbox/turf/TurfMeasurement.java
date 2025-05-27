@@ -49,9 +49,8 @@ public final class TurfMeasurement {
    *
    * @param point1 first point used for calculating the bearing
    * @param point2 second point used for calculating the bearing
-   * @return bearing in decimal degrees
-   * @see <a href="http://turfjs.org/docs/#bearing">Turf Bearing documentation</a>
-   * @since 1.3.0
+   * @return bearing in decimal degrees, between -180 and 180 degrees (positive clockwise)
+   * @see <a href="https://turfjs.org/docs/api/bearing">Turf Bearing documentation</a>
    */
   public static double bearing(@NonNull Point point1, @NonNull Point point2) {
 

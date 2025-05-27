@@ -60,9 +60,54 @@ public class TurfMeasurementTest extends TestUtils {
 
   @Test
   public void testBearing() {
-    Point pt1 = Point.fromLngLat(-75.4, 39.4);
-    Point pt2 = Point.fromLngLat(-75.534, 39.123);
-    assertNotEquals(TurfMeasurement.bearing(pt1, pt2), 0, DELTA);
+    assertEquals(
+            90,
+            TurfMeasurement.bearing(
+                    Point.fromLngLat(0, 0),
+                    Point.fromLngLat(10, 0)
+            ),
+            DELTA
+    );
+    assertEquals(
+            -90,
+            TurfMeasurement.bearing(
+                    Point.fromLngLat(0, 0),
+                    Point.fromLngLat(-10, 0)
+            ),
+            DELTA
+    );
+    assertEquals(
+            0,
+            TurfMeasurement.bearing(
+                    Point.fromLngLat(0, 0),
+                    Point.fromLngLat(0, 10)
+            ),
+            DELTA
+    );
+    assertEquals(
+            180,
+            TurfMeasurement.bearing(
+                    Point.fromLngLat(0, 0),
+                    Point.fromLngLat(0, -10)
+            ),
+            DELTA
+    );
+    assertEquals(
+            -135.43,
+            TurfMeasurement.bearing(
+                    Point.fromLngLat(0, 0),
+                    Point.fromLngLat(-10, -10)
+            ),
+            0.01
+    );
+    assertEquals(
+            44.56,
+            TurfMeasurement.bearing(
+                    Point.fromLngLat(0, 0),
+                    Point.fromLngLat(10, 10)
+            ),
+            0.01
+    );
   }
 
   @Test
