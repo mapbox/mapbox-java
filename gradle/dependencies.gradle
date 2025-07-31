@@ -2,10 +2,10 @@ ext {
 
   version = [
       autoValue        : '1.7',
-      autoValueGson    : '0.0.2',
+      autoValueGson    : '0.0.3',
       junit            : '4.12',
       annotation       : '1.0.0',
-      gson             : '2.8.9',
+      gson             : '2.13.1',
       retrofit         : '2.7.2',
       okhttp3          : '4.10.0',
       mockito          : '4.2.0',
