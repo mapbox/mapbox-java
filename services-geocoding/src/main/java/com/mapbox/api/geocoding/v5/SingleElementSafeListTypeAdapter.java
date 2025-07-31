@@ -3,7 +3,7 @@ package com.mapbox.api.geocoding.v5;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
-import com.google.gson.internal.$Gson$Types;
+import com.google.gson.internal.GsonTypes;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -39,7 +39,7 @@ class SingleElementSafeListTypeAdapter<E> extends TypeAdapter<List<E>> {
         return null;
       }
 
-      final Type elementType = $Gson$Types.getCollectionElementType(typeToken.getType(), rawType);
+      final Type elementType = GsonTypes.getCollectionElementType(typeToken.getType(), rawType);
       final TypeAdapter<?> elementTypeAdapter = gson.getAdapter(TypeToken.get(elementType));
 
       @SuppressWarnings("unchecked")
