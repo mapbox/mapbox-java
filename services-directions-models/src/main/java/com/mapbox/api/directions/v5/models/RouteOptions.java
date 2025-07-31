@@ -947,6 +947,76 @@ public abstract class RouteOptions extends DirectionsJsonObject {
   public abstract Boolean suppressVoiceInstructionLocalNames();
 
   /**
+   * Defines whether to return "form of way" values for roads at each {@link StepIntersection}.
+   * See {@link StepIntersection#formOfWay()} for details.
+   * Requires {@link RouteOptions#steps()} to be set to true.
+   *
+   * @return boolean representing the `intersectionLinkFormOfWay` value
+   */
+  @SerializedName("intersection_link_form_of_way")
+  @Nullable
+  public abstract Boolean intersectionLinkFormOfWay();
+
+  /**
+   * A comma-separated list of road classes for which intersection geometry data should be included
+   * at each {@link StepIntersection}. See {@link StepIntersection#geometries()} for details.
+   * Possible values include:
+   * - "motorway"
+   * - "trunk"
+   * - "primary"
+   * - "secondary"
+   * - "tertiary"
+   * - "unclassified"
+   * - "residential"
+   * - "service_other"
+   * Geometry data will be provided for each intersection along the requested route.
+   * The geometry format is affected by {@link RouteOptions#geometries}.
+   * Requires {@link RouteOptions#steps()} to be set to true.
+   * Be aware that enabling this option can significantly increase the response size
+   * and the memory required to store the response object. Use this option selectively, for example,
+   * if geometry is only needed for motorways, specify only "motorway".
+   *
+   * @return a comma-separated list of road classes for which intersection geometry data
+   *   should be included
+   */
+  @SerializedName("intersection_link_geometry")
+  @Nullable
+  public abstract String intersectionLinkGeometry();
+
+  /**
+   * Defines whether to return "access" values for roads at each {@link StepIntersection}.
+   * See {@link StepIntersection#access()} for details.
+   * Requires {@link RouteOptions#steps()} to be set to true.
+   *
+   * @return boolean representing the `intersectionLinkAccess` value
+   */
+  @SerializedName("intersection_link_access")
+  @Nullable
+  public abstract Boolean intersectionLinkAccess();
+
+  /**
+   * Defines whether to return "elevated" status for roads at each {@link StepIntersection}.
+   * See {@link StepIntersection#elevated()} for details.
+   * Requires {@link RouteOptions#steps()} to be set to true.
+   *
+   * @return boolean representing the `intersectionLinkAccess` value
+   */
+  @SerializedName("intersection_link_elevated")
+  @Nullable
+  public abstract Boolean intersectionLinkElevated();
+
+  /**
+   * Defines whether to return "bridge" status for roads at each {@link StepIntersection}.
+   * See {@link StepIntersection#bridges()} for details.
+   * Requires {@link RouteOptions#steps()} to be set to true.
+   *
+   * @return boolean representing the `intersectionLinkAccess` value
+   */
+  @SerializedName("intersection_link_bridge")
+  @Nullable
+  public abstract Boolean intersectionLinkBridge();
+
+  /**
    * Gson type adapter for parsing Gson to this class.
    *
    * @param gson the built {@link Gson} object
@@ -1088,6 +1158,11 @@ public abstract class RouteOptions extends DirectionsJsonObject {
       "suppress_voice_instruction_local_names",
       suppressVoiceInstructionLocalNames()
     );
+    appendQueryParameter(sb, "intersection_link_form_of_way", intersectionLinkFormOfWay());
+    appendQueryParameter(sb, "intersection_link_geometry", intersectionLinkGeometry());
+    appendQueryParameter(sb, "intersection_link_access", intersectionLinkAccess());
+    appendQueryParameter(sb, "intersection_link_elevated", intersectionLinkElevated());
+    appendQueryParameter(sb, "intersection_link_bridge", intersectionLinkBridge());
 
     Map<String, SerializableJsonElement> unrecognized = unrecognized();
     if (unrecognized != null) {
@@ -2125,6 +2200,113 @@ public abstract class RouteOptions extends DirectionsJsonObject {
     @NonNull
     public abstract Builder suppressVoiceInstructionLocalNames(
       @Nullable Boolean suppressVoiceInstructionLocalNames
+    );
+
+    /**
+     * Defines whether to return "form of way" values for roads at each {@link StepIntersection}.
+     * See {@link StepIntersection#formOfWay()} for details.
+     * Requires {@link RouteOptions#steps()} to be set to true.
+     *
+     * @param intersectionLinkFormOfWay whether to return "form of way" values
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder intersectionLinkFormOfWay(
+      @Nullable Boolean intersectionLinkFormOfWay
+    );
+
+    /**
+     * A comma-separated list of road types for which intersection geometry data should be included
+     * at each {@link StepIntersection}. See {@link StepIntersection#geometries()} for details.
+     * Requires {@link RouteOptions#steps()} to be set to true.
+     * Possible values include:
+     * - "motorway"
+     * - "trunk"
+     * - "primary"
+     * - "secondary"
+     * - "tertiary"
+     * - "unclassified"
+     * - "residential"
+     * - "service_other"
+     * Geometry data will be provided for each intersection along the requested route.
+     * Be aware that enabling this option can significantly increase the response size
+     * and the memory required to store the response object. Use this option selectively,
+     * for example, if geometry is only needed for motorways, specify only "motorway".
+     *
+     * @param intersectionLinkGeometry a comma-separated list of road types for which intersection
+     *                                 geometry data should be included
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder intersectionLinkGeometry(
+      @Nullable String intersectionLinkGeometry
+    );
+
+    /**
+     * A comma-separated list of road types for which intersection geometry data should be included
+     * at each {@link StepIntersection}. See {@link StepIntersection#geometries()} for details.
+     * Requires {@link RouteOptions#steps()} to be set to true.
+     * Possible values include:
+     * - "motorway"
+     * - "trunk"
+     * - "primary"
+     * - "secondary"
+     * - "tertiary"
+     * - "unclassified"
+     * - "residential"
+     * - "service_other"
+     * Geometry data will be provided for each intersection along the requested route.
+     * Be aware that enabling this option can significantly increase the response size
+     * and the memory required to store the response object. Use this option selectively,
+     * for example, if geometry is only needed for motorways, specify only "motorway".
+     *
+     * @param intersectionLinkGeometry a list of road types for which intersection
+     *                                 geometry data should be included
+     * @return this builder
+     */
+    @NonNull
+    public Builder intersectionLinkGeometry(@Nullable List<String> intersectionLinkGeometry) {
+      String result = FormatUtils.join(",", intersectionLinkGeometry);
+      return intersectionLinkGeometry(result);
+    }
+
+    /**
+     * Defines whether to return "access" values for roads at each {@link StepIntersection}.
+     * See {@link StepIntersection#access()} for details.
+     * Requires {@link RouteOptions#steps()} to be set to true.
+     *
+     * @param intersectionLinkAccess whether to return "access" values
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder intersectionLinkAccess(
+      @Nullable Boolean intersectionLinkAccess
+    );
+
+    /**
+     * Defines whether to return "elevated" status for roads at each {@link StepIntersection}.
+     * See {@link StepIntersection#elevated()} for details.
+     * Requires {@link RouteOptions#steps()} to be set to true.
+     *
+     * @param intersectionLinkElevated whether to return "elevated" status
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder intersectionLinkElevated(
+      @Nullable Boolean intersectionLinkElevated
+    );
+
+    /**
+     * Defines whether to return "bridge" status for roads at each {@link StepIntersection}.
+     * See {@link StepIntersection#bridges()} for details.
+     * Requires {@link RouteOptions#steps()} to be set to true.
+     *
+     * @param intersectionLinkBridge whether to return "bridge" status
+     * @return this builder
+     */
+    @NonNull
+    public abstract Builder intersectionLinkBridge(
+      @Nullable Boolean intersectionLinkBridge
     );
 
     /**

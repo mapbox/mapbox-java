@@ -261,4 +261,105 @@ public class DirectionsRouteTest extends TestUtils {
       .build();
     assertEquals(access, lane.access());
   }
+
+  @Test
+  public void directionsRoute_hasFormOfWay() throws IOException {
+    String json = loadJsonFixture("directions_v5_with_toll_costs_and_lanes.json");
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    String uuid = "123";
+    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
+
+    final List<String> formOfWay = route.legs().get(0).steps().get(0).intersections().get(0)
+      .formOfWay();
+
+    assertEquals(Arrays.asList("freeway", "ramp", null), formOfWay);
+  }
+
+  @Test
+  public void directionsRoute_hasGeometries() throws IOException {
+    String json = loadJsonFixture("directions_v5_with_toll_costs_and_lanes.json");
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    String uuid = "123";
+    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
+
+    final List<String> geometries = route.legs().get(0).steps().get(0).intersections().get(0)
+      .geometries();
+
+    final List<String> expectedGeometries = Arrays.asList(
+      "k}fiyAcxhgOjCRrD?rDS~CSrDSbQ{@rIg@nFSfES~HSjMSrNRjMz@jHz@jMjCnK~CzJrD~MvG",
+      null,
+      null
+    );
+
+    assertEquals(expectedGeometries, geometries);
+  }
+
+  @Test
+  public void directionsRoute_hasAccess() throws IOException {
+    String json = loadJsonFixture("directions_v5_with_toll_costs_and_lanes.json");
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    String uuid = "123";
+    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
+
+    assertEquals(
+      Arrays.asList(0, 1, null),
+      route.legs().get(0).steps().get(0).intersections().get(0).access()
+    );
+  }
+
+  @Test
+  public void directionsRoute_hasElevated() throws IOException {
+    String json = loadJsonFixture("directions_v5_with_toll_costs_and_lanes.json");
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    String uuid = "123";
+    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
+
+    assertEquals(
+      Arrays.asList(true, false, null),
+      route.legs().get(0).steps().get(0).intersections().get(0).elevated()
+    );
+  }
+
+  @Test
+  public void directionsRoute_hasBridges() throws IOException {
+    String json = loadJsonFixture("directions_v5_with_toll_costs_and_lanes.json");
+    RouteOptions options = RouteOptions.builder()
+      .profile(DirectionsCriteria.PROFILE_DRIVING_TRAFFIC)
+      .coordinatesList(new ArrayList<Point>() {{
+        add(Point.fromLngLat(1.0, 1.0));
+        add(Point.fromLngLat(2.0, 2.0));
+      }})
+      .build();
+    String uuid = "123";
+    DirectionsRoute route = DirectionsRoute.fromJson(json, options, uuid);
+
+    assertEquals(
+      Arrays.asList(false, true, null),
+      route.legs().get(0).steps().get(0).intersections().get(0).bridges()
+    );
+  }
 }

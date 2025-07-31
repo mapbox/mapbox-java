@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -91,6 +92,76 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    */
   @Nullable
   public abstract List<Boolean> entry();
+
+  /**
+   * A list representing the "form of way" values for all roads at the step intersection.
+   * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+   * Each element is one of the following:
+   * - freeway,
+   * - multiple_carriageway,
+   * - single_carriageway,
+   * - roundabout,
+   * - ramp,
+   * - service_road,
+   * - pedestrian_zone,
+   * - unknown
+   * Example:
+   * "form_of_way": [
+   *     "ramp",
+   *     "single_carriageway",
+   *     "freeway"
+   * ]
+   *
+   * @return A list of form of way values for all roads at the step intersection
+   */
+  @Nullable
+  @SerializedName("form_of_way")
+  public abstract List<String> formOfWay();
+
+  /**
+   * A list representing the geometry of each road at the step intersection.
+   * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+   * Each value represents the geometry of a segment up to the next intersection (a SIRN segment).
+   * For on-route segments, the geometry is `null` except for the first and last segment of each leg.
+   * @return A list of geometry for all roads at the step intersection
+   */
+  @Nullable
+  @SerializedName("geometries")
+  public abstract List<String> geometries();
+
+  /**
+   * A list representing the access type for each road at the step intersection.
+   * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+   * Each value is one of the following:
+   * - 0 (none)
+   * - -1 (forward)
+   * - 1 (backward)
+   * - 2 (both).
+   * @return A list of access values for all roads at the intersection
+   */
+  @Nullable
+  @SerializedName("access")
+  public abstract List<Integer> access();
+
+  /**
+   * A list indicating whether each road at the step intersection is elevated.
+   * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+   * Each value is {@code true} if the segment is elevated, otherwise {@code false}.
+   * @return A list of boolean values indicating elevated status for all roads at the intersection.
+   */
+  @Nullable
+  @SerializedName("elevated")
+  public abstract List<Boolean> elevated();
+
+  /**
+   * A list indicating whether each road at the step intersection is a bridge.
+   * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+   * Each value is {@code true} if the segment is a bridge, otherwise {@code false}.
+   * @return A list of boolean values indicating bridge status for all roads at the intersection
+   */
+  @Nullable
+  @SerializedName("bridges")
+  public abstract List<Boolean> bridges();
 
   /**
    * Index into bearings/entry array. Used to calculate the bearing before the turn. Namely, the
@@ -359,6 +430,83 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder entry(@Nullable List<Boolean> entry);
+
+    /**
+     * A list representing the "form of way" values for all roads at the step intersection.
+     * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+     * Each element is one of the following:
+     * - freeway,
+     * - multiple_carriageway,
+     * - single_carriageway,
+     * - roundabout,
+     * - ramp,
+     * - service_road,
+     * - pedestrian_zone,
+     * - unknown
+     * Example:
+     * "form_of_way": [
+     *     "ramp",
+     *     "single_carriageway",
+     *     "freeway"
+     * ]
+     *
+     * @param formOfWay a list of form of way values for all roads at the step intersection
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder formOfWay(List<String> formOfWay);
+
+    /**
+     * A list representing the geometry of each road at the step intersection.
+     * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+     * Each value represents the geometry of a segment up to the next intersection (a SIRN segment).
+     * For on-route segments, the geometry is `null` except for the first and last segment
+     * of each leg.
+     *
+     * @param geometries a list of geometry for all roads at the step intersection
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder geometries(List<String> geometries);
+
+    /**
+     * A list representing the access type for each road at the step intersection.
+     * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+     * Each value is one of the following:
+     * - 0 (none)
+     * - -1 (forward)
+     * - 1 (backward)
+     * - 2 (both).
+     *
+     * @param access a list of access values for all roads at the intersection
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder access(List<Integer> access);
+
+    /**
+     * A list indicating whether each road at the step intersection is elevated.
+     * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+     * Each value is {@code true} if the segment is elevated, otherwise {@code false}.
+     *
+     * @param elevated a list of boolean values indicating elevated status for all roads
+     *                 at the intersection.
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder elevated(List<Boolean> elevated);
+
+    /**
+     * A list indicating whether each road at the step intersection is a bridge.
+     * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
+     * Each value is {@code true} if the segment is a bridge, otherwise {@code false}.
+     *
+     * @param bridges a list of boolean values indicating bridge status for all roads
+     *                at the intersection
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder bridges(List<Boolean> bridges);
 
     /**
      * Index into bearings/entry array. Used to calculate the bearing before the turn. Namely, the
