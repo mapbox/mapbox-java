@@ -4,6 +4,8 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+- Updated `auto-value-gson` to version [0.0.3](https://github.com/mapbox/auto-value-gson/releases/tag/mapbox-v0.0.3) and `gson` to version 2.13.1. [#1615](https://github.com/mapbox/mapbox-java/pull/1615)
+
 ### v7.4.0 - April 11, 2025
 
 - Added `IntersectionLanes#access` property which provides lane access attributes, such as allowed vehicle types for designated lanes. [#1608](https://github.com/mapbox/mapbox-java/pull/1608)
