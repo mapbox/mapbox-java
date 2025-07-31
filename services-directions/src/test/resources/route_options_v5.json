@@ -39,5 +39,6 @@
   "waypoints_per_route": true,
   "metadata": true,
   "payment_methods": "general,etcx",
-  "suppress_voice_instruction_local_names": true
+  "suppress_voice_instruction_local_names": true,
+  "notifications": "none"
 }
