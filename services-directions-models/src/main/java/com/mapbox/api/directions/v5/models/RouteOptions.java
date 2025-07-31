@@ -506,7 +506,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
   /**
    * A type of units to return in the text for voice instructions.
-   * Can be {@link DirectionsCriteria#IMPERIAL} (default) or {@link DirectionsCriteria#METRIC}.
+   * Can be {@link DirectionsCriteria#IMPERIAL} (default), {@link DirectionsCriteria#METRIC},
+   * or {@link DirectionsCriteria#BRITISH_IMPERIAL}.
    * Must be used in conjunction with {@link RouteOptions#steps()}=true and
    * {@link RouteOptions#steps()}=true
    * and {@link RouteOptions#voiceInstructions()}=true.
@@ -1628,7 +1629,8 @@ public abstract class RouteOptions extends DirectionsJsonObject {
 
     /**
      * A type of units to return in the text for voice instructions.
-     * Can be {@link DirectionsCriteria#IMPERIAL} (default) or {@link DirectionsCriteria#METRIC}.
+     * Can be {@link DirectionsCriteria#IMPERIAL} (default), {@link DirectionsCriteria#METRIC},
+     * or {@link DirectionsCriteria#BRITISH_IMPERIAL}.
      * Must be used in conjunction with {@link RouteOptions#steps()}=true and
      * {@link RouteOptions#steps()}=true
      * and {@link RouteOptions#voiceInstructions()}=true.

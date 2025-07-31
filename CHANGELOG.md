@@ -9,6 +9,7 @@ Mapbox welcomes participation and contributions from everyone.
 - Added `StepIntersection#access` property which provides a list representing the access type for each road at the step intersection. [#1611](https://github.com/mapbox/mapbox-java/pull/1611)
 - Added `StepIntersection#elevated` property which provides a list indicating whether each road at the step intersection is elevated. [#1611](https://github.com/mapbox/mapbox-java/pull/1611)
 - Added `StepIntersection#bridge` property which provides a list indicating whether each road at the step intersection is a bridge. [#1611](https://github.com/mapbox/mapbox-java/pull/1611)
+- Added a new voice unit value: `DirectionsCriteria#BRITISH_IMPERIAL`. This value is now included in `DirectionsCriteria#VoiceUnitCriteria`. [#1611](https://github.com/mapbox/mapbox-java/pull/1611)
 
 
 ### v7.5.0 - July 31, 2025

@@ -240,6 +240,13 @@ public final class DirectionsCriteria {
   public static final String METRIC = "metric";
 
   /**
+   * Change the units to british imperial for voice and visual information.
+   * Note that this won't change other results such as raw distance measurements which will
+   * always be returned in meters.
+   */
+  public static final String BRITISH_IMPERIAL = "british_imperial";
+
+  /**
    * Returned route starts at the first provided coordinate in the list. Used specifically for the
    * Optimization API.
    *
@@ -594,7 +601,8 @@ public final class DirectionsCriteria {
   @Retention(RetentionPolicy.CLASS)
   @StringDef( {
     IMPERIAL,
-    METRIC
+    METRIC,
+    BRITISH_IMPERIAL
   })
   public @interface VoiceUnitCriteria {
   }
