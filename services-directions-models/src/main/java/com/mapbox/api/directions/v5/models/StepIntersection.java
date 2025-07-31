@@ -52,7 +52,7 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    */
   @NonNull
   @SerializedName("location")
-  @SuppressWarnings( {"mutable", "WeakerAccess"})
+  @SuppressWarnings({"mutable", "WeakerAccess"})
   protected abstract double[] rawLocation();
 
   /**
@@ -107,9 +107,9 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    * - unknown
    * Example:
    * "form_of_way": [
-   *     "ramp",
-   *     "single_carriageway",
-   *     "freeway"
+   * "ramp",
+   * "single_carriageway",
+   * "freeway"
    * ]
    *
    * @return A list of form of way values for all roads at the step intersection
@@ -122,7 +122,9 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    * A list representing the geometry of each road at the step intersection.
    * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
    * Each value represents the geometry of a segment up to the next intersection (a SIRN segment).
-   * For on-route segments, the geometry is `null` except for the first and last segment of each leg.
+   * For on-route segments, the geometry is `null` except for the first and last segment
+   * of each leg.
+   *
    * @return A list of geometry for all roads at the step intersection
    */
   @Nullable
@@ -137,6 +139,7 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    * - -1 (forward)
    * - 1 (backward)
    * - 2 (both).
+   *
    * @return A list of access values for all roads at the intersection
    */
   @Nullable
@@ -147,6 +150,7 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    * A list indicating whether each road at the step intersection is elevated.
    * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
    * Each value is {@code true} if the segment is elevated, otherwise {@code false}.
+   *
    * @return A list of boolean values indicating elevated status for all roads at the intersection.
    */
   @Nullable
@@ -157,6 +161,7 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    * A list indicating whether each road at the step intersection is a bridge.
    * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
    * Each value is {@code true} if the segment is a bridge, otherwise {@code false}.
+   *
    * @return A list of boolean values indicating bridge status for all roads at the intersection
    */
   @Nullable
@@ -445,9 +450,9 @@ public abstract class StepIntersection extends DirectionsJsonObject {
      * - unknown
      * Example:
      * "form_of_way": [
-     *     "ramp",
-     *     "single_carriageway",
-     *     "freeway"
+     * "ramp",
+     * "single_carriageway",
+     * "freeway"
      * ]
      *
      * @param formOfWay a list of form of way values for all roads at the step intersection
