@@ -121,7 +121,7 @@ public abstract class StepIntersection extends DirectionsJsonObject {
   /**
    * A list representing the geometry of each road at the step intersection.
    * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
-   * Each value represents the geometry of a segment up to the next intersection (a SIRN segment).
+   * Each value represents the geometry of a segment up to the next intersection.
    * For on-route segments, the geometry is `null` except for the first and last segment
    * of each leg.
    *
@@ -464,7 +464,7 @@ public abstract class StepIntersection extends DirectionsJsonObject {
     /**
      * A list representing the geometry of each road at the step intersection.
      * This list has a 1:1 correspondence with the {@link #bearings()} and {@link #entry()} lists.
-     * Each value represents the geometry of a segment up to the next intersection (a SIRN segment).
+     * Each value represents the geometry of a segment up to the next intersection.
      * For on-route segments, the geometry is `null` except for the first and last segment
      * of each leg.
      *

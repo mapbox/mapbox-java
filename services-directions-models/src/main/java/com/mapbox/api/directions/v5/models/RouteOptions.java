@@ -1000,7 +1000,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * See {@link StepIntersection#elevated()} for details.
    * Requires {@link RouteOptions#steps()} to be set to true.
    *
-   * @return boolean representing the `intersectionLinkAccess` value
+   * @return boolean representing the `intersectionLinkElevated` value
    */
   @SerializedName("intersection_link_elevated")
   @Nullable
@@ -1011,7 +1011,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
    * See {@link StepIntersection#bridges()} for details.
    * Requires {@link RouteOptions#steps()} to be set to true.
    *
-   * @return boolean representing the `intersectionLinkAccess` value
+   * @return boolean representing the `intersectionLinkBridge` value
    */
   @SerializedName("intersection_link_bridge")
   @Nullable
