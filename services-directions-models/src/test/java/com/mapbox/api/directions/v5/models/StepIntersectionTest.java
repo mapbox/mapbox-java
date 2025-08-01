@@ -1,16 +1,18 @@
 package com.mapbox.api.directions.v5.models;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import com.mapbox.core.TestUtils;
 import com.mapbox.geojson.Point;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
+
 import org.junit.Assert;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class StepIntersectionTest extends TestUtils {
 
@@ -245,5 +247,176 @@ public class StepIntersectionTest extends TestUtils {
     Assert.assertNull(stepIntersection.mergingArea());
     String jsonStr = stepIntersection.toJson();
     compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testFormOfWay() {
+    final String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ],"
+      + "\"form_of_way\": [\n"
+      + "    \"freeway\",\n"
+      + "    \"roundabout\",\n"
+      + "    \"ramp\",\n"
+      + "    null\n"
+      + "]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    final List<String> formOfWay = Arrays.asList(
+      "freeway", "roundabout", "ramp", null
+    );
+
+    assertEquals(formOfWay, stepIntersection.formOfWay());
+
+    final String jsonStr = stepIntersection.toJson();
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testNullFormOfWay() {
+    final String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+    assertNull(stepIntersection.formOfWay());
+  }
+
+  @Test
+  public void testGeometries() {
+    final String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ],"
+      + "\"geometries\": [\n"
+      + "    \"{{vacBwuenX?^?|OAzXBdP\",\n"
+      + "    \"}xfbcB_yjkXcEdAcF`KwClEyH|NoQz[iOdUqOhSeT|TgH`FyHnFuKbF}ChAcFhBoGpAqFXeIXeEHuVl@\",\n"
+      + "    null\n"
+      + "]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    final List<String> geometries = Arrays.asList(
+      "{{vacBwuenX?^?|OAzXBdP",
+      "}xfbcB_yjkXcEdAcF`KwClEyH|NoQz[iOdUqOhSeT|TgH`FyHnFuKbF}ChAcFhBoGpAqFXeIXeEHuVl@",
+      null
+    );
+
+    assertEquals(geometries, stepIntersection.geometries());
+
+    final String jsonStr = stepIntersection.toJson();
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testNullGeometries() {
+    String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+    assertNull(stepIntersection.geometries());
+  }
+
+  @Test
+  public void testAccess() {
+    final String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ],"
+      + "\"access\": [\n"
+      + "    0,\n"
+      + "    -1,\n"
+      + "    1,\n"
+      + "    2,\n"
+      + "    null"
+      + "]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    final List<Integer> access = Arrays.asList(
+      0, -1, 1, 2, null
+    );
+
+    assertEquals(access, stepIntersection.access());
+
+    final String jsonStr = stepIntersection.toJson();
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testNullAccess() {
+    String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+    assertNull(stepIntersection.access());
+  }
+
+  @Test
+  public void testElevated() {
+    final String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ],"
+      + "\"elevated\": [\n"
+      + "    true,\n"
+      + "    false,\n"
+      + "    null"
+      + "]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    final List<Boolean> elevated = Arrays.asList(
+      true, false, null
+    );
+
+    assertEquals(elevated, stepIntersection.elevated());
+
+    final String jsonStr = stepIntersection.toJson();
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testNullElevated() {
+    String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+    assertNull(stepIntersection.elevated());
+  }
+
+  @Test
+  public void testBridges() {
+    final String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ],"
+      + "\"bridges\": [\n"
+      + "    true,\n"
+      + "    false,\n"
+      + "    true,\n"
+      + "    null"
+      + "]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+
+    final List<Boolean> bridge = Arrays.asList(
+      true, false, true, null
+    );
+
+    assertEquals(bridge, stepIntersection.bridges());
+
+    final String jsonStr = stepIntersection.toJson();
+    compareJson(stepIntersectionJsonString, jsonStr);
+  }
+
+  @Test
+  public void testNullBridges() {
+    String stepIntersectionJsonString = "{"
+      + "\"location\": [ 13.426579, 52.508068 ]"
+      + "}";
+
+    final StepIntersection stepIntersection = StepIntersection.fromJson(stepIntersectionJsonString);
+    assertNull(stepIntersection.bridges());
   }
 }
