@@ -78,13 +78,13 @@ public class RouteOptionsTest extends TestUtils {
       "&waypoints_per_route=true" +
       "&metadata=true" +
       "&payment_methods=general" +
+      "&notifications=none" +
       "&suppress_voice_instruction_local_names=true" +
       "&intersection_link_form_of_way=true" +
       "&intersection_link_geometry=motorway%2Ctrunk%2Cprimary" +
       "&intersection_link_access=true" +
       "&intersection_link_elevated=true" +
-      "&intersection_link_bridge=true," +
-      "$notifications=none";
+      "&intersection_link_bridge=true";
 
   private static final String ACCESS_TOKEN = "pk.token";
 
