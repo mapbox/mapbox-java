@@ -90,6 +90,7 @@ public class RouteLegTest extends TestUtils {
       Notification.builder()
         .type(DirectionsCriteria.NOTIFICATION_TYPE_VIOLATION)
         .subtype(DirectionsCriteria.NOTIFICATION_SUBTYPE_MAX_HEIGHT)
+        .refreshType(DirectionsCriteria.NOTIFICATION_REFRESH_TYPE_STATIC)
         .geometryIndexStart(123)
         .geometryIndexEnd(145)
         .build()
@@ -121,7 +122,7 @@ public class RouteLegTest extends TestUtils {
       + "\"admins\": [{ \"iso_3166_1_alpha3\": \"USA\", \"iso_3166_1\": \"US\" }],"
       + "\"incidents\": [{ \"id\": \"15985415522454461962\" }],"
       + "\"closures\": [{ \"geometry_index_start\": 1,\"geometry_index_end\": 4}],"
-      + "\"notifications\": [{ \"geometry_index_start\": 123,\"geometry_index_end\": 145, \"type\": \"violation\", \"subtype\": \"maxHeight\"}]}";
+      + "\"notifications\": [{ \"geometry_index_start\": 123,\"geometry_index_end\": 145, \"type\": \"violation\", \"refresh_type\": \"dynamic\", \"subtype\": \"maxHeight\"}]}";
     List<Admin> admins = new ArrayList<>();
     admins.add(Admin.builder().countryCode("US").countryCodeAlpha3("USA").build());
 
@@ -135,6 +136,7 @@ public class RouteLegTest extends TestUtils {
       Notification.builder()
         .type(DirectionsCriteria.NOTIFICATION_TYPE_VIOLATION)
         .subtype(DirectionsCriteria.NOTIFICATION_SUBTYPE_MAX_HEIGHT)
+        .refreshType(DirectionsCriteria.NOTIFICATION_REFRESH_TYPE_DYNAMIC)
         .geometryIndexStart(123)
         .geometryIndexEnd(145)
         .build()

@@ -35,6 +35,17 @@ public abstract class Notification extends DirectionsJsonObject {
   public abstract String type();
 
   /**
+   * Notification refresh type.
+   * Can be one of {@link DirectionsCriteria.NotificationsRefreshTypeCriteria}.
+   *
+   * @return notification refresh type
+   */
+  @SerializedName("refresh_type")
+  @NonNull
+  @DirectionsCriteria.NotificationsRefreshTypeCriteria
+  public abstract String refreshType();
+
+  /**
    * Notification subtype. Can be one of {@link DirectionsCriteria.NotificationsSubtypeCriteria},
    * depending on {@link Notification#type()}.
    *
@@ -70,6 +81,17 @@ public abstract class Notification extends DirectionsJsonObject {
    */
   @Nullable
   public abstract NotificationDetails details();
+
+  /**
+   * Notification reason. It is valid only if {@link Notification#type()} is
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT} and {@link Notification#subtype()} is
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE}.
+   *
+   * @return reason for the unavailability of the charging station for the electric vehicle
+   */
+  @DirectionsCriteria.NotificationsEvStationUnavailableReasonCriteria
+  @Nullable
+  public abstract String reason();
 
   /**
    * Convert the current {@link Notification} to its builder holding the currently assigned
@@ -122,6 +144,19 @@ public abstract class Notification extends DirectionsJsonObject {
     );
 
     /**
+     * Notification refresh type.
+     * Can be one of {@link DirectionsCriteria.NotificationsRefreshTypeCriteria}.
+     *
+     * @param type notification refresh type
+     * @return this builder for chaining options together
+     */
+    @SerializedName("refresh_type")
+    @NonNull
+    public abstract Builder refreshType(
+      @NonNull @DirectionsCriteria.NotificationsRefreshTypeCriteria String type
+    );
+
+    /**
      * Notification subtype. Can be one of {@link DirectionsCriteria.NotificationsSubtypeCriteria},
      * depending on {@link Notification.Builder#type()}.
      *
@@ -161,6 +196,20 @@ public abstract class Notification extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder details(@Nullable NotificationDetails details);
+
+    /**
+     * Notification reason. It is valid only if {@link Notification#type()} is
+     * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT} and {@link Notification#subtype()} is
+     * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE}.
+     *
+     * @param reason for the unavailability of the charging station for the electric vehicle
+     *        Can be one of {@link DirectionsCriteria.NotificationsEvStationUnavailableReasonCriteria}.
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder reason(
+      @Nullable @DirectionsCriteria.NotificationsEvStationUnavailableReasonCriteria String reason
+    );
 
     /**
      * Build a new {@link Notification} object.
