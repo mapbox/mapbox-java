@@ -594,17 +594,21 @@ public final class DirectionsCriteria {
    * EV minimal charge at charging station notification subtype of type
    * {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
    * {@link Notification#subtype()} will have this value
-   * if route request is EV (engine=electric) and EV's battery charge level was less than requested at a charging station.
+   * if route request is EV (engine=electric) and EV's battery charge level was less
+   * than requested at a charging station.
    */
-  public static final String NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_CHARGING_STATION = "evMinChargeAtChargingStation";
+  public static final String NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_CHARGING_STATION
+          = "evMinChargeAtChargingStation";
 
   /**
    * EV minimal charge at charging station notification subtype of type
    * {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
    * {@link Notification#subtype()} will have this value
-   * if route request is EV (engine=electric) and EV's battery charge level was less than requested at a destination
+   * if route request is EV (engine=electric) and EV's battery charge level was less
+   * than requested at a destination
    */
-  public static final String NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_DESTINATION = "evMinChargeAtDestination";
+  public static final String NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_DESTINATION
+          = "evMinChargeAtDestination";
 
   /**
    * Tunnel notification subtype of type
@@ -621,9 +625,10 @@ public final class DirectionsCriteria {
   /**
    * EV insufficient charge notification subtype of type
    * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT}.
-   * {@link Notification#subtype()} will have this value if route request is EV (engine=electric) and
-   * EV's battery charge level transitioned from a positive value to zero or less for the first time on a leg.
-   * Note that if a leg starts with zero charge level the notification is not emitted.
+   * {@link Notification#subtype()} will have this value if route request is EV (engine=electric)
+   * and EV's battery charge level transitioned from a positive value to zero or less for the first
+   * time on a leg. Note that if a leg starts with zero charge level the notification is not
+   * emitted.
    */
   public static final String NOTIFICATION_SUBTYPE_EV_INSUFFICIENT_CHARGE = "evInsufficientCharge";
 
@@ -632,9 +637,10 @@ public final class DirectionsCriteria {
    * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT}.
    * {@link Notification#subtype()} will have this value if route request is EV (engine=electric)
    * and the station offered during trip planning became unavailable.
-   * The reason for availability change is provided in field {@link Notification#reason()} and can be
-   * either {@link DirectionsCriteria#NOTIFICATION_EV_STATION_OUT_OF_ORDER} (when station broke down) or
-   * {@link DirectionsCriteria#NOTIFICATION_EV_STATION_OCCUPIED} (when there are no available chargers at the station)
+   * The reason for availability change is provided in field {@link Notification#reason()} and
+   * can be either {@link DirectionsCriteria#NOTIFICATION_EV_STATION_OUT_OF_ORDER}
+   * (when station broke down) or {@link DirectionsCriteria#NOTIFICATION_EV_STATION_OCCUPIED}
+   * (when there are no available chargers at the station)
    */
   public static final String NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE = "stationUnavailable";
 
