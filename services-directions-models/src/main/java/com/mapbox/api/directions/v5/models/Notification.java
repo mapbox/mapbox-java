@@ -202,8 +202,8 @@ public abstract class Notification extends DirectionsJsonObject {
      * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT} and {@link Notification#subtype()} is
      * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE}.
      *
-     * @param reason for the unavailability of the charging station for the electric vehicle
-     *        Can be one of {@link DirectionsCriteria.NotificationsEvStationUnavailableReasonCriteria}.
+     * @param reason for the unavailability of the charging station for the electric vehicle. Can be
+     *        one of {@link DirectionsCriteria.NotificationsEvStationUnavailableReasonCriteria}.
      * @return this builder for chaining options together
      */
     @NonNull
