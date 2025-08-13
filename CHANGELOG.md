@@ -3,7 +3,10 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
-- Added `RouteLeg#notifications`.
+
+### v7.7.0 - August 13, 2025
+- Add `RouteLeg#notifications`
+
 
 ### v7.6.0 - August 01, 2025
 
