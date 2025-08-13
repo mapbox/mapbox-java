@@ -669,7 +669,7 @@ public final class DirectionsCriteria {
   public static final String NOTIFICATION_FLOW_NONE = "none";
 
   private DirectionsCriteria() {
-      //not called
+    //not called
   }
 
   /**
@@ -679,10 +679,10 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          PROFILE_DRIVING_TRAFFIC,
-          PROFILE_DRIVING,
-          PROFILE_WALKING,
-          PROFILE_CYCLING
+    PROFILE_DRIVING_TRAFFIC,
+    PROFILE_DRIVING,
+    PROFILE_WALKING,
+    PROFILE_CYCLING
   })
   public @interface ProfileCriteria {
   }
@@ -694,8 +694,8 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          GEOMETRY_POLYLINE,
-          GEOMETRY_POLYLINE6
+    GEOMETRY_POLYLINE,
+    GEOMETRY_POLYLINE6
   })
   public @interface GeometriesCriteria {
   }
@@ -707,9 +707,9 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          OVERVIEW_FALSE,
-          OVERVIEW_FULL,
-          OVERVIEW_SIMPLIFIED
+    OVERVIEW_FALSE,
+    OVERVIEW_FULL,
+    OVERVIEW_SIMPLIFIED
   })
   public @interface OverviewCriteria {
   }
@@ -721,14 +721,14 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          ANNOTATION_DURATION,
-          ANNOTATION_DISTANCE,
-          ANNOTATION_SPEED,
-          ANNOTATION_CONGESTION,
-          ANNOTATION_CONGESTION_NUMERIC,
-          ANNOTATION_MAXSPEED,
-          ANNOTATION_CLOSURE,
-          ANNOTATION_TRAFFIC_TENDENCY,
+    ANNOTATION_DURATION,
+    ANNOTATION_DISTANCE,
+    ANNOTATION_SPEED,
+    ANNOTATION_CONGESTION,
+    ANNOTATION_CONGESTION_NUMERIC,
+    ANNOTATION_MAXSPEED,
+    ANNOTATION_CLOSURE,
+    ANNOTATION_TRAFFIC_TENDENCY,
     ANNOTATION_CURRENT_SPEED,
     ANNOTATION_FREEFLOW_SPEED
   })
@@ -743,13 +743,13 @@ public final class DirectionsCriteria {
   @Retention(RetentionPolicy.CLASS)
   // Please update Exclude.VALID_EXCLUDE_CRITERIA adding new type of exclude
   @StringDef({
-          EXCLUDE_FERRY,
-          EXCLUDE_MOTORWAY,
-          EXCLUDE_TOLL,
-          EXCLUDE_TUNNEL,
-          EXCLUDE_RESTRICTED,
-          EXCLUDE_CASH_ONLY_TOLLS,
-          EXCLUDE_UNPAVED
+    EXCLUDE_FERRY,
+    EXCLUDE_MOTORWAY,
+    EXCLUDE_TOLL,
+    EXCLUDE_TUNNEL,
+    EXCLUDE_RESTRICTED,
+    EXCLUDE_CASH_ONLY_TOLLS,
+    EXCLUDE_UNPAVED
   })
   public @interface ExcludeCriteria {
   }
@@ -759,9 +759,9 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          INCLUDE_HOV2,
-          INCLUDE_HOV3,
-          INCLUDE_HOT
+    INCLUDE_HOV2,
+    INCLUDE_HOV3,
+    INCLUDE_HOT
   })
   public @interface IncludeCriteria {
   }
@@ -773,8 +773,8 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          IMPERIAL,
-          METRIC,
+    IMPERIAL,
+    METRIC,
     BRITISH_IMPERIAL
   })
   public @interface VoiceUnitCriteria {
@@ -787,8 +787,8 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          SOURCE_ANY,
-          SOURCE_FIRST
+    SOURCE_ANY,
+    SOURCE_FIRST
   })
   public @interface SourceCriteria {
   }
@@ -800,12 +800,11 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          DESTINATION_ANY,
-          DESTINATION_LAST
+    DESTINATION_ANY,
+    DESTINATION_LAST
   })
   public @interface DestinationCriteria {
   }
-
 
   /**
    * Retention policy for the approaches parameter in the MapMatching and Directions API.
@@ -814,8 +813,8 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          APPROACH_UNRESTRICTED,
-          APPROACH_CURB
+    APPROACH_UNRESTRICTED,
+    APPROACH_CURB
   })
   public @interface ApproachesCriteria {
   }
@@ -829,12 +828,12 @@ public final class DirectionsCriteria {
   @SuppressWarnings("checkstyle:javadoctype")
   @Retention(RetentionPolicy.CLASS)
   @IntDef({
-          TRAFFIC_TENDENCY_UNKNOWN,
-          TRAFFIC_TENDENCY_CONSTANT_CONGESTION,
-          TRAFFIC_TENDENCY_INCREASING_CONGESTION,
-          TRAFFIC_TENDENCY_DECREASING_CONGESTION,
-          TRAFFIC_TENDENCY_RAPIDLY_INCREASING_CONGESTION,
-          TRAFFIC_TENDENCY_RAPIDLY_DECREASING_CONGESTION
+    TRAFFIC_TENDENCY_UNKNOWN,
+    TRAFFIC_TENDENCY_CONSTANT_CONGESTION,
+    TRAFFIC_TENDENCY_INCREASING_CONGESTION,
+    TRAFFIC_TENDENCY_DECREASING_CONGESTION,
+    TRAFFIC_TENDENCY_RAPIDLY_INCREASING_CONGESTION,
+    TRAFFIC_TENDENCY_RAPIDLY_DECREASING_CONGESTION
   })
   public @interface TrafficTendencyCriteria {
   }
@@ -845,19 +844,19 @@ public final class DirectionsCriteria {
   @SuppressWarnings("checkstyle:javadoctype")
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          PAYMENT_METHOD_GENERAL,
-          PAYMENT_METHOD_ETC,
-          PAYMENT_METHOD_ETCX,
-          PAYMENT_METHOD_CASH,
-          PAYMENT_METHOD_EXACT_CASH,
-          PAYMENT_METHOD_COINS,
-          PAYMENT_METHOD_NOTES,
-          PAYMENT_METHOD_DEBIT_CARDS,
-          PAYMENT_METHOD_PASS_CARD,
-          PAYMENT_METHOD_CREDIT_CARDS,
-          PAYMENT_METHOD_VIDEO,
-          PAYMENT_METHOD_CRYPTOCURRENCIES,
-          PAYMENT_METHOD_APP,
+    PAYMENT_METHOD_GENERAL,
+    PAYMENT_METHOD_ETC,
+    PAYMENT_METHOD_ETCX,
+    PAYMENT_METHOD_CASH,
+    PAYMENT_METHOD_EXACT_CASH,
+    PAYMENT_METHOD_COINS,
+    PAYMENT_METHOD_NOTES,
+    PAYMENT_METHOD_DEBIT_CARDS,
+    PAYMENT_METHOD_PASS_CARD,
+    PAYMENT_METHOD_CREDIT_CARDS,
+    PAYMENT_METHOD_VIDEO,
+    PAYMENT_METHOD_CRYPTOCURRENCIES,
+    PAYMENT_METHOD_APP,
     PAYMENT_METHOD_ETC2,
   })
   public @interface PaymentMethodsCriteria {
@@ -868,24 +867,24 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          AMENITY_TYPE_GAS_STATION,
-          AMENITY_TYPE_ELECTRIC_CHARGING_STATION,
-          AMENITY_TYPE_TOILET,
-          AMENITY_TYPE_COFFEE,
-          AMENITY_TYPE_RESTAURANT,
-          AMENITY_TYPE_SNACK,
-          AMENITY_TYPE_ATM,
-          AMENITY_TYPE_INFO,
-          AMENITY_TYPE_BABY_CARE,
-          AMENITY_TYPE_FACILITIES_FOR_DISABLED,
-          AMENITY_TYPE_SHOP,
-          AMENITY_TYPE_TELEPHONE,
-          AMENITY_TYPE_HOTEL,
-          AMENITY_TYPE_HOTSPRING,
-          AMENITY_TYPE_SHOWER,
-          AMENITY_TYPE_PICNIC_SHELTER,
-          AMENITY_TYPE_POST,
-          AMENITY_TYPE_FAX,
+    AMENITY_TYPE_GAS_STATION,
+    AMENITY_TYPE_ELECTRIC_CHARGING_STATION,
+    AMENITY_TYPE_TOILET,
+    AMENITY_TYPE_COFFEE,
+    AMENITY_TYPE_RESTAURANT,
+    AMENITY_TYPE_SNACK,
+    AMENITY_TYPE_ATM,
+    AMENITY_TYPE_INFO,
+    AMENITY_TYPE_BABY_CARE,
+    AMENITY_TYPE_FACILITIES_FOR_DISABLED,
+    AMENITY_TYPE_SHOP,
+    AMENITY_TYPE_TELEPHONE,
+    AMENITY_TYPE_HOTEL,
+    AMENITY_TYPE_HOTSPRING,
+    AMENITY_TYPE_SHOWER,
+    AMENITY_TYPE_PICNIC_SHELTER,
+    AMENITY_TYPE_POST,
+    AMENITY_TYPE_FAX,
   })
   public @interface AmenityTypeCriteria {
   }
@@ -895,8 +894,8 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          NOTIFICATION_TYPE_VIOLATION,
-          NOTIFICATION_TYPE_ALERT
+    NOTIFICATION_TYPE_VIOLATION,
+    NOTIFICATION_TYPE_ALERT
   })
   public @interface NotificationsTypeCriteria {
   }
@@ -906,8 +905,8 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          NOTIFICATION_REFRESH_TYPE_STATIC,
-          NOTIFICATION_REFRESH_TYPE_DYNAMIC
+    NOTIFICATION_REFRESH_TYPE_STATIC,
+    NOTIFICATION_REFRESH_TYPE_DYNAMIC
   })
   public @interface NotificationsRefreshTypeCriteria {
   }
@@ -917,18 +916,18 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          NOTIFICATION_SUBTYPE_MAX_HEIGHT,
-          NOTIFICATION_SUBTYPE_MAX_WIDTH,
-          NOTIFICATION_SUBTYPE_MAX_WEIGHT,
-          NOTIFICATION_SUBTYPE_UNPAVED,
-          NOTIFICATION_SUBTYPE_POINT_EXCLUSION,
-          NOTIFICATION_SUBTYPE_COUNTRY_BORDER_CROSSING,
-          NOTIFICATION_SUBTYPE_STATE_BORDER_CROSSING,
-          NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_CHARGING_STATION,
-          NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_DESTINATION,
-          NOTIFICATION_SUBTYPE_TUNNEL,
-          NOTIFICATION_SUBTYPE_EV_INSUFFICIENT_CHARGE,
-          NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE
+    NOTIFICATION_SUBTYPE_MAX_HEIGHT,
+    NOTIFICATION_SUBTYPE_MAX_WIDTH,
+    NOTIFICATION_SUBTYPE_MAX_WEIGHT,
+    NOTIFICATION_SUBTYPE_UNPAVED,
+    NOTIFICATION_SUBTYPE_POINT_EXCLUSION,
+    NOTIFICATION_SUBTYPE_COUNTRY_BORDER_CROSSING,
+    NOTIFICATION_SUBTYPE_STATE_BORDER_CROSSING,
+    NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_CHARGING_STATION,
+    NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_DESTINATION,
+    NOTIFICATION_SUBTYPE_TUNNEL,
+    NOTIFICATION_SUBTYPE_EV_INSUFFICIENT_CHARGE,
+    NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE
   })
   public @interface NotificationsSubtypeCriteria {
   }
@@ -939,8 +938,8 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          NOTIFICATION_EV_STATION_OUT_OF_ORDER,
-          NOTIFICATION_REFRESH_TYPE_DYNAMIC
+    NOTIFICATION_EV_STATION_OUT_OF_ORDER,
+    NOTIFICATION_EV_STATION_OCCUPIED
   })
   public @interface NotificationsEvStationUnavailableReasonCriteria {
   }
@@ -950,8 +949,8 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
-          NOTIFICATION_FLOW_ALL,
-          NOTIFICATION_FLOW_NONE,
+    NOTIFICATION_FLOW_ALL,
+    NOTIFICATION_FLOW_NONE,
   })
   public @interface NotificationsFlowCriteria {
   }
