@@ -65,6 +65,16 @@ public abstract class Notification extends DirectionsJsonObject {
   public abstract Integer geometryIndexStart();
 
   /**
+   * Leg-wise position in the coordinate list where the notification occurred, relative to the
+   * start of the leg it's on.
+   *
+   * @return index position in the coordinate list
+   */
+  @SerializedName("geometry_index")
+  @Nullable
+  public abstract Integer geometryIndex();
+
+  /**
    * Leg-wise end index of the area that violates the request parameter.
    *
    * @return end index
@@ -92,6 +102,18 @@ public abstract class Notification extends DirectionsJsonObject {
   @DirectionsCriteria.NotificationsEvStationUnavailableReasonCriteria
   @Nullable
   public abstract String reason();
+
+
+  /**
+   * Notification charging station id. It is valid only if {@link Notification#type()} is
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT} and {@link Notification#subtype()} is
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE}.
+   *
+   * @return charging station id of the unavailable charging station for the electric vehicle
+   */
+  @Nullable
+  @SerializedName("station_id")
+  public abstract String chargingStationId();
 
   /**
    * Convert the current {@link Notification} to its builder holding the currently assigned
@@ -178,6 +200,18 @@ public abstract class Notification extends DirectionsJsonObject {
     @NonNull
     public abstract Builder geometryIndexStart(@Nullable Integer geometryIndexStart);
 
+
+    /**
+     * Leg-wise position in the coordinate list where the notification occurred, relative to the
+     * start of the leg it's on.
+     *
+     * @param geometryIndex index
+     * @return this builder for chaining options together
+     */
+    @SerializedName("geometry_index")
+    @NonNull
+    public abstract Builder geometryIndex(@Nullable Integer geometryIndex);
+
     /**
      * Leg-wise end index of the area that violates the request parameter.
      *
@@ -209,6 +243,20 @@ public abstract class Notification extends DirectionsJsonObject {
     @NonNull
     public abstract Builder reason(
       @Nullable @DirectionsCriteria.NotificationsEvStationUnavailableReasonCriteria String reason
+    );
+
+    /**
+     * Notification charging station id. It is valid only if {@link Notification#type()} is
+     * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT} and {@link Notification#subtype()} is
+     * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE}.
+     *
+     * @param id of the unavailable charging station for the electric vehicle
+     * @return this builder for chaining options together
+     */
+    @SerializedName("station_id")
+    @NonNull
+    public abstract Builder chargingStationId(
+            @Nullable String id
     );
 
     /**

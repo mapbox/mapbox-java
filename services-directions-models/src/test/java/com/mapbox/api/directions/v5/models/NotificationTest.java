@@ -111,10 +111,10 @@ public class NotificationTest extends TestUtils {
             .subtype(DirectionsCriteria.NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE)
             .refreshType(DirectionsCriteria.NOTIFICATION_REFRESH_TYPE_DYNAMIC)
             .reason(DirectionsCriteria.NOTIFICATION_EV_STATION_OUT_OF_ORDER)
-            .unrecognizedJsonProperties(Collections.singletonMap("station_id", new JsonPrimitive("station1")))
+            .chargingStationId("charging-station-1")
             .build();
     String json = "{\"type\": \"alert\", \"refresh_type\": \"dynamic\", \"subtype\": \"stationUnavailable\", " +
-            "\"reason\": \"outOfOrder\", \"station_id\": \"station1\"}";
+            "\"reason\": \"outOfOrder\", \"station_id\": \"charging-station-1\"}";
 
     assertEquals(expected, Notification.fromJson(json));
   }
