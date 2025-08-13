@@ -125,6 +125,14 @@ public abstract class RouteLeg extends DirectionsJsonObject {
   public abstract List<Closure> closures();
 
   /**
+   * A list of notifications describing which requested parameters were violated (if any) and how.
+   *
+   * @return a list of {@link Notification}.
+   */
+  @Nullable
+  public abstract List<Notification> notifications();
+
+  /**
    * Convert the current {@link RouteLeg} to its builder holding the currently assigned
    * values. This allows you to modify a single property and then rebuild the object resulting in
    * an updated and modified {@link RouteLeg}.
@@ -271,6 +279,15 @@ public abstract class RouteLeg extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder closures(@Nullable List<Closure> closures);
+
+    /**
+     * A list of notifications describing which requested parameters were violated (if any) and how.
+     *
+     * @param notifications a list of {@link Notification}
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder notifications(@Nullable List<Notification> notifications);
 
     /**
      * Build a new {@link RouteLeg} object.

@@ -1,5 +1,6 @@
 package com.mapbox.api.directionsrefresh.v1.models;
 
+import com.mapbox.api.directions.v5.models.Notification;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -46,6 +47,16 @@ public class RouteLegRefreshTest extends TestUtils {
             .geometryIndexEnd(2)
             .build()
           )
+      )
+      .notifications(
+        Arrays.asList(
+          Notification.builder()
+            .refreshType(DirectionsCriteria.NOTIFICATION_REFRESH_TYPE_STATIC)
+            .type(DirectionsCriteria.NOTIFICATION_TYPE_VIOLATION)
+            .geometryIndexStart(1)
+            .geometryIndexEnd(2)
+            .build()
+        )
       )
       .build();
   }
@@ -131,6 +142,23 @@ public class RouteLegRefreshTest extends TestUtils {
         .build()
     );
 
+    List<Notification> notifications = Arrays.asList(
+      Notification.builder()
+        .type(DirectionsCriteria.NOTIFICATION_TYPE_VIOLATION)
+        .refreshType(DirectionsCriteria.NOTIFICATION_REFRESH_TYPE_STATIC)
+        .geometryIndexStart(1)
+        .geometryIndex(2)
+        .geometryIndexEnd(3)
+        .build(),
+      Notification.builder()
+        .type(DirectionsCriteria.NOTIFICATION_TYPE_ALERT)
+        .subtype(DirectionsCriteria.NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE)
+        .refreshType(DirectionsCriteria.NOTIFICATION_REFRESH_TYPE_DYNAMIC)
+        .reason(DirectionsCriteria.NOTIFICATION_EV_STATION_OUT_OF_ORDER)
+        .chargingStationId("charging-station-1")
+        .build()
+    );
+
     RouteLegRefresh routeLegRefresh = RouteLegRefresh.builder()
       .annotation(
         LegAnnotation.builder()
@@ -144,6 +172,7 @@ public class RouteLegRefreshTest extends TestUtils {
       )
       .incidents(incidents)
       .closures(closures)
+      .notifications(notifications)
       .build();
 
     String json = routeLegRefresh.toJson();
@@ -152,6 +181,7 @@ public class RouteLegRefreshTest extends TestUtils {
     assertNotNull(routeLegRefresh.annotation());
     assertNotNull(routeLegRefresh.incidents());
     assertNotNull(routeLegRefresh.closures());
+    assertNotNull(routeLegRefresh.notifications());
     assertEquals(routeLegRefresh, fromJson);
   }
 

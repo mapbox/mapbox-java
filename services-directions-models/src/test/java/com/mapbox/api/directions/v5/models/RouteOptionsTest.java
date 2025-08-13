@@ -78,6 +78,7 @@ public class RouteOptionsTest extends TestUtils {
       "&waypoints_per_route=true" +
       "&metadata=true" +
       "&payment_methods=general" +
+      "&notifications=none" +
       "&suppress_voice_instruction_local_names=true" +
       "&intersection_link_form_of_way=true" +
       "&intersection_link_geometry=motorway%2Ctrunk%2Cprimary" +
@@ -404,6 +405,13 @@ public class RouteOptionsTest extends TestUtils {
   }
 
   @Test
+  public void notificationsIsValid_fromJson() {
+    RouteOptions options = RouteOptions.fromJson(optionsJson);
+
+    assertEquals(DirectionsCriteria.NOTIFICATION_FLOW_NONE, options.notifications());
+  }
+
+  @Test
   public void waypointsPerRouteAreValid_fromJson() {
     RouteOptions routeOptions = RouteOptions.fromJson(optionsJson);
 
@@ -452,6 +460,13 @@ public class RouteOptionsTest extends TestUtils {
     RouteOptions options = defaultRouteOptions();
 
     assertNull(options.suppressVoiceInstructionLocalNames());
+  }
+
+  @Test
+  public void defaultNotifications() {
+    RouteOptions options = defaultRouteOptions();
+
+    assertNull(options.notifications());
   }
 
   @Test
@@ -1221,6 +1236,7 @@ public class RouteOptionsTest extends TestUtils {
       .intersectionLinkAccess(true)
       .intersectionLinkElevated(true)
       .intersectionLinkBridge(true)
+      .notifications(DirectionsCriteria.NOTIFICATION_FLOW_NONE)
       .build();
   }
 
@@ -1335,6 +1351,7 @@ public class RouteOptionsTest extends TestUtils {
       .intersectionLinkElevated(true)
       .intersectionLinkBridge(true)
       .intersectionLinkGeometry(Arrays.asList("motorway", "trunk", "primary"))
+      .notifications(DirectionsCriteria.NOTIFICATION_FLOW_NONE)
       .build();
   }
 }

@@ -3,6 +3,9 @@ package com.mapbox.api.directions.v5;
 import androidx.annotation.IntDef;
 import androidx.annotation.StringDef;
 import com.mapbox.api.directions.v5.models.Amenity;
+import com.mapbox.api.directions.v5.models.Notification;
+import com.mapbox.api.directions.v5.models.RouteLeg;
+import com.mapbox.api.directions.v5.models.RouteOptions;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -495,6 +498,176 @@ public final class DirectionsCriteria {
    */
   public static final String AMENITY_TYPE_FAX = "FAX";
 
+  /**
+   * Violation notification type. {@link Notification#type()} will have this value
+   * if some request parameters were violated.
+   */
+  public static final String NOTIFICATION_TYPE_VIOLATION = "violation";
+
+  /**
+   * Alert notification type. {@link Notification#type()} will have this value
+   * if some implicit route preferences cannot be satisfied
+   */
+  public static final String NOTIFICATION_TYPE_ALERT = "alert";
+
+  /**
+   * A notification that is received with the initial route request or during one of the route
+   * refreshes, but is then kept constant and not updated on route refreshes.
+   * It persists until arrival.
+   * An example is a violation alert, where the condition is unlikely to change.
+   * {@link Notification#refreshType()} will have this value
+   */
+  public static final String NOTIFICATION_REFRESH_TYPE_STATIC = "static";
+
+  /**
+   * A notification that is updated and reset with each route refresh.
+   * Previous notifications of this type are cleared,
+   * and new ones are applied based on the current status.
+   * This type of notification is used for information that can change,
+   * such as the status of a busy EV station.
+   * {@link Notification#refreshType()} will have this value
+   */
+  public static final String NOTIFICATION_REFRESH_TYPE_DYNAMIC = "dynamic";
+
+  /**
+   * Max height notification subtype of type {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#maxHeight()} parameter is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_MAX_HEIGHT = "maxHeight";
+
+  /**
+   * Max width notification subtype of type {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#maxWidth()} parameter is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_MAX_WIDTH = "maxWidth";
+
+  /**
+   * Max weight notification subtype of type {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#maxWeight()} parameter is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_MAX_WEIGHT = "maxWeight";
+
+  /**
+   * Unpaved notification subtype of type {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#exclude()} parameter with value
+   * {@link DirectionsCriteria#EXCLUDE_UNPAVED} is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_UNPAVED = "unpaved";
+
+  /**
+   * Point exclusion notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#exclude()} parameter with point value is violated.
+   */
+  public static final String NOTIFICATION_SUBTYPE_POINT_EXCLUSION = "pointExclusion";
+
+  /**
+   * Country border exclusion notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#exclude()} parameter "country_border" is violated.
+   * <p>
+   * Country border notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT}.
+   * {@link Notification#subtype()} will have this value if route crosses a country border.
+   */
+  public static final String NOTIFICATION_SUBTYPE_COUNTRY_BORDER_CROSSING = "countryBorderCrossing";
+
+  /**
+   * State border exclusion notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#exclude()} parameter "state_border" is violated.
+   * <p>
+   * State border notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT}.
+   * {@link Notification#subtype()} will have this value if route crosses a state border.
+   */
+  public static final String NOTIFICATION_SUBTYPE_STATE_BORDER_CROSSING = "stateBorderCrossing";
+
+  /**
+   * EV minimal charge at charging station notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if route request is EV (engine=electric) and EV's battery charge level was less
+   * than requested at a charging station.
+   */
+  public static final String NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_CHARGING_STATION
+          = "evMinChargeAtChargingStation";
+
+  /**
+   * EV minimal charge at charging station notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if route request is EV (engine=electric) and EV's battery charge level was less
+   * than requested at a destination
+   */
+  public static final String NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_DESTINATION
+          = "evMinChargeAtDestination";
+
+  /**
+   * Tunnel notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_VIOLATION}.
+   * {@link Notification#subtype()} will have this value
+   * if {@link RouteOptions#exclude()} tunnel parameter is violated.
+   * <p>
+   * Tunnel notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT}.
+   * {@link Notification#subtype()} will have this value if route has a tunnel
+   */
+  public static final String NOTIFICATION_SUBTYPE_TUNNEL = "tunnel";
+
+  /**
+   * EV insufficient charge notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT}.
+   * {@link Notification#subtype()} will have this value if route request is EV (engine=electric)
+   * and EV's battery charge level transitioned from a positive value to zero or less for the first
+   * time on a leg. Note that if a leg starts with zero charge level the notification is not
+   * emitted.
+   */
+  public static final String NOTIFICATION_SUBTYPE_EV_INSUFFICIENT_CHARGE = "evInsufficientCharge";
+
+  /**
+   * Station unavailable notification subtype of type
+   * {@link DirectionsCriteria#NOTIFICATION_TYPE_ALERT}.
+   * {@link Notification#subtype()} will have this value if route request is EV (engine=electric)
+   * and the station offered during trip planning became unavailable.
+   * The reason for availability change is provided in field {@link Notification#reason()} and
+   * can be either {@link DirectionsCriteria#NOTIFICATION_EV_STATION_OUT_OF_ORDER}
+   * (when station broke down) or {@link DirectionsCriteria#NOTIFICATION_EV_STATION_OCCUPIED}
+   * (when there are no available chargers at the station)
+   */
+  public static final String NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE = "stationUnavailable";
+
+  /**
+   * Out of order reason for unavailability of the charging station for the electric vehicle.
+   * {@link Notification#reason()} will have this value if route request is EV (engine=electric)
+   * and the station offered during trip planning became unavailable.
+   */
+  public static final String NOTIFICATION_EV_STATION_OUT_OF_ORDER = "outOfOrder";
+
+  /**
+   * `Occupied` reason for unavailability of the charging station for the electric vehicle.
+   * {@link Notification#reason()} will have this value if route request is EV (engine=electric)
+   * and the station offered during trip planning became unavailable.
+   */
+  public static final String NOTIFICATION_EV_STATION_OCCUPIED = "occupied";
+
+  /**
+   * Include all notifications in the route response (see {@link RouteLeg#notifications()}).
+   */
+  public static final String NOTIFICATION_FLOW_ALL = "all";
+
+  /**
+   * Include none of the notifications in the route response (see {@link RouteLeg#notifications()}).
+   */
+  public static final String NOTIFICATION_FLOW_NONE = "none";
+
   private DirectionsCriteria() {
     //not called
   }
@@ -505,7 +678,7 @@ public final class DirectionsCriteria {
    * @since 3.0.0
    */
   @Retention(RetentionPolicy.CLASS)
-  @StringDef( {
+  @StringDef({
     PROFILE_DRIVING_TRAFFIC,
     PROFILE_DRIVING,
     PROFILE_WALKING,
@@ -520,7 +693,7 @@ public final class DirectionsCriteria {
    * @since 3.0.0
    */
   @Retention(RetentionPolicy.CLASS)
-  @StringDef( {
+  @StringDef({
     GEOMETRY_POLYLINE,
     GEOMETRY_POLYLINE6
   })
@@ -533,7 +706,7 @@ public final class DirectionsCriteria {
    * @since 3.0.0
    */
   @Retention(RetentionPolicy.CLASS)
-  @StringDef( {
+  @StringDef({
     OVERVIEW_FALSE,
     OVERVIEW_FULL,
     OVERVIEW_SIMPLIFIED
@@ -547,7 +720,7 @@ public final class DirectionsCriteria {
    * @since 3.0.0
    */
   @Retention(RetentionPolicy.CLASS)
-  @StringDef( {
+  @StringDef({
     ANNOTATION_DURATION,
     ANNOTATION_DISTANCE,
     ANNOTATION_SPEED,
@@ -569,7 +742,7 @@ public final class DirectionsCriteria {
    */
   @Retention(RetentionPolicy.CLASS)
   // Please update Exclude.VALID_EXCLUDE_CRITERIA adding new type of exclude
-  @StringDef( {
+  @StringDef({
     EXCLUDE_FERRY,
     EXCLUDE_MOTORWAY,
     EXCLUDE_TOLL,
@@ -585,7 +758,7 @@ public final class DirectionsCriteria {
    * Retention policy for include key.
    */
   @Retention(RetentionPolicy.CLASS)
-  @StringDef( {
+  @StringDef({
     INCLUDE_HOV2,
     INCLUDE_HOV3,
     INCLUDE_HOT
@@ -599,7 +772,7 @@ public final class DirectionsCriteria {
    * @since 0.3.0
    */
   @Retention(RetentionPolicy.CLASS)
-  @StringDef( {
+  @StringDef({
     IMPERIAL,
     METRIC,
     BRITISH_IMPERIAL
@@ -613,7 +786,7 @@ public final class DirectionsCriteria {
    * @since 3.0.0
    */
   @Retention(RetentionPolicy.CLASS)
-  @StringDef( {
+  @StringDef({
     SOURCE_ANY,
     SOURCE_FIRST
   })
@@ -626,13 +799,12 @@ public final class DirectionsCriteria {
    * @since 3.0.0
    */
   @Retention(RetentionPolicy.CLASS)
-  @StringDef( {
+  @StringDef({
     DESTINATION_ANY,
     DESTINATION_LAST
   })
   public @interface DestinationCriteria {
   }
-
 
   /**
    * Retention policy for the approaches parameter in the MapMatching and Directions API.
@@ -640,7 +812,7 @@ public final class DirectionsCriteria {
    * @since 3.2.0
    */
   @Retention(RetentionPolicy.CLASS)
-  @StringDef( {
+  @StringDef({
     APPROACH_UNRESTRICTED,
     APPROACH_CURB
   })
@@ -715,5 +887,70 @@ public final class DirectionsCriteria {
     AMENITY_TYPE_FAX,
   })
   public @interface AmenityTypeCriteria {
+  }
+
+  /**
+   * Supported notification types. See {@link Notification#type()}.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    NOTIFICATION_TYPE_VIOLATION,
+    NOTIFICATION_TYPE_ALERT
+  })
+  public @interface NotificationsTypeCriteria {
+  }
+
+  /**
+   * Supported notification refresh types. See {@link Notification#refreshType()}.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    NOTIFICATION_REFRESH_TYPE_STATIC,
+    NOTIFICATION_REFRESH_TYPE_DYNAMIC
+  })
+  public @interface NotificationsRefreshTypeCriteria {
+  }
+
+  /**
+   * Supported notification subtypes. See {@link Notification#subtype()}.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    NOTIFICATION_SUBTYPE_MAX_HEIGHT,
+    NOTIFICATION_SUBTYPE_MAX_WIDTH,
+    NOTIFICATION_SUBTYPE_MAX_WEIGHT,
+    NOTIFICATION_SUBTYPE_UNPAVED,
+    NOTIFICATION_SUBTYPE_POINT_EXCLUSION,
+    NOTIFICATION_SUBTYPE_COUNTRY_BORDER_CROSSING,
+    NOTIFICATION_SUBTYPE_STATE_BORDER_CROSSING,
+    NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_CHARGING_STATION,
+    NOTIFICATION_SUBTYPE_EV_MIN_CHARGE_AT_DESTINATION,
+    NOTIFICATION_SUBTYPE_TUNNEL,
+    NOTIFICATION_SUBTYPE_EV_INSUFFICIENT_CHARGE,
+    NOTIFICATION_SUBTYPE_EV_STATION_UNAVAILABLE
+  })
+  public @interface NotificationsSubtypeCriteria {
+  }
+
+  /**
+   * Supported EV station unavailable reasons. See {@link Notification#reason()}.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    NOTIFICATION_EV_STATION_OUT_OF_ORDER,
+    NOTIFICATION_EV_STATION_OCCUPIED
+  })
+  public @interface NotificationsEvStationUnavailableReasonCriteria {
+  }
+
+  /**
+   * Supported {@link RouteOptions#notifications()} parameter values.
+   */
+  @Retention(RetentionPolicy.CLASS)
+  @StringDef({
+    NOTIFICATION_FLOW_ALL,
+    NOTIFICATION_FLOW_NONE,
+  })
+  public @interface NotificationsFlowCriteria {
   }
 }

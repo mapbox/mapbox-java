@@ -11,6 +11,7 @@ import com.mapbox.api.directions.v5.models.Closure;
 import com.mapbox.api.directions.v5.models.DirectionsWaypoint;
 import com.mapbox.api.directions.v5.models.Incident;
 import com.mapbox.api.directions.v5.models.LegAnnotation;
+import com.mapbox.api.directions.v5.models.Notification;
 import com.mapbox.api.directionsrefresh.v1.DirectionsRefreshAdapterFactory;
 
 import java.util.List;
@@ -56,6 +57,15 @@ public abstract class RouteLegRefresh extends DirectionsRefreshJsonObject {
    */
   @Nullable
   public abstract List<Closure> closures();
+
+
+  /**
+   * A list of notifications that occur on this leg.
+   *
+   * @return a list of {@link Notification}
+   */
+  @Nullable
+  public abstract List<Notification> notifications();
 
   /**
    * Convert the current {@link RouteLegRefresh} to its builder holding the currently assigned
@@ -126,6 +136,15 @@ public abstract class RouteLegRefresh extends DirectionsRefreshJsonObject {
      */
     @NonNull
     public abstract Builder closures(@Nullable List<Closure> closures);
+
+    /**
+     * A list of notifications that occur on this leg.
+     *
+     * @param notifications a list of {@link Notification}
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder notifications(@Nullable List<Notification> notifications);
 
     /**
      * Build a new {@link RouteLegRefresh} object.

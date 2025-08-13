@@ -44,5 +44,6 @@
   "intersection_link_geometry": "motorway,trunk,primary",
   "intersection_link_access": true,
   "intersection_link_elevated": true,
-  "intersection_link_bridge": true
+  "intersection_link_bridge": true,
+  "notifications": "none"
 }
