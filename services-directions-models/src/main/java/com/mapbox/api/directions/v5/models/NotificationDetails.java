@@ -83,7 +83,7 @@ public abstract class NotificationDetails extends DirectionsJsonObject {
    * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_MAX_WEIGHT},
    * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_UNPAVED},
    * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_POINT_EXCLUSION},
-   * it the message of the notification.
+   * it is the message of the notification.
    *
    * @return message
    */
@@ -189,7 +189,7 @@ public abstract class NotificationDetails extends DirectionsJsonObject {
      * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_MAX_WEIGHT},
      * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_UNPAVED},
      * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_POINT_EXCLUSION},
-     * it the message of the notification.
+     * is is the message of the notification.
      *
      * @param message message
      * @return this builder for chaining options together
