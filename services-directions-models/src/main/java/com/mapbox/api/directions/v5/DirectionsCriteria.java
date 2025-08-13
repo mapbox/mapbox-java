@@ -932,9 +932,8 @@ public final class DirectionsCriteria {
   public @interface NotificationsSubtypeCriteria {
   }
 
-
   /**
-   * Supported notification refresh types. See {@link Notification#refreshType()}.
+   * Supported EV station unavailable reasons. See {@link Notification#reason()}.
    */
   @Retention(RetentionPolicy.CLASS)
   @StringDef({
