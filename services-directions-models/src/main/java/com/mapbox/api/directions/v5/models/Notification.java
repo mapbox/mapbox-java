@@ -57,6 +57,15 @@ public abstract class Notification extends DirectionsJsonObject {
 
   /**
    * Leg-wise start index of the area that violates the request parameter.
+   * This value is present only for
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_MAX_HEIGHT},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_MAX_WIDTH},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_MAX_WEIGHT},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_UNPAVED},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_POINT_EXCLUSION},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_COUNTRY_BORDER_CROSSING},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_STATE_BORDER_CROSSING}
+   * otherwise it is null
    *
    * @return start index
    */
@@ -68,6 +77,9 @@ public abstract class Notification extends DirectionsJsonObject {
    * Leg-wise position in the coordinate list where the notification occurred, relative to the
    * start of the leg it's on.
    *
+   * This value is present only for
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_EV_INSUFFICIENT_CHARGE} otherwise it is null.
+   *
    * @return index position in the coordinate list
    */
   @SerializedName("geometry_index")
@@ -76,6 +88,15 @@ public abstract class Notification extends DirectionsJsonObject {
 
   /**
    * Leg-wise end index of the area that violates the request parameter.
+   * This value is present only for
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_MAX_HEIGHT},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_MAX_WIDTH},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_MAX_WEIGHT},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_UNPAVED},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_POINT_EXCLUSION},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_COUNTRY_BORDER_CROSSING},
+   * {@link DirectionsCriteria#NOTIFICATION_SUBTYPE_STATE_BORDER_CROSSING}
+   * otherwise it is null
    *
    * @return end index
    */
