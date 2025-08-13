@@ -2328,7 +2328,7 @@ public abstract class RouteOptions extends DirectionsJsonObject {
      * Which notifications the response should contain (see {@link RouteLeg#notifications()}).
      * For possible values see
      * {@link com.mapbox.api.directions.v5.DirectionsCriteria.NotificationsFlowCriteria}.
-     * If null is passed, {@link DirectionsCriteria#NOTIFICATION_FLOW_ALL} value wil be used.
+     * If null is passed, {@link DirectionsCriteria#NOTIFICATION_FLOW_ALL} value will be used.
      *
      * @param notifications  string representing `notifications` value.
      * @return this builder

@@ -59,7 +59,7 @@ interface DirectionsService {
    * @param computeTollCost               {@link RouteOptions#computeTollCost()}
    * @param waypointsPerRoute             {@link RouteOptions#waypointsPerRoute()}
    * @param metadata                      {@link RouteOptions#metadata()}
-   * @param notifications                 {@link RouteOptions#notifications()} ()}
+   * @param notifications                 {@link RouteOptions#notifications()}
    * @return the {@link DirectionsResponse} in a Call wrapper
    */
   @GET("directions/v5/{user}/{profile}/{coordinates}")
