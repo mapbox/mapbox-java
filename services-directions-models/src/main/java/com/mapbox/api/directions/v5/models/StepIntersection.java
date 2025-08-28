@@ -352,9 +352,11 @@ public abstract class StepIntersection extends DirectionsJsonObject {
 
 
   /**
-   * The time required, in seconds, to traverse the intersection. Only available on the driving profile.
+   * The time required, in seconds, to traverse the intersection.
+   * Only available on the driving profile.
    *
-   * @return The time required, in seconds, to traverse the intersection. Only available on the driving profile.
+   * @return The time required, in seconds, to traverse the intersection.
+   *   Only available on the driving profile.
    */
   @Nullable
   @SerializedName("duration")
@@ -724,9 +726,11 @@ public abstract class StepIntersection extends DirectionsJsonObject {
     public abstract Builder mergingArea(@Nullable MergingArea mergingArea);
 
     /**
-     * The time required, in seconds, to traverse the intersection. Only available on the driving profile.
+     * The time required, in seconds, to traverse the intersection.
+     * Only available on the driving profile.
      *
-     * @return The time required, in seconds, to traverse the intersection. Only available on the driving profile.
+     * @param duration The time required, in seconds, to traverse the intersection
+     * @return this builder for chaining options together
      */
     @NonNull
     public abstract Builder duration(@Nullable Double duration);
