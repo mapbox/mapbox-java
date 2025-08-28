@@ -3,7 +3,10 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+
+### v7.8.0 - August 28, 2025
 - Add `StepIntersection#duration` (previously available through `StepIntersection#getUnrecognizedProperty("duration")`)
+
 
 ### v7.7.0 - August 13, 2025
 - Add `RouteLeg#notifications`
