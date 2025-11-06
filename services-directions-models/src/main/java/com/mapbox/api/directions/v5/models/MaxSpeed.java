@@ -83,7 +83,7 @@ public abstract class MaxSpeed extends DirectionsJsonObject {
    * @since 3.0.0
    */
   public static TypeAdapter<MaxSpeed> typeAdapter(Gson gson) {
-    return new AutoValue_MaxSpeed.GsonTypeAdapter(gson);
+    return new MaxSpeedGsonTypeAdapter(gson);
   }
 
   /**
