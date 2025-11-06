@@ -2,7 +2,7 @@ apply plugin: 'checkstyle'
 
 checkstyle.toolVersion = '7.8.2'
 checkstyle.configFile = rootProject.file('config/checkstyle/checkstyle.xml')
-checkstyleMain.exclude '**/BuildConfig.java'
+checkstyleMain.exclude '**/BuildConfig.java','**/*GsonTypeAdapter.java'
 
 task checkstyle(type: Checkstyle) {
   description 'Checks if the code adheres to coding standards'
@@ -14,7 +14,7 @@ task checkstyle(type: Checkstyle) {
       'baseDir'  : rootDir,
   ]
 
-  exclude '**/BuildConfig.java'
+  exclude '**/BuildConfig.java', '**/*GsonTypeAdapter.java'
   classpath = files()
   ignoreFailures = false
 }

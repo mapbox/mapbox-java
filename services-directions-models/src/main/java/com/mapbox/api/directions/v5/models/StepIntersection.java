@@ -382,7 +382,6 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    */
   public static TypeAdapter<StepIntersection> typeAdapter(Gson gson) {
     return new StepIntersectionGsonTypeAdapter(gson);
-//    return new AutoValue_StepIntersection.GsonTypeAdapter(gson);
   }
 
   /**
