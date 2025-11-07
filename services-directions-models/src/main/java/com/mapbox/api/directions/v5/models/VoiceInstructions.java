@@ -78,7 +78,7 @@ public abstract class VoiceInstructions extends DirectionsJsonObject {
    * @since 3.0.0
    */
   public static TypeAdapter<VoiceInstructions> typeAdapter(Gson gson) {
-    return new AutoValue_VoiceInstructions.GsonTypeAdapter(gson);
+    return new VoiceInstructionsGsonTypeAdapter(gson);
   }
 
   /**
