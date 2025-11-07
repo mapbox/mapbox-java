@@ -351,7 +351,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
    * @since 3.0.0
    */
   public static TypeAdapter<BannerComponents> typeAdapter(Gson gson) {
-    return new AutoValue_BannerComponents.GsonTypeAdapter(gson);
+    return new BannerComponentsGsonTypeAdapter(gson);
   }
 
   /**
