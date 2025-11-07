@@ -57,7 +57,7 @@ public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
    * @return the type adapter for this class
    */
   public static TypeAdapter<MapboxStreetsV8> typeAdapter(Gson gson) {
-    return new AutoValue_MapboxStreetsV8.GsonTypeAdapter(gson);
+    return new MapboxStreetsV8GsonTypeAdapter(gson);
   }
 
   /**
