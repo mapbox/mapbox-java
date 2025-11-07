@@ -123,7 +123,7 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
       .registerTypeAdapter(String.class, new InterningStringAdapter())
       .create();
 
-    return new AutoValue_IntersectionLanes.GsonTypeAdapter(customGson);
+    return new IntersectionLanesGsonTypeAdapter(customGson);
   }
 
   /**
