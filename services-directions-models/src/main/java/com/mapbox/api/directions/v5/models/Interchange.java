@@ -2,15 +2,18 @@ package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 /*
  * An object containing information about routing and passing interchange(s) along the route.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 @SuppressWarnings({"checkstyle:javadoctype", "checkstyle:javadocmethod"})
 public abstract class Interchange extends DirectionsJsonObject {

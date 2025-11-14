@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 /**
  * A part of the {@link BannerComponents} which includes a snippet of the route shield associated
@@ -14,6 +15,7 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
  * To receive this information, your request must have
  * <tt>MapboxDirections.Builder#bannerInstructions()</tt> set to true.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class MapboxShield extends DirectionsJsonObject {
   /**

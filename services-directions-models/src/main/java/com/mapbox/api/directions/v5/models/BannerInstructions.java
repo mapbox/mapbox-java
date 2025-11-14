@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 /**
  * Visual instruction information related to a particular {@link LegStep} useful for making UI
@@ -16,6 +17,7 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
  *
  * @since 3.0.0
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class BannerInstructions extends DirectionsJsonObject {
 

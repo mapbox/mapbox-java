@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Set;
 /**
  * ShieldSprites.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class ShieldSprites extends DirectionsJsonObject implements Serializable {
 

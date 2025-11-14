@@ -2,16 +2,19 @@ package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 /*
  * Toll cost information.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 @SuppressWarnings({"checkstyle:javadoctype", "checkstyle:javadocmethod"})
 public abstract class TollCost extends DirectionsJsonObject {

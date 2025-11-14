@@ -7,12 +7,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 /**
  * Object representing max speeds along a route.
  *
  * @since 3.0.0
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class MaxSpeed extends DirectionsJsonObject {
 
@@ -83,7 +85,11 @@ public abstract class MaxSpeed extends DirectionsJsonObject {
    * @since 3.0.0
    */
   public static TypeAdapter<MaxSpeed> typeAdapter(Gson gson) {
-    return new MaxSpeedGsonTypeAdapter(gson);
+    // We want all the strings in this class (for now only `unit`) to be intern Strings
+    final Gson customGson = gson.newBuilder()
+            .registerTypeAdapter(String.class, new InterningStringAdapter())
+            .create();
+    return new AutoValue_MaxSpeed.GsonTypeAdapter(customGson);
   }
 
   /**

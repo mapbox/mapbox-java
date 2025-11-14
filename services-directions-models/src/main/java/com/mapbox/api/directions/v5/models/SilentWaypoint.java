@@ -1,15 +1,18 @@
 package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.NonNull;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 /**
  * Represents an information about silent waypoint in the leg index.
  * See {@link RouteLeg#viaWaypoints()} for more details.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class SilentWaypoint extends DirectionsJsonObject {
 

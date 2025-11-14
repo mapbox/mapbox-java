@@ -5,12 +5,14 @@ import androidx.annotation.NonNull;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 import java.io.Serializable;
 
 /**
  * ShieldSprite.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class ShieldSprite extends DirectionsJsonObject implements Serializable {
 

@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * ShieldSpriteAttribute.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class ShieldSpriteAttribute extends DirectionsJsonObject implements Serializable {
 

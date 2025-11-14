@@ -10,6 +10,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 import com.mapbox.geojson.Point;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
  *
  * @since 1.3.0
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class StepIntersection extends DirectionsJsonObject {
 
@@ -381,7 +383,7 @@ public abstract class StepIntersection extends DirectionsJsonObject {
    * @since 3.0.0
    */
   public static TypeAdapter<StepIntersection> typeAdapter(Gson gson) {
-    return new StepIntersectionGsonTypeAdapter(gson);
+    return new AutoValue_StepIntersection.GsonTypeAdapter(gson);
   }
 
   /**

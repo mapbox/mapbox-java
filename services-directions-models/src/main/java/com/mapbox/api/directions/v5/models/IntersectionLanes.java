@@ -1,6 +1,7 @@
 package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,6 +9,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria.PaymentMethodsCriteria;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
  *
  * @since 2.0.0
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class IntersectionLanes extends DirectionsJsonObject {
 
@@ -123,7 +126,7 @@ public abstract class IntersectionLanes extends DirectionsJsonObject {
       .registerTypeAdapter(String.class, new InterningStringAdapter())
       .create();
 
-    return new IntersectionLanesGsonTypeAdapter(customGson);
+    return new AutoValue_IntersectionLanes.GsonTypeAdapter(customGson);
   }
 
   /**

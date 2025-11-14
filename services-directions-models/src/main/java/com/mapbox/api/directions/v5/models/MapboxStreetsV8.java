@@ -1,6 +1,7 @@
 package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,12 +9,14 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 /**
  * An object containing detailed information about the road exiting the intersection along the
  * route.
  * Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
 
@@ -57,7 +60,7 @@ public abstract class MapboxStreetsV8 extends DirectionsJsonObject {
    * @return the type adapter for this class
    */
   public static TypeAdapter<MapboxStreetsV8> typeAdapter(Gson gson) {
-    return new MapboxStreetsV8GsonTypeAdapter(gson);
+    return new AutoValue_MapboxStreetsV8.GsonTypeAdapter(gson);
   }
 
   /**

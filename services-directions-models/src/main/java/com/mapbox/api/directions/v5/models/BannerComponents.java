@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -23,6 +24,7 @@ import java.util.List;
  *
  * @since 3.0.0
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class BannerComponents extends DirectionsJsonObject
   implements Comparable<BannerComponents> {
@@ -351,7 +353,7 @@ public abstract class BannerComponents extends DirectionsJsonObject
    * @since 3.0.0
    */
   public static TypeAdapter<BannerComponents> typeAdapter(Gson gson) {
-    return new BannerComponentsGsonTypeAdapter(gson);
+    return new AutoValue_BannerComponents.GsonTypeAdapter(gson);
   }
 
   /**

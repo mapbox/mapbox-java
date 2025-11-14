@@ -3,6 +3,7 @@ package com.mapbox.api.directions.v5.models;
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,6 +16,7 @@ import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.FormatUtils;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 import com.mapbox.auto.value.gson.SerializableJsonElement;
 import com.mapbox.geojson.Point;
 
@@ -37,6 +39,10 @@ import java.util.Set;
  * <a href="https://www.mapbox.com/api-documentation/navigation/#directions">Directions API
  * documentation</a> for details and up-to-date documentation for each of the parameters.
  */
+@GsonTypeAdapterConfig(
+        // The builder sets defaults values so we have to use while reading
+        useBuilderOnRead = true
+)
 @AutoValue
 public abstract class RouteOptions extends DirectionsJsonObject {
 
