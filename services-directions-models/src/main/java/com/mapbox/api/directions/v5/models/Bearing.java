@@ -10,7 +10,7 @@ import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
  * and a {@link #degrees()} which is the range of degrees by which the angle can deviate.
  */
 @GsonTypeAdapterConfig(
-        // The builder sets defaults values so we have to use while reading
+        // The builder sets default values so we have to use it while deserializing
         useBuilderOnRead = true
 )
 @AutoValue

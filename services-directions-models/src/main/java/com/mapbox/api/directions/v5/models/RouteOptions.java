@@ -40,7 +40,7 @@ import java.util.Set;
  * documentation</a> for details and up-to-date documentation for each of the parameters.
  */
 @GsonTypeAdapterConfig(
-        // The builder sets defaults values so we have to use while reading
+        // The builder sets default values so we have to use it while deserializing
         useBuilderOnRead = true
 )
 @AutoValue
