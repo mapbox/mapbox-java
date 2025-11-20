@@ -2,6 +2,7 @@ package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;

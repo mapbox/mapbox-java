@@ -2,9 +2,11 @@ package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.utils.ParseUtils;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import java.util.Set;
  * are ignored. If you want to work with exclude criteria which is not yet supported,
  * consider using raw {@link RouteOptions#exclude()} directly.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class Exclude extends DirectionsJsonObject {
 

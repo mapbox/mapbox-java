@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 /**
  * An object containing information about a toll collection point along the route.
@@ -17,6 +18,7 @@ import com.mapbox.api.directions.v5.DirectionsCriteria;
  * where toll charge is collected.
  * Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class TollCollection extends DirectionsJsonObject {
 

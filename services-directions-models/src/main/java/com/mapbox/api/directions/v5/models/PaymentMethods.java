@@ -2,15 +2,18 @@ package com.mapbox.api.directions.v5.models;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 /*
  * Payment methods for the toll road.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 @SuppressWarnings({"checkstyle:javadoctype", "checkstyle:javadocmethod"})
 public abstract class PaymentMethods extends DirectionsJsonObject {

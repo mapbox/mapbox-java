@@ -10,6 +10,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.auto.value.gson.GsonTypeAdapterConfig;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * An object containing information about passing rest stops along the route.
  * Only available on the {@link DirectionsCriteria#PROFILE_DRIVING} profile.
  */
+@GsonTypeAdapterConfig(useBuilderOnRead = false)
 @AutoValue
 public abstract class RestStop extends DirectionsJsonObject {
 
