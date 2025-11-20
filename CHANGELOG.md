@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 
+### v7.9.0 - November 20, 2025
+
+
 ### v7.8.0 - August 28, 2025
 - Add `StepIntersection#duration` (previously available through `StepIntersection#getUnrecognizedProperty("duration")`)
 
