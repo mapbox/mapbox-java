@@ -10,6 +10,8 @@ import com.google.gson.TypeAdapter;
 import com.mapbox.api.directions.v5.DirectionsAdapterFactory;
 import com.mapbox.api.directionsrefresh.v1.DirectionsRefreshAdapterFactory;
 
+import java.io.Reader;
+
 /**
  * Response object for Directions Refresh requests.
  *
@@ -88,10 +90,26 @@ public abstract class DirectionsRefreshResponse extends DirectionsRefreshJsonObj
    * @since 4.4.0
    */
   public static DirectionsRefreshResponse fromJson(String json) {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    gsonBuilder.registerTypeAdapterFactory(DirectionsRefreshAdapterFactory.create())
-      .registerTypeAdapterFactory(DirectionsAdapterFactory.create());
-    return gsonBuilder.create().fromJson(json, DirectionsRefreshResponse.class);
+    return createGson().fromJson(json, DirectionsRefreshResponse.class);
+  }
+
+  /**
+   * Deserializes a {@link DirectionsRefreshResponse} from the given reader.
+   *
+   * @param json a {@link Reader} that provides valid JSON representing a
+   *   Directions Refresh response
+   * @return a new {@link DirectionsRefreshResponse} instance created from the provided reader
+   */
+  public static DirectionsRefreshResponse fromJson(@NonNull Reader json) {
+    return createGson().fromJson(json, DirectionsRefreshResponse.class);
+  }
+
+  @NonNull
+  private static Gson createGson() {
+    return new GsonBuilder()
+      .registerTypeAdapterFactory(DirectionsRefreshAdapterFactory.create())
+      .registerTypeAdapterFactory(DirectionsAdapterFactory.create())
+      .create();
   }
 
   /**

@@ -9,6 +9,7 @@ import com.mapbox.core.TestUtils;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class DirectionsRefreshResponseTest extends TestUtils {
 
@@ -67,6 +69,24 @@ public class DirectionsRefreshResponseTest extends TestUtils {
     DirectionsRefreshResponse fromJson2 = DirectionsRefreshResponse.fromJson(jsonFromObj);
 
     assertEquals(fromJson1, fromJson2);
+  }
+
+  @Test
+  public void testDeserializationFromReader() {
+    final InputStreamReader reader = getResourceInputSteamReader(DIRECTIONS_REFRESH_V1_WAYPOINTS);
+    final DirectionsRefreshResponse response = DirectionsRefreshResponse.fromJson(reader);
+
+    assertEquals("Ok", response.code());
+    assertNotNull(response.route());
+    assertNotNull(response.route().legs());
+
+    final RouteLegRefresh leg = response.route().legs().get(0);
+    assertNotNull(leg);
+    assertNotNull(leg.annotation());
+    assertFalse(leg.annotation().congestion().isEmpty());
+    assertFalse(leg.annotation().trafficTendency().isEmpty());
+    assertFalse(leg.incidents().isEmpty());
+    assertFalse(leg.closures().isEmpty());
   }
 
   @Test

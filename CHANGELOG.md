@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Added `DirectionsRefreshResponse#fromJson(Reader)`, a static factory method that deserializes a `DirectionsRefreshResponse` from a `java.io.Reader`.
 
 ### v7.9.0 - November 20, 2025
 
