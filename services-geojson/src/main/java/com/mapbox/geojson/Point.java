@@ -12,7 +12,10 @@ import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import com.mapbox.geojson.shifter.CoordinateShifterManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A point represents a single geographic position and is one of the seven Geometries found in the
@@ -46,7 +49,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Keep
-public final class Point implements CoordinateContainer<List<Double>> {
+public final class Point implements PrimitiveCoordinateContainer<List<Double>, double[]> {
 
   private static final String TYPE = "Point";
 
@@ -57,7 +60,7 @@ public final class Point implements CoordinateContainer<List<Double>> {
   private final BoundingBox bbox;
 
   @NonNull
-  private final List<Double> coordinates;
+  private final double[] coordinates;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -91,8 +94,8 @@ public final class Point implements CoordinateContainer<List<Double>> {
    */
   public static Point fromLngLat(double longitude, double latitude) {
 
-    List<Double> coordinates =
-      CoordinateShifterManager.getCoordinateShifter().shiftLonLat(longitude, latitude);
+    double[] coordinates =
+      CoordinateShifterManager.getCoordinateShifter().shift(longitude, latitude);
     return new Point(TYPE, null, coordinates);
   }
 
@@ -113,8 +116,8 @@ public final class Point implements CoordinateContainer<List<Double>> {
   public static Point fromLngLat(double longitude, double latitude,
     @Nullable BoundingBox bbox) {
 
-    List<Double> coordinates =
-      CoordinateShifterManager.getCoordinateShifter().shiftLonLat(longitude, latitude);
+    double[] coordinates =
+      CoordinateShifterManager.getCoordinateShifter().shift(longitude, latitude);
     return new Point(TYPE, bbox, coordinates);
   }
 
@@ -135,8 +138,8 @@ public final class Point implements CoordinateContainer<List<Double>> {
    */
   public static Point fromLngLat(double longitude, double latitude, double altitude) {
 
-    List<Double> coordinates =
-      CoordinateShifterManager.getCoordinateShifter().shiftLonLatAlt(longitude, latitude, altitude);
+    double[] coordinates =
+      CoordinateShifterManager.getCoordinateShifter().shift(longitude, latitude, altitude);
 
     return new Point(TYPE, null, coordinates);
   }
@@ -160,28 +163,24 @@ public final class Point implements CoordinateContainer<List<Double>> {
   public static Point fromLngLat(double longitude, double latitude,
     double altitude, @Nullable BoundingBox bbox) {
 
-    List<Double> coordinates =
-      CoordinateShifterManager.getCoordinateShifter().shiftLonLatAlt(longitude, latitude, altitude);
+    double[] coordinates =
+      CoordinateShifterManager.getCoordinateShifter().shift(longitude, latitude, altitude);
     return new Point(TYPE, bbox, coordinates);
   }
 
   static Point fromLngLat(@NonNull double[] coords) {
     if (coords.length == 2) {
       return Point.fromLngLat(coords[0], coords[1]);
-
     } else if (coords.length > 2) {
       return  Point.fromLngLat(coords[0], coords[1], coords[2]);
     }
     return null;
   }
 
-  Point(String type, @Nullable BoundingBox bbox, List<Double> coordinates) {
-    if (type == null) {
-      throw new NullPointerException("Null type");
-    }
+  Point(@NonNull String type, @Nullable BoundingBox bbox, @NonNull double[] coordinates) {
     this.type = type;
     this.bbox = bbox;
-    if (coordinates == null || coordinates.size() == 0) {
+    if (coordinates.length == 0) {
       throw new NullPointerException("Null coordinates");
     }
     this.coordinates = coordinates;
@@ -197,7 +196,7 @@ public final class Point implements CoordinateContainer<List<Double>> {
    * @since 3.0.0
    */
   public double longitude() {
-    return coordinates().get(0);
+    return coordinates[0];
   }
 
   /**
@@ -210,7 +209,7 @@ public final class Point implements CoordinateContainer<List<Double>> {
    * @since 3.0.0
    */
   public double latitude() {
-    return coordinates().get(1);
+    return coordinates[1];
   }
 
   /**
@@ -223,10 +222,10 @@ public final class Point implements CoordinateContainer<List<Double>> {
    * @since 3.0.0
    */
   public double altitude() {
-    if (coordinates().size() < 3) {
+    if (coordinates.length < 3) {
       return Double.NaN;
     }
-    return coordinates().get(2);
+    return coordinates[2];
   }
 
   /**
@@ -274,14 +273,33 @@ public final class Point implements CoordinateContainer<List<Double>> {
   /**
    * Provide a single double array containing the longitude, latitude, and optionally an
    * altitude/elevation. {@link #longitude()}, {@link #latitude()}, and {@link #altitude()} are all
-   * avaliable which make getting specific coordinates more direct.
+   * available which make getting specific coordinates more direct.
+   *
+   * @return a double array which holds this points coordinates
+   * @since 3.0.0
+   * @deprecated Please use {@link #coordinatesPrimitives()} instead.
+   */
+  @NonNull
+  @Override
+  @Deprecated
+  public List<Double> coordinates()  {
+    ArrayList<Double> list = new ArrayList<>(coordinates.length);
+    for (double coordinate : coordinates) {
+      list.add(coordinate);
+    }
+    return list;
+  }
+
+  /**
+   * Provide a single double array containing the longitude, latitude, and optionally an
+   * altitude/elevation. {@link #longitude()}, {@link #latitude()}, and {@link #altitude()} are all
+   * available which make getting specific coordinates more direct.
    *
    * @return a double array which holds this points coordinates
    * @since 3.0.0
    */
-  @NonNull
   @Override
-  public List<Double> coordinates()  {
+  public double[] coordinatesPrimitives() {
     return coordinates;
   }
 
@@ -312,25 +330,23 @@ public final class Point implements CoordinateContainer<List<Double>> {
 
   @Override
   public String toString() {
+    String coordinatesStr;
+    if (coordinates.length > 2)
+      coordinatesStr = "[" + this.coordinates[0] + ", " + this.coordinates[1] + ", " + this.coordinates[2] + "]";
+    else
+      coordinatesStr = "[" + this.coordinates[0] + ", " + this.coordinates[1] + "]";
     return "Point{"
             + "type=" + type + ", "
             + "bbox=" + bbox + ", "
-            + "coordinates=" + coordinates
+            + "coordinates=" + coordinatesStr
             + "}";
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
-    }
-    if (obj instanceof Point) {
-      Point that = (Point) obj;
-      return (this.type.equals(that.type()))
-              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
-              && (this.coordinates.equals(that.coordinates()));
-    }
-    return false;
+  public boolean equals(Object o) {
+    if (!(o instanceof Point)) return false;
+    Point point = (Point) o;
+    return Objects.equals(type, point.type) && Objects.equals(bbox, point.bbox) && Objects.deepEquals(coordinates, point.coordinates);
   }
 
   @Override
@@ -341,7 +357,7 @@ public final class Point implements CoordinateContainer<List<Double>> {
     hashCode *= 1000003;
     hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
     hashCode *= 1000003;
-    hashCode ^= coordinates.hashCode();
+    hashCode ^= Arrays.hashCode(coordinates);
     return hashCode;
   }
 
@@ -350,7 +366,7 @@ public final class Point implements CoordinateContainer<List<Double>> {
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<Point, List<Double>> {
+  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<Point, List<Double>, double[]> {
 
     GsonTypeAdapter(Gson gson) {
       super(gson, new ListOfDoublesCoordinatesTypeAdapter());
@@ -359,7 +375,7 @@ public final class Point implements CoordinateContainer<List<Double>> {
     @Override
     @SuppressWarnings("unchecked")
     public void write(JsonWriter jsonWriter, Point object) throws IOException {
-      writeCoordinateContainer(jsonWriter, object);
+      writeCoordinateContainerPrimitive(jsonWriter, object);
     }
 
     @Override
@@ -371,7 +387,7 @@ public final class Point implements CoordinateContainer<List<Double>> {
     @Override
     CoordinateContainer<List<Double>> createCoordinateContainer(String type,
                                                                 BoundingBox bbox,
-                                                                List<Double> coordinates) {
+                                                                double[] coordinates) {
       return new Point(type == null ? "Point" : type, bbox, coordinates);
     }
   }

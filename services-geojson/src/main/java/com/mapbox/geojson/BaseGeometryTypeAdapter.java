@@ -21,26 +21,62 @@ import java.io.IOException;
  * @since 4.6.0
  */
 @Keep
-abstract class BaseGeometryTypeAdapter<G, T> extends TypeAdapter<G> {
+abstract class BaseGeometryTypeAdapter<G, T, A> extends TypeAdapter<G> {
 
   private volatile TypeAdapter<String> stringAdapter;
   private volatile TypeAdapter<BoundingBox> boundingBoxAdapter;
-  private volatile TypeAdapter<T> coordinatesAdapter;
+  private volatile TypeAdapter<A> coordinatesAdapter;
 
   private final Gson gson;
 
-  BaseGeometryTypeAdapter(Gson gson, TypeAdapter<T> coordinatesAdapter) {
+  BaseGeometryTypeAdapter(Gson gson, TypeAdapter<A> coordinatesAdapter) {
     this.gson = gson;
     this.coordinatesAdapter = coordinatesAdapter;
     this.boundingBoxAdapter = new BoundingBoxTypeAdapter();
   }
 
-  public void writeCoordinateContainer(JsonWriter jsonWriter, CoordinateContainer<T> object)
+  public void writeCoordinateContainerPrimitive(JsonWriter jsonWriter, PrimitiveCoordinateContainer<T, A> object) throws IOException {
+    if (object == null) {
+      jsonWriter.nullValue();
+      return;
+    }
+    writeCommon(jsonWriter, object);
+    jsonWriter.name("coordinates");
+    if (object.coordinates() == null) {
+      jsonWriter.nullValue();
+    } else {
+      TypeAdapter<A> coordinatesAdapter = this.coordinatesAdapter;
+      if (coordinatesAdapter == null) {
+        throw new GeoJsonException("Coordinates type adapter is null");
+      }
+      coordinatesAdapter.write(jsonWriter, object.coordinatesPrimitives());
+    }
+    jsonWriter.endObject();
+  }
+  public void writeCoordinateContainer(JsonWriter jsonWriter, CoordinateContainer<A> object)
           throws IOException {
     if (object == null) {
       jsonWriter.nullValue();
       return;
     }
+
+    writeCommon(jsonWriter, object);
+
+    jsonWriter.name("coordinates");
+    if (object.coordinates() == null) {
+      jsonWriter.nullValue();
+    } else {
+      TypeAdapter<A> coordinatesAdapter = this.coordinatesAdapter;
+      if (coordinatesAdapter == null) {
+        throw new GeoJsonException("Coordinates type adapter is null");
+      }
+      coordinatesAdapter.write(jsonWriter, object.coordinates());
+    }
+
+    jsonWriter.endObject();
+  }
+
+  private void writeCommon(JsonWriter jsonWriter, CoordinateContainer object) throws IOException {
     jsonWriter.beginObject();
     jsonWriter.name("type");
     if (object.type() == null) {
@@ -64,17 +100,6 @@ abstract class BaseGeometryTypeAdapter<G, T> extends TypeAdapter<G> {
       }
       boundingBoxAdapter.write(jsonWriter, object.bbox());
     }
-    jsonWriter.name("coordinates");
-    if (object.coordinates() == null) {
-      jsonWriter.nullValue();
-    } else {
-      TypeAdapter<T> coordinatesAdapter = this.coordinatesAdapter;
-      if (coordinatesAdapter == null) {
-        throw new GeoJsonException("Coordinates type adapter is null");
-      }
-      coordinatesAdapter.write(jsonWriter, object.coordinates());
-    }
-    jsonWriter.endObject();
   }
 
   public CoordinateContainer<T> readCoordinateContainer(JsonReader jsonReader) throws IOException {
@@ -86,7 +111,7 @@ abstract class BaseGeometryTypeAdapter<G, T> extends TypeAdapter<G> {
     jsonReader.beginObject();
     String type = null;
     BoundingBox bbox = null;
-    T coordinates = null;
+    A coordinates = null;
 
     while (jsonReader.hasNext()) {
       String name = jsonReader.nextName();
@@ -114,7 +139,7 @@ abstract class BaseGeometryTypeAdapter<G, T> extends TypeAdapter<G> {
           break;
 
         case "coordinates":
-          TypeAdapter<T> coordinatesAdapter = this.coordinatesAdapter;
+          TypeAdapter<A> coordinatesAdapter = this.coordinatesAdapter;
           if (coordinatesAdapter == null) {
             throw new GeoJsonException("Coordinates type adapter is null");
           }
@@ -133,5 +158,5 @@ abstract class BaseGeometryTypeAdapter<G, T> extends TypeAdapter<G> {
 
   abstract CoordinateContainer<T> createCoordinateContainer(String type,
                                                             BoundingBox bbox,
-                                                            T coordinates);
+                                                            A coordinates);
 }

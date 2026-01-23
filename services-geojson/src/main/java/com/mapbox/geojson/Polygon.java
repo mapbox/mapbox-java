@@ -432,7 +432,7 @@ public final class Polygon implements CoordinateContainer<List<List<Point>>> {
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<Polygon, List<List<Point>>> {
+  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<Polygon, List<List<Point>>, List<List<Point>>> {
 
     GsonTypeAdapter(Gson gson) {
       super(gson, new ListOfListOfPointCoordinatesTypeAdapter());

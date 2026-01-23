@@ -122,7 +122,8 @@ public class LineStringTest extends TestUtils {
     BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
     LineString lineString = LineString.fromLngLats(points, bbox);
     byte[] bytes = serialize(lineString);
-    assertEquals(lineString, deserialize(bytes, LineString.class));
+    LineString deserialize = deserialize(bytes, LineString.class);
+    assertEquals(lineString, deserialize);
   }
 
   @Test

@@ -34,6 +34,25 @@ public final class CoordinateShifterManager {
     public List<Double> unshiftPoint(List<Double> coordinates) {
       return coordinates;
     }
+
+    @Override
+    public double[] shift(double lon, double lat) {
+      return new double[]{lon, lat};
+    }
+
+    @Override
+    public double[] shift(double lon, double lat, double altitude) {
+      if (Double.isNaN(altitude)){
+        return shift(lon, lat);
+      } else {
+        return new double[]{lon, lat, altitude};
+      }
+    }
+
+    @Override
+    public double[] unshiftPointArray(double[] shiftedCoordinates) {
+      return shiftedCoordinates;
+    }
   };
 
   private static volatile CoordinateShifter coordinateShifter = DEFAULT;

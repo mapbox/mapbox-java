@@ -326,7 +326,7 @@ public final class MultiLineString
    * @since 4.6.0
    */
   static final class GsonTypeAdapter
-          extends BaseGeometryTypeAdapter<MultiLineString, List<List<Point>>> {
+          extends BaseGeometryTypeAdapter<MultiLineString, List<List<Point>>, List<List<Point>>> {
 
     GsonTypeAdapter(Gson gson) {
       super(gson, new ListOfListOfPointCoordinatesTypeAdapter());

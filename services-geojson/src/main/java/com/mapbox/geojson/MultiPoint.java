@@ -221,7 +221,7 @@ public final class MultiPoint implements CoordinateContainer<List<Point>> {
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<MultiPoint, List<Point>> {
+  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<MultiPoint, List<Point>, List<Point>> {
 
     GsonTypeAdapter(Gson gson) {
       super(gson, new ListOfPointCoordinatesTypeAdapter());

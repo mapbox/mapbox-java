@@ -54,4 +54,8 @@ public interface CoordinateShifter {
    * @since 4.2.0
    */
   List<Double> unshiftPoint(List<Double> shiftedCoordinates);
+
+  double[] shift(double lon, double lat, double altitude);
+  double[] shift(double lon, double lat);
+  double[] unshiftPointArray(double[] shiftedCoordinates);
 }
