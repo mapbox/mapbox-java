@@ -13,6 +13,7 @@ import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A MultiPoint represents two or more geographic points that share a relationship and is one of the
@@ -35,7 +36,7 @@ import java.util.List;
  * @since 1.0.0
  */
 @Keep
-public final class MultiPoint implements CoordinateContainer<List<Point>> {
+public final class MultiPoint implements FlattenedCoordinateContainer<List<Point>, FlattenListOfPoints> {
 
   private static final String TYPE = "MultiPoint";
 
@@ -43,7 +44,8 @@ public final class MultiPoint implements CoordinateContainer<List<Point>> {
 
   private final BoundingBox bbox;
 
-  private final List<Point> coordinates;
+  @NonNull
+  private final FlattenListOfPoints flattenListOfPoints;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -103,15 +105,18 @@ public final class MultiPoint implements CoordinateContainer<List<Point>> {
   }
 
   MultiPoint(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
+    this(type, bbox, new FlattenListOfPoints(coordinates));
+  }
+    MultiPoint(String type, @Nullable BoundingBox bbox, FlattenListOfPoints flattenListOfPoints) {
     if (type == null) {
       throw new NullPointerException("Null type");
     }
     this.type = type;
     this.bbox = bbox;
-    if (coordinates == null) {
+    if (flattenListOfPoints == null) {
       throw new NullPointerException("Null coordinates");
     }
-    this.coordinates = coordinates;
+    this.flattenListOfPoints = flattenListOfPoints;
   }
 
   /**
@@ -153,7 +158,7 @@ public final class MultiPoint implements CoordinateContainer<List<Point>> {
   @NonNull
   @Override
   public List<Point> coordinates() {
-    return coordinates;
+    return flattenListOfPoints.coordinates();
   }
 
   /**
@@ -186,34 +191,25 @@ public final class MultiPoint implements CoordinateContainer<List<Point>> {
     return "MultiPoint{"
             + "type=" + type + ", "
             + "bbox=" + bbox + ", "
-            + "coordinates=" + coordinates
+            + "coordinates=" + flattenListOfPoints.coordinates()
             + "}";
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
-    }
-    if (obj instanceof MultiPoint) {
-      MultiPoint that = (MultiPoint) obj;
-      return (this.type.equals(that.type()))
-              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
-              && (this.coordinates.equals(that.coordinates()));
-    }
-    return false;
+  public boolean equals(Object o) {
+    if (!(o instanceof MultiPoint)) return false;
+    MultiPoint that = (MultiPoint) o;
+    return Objects.equals(type, that.type) && Objects.equals(bbox, that.bbox) && Objects.equals(flattenListOfPoints, that.flattenListOfPoints);
   }
 
   @Override
   public int hashCode() {
-    int hashCode = 1;
-    hashCode *= 1000003;
-    hashCode ^= type.hashCode();
-    hashCode *= 1000003;
-    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
-    hashCode *= 1000003;
-    hashCode ^= coordinates.hashCode();
-    return hashCode;
+    return Objects.hash(type, bbox, flattenListOfPoints);
+  }
+
+  @Override
+  public FlattenListOfPoints flattenCoordinates() {
+    return flattenListOfPoints;
   }
 
   /**
@@ -221,15 +217,15 @@ public final class MultiPoint implements CoordinateContainer<List<Point>> {
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<MultiPoint, List<Point>, List<Point>> {
+  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<MultiPoint, List<Point>, FlattenListOfPoints> {
 
     GsonTypeAdapter(Gson gson) {
-      super(gson, new ListOfPointCoordinatesTypeAdapter());
+      super(gson, new FlattenListOfPointsTypeAdapter());
     }
 
     @Override
     public void write(JsonWriter jsonWriter, MultiPoint object) throws IOException {
-      writeCoordinateContainer(jsonWriter, object);
+      writeCoordinateContainerPrimitive(jsonWriter, object);
     }
 
     @Override
@@ -240,8 +236,8 @@ public final class MultiPoint implements CoordinateContainer<List<Point>> {
     @Override
     CoordinateContainer<List<Point>> createCoordinateContainer(String type,
                                                                BoundingBox bbox,
-                                                               List<Point> coordinates) {
-      return new MultiPoint(type == null ? "MultiPoint" : type, bbox, coordinates);
+                                                               FlattenListOfPoints flattenListOfPoints) {
+      return new MultiPoint(type == null ? "MultiPoint" : type, bbox, flattenListOfPoints);
     }
   }
 }

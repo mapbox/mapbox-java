@@ -4,6 +4,7 @@ import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -93,15 +94,29 @@ public class MultiPointTest extends TestUtils {
   @Test
   public void fromJson() throws IOException {
     final String json = "{ \"type\": \"MultiPoint\"," +
-            "\"coordinates\": [ [100, 0], [101, 1] ] } ";
+            "\"coordinates\": [ [100, 0, 1000], [101, 1] ] } ";
     MultiPoint geo = MultiPoint.fromJson(json);
-    assertEquals(geo.type(), "MultiPoint");
-    assertEquals(geo.coordinates().get(0).longitude(), 100.0, DELTA);
-    assertEquals(geo.coordinates().get(0).latitude(), 0.0, DELTA);
-    assertEquals(geo.coordinates().get(1).longitude(), 101.0, DELTA);
-    assertEquals(geo.coordinates().get(1).latitude(), 1.0, DELTA);
-    assertFalse(geo.coordinates().get(0).hasAltitude());
-    assertEquals(Double.NaN, geo.coordinates().get(0).altitude(), DELTA);
+    assertEquals("MultiPoint", geo.type());
+    List<Point> coordinates = geo.coordinates();
+    Point firstPoint = coordinates.get(0);
+    assertEquals(100.0, firstPoint.longitude(), DELTA);
+    assertEquals(0.0, firstPoint.latitude(), DELTA);
+    assertTrue(firstPoint.hasAltitude());
+    assertEquals(1000.0, firstPoint.altitude(), DELTA);
+
+    double[] flattenLatLngArray = geo.flattenCoordinates().getFlattenLatLngArray();
+    assertEquals(100.0, flattenLatLngArray[0], DELTA);
+    assertEquals(0.0, flattenLatLngArray[1], DELTA);
+
+
+    Point secondPoint = coordinates.get(1);
+    assertEquals(101.0, secondPoint.longitude(), DELTA);
+    assertEquals(1.0, secondPoint.latitude(), DELTA);
+    assertFalse(secondPoint.hasAltitude());
+    assertEquals(Double.NaN, secondPoint.altitude(), DELTA);
+
+    assertEquals(101.0, flattenLatLngArray[2], DELTA);
+    assertEquals(1.0, flattenLatLngArray[3], DELTA);
   }
 
   @Test
