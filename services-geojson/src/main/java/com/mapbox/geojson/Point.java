@@ -49,7 +49,7 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @Keep
-public final class Point implements PrimitiveCoordinateContainer<List<Double>, double[]> {
+public final class Point implements FlattenedCoordinateContainer<List<Double>, double[]> {
 
   static final String TYPE = "Point";
 
@@ -277,7 +277,7 @@ public final class Point implements PrimitiveCoordinateContainer<List<Double>, d
    *
    * @return a double array which holds this points coordinates
    * @since 3.0.0
-   * @deprecated Please use {@link #coordinatesPrimitives()} instead.
+   * @deprecated Please use {@link #flattenCoordinates()} instead.
    */
   @NonNull
   @Override
@@ -299,7 +299,7 @@ public final class Point implements PrimitiveCoordinateContainer<List<Double>, d
    * @since 3.0.0
    */
   @Override
-  public double[] coordinatesPrimitives() {
+  public double[] flattenCoordinates() {
     return coordinates;
   }
 

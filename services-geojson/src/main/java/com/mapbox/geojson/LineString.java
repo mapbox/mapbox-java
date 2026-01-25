@@ -50,7 +50,7 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @Keep
-public final class LineString implements PrimitiveCoordinateContainer<List<Point>, FlattenListOfPoints> {
+public final class LineString implements FlattenedCoordinateContainer<List<Point>, FlattenListOfPoints> {
 
   private static final String TYPE = "LineString";
 
@@ -218,7 +218,7 @@ public final class LineString implements PrimitiveCoordinateContainer<List<Point
   /**
    * Provides the list of {@link Point}s that make up the LineString geometry.
    * </p>
-   * Please consider using {@link #coordinatesPrimitives()} instead for better performance.
+   * Please consider using {@link #flattenCoordinates()} instead for better performance.
    *
    * @return a list of points
    * @since 3.0.0
@@ -289,7 +289,7 @@ public final class LineString implements PrimitiveCoordinateContainer<List<Point
   }
 
   @Override
-  public FlattenListOfPoints coordinatesPrimitives() {
+  public FlattenListOfPoints flattenCoordinates() {
     return flattenListOfPoints;
   }
 

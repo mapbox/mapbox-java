@@ -27,7 +27,7 @@ abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
     if (point == null) {
       return;
     }
-    writePointList(out, point.coordinatesPrimitives());
+    writePointList(out, point.flattenCoordinates());
   }
 
   protected Point readPoint(JsonReader in) throws IOException {
