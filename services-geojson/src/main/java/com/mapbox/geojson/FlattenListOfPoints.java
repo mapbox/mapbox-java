@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A class that contains the required data to store a list of {@link Point}s as a flat structure.
+ */
 @Keep
 public class FlattenListOfPoints implements Serializable {
   /**
@@ -18,16 +21,12 @@ public class FlattenListOfPoints implements Serializable {
    * Note: we use one-dimensional array for performance reasons related to JNI access (
    * <a href="https://developer.android.com/ndk/guides/jni-tips#primitive-arrays">Android JNI Tips
    * - Primitive arrays</a>)
-   *
-   * @see #coordinatesPrimitives()
    */
   @NonNull
   private final double[] flattenLatLngCoordinates;
   /**
    * An array to store the altitudes of each coordinate or {@link Double#NaN} if the coordinate
    * does not have altitude.
-   *
-   * @see #coordinatesPrimitives()
    */
   @Nullable
   private final double[] altitudes;
@@ -76,17 +75,20 @@ public class FlattenListOfPoints implements Serializable {
   }
 
   /**
-   * Returns two arrays of doubles:
-   * - The first one is a flatten array of all the coordinates (lat, lng) in the line string: [lat1, lng1, lat2, lng2, ...].
-   * - The second (nullable) one is an array of all the altitudes in the line string (or null if no altitudes are present).
+   * @return a flatten array of all the coordinates (lat, lng): [lat1, lng1, lat2, lng2, ...].
    */
-  public double[][] coordinatesPrimitives() {
-    return new double[][]{flattenLatLngCoordinates, altitudes};
+  @NonNull
+  public double[] getFlattenLatLngArray() {
+    return flattenLatLngCoordinates;
   }
 
+  /**
+   * @return an array of all the altitudes (or null if no altitudes are present at all). If a
+   * coordinate does not contain altitude it's represented as {@link Double#NaN}
+   */
   @Nullable
-  public BoundingBox[] getCoordinatesBoundingBoxes() {
-    return coordinatesBoundingBoxes;
+  public double[] getAltitudes() {
+    return altitudes;
   }
 
   public List<Point> coordinates() {

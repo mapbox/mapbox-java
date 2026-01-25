@@ -28,9 +28,8 @@ class FlattenListOfPointsTypeAdapter extends BaseCoordinatesTypeAdapter<FlattenL
     }
 
     out.beginArray();
-    double[][] coordinatesPrimitives = flattenListOfPoints.coordinatesPrimitives();
-    double[] flattenLatLngCoordinates = coordinatesPrimitives[0];
-    double[] altitudes = coordinatesPrimitives[1];
+    double[] flattenLatLngCoordinates = flattenListOfPoints.getFlattenLatLngArray();
+    double[] altitudes = flattenListOfPoints.getAltitudes();
 
     for (int i = 0; i < flattenLatLngCoordinates.length / 2; i++) {
       double[] value;
