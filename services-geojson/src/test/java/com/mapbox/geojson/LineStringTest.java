@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -104,19 +105,28 @@ public class LineStringTest extends TestUtils {
     assertEquals(2.0, lineString.bbox().southwest().latitude(), DELTA);
     assertEquals(3.0, lineString.bbox().northeast().longitude(), DELTA);
     assertEquals(4.0, lineString.bbox().northeast().latitude(), DELTA);
-    assertNotNull(lineString.coordinates());
-    assertEquals(1, lineString.coordinates().get(0).longitude(), DELTA);
-    assertEquals(2, lineString.coordinates().get(0).latitude(), DELTA);
-    assertEquals(2, lineString.coordinates().get(1).longitude(), DELTA);
-    assertEquals(3, lineString.coordinates().get(1).latitude(), DELTA);
-    assertEquals(3, lineString.coordinates().get(2).longitude(), DELTA);
-    assertEquals(4, lineString.coordinates().get(2).latitude(), DELTA);
+    List<Point> coordinates = lineString.coordinates();
+    assertNotNull(coordinates);
+    assertEquals(1, coordinates.get(0).longitude(), DELTA);
+    assertEquals(2, coordinates.get(0).latitude(), DELTA);
+    assertEquals(2, coordinates.get(1).longitude(), DELTA);
+    assertEquals(3, coordinates.get(1).latitude(), DELTA);
+    assertEquals(3, coordinates.get(2).longitude(), DELTA);
+    assertEquals(4, coordinates.get(2).latitude(), DELTA);
+
+    double[] coordinatesPrimitive = lineString.coordinatesPrimitives()[0];
+    assertEquals(1, coordinatesPrimitive[0], DELTA);
+    assertEquals(2, coordinatesPrimitive[1], DELTA);
+    assertEquals(2, coordinatesPrimitive[2], DELTA);
+    assertEquals(3, coordinatesPrimitive[3], DELTA);
+    assertEquals(3, coordinatesPrimitive[4], DELTA);
+    assertEquals(4, coordinatesPrimitive[5], DELTA);
   }
 
   @Test
   public void testSerializable() throws Exception {
     List<Point> points = new ArrayList<>();
-    points.add(Point.fromLngLat(1.0, 1.0));
+    points.add(Point.fromLngLat(1.0, 1.0, 1.0));
     points.add(Point.fromLngLat(2.0, 2.0));
     points.add(Point.fromLngLat(3.0, 3.0));
     BoundingBox bbox = BoundingBox.fromLngLats(1.0, 2.0, 3.0, 4.0);
@@ -129,18 +139,36 @@ public class LineStringTest extends TestUtils {
   @Test
   public void fromJson() throws IOException {
     final String json = "{\"type\": \"LineString\"," +
-            "  \"coordinates\": [[ 100, 0], [101, 1]]} ";
+            "  \"coordinates\": [[ 100, 0, 1000], [101, 1]]} ";
     LineString geo = LineString.fromJson(json);
-    assertEquals(geo.type(), "LineString");
-    assertEquals(geo.coordinates().get(0).longitude(), 100.0, 0.0);
-    assertEquals(geo.coordinates().get(0).latitude(), 0.0, 0.0);
-    assertFalse(geo.coordinates().get(0).hasAltitude());
+    assertEquals("LineString", geo.type());
+    List<Point> points = geo.coordinates();
+    Point firstPoint = points.get(0);
+    assertEquals(100.0, firstPoint.longitude(), 0.0);
+    assertEquals(0.0, firstPoint.latitude(), 0.0);
+    assertTrue(firstPoint.hasAltitude());
+    assertEquals(1000.0, firstPoint.altitude(), 0.0);
+
+    Point secondPoint = points.get(1);
+    assertEquals(101.0, secondPoint.longitude(), 0.0);
+    assertEquals(1.0, secondPoint.latitude(), 0.0);
+    assertFalse(secondPoint.hasAltitude());
+
+    double[][] coordinatesPrimitives = geo.coordinatesPrimitives();
+    double[] coordinates = coordinatesPrimitives[0];
+    double[] altitudes = coordinatesPrimitives[1];
+    assertEquals(100.0, coordinates[0], 0.0);
+    assertEquals(0.0, coordinates[1], 0.0);
+    assertEquals(1000.0, altitudes[0], 0.0);
+    assertEquals(101.0, coordinates[2], 0.0);
+    assertEquals(1.0, coordinates[3], 0.0);
+    assertEquals(Double.NaN, altitudes[1], 0.0);
   }
 
   @Test
   public void toJson() throws IOException {
     final String json = "{\"type\": \"LineString\"," +
-            "  \"coordinates\": [[ 100, 0], [101, 1]]} ";
+            "  \"coordinates\": [[ 100, 0, 1], [101, 1]]} ";
     LineString geo = LineString.fromJson(json);
     String geoJsonString = geo.toJson();
     compareJson(geoJsonString, json);

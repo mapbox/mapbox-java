@@ -51,7 +51,7 @@ import java.util.Objects;
 @Keep
 public final class Point implements PrimitiveCoordinateContainer<List<Double>, double[]> {
 
-  private static final String TYPE = "Point";
+  static final String TYPE = "Point";
 
   @NonNull
   private final String type;
