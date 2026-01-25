@@ -13,7 +13,6 @@ import com.mapbox.geojson.utils.PolylineUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,7 +50,7 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @Keep
-public final class LineString implements PrimitiveCoordinateContainer<List<Point>, double[][]> {
+public final class LineString implements PrimitiveCoordinateContainer<List<Point>, FlattenListOfPoints> {
 
   private static final String TYPE = "LineString";
 
@@ -59,30 +58,8 @@ public final class LineString implements PrimitiveCoordinateContainer<List<Point
 
   private final BoundingBox bbox;
 
-  /**
-   * A one-dimensional array to store the flattened coordinates: [lat1, lng1, lat2, lng2, ...].
-   * <p>
-   * Note: we use one-dimensional array for performance reasons related to JNI access (
-   * <a href="https://developer.android.com/ndk/guides/jni-tips#primitive-arrays">Android JNI Tips
-   * - Primitive arrays</a>)
-   * @see #coordinatesPrimitives()
-   */
   @NonNull
-  private final double[] flattenLatLngCoordinates;
-  /**
-   * An array to store the altitudes of each coordinate or {@link Double#NaN} if the coordinate
-   * does not have altitude.
-   *
-   * @see #coordinatesPrimitives()
-   */
-  @Nullable
-  private final double[] altitudes;
-  /**
-   * An array to store the {@link BoundingBox} of each coordinate or null if the coordinate does
-   * not have bounding box.
-   */
-  @Nullable
-  private BoundingBox[] coordinatesBoundingBoxes;
+  private final FlattenListOfPoints flattenListOfPoints;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -167,45 +144,19 @@ public final class LineString implements PrimitiveCoordinateContainer<List<Point
   }
 
   LineString(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
+    this(type, bbox, new FlattenListOfPoints(coordinates));
+  }
+
+  LineString(String type, @Nullable BoundingBox bbox, FlattenListOfPoints flattenListOfPoints) {
     if (type == null) {
       throw new NullPointerException("Null type");
     }
-    double[] flattenLatLngCoordinates = new double[coordinates.size() * 2];
-    double[] altitudes = null;
-    for (int i = 0; i < coordinates.size(); i++) {
-      Point point = coordinates.get(i);
-      flattenLatLngCoordinates[i*2] = point.longitude();
-      flattenLatLngCoordinates[(i*2)+1] = point.latitude();
-
-      // It is quite common to not have altitude in Point. Therefore only if we have points
-      // with altitude then we create an array to store those.
-      if (point.hasAltitude()) {
-        // If one point has altitude we create an array of double to store the altitudes.
-        if (altitudes == null) {
-          altitudes = new double[coordinates.size()];
-          // Fill in any previous altitude as NaN
-          for (int j = 0; j < i; j++) {
-            altitudes[j] = Double.NaN;
-          }
-        }
-        altitudes[i] = point.altitude();
-      } else if (altitudes != null) {
-        // If we are storing altitudes but this point doesn't have it then set it to NaN
-        altitudes[i] = Double.NaN;
-      }
-
-      // Similarly to altitudes, if one point has bound we create an array to store those.
-      if (point.bbox() != null) {
-        if (coordinatesBoundingBoxes == null) {
-          coordinatesBoundingBoxes = new BoundingBox[coordinates.size()];
-        }
-        coordinatesBoundingBoxes[i] = point.bbox();
-      }
+    if (flattenListOfPoints == null) {
+      throw new NullPointerException("Null coordinates");
     }
+    this.flattenListOfPoints = flattenListOfPoints;
     this.type = type;
     this.bbox = bbox;
-    this.flattenLatLngCoordinates = flattenLatLngCoordinates;
-    this.altitudes = altitudes;
   }
 
   static LineString fromLngLats(double[][] coordinates) {
@@ -275,24 +226,7 @@ public final class LineString implements PrimitiveCoordinateContainer<List<Point
   @NonNull
   @Override
   public List<Point> coordinates() {
-    ArrayList<Point> points = new ArrayList<>(flattenLatLngCoordinates.length / 2);
-    for (int i = 0; i < flattenLatLngCoordinates.length / 2; i++) {
-      double[] coordinates;
-      if (altitudes != null && !Double.isNaN(altitudes[i])) {
-        coordinates = new double[]{flattenLatLngCoordinates[i * 2], flattenLatLngCoordinates[(i * 2) + 1], altitudes[i]};
-      } else {
-        coordinates = new double[]{flattenLatLngCoordinates[i * 2], flattenLatLngCoordinates[(i * 2) + 1]};
-      }
-      BoundingBox pointBbox = null;
-      if (coordinatesBoundingBoxes != null) {
-        pointBbox = coordinatesBoundingBoxes[i];
-      }
-      // We create the Point directly instead of static factory method to avoid double coordinate
-      // shifting.
-      Point point = new Point(Point.TYPE, pointBbox, coordinates);
-      points.add(point);
-    }
-    return points;
+    return flattenListOfPoints.coordinates();
   }
 
   /**
@@ -346,22 +280,17 @@ public final class LineString implements PrimitiveCoordinateContainer<List<Point
   public boolean equals(Object o) {
     if (!(o instanceof LineString)) return false;
     LineString that = (LineString) o;
-    return Objects.equals(type, that.type) && Objects.equals(bbox, that.bbox) && Objects.deepEquals(flattenLatLngCoordinates, that.flattenLatLngCoordinates) && Objects.deepEquals(altitudes, that.altitudes);
+    return Objects.equals(type, that.type) && Objects.equals(bbox, that.bbox) && Objects.equals(flattenListOfPoints, that.flattenListOfPoints);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, bbox, Arrays.hashCode(flattenLatLngCoordinates), Arrays.hashCode(altitudes));
+    return Objects.hash(type, bbox, flattenListOfPoints);
   }
 
-  /**
-   * Returns two arrays of doubles:
-   * - The first one is a flatten array of all the coordinates (lat, lng) in the line string: [lat1, lng1, lat2, lng2, ...].
-   * - The second (nullable) one is an array of all the altitudes in the line string (or null if no altitudes are present).
-   */
   @Override
-  public double[][] coordinatesPrimitives() {
-    return new double[][]{flattenLatLngCoordinates, altitudes};
+  public FlattenListOfPoints coordinatesPrimitives() {
+    return flattenListOfPoints;
   }
 
   /**
@@ -369,15 +298,15 @@ public final class LineString implements PrimitiveCoordinateContainer<List<Point
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<LineString, List<Point>, List<Point>> {
+  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<LineString, List<Point>, FlattenListOfPoints> {
 
     GsonTypeAdapter(Gson gson) {
-      super(gson, new ListOfPointCoordinatesTypeAdapter());
+      super(gson, new FlattenListOfPointsTypeAdapter());
     }
 
     @Override
     public void write(JsonWriter jsonWriter, LineString object) throws IOException {
-      writeCoordinateContainer(jsonWriter, object);
+      writeCoordinateContainerPrimitive(jsonWriter, object);
     }
 
     @Override
@@ -388,8 +317,8 @@ public final class LineString implements PrimitiveCoordinateContainer<List<Point
     @Override
     CoordinateContainer<List<Point>> createCoordinateContainer(String type,
                                                                BoundingBox bbox,
-                                                               List<Point> coordinates) {
-      return new LineString(type == null ? "LineString" : type, bbox, coordinates);
+                                                               FlattenListOfPoints flattenListOfPoints) {
+      return new LineString(type == null ? "LineString" : type, bbox, flattenListOfPoints);
     }
   }
 }
