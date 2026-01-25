@@ -158,7 +158,7 @@ public final class MultiPoint implements FlattenedCoordinateContainer<List<Point
   @NonNull
   @Override
   public List<Point> coordinates() {
-    return flattenListOfPoints.coordinates();
+    return flattenListOfPoints.points();
   }
 
   /**
@@ -191,7 +191,7 @@ public final class MultiPoint implements FlattenedCoordinateContainer<List<Point
     return "MultiPoint{"
             + "type=" + type + ", "
             + "bbox=" + bbox + ", "
-            + "coordinates=" + flattenListOfPoints.coordinates()
+            + "coordinates=" + flattenListOfPoints.points()
             + "}";
   }
 

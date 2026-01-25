@@ -226,7 +226,7 @@ public final class LineString implements FlattenedCoordinateContainer<List<Point
   @NonNull
   @Override
   public List<Point> coordinates() {
-    return flattenListOfPoints.coordinates();
+    return flattenListOfPoints.points();
   }
 
   /**
