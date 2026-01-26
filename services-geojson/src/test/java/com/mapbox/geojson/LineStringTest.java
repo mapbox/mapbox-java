@@ -114,7 +114,7 @@ public class LineStringTest extends TestUtils {
     assertEquals(3, coordinates.get(2).longitude(), DELTA);
     assertEquals(4, coordinates.get(2).latitude(), DELTA);
 
-    double[] coordinatesPrimitive = lineString.flattenCoordinates().getFlattenLatLngArray();
+    double[] coordinatesPrimitive = lineString.flattenCoordinates().getFlattenLngLatArray();
     assertEquals(1, coordinatesPrimitive[0], DELTA);
     assertEquals(2, coordinatesPrimitive[1], DELTA);
     assertEquals(2, coordinatesPrimitive[2], DELTA);
@@ -154,7 +154,7 @@ public class LineStringTest extends TestUtils {
     assertEquals(1.0, secondPoint.latitude(), 0.0);
     assertFalse(secondPoint.hasAltitude());
 
-    double[] coordinates = geo.flattenCoordinates().getFlattenLatLngArray();
+    double[] coordinates = geo.flattenCoordinates().getFlattenLngLatArray();
     double[] altitudes = geo.flattenCoordinates().getAltitudes();
     assertEquals(100.0, coordinates[0], 0.0);
     assertEquals(0.0, coordinates[1], 0.0);

@@ -25,6 +25,18 @@ public class PointTest extends TestUtils {
   public void sanity() throws Exception {
     Point point = Point.fromLngLat(1.0, 2.0);
     assertNotNull(point);
+    assertEquals("Point", point.type());
+    assertEquals(1.0, point.longitude(), DELTA);
+    assertEquals(2.0, point.latitude(), DELTA);
+    assertEquals(Double.NaN, point.altitude(), DELTA);
+    List<Double> coordinates = point.coordinates();
+    assertEquals(2, coordinates.size());
+    assertEquals(1.0, coordinates.get(0), DELTA);
+    assertEquals(2.0, coordinates.get(1), DELTA);
+    double[] doubles = point.flattenCoordinates();
+    assertEquals(2, doubles.length);
+    assertEquals(1.0, doubles[0], DELTA);
+    assertEquals(2.0, doubles[1], DELTA);
   }
 
   @Test
@@ -37,6 +49,19 @@ public class PointTest extends TestUtils {
   public void hasAltitude_returnsTrueWhenAltitudeIsPresent() throws Exception {
     Point point = Point.fromLngLat(1.0, 2.0, 5.0);
     assertTrue(point.hasAltitude());
+    assertEquals(1.0, point.longitude(), DELTA);
+    assertEquals(2.0, point.latitude(), DELTA);
+    assertEquals(5.0, point.altitude(), DELTA);
+    List<Double> coordinates = point.coordinates();
+    assertEquals(3, coordinates.size());
+    assertEquals(1.0, coordinates.get(0), DELTA);
+    assertEquals(2.0, coordinates.get(1), DELTA);
+    assertEquals(5.0, coordinates.get(2), DELTA);
+    double[] doubles = point.flattenCoordinates();
+    assertEquals(3, doubles.length);
+    assertEquals(1.0, doubles[0], DELTA);
+    assertEquals(2.0, doubles[1], DELTA);
+    assertEquals(5.0, doubles[2], DELTA);
   }
 
   @Test

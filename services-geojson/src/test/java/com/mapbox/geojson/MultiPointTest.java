@@ -94,19 +94,21 @@ public class MultiPointTest extends TestUtils {
   @Test
   public void fromJson() throws IOException {
     final String json = "{ \"type\": \"MultiPoint\"," +
-            "\"coordinates\": [ [100, 0, 1000], [101, 1] ] } ";
+            "\"coordinates\": [ [100, 90, 1000], [101, 1] ] } ";
     MultiPoint geo = MultiPoint.fromJson(json);
     assertEquals("MultiPoint", geo.type());
     List<Point> coordinates = geo.coordinates();
     Point firstPoint = coordinates.get(0);
     assertEquals(100.0, firstPoint.longitude(), DELTA);
-    assertEquals(0.0, firstPoint.latitude(), DELTA);
+    assertEquals(90.0, firstPoint.latitude(), DELTA);
     assertTrue(firstPoint.hasAltitude());
     assertEquals(1000.0, firstPoint.altitude(), DELTA);
 
-    double[] flattenLatLngArray = geo.flattenCoordinates().getFlattenLatLngArray();
-    assertEquals(100.0, flattenLatLngArray[0], DELTA);
-    assertEquals(0.0, flattenLatLngArray[1], DELTA);
+    double[] flattenLngLatArray = geo.flattenCoordinates().getFlattenLngLatArray();
+    assertEquals(100.0, flattenLngLatArray[0], DELTA);
+    assertEquals(firstPoint.longitude(), flattenLngLatArray[0], DELTA);
+    assertEquals(90.0, flattenLngLatArray[1], DELTA);
+    assertEquals(firstPoint.latitude(), flattenLngLatArray[1], DELTA);
 
 
     Point secondPoint = coordinates.get(1);
@@ -115,8 +117,8 @@ public class MultiPointTest extends TestUtils {
     assertFalse(secondPoint.hasAltitude());
     assertEquals(Double.NaN, secondPoint.altitude(), DELTA);
 
-    assertEquals(101.0, flattenLatLngArray[2], DELTA);
-    assertEquals(1.0, flattenLatLngArray[3], DELTA);
+    assertEquals(101.0, flattenLngLatArray[2], DELTA);
+    assertEquals(1.0, flattenLngLatArray[3], DELTA);
   }
 
   @Test

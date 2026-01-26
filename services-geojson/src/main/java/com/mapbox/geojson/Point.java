@@ -271,7 +271,7 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
   }
 
   /**
-   * Provide a single double array containing the longitude, latitude, and optionally an
+   * Provide a list of Doubles containing the longitude, latitude, and optionally an
    * altitude/elevation. {@link #longitude()}, {@link #latitude()}, and {@link #altitude()} are all
    * available which make getting specific coordinates more direct.
    *
@@ -292,7 +292,7 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
 
   /**
    * Provide a single double array containing the longitude, latitude, and optionally an
-   * altitude/elevation. {@link #longitude()}, {@link #latitude()}, and {@link #altitude()} are all
+   * altitude. {@link #longitude()}, {@link #latitude()}, and {@link #altitude()} are all
    * available which make getting specific coordinates more direct.
    *
    * @return a double array which holds this points coordinates

@@ -16,14 +16,14 @@ import java.util.Objects;
 @Keep
 public class FlattenListOfPoints implements Serializable {
   /**
-   * A one-dimensional array to store the flattened coordinates: [lat1, lng1, lat2, lng2, ...].
+   * A one-dimensional array to store the flattened coordinates: [lng1, lat1, lng2, lat2, ...].
    * <p>
    * Note: we use one-dimensional array for performance reasons related to JNI access (
    * <a href="https://developer.android.com/ndk/guides/jni-tips#primitive-arrays">Android JNI Tips
    * - Primitive arrays</a>)
    */
   @NonNull
-  private final double[] flattenLatLngPoints;
+  private final double[] flattenLngLatPoints;
   /**
    * An array to store the altitudes of each coordinate or {@link Double#NaN} if the coordinate
    * does not have altitude.
@@ -37,19 +37,24 @@ public class FlattenListOfPoints implements Serializable {
   @Nullable
   private BoundingBox[] boundingBoxes;
 
-  FlattenListOfPoints(List<Point> points) {
+  FlattenListOfPoints(@NonNull double[] flattenLngLatPoints, @Nullable double[] altitudes) {
+    this.flattenLngLatPoints = flattenLngLatPoints;
+    this.altitudes = altitudes;
+  }
+
+  FlattenListOfPoints(@NonNull List<Point> points) {
     if (points.isEmpty()) {
-      this.flattenLatLngPoints = new double[0];
+      this.flattenLngLatPoints = new double[0];
       this.altitudes = null;
       this.boundingBoxes = null;
       return;
     }
-    double[] flattenLatLngCoordinates = new double[points.size() * 2];
+    double[] flattenLngLatCoordinates = new double[points.size() * 2];
     double[] altitudes = null;
     for (int i = 0; i < points.size(); i++) {
       Point point = points.get(i);
-      flattenLatLngCoordinates[i * 2] = point.longitude();
-      flattenLatLngCoordinates[(i * 2) + 1] = point.latitude();
+      flattenLngLatCoordinates[i * 2] = point.longitude();
+      flattenLngLatCoordinates[(i * 2) + 1] = point.latitude();
 
       // It is quite common to not have altitude in Point. Therefore only if we have points
       // with altitude then we create an array to store those.
@@ -76,16 +81,17 @@ public class FlattenListOfPoints implements Serializable {
         boundingBoxes[i] = point.bbox();
       }
     }
-    this.flattenLatLngPoints = flattenLatLngCoordinates;
+    this.flattenLngLatPoints = flattenLngLatCoordinates;
     this.altitudes = altitudes;
   }
 
   /**
-   * @return a flatten array of all the coordinates (lat, lng): [lat1, lng1, lat2, lng2, ...].
+   * @return a flatten array of all the coordinates (longitude, latitude):
+   *   [lng1, lat1, lng2, lat2, ...].
    */
   @NonNull
-  public double[] getFlattenLatLngArray() {
-    return flattenLatLngPoints;
+  public double[] getFlattenLngLatArray() {
+    return flattenLngLatPoints;
   }
 
   /**
@@ -100,27 +106,27 @@ public class FlattenListOfPoints implements Serializable {
   /**
    * Creates a list of {@link Point}s and returns it.
    * <p>
-   * If possible consider using {@link #getFlattenLatLngArray()} and {@link #getAltitudes()}
+   * If possible consider using {@link #getFlattenLngLatArray()} and {@link #getAltitudes()}
    * instead.
    *
    * @return a list of {@link Point}s
    */
   @NonNull
   public List<Point> points() {
-    if (flattenLatLngPoints.length == 0) {
+    if (flattenLngLatPoints.length == 0) {
       return new ArrayList<>();
     }
-    ArrayList<Point> points = new ArrayList<>(flattenLatLngPoints.length / 2);
-    for (int i = 0; i < flattenLatLngPoints.length / 2; i++) {
+    ArrayList<Point> points = new ArrayList<>(flattenLngLatPoints.length / 2);
+    for (int i = 0; i < flattenLngLatPoints.length / 2; i++) {
       double[] coordinates;
       if (altitudes != null && !Double.isNaN(altitudes[i])) {
         coordinates = new double[]{
-                flattenLatLngPoints[i * 2],
-                flattenLatLngPoints[(i * 2) + 1],
+                flattenLngLatPoints[i * 2],
+                flattenLngLatPoints[(i * 2) + 1],
                 altitudes[i]
         };
       } else {
-        coordinates = new double[]{flattenLatLngPoints[i * 2], flattenLatLngPoints[(i * 2) + 1]};
+        coordinates = new double[]{flattenLngLatPoints[i * 2], flattenLngLatPoints[(i * 2) + 1]};
       }
       BoundingBox pointBbox = null;
       if (boundingBoxes != null) {
@@ -140,7 +146,7 @@ public class FlattenListOfPoints implements Serializable {
       return false;
     }
     FlattenListOfPoints that = (FlattenListOfPoints) o;
-    return Objects.deepEquals(flattenLatLngPoints, that.flattenLatLngPoints)
+    return Objects.deepEquals(flattenLngLatPoints, that.flattenLngLatPoints)
             && Objects.deepEquals(altitudes, that.altitudes)
             && Objects.deepEquals(boundingBoxes, that.boundingBoxes);
   }
@@ -148,7 +154,7 @@ public class FlattenListOfPoints implements Serializable {
   @Override
   public int hashCode() {
     return Objects.hash(
-            Arrays.hashCode(flattenLatLngPoints),
+            Arrays.hashCode(flattenLngLatPoints),
             Arrays.hashCode(altitudes),
             Arrays.hashCode(boundingBoxes)
     );
