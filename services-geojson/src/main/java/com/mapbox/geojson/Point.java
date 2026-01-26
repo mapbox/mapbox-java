@@ -331,10 +331,15 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
   @Override
   public String toString() {
     String coordinatesStr;
-    if (coordinates.length > 2)
-      coordinatesStr = "[" + this.coordinates[0] + ", " + this.coordinates[1] + ", " + this.coordinates[2] + "]";
-    else
+    if (coordinates.length > 2) {
+      coordinatesStr = "["
+              + this.coordinates[0] + ", "
+              + this.coordinates[1] + ", "
+              + this.coordinates[2]
+              + "]";
+    } else {
       coordinatesStr = "[" + this.coordinates[0] + ", " + this.coordinates[1] + "]";
+    }
     return "Point{"
             + "type=" + type + ", "
             + "bbox=" + bbox + ", "
@@ -344,9 +349,13 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof Point)) return false;
+    if (!(o instanceof Point)) {
+      return false;
+    }
     Point point = (Point) o;
-    return Objects.equals(type, point.type) && Objects.equals(bbox, point.bbox) && Objects.deepEquals(coordinates, point.coordinates);
+    return Objects.equals(type, point.type)
+            && Objects.equals(bbox, point.bbox)
+            && Objects.deepEquals(coordinates, point.coordinates);
   }
 
   @Override
@@ -366,7 +375,8 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<Point, List<Double>, double[]> {
+  static final class GsonTypeAdapter extends
+          BaseGeometryTypeAdapter<Point, List<Double>, double[]> {
 
     GsonTypeAdapter(Gson gson) {
       super(gson, new ListOfDoublesCoordinatesTypeAdapter());

@@ -90,7 +90,7 @@ public class FlattenListOfPoints implements Serializable {
 
   /**
    * @return an array of all the altitudes (or null if no altitudes are present at all). If a
-   * coordinate does not contain altitude it's represented as {@link Double#NaN}
+   *   coordinate does not contain altitude it's represented as {@link Double#NaN}
    */
   @Nullable
   public double[] getAltitudes() {
@@ -100,7 +100,8 @@ public class FlattenListOfPoints implements Serializable {
   /**
    * Creates a list of {@link Point}s and returns it.
    * <p>
-   * If possible consider using {@link #getFlattenLatLngArray()} and {@link #getAltitudes()} instead.
+   * If possible consider using {@link #getFlattenLatLngArray()} and {@link #getAltitudes()}
+   * instead.
    *
    * @return a list of {@link Point}s
    */
@@ -113,7 +114,11 @@ public class FlattenListOfPoints implements Serializable {
     for (int i = 0; i < flattenLatLngPoints.length / 2; i++) {
       double[] coordinates;
       if (altitudes != null && !Double.isNaN(altitudes[i])) {
-        coordinates = new double[]{flattenLatLngPoints[i * 2], flattenLatLngPoints[(i * 2) + 1], altitudes[i]};
+        coordinates = new double[]{
+                flattenLatLngPoints[i * 2],
+                flattenLatLngPoints[(i * 2) + 1],
+                altitudes[i]
+        };
       } else {
         coordinates = new double[]{flattenLatLngPoints[i * 2], flattenLatLngPoints[(i * 2) + 1]};
       }
@@ -131,13 +136,21 @@ public class FlattenListOfPoints implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof FlattenListOfPoints)) return false;
+    if (!(o instanceof FlattenListOfPoints)) {
+      return false;
+    }
     FlattenListOfPoints that = (FlattenListOfPoints) o;
-    return Objects.deepEquals(flattenLatLngPoints, that.flattenLatLngPoints) && Objects.deepEquals(altitudes, that.altitudes) && Objects.deepEquals(boundingBoxes, that.boundingBoxes);
+    return Objects.deepEquals(flattenLatLngPoints, that.flattenLatLngPoints)
+            && Objects.deepEquals(altitudes, that.altitudes)
+            && Objects.deepEquals(boundingBoxes, that.boundingBoxes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(Arrays.hashCode(flattenLatLngPoints), Arrays.hashCode(altitudes), Arrays.hashCode(boundingBoxes));
+    return Objects.hash(
+            Arrays.hashCode(flattenLatLngPoints),
+            Arrays.hashCode(altitudes),
+            Arrays.hashCode(boundingBoxes)
+    );
   }
 }

@@ -55,7 +55,30 @@ public interface CoordinateShifter {
    */
   List<Double> unshiftPoint(List<Double> shiftedCoordinates);
 
+  /**
+   * Shifted coordinate values according to its algorithm.
+   *
+   * @param lon unshifted longitude
+   * @param lat unshifted latitude
+   * @param altitude  unshifted altitude
+   * @return shifted longitude, shifted latitude, shifted altitude
+   */
   double[] shift(double lon, double lat, double altitude);
+
+  /**
+   * Shifted coordinate values according to its algorithm.
+   *
+   * @param lon unshifted longitude
+   * @param lat unshifted latitude
+   * @return shifted longitude, shifted latitude
+   */
   double[] shift(double lon, double lat);
+
+  /**
+   * Unshifted coordinate values according to its algorithm.
+   *
+   * @param shiftedCoordinates shifted point
+   * @return unshifted longitude, shifted latitude, and altitude (if present)
+   */
   double[] unshiftPointArray(double[] shiftedCoordinates);
 }

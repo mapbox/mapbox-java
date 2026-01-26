@@ -34,9 +34,16 @@ class FlattenListOfPointsTypeAdapter extends BaseCoordinatesTypeAdapter<FlattenL
     for (int i = 0; i < flattenLatLngCoordinates.length / 2; i++) {
       double[] value;
       if (altitudes != null && !Double.isNaN(altitudes[i])) {
-        value = new double[]{flattenLatLngCoordinates[i * 2], flattenLatLngCoordinates[(i * 2) + 1], altitudes[i]};
+        value = new double[]{
+                flattenLatLngCoordinates[i * 2],
+                flattenLatLngCoordinates[(i * 2) + 1],
+                altitudes[i]
+        };
       } else {
-        value = new double[]{flattenLatLngCoordinates[i * 2], flattenLatLngCoordinates[(i * 2) + 1]};
+        value = new double[]{
+                flattenLatLngCoordinates[i * 2],
+                flattenLatLngCoordinates[(i * 2) + 1]
+        };
       }
 
       writePointList(out, value);

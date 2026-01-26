@@ -36,7 +36,8 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @Keep
-public final class MultiPoint implements FlattenedCoordinateContainer<List<Point>, FlattenListOfPoints> {
+public final class MultiPoint implements
+        FlattenedCoordinateContainer<List<Point>, FlattenListOfPoints> {
 
   private static final String TYPE = "MultiPoint";
 
@@ -107,7 +108,8 @@ public final class MultiPoint implements FlattenedCoordinateContainer<List<Point
   MultiPoint(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
     this(type, bbox, new FlattenListOfPoints(coordinates));
   }
-    MultiPoint(String type, @Nullable BoundingBox bbox, FlattenListOfPoints flattenListOfPoints) {
+
+  MultiPoint(String type, @Nullable BoundingBox bbox, FlattenListOfPoints flattenListOfPoints) {
     if (type == null) {
       throw new NullPointerException("Null type");
     }
@@ -197,9 +199,13 @@ public final class MultiPoint implements FlattenedCoordinateContainer<List<Point
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof MultiPoint)) return false;
+    if (!(o instanceof MultiPoint)) {
+      return false;
+    }
     MultiPoint that = (MultiPoint) o;
-    return Objects.equals(type, that.type) && Objects.equals(bbox, that.bbox) && Objects.equals(flattenListOfPoints, that.flattenListOfPoints);
+    return Objects.equals(type, that.type)
+            && Objects.equals(bbox, that.bbox)
+            && Objects.equals(flattenListOfPoints, that.flattenListOfPoints);
   }
 
   @Override
@@ -217,7 +223,8 @@ public final class MultiPoint implements FlattenedCoordinateContainer<List<Point
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<MultiPoint, List<Point>, FlattenListOfPoints> {
+  static final class GsonTypeAdapter extends
+          BaseGeometryTypeAdapter<MultiPoint, List<Point>, FlattenListOfPoints> {
 
     GsonTypeAdapter(Gson gson) {
       super(gson, new FlattenListOfPointsTypeAdapter());
@@ -234,9 +241,10 @@ public final class MultiPoint implements FlattenedCoordinateContainer<List<Point
     }
 
     @Override
-    CoordinateContainer<List<Point>> createCoordinateContainer(String type,
-                                                               BoundingBox bbox,
-                                                               FlattenListOfPoints flattenListOfPoints) {
+    CoordinateContainer<List<Point>> createCoordinateContainer(
+            String type,
+            BoundingBox bbox,
+            FlattenListOfPoints flattenListOfPoints) {
       return new MultiPoint(type == null ? "MultiPoint" : type, bbox, flattenListOfPoints);
     }
   }

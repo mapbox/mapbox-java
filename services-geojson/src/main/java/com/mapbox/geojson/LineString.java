@@ -50,7 +50,8 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @Keep
-public final class LineString implements FlattenedCoordinateContainer<List<Point>, FlattenListOfPoints> {
+public final class LineString implements
+        FlattenedCoordinateContainer<List<Point>, FlattenListOfPoints> {
 
   private static final String TYPE = "LineString";
 
@@ -278,9 +279,13 @@ public final class LineString implements FlattenedCoordinateContainer<List<Point
 
   @Override
   public boolean equals(Object o) {
-    if (!(o instanceof LineString)) return false;
+    if (!(o instanceof LineString)) {
+      return false;
+    }
     LineString that = (LineString) o;
-    return Objects.equals(type, that.type) && Objects.equals(bbox, that.bbox) && Objects.equals(flattenListOfPoints, that.flattenListOfPoints);
+    return Objects.equals(type, that.type)
+            && Objects.equals(bbox, that.bbox)
+            && Objects.equals(flattenListOfPoints, that.flattenListOfPoints);
   }
 
   @Override
@@ -298,7 +303,8 @@ public final class LineString implements FlattenedCoordinateContainer<List<Point
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<LineString, List<Point>, FlattenListOfPoints> {
+  static final class GsonTypeAdapter extends
+          BaseGeometryTypeAdapter<LineString, List<Point>, FlattenListOfPoints> {
 
     GsonTypeAdapter(Gson gson) {
       super(gson, new FlattenListOfPointsTypeAdapter());
@@ -315,9 +321,10 @@ public final class LineString implements FlattenedCoordinateContainer<List<Point
     }
 
     @Override
-    CoordinateContainer<List<Point>> createCoordinateContainer(String type,
-                                                               BoundingBox bbox,
-                                                               FlattenListOfPoints flattenListOfPoints) {
+    CoordinateContainer<List<Point>> createCoordinateContainer(
+            String type,
+            BoundingBox bbox,
+            FlattenListOfPoints flattenListOfPoints) {
       return new LineString(type == null ? "LineString" : type, bbox, flattenListOfPoints);
     }
   }

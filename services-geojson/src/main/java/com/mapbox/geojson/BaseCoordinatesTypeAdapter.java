@@ -13,8 +13,8 @@ import com.mapbox.geojson.utils.GeoJsonUtils;
 import java.io.IOException;
 
 /**
- *  Base class for converting {@code T} instance of coordinates to JSON and
- *  JSON to instance of {@code T}.
+ * Base class for converting {@code T} instance of coordinates to JSON and
+ * JSON to instance of {@code T}.
  *
  * @param <T> Type of coordinates
  * @since 4.6.0
@@ -23,7 +23,7 @@ import java.io.IOException;
 abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
 
 
-  protected void writePoint(JsonWriter out, Point point) throws  IOException {
+  protected void writePoint(JsonWriter out, Point point) throws IOException {
     if (point == null) {
       return;
     }
@@ -31,7 +31,7 @@ abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
   }
 
   protected Point readPoint(JsonReader in) throws IOException {
-    return new Point("Point",null, readPointList(in));
+    return new Point("Point", null, readPointList(in));
   }
 
 
@@ -44,8 +44,8 @@ abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
     out.beginArray();
 
     // Unshift coordinates
-    double[] unshiftedCoordinates =
-            CoordinateShifterManager.getCoordinateShifter().unshiftPointArray(value);
+    double[] unshiftedCoordinates = CoordinateShifterManager.getCoordinateShifter()
+            .unshiftPointArray(value);
 
     out.value(GeoJsonUtils.trim(unshiftedCoordinates[0]));
     out.value(GeoJsonUtils.trim(unshiftedCoordinates[1]));
@@ -84,10 +84,12 @@ abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
         in.skipValue();
       }
       in.endArray();
-      return CoordinateShifterManager.getCoordinateShifter().shift(coordinate0, coordinate1, coordinate2);
+      return CoordinateShifterManager.getCoordinateShifter()
+              .shift(coordinate0, coordinate1, coordinate2);
     } else {
       in.endArray();
-      return CoordinateShifterManager.getCoordinateShifter().shift(coordinate0, coordinate1);
+      return CoordinateShifterManager.getCoordinateShifter()
+              .shift(coordinate0, coordinate1);
     }
 
   }

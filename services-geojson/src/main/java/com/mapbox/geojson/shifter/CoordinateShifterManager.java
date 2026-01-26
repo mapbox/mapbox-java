@@ -42,7 +42,7 @@ public final class CoordinateShifterManager {
 
     @Override
     public double[] shift(double lon, double lat, double altitude) {
-      if (Double.isNaN(altitude)){
+      if (Double.isNaN(altitude)) {
         return shift(lon, lat);
       } else {
         return new double[]{lon, lat, altitude};

@@ -35,7 +35,10 @@ abstract class BaseGeometryTypeAdapter<G, T, A> extends TypeAdapter<G> {
     this.boundingBoxAdapter = new BoundingBoxTypeAdapter();
   }
 
-  public void writeCoordinateContainerPrimitive(JsonWriter jsonWriter, FlattenedCoordinateContainer<T, A> object) throws IOException {
+  public void writeCoordinateContainerPrimitive(
+          JsonWriter jsonWriter,
+          FlattenedCoordinateContainer<T, A> object
+  ) throws IOException {
     if (object == null) {
       jsonWriter.nullValue();
       return;
@@ -53,6 +56,7 @@ abstract class BaseGeometryTypeAdapter<G, T, A> extends TypeAdapter<G> {
     }
     jsonWriter.endObject();
   }
+
   public void writeCoordinateContainer(JsonWriter jsonWriter, CoordinateContainer<A> object)
           throws IOException {
     if (object == null) {
