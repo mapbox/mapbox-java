@@ -217,7 +217,7 @@ public final class LineString implements FlattenedCoordinateContainer<List<Point
 
   /**
    * Provides the list of {@link Point}s that make up the LineString geometry.
-   * </p>
+   * <p>
    * Please consider using {@link #flattenCoordinates()} instead for better performance.
    *
    * @return a list of points

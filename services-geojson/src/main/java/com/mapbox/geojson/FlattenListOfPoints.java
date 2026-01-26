@@ -99,7 +99,7 @@ public class FlattenListOfPoints implements Serializable {
 
   /**
    * Creates a list of {@link Point}s and returns it.
-   * </p>
+   * <p>
    * If possible consider using {@link #getFlattenLatLngArray()} and {@link #getAltitudes()} instead.
    *
    * @return a list of {@link Point}s
