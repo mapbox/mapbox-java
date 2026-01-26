@@ -45,6 +45,14 @@ public class LineStringTest extends TestUtils {
   }
 
   @Test
+  public void fromFlattenListOfPoints() throws Exception {
+    double[] flattenLngLatPoints= new double[]{1.0, 2.0, 4.0, 8.0};
+    FlattenListOfPoints flattenListOfPoints = new FlattenListOfPoints(flattenLngLatPoints, null);
+    LineString lineString = LineString.fromFlattenListOfPoints(flattenListOfPoints, null);
+    assertEquals("_gayB_c`|@_wemJ_kbvD", lineString.toPolyline(PRECISION_6));
+  }
+
+  @Test
   public void bbox_nullWhenNotSet() throws Exception {
     List<Point> points = new ArrayList<>();
     points.add(Point.fromLngLat(1.0, 1.0));

@@ -2,6 +2,7 @@ package com.mapbox.geojson.shifter;
 
 import com.google.gson.JsonParser;
 import com.mapbox.geojson.BoundingBox;
+import com.mapbox.geojson.FlattenListOfPoints;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 
@@ -221,6 +222,14 @@ public class ShifterTest {
     compareJson("{\"coordinates\":[[1,1],[2,2],[3,3]],"
                     + "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}",
             jsonString);
+
+    double[] flattenLngLatPoints= new double[]{1.0, 1.0, 2.0, 2.0, 3.0, 3.0};
+    FlattenListOfPoints flattenListOfPoints = new FlattenListOfPoints(flattenLngLatPoints, null);
+    LineString lineString2 = LineString.fromFlattenListOfPoints(flattenListOfPoints, bbox);
+    String jsonString2 = lineString2.toJson();
+    compareJson("{\"coordinates\":[[1,1],[2,2],[3,3]],"
+                    + "\"type\":\"LineString\",\"bbox\":[1.0,2.0,3.0,4.0]}",
+            jsonString2);
 
     CoordinateShifterManager.setCoordinateShifter(null);
   }

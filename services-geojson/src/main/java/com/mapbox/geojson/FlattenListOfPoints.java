@@ -37,7 +37,15 @@ public class FlattenListOfPoints implements Serializable {
   @Nullable
   private BoundingBox[] boundingBoxes;
 
-  FlattenListOfPoints(@NonNull double[] flattenLngLatPoints, @Nullable double[] altitudes) {
+  /**
+   *
+   * @param flattenLngLatPoints A one-dimensional array coordinates: [lng1, lat1, lng2, lat2, ...].
+   *                            It is stored as is, no copy or shifting is done.
+   * @param altitudes An array of altitudes of each coordinate or {@link Double#NaN} if the
+   *                 coordinate does not have altitude. It is stored as is, no copy or shifting is
+   *                 done.
+   */
+  public FlattenListOfPoints(@NonNull double[] flattenLngLatPoints, @Nullable double[] altitudes) {
     this.flattenLngLatPoints = flattenLngLatPoints;
     this.altitudes = altitudes;
   }

@@ -9,6 +9,8 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.shifter.CoordinateShifter;
+import com.mapbox.geojson.shifter.CoordinateShifterManager;
 import com.mapbox.geojson.utils.PolylineUtils;
 
 import java.io.IOException;
@@ -142,6 +144,42 @@ public final class LineString implements
    */
   public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
     return new LineString(TYPE, bbox, multiPoint.coordinates());
+  }
+
+  /**
+   * Create a new instance of this class by defining a {@link FlattenListOfPoints} object.
+   * The multipoint object should comply with the GeoJson specifications described in the
+   * documentation.
+   *
+   * @param flattenListOfPoints which will make up the LineString geometry. The points will be
+   *                           shifted according to the current
+   *                           {@link CoordinateShifterManager#getCoordinateShifter()}
+   * @param bbox optionally include a bbox definition
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   */
+  public static LineString fromFlattenListOfPoints(
+          FlattenListOfPoints flattenListOfPoints,
+          @Nullable BoundingBox bbox
+  ) {
+    double[] flattenLngLatArray = flattenListOfPoints.getFlattenLngLatArray();
+    double[] altitudes = flattenListOfPoints.getAltitudes();
+    CoordinateShifter coordinateShifter = CoordinateShifterManager.getCoordinateShifter();
+    // Iterate all the points and shift them
+    for (int i = 0; i < flattenLngLatArray.length / 2; i++) {
+      if (altitudes != null && !Double.isNaN(altitudes[i])) {
+        double[] shifted = coordinateShifter.shift(flattenLngLatArray[i * 2], flattenLngLatArray[(i * 2) + 1], altitudes[i]);
+        flattenLngLatArray[i * 2] = shifted[0];
+        flattenLngLatArray[(i * 2) + 1] = shifted[1];
+        altitudes[i] = shifted[2];
+      } else {
+        double[] shifted = coordinateShifter.shift(flattenLngLatArray[i * 2], flattenLngLatArray[(i * 2) + 1]);
+        flattenLngLatArray[i * 2] = shifted[0];
+        flattenLngLatArray[(i * 2) + 1] = shifted[1];
+      }
+    }
+
+    return new LineString(TYPE, bbox, flattenListOfPoints);
   }
 
   LineString(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
