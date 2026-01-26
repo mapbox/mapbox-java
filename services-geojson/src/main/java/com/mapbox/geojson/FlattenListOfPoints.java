@@ -33,6 +33,7 @@ public class FlattenListOfPoints implements Serializable {
   /**
    * An array to store the {@link BoundingBox} of each coordinate or null if the coordinate does
    * not have bounding box.
+   * In practice is very unlikely that the points have bounding box when inside a list of points.
    */
   @Nullable
   private BoundingBox[] boundingBoxes;
@@ -166,5 +167,44 @@ public class FlattenListOfPoints implements Serializable {
             Arrays.hashCode(altitudes),
             Arrays.hashCode(boundingBoxes)
     );
+  }
+
+  @Override
+  public String toString() {
+    int totalPoints = flattenLngLatPoints.length / 2;
+
+    int iMax = totalPoints - 1;
+    if (iMax == -1) {
+      return "[]";
+    }
+
+    StringBuilder b = new StringBuilder();
+    b.append("[");
+
+    for (int i = 0; ; i++) {
+      b.append("Point{type=Point, bbox=");
+      if (boundingBoxes != null) {
+        BoundingBox boundingBox = boundingBoxes[i];
+        b.append(boundingBox);
+      } else {
+        b.append("null");
+      }
+      b.append(", coordinates=[");
+      b.append(flattenLngLatPoints[i * 2]);
+      b.append(", ");
+      b.append(flattenLngLatPoints[i * 2 + 1]);
+      if (altitudes != null && !Double.isNaN(altitudes[i])) {
+        b.append(", ");
+        b.append(altitudes[i]);
+      }
+      b.append("]}");
+      if (i == iMax) {
+         b.append("]");
+         break;
+      }
+      b.append(", ");
+    }
+
+    return b.toString();
   }
 }

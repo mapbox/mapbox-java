@@ -313,7 +313,7 @@ public final class LineString implements
     return "LineString{"
             + "type=" + type + ", "
             + "bbox=" + bbox + ", "
-            + "coordinates=" + coordinates()
+            + "coordinates=" + flattenCoordinates()
             + "}";
   }
 
