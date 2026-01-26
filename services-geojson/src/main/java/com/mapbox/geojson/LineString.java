@@ -221,7 +221,8 @@ public final class LineString implements
    * @since 1.0.0
    */
   public static LineString fromPolyline(@NonNull String polyline, int precision) {
-    return LineString.fromLngLats(PolylineUtils.decode(polyline, precision), null);
+    FlattenListOfPoints points = PolylineUtils.decodeToFlattenListOfPoints(polyline, precision);
+    return LineString.fromFlattenListOfPoints(points, null);
   }
 
   /**
@@ -264,6 +265,7 @@ public final class LineString implements
    */
   @NonNull
   @Override
+  @Deprecated
   public List<Point> coordinates() {
     return flattenListOfPoints.points();
   }
@@ -292,7 +294,7 @@ public final class LineString implements
    * @since 1.0.0
    */
   public String toPolyline(int precision) {
-    return PolylineUtils.encode(coordinates(), precision);
+    return PolylineUtils.encode(flattenListOfPoints, precision);
   }
 
   /**
