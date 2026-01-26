@@ -63,33 +63,31 @@ abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
       throw new NullPointerException();
     }
 
-    double coordinate0;
-    double coordinate1;
-    double coordinate2;
+    double lon;
+    double lat;
+    double altitude;
     in.beginArray();
     if (in.hasNext()) {
-      coordinate0 = in.nextDouble();
+      lon = in.nextDouble();
     } else {
       throw new IndexOutOfBoundsException("Point coordinates should contain at least two values");
     }
     if (in.hasNext()) {
-      coordinate1 = in.nextDouble();
+      lat = in.nextDouble();
     } else {
       throw new IndexOutOfBoundsException("Point coordinates should contain at least two values");
     }
     if (in.hasNext()) {
-      coordinate2 = in.nextDouble();
+      altitude = in.nextDouble();
       // Consume any extra value but don't store it
       while (in.hasNext()) {
         in.skipValue();
       }
       in.endArray();
-      return CoordinateShifterManager.getCoordinateShifter()
-              .shift(coordinate0, coordinate1, coordinate2);
+      return CoordinateShifterManager.getCoordinateShifter().shift(lon, lat, altitude);
     } else {
       in.endArray();
-      return CoordinateShifterManager.getCoordinateShifter()
-              .shift(coordinate0, coordinate1);
+      return CoordinateShifterManager.getCoordinateShifter().shift(lon, lat);
     }
 
   }
