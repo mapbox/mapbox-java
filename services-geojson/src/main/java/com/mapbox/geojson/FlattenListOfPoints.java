@@ -82,7 +82,7 @@ public class FlattenListOfPoints implements Serializable {
         altitudes[i] = Double.NaN;
       }
 
-      // Similarly to altitudes, if one point has bound we create an array to store those.
+      // Similarly to altitudes, if one point has bounding box we create an array to store those.
       if (point.bbox() != null) {
         if (boundingBoxes == null) {
           boundingBoxes = new BoundingBox[points.size()];
