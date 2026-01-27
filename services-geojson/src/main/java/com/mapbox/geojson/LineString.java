@@ -96,6 +96,20 @@ public final class LineString implements
   }
 
   /**
+   * Create a new instance of this class by defining a {@link MultiPoint} object and passing. The
+   * multipoint object should comply with the GeoJson specifications described in the documentation.
+   *
+   * @param multiPoint which will make up the LineString geometry
+   * @param bbox       optionally include a bbox definition as a double array
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   * @since 3.0.0
+   */
+  public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
+    return new LineString(TYPE, bbox, multiPoint.coordinates());
+  }
+
+  /**
    * Create a new instance of this class by defining a list of {@link Point}s which follow the
    * correct specifications described in the Point documentation. Note that there should not be any
    * duplicate points inside the list and the points combined should create a LineString with a
@@ -132,18 +146,12 @@ public final class LineString implements
     return new LineString(TYPE, bbox, points);
   }
 
-  /**
-   * Create a new instance of this class by defining a {@link MultiPoint} object and passing. The
-   * multipoint object should comply with the GeoJson specifications described in the documentation.
-   *
-   * @param multiPoint which will make up the LineString geometry
-   * @param bbox       optionally include a bbox definition as a double array
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @since 3.0.0
-   */
-  public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
-    return new LineString(TYPE, bbox, multiPoint.coordinates());
+  static LineString fromLngLats(double[][] coordinates) {
+    ArrayList<Point> converted = new ArrayList<>(coordinates.length);
+    for (int i = 0; i < coordinates.length; i++) {
+      converted.add(Point.fromLngLat(coordinates[i]));
+    }
+    return LineString.fromLngLats(converted);
   }
 
   /**
@@ -167,43 +175,21 @@ public final class LineString implements
     CoordinateShifter coordinateShifter = CoordinateShifterManager.getCoordinateShifter();
     // Iterate all the points and shift them
     for (int i = 0; i < flattenLngLatArray.length / 2; i++) {
+      double lon = flattenLngLatArray[i * 2];
+      double lat = flattenLngLatArray[(i * 2) + 1];
       if (altitudes != null && !Double.isNaN(altitudes[i])) {
-        double[] shifted = coordinateShifter.shift(flattenLngLatArray[i * 2], flattenLngLatArray[(i * 2) + 1], altitudes[i]);
+        double[] shifted = coordinateShifter.shift(lon, lat, altitudes[i]);
         flattenLngLatArray[i * 2] = shifted[0];
         flattenLngLatArray[(i * 2) + 1] = shifted[1];
         altitudes[i] = shifted[2];
       } else {
-        double[] shifted = coordinateShifter.shift(flattenLngLatArray[i * 2], flattenLngLatArray[(i * 2) + 1]);
+        double[] shifted = coordinateShifter.shift(lon, lat);
         flattenLngLatArray[i * 2] = shifted[0];
         flattenLngLatArray[(i * 2) + 1] = shifted[1];
       }
     }
 
     return new LineString(TYPE, bbox, flattenListOfPoints);
-  }
-
-  LineString(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
-    this(type, bbox, new FlattenListOfPoints(coordinates));
-  }
-
-  LineString(String type, @Nullable BoundingBox bbox, FlattenListOfPoints flattenListOfPoints) {
-    if (type == null) {
-      throw new NullPointerException("Null type");
-    }
-    if (flattenListOfPoints == null) {
-      throw new NullPointerException("Null coordinates");
-    }
-    this.flattenListOfPoints = flattenListOfPoints;
-    this.type = type;
-    this.bbox = bbox;
-  }
-
-  static LineString fromLngLats(double[][] coordinates) {
-    ArrayList<Point> converted = new ArrayList<>(coordinates.length);
-    for (int i = 0; i < coordinates.length; i++) {
-      converted.add(Point.fromLngLat(coordinates[i]));
-    }
-    return LineString.fromLngLats(converted);
   }
 
   /**
@@ -223,6 +209,22 @@ public final class LineString implements
   public static LineString fromPolyline(@NonNull String polyline, int precision) {
     FlattenListOfPoints points = PolylineUtils.decodeToFlattenListOfPoints(polyline, precision);
     return LineString.fromFlattenListOfPoints(points, null);
+  }
+
+  LineString(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
+    this(type, bbox, new FlattenListOfPoints(coordinates));
+  }
+
+  LineString(String type, @Nullable BoundingBox bbox, FlattenListOfPoints flattenListOfPoints) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    if (flattenListOfPoints == null) {
+      throw new NullPointerException("Null coordinates");
+    }
+    this.flattenListOfPoints = flattenListOfPoints;
+    this.type = type;
+    this.bbox = bbox;
   }
 
   /**
@@ -258,10 +260,10 @@ public final class LineString implements
   /**
    * Provides the list of {@link Point}s that make up the LineString geometry.
    * <p>
-   * Please consider using {@link #flattenCoordinates()} instead for better performance.
    *
    * @return a list of points
    * @since 3.0.0
+   * @deprecated Please consider using {@link #flattenCoordinates()} instead for better performance.
    */
   @NonNull
   @Override

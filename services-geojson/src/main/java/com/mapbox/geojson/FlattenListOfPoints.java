@@ -181,7 +181,7 @@ public class FlattenListOfPoints implements Serializable {
     StringBuilder b = new StringBuilder();
     b.append("[");
 
-    for (int i = 0; ; i++) {
+    for (int i = 0;; i++) {
       b.append("Point{type=Point, bbox=");
       if (boundingBoxes != null) {
         BoundingBox boundingBox = boundingBoxes[i];
@@ -199,8 +199,8 @@ public class FlattenListOfPoints implements Serializable {
       }
       b.append("]}");
       if (i == iMax) {
-         b.append("]");
-         break;
+        b.append("]");
+        break;
       }
       b.append(", ");
     }

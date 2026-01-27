@@ -131,14 +131,17 @@ public final class PolylineUtils {
       while (temp >= 0x1f);
       lng += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
 
-      flattenLngLatCoordinates[itemsCount*2] = lng / factor;
-      flattenLngLatCoordinates[itemsCount*2+1] = lat / factor;
+      flattenLngLatCoordinates[itemsCount * 2] = lng / factor;
+      flattenLngLatCoordinates[itemsCount * 2 + 1] = lat / factor;
 
       itemsCount++;
     }
 
     double[] trimmedFlattenLngLatCoordinates = new double[itemsCount * 2];
-    System.arraycopy(flattenLngLatCoordinates, 0, trimmedFlattenLngLatCoordinates, 0, itemsCount * 2);
+    System.arraycopy(flattenLngLatCoordinates, 0,
+            trimmedFlattenLngLatCoordinates, 0,
+            itemsCount * 2
+    );
     return new FlattenListOfPoints(trimmedFlattenLngLatCoordinates, null);
   }
 
@@ -184,7 +187,11 @@ public final class PolylineUtils {
    * @return a String representing a path string
    */
   @NonNull
-  public static String encode(@NonNull final FlattenListOfPoints flattenListOfPoints, int precision) {
+  public static String encode(
+          @NonNull
+          final FlattenListOfPoints flattenListOfPoints,
+          int precision
+  ) {
     long lastLat = 0;
     long lastLng = 0;
 
