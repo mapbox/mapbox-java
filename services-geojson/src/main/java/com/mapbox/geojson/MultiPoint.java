@@ -193,7 +193,7 @@ public final class MultiPoint implements
     return "MultiPoint{"
             + "type=" + type + ", "
             + "bbox=" + bbox + ", "
-            + "coordinates=" + flattenListOfPoints.points()
+            + "coordinates=" + flattenListOfPoints
             + "}";
   }
 
