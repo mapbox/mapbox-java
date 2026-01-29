@@ -86,12 +86,13 @@ public final class PolylineUtils {
    *
    * @param encodedPath a String representing an encoded path string
    * @param precision   OSRMv4 uses 6, OSRMv5 and Google uses 5
-   * @return a {@link FlattenListOfPoints} making up the line
+   * @return an array of doubles representing a line geometry with flattened points
+   *         in the form: [lng1, lat1, lng2, lat2, ...]
    * @see <a href="https://github.com/mapbox/polyline/blob/master/src/polyline.js">Part of algorithm came from this source</a>
    * @see <a href="https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/android/PolyUtil.java">Part of algorithm came from this source.</a>
    */
   @NonNull
-  public static FlattenListOfPoints decodeToFlattenListOfPoints(
+  public static double[] decodeToFlattenListOfPoints(
           @NonNull
           final String encodedPath,
           int precision
@@ -142,7 +143,7 @@ public final class PolylineUtils {
             trimmedFlattenLngLatCoordinates, 0,
             itemsCount * 2
     );
-    return new FlattenListOfPoints(trimmedFlattenLngLatCoordinates, null);
+    return trimmedFlattenLngLatCoordinates;
   }
 
   /**
