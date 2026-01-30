@@ -204,6 +204,85 @@ public class LineStringTest extends TestUtils {
     assertEquals(Double.NaN, altitudes[1], 0.0);
   }
 
+  /**
+   * Test to trigger reading a JSON that needs to extend the array capacity while parsing.
+   * {@link FlattenListOfPointsTypeAdapter#INITIAL_CAPACITY}.
+   *
+   * @throws IOException
+   */
+  @SuppressWarnings("JavadocReference")
+  @Test
+  public void readJsonWithMoreThan_INITIAL_CAPACITY() throws IOException {
+    final StringBuilder json = new StringBuilder("{\"type\": \"LineString\"," +
+            "  \"coordinates\": [");
+    int totalPoints = 100 * 2;
+    for (int i = 0; i < totalPoints; i++) {
+      json.append("[ ");
+      double lng = 100 + i;
+      double lat = i;
+      json.append(lng).append(",");
+      json.append(lat);
+      // Only add altitude for half of the points
+      if (i >= 100) {
+        double alt = 1000 + i;
+        json.append(",").append(alt);
+      }
+      json.append("], ");
+    }
+    // Trim the last `, `
+    json.deleteCharAt(json.length() - 2);
+    json.append("]}");
+
+    LineString geo = LineString.fromJson(json.toString());
+    assertEquals("LineString", geo.type());
+    List<Point> points = geo.coordinates();
+    assertEquals(totalPoints, points.size());
+
+    // Verify the list of points contents
+    for (int i = 0; i < totalPoints; i++) {
+      Point point = points.get(i);
+      double expectedLng = 100 + i;
+      double expectedLat = i;
+      assertEquals(expectedLng, point.longitude(), DELTA);
+      assertEquals(expectedLat, point.latitude(), DELTA);
+
+      if (i >= 100) {
+        // Second half should have altitude
+        assertTrue(point.hasAltitude());
+        double expectedAlt = 1000 + i;
+        assertEquals(expectedAlt, point.altitude(), DELTA);
+      } else {
+        // First half should not have altitude
+        assertFalse(point.hasAltitude());
+      }
+    }
+
+    FlattenListOfPoints flattenListOfPoints = geo.flattenCoordinates();
+    assertEquals(totalPoints, flattenListOfPoints.size());
+    double[] flattenLngLatArray = flattenListOfPoints.getFlattenLngLatArray();
+    assertEquals(totalPoints * 2, flattenLngLatArray.length);
+    double[] altitudes = flattenListOfPoints.getAltitudes();
+    assertNotNull(altitudes);
+    assertEquals(totalPoints, altitudes.length);
+
+    // Verify the contents of flattenLngLatArray and altitudes
+    for (int i = 0; i < totalPoints; i++) {
+      double expectedLng = 100 + i;
+      double expectedLat = i;
+      assertEquals(expectedLng, flattenLngLatArray[i * 2], DELTA);
+      assertEquals(expectedLat, flattenLngLatArray[i * 2 + 1], DELTA);
+
+      if (i >= 100) {
+        // Second half should have altitude
+        double expectedAlt = 1000 + i;
+        assertEquals(expectedAlt, altitudes[i], DELTA);
+      } else {
+        // First half should have NaN for altitude
+        assertTrue(Double.isNaN(altitudes[i]));
+      }
+    }
+  }
+
   @Test
   public void toJson() throws IOException {
     final String json = "{\"type\": \"LineString\"," +
