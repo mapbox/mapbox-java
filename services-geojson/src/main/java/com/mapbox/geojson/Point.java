@@ -13,7 +13,6 @@ import com.mapbox.geojson.shifter.CoordinateShifterManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,8 +58,9 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
   @Nullable
   private final BoundingBox bbox;
 
-  @NonNull
-  private final double[] coordinates;
+  private final double longitude;
+  private final double latitude;
+  private final double altitude;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -183,7 +183,9 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
     if (coordinates.length == 0) {
       throw new NullPointerException("Null coordinates");
     }
-    this.coordinates = coordinates;
+    longitude = coordinates[0];
+    latitude = coordinates[1];
+    altitude = coordinates.length > 2 ? coordinates[2] : Double.NaN;
   }
 
   /**
@@ -196,7 +198,7 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
    * @since 3.0.0
    */
   public double longitude() {
-    return coordinates[0];
+    return longitude;
   }
 
   /**
@@ -209,7 +211,7 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
    * @since 3.0.0
    */
   public double latitude() {
-    return coordinates[1];
+    return latitude;
   }
 
   /**
@@ -222,10 +224,7 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
    * @since 3.0.0
    */
   public double altitude() {
-    if (coordinates.length < 3) {
-      return Double.NaN;
-    }
-    return coordinates[2];
+    return altitude;
   }
 
   /**
@@ -283,9 +282,15 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
   @Override
   @Deprecated
   public List<Double> coordinates()  {
-    ArrayList<Double> list = new ArrayList<>(coordinates.length);
-    for (double coordinate : coordinates) {
-      list.add(coordinate);
+    int size = 2;
+    if (!Double.isNaN(altitude())) {
+      size++;
+    }
+    ArrayList<Double> list = new ArrayList<>(size);
+    list.add(longitude);
+    list.add(latitude);
+    if (!Double.isNaN(altitude())) {
+      list.add(altitude);
     }
     return list;
   }
@@ -300,7 +305,11 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
    */
   @Override
   public double[] flattenCoordinates() {
-    return coordinates;
+    if (Double.isNaN(altitude)) {
+      return new double[]{longitude, latitude};
+    } else {
+      return new double[]{longitude, latitude, altitude};
+    }
   }
 
   /**
@@ -331,14 +340,14 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
   @Override
   public String toString() {
     String coordinatesStr;
-    if (coordinates.length > 2) {
-      coordinatesStr = "["
-              + this.coordinates[0] + ", "
-              + this.coordinates[1] + ", "
-              + this.coordinates[2]
-              + "]";
+    if (Double.isNaN(altitude)) {
+      coordinatesStr = "[" + longitude + ", " + latitude + "]";
     } else {
-      coordinatesStr = "[" + this.coordinates[0] + ", " + this.coordinates[1] + "]";
+      coordinatesStr = "["
+              + longitude + ", "
+              + latitude + ", "
+              + altitude
+              + "]";
     }
     return "Point{"
             + "type=" + type + ", "
@@ -353,21 +362,21 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
       return false;
     }
     Point point = (Point) o;
-    return Objects.equals(type, point.type)
-            && Objects.equals(bbox, point.bbox)
-            && Objects.deepEquals(coordinates, point.coordinates);
+    return Double.compare(longitude, point.longitude) == 0
+            && Double.compare(latitude, point.latitude) == 0
+            && Double.compare(altitude, point.altitude) == 0
+            && Objects.equals(type, point.type)
+            && Objects.equals(bbox, point.bbox);
   }
 
   @Override
   public int hashCode() {
-    int hashCode = 1;
-    hashCode *= 1000003;
-    hashCode ^= type.hashCode();
-    hashCode *= 1000003;
-    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
-    hashCode *= 1000003;
-    hashCode ^= Arrays.hashCode(coordinates);
-    return hashCode;
+    int result = type.hashCode();
+    result = 31 * result + Objects.hashCode(bbox);
+    result = 31 * result + Double.hashCode(longitude);
+    result = 31 * result + Double.hashCode(latitude);
+    result = 31 * result + Double.hashCode(altitude);
+    return result;
   }
 
   /**
