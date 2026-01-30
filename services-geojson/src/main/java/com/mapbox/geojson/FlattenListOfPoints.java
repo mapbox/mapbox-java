@@ -113,6 +113,15 @@ public class FlattenListOfPoints implements Serializable {
   }
 
   /**
+   * Returns the total number of points stored in this flattened structure.
+   *
+   * @return the total number of points.
+   */
+  public int size() {
+    return flattenLngLatPoints.length / 2;
+  }
+
+  /**
    * Creates a list of {@link Point}s and returns it.
    * <p>
    * If possible consider using {@link #getFlattenLngLatArray()} and {@link #getAltitudes()}

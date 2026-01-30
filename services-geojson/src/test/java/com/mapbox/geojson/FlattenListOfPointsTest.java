@@ -40,6 +40,43 @@ public class FlattenListOfPointsTest extends TestUtils {
   }
 
   @Test
+  public void size_emptyFlatten_returnsZero() {
+    double[] lngLatArray = new double[]{};
+    FlattenListOfPoints flatten = new FlattenListOfPoints(lngLatArray, null);
+
+    assertEquals(0, flatten.size());
+  }
+
+  @Test
+  public void size_singlePoint_returnsOne() {
+    double[] lngLatArray = new double[]{1.0, 2.0};
+    FlattenListOfPoints flatten = new FlattenListOfPoints(lngLatArray, null);
+
+    assertEquals(1, flatten.size());
+  }
+
+  @Test
+  public void size_multiplePoints_returnsCorrectCount() {
+    double[] lngLatArray = new double[]{1.0, 2.0, 3.0, 4.0, 5.0, 6.0};
+    FlattenListOfPoints flatten = new FlattenListOfPoints(lngLatArray, null);
+
+    assertEquals(3, flatten.size());
+  }
+
+  @Test
+  public void size_fromListOfPoints_returnsCorrectCount() {
+    List<Point> points = new ArrayList<>();
+    points.add(Point.fromLngLat(1.0, 2.0));
+    points.add(Point.fromLngLat(3.0, 4.0));
+    points.add(Point.fromLngLat(5.0, 6.0));
+    points.add(Point.fromLngLat(7.0, 8.0));
+
+    FlattenListOfPoints flatten = new FlattenListOfPoints(points);
+
+    assertEquals(4, flatten.size());
+  }
+
+  @Test
   public void constructor_withEmptyList_createsEmptyFlatten() {
     List<Point> points = new ArrayList<>();
 
