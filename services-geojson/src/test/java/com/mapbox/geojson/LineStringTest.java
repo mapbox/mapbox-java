@@ -173,6 +173,38 @@ public class LineStringTest extends TestUtils {
   }
 
   @Test
+  public void fromJsonWithExtraValuesAreIgnored() throws IOException {
+    final String json = "{\"type\": \"LineString\"," +
+            "  \"coordinates\": [[ 100, 0, 1000, 2, 3], [101, 1]]} ";
+    LineString geo = LineString.fromJson(json);
+    assertEquals("LineString", geo.type());
+    List<Point> points = geo.coordinates();
+    Point firstPoint = points.get(0);
+    assertEquals(100.0, firstPoint.longitude(), 0.0);
+    assertEquals(0.0, firstPoint.latitude(), 0.0);
+    assertTrue(firstPoint.hasAltitude());
+    assertEquals(1000.0, firstPoint.altitude(), 0.0);
+
+    Point secondPoint = points.get(1);
+    assertEquals(101.0, secondPoint.longitude(), 0.0);
+    assertEquals(1.0, secondPoint.latitude(), 0.0);
+    assertFalse(secondPoint.hasAltitude());
+
+    double[] coordinates = geo.flattenCoordinates().getFlattenLngLatArray();
+    assertEquals(4, geo.flattenCoordinates().getFlattenLngLatArray().length);
+    double[] altitudes = geo.flattenCoordinates().getAltitudes();
+    assertEquals(100.0, coordinates[0], 0.0);
+    assertEquals(0.0, coordinates[1], 0.0);
+    assertNotNull(altitudes);
+    assertEquals(1000.0, altitudes[0], 0.0);
+
+    // Second point
+    assertEquals(101.0, coordinates[2], 0.0);
+    assertEquals(1.0, coordinates[3], 0.0);
+    assertEquals(Double.NaN, altitudes[1], 0.0);
+  }
+
+  @Test
   public void toJson() throws IOException {
     final String json = "{\"type\": \"LineString\"," +
             "  \"coordinates\": [[ 100, 0, 1], [101, 1]]} ";
