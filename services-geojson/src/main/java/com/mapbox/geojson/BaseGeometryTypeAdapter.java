@@ -18,6 +18,7 @@ import java.io.IOException;
  *
  * @param <G> Geometry
  * @param <T> Type of coordinates
+ * @param <A> The type of coordinates adapter
  * @since 4.6.0
  */
 @Keep
@@ -25,17 +26,20 @@ abstract class BaseGeometryTypeAdapter<G, T, A> extends TypeAdapter<G> {
 
   private volatile TypeAdapter<String> stringAdapter;
   private volatile TypeAdapter<BoundingBox> boundingBoxAdapter;
-  private volatile TypeAdapter<A> coordinatesAdapter;
+  private final BaseCoordinatesTypeAdapter<A> coordinatesAdapter;
 
   private final Gson gson;
 
-  BaseGeometryTypeAdapter(Gson gson, TypeAdapter<A> coordinatesAdapter) {
+  BaseGeometryTypeAdapter(Gson gson, BaseCoordinatesTypeAdapter<A> coordinatesAdapter) {
+    if (coordinatesAdapter == null) {
+      throw new GeoJsonException("Coordinates type adapter is null");
+    }
     this.gson = gson;
     this.coordinatesAdapter = coordinatesAdapter;
     this.boundingBoxAdapter = new BoundingBoxTypeAdapter();
   }
 
-  public void writeCoordinateContainerPrimitive(
+  public void writeFlattenedCoordinateContainer(
           JsonWriter jsonWriter,
           FlattenedCoordinateContainer<T, A> object
   ) throws IOException {
@@ -45,15 +49,7 @@ abstract class BaseGeometryTypeAdapter<G, T, A> extends TypeAdapter<G> {
     }
     writeCommon(jsonWriter, object);
     jsonWriter.name("coordinates");
-    if (object.coordinates() == null) {
-      jsonWriter.nullValue();
-    } else {
-      TypeAdapter<A> coordinatesAdapter = this.coordinatesAdapter;
-      if (coordinatesAdapter == null) {
-        throw new GeoJsonException("Coordinates type adapter is null");
-      }
-      coordinatesAdapter.write(jsonWriter, object.flattenCoordinates());
-    }
+    coordinatesAdapter.write(jsonWriter, object.flattenCoordinates());
     jsonWriter.endObject();
   }
 
@@ -70,17 +66,20 @@ abstract class BaseGeometryTypeAdapter<G, T, A> extends TypeAdapter<G> {
     if (object.coordinates() == null) {
       jsonWriter.nullValue();
     } else {
-      TypeAdapter<A> coordinatesAdapter = this.coordinatesAdapter;
-      if (coordinatesAdapter == null) {
-        throw new GeoJsonException("Coordinates type adapter is null");
-      }
       coordinatesAdapter.write(jsonWriter, object.coordinates());
     }
 
     jsonWriter.endObject();
   }
 
-  private void writeCommon(JsonWriter jsonWriter, CoordinateContainer object) throws IOException {
+  /**
+   * Write the common part of the coordinate container: "type" and "bbox".
+   */
+  private void writeCommon(
+          JsonWriter jsonWriter,
+          @SuppressWarnings("rawtypes")
+          CoordinateContainer object
+  ) throws IOException {
     jsonWriter.beginObject();
     jsonWriter.name("type");
     if (object.type() == null) {

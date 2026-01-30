@@ -293,6 +293,22 @@ public class LineStringTest extends TestUtils {
   }
 
   @Test
+  public void toJsonEmpty() throws IOException {
+    final String json = "{\"type\": \"LineString\",  \"coordinates\": [ ]} ";
+    LineString geo = LineString.fromLngLats(new ArrayList<>());
+    String geoJsonString = geo.toJson();
+    compareJson(geoJsonString, json);
+  }
+
+  @Test
+  public void fromEmptyJson() throws IOException {
+    final String json = "{\"type\": \"LineString\",  \"coordinates\": [ ]} ";
+    LineString geo = LineString.fromJson(json);
+    String geoJsonString = geo.toJson();
+    compareJson(geoJsonString, json);
+  }
+
+  @Test
   public void fromJson_coordinatesPresent() throws Exception {
     thrown.expect(NullPointerException.class);
     LineString.fromJson("{\"type\":\"LineString\",\"coordinates\":null}");

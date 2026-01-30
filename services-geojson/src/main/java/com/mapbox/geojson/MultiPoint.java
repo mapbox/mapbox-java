@@ -232,7 +232,7 @@ public final class MultiPoint implements
 
     @Override
     public void write(JsonWriter jsonWriter, MultiPoint object) throws IOException {
-      writeCoordinateContainerPrimitive(jsonWriter, object);
+      writeFlattenedCoordinateContainer(jsonWriter, object);
     }
 
     @Override

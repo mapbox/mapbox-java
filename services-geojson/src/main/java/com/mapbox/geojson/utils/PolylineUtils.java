@@ -181,16 +181,18 @@ public final class PolylineUtils {
   }
 
   /**
-   * Encodes a {@link FlattenListOfPoints} into an encoded path string.
+   * Encodes an array of doubles representing a line geometry with flattened points into an encoded
+   * path string.
    *
-   * @param flattenListOfPoints      a {@link FlattenListOfPoints} making up the line
+   * @param flattenLngLatArray an array of doubles representing a line geometry with flattened
+   *                          points in the form: [lng1, lat1, lng2, lat2, ...]
    * @param precision OSRMv4 uses 6, OSRMv5 and Google uses 5
    * @return a String representing a path string
    */
   @NonNull
   public static String encode(
           @NonNull
-          final FlattenListOfPoints flattenListOfPoints,
+          double[] flattenLngLatArray,
           int precision
   ) {
     long lastLat = 0;
@@ -201,7 +203,6 @@ public final class PolylineUtils {
     // OSRM uses precision=6, the default Polyline spec divides by 1E5, capping at precision=5
     double factor = Math.pow(10, precision);
 
-    double[] flattenLngLatArray = flattenListOfPoints.getFlattenLngLatArray();
     for (int i = 0; i < flattenLngLatArray.length / 2; i++) {
       double longitude = flattenLngLatArray[i * 2];
       double latitude = flattenLngLatArray[i * 2 + 1];

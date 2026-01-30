@@ -10,9 +10,8 @@ import com.mapbox.geojson.exception.GeoJsonException;
 import java.io.IOException;
 
 /**
- * Type Adapter to serialize/deserialize List&lt;Point&gt; into/from two dimentional double array.
- *
- * @since 4.6.0
+ * Type Adapter to serialize/deserialize {@link FlattenListOfPoints} into/from two dimensional
+ * JSON array.
  */
 @Keep
 class FlattenListOfPointsTypeAdapter extends BaseCoordinatesTypeAdapter<FlattenListOfPoints> {
@@ -21,17 +20,22 @@ class FlattenListOfPointsTypeAdapter extends BaseCoordinatesTypeAdapter<FlattenL
 
   @Override
   public void write(JsonWriter out, FlattenListOfPoints flattenListOfPoints) throws IOException {
-
     if (flattenListOfPoints == null) {
       out.nullValue();
       return;
     }
 
     out.beginArray();
+    int size = flattenListOfPoints.size();
+    if (size == 0) {
+      out.endArray();
+      return;
+    }
+
     double[] flattenLngLatCoordinates = flattenListOfPoints.getFlattenLngLatArray();
     double[] altitudes = flattenListOfPoints.getAltitudes();
 
-    for (int i = 0; i < flattenLngLatCoordinates.length / 2; i++) {
+    for (int i = 0; i < size; i++) {
       double[] value;
       if (altitudes != null && !Double.isNaN(altitudes[i])) {
         value = new double[]{

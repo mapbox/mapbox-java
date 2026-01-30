@@ -385,7 +385,7 @@ public final class Point implements FlattenedCoordinateContainer<List<Double>, d
     @Override
     @SuppressWarnings("unchecked")
     public void write(JsonWriter jsonWriter, Point object) throws IOException {
-      writeCoordinateContainerPrimitive(jsonWriter, object);
+      writeFlattenedCoordinateContainer(jsonWriter, object);
     }
 
     @Override

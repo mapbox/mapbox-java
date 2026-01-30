@@ -128,6 +128,22 @@ public class MultiPointTest extends TestUtils {
     MultiPoint geo = MultiPoint.fromJson(json);
     compareJson(json, geo.toJson());
   }
+  @Test
+  public void toJsonEmpty() throws IOException {
+    final String json = "{ \"type\": \"MultiPoint\"," +
+            "\"coordinates\": [ ] } ";
+    MultiPoint geo = MultiPoint.fromLngLats(new ArrayList<>());
+    String geoJson = geo.toJson();
+    compareJson(json, geoJson);
+  }
+
+  @Test
+  public void fromJsonEmpty() throws IOException {
+    final String json = "{ \"type\": \"MultiPoint\",\"coordinates\": [ ] } ";
+    MultiPoint geo = MultiPoint.fromJson(json);
+    String geoJson = geo.toJson();
+    compareJson(json, geoJson);
+  }
 
   @Test
   public void fromJson_coordinatesPresent() throws Exception {

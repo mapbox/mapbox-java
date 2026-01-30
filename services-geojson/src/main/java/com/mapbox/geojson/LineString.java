@@ -96,20 +96,6 @@ public final class LineString implements
   }
 
   /**
-   * Create a new instance of this class by defining a {@link MultiPoint} object and passing. The
-   * multipoint object should comply with the GeoJson specifications described in the documentation.
-   *
-   * @param multiPoint which will make up the LineString geometry
-   * @param bbox       optionally include a bbox definition as a double array
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @since 3.0.0
-   */
-  public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
-    return new LineString(TYPE, bbox, multiPoint.coordinates());
-  }
-
-  /**
    * Create a new instance of this class by defining a list of {@link Point}s which follow the
    * correct specifications described in the Point documentation. Note that there should not be any
    * duplicate points inside the list and the points combined should create a LineString with a
@@ -287,7 +273,7 @@ public final class LineString implements
    * @since 1.0.0
    */
   public String toPolyline(int precision) {
-    return PolylineUtils.encode(flattenListOfPoints, precision);
+    return PolylineUtils.encode(flattenListOfPoints.getFlattenLngLatArray(), precision);
   }
 
   /**
@@ -345,7 +331,7 @@ public final class LineString implements
 
     @Override
     public void write(JsonWriter jsonWriter, LineString object) throws IOException {
-      writeCoordinateContainerPrimitive(jsonWriter, object);
+      writeFlattenedCoordinateContainer(jsonWriter, object);
     }
 
     @Override
