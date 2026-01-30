@@ -17,6 +17,8 @@ import static org.junit.Assert.*;
 
 public class ShifterTest {
 
+  private static final double DELTA = 0.0001;
+
   static class TestCoordinateShifter implements CoordinateShifter {
     @Override
     public List<Double> shiftLonLat(double lon, double lat) {
@@ -89,6 +91,72 @@ public class ShifterTest {
 
     CoordinateShifterManager.setCoordinateShifter(null);
     assertTrue(CoordinateShifterManager.isUsingDefaultShifter());
+
+    // Test default shifter behavior - it should return coordinates unchanged
+    CoordinateShifter defaultShifter = CoordinateShifterManager.getCoordinateShifter();
+    assertNotNull(defaultShifter);
+
+    // Test shiftLonLat - should return coordinates unchanged
+    List<Double> shiftedLonLat = defaultShifter.shiftLonLat(10.5, 20.3);
+    assertNotNull(shiftedLonLat);
+    assertEquals(2, shiftedLonLat.size());
+    assertEquals(10.5, shiftedLonLat.get(0), DELTA);
+    assertEquals(20.3, shiftedLonLat.get(1), DELTA);
+
+    // Test shiftLonLatAlt with valid altitude - should return all three coordinates
+    List<Double> shiftedWithAlt = defaultShifter.shiftLonLatAlt(10.5, 20.3, 30.7);
+    assertNotNull(shiftedWithAlt);
+    assertEquals(3, shiftedWithAlt.size());
+    assertEquals(10.5, shiftedWithAlt.get(0), DELTA);
+    assertEquals(20.3, shiftedWithAlt.get(1), DELTA);
+    assertEquals(30.7, shiftedWithAlt.get(2), DELTA);
+
+    // Test shiftLonLatAlt with NaN altitude - should return only lon, lat
+    List<Double> shiftedNoAlt = defaultShifter.shiftLonLatAlt(10.5, 20.3, Double.NaN);
+    assertNotNull(shiftedNoAlt);
+    assertEquals(2, shiftedNoAlt.size());
+    assertEquals(10.5, shiftedNoAlt.get(0), DELTA);
+    assertEquals(20.3, shiftedNoAlt.get(1), DELTA);
+
+    // Test shift with lon, lat - should return array unchanged
+    double[] shiftedArray = defaultShifter.shift(15.2, 25.8);
+    assertNotNull(shiftedArray);
+    assertEquals(2, shiftedArray.length);
+    assertEquals(15.2, shiftedArray[0], DELTA);
+    assertEquals(25.8, shiftedArray[1], DELTA);
+
+    // Test shift with lon, lat, altitude - should return all three
+    double[] shiftedArrayWithAlt = defaultShifter.shift(15.2, 25.8, 35.4);
+    assertNotNull(shiftedArrayWithAlt);
+    assertEquals(3, shiftedArrayWithAlt.length);
+    assertEquals(15.2, shiftedArrayWithAlt[0], DELTA);
+    assertEquals(25.8, shiftedArrayWithAlt[1], DELTA);
+    assertEquals(35.4, shiftedArrayWithAlt[2], DELTA);
+
+    // Test shift with lon, lat, NaN altitude - should return only lon, lat
+    double[] shiftedArrayNoAlt = defaultShifter.shift(15.2, 25.8, Double.NaN);
+    assertNotNull(shiftedArrayNoAlt);
+    assertEquals(2, shiftedArrayNoAlt.length);
+    assertEquals(15.2, shiftedArrayNoAlt[0], DELTA);
+    assertEquals(25.8, shiftedArrayNoAlt[1], DELTA);
+
+    // Test unshiftPoint with Point object - should return point coordinates unchanged
+    Point testPoint = Point.fromLngLat(12.3, 45.6, 78.9);
+    List<Double> unshiftedPoint = defaultShifter.unshiftPoint(testPoint);
+    assertNotNull(unshiftedPoint);
+    assertEquals(testPoint.coordinates(), unshiftedPoint);
+
+    // Test unshiftPoint with coordinates list - should return list unchanged
+    List<Double> testCoordinates = Arrays.asList(5.5, 6.6, 7.7);
+    List<Double> unshiftedCoordinates = defaultShifter.unshiftPoint(testCoordinates);
+    assertNotNull(unshiftedCoordinates);
+    assertEquals(testCoordinates, unshiftedCoordinates);
+
+    // Test unshiftPointArray - should return array unchanged
+    double[] testArray = new double[]{8.8, 9.9, 10.1};
+    double[] unshiftedArray = defaultShifter.unshiftPointArray(testArray);
+    assertNotNull(unshiftedArray);
+    assertArrayEquals(testArray, unshiftedArray, DELTA);
   }
 
   @Test
