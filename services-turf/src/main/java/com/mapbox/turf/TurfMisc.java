@@ -188,56 +188,61 @@ public final class TurfMisc {
                                           @FloatRange(from = 0) double stopDist,
                                           @NonNull @TurfConstants.TurfUnitCriteria String units) {
 
-    List<Point> coords = line.coordinates();
+    double[] coords = line.flattenCoordinates().getFlattenLngLatArray();
 
-    if (coords.size() < 2) {
+    int size = line.flattenCoordinates().size();
+    if (size < 2) {
       throw new TurfException("Turf lineSlice requires a LineString Geometry made up of "
-        + "at least 2 coordinates. The LineString passed in only contains " + coords.size() + ".");
+        + "at least 2 coordinates. The LineString passed in only contains " + size + ".");
     } else if (startDist == stopDist) {
       throw new TurfException("Start and stop distance in Turf lineSliceAlong "
         + "cannot equal each other.");
     }
 
-    List<Point> slice = new ArrayList<>(2);
+    List<Point> slice = new ArrayList<>();
 
     double travelled = 0;
-    for (int i = 0; i < coords.size(); i++) {
+    for (int i = 0; i < size; i++) {
+      Point pointAtI = Point.fromLngLat(coords[i * 2], coords[i * 2 + 1]);
 
-      if (startDist >= travelled && i == coords.size() - 1) {
+      if (startDist >= travelled && i == size - 1) {
         break;
-
       } else if (travelled > startDist && slice.size() == 0) {
+        // This logic handles finding the starting point when startDist is not 0
         double overshot = startDist - travelled;
         if (overshot == 0) {
-          slice.add(coords.get(i));
+          // This doesn't make sense, why are we stopping when the overshot from startDist is 0?
+          slice.add(pointAtI);
           return LineString.fromLngLats(slice);
         }
-        double direction = TurfMeasurement.bearing(coords.get(i), coords.get(i - 1)) - 180;
-        Point interpolated = TurfMeasurement.destination(coords.get(i), overshot, direction, units);
+        Point previousPoint = Point.fromLngLat(coords[((i - 1) * 2)], coords[((i - 1) * 2) + 1]);
+        double direction = TurfMeasurement.bearing(pointAtI, previousPoint) - 180;
+        Point interpolated = TurfMeasurement.destination(pointAtI, overshot, direction, units);
         slice.add(interpolated);
       }
 
       if (travelled >= stopDist) {
         double overshot = stopDist - travelled;
         if (overshot == 0) {
-          slice.add(coords.get(i));
+          slice.add(pointAtI);
           return LineString.fromLngLats(slice);
         }
-        double direction = TurfMeasurement.bearing(coords.get(i), coords.get(i - 1)) - 180;
-        Point interpolated = TurfMeasurement.destination(coords.get(i), overshot, direction, units);
+        Point previousPoint = Point.fromLngLat(coords[((i - 1) * 2)], coords[((i - 1) * 2) + 1]);
+        double direction = TurfMeasurement.bearing(pointAtI, previousPoint) - 180;
+        Point interpolated = TurfMeasurement.destination(pointAtI, overshot, direction, units);
         slice.add(interpolated);
         return LineString.fromLngLats(slice);
       }
 
       if (travelled >= startDist) {
-        slice.add(coords.get(i));
+        slice.add(pointAtI);
       }
 
-      if (i == coords.size() - 1) {
+      if (i == size - 1) {
         return LineString.fromLngLats(slice);
       }
-
-      travelled += TurfMeasurement.distance(coords.get(i), coords.get(i + 1), units);
+      Point nextPoint = Point.fromLngLat(coords[((i + 1) * 2)], coords[((i + 1) * 2) + 1]);
+      travelled += TurfMeasurement.distance(pointAtI, nextPoint, units);
     }
 
     if (travelled < startDist) {
