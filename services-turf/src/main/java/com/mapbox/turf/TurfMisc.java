@@ -210,11 +210,6 @@ public final class TurfMisc {
       } else if (travelled > startDist && slice.size() == 0) {
         // This logic handles finding the starting point when startDist is not 0
         double overshot = startDist - travelled;
-        if (overshot == 0) {
-          // This doesn't make sense, why are we stopping when the overshot from startDist is 0?
-          slice.add(pointAtI);
-          return LineString.fromLngLats(slice);
-        }
         Point previousPoint = Point.fromLngLat(coords[((i - 1) * 2)], coords[((i - 1) * 2) + 1]);
         double direction = TurfMeasurement.bearing(pointAtI, previousPoint) - 180;
         Point interpolated = TurfMeasurement.destination(pointAtI, overshot, direction, units);
