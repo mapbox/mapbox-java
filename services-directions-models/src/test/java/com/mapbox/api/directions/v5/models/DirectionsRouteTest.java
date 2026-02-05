@@ -49,9 +49,25 @@ public class DirectionsRouteTest extends TestUtils {
     DirectionsResponse response = DirectionsResponse.fromJson(json);
     DirectionsRoute route = response.routes().get(FIRST_ROUTE);
 
-    String voiceLanguage = route.voiceLanguage();
+    assertEquals("en-US", route.voiceLanguage());
+  }
 
-    assertEquals("en-US", voiceLanguage);
+  @Test
+  public void directionsRoute_doesReturnWeight() throws Exception {
+    String json = loadJsonFixture(DIRECTIONS_V5_VOICE_BANNER_FIXTURE);
+    DirectionsResponse response = DirectionsResponse.fromJson(json);
+    DirectionsRoute route = response.routes().get(FIRST_ROUTE);
+
+    assertEquals((Double) 373.1, route.weight());
+  }
+
+  @Test
+  public void directionsRoute_doesReturnWeightTypical() throws Exception {
+    String json = loadJsonFixture(DIRECTIONS_V5_VOICE_BANNER_FIXTURE);
+    DirectionsResponse response = DirectionsResponse.fromJson(json);
+    DirectionsRoute route = response.routes().get(FIRST_ROUTE);
+
+    assertEquals((Double) 321.5, route.weightTypical());
   }
 
   @Test
