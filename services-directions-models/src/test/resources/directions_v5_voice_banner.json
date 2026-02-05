@@ -1,1 +1,784 @@
-{"routes":[{"geometry":"kfafiA|`d}qCnXtVfB~ApBrB`@^nCfCrh@bf@zL~Kt@r@fDzCfD~CvNvMnChCtCjCvl@~i@rAhBhAdCh@zBPdCCdDYxAUzASlBMlBGnBAnA@nABnAFnAHnALlANlAX|A\\zAj@nBp@hBv@bB|@|Al@~@p@z@t@v@t@r@v@n@l@b@n@^n@\\p@Z~Bt@pBd@x@FjAHjABlAAjAGhAMjAUjA[jAa@hAg@fAm@dAs@`Ay@|@_AbDaA~A?zATbANnBj@vX`W`^n[tIbIbh@te@?jB","legs":[{"summary":"New Hampshire Avenue Northwest, Dupont Circle Northwest","weight":373.1,"duration":225.7,"steps":[{"intersections":[{"out":0,"entry":[true],"bearings":[216],"location":[-77.040159,38.913142]},{"out":2,"in":0,"entry":[false,false,true,true],"bearings":[30,90,210,270],"location":[-77.04066,38.912608]},{"out":2,"in":0,"entry":[false,true,true,false],"bearings":[30,90,210,270],"location":[-77.041354,38.91187]},{"out":3,"in":1,"entry":[true,false,true,true],"bearings":[0,30,180,210],"location":[-77.041666,38.911537]},{"out":2,"in":0,"entry":[false,true,true,false],"bearings":[30,90,210,270],"location":[-77.042051,38.911129]},{"out":2,"in":0,"entry":[false,false,true],"bearings":[30,195,225],"location":[-77.042809,38.910322]}],"driving_side":"right","geometry":"kfafiA|`d}qCnXtVfB~ApBrB`@^nCfCrh@bf@zL~Kt@r@fDzCfD~CvNvMnChCtCjCvl@~i@rAhBhAdCh@zBPdCCdD","mode":"driving","maneuver":{"bearing_after":216,"bearing_before":0,"location":[-77.040159,38.913142],"type":"depart","instruction":"Head southwest on New Hampshire Avenue Northwest"},"weight":159.20000000000002,"duration":122.8,"name":"New Hampshire Avenue Northwest","distance":421.2,"voiceInstructions":[{"distanceAlongGeometry":421.2,"announcement":"Head southwest on New Hampshire Avenue Northwest for a quarter mile","ssmlAnnouncement":"<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Head southwest on New Hampshire Avenue Northwest for a quarter mile</prosody></amazon:effect></speak>"},{"distanceAlongGeometry":240.1,"announcement":"In 800 feet, enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest","ssmlAnnouncement":"<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">In 800 feet, enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest</prosody></amazon:effect></speak>"},{"distanceAlongGeometry":51.4,"announcement":"Enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest","ssmlAnnouncement":"<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest</prosody></amazon:effect></speak>"}],"bannerInstructions":[{"distanceAlongGeometry":421.2,"primary":{"text":"New Hampshire Avenue Northwest","components":[{"text":"New Hampshire Avenue","type":"text","abbr":"New Hampshire Ave","abbr_priority":0},{"text":"Northwest","type":"text","abbr":"NW","abbr_priority":1}],"type":"roundabout","modifier":"straight","degrees":288,"driving_side":"right"},"secondary":null},{"distanceAlongGeometry":51.4,"primary":{"text":"New Hampshire Avenue Northwest","components":[{"text":"New Hampshire Avenue","type":"text","abbr":"New Hampshire Ave","abbr_priority":0},{"text":"Northwest","type":"text","abbr":"NW","abbr_priority":1}],"type":"roundabout","modifier":"straight","degrees":288,"driving_side":"right"},"secondary":null,"sub":{"text":"New Hampshire Avenue Northwest","components":[{"text":"New Hampshire Avenue","type":"text","abbr":"New Hampshire Ave","abbr_priority":0},{"text":"Northwest","type":"text","abbr":"NW","abbr_priority":1}],"type":"roundabout","modifier":"right","degrees":54,"driving_side":"right"}}]},{"intersections":[{"out":2,"in":0,"entry":[false,false,true],"bearings":[90,120,285],"location":[-77.043141,38.910215]},{"out":1,"in":0,"entry":[false,true,true],"bearings":[105,285,300],"location":[-77.043232,38.910239]},{"out":1,"in":0,"entry":[false,true,true],"bearings":[90,270,285],"location":[-77.043398,38.91026]},{"out":2,"in":1,"entry":[false,false,true],"bearings":[45,75,240],"location":[-77.043676,38.910234]},{"out":2,"in":1,"entry":[false,false,true],"bearings":[15,45,225],"location":[-77.043975,38.9101]},{"out":2,"in":0,"entry":[false,false,true,true],"bearings":[30,75,210,300],"location":[-77.044115,38.90997]},{"out":2,"in":0,"entry":[false,true,true,false],"bearings":[15,165,195,300],"location":[-77.044205,38.90981]},{"out":1,"in":0,"entry":[false,true,true],"bearings":[15,180,255],"location":[-77.044224,38.909753]},{"out":0,"in":2,"entry":[true,false,false],"bearings":[165,315,345],"location":[-77.044212,38.909496]}],"driving_side":"right","geometry":"mo{eiAh{i}qCYxAUzASlBMlBGnBAnA@nABnAFnAHnALlANlAX|A\\zAj@nBp@hBv@bB|@|Al@~@p@z@t@v@t@r@v@n@l@b@n@^n@\\p@Z~Bt@pBd@x@FjAHjABlAAjAGhAMjAUjA[jAa@hAg@fAm@dAs@`Ay@|@_A","mode":"driving","maneuver":{"exit":6,"bearing_after":289,"bearing_before":271,"location":[-77.043141,38.910215],"modifier":"straight","type":"roundabout","instruction":"Enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest"},"weight":98,"duration":40.9,"name":"New Hampshire Avenue Northwest","distance":182.3,"voiceInstructions":[{"distanceAlongGeometry":66.9,"announcement":"Exit the traffic circle onto New Hampshire Avenue Northwest","ssmlAnnouncement":"<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Exit the traffic circle onto New Hampshire Avenue Northwest</prosody></amazon:effect></speak>"}],"bannerInstructions":[{"distanceAlongGeometry":182.3,"primary":{"text":"New Hampshire Avenue Northwest","components":[{"text":"New Hampshire Avenue","type":"text","abbr":"New Hampshire Ave","abbr_priority":0},{"text":"Northwest","type":"text","abbr":"NW","abbr_priority":1}],"type":"roundabout","modifier":"right","degrees":54,"driving_side":"right"},"secondary":null},{"distanceAlongGeometry":66.9,"primary":{"text":"New Hampshire Avenue Northwest","components":[{"text":"New Hampshire Avenue","type":"text","abbr":"New Hampshire Ave","abbr_priority":0},{"text":"Northwest","type":"text","abbr":"NW","abbr_priority":1}],"type":"roundabout","modifier":"right","degrees":54,"driving_side":"right"},"secondary":null,"sub":{"text":"N Street Northwest","components":[{"text":"N Street","type":"text","abbr":"N St","abbr_priority":0},{"text":"Northwest","type":"text","abbr":"NW","abbr_priority":1}],"type":"turn","modifier":"right"}}]},{"intersections":[{"out":1,"in":2,"entry":[true,true,false],"bearings":[135,165,315],"location":[-77.044051,38.909248]},{"out":2,"in":0,"entry":[false,false,true],"bearings":[15,60,210],"location":[-77.044059,38.908982]},{"out":1,"in":0,"entry":[false,true,true],"bearings":[30,210,270],"location":[-77.044444,38.90857]},{"out":3,"in":1,"entry":[true,false,false,true],"bearings":[0,30,180,210],"location":[-77.0449,38.908073]},{"out":2,"in":0,"entry":[false,true,true],"bearings":[30,90,210],"location":[-77.045062,38.907902]}],"driving_side":"right","geometry":"_syeiAdtk}qCbDaA~A?zATbANnBj@vX`W`^n[tIbIbh@te@","mode":"driving","maneuver":{"exit":6,"bearing_after":163,"bearing_before":142,"location":[-77.044051,38.909248],"modifier":"slight right","type":"exit roundabout","instruction":"Exit the traffic circle onto New Hampshire Avenue Northwest"},"weight":114.69999999999999,"duration":60.8,"name":"New Hampshire Avenue Northwest","distance":269.4,"voiceInstructions":[{"distanceAlongGeometry":269.4,"announcement":"In 900 feet, turn right onto N Street Northwest","ssmlAnnouncement":"<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">In 900 feet, turn right onto N Street Northwest</prosody></amazon:effect></speak>"},{"distanceAlongGeometry":66.5,"announcement":"Turn right onto N Street Northwest, then you will arrive at your destination","ssmlAnnouncement":"<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Turn right onto N Street Northwest, then you will arrive at your destination</prosody></amazon:effect></speak>"}],"bannerInstructions":[{"distanceAlongGeometry":269.4,"primary":{"text":"N Street Northwest","components":[{"text":"N Street","type":"text","abbr":"N St","abbr_priority":0},{"text":"Northwest","type":"text","abbr":"NW","abbr_priority":1}],"type":"turn","modifier":"right"},"secondary":null}]},{"intersections":[{"out":3,"in":0,"entry":[false,false,true,true],"bearings":[30,90,210,270],"location":[-77.045681,38.907244]}],"driving_side":"right","geometry":"wuueiA`zn}qC?jB","mode":"driving","maneuver":{"bearing_after":268,"bearing_before":215,"location":[-77.045681,38.907244],"modifier":"right","type":"turn","instruction":"Turn right onto N Street Northwest"},"weight":1.2,"duration":1.2,"name":"N Street Northwest","distance":4.7,"voiceInstructions":[{"distanceAlongGeometry":4.7,"announcement":"You have arrived at your destination","ssmlAnnouncement":"<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">You have arrived at your destination</prosody></amazon:effect></speak>"}],"bannerInstructions":[{"distanceAlongGeometry":4.7,"primary":{"text":"You have arrived","components":[{"text":"You have arrived","type":"text"}],"type":"arrive","modifier":"straight"},"secondary":null}]},{"intersections":[{"in":0,"entry":[true],"bearings":[90],"location":[-77.045735,38.907244]}],"driving_side":"right","geometry":"wuueiAl}n}qC","mode":"driving","maneuver":{"bearing_after":0,"bearing_before":270,"location":[-77.045735,38.907244],"type":"arrive","instruction":"You have arrived at your destination"},"weight":0,"duration":0,"name":"N Street Northwest","distance":0,"voiceInstructions":[],"bannerInstructions":[]}],"distance":877.5}],"weight_name":"routability","weight":373.1,"duration":225.7,"distance":877.5,"voiceLocale":"en-US"}],"waypoints":[{"name":"New Hampshire Avenue Northwest","location":[-77.040159,38.913142]},{"name":"N Street Northwest","location":[-77.045735,38.907244]}],"code":"Ok","uuid":"cjhk3owmb0zg34crqq5wsc6d1"}
+{
+  "routes": [
+    {
+      "geometry": "kfafiA|`d}qCnXtVfB~ApBrB`@^nCfCrh@bf@zL~Kt@r@fDzCfD~CvNvMnChCtCjCvl@~i@rAhBhAdCh@zBPdCCdDYxAUzASlBMlBGnBAnA@nABnAFnAHnALlANlAX|A\\zAj@nBp@hBv@bB|@|Al@~@p@z@t@v@t@r@v@n@l@b@n@^n@\\p@Z~Bt@pBd@x@FjAHjABlAAjAGhAMjAUjA[jAa@hAg@fAm@dAs@`Ay@|@_AbDaA~A?zATbANnBj@vX`W`^n[tIbIbh@te@?jB",
+      "legs": [
+        {
+          "summary": "New Hampshire Avenue Northwest, Dupont Circle Northwest",
+          "weight": 373.1,
+          "duration": 225.7,
+          "steps": [
+            {
+              "intersections": [
+                {
+                  "out": 0,
+                  "entry": [
+                    true
+                  ],
+                  "bearings": [
+                    216
+                  ],
+                  "location": [
+                    -77.040159,
+                    38.913142
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    false,
+                    true,
+                    true
+                  ],
+                  "bearings": [
+                    30,
+                    90,
+                    210,
+                    270
+                  ],
+                  "location": [
+                    -77.04066,
+                    38.912608
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "bearings": [
+                    30,
+                    90,
+                    210,
+                    270
+                  ],
+                  "location": [
+                    -77.041354,
+                    38.91187
+                  ]
+                },
+                {
+                  "out": 3,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false,
+                    true,
+                    true
+                  ],
+                  "bearings": [
+                    0,
+                    30,
+                    180,
+                    210
+                  ],
+                  "location": [
+                    -77.041666,
+                    38.911537
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "bearings": [
+                    30,
+                    90,
+                    210,
+                    270
+                  ],
+                  "location": [
+                    -77.042051,
+                    38.911129
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    false,
+                    true
+                  ],
+                  "bearings": [
+                    30,
+                    195,
+                    225
+                  ],
+                  "location": [
+                    -77.042809,
+                    38.910322
+                  ]
+                }
+              ],
+              "driving_side": "right",
+              "geometry": "kfafiA|`d}qCnXtVfB~ApBrB`@^nCfCrh@bf@zL~Kt@r@fDzCfD~CvNvMnChCtCjCvl@~i@rAhBhAdCh@zBPdCCdD",
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 216,
+                "bearing_before": 0,
+                "location": [
+                  -77.040159,
+                  38.913142
+                ],
+                "type": "depart",
+                "instruction": "Head southwest on New Hampshire Avenue Northwest"
+              },
+              "weight": 159.20000000000002,
+              "duration": 122.8,
+              "name": "New Hampshire Avenue Northwest",
+              "distance": 421.2,
+              "voiceInstructions": [
+                {
+                  "distanceAlongGeometry": 421.2,
+                  "announcement": "Head southwest on New Hampshire Avenue Northwest for a quarter mile",
+                  "ssmlAnnouncement": "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Head southwest on New Hampshire Avenue Northwest for a quarter mile</prosody></amazon:effect></speak>"
+                },
+                {
+                  "distanceAlongGeometry": 240.1,
+                  "announcement": "In 800 feet, enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest",
+                  "ssmlAnnouncement": "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">In 800 feet, enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest</prosody></amazon:effect></speak>"
+                },
+                {
+                  "distanceAlongGeometry": 51.4,
+                  "announcement": "Enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest",
+                  "ssmlAnnouncement": "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest</prosody></amazon:effect></speak>"
+                }
+              ],
+              "bannerInstructions": [
+                {
+                  "distanceAlongGeometry": 421.2,
+                  "primary": {
+                    "text": "New Hampshire Avenue Northwest",
+                    "components": [
+                      {
+                        "text": "New Hampshire Avenue",
+                        "type": "text",
+                        "abbr": "New Hampshire Ave",
+                        "abbr_priority": 0
+                      },
+                      {
+                        "text": "Northwest",
+                        "type": "text",
+                        "abbr": "NW",
+                        "abbr_priority": 1
+                      }
+                    ],
+                    "type": "roundabout",
+                    "modifier": "straight",
+                    "degrees": 288,
+                    "driving_side": "right"
+                  },
+                  "secondary": null
+                },
+                {
+                  "distanceAlongGeometry": 51.4,
+                  "primary": {
+                    "text": "New Hampshire Avenue Northwest",
+                    "components": [
+                      {
+                        "text": "New Hampshire Avenue",
+                        "type": "text",
+                        "abbr": "New Hampshire Ave",
+                        "abbr_priority": 0
+                      },
+                      {
+                        "text": "Northwest",
+                        "type": "text",
+                        "abbr": "NW",
+                        "abbr_priority": 1
+                      }
+                    ],
+                    "type": "roundabout",
+                    "modifier": "straight",
+                    "degrees": 288,
+                    "driving_side": "right"
+                  },
+                  "secondary": null,
+                  "sub": {
+                    "text": "New Hampshire Avenue Northwest",
+                    "components": [
+                      {
+                        "text": "New Hampshire Avenue",
+                        "type": "text",
+                        "abbr": "New Hampshire Ave",
+                        "abbr_priority": 0
+                      },
+                      {
+                        "text": "Northwest",
+                        "type": "text",
+                        "abbr": "NW",
+                        "abbr_priority": 1
+                      }
+                    ],
+                    "type": "roundabout",
+                    "modifier": "right",
+                    "degrees": 54,
+                    "driving_side": "right"
+                  }
+                }
+              ]
+            },
+            {
+              "intersections": [
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    false,
+                    true
+                  ],
+                  "bearings": [
+                    90,
+                    120,
+                    285
+                  ],
+                  "location": [
+                    -77.043141,
+                    38.910215
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "bearings": [
+                    105,
+                    285,
+                    300
+                  ],
+                  "location": [
+                    -77.043232,
+                    38.910239
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "bearings": [
+                    90,
+                    270,
+                    285
+                  ],
+                  "location": [
+                    -77.043398,
+                    38.91026
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 1,
+                  "entry": [
+                    false,
+                    false,
+                    true
+                  ],
+                  "bearings": [
+                    45,
+                    75,
+                    240
+                  ],
+                  "location": [
+                    -77.043676,
+                    38.910234
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 1,
+                  "entry": [
+                    false,
+                    false,
+                    true
+                  ],
+                  "bearings": [
+                    15,
+                    45,
+                    225
+                  ],
+                  "location": [
+                    -77.043975,
+                    38.9101
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    false,
+                    true,
+                    true
+                  ],
+                  "bearings": [
+                    30,
+                    75,
+                    210,
+                    300
+                  ],
+                  "location": [
+                    -77.044115,
+                    38.90997
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true,
+                    false
+                  ],
+                  "bearings": [
+                    15,
+                    165,
+                    195,
+                    300
+                  ],
+                  "location": [
+                    -77.044205,
+                    38.90981
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "bearings": [
+                    15,
+                    180,
+                    255
+                  ],
+                  "location": [
+                    -77.044224,
+                    38.909753
+                  ]
+                },
+                {
+                  "out": 0,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    false,
+                    false
+                  ],
+                  "bearings": [
+                    165,
+                    315,
+                    345
+                  ],
+                  "location": [
+                    -77.044212,
+                    38.909496
+                  ]
+                }
+              ],
+              "driving_side": "right",
+              "geometry": "mo{eiAh{i}qCYxAUzASlBMlBGnBAnA@nABnAFnAHnALlANlAX|A\\zAj@nBp@hBv@bB|@|Al@~@p@z@t@v@t@r@v@n@l@b@n@^n@\\p@Z~Bt@pBd@x@FjAHjABlAAjAGhAMjAUjA[jAa@hAg@fAm@dAs@`Ay@|@_A",
+              "mode": "driving",
+              "maneuver": {
+                "exit": 6,
+                "bearing_after": 289,
+                "bearing_before": 271,
+                "location": [
+                  -77.043141,
+                  38.910215
+                ],
+                "modifier": "straight",
+                "type": "roundabout",
+                "instruction": "Enter the traffic circle and take the 6th exit onto New Hampshire Avenue Northwest"
+              },
+              "weight": 98,
+              "duration": 40.9,
+              "name": "New Hampshire Avenue Northwest",
+              "distance": 182.3,
+              "voiceInstructions": [
+                {
+                  "distanceAlongGeometry": 66.9,
+                  "announcement": "Exit the traffic circle onto New Hampshire Avenue Northwest",
+                  "ssmlAnnouncement": "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Exit the traffic circle onto New Hampshire Avenue Northwest</prosody></amazon:effect></speak>"
+                }
+              ],
+              "bannerInstructions": [
+                {
+                  "distanceAlongGeometry": 182.3,
+                  "primary": {
+                    "text": "New Hampshire Avenue Northwest",
+                    "components": [
+                      {
+                        "text": "New Hampshire Avenue",
+                        "type": "text",
+                        "abbr": "New Hampshire Ave",
+                        "abbr_priority": 0
+                      },
+                      {
+                        "text": "Northwest",
+                        "type": "text",
+                        "abbr": "NW",
+                        "abbr_priority": 1
+                      }
+                    ],
+                    "type": "roundabout",
+                    "modifier": "right",
+                    "degrees": 54,
+                    "driving_side": "right"
+                  },
+                  "secondary": null
+                },
+                {
+                  "distanceAlongGeometry": 66.9,
+                  "primary": {
+                    "text": "New Hampshire Avenue Northwest",
+                    "components": [
+                      {
+                        "text": "New Hampshire Avenue",
+                        "type": "text",
+                        "abbr": "New Hampshire Ave",
+                        "abbr_priority": 0
+                      },
+                      {
+                        "text": "Northwest",
+                        "type": "text",
+                        "abbr": "NW",
+                        "abbr_priority": 1
+                      }
+                    ],
+                    "type": "roundabout",
+                    "modifier": "right",
+                    "degrees": 54,
+                    "driving_side": "right"
+                  },
+                  "secondary": null,
+                  "sub": {
+                    "text": "N Street Northwest",
+                    "components": [
+                      {
+                        "text": "N Street",
+                        "type": "text",
+                        "abbr": "N St",
+                        "abbr_priority": 0
+                      },
+                      {
+                        "text": "Northwest",
+                        "type": "text",
+                        "abbr": "NW",
+                        "abbr_priority": 1
+                      }
+                    ],
+                    "type": "turn",
+                    "modifier": "right"
+                  }
+                }
+              ]
+            },
+            {
+              "intersections": [
+                {
+                  "out": 1,
+                  "in": 2,
+                  "entry": [
+                    true,
+                    true,
+                    false
+                  ],
+                  "bearings": [
+                    135,
+                    165,
+                    315
+                  ],
+                  "location": [
+                    -77.044051,
+                    38.909248
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    false,
+                    true
+                  ],
+                  "bearings": [
+                    15,
+                    60,
+                    210
+                  ],
+                  "location": [
+                    -77.044059,
+                    38.908982
+                  ]
+                },
+                {
+                  "out": 1,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "bearings": [
+                    30,
+                    210,
+                    270
+                  ],
+                  "location": [
+                    -77.044444,
+                    38.90857
+                  ]
+                },
+                {
+                  "out": 3,
+                  "in": 1,
+                  "entry": [
+                    true,
+                    false,
+                    false,
+                    true
+                  ],
+                  "bearings": [
+                    0,
+                    30,
+                    180,
+                    210
+                  ],
+                  "location": [
+                    -77.0449,
+                    38.908073
+                  ]
+                },
+                {
+                  "out": 2,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    true,
+                    true
+                  ],
+                  "bearings": [
+                    30,
+                    90,
+                    210
+                  ],
+                  "location": [
+                    -77.045062,
+                    38.907902
+                  ]
+                }
+              ],
+              "driving_side": "right",
+              "geometry": "_syeiAdtk}qCbDaA~A?zATbANnBj@vX`W`^n[tIbIbh@te@",
+              "mode": "driving",
+              "maneuver": {
+                "exit": 6,
+                "bearing_after": 163,
+                "bearing_before": 142,
+                "location": [
+                  -77.044051,
+                  38.909248
+                ],
+                "modifier": "slight right",
+                "type": "exit roundabout",
+                "instruction": "Exit the traffic circle onto New Hampshire Avenue Northwest"
+              },
+              "weight": 114.69999999999999,
+              "duration": 60.8,
+              "name": "New Hampshire Avenue Northwest",
+              "distance": 269.4,
+              "voiceInstructions": [
+                {
+                  "distanceAlongGeometry": 269.4,
+                  "announcement": "In 900 feet, turn right onto N Street Northwest",
+                  "ssmlAnnouncement": "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">In 900 feet, turn right onto N Street Northwest</prosody></amazon:effect></speak>"
+                },
+                {
+                  "distanceAlongGeometry": 66.5,
+                  "announcement": "Turn right onto N Street Northwest, then you will arrive at your destination",
+                  "ssmlAnnouncement": "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">Turn right onto N Street Northwest, then you will arrive at your destination</prosody></amazon:effect></speak>"
+                }
+              ],
+              "bannerInstructions": [
+                {
+                  "distanceAlongGeometry": 269.4,
+                  "primary": {
+                    "text": "N Street Northwest",
+                    "components": [
+                      {
+                        "text": "N Street",
+                        "type": "text",
+                        "abbr": "N St",
+                        "abbr_priority": 0
+                      },
+                      {
+                        "text": "Northwest",
+                        "type": "text",
+                        "abbr": "NW",
+                        "abbr_priority": 1
+                      }
+                    ],
+                    "type": "turn",
+                    "modifier": "right"
+                  },
+                  "secondary": null
+                }
+              ]
+            },
+            {
+              "intersections": [
+                {
+                  "out": 3,
+                  "in": 0,
+                  "entry": [
+                    false,
+                    false,
+                    true,
+                    true
+                  ],
+                  "bearings": [
+                    30,
+                    90,
+                    210,
+                    270
+                  ],
+                  "location": [
+                    -77.045681,
+                    38.907244
+                  ]
+                }
+              ],
+              "driving_side": "right",
+              "geometry": "wuueiA`zn}qC?jB",
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 268,
+                "bearing_before": 215,
+                "location": [
+                  -77.045681,
+                  38.907244
+                ],
+                "modifier": "right",
+                "type": "turn",
+                "instruction": "Turn right onto N Street Northwest"
+              },
+              "weight": 1.2,
+              "duration": 1.2,
+              "name": "N Street Northwest",
+              "distance": 4.7,
+              "voiceInstructions": [
+                {
+                  "distanceAlongGeometry": 4.7,
+                  "announcement": "You have arrived at your destination",
+                  "ssmlAnnouncement": "<speak><amazon:effect name=\"drc\"><prosody rate=\"1.08\">You have arrived at your destination</prosody></amazon:effect></speak>"
+                }
+              ],
+              "bannerInstructions": [
+                {
+                  "distanceAlongGeometry": 4.7,
+                  "primary": {
+                    "text": "You have arrived",
+                    "components": [
+                      {
+                        "text": "You have arrived",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "arrive",
+                    "modifier": "straight"
+                  },
+                  "secondary": null
+                }
+              ]
+            },
+            {
+              "intersections": [
+                {
+                  "in": 0,
+                  "entry": [
+                    true
+                  ],
+                  "bearings": [
+                    90
+                  ],
+                  "location": [
+                    -77.045735,
+                    38.907244
+                  ]
+                }
+              ],
+              "driving_side": "right",
+              "geometry": "wuueiAl}n}qC",
+              "mode": "driving",
+              "maneuver": {
+                "bearing_after": 0,
+                "bearing_before": 270,
+                "location": [
+                  -77.045735,
+                  38.907244
+                ],
+                "type": "arrive",
+                "instruction": "You have arrived at your destination"
+              },
+              "weight": 0,
+              "duration": 0,
+              "name": "N Street Northwest",
+              "distance": 0,
+              "voiceInstructions": [],
+              "bannerInstructions": []
+            }
+          ],
+          "distance": 877.5
+        }
+      ],
+      "weight_name": "routability",
+      "weight": 373.1,
+      "weight_typical": 321.5,
+      "duration": 225.7,
+      "distance": 877.5,
+      "voiceLocale": "en-US"
+    }
+  ],
+  "waypoints": [
+    {
+      "name": "New Hampshire Avenue Northwest",
+      "location": [
+        -77.040159,
+        38.913142
+      ]
+    },
+    {
+      "name": "N Street Northwest",
+      "location": [
+        -77.045735,
+        38.907244
+      ]
+    }
+  ],
+  "code": "Ok",
+  "uuid": "cjhk3owmb0zg34crqq5wsc6d1"
+}

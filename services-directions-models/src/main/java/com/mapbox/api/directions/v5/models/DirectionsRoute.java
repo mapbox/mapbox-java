@@ -94,6 +94,15 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
   public abstract Double weight();
 
   /**
+   * When using the driving-traffic profile, this will be returned as a double value
+   * indicating the weight of the selected route under typical conditions
+   * (not taking into account live traffic).
+   */
+  @Nullable
+  @SerializedName("weight_typical")
+  public abstract Double weightTypical();
+
+  /**
    * The name of the weight profile used while calculating during extraction phase. The default is
    * {@code routability} which is duration based, with additional penalties for less desirable
    * maneuvers.
@@ -295,6 +304,16 @@ public abstract class DirectionsRoute extends DirectionsJsonObject {
      */
     @NonNull
     public abstract Builder weight(@Nullable Double weight);
+
+    /**
+     * The weight of the selected route under typical conditions
+     * (not taking into account live traffic).
+     *
+     * @param weightTypical the weight of the selected route under typical conditions
+     * @return this builder for chaining options together
+     */
+    @NonNull
+    public abstract Builder weightTypical(@Nullable Double weightTypical);
 
     /**
      * The name of the weight profile used while calculating during extraction phase. The default is
