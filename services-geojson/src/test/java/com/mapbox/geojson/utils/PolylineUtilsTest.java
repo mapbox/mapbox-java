@@ -1,12 +1,14 @@
 package com.mapbox.geojson.utils;
 
 import static com.mapbox.geojson.utils.PolylineUtils.decode;
+import static com.mapbox.geojson.utils.PolylineUtils.decodeToFlattenListOfPoints;
 import static com.mapbox.geojson.utils.PolylineUtils.encode;
 import static com.mapbox.geojson.utils.PolylineUtils.simplify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.mapbox.geojson.FlattenListOfPoints;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.TestUtils;
@@ -114,12 +116,17 @@ public class PolylineUtilsTest extends TestUtils {
     List<Point> path = decode("", PRECISION_5);
     assertNotNull(path);
     assertEquals(0, path.size());
+    double[] pathArray = decodeToFlattenListOfPoints("", PRECISION_5);
+    assertNotNull(pathArray);
+    assertEquals(0, pathArray.length);
   }
 
   @Test
   public void encode_neverReturnsNull() throws Exception {
     String encodedString = encode(new ArrayList<Point>(), PRECISION_6);
     assertNotNull(encodedString);
+    String encodedArrayString = encode(new double[]{}, PRECISION_6);
+    assertNotNull(encodedArrayString);
   }
 
   @Test

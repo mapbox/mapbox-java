@@ -1,1 +1,5 @@
 * @mapbox/navigation-android
+
+# GeoJSON and Turf can be approved by either navigation-android or maps-android teams
+/services-geojson/ @mapbox/navigation-android @mapbox/maps-android
+/services-turf/ @mapbox/navigation-android @mapbox/maps-android

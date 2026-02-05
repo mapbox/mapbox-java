@@ -344,8 +344,8 @@ public final class MultiPolygon
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter
-          extends BaseGeometryTypeAdapter<MultiPolygon, List<List<List<Point>>>> {
+  static final class GsonTypeAdapter extends
+          BaseGeometryTypeAdapter<MultiPolygon, List<List<List<Point>>>, List<List<List<Point>>>> {
 
     GsonTypeAdapter(Gson gson) {
       super(gson, new ListofListofListOfPointCoordinatesTypeAdapter());

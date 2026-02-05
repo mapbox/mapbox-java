@@ -4,6 +4,9 @@ Mapbox welcomes participation and contributions from everyone.
 
 ### main
 - Added `DirectionsRefreshResponse#fromJson(Reader)`, a static factory method that deserializes a `DirectionsRefreshResponse` from a `java.io.Reader`.
+- Added `FlattenListOfPoints` to hold a list of points in a more memory-efficient way.
+- Deprecate `LineString#coordinates()` and `Point#coordinates()`. It's encouraged to use the new `flattenCoordinates()` methods.
+
 
 ### v7.9.0 - November 20, 2025
 

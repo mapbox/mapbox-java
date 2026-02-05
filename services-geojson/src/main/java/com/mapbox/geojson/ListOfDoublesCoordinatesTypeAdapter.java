@@ -6,23 +6,22 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
- * Type Adapter to serialize/deserialize Poinr into/from for double array.
+ * Type Adapter to serialize/deserialize Point into/from for double array.
  *
  * @since 4.6.0
  */
 @Keep
-class ListOfDoublesCoordinatesTypeAdapter extends BaseCoordinatesTypeAdapter<List<Double>> {
+class ListOfDoublesCoordinatesTypeAdapter extends BaseCoordinatesTypeAdapter<double[]> {
 
   @Override
-  public void write(JsonWriter out, List<Double> value) throws IOException {
+  public void write(JsonWriter out, double[] value) throws IOException {
     writePointList(out, value);
   }
 
   @Override
-  public List<Double> read(JsonReader in) throws IOException {
+  public double[] read(JsonReader in) throws IOException {
     return readPointList(in);
   }
 }

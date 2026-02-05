@@ -9,11 +9,14 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.mapbox.geojson.gson.GeoJsonAdapterFactory;
+import com.mapbox.geojson.shifter.CoordinateShifter;
+import com.mapbox.geojson.shifter.CoordinateShifterManager;
 import com.mapbox.geojson.utils.PolylineUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A linestring represents two or more geographic points that share a relationship and is one of the
@@ -49,7 +52,8 @@ import java.util.List;
  * @since 1.0.0
  */
 @Keep
-public final class LineString implements CoordinateContainer<List<Point>> {
+public final class LineString implements
+        FlattenedCoordinateContainer<List<Point>, FlattenListOfPoints> {
 
   private static final String TYPE = "LineString";
 
@@ -57,7 +61,8 @@ public final class LineString implements CoordinateContainer<List<Point>> {
 
   private final BoundingBox bbox;
 
-  private final List<Point> coordinates;
+  @NonNull
+  private final FlattenListOfPoints flattenListOfPoints;
 
   /**
    * Create a new instance of this class by passing in a formatted valid JSON String. If you are
@@ -127,38 +132,41 @@ public final class LineString implements CoordinateContainer<List<Point>> {
     return new LineString(TYPE, bbox, points);
   }
 
-  /**
-   * Create a new instance of this class by defining a {@link MultiPoint} object and passing. The
-   * multipoint object should comply with the GeoJson specifications described in the documentation.
-   *
-   * @param multiPoint which will make up the LineString geometry
-   * @param bbox       optionally include a bbox definition as a double array
-   * @return a new instance of this class defined by the values passed inside this static factory
-   *   method
-   * @since 3.0.0
-   */
-  public static LineString fromLngLats(@NonNull MultiPoint multiPoint, @Nullable BoundingBox bbox) {
-    return new LineString(TYPE, bbox, multiPoint.coordinates());
-  }
-
-  LineString(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
-    if (type == null) {
-      throw new NullPointerException("Null type");
-    }
-    this.type = type;
-    this.bbox = bbox;
-    if (coordinates == null) {
-      throw new NullPointerException("Null coordinates");
-    }
-    this.coordinates = coordinates;
-  }
-
   static LineString fromLngLats(double[][] coordinates) {
     ArrayList<Point> converted = new ArrayList<>(coordinates.length);
     for (int i = 0; i < coordinates.length; i++) {
       converted.add(Point.fromLngLat(coordinates[i]));
     }
     return LineString.fromLngLats(converted);
+  }
+
+  /**
+   * Create a new instance by providing a flatten array of [lng1, lat1, lng2, lat2, ...].
+   * The flatten array object should comply with the GeoJson specifications described in the
+   * documentation.
+   *
+   * @param flattenLngLatArray which will make up the LineString geometry. WARNING: The points will
+   *                           be shifted according to the current
+   *                           {@link CoordinateShifterManager#getCoordinateShifter()} in place!
+   * @param bbox optionally include a bbox definition
+   * @return a new instance of this class defined by the values passed inside this static factory
+   *   method
+   */
+  public static LineString fromFlattenArrayOfPoints(
+          double[] flattenLngLatArray,
+          @Nullable BoundingBox bbox
+  ) {
+    CoordinateShifter coordinateShifter = CoordinateShifterManager.getCoordinateShifter();
+    // Iterate all the points and shift them
+    for (int i = 0; i < flattenLngLatArray.length / 2; i++) {
+      double lon = flattenLngLatArray[i * 2];
+      double lat = flattenLngLatArray[(i * 2) + 1];
+      double[] shifted = coordinateShifter.shift(lon, lat);
+      flattenLngLatArray[i * 2] = shifted[0];
+      flattenLngLatArray[(i * 2) + 1] = shifted[1];
+    }
+
+    return new LineString(TYPE, bbox, new FlattenListOfPoints(flattenLngLatArray, null));
   }
 
   /**
@@ -176,7 +184,24 @@ public final class LineString implements CoordinateContainer<List<Point>> {
    * @since 1.0.0
    */
   public static LineString fromPolyline(@NonNull String polyline, int precision) {
-    return LineString.fromLngLats(PolylineUtils.decode(polyline, precision), null);
+    double[] points = PolylineUtils.decodeToFlattenListOfPoints(polyline, precision);
+    return LineString.fromFlattenArrayOfPoints(points, null);
+  }
+
+  LineString(String type, @Nullable BoundingBox bbox, List<Point> coordinates) {
+    this(type, bbox, new FlattenListOfPoints(coordinates));
+  }
+
+  LineString(String type, @Nullable BoundingBox bbox, FlattenListOfPoints flattenListOfPoints) {
+    if (type == null) {
+      throw new NullPointerException("Null type");
+    }
+    if (flattenListOfPoints == null) {
+      throw new NullPointerException("Null coordinates");
+    }
+    this.flattenListOfPoints = flattenListOfPoints;
+    this.type = type;
+    this.bbox = bbox;
   }
 
   /**
@@ -211,14 +236,17 @@ public final class LineString implements CoordinateContainer<List<Point>> {
 
   /**
    * Provides the list of {@link Point}s that make up the LineString geometry.
+   * <p>
    *
    * @return a list of points
    * @since 3.0.0
+   * @deprecated Please consider using {@link #flattenCoordinates()} instead for better performance.
    */
   @NonNull
   @Override
-  public List<Point> coordinates()  {
-    return coordinates;
+  @Deprecated
+  public List<Point> coordinates() {
+    return flattenListOfPoints.points();
   }
 
   /**
@@ -245,7 +273,7 @@ public final class LineString implements CoordinateContainer<List<Point>> {
    * @since 1.0.0
    */
   public String toPolyline(int precision) {
-    return PolylineUtils.encode(coordinates(), precision);
+    return PolylineUtils.encode(flattenListOfPoints.getFlattenLngLatArray(), precision);
   }
 
   /**
@@ -264,34 +292,29 @@ public final class LineString implements CoordinateContainer<List<Point>> {
     return "LineString{"
             + "type=" + type + ", "
             + "bbox=" + bbox + ", "
-            + "coordinates=" + coordinates
+            + "coordinates=" + flattenListOfPoints
             + "}";
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
+  public boolean equals(Object o) {
+    if (!(o instanceof LineString)) {
+      return false;
     }
-    if (obj instanceof LineString) {
-      LineString that = (LineString) obj;
-      return (this.type.equals(that.type()))
-              && ((this.bbox == null) ? (that.bbox() == null) : this.bbox.equals(that.bbox()))
-              && (this.coordinates.equals(that.coordinates()));
-    }
-    return false;
+    LineString that = (LineString) o;
+    return Objects.equals(type, that.type)
+            && Objects.equals(bbox, that.bbox)
+            && Objects.equals(flattenListOfPoints, that.flattenListOfPoints);
   }
 
   @Override
   public int hashCode() {
-    int hashCode = 1;
-    hashCode *= 1000003;
-    hashCode ^= type.hashCode();
-    hashCode *= 1000003;
-    hashCode ^= (bbox == null) ? 0 : bbox.hashCode();
-    hashCode *= 1000003;
-    hashCode ^= coordinates.hashCode();
-    return hashCode;
+    return Objects.hash(type, bbox, flattenListOfPoints);
+  }
+
+  @Override
+  public FlattenListOfPoints flattenCoordinates() {
+    return flattenListOfPoints;
   }
 
   /**
@@ -299,15 +322,16 @@ public final class LineString implements CoordinateContainer<List<Point>> {
    *
    * @since 4.6.0
    */
-  static final class GsonTypeAdapter extends BaseGeometryTypeAdapter<LineString, List<Point>> {
+  static final class GsonTypeAdapter extends
+          BaseGeometryTypeAdapter<LineString, List<Point>, FlattenListOfPoints> {
 
     GsonTypeAdapter(Gson gson) {
-      super(gson, new ListOfPointCoordinatesTypeAdapter());
+      super(gson, new FlattenListOfPointsTypeAdapter());
     }
 
     @Override
     public void write(JsonWriter jsonWriter, LineString object) throws IOException {
-      writeCoordinateContainer(jsonWriter, object);
+      writeFlattenedCoordinateContainer(jsonWriter, object);
     }
 
     @Override
@@ -316,10 +340,11 @@ public final class LineString implements CoordinateContainer<List<Point>> {
     }
 
     @Override
-    CoordinateContainer<List<Point>> createCoordinateContainer(String type,
-                                                               BoundingBox bbox,
-                                                               List<Point> coordinates) {
-      return new LineString(type == null ? "LineString" : type, bbox, coordinates);
+    CoordinateContainer<List<Point>> createCoordinateContainer(
+            String type,
+            BoundingBox bbox,
+            FlattenListOfPoints flattenListOfPoints) {
+      return new LineString(type == null ? "LineString" : type, bbox, flattenListOfPoints);
     }
   }
 }

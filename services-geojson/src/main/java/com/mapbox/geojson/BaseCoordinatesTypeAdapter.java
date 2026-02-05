@@ -1,22 +1,20 @@
 package com.mapbox.geojson;
 
 import androidx.annotation.Keep;
+import androidx.annotation.NonNull;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import com.mapbox.geojson.exception.GeoJsonException;
 import com.mapbox.geojson.shifter.CoordinateShifterManager;
 import com.mapbox.geojson.utils.GeoJsonUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- *  Base class for converting {@code T} instance of coordinates to JSON and
- *  JSON to instance of {@code T}.
+ * Base class for converting {@code T} instance of coordinates to JSON and
+ * JSON to instance of {@code T}.
  *
  * @param <T> Type of coordinates
  * @since 4.6.0
@@ -25,25 +23,19 @@ import java.util.List;
 abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
 
 
-  protected void writePoint(JsonWriter out, Point point) throws  IOException {
+  protected void writePoint(JsonWriter out, Point point) throws IOException {
     if (point == null) {
       return;
     }
-    writePointList(out, point.coordinates());
+    writePointList(out, point.flattenCoordinates());
   }
 
   protected Point readPoint(JsonReader in) throws IOException {
-
-    List<Double> coordinates = readPointList(in);
-    if (coordinates != null && coordinates.size() > 1) {
-      return new Point("Point",null, coordinates);
-    }
-
-    throw new GeoJsonException(" Point coordinates should be non-null double array");
+    return new Point("Point", null, readPointList(in));
   }
 
 
-  protected void writePointList(JsonWriter out, List<Double> value) throws IOException {
+  protected void writePointList(JsonWriter out, double[] value) throws IOException {
 
     if (value == null) {
       return;
@@ -52,38 +44,52 @@ abstract class BaseCoordinatesTypeAdapter<T> extends TypeAdapter<T> {
     out.beginArray();
 
     // Unshift coordinates
-    List<Double> unshiftedCoordinates =
-            CoordinateShifterManager.getCoordinateShifter().unshiftPoint(value);
+    double[] unshiftedCoordinates = CoordinateShifterManager.getCoordinateShifter()
+            .unshiftPointArray(value);
 
-    out.value(GeoJsonUtils.trim(unshiftedCoordinates.get(0)));
-    out.value(GeoJsonUtils.trim(unshiftedCoordinates.get(1)));
+    out.value(GeoJsonUtils.trim(unshiftedCoordinates[0]));
+    out.value(GeoJsonUtils.trim(unshiftedCoordinates[1]));
 
     // Includes altitude
-    if (value.size() > 2) {
-      out.value(unshiftedCoordinates.get(2));
+    if (value.length > 2) {
+      out.value(unshiftedCoordinates[2]);
     }
     out.endArray();
   }
 
-  protected List<Double> readPointList(JsonReader in) throws IOException {
-
+  @NonNull
+  protected double[] readPointList(JsonReader in) throws IOException {
     if (in.peek() == JsonToken.NULL) {
       throw new NullPointerException();
     }
 
-    List<Double> coordinates = new ArrayList<Double>(3);
+    double lon;
+    double lat;
+    double altitude;
     in.beginArray();
-    while (in.hasNext()) {
-      coordinates.add(in.nextDouble());
+    if (in.hasNext()) {
+      lon = in.nextDouble();
+    } else {
+      throw new IndexOutOfBoundsException("Point coordinates should contain at least two values");
     }
-    in.endArray();
+    if (in.hasNext()) {
+      lat = in.nextDouble();
+    } else {
+      throw new IndexOutOfBoundsException("Point coordinates should contain at least two values");
+    }
+    if (in.hasNext()) {
+      altitude = in.nextDouble();
+      // Consume any extra value but don't store it
+      while (in.hasNext()) {
+        in.skipValue();
+      }
+      in.endArray();
+      return CoordinateShifterManager.getCoordinateShifter().shift(lon, lat, altitude);
+    } else {
+      in.endArray();
+      return CoordinateShifterManager.getCoordinateShifter().shift(lon, lat);
+    }
 
-    if (coordinates.size() > 2) {
-      return CoordinateShifterManager.getCoordinateShifter()
-              .shiftLonLatAlt(coordinates.get(0), coordinates.get(1), coordinates.get(2));
-    }
-    return CoordinateShifterManager.getCoordinateShifter()
-            .shiftLonLat(coordinates.get(0), coordinates.get(1));
   }
 
 }

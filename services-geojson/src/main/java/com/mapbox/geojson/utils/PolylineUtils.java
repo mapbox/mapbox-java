@@ -1,6 +1,8 @@
 package com.mapbox.geojson.utils;
 
 import androidx.annotation.NonNull;
+
+import com.mapbox.geojson.FlattenListOfPoints;
 import com.mapbox.geojson.Point;
 
 import java.util.ArrayList;
@@ -80,6 +82,71 @@ public final class PolylineUtils {
   }
 
   /**
+   * Decodes an encoded path string into a {@link FlattenListOfPoints}.
+   *
+   * @param encodedPath a String representing an encoded path string
+   * @param precision   OSRMv4 uses 6, OSRMv5 and Google uses 5
+   * @return an array of doubles representing a line geometry with flattened points
+   *         in the form: [lng1, lat1, lng2, lat2, ...]
+   * @see <a href="https://github.com/mapbox/polyline/blob/master/src/polyline.js">Part of algorithm came from this source</a>
+   * @see <a href="https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/android/PolyUtil.java">Part of algorithm came from this source.</a>
+   */
+  @NonNull
+  public static double[] decodeToFlattenListOfPoints(
+          @NonNull
+          final String encodedPath,
+          int precision
+  ) {
+    int len = encodedPath.length();
+
+    // OSRM uses precision=6, the default Polyline spec divides by 1E5, capping at precision=5
+    double factor = Math.pow(10, precision);
+
+    // For speed we preallocate to an upper bound on the final length, then
+    // truncate the array before returning.
+    double[] flattenLngLatCoordinates = new double[len];
+    int index = 0;
+    int lat = 0;
+    int lng = 0;
+    int itemsCount = 0;
+
+    while (index < len) {
+      int result = 1;
+      int shift = 0;
+      int temp;
+      do {
+        temp = encodedPath.charAt(index++) - 63 - 1;
+        result += temp << shift;
+        shift += 5;
+      }
+      while (temp >= 0x1f);
+      lat += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+
+      result = 1;
+      shift = 0;
+      do {
+        temp = encodedPath.charAt(index++) - 63 - 1;
+        result += temp << shift;
+        shift += 5;
+      }
+      while (temp >= 0x1f);
+      lng += (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+
+      flattenLngLatCoordinates[itemsCount * 2] = lng / factor;
+      flattenLngLatCoordinates[itemsCount * 2 + 1] = lat / factor;
+
+      itemsCount++;
+    }
+
+    double[] trimmedFlattenLngLatCoordinates = new double[itemsCount * 2];
+    System.arraycopy(flattenLngLatCoordinates, 0,
+            trimmedFlattenLngLatCoordinates, 0,
+            itemsCount * 2
+    );
+    return trimmedFlattenLngLatCoordinates;
+  }
+
+  /**
    * Encodes a sequence of Points into an encoded path string.
    *
    * @param path      list of {@link Point}s making up the line
@@ -100,6 +167,47 @@ public final class PolylineUtils {
     for (final Point point : path) {
       long lat = Math.round(point.latitude() * factor);
       long lng = Math.round(point.longitude() * factor);
+
+      long varLat = lat - lastLat;
+      long varLng = lng - lastLng;
+
+      encode(varLat, result);
+      encode(varLng, result);
+
+      lastLat = lat;
+      lastLng = lng;
+    }
+    return result.toString();
+  }
+
+  /**
+   * Encodes an array of doubles representing a line geometry with flattened points into an encoded
+   * path string.
+   *
+   * @param flattenLngLatArray an array of doubles representing a line geometry with flattened
+   *                          points in the form: [lng1, lat1, lng2, lat2, ...]
+   * @param precision OSRMv4 uses 6, OSRMv5 and Google uses 5
+   * @return a String representing a path string
+   */
+  @NonNull
+  public static String encode(
+          @NonNull
+          double[] flattenLngLatArray,
+          int precision
+  ) {
+    long lastLat = 0;
+    long lastLng = 0;
+
+    final StringBuilder result = new StringBuilder();
+
+    // OSRM uses precision=6, the default Polyline spec divides by 1E5, capping at precision=5
+    double factor = Math.pow(10, precision);
+
+    for (int i = 0; i < flattenLngLatArray.length / 2; i++) {
+      double longitude = flattenLngLatArray[i * 2];
+      double latitude = flattenLngLatArray[i * 2 + 1];
+      long lat = Math.round(latitude * factor);
+      long lng = Math.round(longitude * factor);
 
       long varLat = lat - lastLat;
       long varLng = lng - lastLng;
