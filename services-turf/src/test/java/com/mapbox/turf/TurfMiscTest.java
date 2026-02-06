@@ -510,6 +510,26 @@ public class TurfMiscTest extends TestUtils {
   }
 
   @Test
+  public void testLineSliceAlongRoute1WithExactStop() throws IOException, TurfException {
+    Feature route1 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_ROUTE_ONE));
+    LineString lineStringRoute1 = (LineString) route1.geometry();
+
+    double start = 500;
+    Point start_point = TurfMeasurement.along(lineStringRoute1, start, TurfConstants.UNIT_MILES);
+    double exactStop = TurfMeasurement.length(lineStringRoute1, TurfConstants.UNIT_MILES);
+
+    LineString slicedAtExactStop = TurfMisc.lineSliceAlong(route1, start, exactStop,
+            TurfConstants.UNIT_MILES);
+    List<Point> slicedCoordinatesAtExactStop = slicedAtExactStop.coordinates();
+    assertEquals(slicedCoordinatesAtExactStop.get(0).coordinates(), start_point.coordinates());
+    Point lastPointInLine = lineStringRoute1.coordinates().get(
+            lineStringRoute1.coordinates().size() - 1
+    );
+    assertEquals(slicedCoordinatesAtExactStop.get(slicedCoordinatesAtExactStop.size() - 1)
+                    .coordinates(), lastPointInLine.coordinates());
+  }
+
+  @Test
   public void testLineSliceAlongRoute2() throws IOException, TurfException {
 
     Feature route2 = Feature.fromJson(loadJsonFixture(LINE_SLICE_ALONG_ROUTE_TWO));
