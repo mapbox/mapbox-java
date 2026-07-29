@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- Fixed `TurfMisc#lineSliceAlong` dropping the altitude of the line's vertices, a regression introduced in v7.10.0.
 
 ### v7.10.0 - February 05, 2026
 - Added `DirectionsRefreshResponse#fromJson(Reader)`, a static factory method that deserializes a `DirectionsRefreshResponse` from a `java.io.Reader`.
