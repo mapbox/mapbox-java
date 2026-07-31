@@ -3,7 +3,7 @@ set -eoux
 # control sum of the key is const: echo | shasum -a 256 pgp_keys.asc
 shaSumAscKey="d56942c32a1bb70af75bf972302b6114049fb59cb76193fac349bb9b587b60c2"
 
-curl https://keybase.io/codecovsecurity/pgp_keys.asc -o pgp_keys.asc
+curl https://uploader.codecov.io/verification.gpg -o pgp_keys.asc
 # check sum
 echo "$shaSumAscKey  pgp_keys.asc" | shasum -a 256 -c
 
