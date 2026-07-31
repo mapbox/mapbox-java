@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FlattenListOfPoints;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.turf.models.LineIntersectsResult;
@@ -188,9 +189,11 @@ public final class TurfMisc {
                                           @FloatRange(from = 0) double stopDist,
                                           @NonNull @TurfConstants.TurfUnitCriteria String units) {
 
-    double[] coords = line.flattenCoordinates().getFlattenLngLatArray();
+    FlattenListOfPoints flattenCoordinates = line.flattenCoordinates();
+    double[] coords = flattenCoordinates.getFlattenLngLatArray();
+    double[] altitudes = flattenCoordinates.getAltitudes();
 
-    int size = line.flattenCoordinates().size();
+    int size = flattenCoordinates.size();
     if (size < 2) {
       throw new TurfException("Turf lineSlice requires a LineString Geometry made up of "
         + "at least 2 coordinates. The LineString passed in only contains " + size + ".");
@@ -203,7 +206,9 @@ public final class TurfMisc {
 
     double travelled = 0;
     for (int i = 0; i < size; i++) {
-      Point pointAtI = Point.fromLngLat(coords[i * 2], coords[i * 2 + 1]);
+      // Altitude is kept only for the original vertices: the interpolated start and stop points
+      // are computed with 2D math (see TurfMeasurement#destination) and have no altitude.
+      Point pointAtI = pointAt(coords, altitudes, i);
 
       if (startDist >= travelled && i == size - 1) {
         break;
@@ -245,6 +250,16 @@ public final class TurfMisc {
     }
 
     return LineString.fromLngLats(slice);
+  }
+
+  @NonNull
+  private static Point pointAt(@NonNull double[] coords, @Nullable double[] altitudes, int index) {
+    double longitude = coords[index * 2];
+    double latitude = coords[(index * 2) + 1];
+    if (altitudes != null && !Double.isNaN(altitudes[index])) {
+      return Point.fromLngLat(longitude, latitude, altitudes[index]);
+    }
+    return Point.fromLngLat(longitude, latitude);
   }
 
   /**

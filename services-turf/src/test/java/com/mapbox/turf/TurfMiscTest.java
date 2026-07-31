@@ -584,6 +584,27 @@ public class TurfMiscTest extends TestUtils {
   }
 
   @Test
+  public void testLineSliceAlongPreservesAltitude() throws TurfException {
+    List<Point> input = Arrays.asList(
+      Point.fromLngLat(113.99414062499999, 22.350075806124867, 10.0),
+      Point.fromLngLat(115.0, 22.8, 20.0),
+      Point.fromLngLat(116.76269531249999, 23.241346102386135, 30.0));
+    LineString line = LineString.fromLngLats(input);
+
+    // Slicing the whole line means every returned point is an original vertex.
+    double stop = TurfMeasurement.length(line, TurfConstants.UNIT_MILES);
+    LineString sliced = TurfMisc.lineSliceAlong(line, 0, stop, TurfConstants.UNIT_MILES);
+
+    List<Point> slicedCoordinates = sliced.coordinates();
+    assertEquals(input.size(), slicedCoordinates.size());
+    for (int i = 0; i < input.size(); i++) {
+      assertTrue("point " + i + " lost altitude", slicedCoordinates.get(i).hasAltitude());
+      assertArrayEquals(input.get(i).flattenCoordinates(),
+              slicedCoordinates.get(i).flattenCoordinates(), DELTA);
+    }
+  }
+
+  @Test
   public void testShortLine() throws IOException, TurfException {
 
     // Distance between points is about 186 miles
