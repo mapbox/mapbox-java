@@ -7,6 +7,7 @@ import static com.mapbox.geojson.utils.PolylineUtils.simplify;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import com.mapbox.geojson.FlattenListOfPoints;
 import com.mapbox.geojson.LineString;
@@ -47,6 +48,54 @@ public class PolylineUtilsTest extends TestUtils {
     Point lastPoint = latLngs.get(expectedLength - 1);
     expectNearNumber(37.76953, lastPoint.latitude(), 1e-6);
     expectNearNumber(-122.41488, lastPoint.longitude(), 1e-6);
+  }
+
+  @Test
+  public void decode_emptyString_returnsEmptyResult() {
+    assertTrue(decode("", PRECISION_5).isEmpty());
+    assertEquals(0, decodeToFlattenListOfPoints("", PRECISION_5).length);
+  }
+
+  @Test
+  public void decode_malformedPolyline_throwsIllegalArgumentException() {
+    char[] longValue = new char[1024];
+    Arrays.fill(longValue, '~');
+    String[] malformed = {
+      // latitude without longitude
+      "?",
+      // continuation bit set on the last character
+      "_",
+      // valid point followed by a truncated one
+      "_p~iF~ps|U_",
+      // valid latitude, truncated longitude
+      "_p~iF~",
+      new String(longValue)
+    };
+
+    for (String polyline : malformed) {
+      assertDecodeThrows(polyline);
+    }
+  }
+
+  private static void assertDecodeThrows(String polyline) {
+    try {
+      decode(polyline, PRECISION_5);
+      fail("decode() expected to throw for \"" + polyline + "\"");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
+    try {
+      decodeToFlattenListOfPoints(polyline, PRECISION_5);
+      fail("decodeToFlattenListOfPoints() expected to throw for \"" + polyline + "\"");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
+    try {
+      LineString.fromPolyline(polyline, PRECISION_5);
+      fail("LineString.fromPolyline() expected to throw for \"" + polyline + "\"");
+    } catch (IllegalArgumentException expected) {
+      // expected
+    }
   }
 
   @Test
