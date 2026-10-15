@@ -181,6 +181,7 @@ public final class LineString implements
    *                  was first encoded
    * @return a new instance of this class defined by the values passed inside this static factory
    *   method
+   * @throws IllegalArgumentException if {@code polyline} is not a well-formed encoded polyline
    * @since 1.0.0
    */
   public static LineString fromPolyline(@NonNull String polyline, int precision) {

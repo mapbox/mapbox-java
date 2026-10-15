@@ -33,6 +33,7 @@ public final class PolylineUtils {
    * @param encodedPath a String representing an encoded path string
    * @param precision   OSRMv4 uses 6, OSRMv5 and Google uses 5
    * @return list of {@link Point} making up the line
+   * @throws IllegalArgumentException if {@code encodedPath} is not a well-formed encoded polyline
    * @see <a href="https://github.com/mapbox/polyline/blob/master/src/polyline.js">Part of algorithm came from this source</a>
    * @see <a href="https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/android/PolyUtil.java">Part of algorithm came from this source.</a>
    * @since 1.0.0
@@ -57,6 +58,7 @@ public final class PolylineUtils {
       int shift = 0;
       int temp;
       do {
+        checkNotTruncated(encodedPath, index);
         temp = encodedPath.charAt(index++) - 63 - 1;
         result += temp << shift;
         shift += 5;
@@ -67,6 +69,7 @@ public final class PolylineUtils {
       result = 1;
       shift = 0;
       do {
+        checkNotTruncated(encodedPath, index);
         temp = encodedPath.charAt(index++) - 63 - 1;
         result += temp << shift;
         shift += 5;
@@ -88,6 +91,7 @@ public final class PolylineUtils {
    * @param precision   OSRMv4 uses 6, OSRMv5 and Google uses 5
    * @return an array of doubles representing a line geometry with flattened points
    *         in the form: [lng1, lat1, lng2, lat2, ...]
+   * @throws IllegalArgumentException if {@code encodedPath} is not a well-formed encoded polyline
    * @see <a href="https://github.com/mapbox/polyline/blob/master/src/polyline.js">Part of algorithm came from this source</a>
    * @see <a href="https://github.com/googlemaps/android-maps-utils/blob/master/library/src/com/google/maps/android/PolyUtil.java">Part of algorithm came from this source.</a>
    */
@@ -115,6 +119,7 @@ public final class PolylineUtils {
       int shift = 0;
       int temp;
       do {
+        checkNotTruncated(encodedPath, index);
         temp = encodedPath.charAt(index++) - 63 - 1;
         result += temp << shift;
         shift += 5;
@@ -125,6 +130,7 @@ public final class PolylineUtils {
       result = 1;
       shift = 0;
       do {
+        checkNotTruncated(encodedPath, index);
         temp = encodedPath.charAt(index++) - 63 - 1;
         result += temp << shift;
         shift += 5;
@@ -144,6 +150,20 @@ public final class PolylineUtils {
             itemsCount * 2
     );
     return trimmedFlattenLngLatCoordinates;
+  }
+
+  /**
+   * Validates that the encoded path string has a character to read at the given index.
+   *
+   * @param encodedPath the encoded path string being decoded
+   * @param index       index of the next character to read
+   * @throws IllegalArgumentException if the string ends in the middle of an encoded value
+   */
+  private static void checkNotTruncated(@NonNull String encodedPath, int index) {
+    if (index >= encodedPath.length()) {
+      throw new IllegalArgumentException(
+        "Malformed polyline: unexpected end of input at index " + index);
+    }
   }
 
   /**

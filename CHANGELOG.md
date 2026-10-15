@@ -3,6 +3,7 @@
 Mapbox welcomes participation and contributions from everyone.
 
 ### main
+- `PolylineUtils#decode`, `PolylineUtils#decodeToFlattenListOfPoints` and `LineString#fromPolyline` now throw `IllegalArgumentException` for malformed encoded polylines instead of `StringIndexOutOfBoundsException`.
 
 ### v7.10.1 - July 31, 2026
 - Fixed `TurfMisc#lineSliceAlong` dropping the altitude of the line's vertices, a regression introduced in v7.10.0.
